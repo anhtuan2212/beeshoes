@@ -17,6 +17,13 @@
     height: 100px;
     object-fit: cover;
 }
+.img-product-files-extra{
+    height: 150px;
+    object-fit: cover;
+}
 .box-shadow-img-file{
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+#anh_duoc_chon{
+    min-height: 172px;
 }

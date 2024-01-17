@@ -120,7 +120,7 @@ public class LoginRegisterController {
                     user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
                     user.setTrangThai(true); // true = active
                     user.setKhachHang(khachHang);
-                    user.setRole(Role.ADMIN);
+                    user.setRole(Role.CUSTOMER);
                     user.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
                     User createdUser = userService.createNewUser(user);
 
