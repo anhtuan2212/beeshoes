@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required Meta Tags Always Come First -->
     <meta charset="utf-8">
@@ -14,6 +14,8 @@
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
+    <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
+    <link rel="stylesheet" href="/assets/cms/css/custom.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
 </head>
@@ -40,555 +42,509 @@
                 <div class="col-sm mb-2 mb-sm-0">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-no-gutter">
-                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="/admin/product">Products</a>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/product">Sản Phẩm</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Add product</li>
+                            <li class="breadcrumb-item active" aria-current="page">Thêm Sản Phẩm</li>
                         </ol>
                     </nav>
-
-                    <h1 class="page-header-title">Add product</h1>
+                    <h1 class="page-header-title">Thêm Sản Phẩm</h1>
                 </div>
             </div>
             <!-- End Row -->
         </div>
         <!-- End Page Header -->
-
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- Card -->
-                <div class="card mb-3 mb-lg-5">
-                    <!-- Header -->
-                    <div class="card-header">
-                        <h4 class="card-header-title">Product information</h4>
-                    </div>
-                    <!-- End Header -->
-
-                    <!-- Body -->
-                    <div class="card-body">
-                        <!-- Form Group -->
-                        <div class="form-group">
-                            <label for="productNameLabel" class="input-label">Name <i
-                                    class="tio-help-outlined text-body ml-1" data-toggle="tooltip" data-placement="top"
-                                    title="Products are the goods or services you sell."></i></label>
-
-                            <input type="text" class="form-control" name="productName" id="productNameLabel"
-                                   placeholder="Shirt, t-shirts, etc." aria-label="Shirt, t-shirts, etc.">
+        <form action="#" method="post" name="add-product">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Card -->
+                    <div class="card mb-3 mb-lg-5">
+                        <!-- Header -->
+                        <div class="card-header">
+                            <h4 class="card-header-title">Thông Tin Sản Phẩm</h4>
                         </div>
-                        <!-- End Form Group -->
-
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <!-- Form Group -->
-                                <div class="form-group">
-                                    <label for="SKULabel" class="input-label">SKU</label>
-
-                                    <input type="text" class="form-control" name="SKU" id="SKULabel"
-                                           placeholder="eg. 348121032" aria-label="eg. 348121032">
-                                </div>
-                                <!-- End Form Group -->
-                            </div>
-
-                            <div class="col-sm-6">
-                                <!-- Form Group -->
-                                <div class="form-group">
-                                    <label for="weightLabel" class="input-label">Weight</label>
-
-                                    <div class="input-group input-group-merge">
-                                        <input type="text" class="form-control" name="weightName" id="weightLabel"
-                                               placeholder="0.0" aria-label="0.0">
-                                        <div class="input-group-append">
-                                            <!-- Select -->
-                                            <div id="weightSelect" class="select2-custom select2-custom-right">
-                                                <select class="js-select2-custom custom-select" size="1"
-                                                        style="opacity: 0;" data-hs-select2-options='{
-                                      "dropdownParent": "#weightSelect",
-                                      "dropdownAutoWidth": true,
-                                      "width": true
+                        <!-- End Header -->
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Form Group -->
+                            <div class="row">
+                                <div class="form-group col-md-11">
+                                    <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
+                                    <select class="js-select2-custom custom-select" id="sanPham" size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
+                                    "placeholder": "Tìm sản phẩm...",
+                                    "searchInputPlaceholder": "Tìm sản phẩm..."
                                     }'>
-                                                    <option value="lb">lb</option>
-                                                    <option value="oz">oz</option>
-                                                    <option value="kg" selected="">kg</option>
-                                                    <option value="g">g</option>
-                                                </select>
-                                            </div>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-
-                                    <small class="form-text">Used to calculate shipping rates at checkout and label
-                                        prices during fulfillment.</small>
+                                        <option value="1">Sản Phẩm A</option>
+                                        <option value="2">Sản Phẩm B</option>
+                                    </select>
                                 </div>
+                                <div class="col-md-1 p-0">
+                                    <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                            title="Thêm Sản Phẩm.">
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#add_new_product">
+                                            <i class="tio-add-circle"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- End Form Group -->
+
+                            <div class="row">
+                                <!--Thể loại-->
+                                <div class="col-sm-6 row p-0 m-0">
+                                    <!-- Form Group -->
+                                    <div class="form-group col-md-10">
+                                        <label for="theLoai" class="input-label">Thể Loại</label>
+                                        <select class="js-select2-custom custom-select" id="theLoai" size="1"
+                                                style="opacity: 0;"
+                                                data-hs-select2-options='{
+                                    "placeholder": "Tìm thể loại...",
+                                    "searchInputPlaceholder": "Tìm thể loại..."
+                                    }'>
+                                            <option value="1">Thể Loại A</option>
+                                            <option value="2">Thể Loại B</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 pl-0 m-0">
+                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                                title="Thêm Thể Loại.">
+                                            <a class="btn btn-primary" data-toggle="modal"
+                                               data-target="#add_new_product">
+                                                <i class="tio-add-circle"></i>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <!-- End Form Group -->
+                                </div>
+                                <!--Thương hiệu-->
+                                <div class="col-sm-6 row p-0 m-0">
+                                    <!-- Form Group -->
+                                    <div class="form-group col-md-10 ">
+                                        <label for="thuongHieu" class="input-label">Thương Hiệu</label>
+
+                                        <select class="js-select2-custom custom-select" id="thuongHieu" size="1"
+                                                style="opacity: 0;"
+                                                data-hs-select2-options='{
+                                    "placeholder": "Tìm thương hiệu...",
+                                    "searchInputPlaceholder": "Tìm thương hiệu..."
+                                    }'>
+                                            <option value="1">Apple</option>
+                                            <option value="2">Samsung</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 pl-0 m-0">
+                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                                title="Thêm thương hiệu.">
+                                            <a class="btn btn-primary" data-toggle="modal"
+                                               data-target="#add_new_product">
+                                                <i class="tio-add-circle"></i>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <!-- End Form Group -->
+                                </div>
+                                <!--Chất liệu-->
+                                <div class="col-sm-6 row p-0 m-0">
+                                    <!-- Form Group -->
+                                    <div class="form-group col-md-10 ">
+                                        <label for="chatLieu" class="input-label">Chất Liệu</label>
+
+                                        <select class="js-select2-custom custom-select" id="chatLieu" size="1"
+                                                style="opacity: 0;"
+                                                data-hs-select2-options='{
+                                    "placeholder": "Tìm chất liệu...",
+                                    "searchInputPlaceholder": "Tìm chất liệu..."
+                                    }'>
+                                            <option value="1">Da</option>
+                                            <option value="2">Vải</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 pl-0 m-0">
+                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                                title="Thêm chất liệu.">
+                                            <a class="btn btn-primary" data-toggle="modal"
+                                               data-target="#add_new_product">
+                                                <i class="tio-add-circle"></i>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <!-- End Form Group -->
+                                </div>
+                                <!--Đế Giày-->
+                                <div class="col-sm-6 row p-0 m-0">
+                                    <!-- Form Group -->
+                                    <div class="form-group col-md-10 ">
+                                        <label for="deGiay" class="input-label">Đế Giày</label>
+
+                                        <select class="js-select2-custom custom-select" id="deGiay" size="1"
+                                                style="opacity: 0;"
+                                                data-hs-select2-options='{
+                                    "placeholder": "Tìm đế giày...",
+                                    "searchInputPlaceholder": "Tìm đế giày..."
+                                    }'>
+                                            <option value="1">Đế Sắt</option>
+                                            <option value="2">Đế Nhữa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 pl-0 m-0">
+                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                                title="Thêm đế giày.">
+                                            <a class="btn btn-primary" data-toggle="modal"
+                                               data-target="#add_new_product">
+                                                <i class="tio-add-circle"></i>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <!-- End Form Group -->
+                                </div>
+                                <!--Cổ Giày-->
+                                <div class="col-sm-6 row p-0 m-0">
+                                    <!-- Form Group -->
+                                    <div class="form-group col-md-10 ">
+                                        <label for="coGiay" class="input-label">Cổ Giày</label>
+
+                                        <select class="js-select2-custom custom-select" name="coGiay" id="coGiay"
+                                                size="1"
+                                                style="opacity: 0;"
+                                                data-hs-select2-options='{
+                                    "placeholder": "Tìm cổ giày...",
+                                    "searchInputPlaceholder": "Tìm cổ giày..."
+                                    }'>
+                                            <option value="1">Đế Sắt</option>
+                                            <option value="2">Đế Nhữa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 pl-0 m-0">
+                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                                title="Thêm cổ giày.">
+                                            <a class="btn btn-primary" data-toggle="modal"
+                                               data-target="#add_new_product">
+                                                <i class="tio-add-circle"></i>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <!-- End Form Group -->
+                                </div>
+                                <!--Mũi Giày-->
+                                <div class="col-sm-6 row p-0 m-0">
+                                    <!-- Form Group -->
+                                    <div class="form-group col-md-10 ">
+                                        <label for="muiGiay" class="input-label">Mũi Giày</label>
+
+                                        <select class="js-select2-custom custom-select" name="muiGiay" id="muiGiay"
+                                                size="1"
+                                                style="opacity: 0;"
+                                                data-hs-select2-options='{
+                                    "placeholder": "Tìm mũi giày...",
+                                    "searchInputPlaceholder": "Tìm mũi giày..."
+                                    }'>
+                                            <option value="1">Mũi Sắt</option>
+                                            <option value="2">Mũi Nhữa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 pl-0 m-0">
+                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
+                                                title="Thêm mũi giày.">
+                                            <a class="btn btn-primary" data-toggle="modal"
+                                               data-target="#add_new_product">
+                                                <i class="tio-add-circle"></i>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <!-- End Form Group -->
+                                </div>
+                                <!-- Form Group -->
+
                                 <!-- End Form Group -->
                             </div>
                         </div>
                         <!-- End Row -->
-
-                        <label class="input-label">Description <span
-                                class="input-label-secondary">(Optional)</span></label>
-
-                        <!-- Quill -->
-                        <div class="quill-custom">
-                            <div class="js-quill" style="min-height: 15rem;" data-hs-quill-options='{
-                          "placeholder": "Type your description..."
-                         }'>
-                            </div>
-                        </div>
-                        <!-- End Quill -->
                     </div>
-                    <!-- Body -->
-                </div>
-                <!-- End Card -->
+                    <!-- End Card -->
 
-                <!-- Card -->
-                <div class="card mb-3 mb-lg-5">
-                    <!-- Header -->
-                    <div class="card-header">
-                        <h4 class="card-header-title">Media</h4>
+                    <!-- Card -->
+                    <div class="card mb-3 mb-lg-5">
+                        <!-- Header -->
+                        <div class="card-header">
+                            <h4 class="card-header-title">Media</h4>
 
-                        <!-- Unfold -->
-                        <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-sm btn-ghost-secondary" href="javascript:;"
-                               data-hs-unfold-options='{
-                       "target": "#mediaDropdown",
-                       "type": "css-animation"
-                     }'>
-                                Add media from URL <i class="tio-chevron-down"></i>
-                            </a>
-
-                            <div id="mediaDropdown"
-                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
-                                <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                   data-target="#addImageFromURLModal">
-                                    <i class="tio-link dropdown-item-icon"></i> Add image from URL
+                            <!-- Unfold -->
+                            <div class="hs-unfold">
+                                <a class="js-hs-unfold-invoker btn btn-sm btn-ghost-secondary" href="javascript:;"
+                                   data-hs-unfold-options='{
+                                   "target": "#mediaDropdown",
+                                   "type": "css-animation"}'>
+                                    Chọn Ảnh <i class="tio-chevron-down"></i>
                                 </a>
-                                <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                   data-target="#embedVideoModal">
-                                    <i class="tio-youtube-outlined dropdown-item-icon"></i> Embed video
-                                </a>
+                                <div id="mediaDropdown"
+                                     class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
+                                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                       data-target="#addImageFromURLModal">
+                                        <i class="tio-link dropdown-item-icon"></i>Thêm Đường Dẫn
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                       data-target="#select_img_firebase">
+                                        <i class="tio-youtube-outlined dropdown-item-icon"></i> Chọn Ảnh Có Sẵn
+                                    </a>
+                                </div>
                             </div>
+                            <!-- End Unfold -->
                         </div>
-                        <!-- End Unfold -->
-                    </div>
-                    <!-- End Header -->
+                        <!-- End Header -->
 
-                    <!-- Body -->
-                    <div class="card-body">
-                        <!-- Dropzone -->
-                        <div id="attachFilesNewProjectLabel" class="js-dropzone dropzone-custom custom-file-boxed">
-                            <div class="dz-message custom-file-boxed-label">
-                                <img class="avatar avatar-xl avatar-4by3 mb-3"
-                                     src="/assets/cms/svg/illustrations/browse.svg" alt="Image Description">
-                                <h5 class="mb-1">Choose files to upload</h5>
-                                <p class="mb-2">or</p>
-                                <span class="btn btn-sm btn-primary">Browse files</span>
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Dropzone -->
+                            <div id="attachFilesNewProjectLabel" class="js-dropzone dropzone-custom custom-file-boxed">
+                                <div class="dz-message custom-file-boxed-label">
+                                    <img class="avatar avatar-xl avatar-4by3 mb-3"
+                                         src="/assets/cms/svg/illustrations/browse.svg" alt="Image Description">
+                                    <h5 class="mb-1">Choose files to upload</h5>
+                                    <p class="mb-2">or</p>
+                                    <span class="btn btn-sm btn-primary">Browse files</span>
+                                </div>
                             </div>
+                            <!-- End Dropzone -->
                         </div>
-                        <!-- End Dropzone -->
+                        <!-- Body -->
                     </div>
-                    <!-- Body -->
-                </div>
-                <!-- End Card -->
+                    <!-- End Card -->
 
-                <!-- Card -->
-                <div class="card">
-                    <!-- Header -->
-                    <div class="card-header">
-                        <h4 class="card-header-title">Variants</h4>
-                    </div>
-                    <!-- End Header -->
+                    <!-- Card -->
+                    <div class="card">
+                        <!-- Header -->
+                        <div class="card-header">
+                            <h4 class="card-header-title">Variants</h4>
+                        </div>
+                        <!-- End Header -->
 
-                    <!-- Body -->
-                    <div class="card-body">
-                        <h6 class="text-cap">Options</h6>
+                        <!-- Body -->
+                        <div class="card-body">
+                            <h6 class="text-cap">Options</h6>
 
-                        <div class="js-add-field" data-hs-add-field-options='{
+                            <div class="js-add-field" data-hs-add-field-options='{
                       "template": "#addAnotherOptionFieldTemplate",
                       "container": "#addAnotherOptionFieldContainer",
                       "defaultCreated": 0
                     }'>
-                            <!-- Form Group -->
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="input-group-prepend">
-                                            <!-- Select -->
+                                <!-- Form Group -->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="input-group-prepend">
+                                                <!-- Select -->
+                                                <select class="js-select2-custom custom-select" size="1"
+                                                        style="opacity: 0;"
+                                                        data-hs-select2-options='{
+                                    "minimumResultsForSearch": "Infinity"
+                                  }'>
+                                                    <option value="Size">Size</option>
+                                                    <option value="Color">Color</option>
+                                                    <option value="Material">Material</option>
+                                                    <option value="Style">Style</option>
+                                                    <option value="Title">Title</option>
+                                                </select>
+                                                <!-- End Select -->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-8">
+                                            <!-- Select2 -->
                                             <select class="js-select2-custom custom-select" size="1" style="opacity: 0;"
-                                                    data-hs-select2-options='{
-                                    "minimumResultsForSearch": "Infinity"
-                                  }'>
-                                                <option value="Size">Size</option>
-                                                <option value="Color">Color</option>
-                                                <option value="Material">Material</option>
-                                                <option value="Style">Style</option>
-                                                <option value="Title">Title</option>
-                                            </select>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-
-                                    <div class="col-8">
-                                        <!-- Select2 -->
-                                        <select class="js-select2-custom custom-select" size="1" style="opacity: 0;"
-                                                multiple="" data-hs-select2-options='{
+                                                    multiple="" data-hs-select2-options='{
                                   "minimumResultsForSearch": "Infinity",
                                   "placeholder": "Separate options with enter",
                                   "tags": true
                                 }'>
-                                            <option label="empty"></option>
-                                        </select>
-                                        <!-- End Select2 -->
+                                                <option label="empty"></option>
+                                            </select>
+                                            <!-- End Select2 -->
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- End Form Group -->
+
+                                <!-- Container For Input Field -->
+                                <div id="addAnotherOptionFieldContainer"></div>
+
+                                <a href="javascript:;"
+                                   class="js-create-field btn btn-sm btn-no-focus btn-ghost-primary">
+                                    <i class="tio-add"></i> Add another option
+                                </a>
                             </div>
-                            <!-- End Form Group -->
 
-                            <!-- Container For Input Field -->
-                            <div id="addAnotherOptionFieldContainer"></div>
+                            <!-- Add Another Option Input Field -->
+                            <div id="addAnotherOptionFieldTemplate" style="display: none;">
+                                <!-- Form Group -->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="input-group-prepend">
+                                                <!-- Select -->
+                                                <select class="js-select2-custom-dynamic custom-select" size="1"
+                                                        style="opacity: 0;" data-hs-select2-options='{
+                                    "minimumResultsForSearch": "Infinity"
+                                  }'>
+                                                    <option value="Size">Size</option>
+                                                    <option value="Color">Color</option>
+                                                    <option value="Material">Material</option>
+                                                    <option value="Style">Style</option>
+                                                    <option value="Title">Title</option>
+                                                </select>
+                                                <!-- End Select -->
+                                            </div>
+                                        </div>
 
-                            <a href="javascript:;" class="js-create-field btn btn-sm btn-no-focus btn-ghost-primary">
-                                <i class="tio-add"></i> Add another option
-                            </a>
+                                        <div class="col-8">
+                                            <!-- Select2 -->
+                                            <select class="js-select2-custom-dynamic custom-select" size="1"
+                                                    style="opacity: 0;" multiple="" data-hs-select2-options='{
+                                  "minimumResultsForSearch": "Infinity",
+                                  "placeholder": "Separate options with enter",
+                                  "tags": true
+                                }'>
+                                                <option label="empty"></option>
+                                            </select>
+                                            <!-- End Select2 -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+                            </div>
+                            <!-- End Add Another Option Input Field -->
                         </div>
+                        <!-- Body -->
+                    </div>
+                    <!-- End Card -->
+                </div>
 
-                        <!-- Add Another Option Input Field -->
-                        <div id="addAnotherOptionFieldTemplate" style="display: none;">
+                <div class="col-lg-4">
+                    <!-- Card -->
+                    <div class="card mb-3 mb-lg-5">
+                        <!-- Header -->
+                        <div class="card-header">
+                            <h4 class="card-header-title">Giá</h4>
+                        </div>
+                        <!-- End Header -->
+
+                        <!-- Body -->
+                        <div class="card-body">
                             <!-- Form Group -->
                             <div class="form-group">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="input-group-prepend">
-                                            <!-- Select -->
-                                            <select class="js-select2-custom-dynamic custom-select" size="1"
-                                                    style="opacity: 0;" data-hs-select2-options='{
-                                    "minimumResultsForSearch": "Infinity"
-                                  }'>
-                                                <option value="Size">Size</option>
-                                                <option value="Color">Color</option>
-                                                <option value="Material">Material</option>
-                                                <option value="Style">Style</option>
-                                                <option value="Title">Title</option>
-                                            </select>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-
-                                    <div class="col-8">
-                                        <!-- Select2 -->
-                                        <select class="js-select2-custom-dynamic custom-select" size="1"
-                                                style="opacity: 0;" multiple="" data-hs-select2-options='{
-                                  "minimumResultsForSearch": "Infinity",
-                                  "placeholder": "Separate options with enter",
-                                  "tags": true
-                                }'>
-                                            <option label="empty"></option>
-                                        </select>
-                                        <!-- End Select2 -->
-                                    </div>
+                                <label for="giaNhap" class="input-label">Giá Nhập</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control money-input-mask" name="giaNhap" id="giaNhap"
+                                           placeholder="Vui lòng nhập giá nhập." aria-label="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="giaGoc" class="input-label">Giá Gốc</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control money-input-mask" name="giaGoc" id="giaGoc"
+                                           placeholder="Vui lòng nhập giá nhập." aria-label="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="giaBan" class="input-label">Giá Bán</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control money-input-mask" name="giaBan" id="giaBan"
+                                           placeholder="Vui lòng nhập giá nhập." aria-label="">
                                 </div>
                             </div>
                             <!-- End Form Group -->
+
+                            <hr class="my-4">
+
+                            <!-- Toggle Switch -->
+                            <label class="row toggle-switch" for="sales">
+                            <span class="col-8 col-sm-9 toggle-switch-content">
+                                <span class="text-dark">Sales</span>
+                            </span>
+                                <span class="col-4 col-sm-3">
+                                <input type="checkbox" class="toggle-switch-input" id="sales">
+                                <span class="toggle-switch-label ml-auto">
+                                    <span class="toggle-switch-indicator"></span>
+                                </span>
+                            </span>
+                            </label>
+                            <hr class="my-4">
+
+                            <!-- Toggle Switch -->
+                            <label class="row toggle-switch" for="status">
+                            <span class="col-8 col-sm-9 toggle-switch-content">
+                                <span class="text-dark">Trạng Thái</span>
+                            </span>
+                                <span class="col-4 col-sm-3">
+                                <input type="checkbox" class="toggle-switch-input" id="status">
+                                <span class="toggle-switch-label ml-auto">
+                                    <span class="toggle-switch-indicator"></span>
+                                </span>
+                            </span>
+                            </label>
+                            <!-- End Toggle Switch -->
                         </div>
-                        <!-- End Add Another Option Input Field -->
+                        <!-- Body -->
                     </div>
-                    <!-- Body -->
-                </div>
-                <!-- End Card -->
-            </div>
+                    <!-- End Card -->
 
-            <div class="col-lg-4">
-                <!-- Card -->
-                <div class="card mb-3 mb-lg-5">
-                    <!-- Header -->
-                    <div class="card-header">
-                        <h4 class="card-header-title">Pricing</h4>
-                    </div>
-                    <!-- End Header -->
+                    <!-- Card -->
+                    <div class="card">
+                        <!-- Header -->
+                        <div class="card-header">
+                            <h4 class="card-header-title">Phiên Bản</h4>
+                        </div>
+                        <!-- End Header -->
 
-                    <!-- Body -->
-                    <div class="card-body">
-                        <!-- Form Group -->
-                        <div class="form-group">
-                            <label for="priceNameLabel" class="input-label">Price</label>
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Form Group -->
+                            <div class="form-group">
+                                <label for="mauSac" class="input-label">Màu Sắc</label>
 
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="priceName" id="priceNameLabel"
-                                       placeholder="0.00" aria-label="0.00">
-
-                                <div class="input-group-append">
-                                    <!-- Select -->
-                                    <div id="priceSelect" class="select2-custom select2-custom-right">
-                                        <select class="js-select2-custom custom-select" size="1" style="opacity: 0;"
-                                                data-hs-select2-options='{
-                                    "dropdownParent": "#priceSelect",
-                                    "dropdownAutoWidth": true,
-                                    "width": true
-                                  }'>
-                                            <option value="USD" selected="">USD</option>
-                                            <option value="AED">AED</option>
-                                            <option value="AFN">AFN</option>
-                                            <option value="ALL">ALL</option>
-                                            <option value="AMD">AMD</option>
-                                            <option value="ANG">ANG</option>
-                                            <option value="AOA">AOA</option>
-                                            <option value="ARS">ARS</option>
-                                            <option value="AUD">AUD</option>
-                                            <option value="AWG">AWG</option>
-                                            <option value="AZN">AZN</option>
-                                            <option value="BAM">BAM</option>
-                                            <option value="BBD">BBD</option>
-                                            <option value="BDT">BDT</option>
-                                            <option value="BGN">BGN</option>
-                                            <option value="BIF">BIF</option>
-                                            <option value="BMD">BMD</option>
-                                            <option value="BND">BND</option>
-                                            <option value="BOB">BOB</option>
-                                            <option value="BRL">BRL</option>
-                                            <option value="BSD">BSD</option>
-                                            <option value="BWP">BWP</option>
-                                            <option value="BZD">BZD</option>
-                                            <option value="CAD">CAD</option>
-                                            <option value="CDF">CDF</option>
-                                            <option value="CHF">CHF</option>
-                                            <option value="CLP">CLP</option>
-                                            <option value="CNY">CNY</option>
-                                            <option value="COP">COP</option>
-                                            <option value="CRC">CRC</option>
-                                            <option value="CVE">CVE</option>
-                                            <option value="CZK">CZK</option>
-                                            <option value="DJF">DJF</option>
-                                            <option value="DKK">DKK</option>
-                                            <option value="DOP">DOP</option>
-                                            <option value="DZD">DZD</option>
-                                            <option value="EGP">EGP</option>
-                                            <option value="ETB">ETB</option>
-                                            <option value="EUR">EUR</option>
-                                            <option value="FJD">FJD</option>
-                                            <option value="FKP">FKP</option>
-                                            <option value="GBP">GBP</option>
-                                            <option value="GEL">GEL</option>
-                                            <option value="GIP">GIP</option>
-                                            <option value="GMD">GMD</option>
-                                            <option value="GNF">GNF</option>
-                                            <option value="GTQ">GTQ</option>
-                                            <option value="GYD">GYD</option>
-                                            <option value="HKD">HKD</option>
-                                            <option value="HNL">HNL</option>
-                                            <option value="HRK">HRK</option>
-                                            <option value="HTG">HTG</option>
-                                            <option value="HUF">HUF</option>
-                                            <option value="IDR">IDR</option>
-                                            <option value="ILS">ILS</option>
-                                            <option value="INR">INR</option>
-                                            <option value="ISK">ISK</option>
-                                            <option value="JMD">JMD</option>
-                                            <option value="JPY">JPY</option>
-                                            <option value="KES">KES</option>
-                                            <option value="KGS">KGS</option>
-                                            <option value="KHR">KHR</option>
-                                            <option value="KMF">KMF</option>
-                                            <option value="KRW">KRW</option>
-                                            <option value="KYD">KYD</option>
-                                            <option value="KZT">KZT</option>
-                                            <option value="LAK">LAK</option>
-                                            <option value="LBP">LBP</option>
-                                            <option value="LKR">LKR</option>
-                                            <option value="LRD">LRD</option>
-                                            <option value="LSL">LSL</option>
-                                            <option value="MAD">MAD</option>
-                                            <option value="MDL">MDL</option>
-                                            <option value="MGA">MGA</option>
-                                            <option value="MKD">MKD</option>
-                                            <option value="MMK">MMK</option>
-                                            <option value="MNT">MNT</option>
-                                            <option value="MOP">MOP</option>
-                                            <option value="MRO">MRO</option>
-                                            <option value="MUR">MUR</option>
-                                            <option value="MVR">MVR</option>
-                                            <option value="MWK">MWK</option>
-                                            <option value="MXN">MXN</option>
-                                            <option value="MYR">MYR</option>
-                                            <option value="MZN">MZN</option>
-                                            <option value="NAD">NAD</option>
-                                            <option value="NGN">NGN</option>
-                                            <option value="NIO">NIO</option>
-                                            <option value="NOK">NOK</option>
-                                            <option value="NPR">NPR</option>
-                                            <option value="NZD">NZD</option>
-                                            <option value="PAB">PAB</option>
-                                            <option value="PEN">PEN</option>
-                                            <option value="PGK">PGK</option>
-                                            <option value="PHP">PHP</option>
-                                            <option value="PKR">PKR</option>
-                                            <option value="PLN">PLN</option>
-                                            <option value="PYG">PYG</option>
-                                            <option value="QAR">QAR</option>
-                                            <option value="RON">RON</option>
-                                            <option value="RSD">RSD</option>
-                                            <option value="RUB">RUB</option>
-                                            <option value="RWF">RWF</option>
-                                            <option value="SAR">SAR</option>
-                                            <option value="SBD">SBD</option>
-                                            <option value="SCR">SCR</option>
-                                            <option value="SEK">SEK</option>
-                                            <option value="SGD">SGD</option>
-                                            <option value="SHP">SHP</option>
-                                            <option value="SLL">SLL</option>
-                                            <option value="SOS">SOS</option>
-                                            <option value="SRD">SRD</option>
-                                            <option value="STD">STD</option>
-                                            <option value="SZL">SZL</option>
-                                            <option value="THB">THB</option>
-                                            <option value="TJS">TJS</option>
-                                            <option value="TOP">TOP</option>
-                                            <option value="TRY">TRY</option>
-                                            <option value="TTD">TTD</option>
-                                            <option value="TWD">TWD</option>
-                                            <option value="TZS">TZS</option>
-                                            <option value="UAH">UAH</option>
-                                            <option value="UGX">UGX</option>
-                                            <option value="UYU">UYU</option>
-                                            <option value="UZS">UZS</option>
-                                            <option value="VND">VND</option>
-                                            <option value="VUV">VUV</option>
-                                            <option value="WST">WST</option>
-                                            <option value="XAF">XAF</option>
-                                            <option value="XCD">XCD</option>
-                                            <option value="XOF">XOF</option>
-                                            <option value="XPF">XPF</option>
-                                            <option value="YER">YER</option>
-                                            <option value="ZAR">ZAR</option>
-                                            <option value="ZMW">ZMW</option>
-                                        </select>
-                                    </div>
-                                    <!-- End Select -->
-                                </div>
+                                <!-- Select2 -->
+                                <select class="js-select2-custom custom-select" id="mauSac" multiple size="1"
+                                        style="opacity: 0;"
+                                        data-hs-select2-options='{
+                                    "tags": true,
+                                    "minimumResultsForSearch": "Infinity",
+                                    "placeholder":"Chọn màu"
+                                    }'>
+                                    <option value="#FFFFFF" data-name="Màu Trắng">#FFFFFF</option>
+                                    <option value="#000000" data-name="Màu Đen">#000000</option>
+                                    <option value="#0000FF" data-name="Màu Tím">#0000FF</option>
+                                    <option value="#C0C0C0" data-name="Màu Xám">#C0C0C0</option>
+                                </select>
+                                <!-- End Select2 -->
                             </div>
+                            <!-- End Form Group -->
+
+                            <!-- Form Group -->
+                            <div class="form-group">
+                                <label for="kichCo" class="input-label">Kích Cỡ</label>
+                                <!-- Select -->
+                                <select class="js-select2-custom custom-select" name="kichCo" id="kichCo" multiple
+                                        size="1"
+                                        style="opacity: 0;"
+                                        data-hs-select2-options='{
+                                    "tags": true ,
+                                    "placeholder":"Chọn size"
+                                    }'>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                </select>
+                                <!-- End Select -->
+                            </div>
+                            <!-- Form Group -->
                         </div>
-                        <!-- End Form Group -->
-
-                        <div class="mb-2">
-                            <a class="d-inline-block" href="javascript:;" data-toggle="modal"
-                               data-target="#productsAdvancedFeaturesModal">
-                                <i class="tio-star tio-lg text-warning mr-1"></i> Set "Compare to" price
-                            </a>
-                        </div>
-
-                        <a class="d-inline-block" href="javascript:;" data-toggle="modal"
-                           data-target="#productsAdvancedFeaturesModal">
-                            <i class="tio-star tio-lg text-warning mr-1"></i> Bulk discount pricing
-                        </a>
-
-                        <hr class="my-4">
-
-                        <!-- Toggle Switch -->
-                        <label class="row toggle-switch" for="availabilitySwitch1">
-                  <span class="col-8 col-sm-9 toggle-switch-content">
-                    <span class="text-dark">Availability</span>
-                  </span>
-                            <span class="col-4 col-sm-3">
-                    <input type="checkbox" class="toggle-switch-input" id="availabilitySwitch1">
-                    <span class="toggle-switch-label ml-auto">
-                      <span class="toggle-switch-indicator"></span>
-                    </span>
-                  </span>
-                        </label>
-                        <!-- End Toggle Switch -->
+                        <!-- End Body -->
                     </div>
-                    <!-- Body -->
+                    <!-- End Card -->
                 </div>
-                <!-- End Card -->
-
-                <!-- Card -->
-                <div class="card">
-                    <!-- Header -->
-                    <div class="card-header">
-                        <h4 class="card-header-title">Organization</h4>
-                    </div>
-                    <!-- End Header -->
-
-                    <!-- Body -->
-                    <div class="card-body">
-                        <!-- Form Group -->
-                        <div class="form-group">
-                            <label for="vendorLabel" class="input-label">Vendor</label>
-
-                            <input type="text" class="form-control" name="vendor" id="vendorLabel"
-                                   placeholder="eg. Nike" aria-label="eg. Nike">
-                        </div>
-                        <!-- End Form Group -->
-
-                        <!-- Form Group -->
-                        <div class="form-group">
-                            <label for="categoryLabel" class="input-label">Category</label>
-
-                            <!-- Select -->
-                            <select class="js-select2-custom custom-select" size="1" style="opacity: 0;"
-                                    id="categoryLabel" data-hs-select2-options='{
-                            "minimumResultsForSearch": "Infinity",
-                            "placeholder": "Select category"
-                          }'>
-                                <option label="empty"></option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Shoes">Shoes</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Others">Others</option>
-                            </select>
-                            <!-- End Select -->
-                        </div>
-                        <!-- Form Group -->
-
-                        <!-- Form Group -->
-                        <div class="form-group">
-                            <label for="collectionsLabel" class="input-label">Collections</label>
-
-                            <!-- Select -->
-                            <select class="js-select2-custom custom-select" size="1" style="opacity: 0;"
-                                    id="collectionsLabel" data-hs-select2-options='{
-                            "minimumResultsForSearch": "Infinity",
-                            "placeholder": "Select collections"
-                          }'>
-                                <option label="empty"></option>
-                                <option value="Winter">Winter</option>
-                                <option value="Spring">Spring</option>
-                                <option value="Summer">Summer</option>
-                                <option value="Autumn">Autumn</option>
-                            </select>
-                            <!-- End Select -->
-
-                            <span class="form-text">Add this product to a collection so it’s easy to find in your store.</span>
-                        </div>
-                        <!-- Form Group -->
-
-                        <label for="tagsLabel" class="input-label">Tags</label>
-
-                        <input type="text" class="js-tagify tagify-form-control form-control" name="tagsName"
-                               id="tagsLabel" placeholder="Enter tags here" aria-label="Enter tags here">
-                    </div>
-                    <!-- End Body -->
-                </div>
-                <!-- End Card -->
             </div>
-        </div>
+        </form>
+
         <!-- End Row -->
-
-        <div class="position-fixed bottom-0 content-centered-x w-100 z-index-99 mb-3" style="max-width: 40rem;">
-            <!-- Card -->
-            <div class="card card-sm bg-dark border-dark mx-2">
-                <div class="card-body">
-                    <div class="row justify-content-center justify-content-sm-between">
-                        <div class="col">
-                            <button type="button" class="btn btn-ghost-danger">Delete</button>
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-ghost-light mr-2">Discard</button>
-                            <button type="button" class="btn btn-primary">Save</button>
-                        </div>
-                    </div>
-                    <!-- End Row -->
-                </div>
-            </div>
-            <!-- End Card -->
-        </div>
     </div>
     <!-- End Content -->
 
@@ -1039,243 +995,328 @@
 <!-- End Add Image from URL Modal -->
 
 <!-- Embed Video Modal -->
-<div class="modal fade" id="embedVideoModal" tabindex="-1" role="dialog" aria-labelledby="embedVideoModalTitle"
+<div class="modal fade" id="select_img_firebase" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document" style="max-width: 800px">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
-                <h4 id="embedVideoModalTitle" class="modal-title">Embed video</h4>
-
+                <h5 class="modal-title" id="Chọn Ảnh">Chọn Ảnh</h5>
                 <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
                         aria-label="Close">
-                    <i class="tio-clear tio-lg"></i>
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
                 </button>
             </div>
             <!-- End Header -->
 
             <!-- Body -->
             <div class="modal-body">
-                <label for="pasteVideoURLNameLabel" class="input-label">Paste video URL</label>
-                <input type="text" class="form-control" name="projectName" id="pasteVideoURLNameLabel"
-                       placeholder="https://" aria-label="https://">
-            </div>
-            <!-- End Body -->
 
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
-                <button type="button" class="btn btn-primary">Add media</button>
+                <span class="divider">Ảnh Đã Chọn</span>
+                <!-- Gallery -->
+                <div id="anh_duoc_chon" class="js-fancybox row gx-2"
+                     data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
+
+                </div>
+                <span class="divider mt-2 mb-2"></span>
+                <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn">
+                    <span id="customFileExample5">Thêm Ảnh</span>
+                    <input id="fileAttachmentBtn" name="custom-file" type="file" multiple
+                           class="js-file-attach custom-file-btn-input"
+                           data-hs-file-attach-options='{ "textTarget": "#customFileExample5"}'>
+                </label>
+                <!-- End Gallery -->
+                <span class="divider">Ảnh Hiện Có</span>
+                <!-- Gallery -->
+                <div id="anh_co_san" class="js-fancybox row gx-2"
+                     data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
+
+                    <!-- End Gallery -->
+                </div>
+                <!-- End Body -->
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Continue</button>
+                </div>
+                <!-- End Footer -->
             </div>
-            <!-- End Footer -->
         </div>
     </div>
-    -
-</div>
-<!-- End Embed Video Modal -->
+    <!-- End Embed Video Modal -->
 
-<!-- Products Advanced Features Modal -->
-<div class="modal fade" id="productsAdvancedFeaturesModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-close">
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body">
-                <div class="text-center mb-7">
-                    <h4 class="h1">Advanced features</h4>
-                    <p>"Compare to" Price, Bulk Discount Pricing, Inventory Tracking</p>
-
-                    <a class="btn btn-primary" href="#">
-                        <i class="tio-star mr-1"></i> Upgrade to get these features
-                    </a>
+    <!-- Products Advanced Features Modal -->
+    <div class="modal fade" id="productsAdvancedFeaturesModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-close">
+                    <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                            aria-label="Close">
+                        <i class="tio-clear tio-lg"></i>
+                    </button>
                 </div>
+                <!-- End Header -->
 
-                <!-- Media -->
-                <div class="d-sm-flex">
-                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                         src="/assets/cms/svg/illustrations/choice.svg" alt="Image Description">
+                <!-- Body -->
+                <div class="modal-body">
+                    <div class="text-center mb-7">
+                        <h4 class="h1">Advanced features</h4>
+                        <p>"Compare to" Price, Bulk Discount Pricing, Inventory Tracking</p>
 
-                    <div class="media-body">
-                        <h4>"Compare to" price</h4>
-                        <p>Use this feature when you want to put a product on sale or show savings off suggested retail
-                            pricing.</p>
+                        <a class="btn btn-primary" href="#">
+                            <i class="tio-star mr-1"></i> Upgrade to get these features
+                        </a>
                     </div>
-                </div>
-                <!-- End Media -->
 
-                <hr class="my-4">
+                    <!-- Media -->
+                    <div class="d-sm-flex">
+                        <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
+                             src="/assets/cms/svg/illustrations/choice.svg" alt="Image Description">
 
-                <!-- Media -->
-                <div class="d-sm-flex">
-                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                         src="/assets/cms/svg/illustrations/presenting.svg" alt="Image Description">
-
-                    <div class="media-body">
-                        <h4>Bulk discount pricing</h4>
-                        <p>Encourage higher purchase quantities with volume discounts.</p>
+                        <div class="media-body">
+                            <h4>"Compare to" price</h4>
+                            <p>Use this feature when you want to put a product on sale or show savings off suggested
+                                retail
+                                pricing.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- End Media -->
+                    <!-- End Media -->
 
-                <hr class="my-4">
+                    <hr class="my-4">
 
-                <!-- Media -->
-                <div class="d-sm-flex">
-                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                         src="/assets/cms/svg/illustrations/book.svg" alt="Image Description">
+                    <!-- Media -->
+                    <div class="d-sm-flex">
+                        <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
+                             src="/assets/cms/svg/illustrations/presenting.svg" alt="Image Description">
 
-                    <div class="media-body">
-                        <h4>Inventory tracking</h4>
-                        <p>Automatically keep track of product availability and receive notifications when inventory
-                            levels get low.</p>
+                        <div class="media-body">
+                            <h4>Bulk discount pricing</h4>
+                            <p>Encourage higher purchase quantities with volume discounts.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- End Media -->
-            </div>
-            <!-- End Body -->
+                    <!-- End Media -->
 
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Close</button>
-                <button type="button" class="btn btn-primary">Upgrade now</button>
+                    <hr class="my-4">
+
+                    <!-- Media -->
+                    <div class="d-sm-flex">
+                        <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
+                             src="/assets/cms/svg/illustrations/book.svg" alt="Image Description">
+
+                        <div class="media-body">
+                            <h4>Inventory tracking</h4>
+                            <p>Automatically keep track of product availability and receive notifications when inventory
+                                levels get low.</p>
+                        </div>
+                    </div>
+                    <!-- End Media -->
+                </div>
+                <!-- End Body -->
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Close
+                    </button>
+                    <button type="button" class="btn btn-primary">Upgrade now</button>
+                </div>
+                <!-- End Footer -->
             </div>
-            <!-- End Footer -->
+        </div>
+        -
+    </div>
+    <!-- End Products Advanced Features Modal -->
+
+    <div class="modal fade" id="add_new_product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm Mới Sản Phẩm</h5>
+                    <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                            aria-label="Close">
+                        <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <!-- End Header -->
+
+                <!-- Body -->
+                <div class="modal-body">
+                    <!-- Form Group -->
+                    <div class="form-group">
+                        <div class="input-group input-group-merge">
+                            <input type="text" class="js-form-search form-control" placeholder="Thêm Sản Phẩm...">
+                            <a class="input-group-append" href="javascript:;">
+                            <span class="input-group-text">
+                                <i id="clearIconModalEg" class="tio-clear tio-lg" style="display: none;"></i>
+                            </span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- End Form Group -->
+                </div>
+                <!-- End Body -->
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary">Thêm Mới</button>
+                </div>
+                <!-- End Footer -->
+            </div>
         </div>
     </div>
-    -
-</div>
-<!-- End Products Advanced Features Modal -->
-<!-- ========== END SECONDARY CONTENTS ========== -->
+    <!-- ========== END SECONDARY CONTENTS ========== -->
 
 
-<!-- JS Implementing Plugins -->
-<script src="/assets/cms/js/vendor.min.js"></script>
+    <!-- JS Implementing Plugins -->
+    <script src="/assets/cms/js/vendor.min.js"></script>
 
-
-<!-- JS Front -->
-<script src="/assets/cms/js/theme.min.js"></script>
-
-<!-- JS Plugins Init. -->
-<script>
-    $(document).on('ready', function () {
-        // ONLY DEV
-        // =======================================================
-
-        if (window.localStorage.getItem('hs-builder-popover') === null) {
-            $('#builderPopover').popover('show')
-                .on('shown.bs.popover', function () {
-                    $('.popover').last().addClass('popover-dark')
-                });
-
-            $(document).on('click', '#closeBuilderPopover', function () {
-                window.localStorage.setItem('hs-builder-popover', true);
-                $('#builderPopover').popover('dispose');
-            });
-        } else {
-            $('#builderPopover').on('show.bs.popover', function () {
-                return false
-            });
-        }
-
-        // END ONLY DEV
-        // =======================================================
-
-
-        // BUILDER TOGGLE INVOKER
-        // =======================================================
-        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
+    <script src="/assets/cms/js/custom-firebase.js" type="module"></script>
+    <!-- JS Front -->
+    <script src="/assets/cms/js/theme.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <!-- JS Plugins Init. -->
+    <script>
+        $(document).on('ready', function () {
+            $('.js-fancybox-item').each(function () {
+                var fancybox = $.HSCore.components.HSFancyBox.init($(this));
+                // console.log(fancybox);
+            })
+        });
+        $(document).ready(function () {
+            $('.money-input-mask').mask('#.##0đ', {reverse: true});
         });
 
+        $(document).on('ready', function () {
+// ONLY DEV
+// =======================================================
 
-        // INITIALIZATION OF MEGA MENU
-        // =======================================================
-        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-            desktop: {
-                position: 'left'
-            }
-        }).init();
-
-
-        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-        // =======================================================
-        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-        // =======================================================
-        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-                return false;
-            }
-        });
-
-
-        // INITIALIZATION OF UNFOLD
-        // =======================================================
-        $('.js-hs-unfold-invoker').each(function () {
-            var unfold = new HSUnfold($(this)).init();
-        });
-
-
-        // INITIALIZATION OF FORM SEARCH
-        // =======================================================
-        $('.js-form-search').each(function () {
-            new HSFormSearch($(this)).init()
-        });
-
-
-        // INITIALIZATION OF SELECT2
-        // =======================================================
-        $('.js-select2-custom').each(function () {
-            var select2 = $.HSCore.components.HSSelect2.init($(this));
-        });
-
-
-        // INITIALIZATION OF QUILLJS EDITOR
-        // =======================================================
-        var quill = $.HSCore.components.HSQuill.init('.js-quill');
-
-
-        // INITIALIZATION OF ADD INPUT FILED
-        // =======================================================
-        $('.js-add-field').each(function () {
-            new HSAddField($(this), {
-                addedField: function () {
-                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
-                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
+            if (window.localStorage.getItem('hs-builder-popover') === null) {
+                $('#builderPopover').popover('show')
+                    .on('shown.bs.popover', function () {
+                        $('.popover').last().addClass('popover-dark')
                     });
+
+                $(document).on('click', '#closeBuilderPopover', function () {
+                    window.localStorage.setItem('hs-builder-popover', true);
+                    $('#builderPopover').popover('dispose');
+                });
+            } else {
+                $('#builderPopover').on('show.bs.popover', function () {
+                    return false
+                });
+            }
+
+            // END ONLY DEV
+            // =======================================================
+
+
+            // BUILDER TOGGLE INVOKER
+            // =======================================================
+            $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
+                $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
+            });
+
+
+            // INITIALIZATION OF MEGA MENU
+            // =======================================================
+            var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
+                desktop: {
+                    position: 'left'
                 }
             }).init();
+
+
+            // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
+            // =======================================================
+            var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
+
+
+            // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
+            // =======================================================
+            $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
+
+            $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
+                if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
+                    return false;
+                }
+            });
+
+
+            // INITIALIZATION OF UNFOLD
+            // =======================================================
+            $('.js-hs-unfold-invoker').each(function () {
+                var unfold = new HSUnfold($(this)).init();
+            });
+
+
+            // INITIALIZATION OF FORM SEARCH
+            // =======================================================
+            $('.js-form-search').each(function () {
+                new HSFormSearch($(this)).init()
+            });
+
+
+            // INITIALIZATION OF SELECT2
+            // =======================================================
+            $('.js-select2-custom').each(function () {
+                var select2 = $.HSCore.components.HSSelect2.init($(this));
+            });
+
+
+            // INITIALIZATION OF QUILLJS EDITOR
+            // =======================================================
+            var quill = $.HSCore.components.HSQuill.init('.js-quill');
+
+
+            // INITIALIZATION OF ADD INPUT FILED
+            // =======================================================
+            $('.js-add-field').each(function () {
+                new HSAddField($(this), {
+                    addedField: function () {
+                        $('.js-add-field .js-select2-custom-dynamic').each(function () {
+                            var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
+                        });
+                    }
+                }).init();
+            });
+
+
+            // INITIALIZATION OF TAGIFY
+            // =======================================================
+            $('.js-tagify').each(function () {
+                var tagify = $.HSCore.components.HSTagify.init($(this));
+            });
+
+
+            // INITIALIZATION OF DROPZONE FILE ATTACH MODULE
+            // =======================================================
+            $('.js-dropzone').each(function () {
+                var dropzone = $.HSCore.components.HSDropzone.init('#' + $(this).attr('id'));
+                // console.log(dropzone)
+            });
+        });
+        $(document).ready(function () {
+            $('#mauSac').on('change', function () {
+                var mausac = $('#mauSac').val();
+                mausac.forEach((mau) => {
+                    var ele = $('li[title="' + mau + '"]');
+                    var tenmau = $('option[value="' + mau + '"]').attr('data-name');
+                    var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
+                    $(span[0]).text(tenmau);
+                    $(ele[0]).css('background-color', mau);
+                    $(ele[0]).css('color', '#FFFFFF');
+                });
+            });
         });
 
 
-        // INITIALIZATION OF TAGIFY
-        // =======================================================
-        $('.js-tagify').each(function () {
-            var tagify = $.HSCore.components.HSTagify.init($(this));
-        });
+    </script>
 
-
-        // INITIALIZATION OF DROPZONE FILE ATTACH MODULE
-        // =======================================================
-        $('.js-dropzone').each(function () {
-            var dropzone = $.HSCore.components.HSDropzone.init('#' + $(this).attr('id'));
-        });
-    });
-</script>
-
-<!-- IE Support -->
-<div th:replace="/cms/pages/_IE-suport.html"></div>
+    <!-- IE Support -->
+    <div th:replace="/cms/pages/_IE-suport.html"></div>
 </body>
 </html>

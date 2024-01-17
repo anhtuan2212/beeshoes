@@ -1,0 +1,22 @@
+/*
+=========================================================
+* Tẩn Láo Lù
+=========================================================
+
+* Code version: 1.0
+* Copyright 2024 anhtuanlc (https://anhtuanlc.online)
+* Licensed under MIT (https://anhtuanlc.online)
+* Coded by anhtuanlc
+
+=========================================================
+ */
+.select2-selection__choice span:not(.select2-selection__choice__remove) {
+    mix-blend-mode: difference;
+}
+.img-product-files{
+    height: 100px;
+    object-fit: cover;
+}
+.box-shadow-img-file{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
