@@ -1,0 +1,101 @@
+<header class="header">
+    <div class="container" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="header__logo">
+<!--                    <a href="/" ><h1 class="logo">LightBee</h1></a>-->
+                    <a href="/"><img src="/assets/customer/img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 p-0">
+                <nav class="header__menu mobile-menu">
+                    <ul>
+                        <li class="tabsheader active" data-web="index"><a href="/">Home</a></li>
+                        <li class="tabsheader" data-web="shop"><a href="/shop">Shop</a></liclas>
+                        <li class="tabsheader" data-web="pages"><a href="#">Pages</a>
+                            <ul class="dropdown">
+                                <li><a href="/blog">Blog</a></li>
+                                <li><a href="/shop-details">Shop Details</a></li>
+                                <li><a href="/checkout">Check Out</a></li>
+                            </ul>
+                        </li>
+                        <li class="tabsheader" data-web="contact"><a href="/contact">Contacts</a></li>
+                        <li class="tabsheader" data-web="about"><a href="/about">About Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-3 p-0">
+                <div class="header__nav__option">
+                    <ul>
+                        <li> <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a></li>
+                        <li><a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a></li>
+                        <li><a href="#"><img src="/assets/customer/img/icon/padlock.png" width="21" height="22" alt=""></a>
+                            <ul class="dropdown boxshadow_drop" style="margin-right: 0px">
+                                <li sec:authorize="!isAuthenticated()">
+                                    <a th:href="@{/login}">Login</a>
+                                </li>
+                                <li sec:authorize="!isAuthenticated()">
+                                    <a th:href="@{/register}">Register</a>
+                                </li>
+                                <li sec:authorize="hasAnyAuthority('USER','MANAGER', 'ADMIN')">
+                                    <a th:href="@{/cms/}">Administration</a>
+                                </li>
+                                <li sec:authorize="isAuthenticated()">
+                                    <a th:href="@{/logout}" onclick="return confirm('Are you sure?')">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
+                            <ul class="cart-dropdown">
+                                <li class="list_product_items">
+                                    <div class="cart_product_item row">
+                                        <div class="thumb col-sm-3">
+                                            <img src="/assets/customer/img/product/product-1.jpg" alt="product img">
+                                        </div>
+                                        <div class="cart_content col-sm-9 ">
+                                            <h5 class="title col-sm-12 w_100">Tên Sản Phẩm Tên Sản Phẩm </h5>
+                                            <h6 class="product_quantity col-sm-12 w_100 mt-2" >x1</h6>
+                                            <h6 class="product_price col-sm-12 w_100 mt-2">100,000đ</h6>
+                                            <a class="cart_trash"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="cart_product_item row">
+                                        <div class="thumb col-sm-3">
+                                            <img src="/assets/customer/img/product/product-1.jpg" alt="product img">
+                                        </div>
+                                        <div class="cart_content col-sm-9 ">
+                                            <h5 class="title col-sm-12 w_100">Tên Sản Phẩm Tên Sản Phẩm </h5>
+                                            <h6 class="product_quantity col-sm-12 w_100 mt-2" >x1</h6>
+                                            <h6 class="product_price col-sm-12 w_100 mt-2">100,000đ</h6>
+                                            <a class="cart_trash"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="cart_product_item row">
+                                        <div class="thumb col-sm-3">
+                                            <img src="/assets/customer/img/product/product-1.jpg" alt="product img">
+                                        </div>
+                                        <div class="cart_content col-sm-9 ">
+                                            <h5 class="title col-sm-12 w_100">Tên Sản Phẩm Tên Sản Phẩm </h5>
+                                            <h6 class="product_quantity col-sm-12 w_100 mt-2" >x1</h6>
+                                            <h6 class="product_price col-sm-12 w_100 mt-2">100,000đ</h6>
+                                            <a class="cart_trash"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="cart-total mt-3  w_100 ">
+                                    <h5>Tổng Tiền : <span>300,000đ</span></h5>
+                                </li>
+                                <li class="cart-btn-group mt-3">
+                                    <a href="/shopping-cart" class="primary-btn cart_btn">Xem Giỏ Hàng</a>
+                                    <a href="/checkout" class="primary-btn cart_btn">Thanh Toán</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+    </div>
+</header>
