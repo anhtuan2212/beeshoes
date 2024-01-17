@@ -295,126 +295,378 @@
 
                         <!-- Body -->
                         <div class="card-body">
-                            <!-- Dropzone -->
-                            <div id="attachFilesNewProjectLabel" class="js-dropzone dropzone-custom custom-file-boxed">
-                                <div class="dz-message custom-file-boxed-label">
-                                    <img class="avatar avatar-xl avatar-4by3 mb-3"
-                                         src="/assets/cms/svg/illustrations/browse.svg" alt="Image Description">
-                                    <h5 class="mb-1">Choose files to upload</h5>
-                                    <p class="mb-2">or</p>
-                                    <span class="btn btn-sm btn-primary">Browse files</span>
-                                </div>
+                            <!-- Gallery -->
+                            <div id="img-selected" class="js-fancybox row justify-content-sm-center gx-2"
+                                 data-hs-fancybox-options='{
+                                 "selector": "#fancyboxGallery .js-fancybox-item"
+                                 }'>
                             </div>
-                            <!-- End Dropzone -->
+                            <!-- End Gallery -->
                         </div>
                         <!-- Body -->
                     </div>
                     <!-- End Card -->
-
                     <!-- Card -->
-                    <div class="card">
+                    <div class="js-add-field card mb-3 mb-lg-5" data-hs-add-field-options='{
+                  "template": "#addVariantsTemplate",
+                  "container": "#addVariantsContainer",
+                  "defaultCreated": 0,
+                  "limit": 100
+                }'>
                         <!-- Header -->
                         <div class="card-header">
-                            <h4 class="card-header-title">Variants</h4>
+                            <div class="row justify-content-between align-items-center flex-grow-1">
+                                <div class="col-12 col-sm mb-3 mb-sm-0">
+                                    <h4 class="card-header-title">Variants</h4>
+                                </div>
+
+                                <div class="col-auto">
+                                    <div class="d-flex align-items-center">
+                                        <!-- Datatable Info -->
+                                        <div id="datatableCounterInfo" style="display: none;">
+                                            <div class="d-flex align-items-center">
+                          <span class="font-size-sm mr-3">
+                            <span id="datatableCounter">0</span>
+                            Selected
+                          </span>
+                                                <a class="btn btn-sm btn-outline-danger" href="javascript:;">
+                                                    <i class="tio-delete-outlined"></i> Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- End Datatable Info -->
+
+                                        <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
+                                            <i class="tio-add"></i> Add variant
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Row -->
                         </div>
                         <!-- End Header -->
 
-                        <!-- Body -->
-                        <div class="card-body">
-                            <h6 class="text-cap">Options</h6>
+                        <!-- Table -->
+                        <div class="table-responsive datatable-custom">
+                            <table id="datatable"
+                                   class="table table-borderless table-thead-bordered table-nowrap table-align-middle"
+                                   data-hs-datatables-options='{
+                         "columnDefs": [{
+                            "targets": [0, 1, 6],
+                            "orderable": false
+                          }],
+                         "order": [],
+                         "pageLength": 15,
+                         "isResponsive": false,
+                         "isShowPaging": false
+                       }'>
+                                <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" class="table-column-pr-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
+                                            <label class="custom-control-label" for="datatableCheckAll"></label>
+                                        </div>
+                                    </th>
+                                    <th></th>
+                                    <th class="table-column-pl-0">Size</th>
+                                    <th class="table-column-pl-0">Color</th>
+                                    <th class="table-column-pl-0">Price</th>
+                                    <th class="table-column-pl-0">Quantity</th>
+                                    <th class="table-column-pl-0"></th>
+                                </tr>
+                                </thead>
 
-                            <div class="js-add-field" data-hs-add-field-options='{
-                      "template": "#addAnotherOptionFieldTemplate",
-                      "container": "#addAnotherOptionFieldContainer",
-                      "defaultCreated": 0
-                    }'>
-                                <!-- Form Group -->
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-4">
+                                <tbody id="addVariantsContainer">
+                                <tr>
+                                    <td class="table-column-pr-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   id="productVariationsCheck1">
+                                            <label class="custom-control-label" for="productVariationsCheck1"></label>
+                                        </div>
+                                    </td>
+                                    <th>
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="S">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="White">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="input-group input-group-merge">
                                             <div class="input-group-prepend">
-                                                <!-- Select -->
-                                                <select class="js-select2-custom custom-select" size="1"
-                                                        style="opacity: 0;"
-                                                        data-hs-select2-options='{
-                                    "minimumResultsForSearch": "Infinity"
-                                  }'>
-                                                    <option value="Size">Size</option>
-                                                    <option value="Color">Color</option>
-                                                    <option value="Material">Material</option>
-                                                    <option value="Style">Style</option>
-                                                    <option value="Title">Title</option>
-                                                </select>
-                                                <!-- End Select -->
+                                                <div class="input-group-text">USD</div>
+                                            </div>
+                                            <input type="text" class="form-control pl-8" value="45.00">
+                                        </div>
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <!-- Quantity Counter -->
+                                        <div class="js-quantity-counter input-group-quantity-counter">
+                                            <input type="number"
+                                                   class="js-result form-control input-group-quantity-counter-control"
+                                                   value="10">
+
+                                            <div class="input-group-quantity-counter-toggle">
+                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-remove"></i>
+                                                </a>
+                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-add"></i>
+                                                </a>
                                             </div>
                                         </div>
-
-                                        <div class="col-8">
-                                            <!-- Select2 -->
-                                            <select class="js-select2-custom custom-select" size="1" style="opacity: 0;"
-                                                    multiple="" data-hs-select2-options='{
-                                  "minimumResultsForSearch": "Infinity",
-                                  "placeholder": "Separate options with enter",
-                                  "tags": true
-                                }'>
-                                                <option label="empty"></option>
-                                            </select>
-                                            <!-- End Select2 -->
+                                        <!-- End Quantity Counter -->
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="btn-group" role="group" aria-label="Edit group">
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-edit"></i> Edit
+                                            </a>
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-delete-outlined"></i>
+                                            </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
+                                    </th>
+                                </tr>
 
-                                <!-- Container For Input Field -->
-                                <div id="addAnotherOptionFieldContainer"></div>
-
-                                <a href="javascript:;"
-                                   class="js-create-field btn btn-sm btn-no-focus btn-ghost-primary">
-                                    <i class="tio-add"></i> Add another option
-                                </a>
-                            </div>
-
-                            <!-- Add Another Option Input Field -->
-                            <div id="addAnotherOptionFieldTemplate" style="display: none;">
-                                <!-- Form Group -->
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-4">
+                                <tr>
+                                    <td class="table-column-pr-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   id="productVariationsCheck2">
+                                            <label class="custom-control-label" for="productVariationsCheck2"></label>
+                                        </div>
+                                    </td>
+                                    <th>
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="M">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="White">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="input-group input-group-merge">
                                             <div class="input-group-prepend">
-                                                <!-- Select -->
-                                                <select class="js-select2-custom-dynamic custom-select" size="1"
-                                                        style="opacity: 0;" data-hs-select2-options='{
-                                    "minimumResultsForSearch": "Infinity"
-                                  }'>
-                                                    <option value="Size">Size</option>
-                                                    <option value="Color">Color</option>
-                                                    <option value="Material">Material</option>
-                                                    <option value="Style">Style</option>
-                                                    <option value="Title">Title</option>
-                                                </select>
-                                                <!-- End Select -->
+                                                <div class="input-group-text">USD</div>
+                                            </div>
+                                            <input type="text" class="form-control pl-8" value="45.00">
+                                        </div>
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <!-- Quantity Counter -->
+                                        <div class="js-quantity-counter input-group-quantity-counter">
+                                            <input type="number"
+                                                   class="js-result form-control input-group-quantity-counter-control"
+                                                   value="10">
+
+                                            <div class="input-group-quantity-counter-toggle">
+                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-remove"></i>
+                                                </a>
+                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-add"></i>
+                                                </a>
                                             </div>
                                         </div>
-
-                                        <div class="col-8">
-                                            <!-- Select2 -->
-                                            <select class="js-select2-custom-dynamic custom-select" size="1"
-                                                    style="opacity: 0;" multiple="" data-hs-select2-options='{
-                                  "minimumResultsForSearch": "Infinity",
-                                  "placeholder": "Separate options with enter",
-                                  "tags": true
-                                }'>
-                                                <option label="empty"></option>
-                                            </select>
-                                            <!-- End Select2 -->
+                                        <!-- End Quantity Counter -->
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="btn-group" role="group" aria-label="Edit group">
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-edit"></i> Edit
+                                            </a>
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-delete-outlined"></i>
+                                            </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-                            </div>
-                            <!-- End Add Another Option Input Field -->
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <td class="table-column-pr-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   id="productVariationsCheck3">
+                                            <label class="custom-control-label" for="productVariationsCheck3"></label>
+                                        </div>
+                                    </td>
+                                    <th>
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="L">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="White">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="input-group input-group-merge">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">USD</div>
+                                            </div>
+                                            <input type="text" class="form-control pl-8" value="45.00">
+                                        </div>
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <!-- Quantity Counter -->
+                                        <div class="js-quantity-counter input-group-quantity-counter">
+                                            <input type="number"
+                                                   class="js-result form-control input-group-quantity-counter-control"
+                                                   value="10">
+
+                                            <div class="input-group-quantity-counter-toggle">
+                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-remove"></i>
+                                                </a>
+                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-add"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- End Quantity Counter -->
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="btn-group" role="group" aria-label="Edit group">
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-edit"></i> Edit
+                                            </a>
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-delete-outlined"></i>
+                                            </a>
+                                        </div>
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <td class="table-column-pr-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   id="productVariationsCheck4">
+                                            <label class="custom-control-label" for="productVariationsCheck4"></label>
+                                        </div>
+                                    </td>
+                                    <th>
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="XL">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <input type="text" class="form-control" value="White">
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="input-group input-group-merge">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">USD</div>
+                                            </div>
+                                            <input type="text" class="form-control pl-8" value="45.00">
+                                        </div>
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <!-- Quantity Counter -->
+                                        <div class="js-quantity-counter input-group-quantity-counter">
+                                            <input type="number"
+                                                   class="js-result form-control input-group-quantity-counter-control"
+                                                   value="10">
+
+                                            <div class="input-group-quantity-counter-toggle">
+                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-remove"></i>
+                                                </a>
+                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-add"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- End Quantity Counter -->
+                                    </th>
+                                    <th class="table-column-pl-0">
+                                        <div class="btn-group" role="group" aria-label="Edit group">
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-edit"></i> Edit
+                                            </a>
+                                            <a class="btn btn-white" href="#">
+                                                <i class="tio-delete-outlined"></i>
+                                            </a>
+                                        </div>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <!-- Body -->
+                        <!-- End Table -->
+
+                        <!-- Footer -->
+                        <div class="card-footer">
+                            <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
+                                <i class="tio-add"></i> Add variant
+                            </a>
+                        </div>
+                        <!-- End Footer -->
+
+                        <!-- Add Variants Field -->
+                        <table style="display: none;">
+                            <tr id="addVariantsTemplate">
+                                <td class="table-column-pr-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="productVariationsCheck13">
+                                        <label class="custom-control-label" for="productVariationsCheck13"></label>
+                                    </div>
+                                </td>
+                                <th>
+                                    <img class="avatar" src="/assets/cms/img/400x400/img2.jpg" alt="Image Description">
+                                </th>
+                                <th class="table-column-pl-0">
+                                    <input type="text" class="form-control">
+                                </th>
+                                <th class="table-column-pl-0">
+                                    <input type="text" class="form-control">
+                                </th>
+                                <th class="table-column-pl-0">
+                                    <div class="input-group input-group-merge">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">USD</div>
+                                        </div>
+                                        <input type="text" class="form-control pl-8">
+                                    </div>
+                                </th>
+                                <th class="table-column-pl-0">
+                                    <!-- Quantity Counter -->
+                                    <div class="js-quantity-counter-dynamic input-group-quantity-counter">
+                                        <input type="number"
+                                               class="js-result form-control input-group-quantity-counter-control"
+                                               value="1">
+
+                                        <div class="input-group-quantity-counter-toggle">
+                                            <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                <i class="tio-remove"></i>
+                                            </a>
+                                            <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                                <i class="tio-add"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- End Quantity Counter -->
+                                </th>
+                                <th class="table-column-pl-0">
+                                    <div class="btn-group" role="group" aria-label="Edit group">
+                                        <a class="btn btn-white" href="#">
+                                            <i class="tio-edit"></i> Edit
+                                        </a>
+                                        <a class="btn btn-white" href="#">
+                                            <i class="tio-delete-outlined"></i>
+                                        </a>
+                                    </div>
+                                </th>
+                            </tr>
+                        </table>
+                        <!-- End Add Variants Field -->
                     </div>
                     <!-- End Card -->
                 </div>
@@ -1012,33 +1264,32 @@
             <!-- Body -->
             <div class="modal-body">
 
-                <span class="divider">Ảnh Đã Chọn</span>
+                <span class="divider"><h4>Ảnh Đã Chọn</h4></span>
                 <!-- Gallery -->
                 <div id="anh_duoc_chon" class="js-fancybox row gx-2"
                      data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
 
                 </div>
-                <span class="divider mt-2 mb-2"></span>
-                <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn">
-                    <span id="customFileExample5">Thêm Ảnh</span>
-                    <input id="fileAttachmentBtn" name="custom-file" type="file" multiple
-                           class="js-file-attach custom-file-btn-input"
-                           data-hs-file-attach-options='{ "textTarget": "#customFileExample5"}'>
-                </label>
                 <!-- End Gallery -->
-                <span class="divider">Ảnh Hiện Có</span>
+                <span class="divider"><h4>Ảnh Hiện Có</h4></span>
                 <!-- Gallery -->
                 <div id="anh_co_san" class="js-fancybox row gx-2"
                      data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
-
                     <!-- End Gallery -->
                 </div>
                 <!-- End Body -->
 
                 <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Continue</button>
+                <div class="modal-footer pb-0">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                    <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn" style="height: 41px">
+                        <span id="customFileExample5">Thêm Ảnh</span>
+                        <input id="fileAttachmentBtn" name="custom-file" type="file" multiple
+                               class="js-file-attach custom-file-btn-input"
+                               data-hs-file-attach-options='{ "textTarget": "#customFileExample5"}'>
+                    </label>
+                    <a id="btn-reset-img" class="btn btn-primary">Làm Mới</a>
+                    <button id="btn-accept-select-img" type="button" class="btn btn-primary" data-dismiss="modal">Xác Nhận</button>
                 </div>
                 <!-- End Footer -->
             </div>
@@ -1180,6 +1431,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
     <!-- JS Plugins Init. -->
     <script>
+        function backToSelected(url, element) {
+            if (element) {
+                var ele = $('div[data-img-src="' + url + '"]');
+                if (ele.length > 0) {
+                    var div = ele.parent();
+                    $(element).removeClass("dis-selected-img");
+                    $(element).addClass("selected-img");
+                    $(element).text("Chọn");
+                    var target = $("#anh_co_san");
+                    if (target.length > 0) {
+                        target.append(div);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
         $(document).on('ready', function () {
             $('.js-fancybox-item').each(function () {
                 var fancybox = $.HSCore.components.HSFancyBox.init($(this));
@@ -1191,29 +1464,6 @@
         });
 
         $(document).on('ready', function () {
-// ONLY DEV
-// =======================================================
-
-            if (window.localStorage.getItem('hs-builder-popover') === null) {
-                $('#builderPopover').popover('show')
-                    .on('shown.bs.popover', function () {
-                        $('.popover').last().addClass('popover-dark')
-                    });
-
-                $(document).on('click', '#closeBuilderPopover', function () {
-                    window.localStorage.setItem('hs-builder-popover', true);
-                    $('#builderPopover').popover('dispose');
-                });
-            } else {
-                $('#builderPopover').on('show.bs.popover', function () {
-                    return false
-                });
-            }
-
-            // END ONLY DEV
-            // =======================================================
-
-
             // BUILDER TOGGLE INVOKER
             // =======================================================
             $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
@@ -1290,7 +1540,19 @@
             $('.js-tagify').each(function () {
                 var tagify = $.HSCore.components.HSTagify.init($(this));
             });
-
+            // DATATABLES
+            // =======================================================
+            var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
+                select: {
+                    style: 'multi',
+                    selector: 'td:first-child input[type="checkbox"]',
+                    classMap: {
+                        checkAll: '#datatableCheckAll',
+                        counter: '#datatableCounter',
+                        counterInfo: '#datatableCounterInfo'
+                    }
+                }
+            });
 
             // INITIALIZATION OF DROPZONE FILE ATTACH MODULE
             // =======================================================

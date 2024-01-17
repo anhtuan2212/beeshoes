@@ -22,28 +22,53 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const fileInput = document.getElementById("fileAttachmentBtn");
 const listRef = ref(storage, "images");
+
+
+
+function generateCard(url , lst) {
+    var html =`
+    <div class="card card-sm box-shadow-img-file" data-img-src="${url}">
+        <img class="card-img-top img-product-files" src="${url}" alt="Image Description">
+        <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary position-absolute right-0 delete-btn">
+            <i class="tio-delete-outlined"></i>
+        </button>
+        <div class="card-body text-center row">
+            <div class="col-sm-6 p-0">
+                <a class="js-fancybox-item text-body" href="javascript:;" data-toggle="tooltip" data-placement="top" title="View"
+                    data-src="${url}" data-caption="Image">
+                    <i class="tio-visible-outlined mr-1"></i>
+                </a>
+            </div>
+            <div class="col-sm-6 p-0">${lst}</div>
+       </div>
+    </div>`;
+    return html;
+}
+function randomString(n) {
+    var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var result = "";
+    for (var i = 0; i < n; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+}
+function renameFile(file) {
+    var name = file.name; // lấy tên file
+    var dotIndex = name.lastIndexOf("."); // lấy vị trí dấu chấm cuối cùng
+    var ext = name.substring(dotIndex); // lấy đuôi file
+    var newName = randomString(10) + ext; // tạo tên file mới bằng cách thêm chuỗi ngẫu nhiên vào trước đuôi file
+    return new File([file], newName, {type: file.type}); // trả về file mới có tên mới
+}
 fileInput.addEventListener("change", function (e) {
     const files = e.target.files;
     for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        const file = renameFile(files[i]);
         const tempUrl = URL.createObjectURL(file);
         var div = document.createElement('div');
         var itemRef = null;
+        var slt =`<a class="js-fancybox-item text-body selected-img" href="javascript:;">Chọn</a>`;
         div.className = "col-sm-2 mb-3";
-        div.innerHTML = `
-            <div class="card card-sm box-shadow-img-file">
-                <img class="card-img-top img-product-files" src="${tempUrl}" alt="Image Description">
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary position-absolute right-0 delete-btn">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-                <div class="card-body text-center">
-                    <a class="js-fancybox-item text-body" href="javascript:;" data-toggle="tooltip" data-placement="top" title="View"
-                       data-src="${tempUrl}"
-                       data-caption="Image">
-                        <i class="tio-visible-outlined mr-1"></i>Xem
-                    </a>
-                </div>
-            </div>`;
+        div.innerHTML = generateCard(tempUrl,slt);
         document.getElementById("anh_co_san").appendChild(div);
         const storageRef = ref(storage, "images/" + file.name);
         uploadBytes(storageRef, file).then((snapshot) => {
@@ -72,30 +97,13 @@ fileInput.addEventListener("change", function (e) {
     }
 });
 
-function generateCard(url , lst) {
-    var html =`
-    <div class="card card-sm box-shadow-img-file">
-        <img class="card-img-top img-product-files" src="${url}" alt="Image Description">
-        <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary position-absolute right-0 delete-btn">
-            <i class="tio-clear tio-lg" aria-hidden="true"></i>
-        </button>
-        <div class="card-body text-center row">
-            <div class="col-sm-6 p-0">
-                <a class="js-fancybox-item text-body" href="javascript:;" data-toggle="tooltip" data-placement="top" title="View"
-                    data-src="${url}" data-caption="Image">
-                    <i class="tio-visible-outlined mr-1"></i>
-                </a>
-            </div>
-            <div class="col-sm-6 p-0">${lst}</div>
-       </div>
-    </div>`;
-    return html;
-}
-function backToSelected(url) {
-    console.log(url)
-}
-var ImgSelected=[];
+
+var ImgSelected =[];
 getAllImgFromFirebase(listRef);
+document.getElementById('btn-reset-img').addEventListener('click',function () {
+    document.getElementById("anh_co_san").innerHTML='';
+    getAllImgFromFirebase(listRef);
+})
 function getAllImgFromFirebase(listRef) {
     listAll(listRef)
         .then((res) => {
@@ -121,9 +129,8 @@ function getAllImgFromFirebase(listRef) {
                     });
                     var selectedImg = div.querySelector('.selected-img');
                     selectedImg.addEventListener('click',function () {
-                        var slt =`<a class="js-fancybox-item text-body dis-selected-img" onclick="backToSelected('${url}')" href="javascript:;">Bỏ</a>`;
+                        var slt =`<a class="js-fancybox-item text-body dis-selected-img" onclick="backToSelected('${url}',this)" href="javascript:;">Bỏ</a>`;
                         ImgSelected.push(url);
-                        console.log(ImgSelected)
                         div.innerHTML = generateCard(url,slt);
                         document.getElementById("anh_duoc_chon").appendChild(div);
                     });
@@ -134,3 +141,42 @@ function getAllImgFromFirebase(listRef) {
             console.error(error);
         });
 }
+$(document).on('ready', function () {
+    $('#btn-accept-select-img').on('click',function () {
+        ImgSelected.forEach((url)=>{
+            var div = document.createElement('div');
+            div.className = "col-6 col-sm-4 col-md-3 mb-3 mb-lg-5";
+            div.innerHTML = `
+        <div class="card card-sm">
+            <img class="card-img-top img-product-files-extra" src="${url}"
+                 alt="Image Description">
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col">
+                        <a class="js-fancybox-item text-body" href="javascript:;"
+                           data-toggle="tooltip" data-placement="top" title="View"
+                           data-src="${url}"
+                           data-caption="Image #01">
+                            <i class="tio-visible-outlined"></i>
+                        </a>
+                    </div>
+                    <div class="col column-divider">
+                        <a class="text-danger btn-delete-img" href="javascript:;" data-toggle="tooltip"
+                           data-placement="top" title="Delete">
+                            <i class="tio-delete-outlined"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            document.getElementById("img-selected").appendChild(div);
+            var Img = div.querySelector('.btn-delete-img');
+            var src = div.querySelector('.img-product-files-extra').getAttribute('src');
+            Img.addEventListener('click',function () {
+                ImgSelected.splice(1,ImgSelected.indexOf(src))
+                console.log(ImgSelected)
+                div.remove()
+            })
+        })
+    })
+})
