@@ -36,14 +36,14 @@ import java.util.List;
 public class KhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String maKhachHang;
-    String ho;
-    String tenDem;
-    String ten;
+    private  Long id;
+    private  String maKhachHang;
+    private   String ho;
+    private  String tenDem;
+    private  String ten;
     boolean gioiTinh;
-    Date ngaySinh;
-    String sdt;
+    private  Date ngaySinh;
+    private  String sdt;
     @JsonIgnore
     @OneToMany(mappedBy = "khachHang", fetch = FetchType.EAGER)
     List<DiaChi> diaChiMacDinh;

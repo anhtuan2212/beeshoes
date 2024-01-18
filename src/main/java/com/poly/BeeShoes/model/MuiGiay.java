@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -13,28 +12,22 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DiaChi {
+public class MuiGiay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_khach_hang")
-    KhachHang khachHang;
-    String soNha;
-    String phuongXa;
-    String quanHuyen;
-    String thanhPho;
-    String zipCode;
+    String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;
 
     @OneToOne
-    @JoinColumn(name = "nguoi_tao")
+    @JoinColumn(name = "id")
     User nguoiTao;
 
     @OneToOne
-    @JoinColumn(name = "nguoi_sua")
+    @JoinColumn(name = "id")
     User nguoiSua;
-    int trangThai;
+    boolean trangThai;
+
 }
