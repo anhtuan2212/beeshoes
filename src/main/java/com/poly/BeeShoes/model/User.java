@@ -20,21 +20,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-/*
-     id binary(16) NOT NULL,
-     email varchar(255) NOT NULL,
-     password varchar(255) NOT NULL,
-     id_khach_hang binary(16),
-     id_nhan_vien binary(16),
-     role tinyint check (role between 0 and 3),
-     is_staff BIT,
-     primary key (id),
-     ngay_tao timestamp,
-     ngay_sua timestamp,
-     nguoi_tao binary(16),
-     nguoi_sua binary(16),
-     trang_thai tinyint check (trang_thai between 0 and 9)
- */
 public class User implements UserDetails {
 
     @Id

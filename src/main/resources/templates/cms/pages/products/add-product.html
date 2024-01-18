@@ -69,20 +69,20 @@
                             <div class="row">
                                 <div class="form-group col-md-11">
                                     <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
-                                    <select class="js-select2-custom custom-select" id="sanPham" size="1"
+                                    <select class="js-select2-custom custom-select" name="sanPham" id="sanPham" size="1"
                                             style="opacity: 0;"
                                             data-hs-select2-options='{
-                                    "placeholder": "Tìm sản phẩm...",
-                                    "searchInputPlaceholder": "Tìm sản phẩm..."
-                                    }'>
-                                        <option value="1">Sản Phẩm A</option>
-                                        <option value="2">Sản Phẩm B</option>
+                                            "placeholder": "Tìm sản phẩm...",
+                                            "searchInputPlaceholder": "Tìm sản phẩm..."}'>
+                                        <option th:each="sp:${lstsanpham}" th:value="*{sp.getId()}"
+                                                th:text="*{sp.getTen()}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-1 p-0">
                                     <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
                                             title="Thêm Sản Phẩm.">
-                                        <a class="btn btn-primary" data-toggle="modal" data-target="#add_new_product">
+                                        <a class="btn btn-primary" data-toggle="modal"
+                                           data-target="#add_new_product_modal">
                                             <i class="tio-add-circle"></i>
                                         </a>
                                     </button>
@@ -96,21 +96,22 @@
                                     <!-- Form Group -->
                                     <div class="form-group col-md-10">
                                         <label for="theLoai" class="input-label">Thể Loại</label>
-                                        <select class="js-select2-custom custom-select" id="theLoai" size="1"
+                                        <select class="js-select2-custom custom-select" name="theLoai" id="theLoai"
+                                                size="1"
                                                 style="opacity: 0;"
                                                 data-hs-select2-options='{
                                     "placeholder": "Tìm thể loại...",
                                     "searchInputPlaceholder": "Tìm thể loại..."
                                     }'>
-                                            <option value="1">Thể Loại A</option>
-                                            <option value="2">Thể Loại B</option>
+                                            <option th:each="th:${lsttheloai}" th:value="${th.getId()}"
+                                                    th:text="${th.getTenTheLoai()}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-2 pl-0 m-0">
                                         <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
                                                 title="Thêm Thể Loại.">
                                             <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_product">
+                                               data-target="#add_new_category">
                                                 <i class="tio-add-circle"></i>
                                             </a>
                                         </button>
@@ -123,14 +124,15 @@
                                     <div class="form-group col-md-10 ">
                                         <label for="thuongHieu" class="input-label">Thương Hiệu</label>
 
-                                        <select class="js-select2-custom custom-select" id="thuongHieu" size="1"
+                                        <select class="js-select2-custom custom-select" name="thuongHieu"
+                                                id="thuongHieu" size="1"
                                                 style="opacity: 0;"
                                                 data-hs-select2-options='{
                                     "placeholder": "Tìm thương hiệu...",
                                     "searchInputPlaceholder": "Tìm thương hiệu..."
                                     }'>
-                                            <option value="1">Apple</option>
-                                            <option value="2">Samsung</option>
+                                            <option th:each="th:${lstthuonghieu}" th:value="${th.getId()}"
+                                                    th:text="${th.getTen()}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-2 pl-0 m-0">
@@ -150,14 +152,15 @@
                                     <div class="form-group col-md-10 ">
                                         <label for="chatLieu" class="input-label">Chất Liệu</label>
 
-                                        <select class="js-select2-custom custom-select" id="chatLieu" size="1"
+                                        <select class="js-select2-custom custom-select" name="chatLieu" id="chatLieu"
+                                                size="1"
                                                 style="opacity: 0;"
                                                 data-hs-select2-options='{
                                     "placeholder": "Tìm chất liệu...",
                                     "searchInputPlaceholder": "Tìm chất liệu..."
                                     }'>
-                                            <option value="1">Da</option>
-                                            <option value="2">Vải</option>
+                                            <option th:each="th:${lstchatlieu}" th:value="${th.getId()}"
+                                                    th:text="${th.getTen()}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-2 pl-0 m-0">
@@ -183,8 +186,8 @@
                                     "placeholder": "Tìm đế giày...",
                                     "searchInputPlaceholder": "Tìm đế giày..."
                                     }'>
-                                            <option value="1">Đế Sắt</option>
-                                            <option value="2">Đế Nhữa</option>
+                                            <option th:each="th:${lstdegiay}" th:value="${th.getId()}"
+                                                    th:text="${th.getTen()}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-2 pl-0 m-0">
@@ -211,8 +214,8 @@
                                     "placeholder": "Tìm cổ giày...",
                                     "searchInputPlaceholder": "Tìm cổ giày..."
                                     }'>
-                                            <option value="1">Đế Sắt</option>
-                                            <option value="2">Đế Nhữa</option>
+                                            <option th:each="th:${lstcogiay}" th:value="${th.getId()}"
+                                                    th:text="${th.getTen()}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-2 pl-0 m-0">
@@ -239,8 +242,8 @@
                                     "placeholder": "Tìm mũi giày...",
                                     "searchInputPlaceholder": "Tìm mũi giày..."
                                     }'>
-                                            <option value="1">Mũi Sắt</option>
-                                            <option value="2">Mũi Nhữa</option>
+                                            <option th:each="th:${lstmuigiay}" th:value="${th.getId()}"
+                                                    th:text="${th.getTen()}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-2 pl-0 m-0">
@@ -387,7 +390,8 @@
                                         </div>
                                     </td>
                                     <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
+                                             alt="Image Description">
                                     </th>
                                     <th class="table-column-pl-0">
                                         <input type="text" class="form-control" value="S">
@@ -411,7 +415,8 @@
                                                    value="10">
 
                                             <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                <a class="js-minus input-group-quantity-counter-btn"
+                                                   href="javascript:;">
                                                     <i class="tio-remove"></i>
                                                 </a>
                                                 <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
@@ -442,7 +447,8 @@
                                         </div>
                                     </td>
                                     <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
+                                             alt="Image Description">
                                     </th>
                                     <th class="table-column-pl-0">
                                         <input type="text" class="form-control" value="M">
@@ -466,7 +472,8 @@
                                                    value="10">
 
                                             <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                <a class="js-minus input-group-quantity-counter-btn"
+                                                   href="javascript:;">
                                                     <i class="tio-remove"></i>
                                                 </a>
                                                 <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
@@ -497,7 +504,8 @@
                                         </div>
                                     </td>
                                     <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
+                                             alt="Image Description">
                                     </th>
                                     <th class="table-column-pl-0">
                                         <input type="text" class="form-control" value="L">
@@ -521,7 +529,8 @@
                                                    value="10">
 
                                             <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                <a class="js-minus input-group-quantity-counter-btn"
+                                                   href="javascript:;">
                                                     <i class="tio-remove"></i>
                                                 </a>
                                                 <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
@@ -552,7 +561,8 @@
                                         </div>
                                     </td>
                                     <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg" alt="Image Description">
+                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
+                                             alt="Image Description">
                                     </th>
                                     <th class="table-column-pl-0">
                                         <input type="text" class="form-control" value="XL">
@@ -576,7 +586,8 @@
                                                    value="10">
 
                                             <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                                <a class="js-minus input-group-quantity-counter-btn"
+                                                   href="javascript:;">
                                                     <i class="tio-remove"></i>
                                                 </a>
                                                 <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
@@ -615,7 +626,8 @@
                             <tr id="addVariantsTemplate">
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="productVariationsCheck13">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="productVariationsCheck13">
                                         <label class="custom-control-label" for="productVariationsCheck13"></label>
                                     </div>
                                 </td>
@@ -755,17 +767,16 @@
                                 <label for="mauSac" class="input-label">Màu Sắc</label>
 
                                 <!-- Select2 -->
-                                <select class="js-select2-custom custom-select" id="mauSac" multiple size="1"
+                                <select class="js-select2-custom custom-select" name="mauSac" id="mauSac" multiple
+                                        size="1"
                                         style="opacity: 0;"
                                         data-hs-select2-options='{
                                     "tags": true,
                                     "minimumResultsForSearch": "Infinity",
                                     "placeholder":"Chọn màu"
                                     }'>
-                                    <option value="#FFFFFF" data-name="Màu Trắng">#FFFFFF</option>
-                                    <option value="#000000" data-name="Màu Đen">#000000</option>
-                                    <option value="#0000FF" data-name="Màu Tím">#0000FF</option>
-                                    <option value="#C0C0C0" data-name="Màu Xám">#C0C0C0</option>
+                                    <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"
+                                            th:attr="data-name=${th.getTen()}" th:text="${th.getMaMauSac()}"></option>
                                 </select>
                                 <!-- End Select2 -->
                             </div>
@@ -782,8 +793,8 @@
                                     "tags": true ,
                                     "placeholder":"Chọn size"
                                     }'>
-                                    <option value="30">30</option>
-                                    <option value="31">31</option>
+                                    <option th:each="th:${lstkichco}" th:value="${th.getId()}"
+                                            th:text="${th.getTen()}"></option>
                                 </select>
                                 <!-- End Select -->
                             </div>
@@ -1282,303 +1293,346 @@
                 <!-- Footer -->
                 <div class="modal-footer pb-0">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                    <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn" style="height: 41px">
+                    <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn"
+                           style="height: 41px">
                         <span id="customFileExample5">Thêm Ảnh</span>
                         <input id="fileAttachmentBtn" name="custom-file" type="file" multiple
                                class="js-file-attach custom-file-btn-input"
                                data-hs-file-attach-options='{ "textTarget": "#customFileExample5"}'>
                     </label>
                     <a id="btn-reset-img" class="btn btn-primary">Làm Mới</a>
-                    <button id="btn-accept-select-img" type="button" class="btn btn-primary" data-dismiss="modal">Xác Nhận</button>
+                    <button id="btn-accept-select-img" type="button" class="btn btn-primary" data-dismiss="modal">Xác
+                        Nhận
+                    </button>
                 </div>
                 <!-- End Footer -->
             </div>
         </div>
     </div>
     <!-- End Embed Video Modal -->
-
-    <!-- Products Advanced Features Modal -->
-    <div class="modal fade" id="productsAdvancedFeaturesModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <!-- Header -->
-                <div class="modal-close">
-                    <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                            aria-label="Close">
-                        <i class="tio-clear tio-lg"></i>
-                    </button>
-                </div>
-                <!-- End Header -->
-
-                <!-- Body -->
-                <div class="modal-body">
-                    <div class="text-center mb-7">
-                        <h4 class="h1">Advanced features</h4>
-                        <p>"Compare to" Price, Bulk Discount Pricing, Inventory Tracking</p>
-
-                        <a class="btn btn-primary" href="#">
-                            <i class="tio-star mr-1"></i> Upgrade to get these features
-                        </a>
-                    </div>
-
-                    <!-- Media -->
-                    <div class="d-sm-flex">
-                        <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                             src="/assets/cms/svg/illustrations/choice.svg" alt="Image Description">
-
-                        <div class="media-body">
-                            <h4>"Compare to" price</h4>
-                            <p>Use this feature when you want to put a product on sale or show savings off suggested
-                                retail
-                                pricing.</p>
-                        </div>
-                    </div>
-                    <!-- End Media -->
-
-                    <hr class="my-4">
-
-                    <!-- Media -->
-                    <div class="d-sm-flex">
-                        <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                             src="/assets/cms/svg/illustrations/presenting.svg" alt="Image Description">
-
-                        <div class="media-body">
-                            <h4>Bulk discount pricing</h4>
-                            <p>Encourage higher purchase quantities with volume discounts.</p>
-                        </div>
-                    </div>
-                    <!-- End Media -->
-
-                    <hr class="my-4">
-
-                    <!-- Media -->
-                    <div class="d-sm-flex">
-                        <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                             src="/assets/cms/svg/illustrations/book.svg" alt="Image Description">
-
-                        <div class="media-body">
-                            <h4>Inventory tracking</h4>
-                            <p>Automatically keep track of product availability and receive notifications when inventory
-                                levels get low.</p>
-                        </div>
-                    </div>
-                    <!-- End Media -->
-                </div>
-                <!-- End Body -->
-
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Upgrade now</button>
-                </div>
-                <!-- End Footer -->
+</div>
+<!-- Products Advanced Features Modal -->
+<div class="modal fade" id="productsAdvancedFeaturesModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-close">
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg"></i>
+                </button>
             </div>
-        </div>
-        -
-    </div>
-    <!-- End Products Advanced Features Modal -->
+            <!-- End Header -->
 
-    <div class="modal fade" id="add_new_product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <!-- Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm Mới Sản Phẩm</h5>
-                    <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                            aria-label="Close">
-                        <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                    </button>
+            <!-- Body -->
+            <div class="modal-body">
+                <div class="text-center mb-7">
+                    <h4 class="h1">Advanced features</h4>
+                    <p>"Compare to" Price, Bulk Discount Pricing, Inventory Tracking</p>
+
+                    <a class="btn btn-primary" href="#">
+                        <i class="tio-star mr-1"></i> Upgrade to get these features
+                    </a>
                 </div>
-                <!-- End Header -->
 
-                <!-- Body -->
-                <div class="modal-body">
-                    <!-- Form Group -->
-                    <div class="form-group">
-                        <div class="input-group input-group-merge">
-                            <input type="text" class="js-form-search form-control" placeholder="Thêm Sản Phẩm...">
-                            <a class="input-group-append" href="javascript:;">
+                <!-- Media -->
+                <div class="d-sm-flex">
+                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
+                         src="/assets/cms/svg/illustrations/choice.svg" alt="Image Description">
+
+                    <div class="media-body">
+                        <h4>"Compare to" price</h4>
+                        <p>Use this feature when you want to put a product on sale or show savings off suggested
+                            retail
+                            pricing.</p>
+                    </div>
+                </div>
+                <!-- End Media -->
+
+                <hr class="my-4">
+
+                <!-- Media -->
+                <div class="d-sm-flex">
+                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
+                         src="/assets/cms/svg/illustrations/presenting.svg" alt="Image Description">
+
+                    <div class="media-body">
+                        <h4>Bulk discount pricing</h4>
+                        <p>Encourage higher purchase quantities with volume discounts.</p>
+                    </div>
+                </div>
+                <!-- End Media -->
+
+                <hr class="my-4">
+
+                <!-- Media -->
+                <div class="d-sm-flex">
+                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
+                         src="/assets/cms/svg/illustrations/book.svg" alt="Image Description">
+
+                    <div class="media-body">
+                        <h4>Inventory tracking</h4>
+                        <p>Automatically keep track of product availability and receive notifications when inventory
+                            levels get low.</p>
+                    </div>
+                </div>
+                <!-- End Media -->
+            </div>
+            <!-- End Body -->
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Close
+                </button>
+                <button type="button" class="btn btn-primary">Upgrade now</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+    -
+</div>
+<!-- End Products Advanced Features Modal -->
+
+<div class="modal fade" id="add_new_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Mới Sản Phẩm</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Form Group -->
+                <div class="form-group">
+                    <div class="input-group input-group-merge">
+                        <input type="text" id="product-name-modal" class="js-form-search form-control" placeholder="Tên Sản Phẩm...">
+                        <a class="input-group-append" href="javascript:;">
                             <span class="input-group-text">
                                 <i id="clearIconModalEg" class="tio-clear tio-lg" style="display: none;"></i>
                             </span>
-                            </a>
-                        </div>
+                        </a>
                     </div>
-                    <!-- End Form Group -->
                 </div>
-                <!-- End Body -->
-
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Thêm Mới</button>
-                </div>
-                <!-- End Footer -->
+                <!-- End Form Group -->
             </div>
+            <!-- End Body -->
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                <button type="button" id="btn-add-new-product" class="btn btn-primary">Thêm Mới</button>
+            </div>
+            <!-- End Footer -->
         </div>
     </div>
-    <!-- ========== END SECONDARY CONTENTS ========== -->
+</div>
+<div class="modal fade" id="add_new_category" tabindex="-1" role="dialog" aria-labelledby="add_new_categoryLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="add_new_categoryLabel">Thêm Mới Thể Loại</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Form Group -->
+                <div class="form-group">
+                    <div class="input-group input-group-merge">
+                        <input type="text" id="category-name-modal" class="js-form-search form-control" placeholder="Tên Thể Loại...">
+                        <a class="input-group-append" href="javascript:;">
+                            <span class="input-group-text">
+                                <i id="clearIconModalEg1" class="tio-clear tio-lg" style="display: none;"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <!-- End Form Group -->
+            </div>
+            <!-- End Body -->
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                <button type="button" id="btn-add-new-category" class="btn btn-primary">Thêm Mới</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+</div>
+<!-- ========== END SECONDARY CONTENTS ========== -->
 
 
-    <!-- JS Implementing Plugins -->
-    <script src="/assets/cms/js/vendor.min.js"></script>
+<!-- JS Implementing Plugins -->
+<script src="/assets/cms/js/vendor.min.js"></script>
 
-    <script src="/assets/cms/js/custom-firebase.js" type="module"></script>
-    <!-- JS Front -->
-    <script src="/assets/cms/js/theme.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-    <!-- JS Plugins Init. -->
-    <script>
-        function backToSelected(url, element) {
-            if (element) {
-                var ele = $('div[data-img-src="' + url + '"]');
-                if (ele.length > 0) {
-                    var div = ele.parent();
-                    $(element).removeClass("dis-selected-img");
-                    $(element).addClass("selected-img");
-                    $(element).text("Chọn");
-                    var target = $("#anh_co_san");
-                    if (target.length > 0) {
-                        target.append(div);
-                    } else {
-                        return false;
-                    }
+<script src="/assets/cms/js/custom-firebase.js" type="module"></script>
+<script src="/assets/cms/js/custom.js"></script>
+<!-- JS Front -->
+<script src="/assets/cms/js/theme.min.js"></script>
+<!-- JS Plugins Init. -->
+<script>
+    function backToSelected(url, element) {
+        if (element) {
+            var ele = $('div[data-img-src="' + url + '"]');
+            if (ele.length > 0) {
+                var div = ele.parent();
+                $(element).removeClass("dis-selected-img");
+                $(element).addClass("selected-img");
+                $(element).text("Chọn");
+                var target = $("#anh_co_san");
+                if (target.length > 0) {
+                    target.append(div);
                 } else {
                     return false;
                 }
             } else {
                 return false;
             }
+        } else {
+            return false;
         }
+    }
 
-        $(document).on('ready', function () {
-            $('.js-fancybox-item').each(function () {
-                var fancybox = $.HSCore.components.HSFancyBox.init($(this));
-                // console.log(fancybox);
-            })
+    $(document).on('ready', function () {
+        $('.js-fancybox-item').each(function () {
+            var fancybox = $.HSCore.components.HSFancyBox.init($(this));
+            // console.log(fancybox);
+        })
+    });
+    $(document).ready(function () {
+        $('.money-input-mask').mask('#.##0đ', {reverse: true});
+    });
+
+    $(document).on('ready', function () {
+        // BUILDER TOGGLE INVOKER
+        // =======================================================
+        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
+            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
         });
-        $(document).ready(function () {
-            $('.money-input-mask').mask('#.##0đ', {reverse: true});
+
+
+        // INITIALIZATION OF MEGA MENU
+        // =======================================================
+        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
+            desktop: {
+                position: 'left'
+            }
+        }).init();
+
+
+        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
+        // =======================================================
+        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
+
+
+        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
+        // =======================================================
+        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
+
+        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
+            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
+                return false;
+            }
         });
 
-        $(document).on('ready', function () {
-            // BUILDER TOGGLE INVOKER
-            // =======================================================
-            $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-                $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-            });
+
+        // INITIALIZATION OF UNFOLD
+        // =======================================================
+        $('.js-hs-unfold-invoker').each(function () {
+            var unfold = new HSUnfold($(this)).init();
+        });
 
 
-            // INITIALIZATION OF MEGA MENU
-            // =======================================================
-            var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-                desktop: {
-                    position: 'left'
+        // INITIALIZATION OF FORM SEARCH
+        // =======================================================
+        $('.js-form-search').each(function () {
+            new HSFormSearch($(this)).init()
+        });
+
+
+        // INITIALIZATION OF SELECT2
+        // =======================================================
+        $('.js-select2-custom').each(function () {
+            var select2 = $.HSCore.components.HSSelect2.init($(this));
+        });
+
+
+        // INITIALIZATION OF QUILLJS EDITOR
+        // =======================================================
+        var quill = $.HSCore.components.HSQuill.init('.js-quill');
+
+
+        // INITIALIZATION OF ADD INPUT FILED
+        // =======================================================
+        $('.js-add-field').each(function () {
+            new HSAddField($(this), {
+                addedField: function () {
+                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
+                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
+                    });
                 }
             }).init();
-
-
-            // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-            // =======================================================
-            var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-            // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-            // =======================================================
-            $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-            $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-                if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-                    return false;
-                }
-            });
-
-
-            // INITIALIZATION OF UNFOLD
-            // =======================================================
-            $('.js-hs-unfold-invoker').each(function () {
-                var unfold = new HSUnfold($(this)).init();
-            });
-
-
-            // INITIALIZATION OF FORM SEARCH
-            // =======================================================
-            $('.js-form-search').each(function () {
-                new HSFormSearch($(this)).init()
-            });
-
-
-            // INITIALIZATION OF SELECT2
-            // =======================================================
-            $('.js-select2-custom').each(function () {
-                var select2 = $.HSCore.components.HSSelect2.init($(this));
-            });
-
-
-            // INITIALIZATION OF QUILLJS EDITOR
-            // =======================================================
-            var quill = $.HSCore.components.HSQuill.init('.js-quill');
-
-
-            // INITIALIZATION OF ADD INPUT FILED
-            // =======================================================
-            $('.js-add-field').each(function () {
-                new HSAddField($(this), {
-                    addedField: function () {
-                        $('.js-add-field .js-select2-custom-dynamic').each(function () {
-                            var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
-                        });
-                    }
-                }).init();
-            });
-
-
-            // INITIALIZATION OF TAGIFY
-            // =======================================================
-            $('.js-tagify').each(function () {
-                var tagify = $.HSCore.components.HSTagify.init($(this));
-            });
-            // DATATABLES
-            // =======================================================
-            var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
-                select: {
-                    style: 'multi',
-                    selector: 'td:first-child input[type="checkbox"]',
-                    classMap: {
-                        checkAll: '#datatableCheckAll',
-                        counter: '#datatableCounter',
-                        counterInfo: '#datatableCounterInfo'
-                    }
-                }
-            });
-
-            // INITIALIZATION OF DROPZONE FILE ATTACH MODULE
-            // =======================================================
-            $('.js-dropzone').each(function () {
-                var dropzone = $.HSCore.components.HSDropzone.init('#' + $(this).attr('id'));
-                // console.log(dropzone)
-            });
-        });
-        $(document).ready(function () {
-            $('#mauSac').on('change', function () {
-                var mausac = $('#mauSac').val();
-                mausac.forEach((mau) => {
-                    var ele = $('li[title="' + mau + '"]');
-                    var tenmau = $('option[value="' + mau + '"]').attr('data-name');
-                    var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
-                    $(span[0]).text(tenmau);
-                    $(ele[0]).css('background-color', mau);
-                    $(ele[0]).css('color', '#FFFFFF');
-                });
-            });
         });
 
 
-    </script>
+        // INITIALIZATION OF TAGIFY
+        // =======================================================
+        $('.js-tagify').each(function () {
+            var tagify = $.HSCore.components.HSTagify.init($(this));
+        });
+        // DATATABLES
+        // =======================================================
+        var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
+            select: {
+                style: 'multi',
+                selector: 'td:first-child input[type="checkbox"]',
+                classMap: {
+                    checkAll: '#datatableCheckAll',
+                    counter: '#datatableCounter',
+                    counterInfo: '#datatableCounterInfo'
+                }
+            }
+        });
 
-    <!-- IE Support -->
-    <div th:replace="/cms/pages/_IE-suport.html"></div>
+        // INITIALIZATION OF DROPZONE FILE ATTACH MODULE
+        // =======================================================
+        $('.js-dropzone').each(function () {
+            var dropzone = $.HSCore.components.HSDropzone.init('#' + $(this).attr('id'));
+            // console.log(dropzone)
+        });
+    });
+    $(document).ready(function () {
+        $('#mauSac').on('change', function () {
+            var mausac = $('#mauSac').val();
+            mausac.forEach((mau) => {
+                var ele = $('li[title="' + mau + '"]');
+                var tenmau = $('option[value="' + mau + '"]').attr('data-name');
+                var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
+                $(span[0]).text(tenmau);
+                $(ele[0]).css('background-color', mau);
+                $(ele[0]).css('color', '#FFFFFF');
+            });
+        });
+    });
+
+
+</script>
+
+<!-- IE Support -->
+<div th:replace="/cms/pages/_IE-suport.html"></div>
 </body>
 </html>

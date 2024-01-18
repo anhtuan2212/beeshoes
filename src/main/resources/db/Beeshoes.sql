@@ -148,7 +148,7 @@ CREATE TABLE de_giay(
 CREATE TABLE mau_sac(
                         id bigint auto_increment,
                         ten nvarchar(256),
-                        ma_mau_sac varchar(20),
+                        ma_mau_sac varchar(20) unique,
                         ngay_tao timestamp,
                         ngay_sua timestamp,
                         nguoi_tao bigint,

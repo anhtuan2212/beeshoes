@@ -1,0 +1,12 @@
+package com.poly.BeeShoes.service;
+
+import com.poly.BeeShoes.model.MauSac;
+import com.poly.BeeShoes.model.MuiGiay;
+
+import java.util.List;
+
+public interface MuiGiayService {
+    MuiGiay save(MuiGiay muiGiay);
+    List<MuiGiay> getAll();
+    boolean delete(Long id);
+}

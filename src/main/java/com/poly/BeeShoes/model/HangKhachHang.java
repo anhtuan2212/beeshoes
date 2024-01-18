@@ -24,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 public class HangKhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String tenHang;
-    int diemToiThieu;
+    private  Long id;
+    private  String tenHang;
+    private  int diemToiThieu;
 }
