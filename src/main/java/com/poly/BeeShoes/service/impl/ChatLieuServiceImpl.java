@@ -17,6 +17,11 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
+    public ChatLieu getById(Long id) {
+        return chatLieuRepository.findById(id).get();
+    }
+
+    @Override
     public List<ChatLieu> getAll() {
         return chatLieuRepository.findAll();
     }

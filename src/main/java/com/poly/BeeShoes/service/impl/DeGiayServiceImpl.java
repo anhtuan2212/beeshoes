@@ -18,6 +18,11 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
+    public DeGiay getById(Long id) {
+        return deGiayRepository.findById(id).get();
+    }
+
+    @Override
     public List<DeGiay> getAll() {
         return deGiayRepository.findAll();
     }

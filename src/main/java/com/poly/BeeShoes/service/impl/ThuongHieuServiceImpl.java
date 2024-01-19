@@ -18,6 +18,11 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
+    public ThuongHieu getById(Long id) {
+        return thuongHieuRepository.findById(id).get();
+    }
+
+    @Override
     public List<ThuongHieu> getAll() {
         return thuongHieuRepository.findAll();
     }

@@ -32,4 +32,23 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
         }
         return false;
     }
+
+    @Override
+    public boolean existsByMaSanPham(String ma) {
+        return false;
+    }
+
+    @Override
+    public String generateDetailCode() {
+        long count = ctspRepository.count();
+        int numberOfDigits = (int) Math.log10(count + 1) + 1;
+        int numberOfZeros = Math.max(0, 6 - numberOfDigits);
+        String productCode;
+        do {
+            productCode = String.format("SP%0" + (numberOfDigits + numberOfZeros) + "d", count + 1);
+            count++;
+        } while (ctspRepository.existsByMaSanPham(productCode));
+
+        return productCode;
+    }
 }

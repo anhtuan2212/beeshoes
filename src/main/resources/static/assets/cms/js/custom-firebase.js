@@ -148,7 +148,7 @@ $(document).on('ready', function () {
             div.className = "col-6 col-sm-4 col-md-3 mb-3 mb-lg-5";
             div.innerHTML = `
         <div class="card card-sm">
-            <img class="card-img-top img-product-files-extra" src="${url}"
+            <img class="card-img-top img-product-files-extra product-img-selected" src="${url}"
                  alt="Image Description">
             <div class="card-body">
                 <div class="row text-center">

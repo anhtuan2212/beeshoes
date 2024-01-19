@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham,Long> {
     List<ChiTietSanPham> getAllBySanPham(SanPham sanPham);
+    boolean existsByMaSanPham(String ma);
 }

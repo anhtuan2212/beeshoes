@@ -75,6 +75,7 @@ public class ChiTietSanPham {
     @JoinColumn(name = "id")
     User nguoiSua;
 
+    boolean isSales;
     int trangThai;
 
 }
