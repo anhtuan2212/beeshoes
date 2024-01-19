@@ -426,6 +426,7 @@ create table chi_tiet_san_pham(
                                   ngay_sua timestamp,
                                   nguoi_tao bigint,
                                   nguoi_sua bigint,
+                                  isSales bit default 0,
                                   trang_thai tinyint check (trang_thai between 0 and 9),-- default = 1 = true
                                   primary key (id),
                                   foreign key(id_thuong_hieu) references thuong_hieu(id),

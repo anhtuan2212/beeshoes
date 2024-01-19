@@ -53,307 +53,313 @@
             <!-- End Row -->
         </div>
         <!-- End Page Header -->
-        <form action="#" method="post" name="add-product">
-            <div class="row">
-                <div class="col-lg-8">
-                    <!-- Card -->
-                    <div class="card mb-3 mb-lg-5">
-                        <!-- Header -->
-                        <div class="card-header">
-                            <h4 class="card-header-title">Thông Tin Sản Phẩm</h4>
-                        </div>
-                        <!-- End Header -->
-                        <!-- Body -->
-                        <div class="card-body">
-                            <!-- Form Group -->
-                            <div class="row">
-                                <div class="form-group col-md-11">
-                                    <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
-                                    <select class="js-select2-custom custom-select" name="sanPham" id="sanPham" size="1"
-                                            style="opacity: 0;"
-                                            data-hs-select2-options='{
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Card -->
+                <div class="card mb-3 mb-lg-5">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h4 class="card-header-title">Thông Tin Sản Phẩm</h4>
+                    </div>
+                    <!-- End Header -->
+                    <!-- Body -->
+                    <div class="card-body">
+                        <!-- Form Group -->
+                        <div class="row">
+                            <div class="form-group col-md-11">
+                                <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
+                                <select class="js-select2-custom custom-select" name="sanPham" id="sanPham" size="1"
+                                        style="opacity: 0;"
+                                        data-hs-select2-options='{
                                             "placeholder": "Tìm sản phẩm...",
                                             "searchInputPlaceholder": "Tìm sản phẩm..."}'>
-                                        <option th:each="sp:${lstsanpham}" th:value="*{sp.getId()}"
-                                                th:text="*{sp.getTen()}"></option>
+                                    <option th:each="sp:${lstsanpham}" th:value="*{sp.getId()}"
+                                            th:text="*{sp.getTen()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 p-0">
+                                <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Thêm Sản Phẩm.">
+                                    <a class="btn btn-primary" href="#"
+                                       onclick="setFormSendData('san-pham','Sản Phẩm','sanPham')">
+                                        <i class="tio-add-circle"></i>
+                                    </a>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- End Form Group -->
+
+                        <div class="row">
+                            <!--Thể loại-->
+                            <div class="col-sm-6 row p-0 m-0">
+                                <!-- Form Group -->
+                                <div class="form-group col-md-10">
+                                    <label for="theLoai" class="input-label">Thể Loại</label>
+                                    <select class="js-select2-custom custom-select" name="theLoai" id="theLoai"
+                                            size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
+                                    "placeholder": "Tìm thể loại...",
+                                    "searchInputPlaceholder": "Tìm thể loại..."
+                                    }'>
+                                        <option th:each="th:${lsttheloai}" th:value="${th.getId()}"
+                                                th:text="${th.getTenTheLoai()}"></option>
                                     </select>
                                 </div>
-                                <div class="col-md-1 p-0">
-                                    <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                            title="Thêm Sản Phẩm.">
-                                        <a class="btn btn-primary" data-toggle="modal"
-                                           data-target="#add_new_product_modal">
+                                <div class="col-md-2 pl-0 m-0">
+                                    <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Thêm Thể Loại.">
+                                        <a class="btn btn-primary" href="#"
+                                           onclick="setFormSendData('the-loai','Thể Loại','theLoai')">
                                             <i class="tio-add-circle"></i>
                                         </a>
                                     </button>
                                 </div>
+                                <!-- End Form Group -->
                             </div>
-                            <!-- End Form Group -->
+                            <!--Thương hiệu-->
+                            <div class="col-sm-6 row p-0 m-0">
+                                <!-- Form Group -->
+                                <div class="form-group col-md-10 ">
+                                    <label for="thuongHieu" class="input-label">Thương Hiệu</label>
 
-                            <div class="row">
-                                <!--Thể loại-->
-                                <div class="col-sm-6 row p-0 m-0">
-                                    <!-- Form Group -->
-                                    <div class="form-group col-md-10">
-                                        <label for="theLoai" class="input-label">Thể Loại</label>
-                                        <select class="js-select2-custom custom-select" name="theLoai" id="theLoai"
-                                                size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
-                                    "placeholder": "Tìm thể loại...",
-                                    "searchInputPlaceholder": "Tìm thể loại..."
-                                    }'>
-                                            <option th:each="th:${lsttheloai}" th:value="${th.getId()}"
-                                                    th:text="${th.getTenTheLoai()}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 pl-0 m-0">
-                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                                title="Thêm Thể Loại.">
-                                            <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_category">
-                                                <i class="tio-add-circle"></i>
-                                            </a>
-                                        </button>
-                                    </div>
-                                    <!-- End Form Group -->
-                                </div>
-                                <!--Thương hiệu-->
-                                <div class="col-sm-6 row p-0 m-0">
-                                    <!-- Form Group -->
-                                    <div class="form-group col-md-10 ">
-                                        <label for="thuongHieu" class="input-label">Thương Hiệu</label>
-
-                                        <select class="js-select2-custom custom-select" name="thuongHieu"
-                                                id="thuongHieu" size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                    <select class="js-select2-custom custom-select" name="thuongHieu"
+                                            id="thuongHieu" size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Tìm thương hiệu...",
                                     "searchInputPlaceholder": "Tìm thương hiệu..."
                                     }'>
-                                            <option th:each="th:${lstthuonghieu}" th:value="${th.getId()}"
-                                                    th:text="${th.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 pl-0 m-0">
-                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                                title="Thêm thương hiệu.">
-                                            <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_product">
-                                                <i class="tio-add-circle"></i>
-                                            </a>
-                                        </button>
-                                    </div>
-                                    <!-- End Form Group -->
+                                        <option th:each="th:${lstthuonghieu}" th:value="${th.getId()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
                                 </div>
-                                <!--Chất liệu-->
-                                <div class="col-sm-6 row p-0 m-0">
-                                    <!-- Form Group -->
-                                    <div class="form-group col-md-10 ">
-                                        <label for="chatLieu" class="input-label">Chất Liệu</label>
+                                <div class="col-md-2 pl-0 m-0">
+                                    <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Thêm thương hiệu.">
+                                        <a class="btn btn-primary" href="#"
+                                           onclick="setFormSendData('thuong-hieu','Thương Hiệu','thuongHieu')">
+                                            <i class="tio-add-circle"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                                <!-- End Form Group -->
+                            </div>
+                            <!--Chất liệu-->
+                            <div class="col-sm-6 row p-0 m-0">
+                                <!-- Form Group -->
+                                <div class="form-group col-md-10 ">
+                                    <label for="chatLieu" class="input-label">Chất Liệu</label>
 
-                                        <select class="js-select2-custom custom-select" name="chatLieu" id="chatLieu"
-                                                size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                    <select class="js-select2-custom custom-select" name="chatLieu" id="chatLieu"
+                                            size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Tìm chất liệu...",
                                     "searchInputPlaceholder": "Tìm chất liệu..."
                                     }'>
-                                            <option th:each="th:${lstchatlieu}" th:value="${th.getId()}"
-                                                    th:text="${th.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 pl-0 m-0">
-                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                                title="Thêm chất liệu.">
-                                            <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_product">
-                                                <i class="tio-add-circle"></i>
-                                            </a>
-                                        </button>
-                                    </div>
-                                    <!-- End Form Group -->
+                                        <option th:each="th:${lstchatlieu}" th:value="${th.getId()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
                                 </div>
-                                <!--Đế Giày-->
-                                <div class="col-sm-6 row p-0 m-0">
-                                    <!-- Form Group -->
-                                    <div class="form-group col-md-10 ">
-                                        <label for="deGiay" class="input-label">Đế Giày</label>
+                                <div class="col-md-2 pl-0 m-0">
+                                    <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Thêm chất liệu.">
+                                        <a class="btn btn-primary" href="#"
+                                           onclick="setFormSendData('chat-lieu','Chất Liệu','chatLieu')">
+                                            <i class="tio-add-circle"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                                <!-- End Form Group -->
+                            </div>
+                            <!--Đế Giày-->
+                            <div class="col-sm-6 row p-0 m-0">
+                                <!-- Form Group -->
+                                <div class="form-group col-md-10 ">
+                                    <label for="deGiay" class="input-label">Đế Giày</label>
 
-                                        <select class="js-select2-custom custom-select" id="deGiay" size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                    <select class="js-select2-custom custom-select" id="deGiay" size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Tìm đế giày...",
                                     "searchInputPlaceholder": "Tìm đế giày..."
                                     }'>
-                                            <option th:each="th:${lstdegiay}" th:value="${th.getId()}"
-                                                    th:text="${th.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 pl-0 m-0">
-                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                                title="Thêm đế giày.">
-                                            <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_product">
-                                                <i class="tio-add-circle"></i>
-                                            </a>
-                                        </button>
-                                    </div>
-                                    <!-- End Form Group -->
+                                        <option th:each="th:${lstdegiay}" th:value="${th.getId()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
                                 </div>
-                                <!--Cổ Giày-->
-                                <div class="col-sm-6 row p-0 m-0">
-                                    <!-- Form Group -->
-                                    <div class="form-group col-md-10 ">
-                                        <label for="coGiay" class="input-label">Cổ Giày</label>
+                                <div class="col-md-2 pl-0 m-0">
+                                    <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Thêm đế giày.">
+                                        <a class="btn btn-primary" href="#"
+                                           onclick="setFormSendData('de-giay','Đế Giày','deGiay')">
+                                            <i class="tio-add-circle"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                                <!-- End Form Group -->
+                            </div>
+                            <!--Cổ Giày-->
+                            <div class="col-sm-6 row p-0 m-0">
+                                <!-- Form Group -->
+                                <div class="form-group col-md-10 ">
+                                    <label for="coGiay" class="input-label">Cổ Giày</label>
 
-                                        <select class="js-select2-custom custom-select" name="coGiay" id="coGiay"
-                                                size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                    <select class="js-select2-custom custom-select" name="coGiay" id="coGiay"
+                                            size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Tìm cổ giày...",
                                     "searchInputPlaceholder": "Tìm cổ giày..."
                                     }'>
-                                            <option th:each="th:${lstcogiay}" th:value="${th.getId()}"
-                                                    th:text="${th.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 pl-0 m-0">
-                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                                title="Thêm cổ giày.">
-                                            <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_product">
-                                                <i class="tio-add-circle"></i>
-                                            </a>
-                                        </button>
-                                    </div>
-                                    <!-- End Form Group -->
+                                        <option th:each="th:${lstcogiay}" th:value="${th.getId()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
                                 </div>
-                                <!--Mũi Giày-->
-                                <div class="col-sm-6 row p-0 m-0">
-                                    <!-- Form Group -->
-                                    <div class="form-group col-md-10 ">
-                                        <label for="muiGiay" class="input-label">Mũi Giày</label>
+                                <div class="col-md-2 pl-0 m-0">
+                                    <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Thêm cổ giày.">
+                                        <a class="btn btn-primary" href="#"
+                                           onclick="setFormSendData('co-giay','Cổ Giày','coGiay')">
+                                            <i class="tio-add-circle"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                                <!-- End Form Group -->
+                            </div>
+                            <!--Mũi Giày-->
+                            <div class="col-sm-6 row p-0 m-0">
+                                <!-- Form Group -->
+                                <div class="form-group col-md-10 ">
+                                    <label for="muiGiay" class="input-label">Mũi Giày</label>
 
-                                        <select class="js-select2-custom custom-select" name="muiGiay" id="muiGiay"
-                                                size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                    <select class="js-select2-custom custom-select" name="muiGiay" id="muiGiay"
+                                            size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Tìm mũi giày...",
                                     "searchInputPlaceholder": "Tìm mũi giày..."
                                     }'>
-                                            <option th:each="th:${lstmuigiay}" th:value="${th.getId()}"
-                                                    th:text="${th.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 pl-0 m-0">
-                                        <button class="m-0 p-0 border-0 mt-5" data-toggle="tooltip" data-placement="top"
-                                                title="Thêm mũi giày.">
-                                            <a class="btn btn-primary" data-toggle="modal"
-                                               data-target="#add_new_product">
-                                                <i class="tio-add-circle"></i>
-                                            </a>
-                                        </button>
-                                    </div>
-                                    <!-- End Form Group -->
+                                        <option th:each="th:${lstmuigiay}" th:value="${th.getId()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
                                 </div>
-                                <!-- Form Group -->
-
+                                <div class="col-md-2 pl-0 m-0">
+                                    <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Thêm mũi giày.">
+                                        <a class="btn btn-primary" href="#"
+                                           onclick="setFormSendData('mui-giay','Mũi Giày','muiGiay')">
+                                            <i class="tio-add-circle"></i>
+                                        </a>
+                                    </button>
+                                </div>
                                 <!-- End Form Group -->
                             </div>
+                            <!-- Form Group -->
+
+                            <!-- End Form Group -->
                         </div>
-                        <!-- End Row -->
                     </div>
-                    <!-- End Card -->
+                    <!-- End Row -->
+                </div>
+                <!-- End Card -->
 
-                    <!-- Card -->
-                    <div class="card mb-3 mb-lg-5">
-                        <!-- Header -->
-                        <div class="card-header">
-                            <h4 class="card-header-title">Media</h4>
+                <!-- Card -->
+                <div class="card mb-3 mb-lg-5">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h4 class="card-header-title">Media</h4>
 
-                            <!-- Unfold -->
-                            <div class="hs-unfold">
-                                <a class="js-hs-unfold-invoker btn btn-sm btn-ghost-secondary" href="javascript:;"
-                                   data-hs-unfold-options='{
+                        <!-- Unfold -->
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker btn btn-sm btn-ghost-secondary" href="javascript:;"
+                               data-hs-unfold-options='{
                                    "target": "#mediaDropdown",
                                    "type": "css-animation"}'>
-                                    Chọn Ảnh <i class="tio-chevron-down"></i>
+                                Chọn Ảnh <i class="tio-chevron-down"></i>
+                            </a>
+                            <div id="mediaDropdown"
+                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
+                                <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                   data-target="#addImageFromURLModal">
+                                    <i class="tio-link dropdown-item-icon"></i>Thêm Đường Dẫn
                                 </a>
-                                <div id="mediaDropdown"
-                                     class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
-                                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                       data-target="#addImageFromURLModal">
-                                        <i class="tio-link dropdown-item-icon"></i>Thêm Đường Dẫn
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                       data-target="#select_img_firebase">
-                                        <i class="tio-youtube-outlined dropdown-item-icon"></i> Chọn Ảnh Có Sẵn
-                                    </a>
-                                </div>
+                                <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                   data-target="#select_img_firebase">
+                                    <i class="tio-youtube-outlined dropdown-item-icon"></i> Chọn Ảnh Có Sẵn
+                                </a>
                             </div>
-                            <!-- End Unfold -->
                         </div>
-                        <!-- End Header -->
+                        <!-- End Unfold -->
+                    </div>
+                    <!-- End Header -->
 
-                        <!-- Body -->
-                        <div class="card-body">
-                            <!-- Gallery -->
-                            <div id="img-selected" class="js-fancybox row justify-content-sm-center gx-2"
-                                 data-hs-fancybox-options='{
+                    <!-- Body -->
+                    <div class="card-body">
+                        <!-- Gallery -->
+                        <div id="img-selected" class="js-fancybox row justify-content-sm-center gx-2"
+                             data-hs-fancybox-options='{
                                  "selector": "#fancyboxGallery .js-fancybox-item"
                                  }'>
-                            </div>
-                            <!-- End Gallery -->
                         </div>
-                        <!-- Body -->
+                        <!-- End Gallery -->
                     </div>
-                    <!-- End Card -->
-                    <!-- Card -->
-                    <div class="js-add-field card mb-3 mb-lg-5" data-hs-add-field-options='{
+                    <!-- Body -->
+                </div>
+                <!-- End Card -->
+                <!-- Card -->
+                <div class="js-add-field card mb-3 mb-lg-5" data-hs-add-field-options='{
                   "template": "#addVariantsTemplate",
                   "container": "#addVariantsContainer",
                   "defaultCreated": 0,
                   "limit": 100
                 }'>
-                        <!-- Header -->
-                        <div class="card-header">
-                            <div class="row justify-content-between align-items-center flex-grow-1">
-                                <div class="col-12 col-sm mb-3 mb-sm-0">
-                                    <h4 class="card-header-title">Variants</h4>
-                                </div>
+                    <!-- Header -->
+                    <div class="card-header">
+                        <div class="row justify-content-between align-items-center flex-grow-1">
+                            <div class="col-12 col-sm mb-3 mb-sm-0">
+                                <h4 class="card-header-title">Variants</h4>
+                            </div>
 
-                                <div class="col-auto">
-                                    <div class="d-flex align-items-center">
-                                        <!-- Datatable Info -->
-                                        <div id="datatableCounterInfo" style="display: none;">
-                                            <div class="d-flex align-items-center">
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <!-- Datatable Info -->
+                                    <div id="datatableCounterInfo" style="display: none;">
+                                        <div class="d-flex align-items-center">
                           <span class="font-size-sm mr-3">
                             <span id="datatableCounter">0</span>
                             Selected
                           </span>
-                                                <a class="btn btn-sm btn-outline-danger" href="javascript:;">
-                                                    <i class="tio-delete-outlined"></i> Delete
-                                                </a>
-                                            </div>
+                                            <a class="btn btn-sm btn-outline-danger" href="javascript:;">
+                                                <i class="tio-delete-outlined"></i> Delete
+                                            </a>
                                         </div>
-                                        <!-- End Datatable Info -->
-
-                                        <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
-                                            <i class="tio-add"></i> Add variant
-                                        </a>
                                     </div>
+                                    <!-- End Datatable Info -->
+
+                                    <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
+                                        <i class="tio-add"></i> Add variant
+                                    </a>
                                 </div>
                             </div>
-                            <!-- End Row -->
                         </div>
-                        <!-- End Header -->
+                        <!-- End Row -->
+                    </div>
+                    <!-- End Header -->
 
-                        <!-- Table -->
-                        <div class="table-responsive datatable-custom">
-                            <table id="datatable"
-                                   class="table table-borderless table-thead-bordered table-nowrap table-align-middle"
-                                   data-hs-datatables-options='{
+                    <!-- Table -->
+                    <div class="table-responsive datatable-custom">
+                        <table id="datatable"
+                               class="table table-borderless table-thead-bordered table-nowrap table-align-middle"
+                               data-hs-datatables-options='{
                          "columnDefs": [{
                             "targets": [0, 1, 6],
                             "orderable": false
@@ -363,865 +369,244 @@
                          "isResponsive": false,
                          "isShowPaging": false
                        }'>
-                                <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" class="table-column-pr-0">
-                                        <div class="custom-control custom-checkbox">
-                                            <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
-                                            <label class="custom-control-label" for="datatableCheckAll"></label>
-                                        </div>
-                                    </th>
-                                    <th></th>
-                                    <th class="table-column-pl-0">Size</th>
-                                    <th class="table-column-pl-0">Color</th>
-                                    <th class="table-column-pl-0">Price</th>
-                                    <th class="table-column-pl-0">Quantity</th>
-                                    <th class="table-column-pl-0"></th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="addVariantsContainer">
-                                <tr>
-                                    <td class="table-column-pr-0">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input"
-                                                   id="productVariationsCheck1">
-                                            <label class="custom-control-label" for="productVariationsCheck1"></label>
-                                        </div>
-                                    </td>
-                                    <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
-                                             alt="Image Description">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="S">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="White">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="input-group input-group-merge">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">USD</div>
-                                            </div>
-                                            <input type="text" class="form-control pl-8" value="45.00">
-                                        </div>
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <!-- Quantity Counter -->
-                                        <div class="js-quantity-counter input-group-quantity-counter">
-                                            <input type="number"
-                                                   class="js-result form-control input-group-quantity-counter-control"
-                                                   value="10">
-
-                                            <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn"
-                                                   href="javascript:;">
-                                                    <i class="tio-remove"></i>
-                                                </a>
-                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                                    <i class="tio-add"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!-- End Quantity Counter -->
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="btn-group" role="group" aria-label="Edit group">
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-edit"></i> Edit
-                                            </a>
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
-                                        </div>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <td class="table-column-pr-0">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input"
-                                                   id="productVariationsCheck2">
-                                            <label class="custom-control-label" for="productVariationsCheck2"></label>
-                                        </div>
-                                    </td>
-                                    <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
-                                             alt="Image Description">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="M">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="White">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="input-group input-group-merge">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">USD</div>
-                                            </div>
-                                            <input type="text" class="form-control pl-8" value="45.00">
-                                        </div>
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <!-- Quantity Counter -->
-                                        <div class="js-quantity-counter input-group-quantity-counter">
-                                            <input type="number"
-                                                   class="js-result form-control input-group-quantity-counter-control"
-                                                   value="10">
-
-                                            <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn"
-                                                   href="javascript:;">
-                                                    <i class="tio-remove"></i>
-                                                </a>
-                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                                    <i class="tio-add"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!-- End Quantity Counter -->
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="btn-group" role="group" aria-label="Edit group">
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-edit"></i> Edit
-                                            </a>
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
-                                        </div>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <td class="table-column-pr-0">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input"
-                                                   id="productVariationsCheck3">
-                                            <label class="custom-control-label" for="productVariationsCheck3"></label>
-                                        </div>
-                                    </td>
-                                    <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
-                                             alt="Image Description">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="L">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="White">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="input-group input-group-merge">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">USD</div>
-                                            </div>
-                                            <input type="text" class="form-control pl-8" value="45.00">
-                                        </div>
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <!-- Quantity Counter -->
-                                        <div class="js-quantity-counter input-group-quantity-counter">
-                                            <input type="number"
-                                                   class="js-result form-control input-group-quantity-counter-control"
-                                                   value="10">
-
-                                            <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn"
-                                                   href="javascript:;">
-                                                    <i class="tio-remove"></i>
-                                                </a>
-                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                                    <i class="tio-add"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!-- End Quantity Counter -->
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="btn-group" role="group" aria-label="Edit group">
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-edit"></i> Edit
-                                            </a>
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
-                                        </div>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <td class="table-column-pr-0">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input"
-                                                   id="productVariationsCheck4">
-                                            <label class="custom-control-label" for="productVariationsCheck4"></label>
-                                        </div>
-                                    </td>
-                                    <th>
-                                        <img class="avatar" src="/assets/cms/img/400x400/img7.jpg"
-                                             alt="Image Description">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="XL">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <input type="text" class="form-control" value="White">
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="input-group input-group-merge">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">USD</div>
-                                            </div>
-                                            <input type="text" class="form-control pl-8" value="45.00">
-                                        </div>
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <!-- Quantity Counter -->
-                                        <div class="js-quantity-counter input-group-quantity-counter">
-                                            <input type="number"
-                                                   class="js-result form-control input-group-quantity-counter-control"
-                                                   value="10">
-
-                                            <div class="input-group-quantity-counter-toggle">
-                                                <a class="js-minus input-group-quantity-counter-btn"
-                                                   href="javascript:;">
-                                                    <i class="tio-remove"></i>
-                                                </a>
-                                                <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                                    <i class="tio-add"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <!-- End Quantity Counter -->
-                                    </th>
-                                    <th class="table-column-pl-0">
-                                        <div class="btn-group" role="group" aria-label="Edit group">
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-edit"></i> Edit
-                                            </a>
-                                            <a class="btn btn-white" href="#">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
-                                        </div>
-                                    </th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- End Table -->
-
-                        <!-- Footer -->
-                        <div class="card-footer">
-                            <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
-                                <i class="tio-add"></i> Add variant
-                            </a>
-                        </div>
-                        <!-- End Footer -->
-
-                        <!-- Add Variants Field -->
-                        <table style="display: none;">
-                            <tr id="addVariantsTemplate">
-                                <td class="table-column-pr-0">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input"
-                                               id="productVariationsCheck13">
-                                        <label class="custom-control-label" for="productVariationsCheck13"></label>
-                                    </div>
-                                </td>
-                                <th>
-                                    <img class="avatar" src="/assets/cms/img/400x400/img2.jpg" alt="Image Description">
-                                </th>
-                                <th class="table-column-pl-0">
-                                    <input type="text" class="form-control">
-                                </th>
-                                <th class="table-column-pl-0">
-                                    <input type="text" class="form-control">
-                                </th>
-                                <th class="table-column-pl-0">
-                                    <div class="input-group input-group-merge">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">USD</div>
-                                        </div>
-                                        <input type="text" class="form-control pl-8">
+                                        <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
+                                        <label class="custom-control-label" for="datatableCheckAll"></label>
                                     </div>
                                 </th>
-                                <th class="table-column-pl-0">
-                                    <!-- Quantity Counter -->
-                                    <div class="js-quantity-counter-dynamic input-group-quantity-counter">
-                                        <input type="number"
-                                               class="js-result form-control input-group-quantity-counter-control"
-                                               value="1">
-
-                                        <div class="input-group-quantity-counter-toggle">
-                                            <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
-                                                <i class="tio-remove"></i>
-                                            </a>
-                                            <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                                <i class="tio-add"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- End Quantity Counter -->
-                                </th>
-                                <th class="table-column-pl-0">
-                                    <div class="btn-group" role="group" aria-label="Edit group">
-                                        <a class="btn btn-white" href="#">
-                                            <i class="tio-edit"></i> Edit
-                                        </a>
-                                        <a class="btn btn-white" href="#">
-                                            <i class="tio-delete-outlined"></i>
-                                        </a>
-                                    </div>
-                                </th>
+                                <th></th>
+                                <th class="table-column-pl-0">Size</th>
+                                <th class="table-column-pl-0">Color</th>
+                                <th class="table-column-pl-0">Price</th>
+                                <th class="table-column-pl-0">Quantity</th>
+                                <th class="table-column-pl-0"></th>
                             </tr>
+                            </thead>
+
+                            <tbody id="addVariantsContainer">
+
+                            </tbody>
                         </table>
-                        <!-- End Add Variants Field -->
                     </div>
-                    <!-- End Card -->
+                    <!-- End Table -->
+
+                    <!-- Footer -->
+                    <div class="card-footer">
+                        <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
+                            <i class="tio-add"></i> Add variant
+                        </a>
+                    </div>
+                    <!-- End Footer -->
+
+                    <!-- Add Variants Field -->
+                    <table style="display: none;">
+                        <tr id="addVariantsTemplate">
+                            <td class="table-column-pr-0">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input"
+                                           id="productVariationsCheck13">
+                                    <label class="custom-control-label" for="productVariationsCheck13"></label>
+                                </div>
+                            </td>
+                            <th>
+                                <img class="avatar" src="/assets/cms/img/400x400/img2.jpg" alt="Image Description">
+                            </th>
+                            <th class="table-column-pl-0">
+                                <input type="text" class="form-control">
+                            </th>
+                            <th class="table-column-pl-0">
+                                <input type="text" class="form-control">
+                            </th>
+                            <th class="table-column-pl-0">
+                                    <input type="text" class="form-control">
+                            </th>
+                            <th class="table-column-pl-0">
+                                <!-- Quantity Counter -->
+                                <div class="js-quantity-counter-dynamic input-group-quantity-counter">
+                                    <input type="number"
+                                           class="js-result form-control input-group-quantity-counter-control"
+                                           value="1">
+
+                                    <div class="input-group-quantity-counter-toggle">
+                                        <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                            <i class="tio-remove"></i>
+                                        </a>
+                                        <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                            <i class="tio-add"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- End Quantity Counter -->
+                            </th>
+                            <th class="table-column-pl-0">
+                                <div class="btn-group" role="group" aria-label="Edit group">
+                                    <a class="btn btn-white" href="#">
+                                        <i class="tio-edit"></i> Edit
+                                    </a>
+                                    <a class="btn btn-white" href="#">
+                                        <i class="tio-delete-outlined"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                    <!-- End Add Variants Field -->
                 </div>
+                <!-- End Card -->
+            </div>
 
-                <div class="col-lg-4">
-                    <!-- Card -->
-                    <div class="card mb-3 mb-lg-5">
-                        <!-- Header -->
-                        <div class="card-header">
-                            <h4 class="card-header-title">Giá</h4>
+            <div class="col-lg-4">
+                <!-- Card -->
+                <div class="card mb-3 mb-lg-5">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h4 class="card-header-title">Giá</h4>
+                    </div>
+                    <!-- End Header -->
+
+                    <!-- Body -->
+                    <div class="card-body">
+                        <!-- Form Group -->
+                        <div class="form-group">
+                            <label for="giaNhap" class="input-label">Giá Nhập</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control money-input-mask" name="giaNhap" id="giaNhap"
+                                       placeholder="Vui lòng nhập giá nhập." aria-label="">
+                            </div>
                         </div>
-                        <!-- End Header -->
-
-                        <!-- Body -->
-                        <div class="card-body">
-                            <!-- Form Group -->
-                            <div class="form-group">
-                                <label for="giaNhap" class="input-label">Giá Nhập</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control money-input-mask" name="giaNhap" id="giaNhap"
-                                           placeholder="Vui lòng nhập giá nhập." aria-label="">
-                                </div>
+                        <div class="form-group">
+                            <label for="giaGoc" class="input-label">Giá Gốc</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control money-input-mask" name="giaGoc" id="giaGoc"
+                                       placeholder="Vui lòng nhập giá nhập." aria-label="">
                             </div>
-                            <div class="form-group">
-                                <label for="giaGoc" class="input-label">Giá Gốc</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control money-input-mask" name="giaGoc" id="giaGoc"
-                                           placeholder="Vui lòng nhập giá nhập." aria-label="">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="giaBan" class="input-label">Giá Bán</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control money-input-mask" name="giaBan" id="giaBan"
+                                       placeholder="Vui lòng nhập giá nhập." aria-label="">
                             </div>
-                            <div class="form-group">
-                                <label for="giaBan" class="input-label">Giá Bán</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control money-input-mask" name="giaBan" id="giaBan"
-                                           placeholder="Vui lòng nhập giá nhập." aria-label="">
-                                </div>
-                            </div>
-                            <!-- End Form Group -->
+                        </div>
+                        <!-- End Form Group -->
 
-                            <hr class="my-4">
+                        <hr class="my-4">
 
-                            <!-- Toggle Switch -->
-                            <label class="row toggle-switch" for="sales">
+                        <!-- Toggle Switch -->
+                        <label class="row toggle-switch" for="sales">
                             <span class="col-8 col-sm-9 toggle-switch-content">
                                 <span class="text-dark">Sales</span>
                             </span>
-                                <span class="col-4 col-sm-3">
+                            <span class="col-4 col-sm-3">
                                 <input type="checkbox" class="toggle-switch-input" id="sales">
                                 <span class="toggle-switch-label ml-auto">
                                     <span class="toggle-switch-indicator"></span>
                                 </span>
                             </span>
-                            </label>
-                            <hr class="my-4">
+                        </label>
+                        <hr class="my-4">
 
-                            <!-- Toggle Switch -->
-                            <label class="row toggle-switch" for="status">
+                        <!-- Toggle Switch -->
+                        <label class="row toggle-switch" for="status">
                             <span class="col-8 col-sm-9 toggle-switch-content">
                                 <span class="text-dark">Trạng Thái</span>
                             </span>
-                                <span class="col-4 col-sm-3">
-                                <input type="checkbox" class="toggle-switch-input" id="status">
+                            <span class="col-4 col-sm-3">
+                                <input type="checkbox" class="toggle-switch-input" id="status" checked>
                                 <span class="toggle-switch-label ml-auto">
                                     <span class="toggle-switch-indicator"></span>
                                 </span>
                             </span>
-                            </label>
-                            <!-- End Toggle Switch -->
-                        </div>
-                        <!-- Body -->
+                        </label>
+                        <!-- End Toggle Switch -->
                     </div>
-                    <!-- End Card -->
+                    <!-- Body -->
+                </div>
+                <!-- End Card -->
 
-                    <!-- Card -->
-                    <div class="card">
-                        <!-- Header -->
-                        <div class="card-header">
-                            <h4 class="card-header-title">Phiên Bản</h4>
-                        </div>
-                        <!-- End Header -->
+                <!-- Card -->
+                <div class="card">
+                    <!-- Header -->
+                    <div class="card-header">
+                        <h4 class="card-header-title">Phiên Bản</h4>
+                    </div>
+                    <!-- End Header -->
 
-                        <!-- Body -->
-                        <div class="card-body">
-                            <!-- Form Group -->
-                            <div class="form-group">
+                    <!-- Body -->
+                    <div class="card-body">
+                        <!-- Form Group -->
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between">
                                 <label for="mauSac" class="input-label">Màu Sắc</label>
+                                <a class="text-primary" href="#" data-toggle="modal"
+                                   data-target="#form-add-color">
+                                    Thêm Màu
+                                </a>
+                            </div>
 
-                                <!-- Select2 -->
-                                <select class="js-select2-custom custom-select" name="mauSac" id="mauSac" multiple
-                                        size="1"
-                                        style="opacity: 0;"
-                                        data-hs-select2-options='{
+                            <select class="js-select2-custom custom-select" name="mauSac" id="mauSac" multiple
+                                    size="1"
+                                    style="opacity: 0;"
+                                    data-hs-select2-options='{
                                     "tags": true,
                                     "minimumResultsForSearch": "Infinity",
                                     "placeholder":"Chọn màu"
                                     }'>
-                                    <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"
-                                            th:attr="data-name=${th.getTen()}" th:text="${th.getMaMauSac()}"></option>
-                                </select>
-                                <!-- End Select2 -->
-                            </div>
-                            <!-- End Form Group -->
+                                <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"
+                                        th:attr="data-name=${th.getTen()}" th:text="${th.getMaMauSac()}"></option>
+                            </select>
+                            <!-- End Select2 -->
+                        </div>
+                        <!-- End Form Group -->
 
-                            <!-- Form Group -->
-                            <div class="form-group">
-                                <label for="kichCo" class="input-label">Kích Cỡ</label>
-                                <!-- Select -->
-                                <select class="js-select2-custom custom-select" name="kichCo" id="kichCo" multiple
-                                        size="1"
-                                        style="opacity: 0;"
-                                        data-hs-select2-options='{
+                        <!-- Form Group -->
+                        <div class="form-group">
+                            <label for="kichCo" class="input-label">Kích Cỡ</label>
+                            <!-- Select -->
+                            <select class="js-select2-custom custom-select de" name="kichCo" id="kichCo" multiple
+                                    size="1"
+                                    style="opacity: 0;"
+                                    data-hs-select2-options='{
                                     "tags": true ,
                                     "placeholder":"Chọn size"
                                     }'>
-                                    <option th:each="th:${lstkichco}" th:value="${th.getId()}"
-                                            th:text="${th.getTen()}"></option>
-                                </select>
-                                <!-- End Select -->
-                            </div>
-                            <!-- Form Group -->
+                                <option th:each="th:${lstkichco}" th:value="${th.getId()}"
+                                        th:text="${th.getTen()}"></option>
+                            </select>
+                            <!-- End Select -->
                         </div>
-                        <!-- End Body -->
+                        <!-- Form Group -->
                     </div>
-                    <!-- End Card -->
+                    <!-- End Body -->
                 </div>
+                <!-- End Card -->
             </div>
-        </form>
+            <div class="d-flex justify-content-center col-12">
+                <button class="btn btn-primary" id="save-product-detail">Lưu</button>
+            </div>
+        </div>
 
         <!-- End Row -->
     </div>
     <!-- End Content -->
 
     <!-- Footer -->
-
-    <div class="footer">
-        <div class="row justify-content-between align-items-center">
-            <div class="col">
-                <p class="font-size-sm mb-0">&copy; Front. <span
-                        class="d-none d-sm-inline-block">2020 Htmlstream.</span></p>
-            </div>
-            <div class="col-auto">
-                <div class="d-flex justify-content-end">
-                    <!-- List Dot -->
-                    <ul class="list-inline list-separator">
-                        <li class="list-inline-item">
-                            <a class="list-separator-link" href="#">FAQ</a>
-                        </li>
-
-                        <li class="list-inline-item">
-                            <a class="list-separator-link" href="#">License</a>
-                        </li>
-
-                        <li class="list-inline-item">
-                            <!-- Keyboard Shortcuts Toggle -->
-                            <div class="hs-unfold">
-                                <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                                   href="javascript:;" data-hs-unfold-options='{
-                              "target": "#keyboardShortcutsSidebar",
-                              "type": "css-animation",
-                              "animationIn": "fadeInRight",
-                              "animationOut": "fadeOutRight",
-                              "hasOverlay": true,
-                              "smartPositionOff": true
-                             }'>
-                                    <i class="tio-command-key"></i>
-                                </a>
-                            </div>
-                            <!-- End Keyboard Shortcuts Toggle -->
-                        </li>
-                    </ul>
-                    <!-- End List Dot -->
-                </div>
-            </div>
-        </div>
+    <div th:replace="~{/cms/pages/_footer.html}"></div>
+    <!-- End Footer -->
+    <!--  các form chuyên dụng chứa dữ liệu tạm thời  -->
+    <div class="hidden">
+        <input type="text" hidden="hidden" id="url-post-data">
+        <input type="text" hidden="hidden" id="id-element-data">
     </div>
-
 
     <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
 
 <!-- ========== SECONDARY CONTENTS ========== -->
-<!-- Keyboard Shortcuts -->
-<div id="keyboardShortcutsSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow">
-    <div class="card card-lg sidebar-card">
-        <div class="card-header">
-            <h4 class="card-header-title">Keyboard shortcuts</h4>
-
-            <!-- Toggle Button -->
-            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;"
-               data-hs-unfold-options='{
-                "target": "#keyboardShortcutsSidebar",
-                "type": "css-animation",
-                "animationIn": "fadeInRight",
-                "animationOut": "fadeOutRight",
-                "hasOverlay": true,
-                "smartPositionOff": true
-               }'>
-                <i class="tio-clear tio-lg"></i>
-            </a>
-            <!-- End Toggle Button -->
-        </div>
-
-        <!-- Body -->
-        <div class="card-body sidebar-body sidebar-scrollbar">
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Formatting</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span class="font-weight-bold">Bold</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">b</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <em>italic</em>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">i</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <u>Underline</u>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">u</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <s>Strikethrough</s>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span class="small">Small text</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <mark>Highlight</mark>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">e</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Insert</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Mention person <a href="#">(@Brian)</a></span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">@</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Link to doc <a href="#">(+Meeting notes)</a></span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">+</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <a href="#">#hashtag</a>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">#hashtag</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Date</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">/date</kbd>
-                            <kbd class="d-inline-block mb-1">Space</kbd>
-                            <kbd class="d-inline-block mb-1">/datetime</kbd>
-                            <kbd class="d-inline-block mb-1">/datetime</kbd>
-                            <kbd class="d-inline-block mb-1">Space</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Time</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">/time</kbd>
-                            <kbd class="d-inline-block mb-1">Space</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Note box</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">/note</kbd>
-                            <kbd class="d-inline-block mb-1">Enter</kbd>
-                            <kbd class="d-inline-block mb-1">/note red</kbd>
-                            <kbd class="d-inline-block mb-1">/note red</kbd>
-                            <kbd class="d-inline-block mb-1">Enter</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Editing</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Find and replace</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">r</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Find next</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">n</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Find previous</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">p</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Indent</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Tab</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Un-indent</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Tab</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Move line up</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Move line down</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1"><i
-                                class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Add a comment</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">m</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Undo</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">z</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Redo</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">y</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Application</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Create new doc</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">n</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Present</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">p</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Share</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Search docs</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">o</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Keyboard shortcuts</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">/</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Body -->
-    </div>
-</div>
-<!-- End Keyboard Shortcuts -->
-
 <!-- Add Image from URL Modal -->
 <div class="modal fade" id="addImageFromURLModal" tabindex="-1" role="dialog"
      aria-labelledby="addImageFromURLModalTitle" aria-hidden="true">
@@ -1392,14 +777,14 @@
     -
 </div>
 <!-- End Products Advanced Features Modal -->
-
-<div class="modal fade" id="add_new_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<!-- add san pham Modal -->
+<div class="modal fade" id="form-add-product-attr" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thêm Mới Sản Phẩm</h5>
+                <h5 class="modal-title" id="titleModalLabel">Thêm Mới Sản Phẩm</h5>
                 <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
                         aria-label="Close">
                     <i class="tio-clear tio-lg" aria-hidden="true"></i>
@@ -1408,19 +793,18 @@
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="modal-body">
-                <!-- Form Group -->
-                <div class="form-group">
-                    <div class="input-group input-group-merge">
-                        <input type="text" id="product-name-modal" class="js-form-search form-control" placeholder="Tên Sản Phẩm...">
-                        <a class="input-group-append" href="javascript:;">
+            <div class="modal-body pb-0">
+                <div class="input-group input-group-merge form-group">
+                    <label for="product-name-modal" class="input-label col-12 pl-0" id="form-modal-add-attr-label">Tên
+                        :</label>
+                    <input type="text" id="product-name-modal" class="js-form-search form-control"
+                           placeholder="Vui lòng nhập tên...">
+                    <a class="input-group-append" href="javascript:;">
                             <span class="input-group-text">
                                 <i id="clearIconModalEg" class="tio-clear tio-lg" style="display: none;"></i>
                             </span>
-                        </a>
-                    </div>
+                    </a>
                 </div>
-                <!-- End Form Group -->
             </div>
             <!-- End Body -->
 
@@ -1433,13 +817,15 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="add_new_category" tabindex="-1" role="dialog" aria-labelledby="add_new_categoryLabel"
+<!-- end san pham Modal -->
+<!-- add màu sắc Modal -->
+<div class="modal fade" id="form-add-color" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
-                <h5 class="modal-title" id="add_new_categoryLabel">Thêm Mới Thể Loại</h5>
+                <h5 class="modal-title" id="form-add-color-Label">Thêm Màu</h5>
                 <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
                         aria-label="Close">
                     <i class="tio-clear tio-lg" aria-hidden="true"></i>
@@ -1448,31 +834,60 @@
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="modal-body">
-                <!-- Form Group -->
-                <div class="form-group">
-                    <div class="input-group input-group-merge">
-                        <input type="text" id="category-name-modal" class="js-form-search form-control" placeholder="Tên Thể Loại...">
-                        <a class="input-group-append" href="javascript:;">
-                            <span class="input-group-text">
-                                <i id="clearIconModalEg1" class="tio-clear tio-lg" style="display: none;"></i>
-                            </span>
-                        </a>
-                    </div>
+            <div class="modal-body row">
+                <div class="col-md-4 form-group">
+                    <label for="colorChoice" class="col-12">Chọn màu:</label>
+                    <input type="color" id="colorChoice" value="" onchange="showColorCode(this.value)">
                 </div>
-                <!-- End Form Group -->
+                <div class="col-md-8 form-group">
+                    <label class="">Mã Màu</label>
+                    <input id="colorCode" type="text" class="form-control disabled" disabled>
+                    <label class="">Tên Màu</label>
+                    <input id="color-name" type="text" class="form-control">
+                </div>
             </div>
             <!-- End Body -->
 
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                <button type="button" id="btn-add-new-category" class="btn btn-primary">Thêm Mới</button>
+                <button type="button" id="btn-add-new-color" class="btn btn-primary">Thêm Mới</button>
             </div>
             <!-- End Footer -->
         </div>
     </div>
 </div>
+<!-- end màu sắc Modal -->
+<!--User Toast -->
+<div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
+    <div class="toast-header">
+        <img class="avatar avatar-sm avatar-circle mr-2" src="/assets/cms/img/160x160/img4.jpg" alt="Image description">
+        <h5 class="mb-0">Bob Dean</h5>
+        <small class="ml-auto">Vừa xong</small>
+        <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
+            <i class="tio-clear" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="toast-body">
+        Thành Công !
+    </div>
+</div>
+<!-- End User Toast -->
+<!-- Toast -->
+<div id="systoast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
+    <div class="toast-header">
+        <img class="avatar avatar-sm avatar-circle mr-2" src="/assets/cms/img/160x160/img1.jpg" alt="Image description">
+        <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
+        <small class="ml-auto">Vừa xong</small>
+        <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
+            <i class="tio-clear" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="toast-body" id="system-toast-mesage">
+        Thành Công !
+    </div>
+</div>
+<!-- End Toast -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
 

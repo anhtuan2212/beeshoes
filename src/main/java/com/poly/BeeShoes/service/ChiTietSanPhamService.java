@@ -9,4 +9,6 @@ public interface ChiTietSanPhamService {
     ChiTietSanPham save(ChiTietSanPham chiTietSanPham);
     List<ChiTietSanPham> getAllBySanPham(SanPham samPham);
     boolean delete(Long id);
+    boolean existsByMaSanPham(String ma);
+    String generateDetailCode();
 }

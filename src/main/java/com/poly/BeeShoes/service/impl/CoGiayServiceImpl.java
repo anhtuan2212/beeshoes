@@ -18,6 +18,11 @@ public class CoGiayServiceImpl implements CoGiayService {
     }
 
     @Override
+    public CoGiay getById(Long id) {
+        return coGiayRepository.findById(id).get();
+    }
+
+    @Override
     public List<CoGiay> getAll() {
         return coGiayRepository.findAll();
     }

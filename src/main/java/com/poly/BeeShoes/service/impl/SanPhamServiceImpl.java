@@ -22,6 +22,11 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public SanPham getById(Long id) {
+        return sanPhamRepository.findById(id).get();
+    }
+
+    @Override
     public List<SanPham> getAll() {
         return sanPhamRepository.findAll();
     }
