@@ -46,12 +46,14 @@ public class KhachHang {
     private  String sdt;
     @JsonIgnore
     @OneToMany(mappedBy = "khachHang", fetch = FetchType.EAGER)
-    List<DiaChi> diaChiMacDinh;
+    List<DiaChi> diaChi;
 
     @OneToOne
     @JoinColumn(name = "id_hang_khach_hang")
     HangKhachHang hangKhachHang;
-
+    @OneToOne
+    @JoinColumn(name = "dia_chi_mac_dinh")
+    DiaChi diaChiMacDinh;
     int diem;
     Timestamp ngayTao;
     Timestamp ngaySua;
@@ -64,5 +66,5 @@ public class KhachHang {
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
 
-    boolean status;
+    boolean trangThai;
 }

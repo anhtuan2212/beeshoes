@@ -1,8 +1,8 @@
 package com.poly.BeeShoes.api;
 
 import com.google.gson.Gson;
-import com.poly.BeeShoes.LibService;
 import com.poly.BeeShoes.dto.ProductDetailVersion;
+import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.service.*;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -56,7 +54,7 @@ public class Product {
         theLoai.setNgayTao(Timestamp.from(Instant.now()));
         theLoai.setNgaySua(Timestamp.from(Instant.now()));
         theLoai.setTrangThai(true);
-        theLoai.setTenTheLoai(ten);
+        theLoai.setTen(ten);
         TheLoai sp = theLoaiService.save(theLoai);
         if (sp.getId() != null) {
             return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
@@ -157,6 +155,7 @@ public class Product {
                                        @RequestParam("muiGiay")Long muiGiay,
                                        @RequestParam("giaNhap")String giaNhap,
                                        @RequestParam("giaGoc")String giaGoc,
+                                       @RequestParam("moTa")String moTa,
                                        @RequestParam("sales")String sales,
                                        @RequestParam("trangThai")String trangThai,
                                        @RequestParam("product_details")String product_details
@@ -169,13 +168,19 @@ public class Product {
         DeGiay dg = deGiayService.getById(deGiay);
         CoGiay cg = coGiayService.getById(coGiay);
         MuiGiay mg = muiGiayService.getById(muiGiay);
-
+        sp.setThuongHieu(th);
+        sp.setTheLoai(tl);
+        sp.setMoTa(moTa);
+        sanPhamService.save(sp);
         try {
             String[] array  = gs.fromJson(imgSelected,String[].class);
-            for (String s : array) {
+            for (int i=0;i< array.length;i++) {
                 Anh anh = new Anh();
-                anh.setUrl(s);
+                anh.setUrl(array[i]);
                 anh.setSanPham(sp);
+                if (i==0){
+                    anh.setMain(true);
+                }
                 anh.setNgayTao(Timestamp.from(Instant.now()));
                 anhService.save(anh);
             }
@@ -185,8 +190,6 @@ public class Product {
                 ChiTietSanPham ctsp = new ChiTietSanPham();
                 KichCo kc = kichCoService.getById(pro.getKichCo());
                 ctsp.setChatLieu(cl);
-                ctsp.setThuongHieu(th);
-                ctsp.setTheLoai(tl);
                 ctsp.setDeGiay(dg);
                 ctsp.setCoGiay(cg);
                 ctsp.setMuiGiay(mg);

@@ -104,7 +104,7 @@ public class LoginRegisterController {
                     khachHang.setHo(registerDto.getHo());
                     khachHang.setTenDem(registerDto.getTenDem());
                     khachHang.setTen(registerDto.getTen());
-                    khachHang.setStatus(true);
+                    khachHang.setTrangThai(true);
                     khachHang.setDiem(0);
                     khachHang.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
                     khachHang.setGioiTinh(registerDto.isGioiTinh());

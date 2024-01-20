@@ -1,9 +1,8 @@
-package com.poly.BeeShoes;
+package com.poly.BeeShoes.library;
 
 import java.math.BigDecimal;
 
 public class LibService {
-    // Hàm static để kiểm tra và xóa ký tự khỏi chuỗi và chuyển thành BigDecimal
     public static BigDecimal convertStringToBigDecimal(String str) {
         if (str.contains(".")) {
             str = str.replace(".", "");
@@ -14,5 +13,4 @@ public class LibService {
         BigDecimal bd = new BigDecimal(str);
         return bd;
     }
-
 }

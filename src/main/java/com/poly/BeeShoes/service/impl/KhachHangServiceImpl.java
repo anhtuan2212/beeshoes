@@ -40,7 +40,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         updatedKhachHang.setTenDem(khachHang.getTenDem());
         updatedKhachHang.setHo(khachHang.getHo());
         updatedKhachHang.setDiem(khachHang.getDiem());
-        updatedKhachHang.setStatus(khachHang.isStatus());
+        updatedKhachHang.setTrangThai(khachHang.isTrangThai());
         updatedKhachHang.setGioiTinh(khachHang.isGioiTinh());
         updatedKhachHang.setNgaySinh(khachHang.getNgaySinh());
         updatedKhachHang.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));

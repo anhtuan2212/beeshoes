@@ -20,7 +20,10 @@ $(document).on('ready', function () {
         var giaGoc = $('#giaGoc').val();
         var sales = $('#sales').val();
         var trangThai = $('#status').val();
-
+        var quill = $.HSCore.components.HSQuill.init('.js-quill');
+        console.log(trangThai)
+        console.log(sales)
+        var mota = quill.root.innerHTML;
         var  imgSelected = function () {
             var img = [];
             $('.product-img-selected').each(function () {
@@ -53,6 +56,7 @@ $(document).on('ready', function () {
                 chatLieu:chatLieu,
                 deGiay:deGiay,
                 coGiay:coGiay,
+                moTa:mota,
                 muiGiay:muiGiay,
                 giaNhap:giaNhap,
                 giaGoc:giaGoc,
@@ -60,9 +64,9 @@ $(document).on('ready', function () {
                 trangThai:trangThai,
                 product_details:JSON.stringify(product_details)
             },success:()=>{
-                alert("Thành Công !");
+                Toast('success','Thêm Thành Công !');
             },error:()=>{
-                alert("Lỗi!")
+                Toast('error','Thêm Lỗi !');
             }
         })
 
@@ -148,14 +152,14 @@ $(document).on('ready', function () {
                 },
                 success: (data, status, xhr) => {
                     var id = $('#id-element-data').val();
-                    var html = `<option value="${data.id}" selected>${data.ten === undefined ? data.tenTheLoai : data.ten}</option>`;
+                    var html = `<option value="${data.id}" selected>${data.ten}</option>`;
                     $('#' + id).append(html);
                     Toast('success','Thêm Thành Công !');
                     // $('#add_new_product_modal').modal('hide');
                     $('#product-name-modal').val('');
                 },
                 error: () => {
-                    alert("lỗi !")
+                    Toast('error','Thêm Lỗi !');
                 }
             })
         }
@@ -166,7 +170,7 @@ $(document).on('ready', function () {
         var coloCode = $('#colorChoice').val();
         var coloName = $('#color-name').val();
         if (coloName.length === 0) {
-            alert('Vui lòng nhập tên màu !')
+            Toast('error','Vui lòng nhập tên !');
         } else {
             $.ajax({
                 type: "POST",
@@ -177,11 +181,11 @@ $(document).on('ready', function () {
                 },
                 success: (data, status, xhr) => {
                     if (data == "") {
-                        alert("Mã màu đã tồn tại.")
+                        Toast('error','Mã màu đã tồn tại !');
                     } else {
                         var html = `<option value="${data.maMauSac}" data-name="${data.ten}" selected>${data.maMauSac}</option>`;
                         $('#mauSac').append(html);
-                        alert('Thêm Thành Công !');
+                        Toast('success','Thêm Thành Công !');
                         if (confirm('Bạn có muốn tạo thêm !')) {
                             $('#color-name').val('');
                         } else {
@@ -191,7 +195,7 @@ $(document).on('ready', function () {
                     }
                 },
                 error: () => {
-                    alert("lỗi !")
+                    Toast('error','Thêm Lỗi !');
                 }
             })
         }
@@ -206,12 +210,14 @@ function showColorCode(color) {
     colorCode.value = color.toUpperCase();
 }
 function Toast(status,message) {
-    $('#systoast').toast({delay: 5000,autohide:true,animation:true,progress:true,multiple:true});
+    $('#systoast').toast({delay: 5000,autohide:true,animation:true,progress:true,hideAfter: 5000});
     $('#systoast').toast('show');
     $('#system-toast-mesage').text(message);
     if (status=='success'){
+        $('#img-toast').attr('src','/assets/cms/img/icon/success.svg')
         $('#toast-status').text("Thành Công !");
     }else if (status=='error'){
+        $('#img-toast').attr('src','/assets/cms/img/icon/error.svg')
         $('#toast-status').text("Thất Bại !");
     }else{
     $('#toast-status').text("Sai Giá trị status !");

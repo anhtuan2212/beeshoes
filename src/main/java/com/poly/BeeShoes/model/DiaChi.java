@@ -24,8 +24,7 @@ public class DiaChi {
     String soNha;
     String phuongXa;
     String quanHuyen;
-    String thanhPho;
-    String zipCode;
+    String tinhThanhPho;
     Timestamp ngayTao;
     Timestamp ngaySua;
 

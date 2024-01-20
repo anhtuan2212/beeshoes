@@ -16,9 +16,7 @@ public class MauSac {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
     String ten;
-
     @Column(unique = true)
     String maMauSac;
     Timestamp ngayTao;

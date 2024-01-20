@@ -17,7 +17,7 @@ public class ChucVu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String tenChucVu;
+    String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;
 
