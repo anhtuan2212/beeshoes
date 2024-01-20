@@ -25,6 +25,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @Column(unique = true)
     String email;
     String password;
 
@@ -38,6 +40,8 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     Role role;
+    Timestamp verifyAt;
+    String avatar;
     Timestamp ngayTao;
     Timestamp ngaySua;
 

@@ -34,4 +34,5 @@ public class Anh {
     @JoinColumn(name = "id")
     User nguoiSua;
     boolean trangThai;
+
 }

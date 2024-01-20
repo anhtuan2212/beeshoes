@@ -1,13 +1,17 @@
 package com.poly.BeeShoes.service.impl;
 
+import com.poly.BeeShoes.model.ChiTietSanPham;
+import com.poly.BeeShoes.model.MauSac;
 import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.repository.SanPhamRepository;
 import com.poly.BeeShoes.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +32,26 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPham> getAll() {
-        return sanPhamRepository.findAll();
+        List<SanPham> sp = sanPhamRepository.findAll();
+        for (int i = 0; i < sp.size(); i++) {
+            SanPham s = sp.get(i);
+            List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
+            int num = 0;
+            BigDecimal gn =null;
+            List<MauSac> lst = new ArrayList<>();
+            for (int j = 0; j < ctsp.size(); j++) {
+                ChiTietSanPham ct = ctsp.get(j);
+                num += ct.getSoLuongTon();
+                gn=ct.getGiaNhap();
+                if (!lst.contains(ct.getMauSac())){
+                    lst.add(ct.getMauSac());
+                }
+            }
+            s.setMauSac(lst);
+            s.setGiaNhap(gn);
+            s.setSoLuong(num);
+        }
+        return sp;
     }
 
     @Override
