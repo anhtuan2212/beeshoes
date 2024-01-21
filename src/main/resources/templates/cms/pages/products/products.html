@@ -321,6 +321,10 @@
                         </td>
                         <td class="table-column-pl-0">
                             <a class="media align-items-center" href="/cms/product-detail">
+                                <th:block th:if="${#lists.size(sp.getAnh()) == 0}">
+                                    <img class="avatar avatar-lg mr-3" src="/assets/cms/img/400x400/img2.jpg"
+                                         alt="Image Description">
+                                </th:block>
                                 <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <img class="avatar avatar-lg mr-3" th:src="${anh.getUrl()}"
                                      alt="Image Description">
@@ -330,12 +334,12 @@
                                 </div>
                             </a>
                         </td>
-                        <td th:text="${sp.getTheLoai().getTen()}"></td>
-                        <td th:text="${sp.getThuongHieu().getTen()}"></td>
+                        <td th:text="${sp.getTheLoai() == null ? 'N/A':sp.getTheLoai().getTen()}"></td>
+                        <td th:text="${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}"></td>
                         <td th:text="${#dates.format (sp.getNgayTao(), 'dd-MM-yyyy')}"></td>
                         <td th:text="${sp.getNguoiTao()==null?'N/A':sp.getNguoiTao()}"></td>
-                        <td th:text="${#numbers.formatDecimal (sp.getGiaNhap(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></td>
-                        <td th:text="${sp.getSoLuong()}"></td>
+                        <td th:text="${sp.getGiaNhap()==null?0:#numbers.formatDecimal (sp.getGiaNhap(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></td>
+                        <td th:text="${sp.getSoLuong()}">0</td>
                         <td th:text="${sp.isTrangThai()==true?'Actice':'No Active'}">2</td>
                         <td>
                             <div class="btn-group" role="group">

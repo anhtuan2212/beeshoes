@@ -30,7 +30,9 @@
     $(document).ready(function () {
     $('.money-input-mask').mask('#.##0đ', {reverse: true});
 });
-
+    $(document).ready(function () {
+        $('.money-input-mask-num').mask('#.##0', {reverse: true});
+    });
     $(document).on('ready', function () {
     // BUILDER TOGGLE INVOKER
     // =======================================================

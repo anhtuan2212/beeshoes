@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -39,7 +41,7 @@ public class Product {
     public ResponseEntity<SanPham> themSanPham(@RequestParam("ten") String ten) {
         SanPham sanPham = new SanPham();
         sanPham.setNgayTao(Timestamp.from(Instant.now()));
-        sanPham.setTrangThai(true);
+        sanPham.setTrangThai(false);
         sanPham.setTen(ten);
         SanPham sp = sanPhamService.save(sanPham);
         if (sp.getId() != null) {
@@ -61,6 +63,7 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
+
     @PostMapping("/them-thuong-hieu")
     public ResponseEntity<ThuongHieu> themThuongHieu(@RequestParam("ten") String ten) {
         ThuongHieu th = new ThuongHieu();
@@ -74,6 +77,7 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
+
     @PostMapping("/them-chat-lieu")
     public ResponseEntity<ChatLieu> themChatLieu(@RequestParam("ten") String ten) {
         ChatLieu th = new ChatLieu();
@@ -87,6 +91,7 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
+
     @PostMapping("/them-de-giay")
     public ResponseEntity<DeGiay> themDeGiay(@RequestParam("ten") String ten) {
         DeGiay dg = new DeGiay();
@@ -100,6 +105,7 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
+
     @PostMapping("/them-co-giay")
     public ResponseEntity<CoGiay> themCoGiay(@RequestParam("ten") String ten) {
         CoGiay cg = new CoGiay();
@@ -113,6 +119,7 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
+
     @PostMapping("/them-mui-giay")
     public ResponseEntity<MuiGiay> themMuiGiay(@RequestParam("ten") String ten) {
         MuiGiay cg = new MuiGiay();
@@ -126,10 +133,11 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
+
     @PostMapping("/them-mau-sac")
-    public ResponseEntity<MauSac> themMauSac(@RequestParam("ten_mau") String ten,@RequestParam("ma_mau") String ma) {
+    public ResponseEntity<MauSac> themMauSac(@RequestParam("ten_mau") String ten, @RequestParam("ma_mau") String ma) {
         boolean st = mauSacService.existsByMaMauSac(ma);
-        if (st){
+        if (st) {
             return ResponseEntity.status(HttpStatus.OK).header("status-cus", "true").body(null);
         }
         MauSac ms = new MauSac();
@@ -144,73 +152,89 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
     @PostMapping("/chi-tiet-san-pham")
-    public ResponseEntity<SanPham> chiTietSanPham(@RequestParam("imgSelected")String imgSelected,
-                                       @RequestParam("sanPham")Long sanPham,
-                                       @RequestParam("theLoai")Long theLoai,
-                                       @RequestParam("thuongHieu")Long thuongHieu,
-                                       @RequestParam("chatLieu")Long chatLieu,
-                                       @RequestParam("deGiay")Long deGiay,
-                                       @RequestParam("coGiay")Long coGiay,
-                                       @RequestParam("muiGiay")Long muiGiay,
-                                       @RequestParam("giaNhap")String giaNhap,
-                                       @RequestParam("giaGoc")String giaGoc,
-                                       @RequestParam("moTa")String moTa,
-                                       @RequestParam("sales")String sales,
-                                       @RequestParam("trangThai")String trangThai,
-                                       @RequestParam("product_details")String product_details
-                                       ) {
+    public ResponseEntity<SanPham> chiTietSanPham(@RequestParam("imgSelected") String imgSelected,
+                                                  @RequestParam("sanPham") Long sanPham,
+                                                  @RequestParam("theLoai") Long theLoai,
+                                                  @RequestParam("thuongHieu") Long thuongHieu,
+                                                  @RequestParam("chatLieu") Long chatLieu,
+                                                  @RequestParam("deGiay") Long deGiay,
+                                                  @RequestParam("coGiay") Long coGiay,
+                                                  @RequestParam("muiGiay") Long muiGiay,
+                                                  @RequestParam("giaNhap") String giaNhap,
+                                                  @RequestParam("giaGoc") String giaGoc,
+                                                  @RequestParam("moTa") String moTa,
+                                                  @RequestParam("sales") boolean sales,
+                                                  @RequestParam("trangThai") boolean trangThai,
+                                                  @RequestParam("product_details") String product_details
+    ) {
+
+        List<String> lst = LibService.checkDataProduct(sanPham, theLoai, thuongHieu, chatLieu, deGiay, coGiay, muiGiay, giaNhap, giaGoc);
+
         Gson gs = new Gson();
-        SanPham sp = sanPhamService.getById(sanPham);
-        ChatLieu cl = chatLieuService.getById(chatLieu);
-        ThuongHieu th = thuongHieuService.getById(thuongHieu);
-        TheLoai tl = theLoaiService.getById(theLoai);
-        DeGiay dg = deGiayService.getById(deGiay);
-        CoGiay cg = coGiayService.getById(coGiay);
-        MuiGiay mg = muiGiayService.getById(muiGiay);
-        sp.setThuongHieu(th);
-        sp.setTheLoai(tl);
-        sp.setMoTa(moTa);
-        sanPhamService.save(sp);
-        try {
-            String[] array  = gs.fromJson(imgSelected,String[].class);
-            for (int i=0;i< array.length;i++) {
-                Anh anh = new Anh();
-                anh.setUrl(array[i]);
-                anh.setSanPham(sp);
-                if (i==0){
-                    anh.setMain(true);
+        String[] array = gs.fromJson(imgSelected, String[].class);
+        Type listType = new TypeToken<List<ProductDetailVersion>>() {
+        }.getType();
+        List<ProductDetailVersion> productdetail = gs.fromJson(product_details, listType);
+
+        List<String> lst2 = LibService.checkDataProductDetail(lst, productdetail,array);
+
+        if (lst2 == null) {
+
+            SanPham sp = sanPhamService.getById(sanPham);
+            ChatLieu cl = chatLieuService.getById(chatLieu);
+            ThuongHieu th = thuongHieuService.getById(thuongHieu);
+            TheLoai tl = theLoaiService.getById(theLoai);
+            DeGiay dg = deGiayService.getById(deGiay);
+            CoGiay cg = coGiayService.getById(coGiay);
+            MuiGiay mg = muiGiayService.getById(muiGiay);
+            sp.setThuongHieu(th);
+            sp.setTrangThai(trangThai);
+            sp.setTheLoai(tl);
+            sp.setMoTa(moTa);
+            sanPhamService.save(sp);
+            List<Anh> a = sp.getAnh();
+                if (sp.getAnh().size() == 4) {
+                    for (int i = 1; i < 4 - a.size(); i++) {
+                        Anh anh = new Anh();
+                        anh.setUrl(array[i]);
+                        anh.setSanPham(sp);
+                        if (i == 0) {
+                            anh.setMain(true);
+                        }
+                        anh.setNgayTao(Timestamp.from(Instant.now()));
+                        anhService.save(anh);
+                    }
                 }
-                anh.setNgayTao(Timestamp.from(Instant.now()));
-                anhService.save(anh);
-            }
-            Type listType = new TypeToken<List<ProductDetailVersion>>(){}.getType();
-            List<ProductDetailVersion> productdetail = gs.fromJson(product_details,listType);
-            for(ProductDetailVersion pro : productdetail){
-                ChiTietSanPham ctsp = new ChiTietSanPham();
-                KichCo kc = kichCoService.getById(pro.getKichCo());
-                ctsp.setChatLieu(cl);
-                ctsp.setDeGiay(dg);
-                ctsp.setCoGiay(cg);
-                ctsp.setMuiGiay(mg);
-                ctsp.setSanPham(sp);
-                ctsp.setKichCo(kc);
-                ctsp.setGiaGoc(LibService.convertStringToBigDecimal(giaGoc));
-                ctsp.setGiaNhap(LibService.convertStringToBigDecimal(giaNhap));
-                ctsp.setGiaBan(LibService.convertStringToBigDecimal(pro.getGiaBan()));
-                ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
-                ctsp.setSoLuongNhap(pro.getSoLuong());
-                ctsp.setSoLuongTon(pro.getSoLuong());
-                ctsp.setTrangThai(1);
-                ctsp.setNgayTao(Timestamp.from(Instant.now()));
-                ctsp.setMauSac(mauSacService.getMauSacByMa(pro.getMauSac()));
-                chiTietSanPhamService.save(ctsp);
-            }
-        }catch (Exception e){
-            System.out.println(e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+                for (ProductDetailVersion pro : productdetail) {
+                    ChiTietSanPham ctsp = new ChiTietSanPham();
+                    KichCo kc = kichCoService.getByTen(pro.getKichCo());
+                    ctsp.setChatLieu(cl);
+                    ctsp.setDeGiay(dg);
+                    ctsp.setCoGiay(cg);
+                    ctsp.setMuiGiay(mg);
+                    ctsp.setSale(sales);
+                    ctsp.setTrangThai(trangThai == true ? 1 : 0);
+                    ctsp.setSanPham(sp);
+                    ctsp.setKichCo(kc);
+                    ctsp.setGiaGoc(LibService.convertStringToBigDecimal(giaGoc));
+                    ctsp.setGiaNhap(LibService.convertStringToBigDecimal(giaNhap));
+                    ctsp.setGiaBan(LibService.convertStringToBigDecimal(pro.getGiaBan()));
+                    ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
+                    ctsp.setSoLuongNhap(pro.getSoLuong());
+                    ctsp.setSoLuongTon(pro.getSoLuong());
+                    ctsp.setTrangThai(1);
+                    ctsp.setNgayTao(Timestamp.from(Instant.now()));
+                    ctsp.setMauSac(mauSacService.getMauSacByMa(pro.getMauSac()));
+                    chiTietSanPhamService.save(ctsp);
+                }
+            return ResponseEntity.status(HttpStatus.OK).body(sp);
+        }else {
+            String res = gs.toJson(lst2);
+            return ResponseEntity.status(HttpStatus.OK).header("mess",res).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(sp);
     }
 
 }

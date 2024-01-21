@@ -6,15 +6,24 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductDetailVersion {
-    public ProductDetailVersion(String mauSac, Long kichCo, String giaBan, int soLuong) {
+    public ProductDetailVersion(String mauSac, String kichCo, String giaBan, int soLuong) {
         this.mauSac = mauSac;
         this.kichCo = kichCo;
         this.giaBan = giaBan;
         this.soLuong = soLuong;
     }
 
+    public ProductDetailVersion(Long id, String mauSac, String kichCo, String giaBan, int soLuong) {
+        this.id = id;
+        this.mauSac = mauSac;
+        this.kichCo = kichCo;
+        this.giaBan = giaBan;
+        this.soLuong = soLuong;
+    }
+
+    Long id;
     String mauSac;
-    Long kichCo;
+    String kichCo;
     String giaBan;
     int soLuong;
 
