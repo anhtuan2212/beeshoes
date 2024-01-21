@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KichCoRepository extends JpaRepository<KichCo,Long> {
+    KichCo getKichCoByTen(String ten);
 }

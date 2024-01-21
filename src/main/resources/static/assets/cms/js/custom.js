@@ -1,3 +1,23 @@
+function Toast(status,message) {
+    $('#systoast').toast({delay: 5000,autohide:true,animation:true,progress:true,hideAfter: 5000});
+    $('#systoast').toast('show');
+    $('#system-toast-mesage').text(message);
+    if (status=='success'){
+        $('#img-toast').attr('src','/assets/cms/img/icon/success.svg')
+        $('#toast-status').text("Thành Công !");
+    }else if (status=='error'){
+        $('#img-toast').attr('src','/assets/cms/img/icon/error.svg')
+        $('#toast-status').text("Thất Bại !");
+    }else{
+        $('#toast-status').text("Sai Giá trị status !");
+    }
+}
+function ToastSuccess(message) {
+    Toast('success',message)
+}
+function ToastError(message) {
+    Toast('error',message)
+}
 function setFormSendData(url, name, id) {
     $('#titleModalLabel').text("Thêm Mới " + name);
     $('#form-modal-add-attr-label').text("Tên " + name + ":");
@@ -9,36 +29,33 @@ function setFormSendData(url, name, id) {
 
 $(document).on('ready', function () {
     $('#save-product-detail').on('click', function () {
-        var sanPham = $('#sanPham').val();
-        var theLoai = $('#theLoai').val();
-        var thuongHieu = $('#thuongHieu').val();
-        var chatLieu = $('#chatLieu').val();
-        var deGiay = $('#deGiay').val();
-        var coGiay = $('#coGiay').val();
-        var muiGiay = $('#muiGiay').val();
-        var giaNhap = $('#giaNhap').val();
-        var giaGoc = $('#giaGoc').val();
-        var sales = $('#sales').val();
-        var trangThai = $('#status').val();
-        var quill = $.HSCore.components.HSQuill.init('.js-quill');
-        console.log(trangThai)
-        console.log(sales)
-        var mota = quill.root.innerHTML;
-        var  imgSelected = function () {
-            var img = [];
+        let sanPham = $('#sanPham').val();
+        let theLoai = $('#theLoai').val();
+        let thuongHieu = $('#thuongHieu').val();
+        let chatLieu = $('#chatLieu').val();
+        let deGiay = $('#deGiay').val();
+        let coGiay = $('#coGiay').val();
+        let muiGiay = $('#muiGiay').val();
+        let giaNhap = $('#giaNhap').val();
+        let giaGoc = $('#giaGoc').val();
+        let sales = $('#sales').is(":checked");
+        let trangThai = $('#status').is(":checked");
+        let mota = $('.ql-editor').html();
+        let  imgSelected = function () {
+            let img = [];
             $('.product-img-selected').each(function () {
-                var src = $(this).attr('src');
+                let src = $(this).attr('src');
                 img.push(src);
             })
             return img;
         };
-        var product_details = [];
+        let product_details = [];
         $('.row-data-detail').each(function (){
-            var inputs = $(this).find('.form-control');
-            var my_obj = {};
+            let inputs = $(this).find('.form-control');
+            let my_obj = {};
             inputs.each(function(){
-                var name = $(this).attr('name');
-                var value = $(this).val();
+                let name = $(this).attr('name');
+                let value = $(this).val();
                 my_obj[name] = value;
             });
             product_details.push(my_obj);
@@ -63,30 +80,43 @@ $(document).on('ready', function () {
                 sales:sales,
                 trangThai:trangThai,
                 product_details:JSON.stringify(product_details)
-            },success:()=>{
-                Toast('success','Thêm Thành Công !');
-            },error:()=>{
-                Toast('error','Thêm Lỗi !');
+            },success:(data,status,xhr)=>{
+                let mess =JSON.parse(xhr.getResponseHeader('mess'));
+                let mes ='';
+                for (let i= 0 ; i < mess.length ; i++){
+                    if(i+1==mess.length){
+                        mes+=mess[i];
+                    }else{
+                        mes+=mess[i]+',';
+                    }
+                }
+                ToastError('Vui lòng nhập :'+mes+' !');
+            },error:(e)=>{
+                console.log(e)
+                ToastError('Gửi Lỗi !');
+                // Toast('error','Thêm Lỗi !');
             }
         })
 
     })
     //generate version product
     $('#mauSac, #kichCo').on('change', function () {
-        var mausac = $('#mauSac').val();
-        var giaban = $('#giaBan').val();
-        var kichco = $('#kichCo').val();
-        var html = '';
-        mausac.forEach((mau) => {
+        let mausac = $('#mauSac').val();
+        let giaban = $('#giaBan').val();
+        let kichco = $('#kichCo').val();
+        let soLuong = $('#soLuong').val();
+        let html = '';
+        mausac.forEach((mau,index1) => {
             html += `<tr><th>${mau}</th></tr>`
-            kichco.forEach((co) => {
+            kichco.forEach((co,index2) => {
                 html += `
                 <tr class="row-data-detail">
                     <td class="table-column-pr-0">
                         <div class="custom-control custom-checkbox">
+                                <input type="text" class="form-control" name="id" value="" hidden="">
                                 <input type="checkbox" class="custom-control-input"
-                                       id="productVariationsCheck4">
-                                <label class="custom-control-label" for="productVariationsCheck4"></label>
+                                       id="productVariationsCheck${index1+''+index2}">
+                                <label class="custom-control-label" for="productVariationsCheck${index1+''+index2}"></label>
                             </div>
                         </td>
                         <th>
@@ -106,7 +136,7 @@ $(document).on('ready', function () {
                             <div class="js-quantity-counter input-group-quantity-counter">
                                 <input type="number" name="soLuong"
                                        class="js-result form-control input-group-quantity-counter-control"
-                                       value="1">
+                                       value="${soLuong}">
 
                                 <div class="input-group-quantity-counter-toggle">
                                     <a class="js-minus input-group-quantity-counter-btn"
@@ -139,8 +169,8 @@ $(document).on('ready', function () {
 
 
     $('#btn-add-new-product').on('click', () => {
-        var ten = $('#product-name-modal').val();
-        var url = $('#url-post-data').val();
+        let ten = $('#product-name-modal').val();
+        let url = $('#url-post-data').val();
         if (ten.length === 0) {
             Toast('error','Vui lòng nhập tên !');
         } else {
@@ -151,8 +181,8 @@ $(document).on('ready', function () {
                     ten: ten
                 },
                 success: (data, status, xhr) => {
-                    var id = $('#id-element-data').val();
-                    var html = `<option value="${data.id}" selected>${data.ten}</option>`;
+                    let id = $('#id-element-data').val();
+                    let html = `<option value="${data.id}" selected>${data.ten}</option>`;
                     $('#' + id).append(html);
                     Toast('success','Thêm Thành Công !');
                     // $('#add_new_product_modal').modal('hide');
@@ -167,8 +197,8 @@ $(document).on('ready', function () {
 
     // thêm màu sắc
     $('#btn-add-new-color').on('click', () => {
-        var coloCode = $('#colorChoice').val();
-        var coloName = $('#color-name').val();
+        let coloCode = $('#colorChoice').val();
+        let coloName = $('#color-name').val();
         if (coloName.length === 0) {
             Toast('error','Vui lòng nhập tên !');
         } else {
@@ -183,7 +213,7 @@ $(document).on('ready', function () {
                     if (data == "") {
                         Toast('error','Mã màu đã tồn tại !');
                     } else {
-                        var html = `<option value="${data.maMauSac}" data-name="${data.ten}" selected>${data.maMauSac}</option>`;
+                        let html = `<option value="${data.maMauSac}" data-name="${data.ten}" selected>${data.maMauSac}</option>`;
                         $('#mauSac').append(html);
                         Toast('success','Thêm Thành Công !');
                         if (confirm('Bạn có muốn tạo thêm !')) {
@@ -206,20 +236,7 @@ $(document).on('ready', function () {
 showColorCode('#000000')
 
 function showColorCode(color) {
-    var colorCode = document.getElementById("colorCode");
+    let colorCode = document.getElementById("colorCode");
     colorCode.value = color.toUpperCase();
 }
-function Toast(status,message) {
-    $('#systoast').toast({delay: 5000,autohide:true,animation:true,progress:true,hideAfter: 5000});
-    $('#systoast').toast('show');
-    $('#system-toast-mesage').text(message);
-    if (status=='success'){
-        $('#img-toast').attr('src','/assets/cms/img/icon/success.svg')
-        $('#toast-status').text("Thành Công !");
-    }else if (status=='error'){
-        $('#img-toast').attr('src','/assets/cms/img/icon/error.svg')
-        $('#toast-status').text("Thất Bại !");
-    }else{
-    $('#toast-status').text("Sai Giá trị status !");
-    }
-}
+

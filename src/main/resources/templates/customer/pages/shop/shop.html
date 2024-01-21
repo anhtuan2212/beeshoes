@@ -269,7 +269,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-6" th:each="sp:${lstsanpham}">
+                        <div class="col-lg-4 col-md-6 col-sm-6" th:each="sp:${lstsanpham.getContent()}">
                             <div class="product__item">
                                 <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <div class="product__item__pic set-bg" th:attr="data-setbg=${anh.getUrl()}" >

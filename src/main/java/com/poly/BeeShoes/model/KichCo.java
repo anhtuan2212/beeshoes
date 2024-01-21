@@ -16,7 +16,7 @@ public class KichCo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
+    @Column(unique = true)
     String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;

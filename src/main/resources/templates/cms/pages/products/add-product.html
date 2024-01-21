@@ -503,6 +503,13 @@
                                        placeholder="Vui lòng nhập giá nhập." aria-label="">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="giaBan" class="input-label">Số Lượng</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control money-input-mask-num" name="soLuong" id="soLuong"
+                                       placeholder="Vui lòng nhập số lượng mỗi loại." aria-label="">
+                            </div>
+                        </div>
                         <!-- End Form Group -->
 
                         <hr class="my-4">
@@ -513,7 +520,7 @@
                                 <span class="text-dark">Sales</span>
                             </span>
                             <span class="col-4 col-sm-3">
-                                <input type="checkbox" class="" id="sales">
+                                <input type="checkbox" class="toggle-switch-input" id="sales">
                                 <span class="toggle-switch-label ml-auto">
                                     <span class="toggle-switch-indicator"></span>
                                 </span>
@@ -527,7 +534,7 @@
                                 <span class="text-dark">Trạng Thái</span>
                             </span>
                             <span class="col-4 col-sm-3">
-                                <input type="checkbox" class="" id="status">
+                                <input type="checkbox" class="toggle-switch-input" id="status">
                                 <span class="toggle-switch-label ml-auto">
                                     <span class="toggle-switch-indicator"></span>
                                 </span>
@@ -585,8 +592,8 @@
                                     "tags": true ,
                                     "placeholder":"Chọn size"
                                     }'>
-                                <option th:each="th:${lstkichco}" th:value="${th.getId()}"
-                                        th:text="${th.getTen()}"></option>
+                                <option th:each="kc:${lstkichco}" th:value="${kc.getTen()}"
+                                        th:text="${kc.getTen()}"></option>
                             </select>
                             <!-- End Select -->
                         </div>
@@ -869,24 +876,8 @@
         </div>
     </div>
 </div>
-<!-- end màu sắc Modal -->
-<!--User Toast -->
-<!--<div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="width: 300px;">-->
-<!--    <div class="toast-header">-->
-<!--        <img class="avatar avatar-sm avatar-circle mr-2" src="/assets/cms/img/160x160/img4.jpg" alt="Image description">-->
-<!--        <h5 class="mb-0">Bob Dean</h5>-->
-<!--        <small class="ml-auto">Vừa xong</small>-->
-<!--        <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">-->
-<!--            <i class="tio-clear" aria-hidden="true"></i>-->
-<!--        </button>-->
-<!--    </div>-->
-<!--    <div class="toast-body">-->
-<!--        Thành Công !-->
-<!--    </div>-->
-<!--</div>-->
-<!-- End User Toast -->
 <!-- Toast -->
-<div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 20px; right: 20px; z-index: 9999;width: 300px;">
+<div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
     <div class="toast-header">
         <img class="avatar avatar-sm avatar-circle mr-2" id="img-toast" src="/assets/cms/img/160x160/img1.jpg" alt="Image description">
         <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
