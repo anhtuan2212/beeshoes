@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.KichCo;
 import com.poly.BeeShoes.repository.KichCoRepository;
 import com.poly.BeeShoes.service.KichCoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class KichCoServiceImpl implements KichCoService {
 
     @Override
     public List<KichCo> getAll() {
-        return kichCoRepository.findAll();
+        return kichCoRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }
 
     @Override
@@ -39,5 +40,10 @@ public class KichCoServiceImpl implements KichCoService {
             kichCoRepository.deleteById(co.getId());
         }
         return false;
+    }
+
+    @Override
+    public boolean exitsByTen(String ten) {
+        return kichCoRepository.existsByTen(ten);
     }
 }

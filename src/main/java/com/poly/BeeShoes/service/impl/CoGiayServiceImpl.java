@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.CoGiay;
 import com.poly.BeeShoes.repository.CoGiayRepository;
 import com.poly.BeeShoes.service.CoGiayService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CoGiayServiceImpl implements CoGiayService {
 
     @Override
     public List<CoGiay> getAll() {
-        return coGiayRepository.findAll();
+        return coGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }
 
     @Override

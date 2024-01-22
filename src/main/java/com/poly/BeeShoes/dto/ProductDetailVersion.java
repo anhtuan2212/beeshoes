@@ -30,8 +30,9 @@ public class ProductDetailVersion {
     @Override
     public String toString() {
         return "ProductDetailVersion{" +
-                "mauSac='" + mauSac + '\'' +
-                ", kichCo=" + kichCo +
+                "id=" + id +
+                ", mauSac='" + mauSac + '\'' +
+                ", kichCo='" + kichCo + '\'' +
                 ", giaBan='" + giaBan + '\'' +
                 ", soLuong=" + soLuong +
                 '}';

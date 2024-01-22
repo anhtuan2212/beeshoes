@@ -8,6 +8,7 @@ import com.poly.BeeShoes.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,7 +35,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPham> getAll() {
-        List<SanPham> sp = sanPhamRepository.findAll();
+        List<SanPham> sp = sanPhamRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
         for (int i = 0; i < sp.size(); i++) {
             SanPham s = sp.get(i);
             List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
@@ -66,15 +67,20 @@ public class SanPhamServiceImpl implements SanPhamService {
                 List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
                 int num = 0;
                 BigDecimal gn =null;
+                boolean sale =false;
                 List<MauSac> lst = new ArrayList<>();
                 for (int j = 0; j < ctsp.size(); j++) {
                     ChiTietSanPham ct = ctsp.get(j);
+                    if (ct.isSale()){
+                        sale=true;
+                    }
                     num += ct.getSoLuongTon();
                     gn=ct.getGiaNhap();
                     if (!lst.contains(ct.getMauSac())){
                         lst.add(ct.getMauSac());
                     }
                 }
+                sp.getContent().get(i).setSale(sale);
                 sp.getContent().get(i).setMauSac(lst);
                 sp.getContent().get(i).setGiaNhap(gn);
                 sp.getContent().get(i).setSoLuong(num);

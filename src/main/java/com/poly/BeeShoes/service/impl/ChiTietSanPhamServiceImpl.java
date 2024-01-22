@@ -1,6 +1,8 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.ChiTietSanPham;
+import com.poly.BeeShoes.model.KichCo;
+import com.poly.BeeShoes.model.MauSac;
 import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.repository.ChiTietSanPhamRepository;
 import com.poly.BeeShoes.service.ChiTietSanPhamService;
@@ -17,6 +19,16 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
     public ChiTietSanPham save(ChiTietSanPham chiTietSanPham) {
         return ctspRepository.save(chiTietSanPham);
     }
+
+    @Override
+    public ChiTietSanPham getById(Long id) {
+        return ctspRepository.findById(id).get();
+    }
+
+//    @Override
+//    public ChiTietSanPham getBySizeAndColor(KichCo kichCo, MauSac mauSac) {
+//        return ctspRepository.getChiTietSanPhamByMauSacAndKichCo(mauSac,kichCo);
+//    }
 
     @Override
     public List<ChiTietSanPham> getAllBySanPham(SanPham samPham) {
