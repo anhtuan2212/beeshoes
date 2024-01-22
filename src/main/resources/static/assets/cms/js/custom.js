@@ -113,7 +113,7 @@ $(document).on('ready', function () {
                 <tr class="row-data-detail">
                     <td class="table-column-pr-0">
                         <div class="custom-control custom-checkbox">
-                                <input type="text" class="form-control" name="id" value="" hidden="">
+                                <input type="text" class="form-control" name="id" value="0" hidden="">
                                 <input type="checkbox" class="custom-control-input"
                                        id="productVariationsCheck${index1+''+index2}">
                                 <label class="custom-control-label" for="productVariationsCheck${index1+''+index2}"></label>
@@ -183,9 +183,11 @@ $(document).on('ready', function () {
                 success: (data, status, xhr) => {
                     let id = $('#id-element-data').val();
                     let html = `<option value="${data.id}" selected>${data.ten}</option>`;
+                    if (id=='kichCo'){
+                         html = `<option value="${data.ten}" selected>${data.ten}</option>`;
+                    }
                     $('#' + id).append(html);
                     Toast('success','Thêm Thành Công !');
-                    // $('#add_new_product_modal').modal('hide');
                     $('#product-name-modal').val('');
                 },
                 error: () => {
@@ -213,7 +215,7 @@ $(document).on('ready', function () {
                     if (data == "") {
                         Toast('error','Mã màu đã tồn tại !');
                     } else {
-                        let html = `<option value="${data.maMauSac}" data-name="${data.ten}" selected>${data.maMauSac}</option>`;
+                        let html = `<option value="${data.maMauSac}" data-name="${data.ten}">${data.maMauSac}</option>`;
                         $('#mauSac').append(html);
                         Toast('success','Thêm Thành Công !');
                         if (confirm('Bạn có muốn tạo thêm !')) {

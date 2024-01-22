@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.TheLoai;
 import com.poly.BeeShoes.repository.TheLoaiRepository;
 import com.poly.BeeShoes.service.TheLoaiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class TheLoaiServiceImpl implements TheLoaiService {
 
     @Override
     public List<TheLoai> getAll() {
-        return theLoaiRepository.findAll();
+        return theLoaiRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }
 
     @Override

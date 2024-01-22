@@ -270,9 +270,10 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-6" th:each="sp:${lstsanpham.getContent()}">
-                            <div class="product__item">
+                            <div class="product__item sale">
                                 <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <div class="product__item__pic set-bg" th:attr="data-setbg=${anh.getUrl()}" >
+                                    <span class="label" th:if="${sp.isSale()}">SALE</span>
                                     <ul class="product__hover">
                                         <li><a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a></li>
                                         <li><a href="#"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a></li>
@@ -283,14 +284,10 @@
                                 <div class="product__item__text">
                                     <h6 th:text="${sp.getTen()}"></h6>
                                     <a href="#" class="add-cart">+ Add To Cart</a>
-                                    <div class="rating">
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
                                     <th:block th:each="ctsp,iter:${sp.getChiTietSanPham()}">
+                                    <div class="rating">
+                                        <h6 class="giaGoc" th:if="${iter.index == 0}" th:text="${#numbers.formatDecimal (ctsp.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></h6>
+                                    </div>
                                     <h5 th:if="${iter.index == 0}" th:text="${#numbers.formatDecimal (ctsp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></h5>
                                     </th:block>
                                     <div class="product__color__select">

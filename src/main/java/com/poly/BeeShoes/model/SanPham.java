@@ -34,6 +34,7 @@ public class SanPham {
 
     boolean trangThai;
 
+
     @JoinColumn(name = "id_thuong_hieu")
     @ManyToOne
     ThuongHieu thuongHieu;
@@ -53,7 +54,8 @@ public class SanPham {
 
     @Transient
     BigDecimal giaNhap;
-
+    @Transient
+    boolean sale;
     @Transient
     List<MauSac> mauSac;
 }
