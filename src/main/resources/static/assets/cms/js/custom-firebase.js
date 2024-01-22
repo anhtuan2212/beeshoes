@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
     getStorage,
     ref,
@@ -7,6 +7,7 @@ import {
     listAll,
     deleteObject,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
 const firebaseConfig = {
     apiKey: "AIzaSyAfK7SCIGsZsPcW3Gd3yZsITl2sZw1jBxY",
     authDomain: "datn-lightbe.firebaseapp.com",
@@ -24,9 +25,8 @@ const fileInput = document.getElementById("fileAttachmentBtn");
 const listRef = ref(storage, "images");
 
 
-
-function generateCard(url , lst) {
-    var html =`
+function generateCard(url, lst) {
+    var html = `
     <div class="card card-sm box-shadow-img-file" data-img-src="${url}">
         <img class="card-img-top img-product-files" src="${url}" alt="Image Description">
         <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary position-absolute right-0 delete-btn">
@@ -44,6 +44,7 @@ function generateCard(url , lst) {
     </div>`;
     return html;
 }
+
 function randomString(n) {
     var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var result = "";
@@ -52,6 +53,7 @@ function randomString(n) {
     }
     return result;
 }
+
 function renameFile(file) {
     var name = file.name; // lấy tên file
     var dotIndex = name.lastIndexOf("."); // lấy vị trí dấu chấm cuối cùng
@@ -59,6 +61,7 @@ function renameFile(file) {
     var newName = randomString(10) + ext; // tạo tên file mới bằng cách thêm chuỗi ngẫu nhiên vào trước đuôi file
     return new File([file], newName, {type: file.type}); // trả về file mới có tên mới
 }
+
 fileInput.addEventListener("change", function (e) {
     const files = e.target.files;
     for (let i = 0; i < files.length; i++) {
@@ -66,9 +69,9 @@ fileInput.addEventListener("change", function (e) {
         const tempUrl = URL.createObjectURL(file);
         var div = document.createElement('div');
         var itemRef = null;
-        var slt =`<a class="js-fancybox-item text-body selected-img" href="javascript:;">Chọn</a>`;
+        var slt = `<a class="js-fancybox-item text-body selected-img" href="javascript:;">Chọn</a>`;
         div.className = "col-sm-2 mb-3";
-        div.innerHTML = generateCard(tempUrl,slt);
+        div.innerHTML = generateCard(tempUrl, slt);
         document.getElementById("anh_co_san").appendChild(div);
         const storageRef = ref(storage, "images/" + file.name);
         uploadBytes(storageRef, file).then((snapshot) => {
@@ -98,21 +101,22 @@ fileInput.addEventListener("change", function (e) {
 });
 
 
-var ImgSelected =[];
+var ImgSelected = [];
 getAllImgFromFirebase(listRef);
-document.getElementById('btn-reset-img').addEventListener('click',function () {
-    document.getElementById("anh_co_san").innerHTML='';
+document.getElementById('btn-reset-img').addEventListener('click', function () {
+    document.getElementById("anh_co_san").innerHTML = '';
     getAllImgFromFirebase(listRef);
 })
+
 function getAllImgFromFirebase(listRef) {
     listAll(listRef)
         .then((res) => {
             res.items.forEach((itemRef) => {
                 getDownloadURL(itemRef).then((url) => {
                     var div = document.createElement('div');
-                    var slt =`<a class="js-fancybox-item text-body selected-img" href="javascript:;">Chọn</a>`;
+                    var slt = `<a class="js-fancybox-item text-body selected-img" href="javascript:;">Chọn</a>`;
                     div.className = "col-sm-2 mb-3 ";
-                    div.innerHTML = generateCard(url,slt);
+                    div.innerHTML = generateCard(url, slt);
                     document.getElementById("anh_co_san").appendChild(div);
                     var deleteBtn = div.querySelector('.delete-btn');
                     deleteBtn.addEventListener('click', function () {
@@ -128,10 +132,10 @@ function getAllImgFromFirebase(listRef) {
                         }
                     });
                     var selectedImg = div.querySelector('.selected-img');
-                    selectedImg.addEventListener('click',function () {
-                        var slt =`<a class="js-fancybox-item text-body dis-selected-img" onclick="backToSelected('${url}',this)" href="javascript:;">Bỏ</a>`;
+                    selectedImg.addEventListener('click', function () {
+                        var slt = `<a class="js-fancybox-item text-body dis-selected-img" onclick="backToSelected('${url}',this)" href="javascript:;">Bỏ</a>`;
                         ImgSelected.push(url);
-                        div.innerHTML = generateCard(url,slt);
+                        div.innerHTML = generateCard(url, slt);
                         document.getElementById("anh_duoc_chon").appendChild(div);
                     });
                 });
@@ -141,42 +145,53 @@ function getAllImgFromFirebase(listRef) {
             console.error(error);
         });
 }
+
 $(document).on('ready', function () {
-    $('#btn-accept-select-img').on('click',function () {
-        ImgSelected.forEach((url)=>{
-            var div = document.createElement('div');
-            div.className = "col-6 col-sm-4 col-md-3 mb-3 mb-lg-5";
-            div.innerHTML = `
-        <div class="card card-sm">
-            <img class="card-img-top img-product-files-extra" src="${url}"
-                 alt="Image Description">
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col">
-                        <a class="js-fancybox-item text-body" href="javascript:;"
-                           data-toggle="tooltip" data-placement="top" title="View"
-                           data-src="${url}"
-                           data-caption="Image #01">
-                            <i class="tio-visible-outlined"></i>
-                        </a>
-                    </div>
-                    <div class="col column-divider">
-                        <a class="text-danger btn-delete-img" href="javascript:;" data-toggle="tooltip"
-                           data-placement="top" title="Delete">
-                            <i class="tio-delete-outlined"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-            document.getElementById("img-selected").appendChild(div);
-            var Img = div.querySelector('.btn-delete-img');
-            var src = div.querySelector('.img-product-files-extra').getAttribute('src');
-            Img.addEventListener('click',function () {
-                ImgSelected.splice(1,ImgSelected.indexOf(src))
-                console.log(ImgSelected)
-                div.remove()
+    $('#btn-accept-select-img').on('click', function () {
+        var element = $('#img-selected');
+        if (ImgSelected.length > 0) {
+            element.empty();
+            ImgSelected.forEach((url) => {
+                var div = $('<div class="col-6 col-sm-4 col-md-3 mb-3 mb-lg-5"></div>');
+                div.html(`
+                    <div class="card card-sm">
+                      <img class="card-img-top img-product-files-extra product-img-selected" src="${url}"
+                           alt="Image Description">
+                      <div class="card-body">
+                        <div class="row text-center">
+                          <div class="col">
+                            <a class="js-fancybox-item text-body" href="javascript:;"
+                               data-toggle="tooltip" data-placement="top" title="View"
+                               data-src="${url}"
+                               data-caption="Image #01">
+                              <i class="tio-visible-outlined"></i>
+                            </a>
+                          </div>
+                          <div class="col column-divider">
+                            <a class="text-danger btn-delete-img" href="javascript:;" data-toggle="tooltip"
+                               data-placement="top" title="Delete">
+                              <i class="tio-delete-outlined"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>`);
+                element.append(div);
+                var Img = div.find('.btn-delete-img');
+                var src = div.find('.img-product-files-extra').attr('src');
+                Img.on('click', function () {
+                    ImgSelected.splice(1, ImgSelected.indexOf(src))
+                    div.remove()
+                    if (element.has('*').length === 0) {
+                        var divNull = $('<div class="text-center p-4"></div>');
+                        divNull.html(`
+                           <img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">
+                           <p class="mb-0">Bạn chưa chọn ảnh.</p>`);
+                        element.append(divNull);
+                    }
+                })
             })
-        })
+        }
     })
+
 })

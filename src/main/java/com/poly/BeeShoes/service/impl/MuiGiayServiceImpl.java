@@ -18,6 +18,11 @@ public class MuiGiayServiceImpl implements MuiGiayService {
     }
 
     @Override
+    public MuiGiay getById(Long id) {
+        return  muiGiayRepository.findById(id).get();
+    }
+
+    @Override
     public List<MuiGiay> getAll() {
         return muiGiayRepository.findAll();
     }

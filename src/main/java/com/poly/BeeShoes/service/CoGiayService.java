@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface CoGiayService {
     CoGiay save(CoGiay coGiay);
+    CoGiay getById(Long id);
     List<CoGiay> getAll();
     boolean delete(Long id);
 }

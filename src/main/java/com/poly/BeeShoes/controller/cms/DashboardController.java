@@ -11,4 +11,5 @@ public class DashboardController {
     public String indexDashboard(){
         return "cms/index";
     }
+
 }

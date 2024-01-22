@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface DeGiayService {
     DeGiay save(DeGiay deGiay);
+    DeGiay getById(Long id);
     List<DeGiay> getAll();
     boolean delete(Long id);
 }

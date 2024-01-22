@@ -1,9 +1,6 @@
 package com.poly.BeeShoes.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,19 +9,18 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "hang_khach_hang")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 /*
-    id binary(16) not null,
-    ten_hang nvarchar(50),
+    id bigint auto_increment,
+    ten nvarchar(256),
     diem_toi_thieu int,
-
-    //ALTER TABLE hang_khach_hang ADD ma_hang varchar(10)
 
  */
 public class HangKhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
-    private  String tenHang;
-    private  int diemToiThieu;
+    Long id;
+    String ten;
+    int diemToiThieu;
 }

@@ -17,7 +17,7 @@ public class TheLoai {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String tenTheLoai;
+    String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;
 

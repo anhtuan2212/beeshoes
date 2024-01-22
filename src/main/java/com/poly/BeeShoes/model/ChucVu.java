@@ -5,19 +5,19 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "chuc_vu")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChucVu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String tenChucVu;
+    String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;
 

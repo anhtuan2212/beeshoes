@@ -18,6 +18,16 @@ public class KichCoServiceImpl implements KichCoService {
     }
 
     @Override
+    public KichCo getById(Long id) {
+        return kichCoRepository.findById(id).get();
+    }
+
+    @Override
+    public KichCo getByTen(String co) {
+        return kichCoRepository.getKichCoByTen(co);
+    }
+
+    @Override
     public List<KichCo> getAll() {
         return kichCoRepository.findAll();
     }

@@ -18,6 +18,11 @@ public class TheLoaiServiceImpl implements TheLoaiService {
     }
 
     @Override
+    public TheLoai getById(Long id) {
+        return theLoaiRepository.findById(id).get();
+    }
+
+    @Override
     public List<TheLoai> getAll() {
         return theLoaiRepository.findAll();
     }

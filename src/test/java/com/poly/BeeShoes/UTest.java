@@ -15,7 +15,7 @@ public class UTest {
     @Test
     public void testHKH() {
         HangKhachHang hang = hangKhachHangService.getByMa("BRONZE");
-        System.out.println("hang = " + hang.getTenHang());
+        System.out.println("hang = " + hang.getTen());
     }
 
 }
