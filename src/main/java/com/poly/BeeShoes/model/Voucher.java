@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

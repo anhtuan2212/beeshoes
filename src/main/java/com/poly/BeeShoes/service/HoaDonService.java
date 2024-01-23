@@ -16,6 +16,8 @@ public interface HoaDonService {
 
     Long count();
 
+    Long countHoaDonCuaKhachHang(Long id);
+
     HoaDon taoMoiHoaDonKhiBanTaiQuay(User user);
 
     boolean capNhatTrangThaiHoaDon(User user, HoaDon hoaDon, TrangThaiHoaDon trangThaiHoaDon);

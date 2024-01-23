@@ -38,16 +38,17 @@ public class VoucherController {
             model.addAttribute("tb1","Không để trống mã");
             check=1;
         }
-        if(voucher.getTen().isEmpty()){
-            model.addAttribute("tb2","Không để trống tên");
-            check=1;
-        }  if(voucher.getGiaTriTienMat()==null){
-            model.addAttribute("tb3","Không để trống gía trị tiền mặt");
-            check=1;
-        } if(voucher.getGiaTriToiDa()==null){
-            model.addAttribute("tb4","Không để trống giá trị tối đa");
-            check=1;
+        if(voucher.getTen().isEmpty()) {
+            model.addAttribute("tb2", "Không để trống tên");
+            check = 1;
         }
+//        }  if(voucher.getGiaTriTienMat() == null){
+//            model.addAttribute("tb3","Không để trống gía trị tiền mặt");
+//            check=1;
+//        } if(voucher.getGiaTriToiDa()==null){
+//            model.addAttribute("tb4","Không để trống giá trị tối đa");
+//            check=1;
+//        }
 
         if(voucher.getDieuKien().isEmpty()){
             model.addAttribute("tb5","Không để trống điều kiện");
