@@ -35,6 +35,12 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+
+    public Long countHoaDonCuaKhachHang(Long id) {
+        return hoaDonRepository.countByKhachHangId(id);
+    }
+
+    @Override
     public HoaDon taoMoiHoaDonKhiBanTaiQuay(User user) {
         HoaDon createdHoaDon = new HoaDon();
         createdHoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));

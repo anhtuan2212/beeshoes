@@ -348,12 +348,14 @@
             </td>
             <td th:text="${hoaDon.ngayTao}"></td>
             <td>
-              <a class="text-body" th:if="${hoaDon.khachHang != null}" th:href="@{|/cms/customer/${hoaDon.khachHang.id}|}" th:text="${hoaDon.khachHang.ten}"></a>
+              <a class="text-body" th:if="${hoaDon.khachHang != null}" th:href="@{|/cms/customer/${hoaDon.khachHang.id}|}"
+                 th:text="${hoaDon.khachHang.ho + ' ' + hoaDon.khachHang.tenDem + ' ' + hoaDon.khachHang.ten}"></a>
               <span th:if="${hoaDon.khachHang == null}">Khách Hàng Ảo</span>
             </td>
             <td>
-                    <span class="badge badge-soft-success" th:text="${hoaDon.trangThai}">
-                      <span th:class="'legend-indicator ' + ${hoaDon.trangThai.toString() == 'ThanhCong' ? 'bg-success' : 'bg-warning'}"></span>
+                    <span  th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
+                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                           th:text="${hoaDon.trangThai}">
                     </span>
             </td>
             <td>
