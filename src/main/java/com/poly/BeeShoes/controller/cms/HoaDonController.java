@@ -23,7 +23,6 @@ public class HoaDonController {
     private final HoaDonService hoaDonService;
     private final HoaDonChiTietService hoaDonChiTietService;
     private final LichSuHoaDonService lichSuHoaDonService;
-
     @GetMapping("/hoa-don")
     public String hoaDonPage(Model model) {
         List<HoaDon> hoaDonList = hoaDonService.getAllHoaDon();
@@ -38,10 +37,12 @@ public class HoaDonController {
             @PathVariable("idHoaDon") Long id,
             Model model
     ) {
+
         List<LichSuHoaDon> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDonByIdHoaDon(id);
         HoaDon hoaDon = hoaDonService.getHoaDonById(id).get();
         List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(id);
         Long countHoaDonCuaKhachHang = hoaDonService.countHoaDonCuaKhachHang(hoaDon.getKhachHang().getId());
+
         double tongTien = 0;
         for(HoaDonChiTiet hdct : hoaDonChiTietList) {
             tongTien = hdct.getChiTietSanPham().getGiaBan().doubleValue() + tongTien;

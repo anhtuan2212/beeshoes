@@ -27,6 +27,7 @@ public class ProductController {
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
+    private final AnhService anhService;
     @GetMapping("/product")
     public String product(Model model) {
         List<SanPham> sp = sanPhamService.getAll();

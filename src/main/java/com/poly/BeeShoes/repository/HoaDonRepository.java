@@ -11,6 +11,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
     List<HoaDon> findByTrangThai(String trangThai);
 
+
     Long countByKhachHangId(Long id);
 
     List<HoaDon> findByNgayTaoBetween(Date startDate, Date endDate);

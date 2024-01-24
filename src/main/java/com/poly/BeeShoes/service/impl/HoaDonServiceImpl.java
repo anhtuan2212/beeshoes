@@ -35,6 +35,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+
     public Long countHoaDonCuaKhachHang(Long id) {
         return hoaDonRepository.countByKhachHangId(id);
     }

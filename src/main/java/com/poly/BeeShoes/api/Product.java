@@ -1,8 +1,8 @@
 package com.poly.BeeShoes.api;
 
 import com.google.gson.Gson;
-import com.poly.BeeShoes.dto.CTSPRequest;
-import com.poly.BeeShoes.dto.ProductDetailVersion;
+import com.poly.BeeShoes.request.CTSPRequest;
+import com.poly.BeeShoes.request.ProductDetailVersion;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.service.*;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -196,11 +196,42 @@ public class Product {
     @PostMapping("/chi-tiet-san-pham")
     public ResponseEntity<SanPham> chiTietSanPham(@ModelAttribute CTSPRequest ctspRequest) {
         Gson gs = new Gson();
-        String[] array = gs.fromJson(ctspRequest.getImgSelected(), String[].class);
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
-
+        if (productdetail.size()==0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Option product can't null").body(null);
+        }
+        String mau ="";
+        for (int i=0;i< productdetail.size();i++){
+            if (productdetail.get(i).getKichCo().isBlank()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Size in option product can't null").body(null);
+            }
+            if (productdetail.get(i).getMauSac().isBlank()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Color in option product can't null").body(null);
+            }
+            if (productdetail.get(i).getGiaBan().isBlank()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Price in option product can't null").body(null);
+            }
+            if (productdetail.get(i).getSoLuong()<0){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Quantity in option product can't null").body(null);
+            }
+            if(i==0){
+                mau = productdetail.get(i).getMauSac();
+                if (productdetail.get(i).getImg()==null){
+                    System.out.println(productdetail.get(i).getImg());
+                    System.out.println("Index ="+i);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","IMG in option product can't null").body(null);
+                }
+            }else {
+                if (!mau.equals(productdetail.get(i).getMauSac())){
+                    if (productdetail.get(i).getImg()==null){
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","IMG in option product can't null").body(null);
+                    }
+                    mau=productdetail.get(i).getMauSac();
+                }
+            }
+        }
         SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
         ChatLieu cl = chatLieuService.getById(ctspRequest.getChatLieu());
         ThuongHieu th = thuongHieuService.getById(ctspRequest.getThuongHieu());
@@ -208,70 +239,66 @@ public class Product {
         DeGiay dg = deGiayService.getById(ctspRequest.getDeGiay());
         CoGiay cg = coGiayService.getById(ctspRequest.getCoGiay());
         MuiGiay mg = muiGiayService.getById(ctspRequest.getMuiGiay());
+        if (sp==null || cl==null || th==null || tl==null || dg==null || cg==null || mg==null ){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         sp.setThuongHieu(th);
         sp.setTrangThai(ctspRequest.isTrangThai());
         sp.setTheLoai(tl);
         sp.setMoTa(ctspRequest.getMoTa());
         SanPham sanPham = sanPhamService.save(sp);
-        boolean st = anhService.saveAnhSanPham(sanPham, array);
-        if (st) {
-            for (ProductDetailVersion pro : productdetail) {
-                if (pro.getId() != 0) {
-                    ChiTietSanPham ctsp = chiTietSanPhamService.getById(pro.getId());
-                    KichCo kc = kichCoService.getByTen(pro.getKichCo());
-                    ctsp.setChatLieu(cl);
-                    ctsp.setDeGiay(dg);
-                    ctsp.setCoGiay(cg);
-                    ctsp.setMuiGiay(mg);
-                    ctsp.setSale(ctspRequest.isSales());
-                    ctsp.setTrangThai(1);
-                    ctsp.setSanPham(sp);
-                    ctsp.setKichCo(kc);
-                    ctsp.setGiaGoc(LibService.convertStringToBigDecimal(ctspRequest.getGiaGoc()));
-                    ctsp.setGiaNhap(LibService.convertStringToBigDecimal(ctspRequest.getGiaNhap()));
-                    ctsp.setGiaBan(LibService.convertStringToBigDecimal(pro.getGiaBan()));
-                    ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
-                    ctsp.setSoLuongNhap(pro.getSoLuong());
-                    ctsp.setSoLuongTon(pro.getSoLuong());
-                    ctsp.setTrangThai(1);
-                    ctsp.setNgayTao(Timestamp.from(Instant.now()));
-                    ctsp.setMauSac(mauSacService.getMauSacByMa(pro.getMauSac()));
-                    chiTietSanPhamService.save(ctsp);
-                    System.out.println(ctspRequest.toString());
-                } else {
-                    KichCo kc = kichCoService.getByTen(pro.getKichCo());
-//                    ChiTietSanPham ct = chiTietSanPhamService.getBySizeAndColor(kc, mauSacService.getMauSacByMa(pro.getMauSac()));
-                    ChiTietSanPham ctsp = new ChiTietSanPham();
-//                    if (ct != null) {
-//                        ctsp = ct;
-//                    }
-                    ctsp.setChatLieu(cl);
-                    ctsp.setDeGiay(dg);
-                    ctsp.setCoGiay(cg);
-                    ctsp.setMuiGiay(mg);
-                    ctsp.setSale(ctspRequest.isSales());
-                    ctsp.setTrangThai(1);
-                    ctsp.setSanPham(sp);
-                    ctsp.setKichCo(kc);
-                    ctsp.setGiaGoc(LibService.convertStringToBigDecimal(ctspRequest.getGiaGoc()));
-                    ctsp.setGiaNhap(LibService.convertStringToBigDecimal(ctspRequest.getGiaNhap()));
-                    ctsp.setGiaBan(LibService.convertStringToBigDecimal(pro.getGiaBan()));
-                    ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
-                    ctsp.setSoLuongNhap(pro.getSoLuong());
-                    ctsp.setSoLuongTon(pro.getSoLuong());
-                    ctsp.setTrangThai(1);
-                    ctsp.setNgayTao(Timestamp.from(Instant.now()));
-                    ctsp.setMauSac(mauSacService.getMauSacByMa(pro.getMauSac()));
-                    chiTietSanPhamService.save(ctsp);
-                }
+        Anh anh = null;
+        for (int i=0;i<productdetail.size();i++) {
+            int in = productdetail.indexOf(productdetail.get(i));
+            KichCo kc = kichCoService.getByTen(productdetail.get(i).getKichCo());
+            MauSac ms = mauSacService.getMauSacByMa(productdetail.get(i).getMauSac());
+            ChiTietSanPham ct = chiTietSanPhamService.getBySizeAndColorAndProduct(kc, ms,sanPham);
+            ChiTietSanPham ctsp = new ChiTietSanPham();
+            if (ct != null) {
+                ctsp = ct;
             }
-//            System.out.println(ctspRequest.toString());
-//            SanPham spres = new SanPham();
-//            spres.setId(sanPham.getId());
-            return ResponseEntity.status(HttpStatus.OK).header("status", "1").body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            String img = productdetail.get(i).getImg();
+            if (img != null) {
+                List<Anh> lsta = anhService.getAllBySanPham(sanPham);
+                Anh a2 = null;
+                for (Anh a : lsta) {
+                    if (a.getUrl().equals(img)) {
+                        anh = a;
+                        a2 = a;
+                        break;
+                    }
+                }
+                if (a2 != null) {
+                    ctsp.setAnh(anh);
+                } else {
+                    Anh an = new Anh(sanPham, img, in == 0 ? true : false, Timestamp.from(Instant.now()));
+                    anh = anhService.save(an);
+                    ctsp.setAnh(anh);
+                }
+            } else {
+                ctsp.setAnh(anh);
+            }
+            ctsp.setChatLieu(cl);
+            ctsp.setDeGiay(dg);
+            ctsp.setCoGiay(cg);
+            ctsp.setMuiGiay(mg);
+            ctsp.setSale(ctspRequest.isSales());
+            ctsp.setTrangThai(1);
+            ctsp.setSanPham(sp);
+            ctsp.setKichCo(kc);
+            ctsp.setGiaGoc(LibService.convertStringToBigDecimal(ctspRequest.getGiaGoc()));
+            ctsp.setGiaNhap(LibService.convertStringToBigDecimal(ctspRequest.getGiaNhap()));
+            ctsp.setGiaBan(LibService.convertStringToBigDecimal(productdetail.get(i).getGiaBan()));
+            ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
+            ctsp.setSoLuongNhap(productdetail.get(i).getSoLuong());
+            ctsp.setSoLuongTon(productdetail.get(i).getSoLuong());
+            ctsp.setTrangThai(1);
+            ctsp.setNgayTao(Timestamp.from(Instant.now()));
+            ctsp.setMauSac(mauSacService.getMauSacByMa(productdetail.get(i).getMauSac()));
+            chiTietSanPhamService.save(ctsp);
         }
+        SanPham sp1 = sanPhamService.getById(sanPham.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 }
