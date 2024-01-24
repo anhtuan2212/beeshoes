@@ -11,4 +11,5 @@ import java.util.List;
 public interface AnhRepository extends JpaRepository<Anh,Long> {
     List<Anh> getAllBySanPham(SanPham sanPham);
     void removeAnhsBySanPham(SanPham sanPham);
+    Anh getFirstByUrl(String url);
 }

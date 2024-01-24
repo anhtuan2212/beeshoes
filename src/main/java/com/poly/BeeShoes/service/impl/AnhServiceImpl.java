@@ -23,44 +23,9 @@ public class AnhServiceImpl implements AnhService {
     }
 
     @Override
-    public boolean saveAnhSanPham(SanPham sanPham, String[] lst) {
-        int size = sanPham.getAnh().size();
-        List<Anh> imagesToRemove = new ArrayList<>();
-        if (size >= 1 && size <= 4) {
-            for (int i = 0; i < size; i++) {
-                Anh a = sanPham.getAnh().get(i);
-                a.setUrl(lst[i]);
-                if (i == 0) {
-                    a.setMain(true);
-                }
-                a.setNgaySua(Timestamp.from(Instant.now()));
-                anhRepository.save(a);
-            }
-            if (size < 4 && lst.length == 4) {
-                for (int i = size; i < 4; i++) {
-                    Anh a = new Anh();
-                    a.setUrl(lst[i]);
-                    a.setSanPham(sanPham);
-                    a.setNgayTao(Timestamp.from(Instant.now()));
-                    a.setNgaySua(Timestamp.from(Instant.now()));
-                    anhRepository.save(a);
-                }
-            }
-        }
-        if (size > lst.length) {
-            for (int i = lst.length; i < size; i++) {
-                Anh a = sanPham.getAnh().get(i);
-                imagesToRemove.add(a);
-            }
-        }
-        for (Anh imageToRemove : imagesToRemove) {
-            sanPham.getAnh().remove(imageToRemove);
-            anhRepository.delete(imageToRemove);
-        }
-        return true;
+    public Anh getAnhByURL(String url) {
+        return null;
     }
-
-
 
     @Override
     public List<Anh> getAllBySanPham(SanPham sanPham) {

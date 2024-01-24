@@ -5,31 +5,32 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "nhan_vien")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 /*
-     id binary(16) NOT NULL,
-     ma_nhan_vien varchar(50) UNIQUE NOT NULL,
-     ho nvarchar(50) NOT NULL,
-     ten_dem nvarchar(50),
-     ten nvarchar(50) NOT NULL,
-     gioi_tinh BIT,
-     ngay_sinh DATE,
-     dia_chi nvarchar(255),
-     sdt varchar(15),
-     cccd varchar(15),
-     id_chuc_vu binary(16),
-     ngay_tao timestamp,
-     ngay_sua timestamp,
-     nguoi_tao binary(16),
-     nguoi_sua binary(16),
-     trang_thai BIT DEFAULT 1, -- default = 1 = true
+     id bigint auto_increment,
+    ma_nhan_vien varchar(256),
+    id_chuc_vu bigint,
+    ten nvarchar(256),
+    ten_dem nvarchar(256),
+    ho nvarchar(256),
+    gioi_tinh bit,
+    ngay_sinh date,
+    dia_chi nvarchar(256),
+    sdt varchar(10),
+    cccd varchar(12),
+    ngay_tao timestamp,
+    ngay_sua timestamp,
+    nguoi_tao bigint,
+    nguoi_sua bigint,
+    trang_thai bit default 1,
  */
 public class NhanVien {
     @Id
@@ -45,20 +46,16 @@ public class NhanVien {
     String sdt;
     String cccd;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_chuc_vu")
     ChucVu chucVu;
 
     Timestamp ngayTao;
     Timestamp ngaySua;
 
-    @OneToOne
-    @JoinColumn(name = "nguoi_tao")
-    User nguoiTao;
+    Long nguoiTao;
 
-    @OneToOne
-    @JoinColumn(name = "nguoi_sua")
-    User nguoiSua;
+    Long nguoiSua;
 
     boolean trangThai;
 }

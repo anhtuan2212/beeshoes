@@ -48,6 +48,10 @@ public class ChiTietSanPham {
     @ManyToOne
     MuiGiay muiGiay;
 
+    @JoinColumn(name = "id_anh")
+    @OneToOne
+    Anh anh;
+
     int giamPhanTram;
 
     BigDecimal giamTien;

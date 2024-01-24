@@ -1,6 +1,6 @@
 package com.poly.BeeShoes.library;
 
-import com.poly.BeeShoes.dto.ProductDetailVersion;
+import com.poly.BeeShoes.request.ProductDetailVersion;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

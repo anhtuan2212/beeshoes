@@ -1,4 +1,4 @@
-package com.poly.BeeShoes.dto;
+package com.poly.BeeShoes.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
@@ -11,26 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Getter
 @Setter
 public class CTSPRequest {
-    public CTSPRequest(String imgSelected, Long sanPham, Long theLoai, Long thuongHieu, Long chatLieu, Long deGiay, Long coGiay, Long muiGiay, String giaNhap, String giaGoc, String moTa, boolean sales, boolean trangThai, String product_details) {
-        this.imgSelected = imgSelected;
-        this.sanPham = sanPham;
-        this.theLoai = theLoai;
-        this.thuongHieu = thuongHieu;
-        this.chatLieu = chatLieu;
-        this.deGiay = deGiay;
-        this.coGiay = coGiay;
-        this.muiGiay = muiGiay;
-        this.giaNhap = giaNhap;
-        this.giaGoc = giaGoc;
-        this.moTa = moTa;
-        this.sales = sales;
-        this.trangThai = trangThai;
-        this.product_details = product_details;
-    }
-
-    @NotBlank(message = "Ảnh không được trống !")
-    @JsonIgnore
-    String imgSelected;
 
     @NotNull(message = "Sản Phẩm không được để trống !")
     Long sanPham;
@@ -55,6 +35,8 @@ public class CTSPRequest {
 
     @NotBlank(message = "Giá Nhập không được trống !")
     String giaNhap;
+    @NotBlank(message = "Giá Nhập không được trống !")
+    String giaBan;
     @NotBlank(message = "Giá Gốc được trống !")
     String giaGoc;
     @NotBlank(message = "Mô Tả được trống !")
@@ -67,14 +49,12 @@ public class CTSPRequest {
     boolean trangThai;
 
     @NotBlank(message = "Chi Tiết Phiên Bản không được trống !")
-    @JsonIgnore
     String product_details;
 
     @Override
     public String toString() {
         return "CTSPRequest{" +
-                "imgSelected='" + imgSelected + '\'' +
-                ", sanPham=" + sanPham +
+                "sanPham=" + sanPham +
                 ", theLoai=" + theLoai +
                 ", thuongHieu=" + thuongHieu +
                 ", chatLieu=" + chatLieu +

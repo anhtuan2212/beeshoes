@@ -279,54 +279,6 @@
                     <!-- End Row -->
                 </div>
                 <!-- End Card -->
-
-                <!-- Card -->
-                <div class="card mb-3 mb-lg-5">
-                    <!-- Header -->
-                    <div class="card-header">
-                        <h4 class="card-header-title">Media</h4>
-
-                        <!-- Unfold -->
-                        <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-sm btn-ghost-secondary" href="javascript:;"
-                               data-hs-unfold-options='{
-                                   "target": "#mediaDropdown",
-                                   "type": "css-animation"}'>
-                                Chọn Ảnh <i class="tio-chevron-down"></i>
-                            </a>
-                            <div id="mediaDropdown"
-                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
-                                <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                   data-target="#addImageFromURLModal">
-                                    <i class="tio-link dropdown-item-icon"></i>Thêm Đường Dẫn
-                                </a>
-                                <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                                   data-target="#select_img_firebase">
-                                    <i class="tio-youtube-outlined dropdown-item-icon"></i> Chọn Ảnh Có Sẵn
-                                </a>
-                            </div>
-                        </div>
-                        <!-- End Unfold -->
-                    </div>
-                    <!-- End Header -->
-
-                    <!-- Body -->
-                    <div class="card-body">
-                        <!-- Gallery -->
-                        <div id="img-selected" class="js-fancybox row justify-content-sm-center gx-2"
-                             data-hs-fancybox-options='{
-                                 "selector": "#fancyboxGallery .js-fancybox-item"
-                                 }'>
-                            <div class="text-center p-4">
-                                <img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">
-                                <p class="mb-0">Bạn chưa chọn ảnh.</p>
-                            </div>
-                        </div>
-                        <!-- End Gallery -->
-                    </div>
-                    <!-- Body -->
-                </div>
-                <!-- End Card -->
                 <!-- Card -->
                 <div class="js-add-field card mb-3 mb-lg-5" data-hs-add-field-options='{
                   "template": "#addVariantsTemplate",
@@ -504,7 +456,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="giaBan" class="input-label">Số Lượng</label>
+                            <label for="soLuong" class="input-label">Số Lượng</label>
                             <div class="input-group">
                                 <input type="text" class="form-control money-input-mask-num" name="soLuong" id="soLuong"
                                        placeholder="Vui lòng nhập số lượng mỗi loại." aria-label="">
@@ -534,7 +486,7 @@
                                 <span class="text-dark">Trạng Thái</span>
                             </span>
                             <span class="col-4 col-sm-3">
-                                <input type="checkbox" class="toggle-switch-input" id="status">
+                                <input type="checkbox" class="toggle-switch-input" id="status" checked>
                                 <span class="toggle-switch-label ml-auto">
                                     <span class="toggle-switch-indicator"></span>
                                 </span>
@@ -570,7 +522,7 @@
                                     size="1"
                                     style="opacity: 0;"
                                     data-hs-select2-options='{
-                                    "tags": true,
+                                    "tags": false,
                                     "minimumResultsForSearch": "Infinity",
                                     "placeholder":"Chọn màu"
                                     }'>
@@ -594,7 +546,7 @@
                                     size="1"
                                     style="opacity: 0;"
                                     data-hs-select2-options='{
-                                    "tags": true ,
+                                    "tags": false ,
                                     "placeholder":"Chọn size"
                                     }'>
                                 <option th:each="kc:${lstkichco}" th:value="${kc.getTen()}"
@@ -881,21 +833,26 @@
         </div>
     </div>
 </div>
-<!-- Toast -->
-<div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
-    <div class="toast-header">
-        <img class="avatar avatar-sm avatar-circle mr-2" id="img-toast" src="/assets/cms/img/160x160/img1.jpg" alt="Image description">
-        <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
-        <small class="ml-auto">Vừa xong</small>
-        <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
-            <i class="tio-clear" aria-hidden="true"></i>
-        </button>
-    </div>
-    <div class="toast-body" id="system-toast-mesage">
-        Thành Công !
+<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+    <!-- Position it -->
+    <div style="position: absolute; top: 0; right: 0;">
+        <!-- Then put toasts within -->
+        <div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
+            <div class="toast-header">
+                <img class="avatar avatar-sm avatar-circle mr-2" id="img-toast" src="/assets/cms/img/160x160/img1.jpg" alt="Image description">
+                <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
+                <small class="ml-auto">Vừa xong</small>
+                <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
+                    <i class="tio-clear" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="toast-body" id="system-toast-mesage">
+                Thành Công !
+            </div>
+        </div>
     </div>
 </div>
-<!-- End Toast -->
+
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
 

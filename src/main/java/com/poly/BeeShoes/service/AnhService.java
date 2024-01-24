@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AnhService {
     Anh save(Anh anh);
-    boolean saveAnhSanPham(SanPham sanPham,String[] lst);
+    Anh getAnhByURL(String url);
     List<Anh> getAllBySanPham(SanPham sanPham);
     boolean delete(Long id);
 }

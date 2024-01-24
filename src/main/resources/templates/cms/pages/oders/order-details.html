@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <!-- Required Meta Tags Always Come First -->
     <meta charset="utf-8">
@@ -21,11 +21,11 @@
       <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 
       <!-- ========== HEADER ========== -->
-      <div th:replace="/cms/pages/_header.html"></div>
+      <div th:replace="~{/cms/pages/_header.html}"></div>
       <!-- ========== END HEADER ========== -->
 
       <!-- ========== SIDEBAR ========== -->
-      <div th:replace="/cms/pages/_sidebar.html"></div>
+      <div th:replace="~{/cms/pages/_sidebar.html}"></div>
       <!-- ========== END SIDEBAR ========== -->
       <script src="/assets/cms/js/demo.js"></script>
 
@@ -41,21 +41,18 @@
             <div class="col-sm mb-2 mb-sm-0">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-no-gutter">
-                  <li class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/oder">Orders</a></li>
+                  <li class="breadcrumb-item"><a class="breadcrumb-link" th:href="@{/cms/hoa-don}">Orders</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Order details</li>
                 </ol>
               </nav>
               
               <div class="d-sm-flex align-items-sm-center">
-                <h1 class="page-header-title">Order #32543</h1>
-                <span class="badge badge-soft-success ml-sm-3">
-                  <span class="legend-indicator bg-success"></span>Paid
+                <h1 class="page-header-title" th:text="'Order #' + ${hoaDon.id}"></h1>
+                <span class="badge badge-soft-success ml-sm-3" th:text="${hoaDon.trangThai}">
+                  <span class="legend-indicator bg-success"></span>
                 </span>
-                <span class="badge badge-soft-info ml-2 ml-sm-3">
-                  <span class="legend-indicator bg-info"></span>Fulfilled
-                </span>
-                <span class="ml-2 ml-sm-3">
-                  <i class="tio-date-range"></i> Aug 17, 2020, 5:48 (ET)
+                <span class="ml-2 ml-sm-3" th:text="${hoaDon.ngayTao}">
+                  <i class="tio-date-range"></i>
                 </span>
               </div>
 
@@ -113,7 +110,7 @@
             <div class="card mb-3 mb-lg-5">
               <!-- Header -->
               <div class="card-header">
-                <h4 class="card-header-title">Order details <span class="badge badge-soft-dark rounded-circle ml-1">4</span></h4>
+                <h4 class="card-header-title">Order details <span class="badge badge-soft-dark rounded-circle ml-1" th:text="${hoaDonChiTietList.size()}"></span></h4>
                 <a class="link" href="javascript:;">Edit</a>
               </div>
               <!-- End Header -->
@@ -121,7 +118,7 @@
               <!-- Body -->
               <div class="card-body">
                 <!-- Media -->
-                <div class="media">
+                <div class="media" th:each="hdct : ${hoaDonChiTietList}">
                   <div class="avatar avatar-xl mr-3">
                     <img class="img-fluid" src="/assets/cms/img/400x400/img26.jpg" alt="Image Description">
                   </div>
@@ -129,7 +126,7 @@
                   <div class="media-body">
                     <div class="row">
                       <div class="col-md-6 mb-3 mb-md-0">
-                        <a class="h5 d-block" href="/cms/product-detail">Topman shoe in green</a>
+                        <a class="h5 d-block" href="/cms/product-detail" th:text="${hdct.chiTietSanPham.sanPham.ten}"></a>
 
                         <div class="font-size-sm text-body">
                           <span>Gender:</span>
@@ -137,123 +134,42 @@
                         </div>
                         <div class="font-size-sm text-body">
                           <span>Color:</span>
-                          <span class="font-weight-bold">Green</span>
+                          <span class="font-weight-bold" th:text="${hdct.chiTietSanPham.mauSac.ten}"></span>
                         </div>
                         <div class="font-size-sm text-body">
                           <span>Size:</span>
-                          <span class="font-weight-bold">UK 7</span>
+                          <span class="font-weight-bold" th:text="${hdct.chiTietSanPham.kichCo.ten}"></span>
                         </div>
                       </div>
 
                       <div class="col col-md-2 align-self-center">
-                        <h5>$21.00</h5>
+                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue(), 0, 'COMMA')}"></h6>
                       </div>
 
                       <div class="col col-md-2 align-self-center">
-                        <h5>2</h5>
+                        <h6>2</h6>
                       </div>
 
                       <div class="col col-md-2 align-self-center text-right">
-                        <h5>$42.00</h5>
+                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue() * 2, 0, 'COMMA')}"></h6>
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- End Media -->
-
-                <hr>
-
-                <!-- Media -->
-                <div class="media">
-                  <div class="avatar avatar-xl mr-3">
-                    <img class="img-fluid" src="/assets/cms/img/400x400/img22.jpg" alt="Image Description">
-                  </div>
-
-                  <div class="media-body">
-                    <div class="row">
-                      <div class="col-md-6 mb-3 mb-md-0">
-                        <a class="h5 d-block" href="/cms/product-detail">Office Notebook</a>
-
-                        <div class="font-size-sm text-body">
-                          <span>Color:</span>
-                          <span class="font-weight-bold">Gray</span>
-                        </div>
-                      </div>
-
-                      <div class="col col-md-2 align-self-center">
-                        <h5>$9</h5>
-                      </div>
-
-                      <div class="col col-md-2 align-self-center">
-                        <h5>1</h5>
-                      </div>
-
-                      <div class="col col-md-2 align-self-center text-right">
-                        <h5>$9.00</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- End Media -->
-
-                <hr>
-
-                <!-- Media -->
-                <div class="media">
-                  <div class="avatar avatar-xl mr-3">
-                    <img class="img-fluid" src="/assets/cms/img/400x400/img15.jpg" alt="Image Description">
-                  </div>
-
-                  <div class="media-body">
-                    <div class="row">
-                      <div class="col-md-6 mb-3 mb-md-0">
-                        <a class="h5 d-block" href="/cms/product-detail">RayBan sunglasses</a>
-
-                        <div class="font-size-sm text-body">
-                          <span>Gender:</span>
-                          <span class="font-weight-bold">Unisex</span>
-                        </div>
-                        <div class="font-size-sm text-body">
-                          <span>Color:</span>
-                          <span class="font-weight-bold">Black</span>
-                        </div>
-                        <div class="font-size-sm text-body">
-                          <span>Size:</span>
-                          <span class="font-weight-bold">One size</span>
-                        </div>
-                      </div>
-
-                      <div class="col col-md-2 align-self-center">
-                        <h5>$14.00</h5>
-                      </div>
-
-                      <div class="col col-md-2 align-self-center">
-                        <h5>1</h5>
-                      </div>
-
-                      <div class="col col-md-2 align-self-center text-right">
-                        <h5>$14.00</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- End Media -->
-
                 <hr>
 
                 <div class="row justify-content-md-end mb-3">
                   <div class="col-md-8 col-lg-7">
                     <dl class="row text-sm-right">
                       <dt class="col-sm-6">Subtotal:</dt>
-                      <dd class="col-sm-6">$65.00</dd>
+                      <dd class="col-sm-6" th:text="${#numbers.formatInteger(tongTien.intValue(), 0, 'COMMA')}"></dd>
                       <dt class="col-sm-6">Shipping fee:</dt>
-                      <dd class="col-sm-6">$0.00</dd>
-                      <dt class="col-sm-6">Tax:</dt>
-                      <dd class="col-sm-6">$7.00</dd>
+                      <dd class="col-sm-6" th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue(), 0, 'COMMA')}"></dd>
                       <dt class="col-sm-6">Total:</dt>
-                      <dd class="col-sm-6">$65.00</dd>
+                      <dd class="col-sm-6" th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue() + tongTien, 0, 'COMMA')}"></dd>
                       <dt class="col-sm-6">Amount paid:</dt>
-                      <dd class="col-sm-6">$65.00</dd>
+                      <dd class="col-sm-6" th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue() + tongTien, 0, 'COMMA')}"></dd>
                     </dl>
                     <!-- End Row -->
                   </div>
