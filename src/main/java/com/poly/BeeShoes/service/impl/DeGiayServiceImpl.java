@@ -37,4 +37,9 @@ public class DeGiayServiceImpl implements DeGiayService {
         }
         return false;
     }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return deGiayRepository.existsByTen(ten);
+    }
 }

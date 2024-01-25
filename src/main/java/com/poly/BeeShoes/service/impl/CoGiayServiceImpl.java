@@ -37,4 +37,9 @@ public class CoGiayServiceImpl implements CoGiayService {
         }
         return false;
     }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return coGiayRepository.existsByTen(ten);
+    }
 }

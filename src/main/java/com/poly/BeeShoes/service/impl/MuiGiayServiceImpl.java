@@ -37,4 +37,9 @@ public class MuiGiayServiceImpl implements MuiGiayService {
         }
         return false;
     }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return muiGiayRepository.existsByTen(ten);
+    }
 }

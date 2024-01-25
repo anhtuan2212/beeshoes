@@ -41,4 +41,9 @@ public class MauSacServiceImpl implements MauSacService {
     public boolean existsByMaMauSac(String ma) {
         return mauSacRepository.existsByMaMauSac(ma);
     }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return mauSacRepository.existsByTen(ten);
+    }
 }

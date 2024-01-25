@@ -8,4 +8,6 @@ public interface DeGiayService {
     DeGiay getById(Long id);
     List<DeGiay> getAll();
     boolean delete(Long id);
+
+    boolean existsByTen(String ten);
 }

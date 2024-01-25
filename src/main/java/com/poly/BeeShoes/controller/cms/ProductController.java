@@ -32,6 +32,7 @@ public class ProductController {
     public String product(Model model) {
         List<SanPham> sp = sanPhamService.getAll();
         model.addAttribute("lstsanpham",sp);
+        model.addAttribute("lstthuonghieu",thuongHieuService.getAll());
         return "cms/pages/products/products";
     }
     @GetMapping("/product-detail")

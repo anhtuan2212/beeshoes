@@ -9,6 +9,8 @@ import java.util.List;
 public interface SanPhamService {
     SanPham save(SanPham sanPham);
     SanPham getById(Long id);
+    SanPham getByTen(String name);
+    boolean existsByTen(String name);
     List<SanPham> getAll();
     Page<SanPham> getAllShop(Pageable pageable);
     boolean delete(Long id);
