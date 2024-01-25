@@ -24,6 +24,11 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
+    public boolean existsByTen(String ten) {
+        return thuongHieuRepository.existsByTen(ten);
+    }
+
+    @Override
     public List<ThuongHieu> getAll() {
         return thuongHieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }

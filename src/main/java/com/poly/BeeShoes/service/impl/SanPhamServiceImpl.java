@@ -34,6 +34,16 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public SanPham getByTen(String name) {
+        return sanPhamRepository.getFirstByTen(name);
+    }
+
+    @Override
+    public boolean existsByTen(String name) {
+        return sanPhamRepository.existsByTen(name);
+    }
+
+    @Override
     public List<SanPham> getAll() {
         List<SanPham> sp = sanPhamRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
         for (int i = 0; i < sp.size(); i++) {

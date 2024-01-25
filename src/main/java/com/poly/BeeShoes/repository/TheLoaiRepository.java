@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TheLoaiRepository extends JpaRepository<TheLoai,Long> {
-
+    
+    boolean existsByTen(String ten);
 }

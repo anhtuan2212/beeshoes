@@ -36,4 +36,9 @@ public class ChatLieuServiceImpl implements ChatLieuService {
         }
         return false;
     }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return chatLieuRepository.existsByTen(ten);
+    }
 }

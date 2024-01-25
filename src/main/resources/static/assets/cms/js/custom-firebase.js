@@ -23,7 +23,8 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const fileInput = document.getElementById("fileAttachmentBtn");
 const listRef = ref(storage, "images");
-const fileInStorages =[];
+const fileInStorages = [];
+const ImgStorage = {};
 
 function generateCard(url, lst) {
     var html = `
@@ -66,6 +67,9 @@ $(document).ready(function () {
     $('#addVariantsContainer').on('change', '.formAddImg', async function (e) {
         const files = e.target.files;
         let img = $(this).parent().find('.avatar')[0];
+        let snip = $(this).parent().find('.spinner-border')[0];
+        $(snip).removeClass('d-none');
+        $(img).addClass('d-none')
         let del = $(this).parent().find('.btn-del-img')[0];
         const file = renameFile(files[0]);
         const tempUrl = URL.createObjectURL(file);
@@ -75,17 +79,20 @@ $(document).ready(function () {
             const snapshot = await uploadBytes(storageRef, file);
             const url = await getDownloadURL(snapshot.ref);
             fileInStorages.push(storageRef);
-            sessionStorage.setItem('fileImg',JSON.stringify(fileInStorages));
+            console.log(storageRef)
+            sessionStorage.setItem('fileImg', JSON.stringify(fileInStorages));
             $(this).attr('img-src')
             img.src = url;
+            $(snip).addClass('d-none')
+            $(img).removeClass('d-none');
         } catch (error) {
             console.error(error);
         }
         $(del).on('click', async function () {
             try {
                 await deleteObject(storageRef);
-                fileInStorages.splice(0,fileInStorages.indexOf(storageRef));
-                sessionStorage.setItem('fileImg',JSON.stringify(fileInStorages));
+                fileInStorages.splice(0, fileInStorages.indexOf(storageRef));
+                sessionStorage.setItem('fileImg', JSON.stringify(fileInStorages));
                 console.log("Deleted", storageRef.name);
                 img.src = '/assets/cms/img/400x400/img2.jpg';
             } catch (error) {
@@ -95,19 +102,32 @@ $(document).ready(function () {
     });
 })
 
-function ClaerImg() {
-    let files = JSON.parse(sessionStorage.getItem('fileImg'));
-    for (let i= 0 ; i < files.length ; i++){
-        deleteObject(files[i])
-            .then(() => {
-                console.log("Deleted", files[i].name);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+async function ClaerImg(files) {
+    let promises = files.map(file => {
+        return deleteObject(file).then(() => {
+            console.log('Deleted', file.name);
+        }).catch((error) => {
+            console.error(error);
+        });
+    });
+    return Promise.all(promises);
 }
-window.addEventListener('beforeunload', function(e) {
-    ClaerImg();
+
+window.addEventListener('beforeunload', async function (e) {
+    let files = JSON.parse(sessionStorage.getItem('fileImg'));
+    let completed = false;
+    setTimeout(async () => {
+        try {
+            await ClaerImg(files);
+            completed = true;
+        } catch (error) {
+            completed = false;
+        }
+        if (completed) {
+            e.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang?';
+        } else {
+            e.preventDefault();
+        }
+    }, 100);
 });
 

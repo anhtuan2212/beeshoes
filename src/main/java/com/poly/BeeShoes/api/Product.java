@@ -35,11 +35,14 @@ public class Product {
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
     private final ChiTietSanPhamService chiTietSanPhamService;
-
+    Gson gs = new Gson();
     @PostMapping("/them-san-pham")
     public ResponseEntity<SanPham> themSanPham(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if(sanPhamService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         SanPham sanPham = new SanPham();
         sanPham.setNgayTao(Timestamp.from(Instant.now()));
@@ -55,7 +58,10 @@ public class Product {
     @PostMapping("/them-the-loai")
     public ResponseEntity<TheLoai> themTheLoai(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (theLoaiService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         TheLoai theLoai = new TheLoai();
         theLoai.setNgayTao(Timestamp.from(Instant.now()));
@@ -72,7 +78,10 @@ public class Product {
     @PostMapping("/them-thuong-hieu")
     public ResponseEntity<ThuongHieu> themThuongHieu(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (thuongHieuService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         ThuongHieu th = new ThuongHieu();
         th.setNgayTao(Timestamp.from(Instant.now()));
@@ -89,7 +98,10 @@ public class Product {
     @PostMapping("/them-chat-lieu")
     public ResponseEntity<ChatLieu> themChatLieu(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (chatLieuService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         ChatLieu th = new ChatLieu();
         th.setNgayTao(Timestamp.from(Instant.now()));
@@ -106,7 +118,10 @@ public class Product {
     @PostMapping("/them-de-giay")
     public ResponseEntity<DeGiay> themDeGiay(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (deGiayService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         DeGiay dg = new DeGiay();
         dg.setNgayTao(Timestamp.from(Instant.now()));
@@ -123,7 +138,10 @@ public class Product {
     @PostMapping("/them-co-giay")
     public ResponseEntity<CoGiay> themCoGiay(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (coGiayService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         CoGiay cg = new CoGiay();
         cg.setNgayTao(Timestamp.from(Instant.now()));
@@ -140,7 +158,10 @@ public class Product {
     @PostMapping("/them-mui-giay")
     public ResponseEntity<MuiGiay> themMuiGiay(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (muiGiayService.existsByTen(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         MuiGiay cg = new MuiGiay();
         cg.setNgayTao(Timestamp.from(Instant.now()));
@@ -156,11 +177,14 @@ public class Product {
 
     @PostMapping("/them-kich-co")
     public ResponseEntity<KichCo> kichCo(@RequestParam("ten") String ten) {
-        if (kichCoService.exitsByTen(ten)) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "true").body(null);
+        if (Integer.parseInt(ten)>30||Integer.parseInt(ten)<50) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameSize").body(null);
         }
         if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "error").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
+        }
+        if (kichCoService.exitsByTen(ten)) {
+            return ResponseEntity.status(HttpStatus.OK).header("status", "existsByTen").body(null);
         }
         KichCo cg = new KichCo();
         cg.setNgayTao(Timestamp.from(Instant.now()));
@@ -176,9 +200,11 @@ public class Product {
 
     @PostMapping("/them-mau-sac")
     public ResponseEntity<MauSac> themMauSac(@RequestParam("ten_mau") String ten, @RequestParam("ma_mau") String ma) {
-        boolean st = mauSacService.existsByMaMauSac(ma);
-        if (st) {
-            return ResponseEntity.status(HttpStatus.OK).header("status-cus", "true").body(null);
+        if (mauSacService.existsByMaMauSac(ma)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByMa").body(null);
+        }
+        if (mauSacService.existsByTen(ten)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         MauSac ms = new MauSac();
         ms.setNgayTao(Timestamp.from(Instant.now()));
@@ -195,7 +221,7 @@ public class Product {
 
     @PostMapping("/chi-tiet-san-pham")
     public ResponseEntity<SanPham> chiTietSanPham(@ModelAttribute CTSPRequest ctspRequest) {
-        Gson gs = new Gson();
+
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
@@ -257,6 +283,7 @@ public class Product {
             if (ct != null) {
                 ctsp = ct;
             }
+
             String img = productdetail.get(i).getImg();
             if (img != null) {
                 List<Anh> lsta = anhService.getAllBySanPham(sanPham);
@@ -271,7 +298,14 @@ public class Product {
                 if (a2 != null) {
                     ctsp.setAnh(anh);
                 } else {
-                    Anh an = new Anh(sanPham, img, in == 0 ? true : false, Timestamp.from(Instant.now()));
+                    boolean main = true;
+                    for (Anh a : lsta) {
+                        if (a.isMain()==true) {
+                            main = false;
+                        }
+                    }
+                    Anh an = new Anh(sanPham, img, main, Timestamp.from(Instant.now()));
+                    main = false;
                     anh = anhService.save(an);
                     ctsp.setAnh(anh);
                 }

@@ -9,4 +9,6 @@ public interface ChatLieuService {
     ChatLieu getById(Long id);
     List<ChatLieu> getAll();
     boolean delete(Long id);
+
+    boolean existsByTen(String ten);
 }

@@ -10,4 +10,6 @@ public interface MuiGiayService {
     MuiGiay getById(Long id);
     List<MuiGiay> getAll();
     boolean delete(Long id);
+
+    boolean existsByTen(String ten);
 }

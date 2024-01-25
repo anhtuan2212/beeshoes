@@ -11,4 +11,5 @@ public interface MauSacService {
     boolean delete(Long id);
     boolean existsByMaMauSac(String ma);
 
+    boolean existsByTen(String ten);
 }

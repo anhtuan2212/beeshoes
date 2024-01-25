@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeGiayRepository extends JpaRepository<DeGiay,Long> {
+    boolean existsByTen(String ten);
 }
