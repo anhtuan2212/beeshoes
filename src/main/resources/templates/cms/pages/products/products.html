@@ -46,7 +46,7 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title">Products <span class="badge badge-soft-dark ml-2">72,031</span></h1>
+                    <h1 class="page-header-title">Sản Phẩm <span class="badge badge-soft-dark ml-2" th:text="${#lists.size(lstsanpham)}"></span></h1>
 
                     <div class="mt-2">
                         <a class="text-body mr-3" href="javascript:;" data-toggle="modal"
@@ -118,6 +118,19 @@
                     </div>
 
                     <div class="col-auto">
+                        <div class="hs-unfold mr-2 form-group">
+                            <select class="js-select2-custom custom-select" name="theLoai"
+                                    id="theLoai" size="1"
+                                    style="opacity: 0;"
+                                    data-hs-select2-options='{
+                                    "placeholder": "Chọn thể loại...",
+                                    "searchInputPlaceholder": "Tìm thể loại..."
+                                    }'>
+                                <option value="all" selected>Chọn Thể Loại</option>
+                                <option th:each="tl:${lsttheloai}" th:value="${tl.getTen()}"
+                                        th:text="${tl.getTen()}"></option>
+                            </select>
+                        </div>
                         <!-- Unfold -->
                         <div class="hs-unfold mr-2 form-group">
                             <select class="js-select2-custom custom-select" name="thuongHieu"
@@ -127,7 +140,7 @@
                                     "placeholder": "Chọn thương hiệu...",
                                     "searchInputPlaceholder": "Tìm thương hiệu..."
                                     }'>
-                                <option value="all" >Chọn Thương Hiệu</option>
+                                <option value="all" selected>Chọn Thương Hiệu</option>
                                 <option th:each="th:${lstthuonghieu}" th:value="${th.getTen()}"
                                         th:text="${th.getTen()}"></option>
                             </select>
@@ -149,6 +162,19 @@
                                  style="width: 15rem;">
                                 <div class="card card-sm">
                                     <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">STT</span>
+
+                                            <!-- Checkbox Switch -->
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_stt">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_stt" checked="">
+                                                <span class="toggle-switch-label">
+                              <span class="toggle-switch-indicator"></span>
+                            </span>
+                                            </label>
+                                            <!-- End Checkbox Switch -->
+                                        </div>
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <span class="mr-2">Sản Phẩm</span>
 
@@ -272,22 +298,24 @@
             <!-- End Header -->
 
             <!-- Table -->
-            <div class="table-responsive datatable-custom">
+            <div class="table-responsive datatable-custom" style="overflow-x: auto;overflow-y: hidden;">
                 <table id="datatable"
                        class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
                        data-hs-datatables-options='{
+                       "select":true,
+                      "ordering": false,
                      "columnDefs": [{
                         "targets": [0, 9],
                         "width": "5%",
                         "orderable": false
                       }],
-                     "order": [],
+                     "order":[[1, "asc"]],
                      "info": {
                        "totalQty": "#datatableWithPaginationInfoTotalQty"
                      },
                      "search": "#datatableSearch",
                      "entries": "#datatableEntries",
-                     "pageLength": 12,
+                     "pageLength": 10,
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
@@ -300,6 +328,7 @@
                                 <label class="custom-control-label" for="datatableCheckAll"></label>
                             </div>
                         </th>
+                        <th>STT</th>
                         <th class="table-column-pl-0">Sản Phẩm</th>
                         <th>Thể Loại</th>
                         <th>Thương Hiệu</th>
@@ -311,9 +340,9 @@
                         <th>Hành Động</th>
                     </tr>
                     </thead>
-
                     <tbody id="dataInTable">
-                    <tr th:each="sp,iter:${lstsanpham}" th:attr="data-brand=${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}">
+                    <tr th:each="sp,iter:${lstsanpham}"
+                        th:attr="data-brand=${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}">
                         <td class="table-column-pr-0">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
@@ -321,8 +350,9 @@
                                 <label class="custom-control-label" th:for="'productsCheck' + ${iter.index}"></label>
                             </div>
                         </td>
+                        <td th:text="${iter.index+1}"></td>
                         <td class="table-column-pl-0">
-                            <a class="media align-items-center" href="/cms/product-detail">
+                            <a class="media align-items-center" th:href="@{/cms/product-detail(id=${sp.getId()})}">
                                 <th:block th:if="${#lists.size(sp.getAnh()) == 0}">
                                     <img class="avatar avatar-lg mr-3" src="/assets/cms/img/400x400/img2.jpg"
                                          alt="Image Description">
@@ -397,11 +427,12 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                <option th:if="${#lists.size(lstsanpham) < 12}" th:value="${#lists.size(lstsanpham)}" selected th:text="${#lists.size(lstsanpham)}"></option>
-                                <option th:if="${#lists.size(lstsanpham) >= 12}" th:value="12" selected>12</option>
-                                <option value="14">14</option>
-                                <option value="16">16</option>
-                                <option value="18">18</option>
+                                <option th:if="${#lists.size(lstsanpham) < 10}" th:value="${#lists.size(lstsanpham)}"
+                                        selected th:text="${#lists.size(lstsanpham)}"></option>
+                                <option th:if="${#lists.size(lstsanpham) >= 10}" th:value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
                             </select>
                             <!-- End Select -->
 
@@ -434,367 +465,6 @@
 <!-- ========== END MAIN CONTENT ========== -->
 
 <!-- ========== SECONDARY CONTENTS ========== -->
-<!-- Keyboard Shortcuts -->
-<div id="keyboardShortcutsSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow">
-    <div class="card card-lg sidebar-card">
-        <div class="card-header">
-            <h4 class="card-header-title">Keyboard shortcuts</h4>
-
-            <!-- Toggle Button -->
-            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;"
-               data-hs-unfold-options='{
-                "target": "#keyboardShortcutsSidebar",
-                "type": "css-animation",
-                "animationIn": "fadeInRight",
-                "animationOut": "fadeOutRight",
-                "hasOverlay": true,
-                "smartPositionOff": true
-               }'>
-                <i class="tio-clear tio-lg"></i>
-            </a>
-            <!-- End Toggle Button -->
-        </div>
-
-        <!-- Body -->
-        <div class="card-body sidebar-body sidebar-scrollbar">
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Formatting</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span class="font-weight-bold">Bold</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">b</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <em>italic</em>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">i</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <u>Underline</u>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">u</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <s>Strikethrough</s>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span class="small">Small text</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <mark>Highlight</mark>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">e</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Insert</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Mention person <a href="#">(@Brian)</a></span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">@</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Link to doc <a href="#">(+Meeting notes)</a></span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">+</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <a href="#">#hashtag</a>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">#hashtag</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Date</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">/date</kbd>
-                            <kbd class="d-inline-block mb-1">Space</kbd>
-                            <kbd class="d-inline-block mb-1">/datetime</kbd>
-                            <kbd class="d-inline-block mb-1">/datetime</kbd>
-                            <kbd class="d-inline-block mb-1">Space</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Time</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">/time</kbd>
-                            <kbd class="d-inline-block mb-1">Space</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Note box</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">/note</kbd>
-                            <kbd class="d-inline-block mb-1">Enter</kbd>
-                            <kbd class="d-inline-block mb-1">/note red</kbd>
-                            <kbd class="d-inline-block mb-1">/note red</kbd>
-                            <kbd class="d-inline-block mb-1">Enter</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Editing</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Find and replace</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">r</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Find next</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">n</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Find previous</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">p</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Indent</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Tab</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Un-indent</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Tab</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Move line up</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Move line down</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1"><i
-                                class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Add a comment</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">m</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Undo</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">z</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Redo</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">y</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group list-group-sm list-group-flush list-group-no-gutters">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Application</h5>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Create new doc</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">n</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Present</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">p</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Share</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Search docs</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">o</kbd>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row align-items-center">
-                        <div class="col-5">
-                            <span>Keyboard shortcuts</span>
-                        </div>
-                        <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">/</kbd>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Body -->
-    </div>
-</div>
-<!-- End Keyboard Shortcuts -->
-
 <!-- Export Products Modal -->
 <div class="modal fade" id="exportProductsModal" tabindex="-1" role="dialog" aria-labelledby="exportProductsModalTitle"
      aria-hidden="true">

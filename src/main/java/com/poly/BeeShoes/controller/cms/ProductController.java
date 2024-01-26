@@ -32,6 +32,7 @@ public class ProductController {
     public String product(Model model) {
         List<SanPham> sp = sanPhamService.getAll();
         model.addAttribute("lstsanpham",sp);
+        model.addAttribute("lsttheloai",theLoaiService.getAll());
         model.addAttribute("lstthuonghieu",thuongHieuService.getAll());
         return "cms/pages/products/products";
     }
@@ -46,6 +47,7 @@ public class ProductController {
         model.addAttribute("lstcogiay",coGiayService.getAll());
         model.addAttribute("lstsanpham",sanPhamService.getAll());
         model.addAttribute("lstkichco",kichCoService.getAll());
+        model.addAttribute("sanPham",sanPhamService.getById(id));
         if (id!=null){
             // chưa code ở fe
             SanPham sp = sanPhamService.getById(id);
