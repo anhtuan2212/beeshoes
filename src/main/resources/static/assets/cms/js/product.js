@@ -101,6 +101,20 @@ $(document).on('ready', function () {
                 '</div>'
         }
     });
+    // Tạo số thứ tự || đang lỗi
+    // datatable.on('order.dt search.dt', function() {
+    //     datatable.columns(1, { search: 'applied', order: 'applied' }).nodes().each(function(cell, i) {
+    //         cell.innerHTML = i + 1;
+    //     });
+    // }).draw();
+    $('#thuongHieu, #theLoai').on('change', function() {
+        var thuongHieuValue = $('#thuongHieu').val();
+        var theLoaiValue = $('#theLoai').val();
+        var thuongHieuFilter = (thuongHieuValue === 'all') ? '' : thuongHieuValue;
+        var theLoaiFilter = (theLoaiValue === 'all') ? '' : theLoaiValue;
+        datatable.columns(4).search(thuongHieuFilter).draw();
+        datatable.columns(3).search(theLoaiFilter).draw();
+    });
 
 
     $('#datatableSearch').on('mouseup', function (e) {
@@ -118,40 +132,41 @@ $(document).on('ready', function () {
             }
         }, 1);
     });
-
-    $('#toggleColumn_product').change(function (e) {
+    $('#toggleColumn_stt').change(function (e) {
         datatable.columns(1).visible(e.target.checked)
     })
-
-    $('#toggleColumn_type').change(function (e) {
+    $('#toggleColumn_product').change(function (e) {
         datatable.columns(2).visible(e.target.checked)
     })
-
-    $('#toggleColumn_vendor').change(function (e) {
+    $('#toggleColumn_type').change(function (e) {
         datatable.columns(3).visible(e.target.checked)
     })
-    datatable.columns(4).visible(false)
-    $('#toggleColumn_stocks').change(function (e) {
+    $('#toggleColumn_vendor').change(function (e) {
         datatable.columns(4).visible(e.target.checked)
     })
     datatable.columns(5).visible(false)
-    $('#toggleColumn_sku').change(function (e) {
+    $('#toggleColumn_stocks').change(function (e) {
         datatable.columns(5).visible(e.target.checked)
     })
-
-    $('#toggleColumn_price').change(function (e) {
+    datatable.columns(6).visible(false)
+    $('#toggleColumn_sku').change(function (e) {
         datatable.columns(6).visible(e.target.checked)
     })
-
-    $('#toggleColumn_quantity').change(function (e) {
+    $('#toggleColumn_price').change(function (e) {
         datatable.columns(7).visible(e.target.checked)
     })
-
-    $('#toggleColumn_variants').change(function (e) {
+    $('#toggleColumn_quantity').change(function (e) {
         datatable.columns(8).visible(e.target.checked)
     })
-
-
+    $('#toggleColumn_variants').change(function (e) {
+        datatable.columns(9).visible(e.target.checked)
+    })
+    // $(window).on('load', function () {
+    //     setTimeout(function () {
+    //         $('#spinner').addClass('d-none');
+    //         $('#dataInTable').removeClass('d-none');
+    //     }, 3000);
+    // });
     // INITIALIZATION OF TAGIFY
     // =======================================================
     $('.js-tagify').each(function () {
@@ -160,18 +175,3 @@ $(document).on('ready', function () {
 
 
 });
-$(document).ready(function () {
-    // $('#thuongHieu').change(function () {
-    //     let vl = $(this).val();
-    //     var tbody = $('#dataInTable');
-    //     tbody.children('tr').each(function() {
-    //         var brand = $(this).attr('data-brand');
-    //         if (brand != vl) {
-    //             $(this).addClass('d-none');
-    //         }else if (vl == 'all'){
-    //             $(this).removeClass('d-none');
-    //         }
-    //     });
-    //
-    // })
-})
