@@ -92,373 +92,47 @@
             </span>
 
         <!-- Nav -->
-        <ul class="nav nav-tabs page-header-tabs">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">All products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Open</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Unfulfilled</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Unpaid</a>
-          </li>
-        </ul>
+          <ul class="nav nav-tabs" id="myTabs">
+              <li class="nav-item">
+                  <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all">Tất cả</a>
+
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="choxacnhan-tab" data-toggle="tab" href="#choxacnhan">Chờ xác nhận</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="chogiao-tab" data-toggle="tab" href="#chogiao">Chờ giao</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="danggiao-tab" data-toggle="tab" href="#danggiao">Đang giao</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="thanhcong-tab" data-toggle="tab" href="#thanhcong">Thành công</a>
+              </li>
+          </ul>
         <!-- End Nav -->
       </div>
       <!-- End Nav Scroller -->
     </div>
     <!-- End Page Header -->
 
-    <!-- Card -->
-    <div class="card">
-      <!-- Header -->
-      <div class="card-header">
-        <div class="row justify-content-between align-items-center flex-grow-1">
-          <div class="col-lg-6 mb-3 mb-lg-0">
-            <form>
-              <!-- Search -->
-              <div class="input-group input-group-merge input-group-flush">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="tio-search"></i>
-                  </div>
-                </div>
-                <input id="datatableSearch" type="search" class="form-control" placeholder="Search orders" aria-label="Search orders">
-              </div>
-              <!-- End Search -->
-            </form>
-          </div>
-
-          <div class="col-lg-6">
-            <div class="d-sm-flex justify-content-sm-end align-items-sm-center">
-              <!-- Datatable Info -->
-              <div id="datatableCounterInfo" class="mr-2 mb-2 mb-sm-0" style="display: none;">
-                <div class="d-flex align-items-center">
-                      <span class="font-size-sm mr-3">
-                        <span id="datatableCounter">0</span>
-                        Selected
-                      </span>
-                  <a class="btn btn-sm btn-outline-danger" href="javascript:;">
-                    <i class="tio-delete-outlined"></i> Delete
-                  </a>
-                </div>
-              </div>
-              <!-- End Datatable Info -->
-
-              <!-- Unfold -->
-              <div class="hs-unfold mr-2">
-                <a class="js-hs-unfold-invoker btn btn-sm btn-white dropdown-toggle" href="javascript:;" data-hs-unfold-options='{
-                         "target": "#usersExportDropdown",
-                         "type": "css-animation"
-                       }'>
-                  <i class="tio-download-to mr-1"></i> Export
-                </a>
-
-                <div id="usersExportDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-sm-right">
-                  <span class="dropdown-header">Options</span>
-                  <a id="export-copy" class="dropdown-item" href="javascript:;">
-                    <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/illustrations/copy.svg" alt="Image Description">
-                    Copy
-                  </a>
-                  <a id="export-print" class="dropdown-item" href="javascript:;">
-                    <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/illustrations/print.svg" alt="Image Description">
-                    Print
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <span class="dropdown-header">Download options</span>
-                  <a id="export-excel" class="dropdown-item" href="javascript:;">
-                    <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/brands/excel.svg" alt="Image Description">
-                    Excel
-                  </a>
-                  <a id="export-csv" class="dropdown-item" href="javascript:;">
-                    <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/components/placeholder-csv-format.svg" alt="Image Description">
-                    .CSV
-                  </a>
-                  <a id="export-pdf" class="dropdown-item" href="javascript:;">
-                    <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/brands/pdf.svg" alt="Image Description">
-                    PDF
-                  </a>
-                </div>
-              </div>
-              <!-- End Unfold -->
-
-              <!-- Unfold -->
-              <div class="hs-unfold">
-                <a class="js-hs-unfold-invoker btn btn-sm btn-white" href="javascript:;" data-hs-unfold-options='{
-                         "target": "#showHideDropdown",
-                         "type": "css-animation"
-                       }'>
-                  <i class="tio-table mr-1"></i> Columns <span class="badge badge-soft-dark rounded-circle ml-1">7</span>
-                </a>
-
-                <div id="showHideDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card" style="width: 15rem;">
-                  <div class="card card-sm">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="mr-2">Mã Hóa Đơn</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_order">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_order" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="mr-2">Ngày Tạo</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_date">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_date" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="mr-2">Khách Hàng</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_customer">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_customer" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="mr-2">Trạng Thái</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_payment_status">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_payment_status" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="mr-2">Phương Thức Thanh Toán</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_payment_method">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_payment_method" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="mr-2">Tổng Tiền</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_total">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_total" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-
-                      <div class="d-flex justify-content-between align-items-center">
-                        <span class="mr-2">Thao Tác</span>
-
-                        <!-- Checkbox Switch -->
-                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_actions">
-                          <input type="checkbox" class="toggle-switch-input" id="toggleColumn_actions" checked="">
-                          <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                              </span>
-                        </label>
-                        <!-- End Checkbox Switch -->
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- End Unfold -->
-            </div>
-          </div>
-        </div>
-        <!-- End Row -->
+    <div class="tab-content mt-2">
+      <div class="tab-pane fade show active" id="all">
+        <div th:include="~{/cms/pages/oders/hoa-don/_tat-ca.html}"></div>
       </div>
-      <!-- End Header -->
-
-      <!-- Table -->
-      <div class="table-responsive datatable-custom">
-        <table id="datatable" class="table table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table" style="width: 100%" data-hs-datatables-options='{
-                     "columnDefs": [{
-                        "targets": [0],
-                        "orderable": false
-                      }],
-                     "order": [],
-                     "info": {
-                       "totalQty": "#datatableWithPaginationInfoTotalQty"
-                     },
-                     "search": "#datatableSearch",
-                     "entries": "#datatableEntries",
-                     "pageLength": 12,
-                     "isResponsive": false,
-                     "isShowPaging": false,
-                     "pagination": "datatablePagination"
-                   }'>
-          <thead class="thead-light">
-          <tr>
-            <th scope="col" class="table-column-pr-0">
-              <div class="custom-control custom-checkbox">
-                <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
-                <label class="custom-control-label" for="datatableCheckAll"></label>
-              </div>
-            </th>
-            <th class="table-column-pl-0">Mã Hóa Đơn</th>
-            <th>Ngày Tạo</th>
-            <th>Khách Hàng</th>
-            <th>Trạng Thái</th>
-            <th>Phương Thức Thanh Toán</th>
-            <th>Tổng Tiền</th>
-            <th>Thao Tác</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr th:each="hoaDon : ${hoaDonList}">
-            <td class="table-column-pr-0">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" th:id="'ordersCheck' + ${hoaDonList.indexOf(hoaDon) + 1}">
-                <label class="custom-control-label" th:for="'ordersCheck' + ${hoaDonList.indexOf(hoaDon) + 1}"></label>
-              </div>
-            </td>
-            <td class="table-column-pl-0">
-              <a th:href="@{|/cms/hoa-don/${hoaDon.id}/chi-tiet|}" th:text="${hoaDon.maHoaDon}"></a>
-            </td>
-            <td th:text="${hoaDon.ngayTao}"></td>
-            <td>
-              <a class="text-body" th:if="${hoaDon.khachHang != null}" th:href="@{|/cms/customer/${hoaDon.khachHang.id}|}"
-                 th:text="${hoaDon.khachHang.ho + ' ' + hoaDon.khachHang.tenDem + ' ' + hoaDon.khachHang.ten}"></a>
-              <span th:if="${hoaDon.khachHang == null}">Khách Hàng Ảo</span>
-            </td>
-            <td>
-                    <span  th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
-                           th:text="${hoaDon.trangThai}">
-                    </span>
-            </td>
-            <td>
-              <div class="d-flex align-items-center">
-                <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/brands/mastercard.svg" alt="Image Description">
-                <span class="text-dark" th:text="${hoaDon.thanhToan.hinhThucThanhToan.hinhThuc == true ? 'Tiền Mặt' : 'Chuyển Khoản'}"></span>
-              </div>
-            </td>
-            <td th:text="${hoaDon.thucThu}"></td>
-            <td>
-              <div class="btn-group" role="group">
-                <a class="btn btn-sm btn-white" th:href="@{|/cms/hoa-don/${hoaDon.id}/chi-tiet|}">
-                  <i class="tio-visible-outlined"></i>
-                </a>
-
-                <!-- Unfold -->
-                <div class="hs-unfold btn-group">
-                  <a class="js-hs-unfold-invoker btn btn-icon btn-sm btn-white dropdown-toggle dropdown-toggle-empty" href="javascript:;" data-hs-unfold-options='{
-                             "target": "#ordersExportDropdown1",
-                             "type": "css-animation",
-                             "smartPositionOffEl": "#datatable"
-                           }'></a>
-
-                  <div id="ordersExportDropdown1" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
-                    <span class="dropdown-header">Options</span>
-                    <a class="js-export-copy dropdown-item" href="javascript:;">
-                      <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/illustrations/copy.svg" alt="Image Description">
-                      Copy
-                    </a>
-                    <a class="js-export-print dropdown-item" href="javascript:;">
-                      <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/illustrations/print.svg" alt="Image Description">
-                      Print
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <span class="dropdown-header">Download options</span>
-                    <a class="js-export-excel dropdown-item" href="javascript:;">
-                      <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/brands/excel.svg" alt="Image Description">
-                      Excel
-                    </a>
-                    <a class="js-export-csv dropdown-item" href="javascript:;">
-                      <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/components/placeholder-csv-format.svg" alt="Image Description">
-                      .CSV
-                    </a>
-                    <a class="js-export-pdf dropdown-item" href="javascript:;">
-                      <img class="avatar avatar-xss avatar-4by3 mr-2" src="/assets/cms/svg/brands/pdf.svg" alt="Image Description">
-                      PDF
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="javascript:;">
-                      <i class="tio-delete-outlined dropdown-item-icon"></i> Delete
-                    </a>
-                  </div>
-                </div>
-                <!-- End Unfold -->
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+      <div class="tab-pane fade" id="choxacnhan">
+        <div th:include="~{/cms/pages/oders/hoa-don/_cho-xac-nhan.html}"></div>
       </div>
-      <!-- End Table -->
-
-      <!-- Footer -->
-      <div class="card-footer">
-        <!-- Pagination -->
-        <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
-          <div class="col-sm mb-2 mb-sm-0">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-              <span class="mr-2">Showing:</span>
-
-              <!-- Select -->
-              <select id="datatableEntries" class="js-select2-custom" data-hs-select2-options='{
-                            "minimumResultsForSearch": "Infinity",
-                            "customClass": "custom-select custom-select-sm custom-select-borderless",
-                            "dropdownAutoWidth": true,
-                            "width": true
-                          }'>
-                <option value="3" selected="">3</option>
-                <option value="6">6</option>
-                <option value="10">10</option>
-                <option value="14">14</option>
-              </select>
-              <!-- End Select -->
-
-              <span class="text-secondary mr-2">of</span>
-
-              <!-- Pagination Quantity -->
-              <span id="datatableWithPaginationInfoTotalQty"></span>
-            </div>
-          </div>
-
-          <div class="col-sm-auto">
-            <div class="d-flex justify-content-center justify-content-sm-end">
-              <!-- Pagination -->
-              <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-            </div>
-          </div>
-        </div>
-        <!-- End Pagination -->
+      <div class="tab-pane fade" id="chogiao">
+        <div th:include="~{/cms/pages/oders/hoa-don/_cho-giao.html}"></div>
       </div>
-      <!-- End Footer -->
+      <div class="tab-pane fade" id="danggiao">
+        <div th:include="~{/cms/pages/oders/hoa-don/_dang-giao.html}"></div>
+      </div>
+      <div class="tab-pane fade" id="thanhcong">
+        <div th:include="~{/cms/pages/oders/hoa-don/_thanh-cong.html}"></div>
+      </div>
     </div>
-    <!-- End Card -->
   </div>
   <!-- End Content -->
 
@@ -1005,6 +679,7 @@
 
     // INITIALIZATION OF DATATABLES
     // =======================================================
+    // Tất cả hóa đơn
     var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
       dom: 'Bfrtip',
       buttons: [
@@ -1108,6 +783,438 @@
 
     $('#toggleColumn_actions').change(function (e) {
       datatable.columns(7).visible(e.target.checked)
+    })
+
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
+    // Hóa đơn chờ xác nhận
+    var datatableCXN = $.HSCore.components.HSDatatables.init($('#datatableCXN'), {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'd-none'
+        },
+        {
+          extend: 'excel',
+          className: 'd-none'
+        },
+        {
+          extend: 'csv',
+          className: 'd-none'
+        },
+        {
+          extend: 'pdf',
+          className: 'd-none'
+        },
+        {
+          extend: 'print',
+          className: 'd-none'
+        },
+      ],
+      select: {
+        style: 'multi',
+        selector: 'td:first-child input[type="checkbox"]',
+        classMap: {
+          checkAll: '#datatableCheckAllCXN',
+          counter: '#datatableCounterCXN',
+          counterInfo: '#datatableCounterInfoCXN'
+        }
+      },
+      language: {
+        zeroRecords: '<div class="text-center p-4">' +
+                '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+                '<p class="mb-0">No data to show</p>' +
+                '</div>'
+      }
+    });
+
+    $('#export-copy-cxn').click(function() {
+      datatable.button('.buttons-copy').trigger()
+    });
+
+    $('#export-excel-cxn').click(function() {
+      datatable.button('.buttons-excel').trigger()
+    });
+
+    $('#export-csv-cxn').click(function() {
+      datatable.button('.buttons-csv').trigger()
+    });
+
+    $('#export-pdf-cxn').click(function() {
+      datatable.button('.buttons-pdf').trigger()
+    });
+
+    $('#export-print-cxn').click(function() {
+      datatable.button('.buttons-print').trigger()
+    });
+
+    $('#datatableSearchCXN').on('mouseup', function (e) {
+      var $input = $(this),
+              oldValue = $input.val();
+
+      if (oldValue == "") return;
+
+      setTimeout(function(){
+        var newValue = $input.val();
+
+        if (newValue == ""){
+          // Gotcha
+          datatableCXN.search('').draw();
+        }
+      }, 1);
+    });
+
+    $('#toggleColumn_order_cxn').change(function (e) {
+      datatableCXN.columns(1).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_date_cxn').change(function (e) {
+      datatableCXN.columns(2).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_customer_cxn').change(function (e) {
+      datatableCXN.columns(3).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_status_cxn').change(function (e) {
+      datatableCXN.columns(4).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_method_cxn').change(function (e) {
+      datatableCXN.columns(5).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_total_cxn').change(function (e) {
+      datatableCXN.columns(6).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_actions_cxn').change(function (e) {
+      datatableCXN.columns(7).visible(e.target.checked)
+    })
+
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
+    // Hóa đơn chờ giao
+    var datatableCG = $.HSCore.components.HSDatatables.init($('#datatableCG'), {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'd-none'
+        },
+        {
+          extend: 'excel',
+          className: 'd-none'
+        },
+        {
+          extend: 'csv',
+          className: 'd-none'
+        },
+        {
+          extend: 'pdf',
+          className: 'd-none'
+        },
+        {
+          extend: 'print',
+          className: 'd-none'
+        },
+      ],
+      select: {
+        style: 'multi',
+        selector: 'td:first-child input[type="checkbox"]',
+        classMap: {
+          checkAll: '#datatableCheckAllCG',
+          counter: '#datatableCounterCG',
+          counterInfo: '#datatableCounterInfoCG'
+        }
+      },
+      language: {
+        zeroRecords: '<div class="text-center p-4">' +
+                '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+                '<p class="mb-0">No data to show</p>' +
+                '</div>'
+      }
+    });
+
+    $('#export-copy-cg').click(function() {
+      datatableCG.button('.buttons-copy').trigger()
+    });
+
+    $('#export-excel-cg').click(function() {
+      datatableCG.button('.buttons-excel').trigger()
+    });
+
+    $('#export-csv-cg').click(function() {
+      datatableCG.button('.buttons-csv').trigger()
+    });
+
+    $('#export-pdf-cg').click(function() {
+      datatableCG.button('.buttons-pdf').trigger()
+    });
+
+    $('#export-print-cg').click(function() {
+      datatableCG.button('.buttons-print').trigger()
+    });
+
+    $('#datatableSearchCG').on('mouseup', function (e) {
+      var $input = $(this),
+              oldValue = $input.val();
+
+      if (oldValue == "") return;
+
+      setTimeout(function(){
+        var newValue = $input.val();
+
+        if (newValue == ""){
+          // Gotcha
+          datatableCG.search('').draw();
+        }
+      }, 1);
+    });
+
+    $('#toggleColumn_order_cg').change(function (e) {
+      datatableCG.columns(1).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_date_cg').change(function (e) {
+      datatableCG.columns(2).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_customer_cg').change(function (e) {
+      datatableCG.columns(3).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_status_cg').change(function (e) {
+      datatableCG.columns(4).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_method_cg').change(function (e) {
+      datatableCG.columns(5).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_total_cg').change(function (e) {
+      datatableCG.columns(6).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_actions_cg').change(function (e) {
+      datatableCG.columns(7).visible(e.target.checked)
+    })
+
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
+    // Hóa đơn đang giao
+    var datatableDG = $.HSCore.components.HSDatatables.init($('#datatableDG'), {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'd-none'
+        },
+        {
+          extend: 'excel',
+          className: 'd-none'
+        },
+        {
+          extend: 'csv',
+          className: 'd-none'
+        },
+        {
+          extend: 'pdf',
+          className: 'd-none'
+        },
+        {
+          extend: 'print',
+          className: 'd-none'
+        },
+      ],
+      select: {
+        style: 'multi',
+        selector: 'td:first-child input[type="checkbox"]',
+        classMap: {
+          checkAll: '#datatableCheckAllDG',
+          counter: '#datatableCounterDG',
+          counterInfo: '#datatableCounterInfoDG'
+        }
+      },
+      language: {
+        zeroRecords: '<div class="text-center p-4">' +
+                '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+                '<p class="mb-0">No data to show</p>' +
+                '</div>'
+      }
+    });
+
+    $('#export-copy-dg').click(function() {
+      datatableDG.button('.buttons-copy').trigger()
+    });
+
+    $('#export-excel-dg').click(function() {
+      datatableDG.button('.buttons-excel').trigger()
+    });
+
+    $('#export-csv-dg').click(function() {
+      datatableDG.button('.buttons-csv').trigger()
+    });
+
+    $('#export-pdf-dg').click(function() {
+      datatableDG.button('.buttons-pdf').trigger()
+    });
+
+    $('#export-print-dg').click(function() {
+      datatableDG.button('.buttons-print').trigger()
+    });
+
+    $('#datatableSearchDG').on('mouseup', function (e) {
+      var $input = $(this),
+              oldValue = $input.val();
+
+      if (oldValue == "") return;
+
+      setTimeout(function(){
+        var newValue = $input.val();
+
+        if (newValue == ""){
+          // Gotcha
+          datatableDG.search('').draw();
+        }
+      }, 1);
+    });
+
+    $('#toggleColumn_order_dg').change(function (e) {
+      datatableDG.columns(1).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_date_dg').change(function (e) {
+      datatableDG.columns(2).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_customer_dg').change(function (e) {
+      datatableDG.columns(3).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_status_dg').change(function (e) {
+      datatableDG.columns(4).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_method_dg').change(function (e) {
+      datatableDG.columns(5).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_total_dg').change(function (e) {
+      datatableDG.columns(6).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_actions_dg').change(function (e) {
+      datatableDG.columns(7).visible(e.target.checked)
+    })
+
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
+    // Hóa đơn thành công
+    var datatableTC = $.HSCore.components.HSDatatables.init($('#datatableTC'), {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'd-none'
+        },
+        {
+          extend: 'excel',
+          className: 'd-none'
+        },
+        {
+          extend: 'csv',
+          className: 'd-none'
+        },
+        {
+          extend: 'pdf',
+          className: 'd-none'
+        },
+        {
+          extend: 'print',
+          className: 'd-none'
+        },
+      ],
+      select: {
+        style: 'multi',
+        selector: 'td:first-child input[type="checkbox"]',
+        classMap: {
+          checkAll: '#datatableCheckAllTC',
+          counter: '#datatableCounterTC',
+          counterInfo: '#datatableCounterInfoTC'
+        }
+      },
+      language: {
+        zeroRecords: '<div class="text-center p-4">' +
+                '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+                '<p class="mb-0">No data to show</p>' +
+                '</div>'
+      }
+    });
+
+    $('#export-copy-tc').click(function() {
+      datatableTC.button('.buttons-copy').trigger()
+    });
+
+    $('#export-excel-tc').click(function() {
+      datatableTC.button('.buttons-excel').trigger()
+    });
+
+    $('#export-csv-tc').click(function() {
+      datatableTC.button('.buttons-csv').trigger()
+    });
+
+    $('#export-pdf-tc').click(function() {
+      datatableTC.button('.buttons-pdf').trigger()
+    });
+
+    $('#export-print-tc').click(function() {
+      datatableTC.button('.buttons-print').trigger()
+    });
+
+    $('#datatableSearchTC').on('mouseup', function (e) {
+      var $input = $(this),
+              oldValue = $input.val();
+
+      if (oldValue == "") return;
+
+      setTimeout(function(){
+        var newValue = $input.val();
+
+        if (newValue == ""){
+          // Gotcha
+          datatableTC.search('').draw();
+        }
+      }, 1);
+    });
+
+    $('#toggleColumn_order_tc').change(function (e) {
+      datatableTC.columns(1).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_date_tc').change(function (e) {
+      datatableTC.columns(2).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_customer_tc').change(function (e) {
+      datatableTC.columns(3).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_status_tc').change(function (e) {
+      datatableTC.columns(4).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_payment_method_tc').change(function (e) {
+      datatableTC.columns(5).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_total_tc').change(function (e) {
+      datatableTC.columns(6).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_actions_tc').change(function (e) {
+      datatableTC.columns(7).visible(e.target.checked)
     })
 
 
