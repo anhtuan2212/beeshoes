@@ -49,3 +49,9 @@
 .table-spinner{
     height: 30vh;
 }
+.width-100{
+    width: 100px !important;
+}
+.top-1em{
+    top: 1em !important;
+}

@@ -228,10 +228,10 @@ $(document).on('ready', function () {
                             </div>
                         </td>
                         ${index2 == 0 ? img : ''}
-                        <th class="table-column-pl-0">
+                        <th class="table-column-pl-0 width-100>
                             <input type="text" class="form-control" name="kichCo" value="${co}">
                         </th>
-                        <th class="table-column-pl-0">
+                        <th class="table-column-pl-0 width-100">
                             <label class="form-control-label" style="background-color: ${mau}"></label>
                             <input type="text" class="form-control" name="mauSac" value="${mau}" hidden="">
                         </th>
@@ -259,9 +259,6 @@ $(document).on('ready', function () {
                         </th>
                         <th class="table-column-pl-0">
                             <div class="btn-group" role="group" aria-label="Edit group">
-                                <a class="btn btn-white" href="#">
-                                    <i class="tio-edit"></i> Edit
-                                </a>
                                <a class="btn btn-white" href="#">
                                     <i class="tio-delete-outlined"></i>
                                 </a>
@@ -359,9 +356,18 @@ $(document).on('ready', function () {
         }
     })
 
-
 })
-
+$(document).ready(function () {
+    $('.js-plus, .js-minus').on('click', function () {
+        var quantityInput = $(this).closest('.js-quantity-counter').find('.js-result');
+        var currentQuantity = parseInt(quantityInput.val(), 10);
+        if ($(this).hasClass('js-plus')) {
+            quantityInput.val(currentQuantity + 1);
+        } else if ($(this).hasClass('js-minus')) {
+            quantityInput.val(Math.max(currentQuantity - 1, 0));
+        }
+    });
+});
 function checkData() {
 
 }

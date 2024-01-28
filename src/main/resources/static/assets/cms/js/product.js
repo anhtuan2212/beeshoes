@@ -107,6 +107,16 @@ $(document).on('ready', function () {
     //         cell.innerHTML = i + 1;
     //     });
     // }).draw();
+    $('input[name="status"]').on('change', function() {
+        var value = $(this).val();
+        if (value === 'active') {
+            datatable.columns(9).search('Đang Bán').draw();
+        } else if (value === 'noActive') {
+            datatable.columns(9).search('Chưa Bán').draw();
+        } else {
+            datatable.columns(9).search('').draw();
+        }
+    });
     $('#thuongHieu, #theLoai').on('change', function() {
         var thuongHieuValue = $('#thuongHieu').val();
         var theLoaiValue = $('#theLoai').val();

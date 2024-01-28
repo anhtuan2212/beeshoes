@@ -14,5 +14,6 @@ public interface ChiTietSanPhamService {
     List<ChiTietSanPham> getAllBySanPham(SanPham samPham);
     boolean delete(Long id);
     boolean existsByMaSanPham(String ma);
+    boolean existsBySanPham(SanPham sanPham);
     String generateDetailCode();
 }

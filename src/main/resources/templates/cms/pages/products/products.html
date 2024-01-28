@@ -21,6 +21,7 @@
 
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+    <link rel="stylesheet" href="/assets/cms/css/custom.css">
 </head>
 
 <body class="   footer-offset">
@@ -60,7 +61,7 @@
                 </div>
 
                 <div class="col-sm-auto">
-                    <a class="btn btn-primary" href="/cms/add-product">Add product</a>
+                    <a class="btn btn-primary" href="/cms/add-product">Thêm Mới</a>
                 </div>
             </div>
             <!-- End Row -->
@@ -101,7 +102,7 @@
             <!-- Header -->
             <div class="card-header">
                 <div class="row justify-content-between align-items-center flex-grow-1">
-                    <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="col-md-3 mb-3 mb-md-0">
                         <form>
                             <!-- Search -->
                             <div class="input-group input-group-merge input-group-flush">
@@ -117,7 +118,32 @@
                         </form>
                     </div>
 
-                    <div class="col-auto">
+                    <div class="col-auto top-1em">
+                        <!-- Form Check -->
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="customInlineRadio1" class="custom-control-input" checked name="status" value="">
+                                <label class="custom-control-label" for="customInlineRadio1">Tất cả</label>
+                            </div>
+                        </div>
+                        <!-- End Form Check -->
+
+                        <!-- Form Check -->
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="customInlineRadio2" class="custom-control-input indeterminate-checkbox" name="status" value="active">
+                                <label class="custom-control-label" for="customInlineRadio2">Đang Bán</label>
+                            </div>
+                        </div>
+                        <!-- End Form Check -->
+
+                        <!-- Form Check -->
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="customInlineRadio3" class="custom-control-input indeterminate-checkbox" name="status" value="noActive">
+                                <label class="custom-control-label" for="customInlineRadio3">Chưa Bán</label>
+                            </div>
+                        </div>
                         <div class="hs-unfold mr-2 form-group">
                             <select class="js-select2-custom custom-select" name="theLoai"
                                     id="theLoai" size="1"
@@ -372,7 +398,7 @@
                         <td th:text="${sp.getNguoiTao()==null?'N/A':sp.getNguoiTao()}"></td>
                         <td th:text="${sp.getGiaNhap()==null?0:#numbers.formatDecimal (sp.getGiaNhap(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></td>
                         <td th:text="${sp.getSoLuong()}">0</td>
-                        <td th:text="${sp.isTrangThai()==true?'Actice':'No Active'}">2</td>
+                        <td th:text="${sp.isTrangThai()==true?'Đang Bán':'Chưa Bán'}">2</td>
                         <td>
                             <div class="btn-group" role="group">
                                 <a class="btn btn-sm btn-white" th:href="@{/cms/product-detail(id=${sp.getId()})}">
@@ -603,7 +629,5 @@
 <script src="/assets/cms/js/product.js"></script>
 <!-- JS Plugins Init. -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
-<script th:inline="javascript">
-</script>
 </body>
 </html>

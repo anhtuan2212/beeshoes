@@ -51,6 +51,11 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
     }
 
     @Override
+    public boolean existsBySanPham(SanPham sanPham) {
+        return ctspRepository.existsBySanPham(sanPham);
+    }
+
+    @Override
     public String generateDetailCode() {
         long count = ctspRepository.count();
         int numberOfDigits = (int) Math.log10(count + 1) + 1;
