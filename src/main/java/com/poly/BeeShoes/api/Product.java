@@ -333,6 +333,13 @@ public class Product {
             chiTietSanPhamService.save(ctsp);
         }
         SanPham sp1 = sanPhamService.getById(sanPham.getId());
+        boolean st = chiTietSanPhamService.existsBySanPham(sp1);
+        if (st){
+            sp1.setTrangThai(true);
+        }else{
+            sp1.setTrangThai(false);
+        }
+        sanPhamService.save(sp1);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 

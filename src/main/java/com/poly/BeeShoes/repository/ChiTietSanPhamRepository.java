@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham,Long> {
+    boolean existsBySanPham(SanPham sanPham);
     List<ChiTietSanPham> getAllBySanPham(SanPham sanPham);
     boolean existsByMaSanPham(String ma);
     ChiTietSanPham getFirstByMauSacAndKichCoAndSanPham(MauSac mauSac, KichCo kichCo,SanPham sanPham);
