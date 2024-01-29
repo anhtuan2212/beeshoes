@@ -1,9 +1,61 @@
+<div class="text-center">
+    <!-- Unfold -->
+    <div class="hs-unfold mr-2 form-group">
+        <select class="js-select2-custom custom-select" name="phuongThucThanhToan"
+                id="phuongThucThanhToanCXN" size="1"
+                style="opacity: 0;"
+                data-hs-select2-options='{
+                                    "placeholder": "Phương thức thanh toán",
+                                    "searchInputPlaceholder": "Tìm phương thức thanh toán"
+                                    }'>
+            <option value="all" selected>Phương Thức Thanh Toán</option>
+            <option th:each="httt : ${hinhThucThanhToanList}" th:value="${httt.isHinhThuc() ? 'Tiền Mặt' : 'Chuyển Khoản'}"
+                    th:text="${httt.isHinhThuc() ? 'Tiền Mặt' : 'Chuyển Khoản'}"></option>
+        </select>
+    </div>
+    <!-- End Unfold -->
+    <!-- Unfold -->
+    <div class="hs-unfold mr-2 form-group">
+        <select class="js-select2-custom custom-select" name="ngayTao"
+                id="ngayTaoCXN" size="1"
+                style="opacity: 0;"
+                data-hs-select2-options='{
+                                    "placeholder": "Ngày Tạo",
+                                    "searchInputPlaceholder": "Tìm Ngày Tạo"
+                                    }'>
+            <option value="all" selected>Ngày Tạo</option>
+            <option value="30">30 ngày trước</option>
+            <option value="60">60 ngày trước</option>
+            <option value="90">90 ngày trước</option>
+            <option value="180">180 ngày trước</option>
+        </select>
+    </div>
+    <!-- End Unfold -->
+    <!-- Unfold -->
+    <div class="hs-unfold mr-2 form-group">
+        <select class="js-select2-custom custom-select" name="tongTien"
+                id="tongTienCXN" size="1"
+                style="opacity: 0;"
+                data-hs-select2-options='{
+                                    "placeholder": "Giá Trị",
+                                    "searchInputPlaceholder": "Tìm giá trị"
+                                    }'>
+            <option value="all" selected>Giá Trị</option>
+            <option value="0-999999">Nhỏ hơn 1 triệu</option>
+            <option value="1000000-4999999">Từ 1 triệu đến 5 triệu</option>
+            <option value="5000000-9999999">Từ 5 triệu đến 10 triệu</option>
+            <option value="10000000+">Lớn hơn 10 triệu</option>
+        </select>
+    </div>
+    <!-- End Unfold -->
+</div>
+
 <!-- Card -->
 <div class="card" xmlns:th="http://www.thymeleaf.org">
     <!-- Header -->
     <div class="card-header">
         <div class="row justify-content-between align-items-center flex-grow-1">
-            <div class="col-lg-6 mb-3 mb-lg-0">
+            <div class="col-lg-4 mb-3 mb-lg-0">
                 <form>
                     <!-- Search -->
                     <div class="input-group input-group-merge input-group-flush">
@@ -12,23 +64,26 @@
                                 <i class="tio-search"></i>
                             </div>
                         </div>
-                        <input id="datatableSearchCXN" type="search" class="form-control" placeholder="Search orders" aria-label="Search orders">
+                        <input id="datatableSearchCXN" type="search" class="form-control" placeholder="Nhập mã đơn hàng cần tìm" aria-label="Search orders">
                     </div>
                     <!-- End Search -->
                 </form>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="d-sm-flex justify-content-sm-end align-items-sm-center">
                     <!-- Datatable Info -->
                     <div id="datatableCounterInfoCXN" class="mr-2 mb-2 mb-sm-0" style="display: none;">
                         <div class="d-flex align-items-center">
                       <span class="font-size-sm mr-3">
                         <span id="datatableCounterCXN">0</span>
-                        Selected
+                        đơn được chọn
                       </span>
-                            <a class="btn btn-sm btn-outline-danger" href="javascript:;">
-                                <i class="tio-delete-outlined"></i> Delete
+                            <a class="btn btn-sm btn-outline-danger mr-3" href="javascript:;">
+                                <i class="tio-delete-outlined"></i> Xóa
+                            </a>
+                            <a class="btn btn-sm btn-outline-success" id="xacNhanCXN" href="javascript:;">
+                                <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                             </a>
                         </div>
                     </div>
@@ -193,6 +248,7 @@
                         "orderable": false
                       }],
                      "order": [],
+                     "ordering": false,
                      "info": {
                        "totalQty": "#datatableWithPaginationInfoTotalQtyCXN"
                      },

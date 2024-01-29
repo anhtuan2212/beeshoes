@@ -741,6 +741,42 @@
       datatable.button('.buttons-print').trigger()
     });
 
+    $('#phuongThucThanhToan, #ngayTao, #trangThai, #tongTien').on('change', function () {
+      var ptttValue = $('#phuongThucThanhToan').val();
+      var ptttFilter = (ptttValue === 'all') ? '' : ptttValue;
+      datatable.columns(5).search(ptttFilter).draw();
+
+      var trangThaiValue = $('#trangThai').val();
+      var trangThaiFilter = (trangThaiValue === 'all' ? '' : trangThaiValue);
+      datatable.columns(4).search(trangThaiFilter).draw();
+
+      var tongTienValue = $('#tongTien').val();
+      if(tongTienValue === 'all') {
+        datatable.columns(6).search('').draw();
+      } else {
+        datatable.columns(6).every(function () {
+          var dataColumnSearch = datatable.columns(6).data;
+          var column = this;
+          column.data().each(function (value, index) {
+            var khoangGiaTri = value.split('-');
+            var minVal = parseFloat(khoangGiaTri[0]);
+            var maxVal = parseFloat(khoangGiaTri[1]);
+            if (isNaN(minVal)) {
+              minVal = 0;
+            }
+            if (isNaN(maxVal)) {
+              maxVal = Number.MAX_VALUE;
+            }
+            if (dataColumnSearch >= minVal && dataColumnSearch <= maxVal) {
+              column.search(value).draw();
+            }
+          });
+        });
+      }
+    })
+
+
+
     $('#datatableSearch').on('mouseup', function (e) {
       var $input = $(this),
               oldValue = $input.val();
@@ -848,6 +884,37 @@
     $('#export-print-cxn').click(function() {
       datatable.button('.buttons-print').trigger()
     });
+
+    $('#phuongThucThanhToanCXN, #ngayTaoCXN, #tongTienCXN').on('change', function () {
+      var ptttValue = $('#phuongThucThanhToanCXN').val();
+      var ptttFilter = (ptttValue === 'all') ? '' : ptttValue;
+      datatableCXN.columns(5).search(ptttFilter).draw();
+
+      var tongTienValue = $('#tongTienCXN').val();
+      if(tongTienValue === 'all') {
+        datatableCXN.columns(6).search('').draw();
+      } else {
+        datatableCXN.columns(6).every(function () {
+          var dataColumnSearch = datatableCXN.columns(6).data;
+          var column = this;
+          column.data().each(function (value, index) {
+            var khoangGiaTri = value.split('-');
+            var minVal = parseFloat(khoangGiaTri[0]);
+            var maxVal = parseFloat(khoangGiaTri[1]);
+            if (isNaN(minVal)) {
+              minVal = 0;
+            }
+            if (isNaN(maxVal)) {
+              maxVal = Number.MAX_VALUE;
+            }
+            if (dataColumnSearch >= minVal && dataColumnSearch <= maxVal) {
+              column.search(value).draw();
+            }
+          });
+        });
+      }
+    })
+
 
     $('#datatableSearchCXN').on('mouseup', function (e) {
       var $input = $(this),
@@ -957,6 +1024,36 @@
       datatableCG.button('.buttons-print').trigger()
     });
 
+    $('#phuongThucThanhToanCG, #ngayTaoCG, #tongTienCG').on('change', function () {
+      var ptttValue = $('#phuongThucThanhToanCG').val();
+      var ptttFilter = (ptttValue === 'all') ? '' : ptttValue;
+      datatableCG.columns(5).search(ptttFilter).draw();
+
+      var tongTienValue = $('#tongTienCG').val();
+      if(tongTienValue === 'all') {
+        datatableCG.columns(6).search('').draw();
+      } else {
+        datatableCG.columns(6).every(function () {
+          var dataColumnSearch = datatableCG.columns(6).data;
+          var column = this;
+          column.data().each(function (value, index) {
+            var khoangGiaTri = value.split('-');
+            var minVal = parseFloat(khoangGiaTri[0]);
+            var maxVal = parseFloat(khoangGiaTri[1]);
+            if (isNaN(minVal)) {
+              minVal = 0;
+            }
+            if (isNaN(maxVal)) {
+              maxVal = Number.MAX_VALUE;
+            }
+            if (dataColumnSearch >= minVal && dataColumnSearch <= maxVal) {
+              column.search(value).draw();
+            }
+          });
+        });
+      }
+    })
+
     $('#datatableSearchCG').on('mouseup', function (e) {
       var $input = $(this),
               oldValue = $input.val();
@@ -1065,6 +1162,36 @@
       datatableDG.button('.buttons-print').trigger()
     });
 
+    $('#phuongThucThanhToanDG, #ngayTaoDG, #tongTienDG').on('change', function () {
+      var ptttValue = $('#phuongThucThanhToanDG').val();
+      var ptttFilter = (ptttValue === 'all') ? '' : ptttValue;
+      datatableCXN.columns(5).search(ptttFilter).draw();
+
+      var tongTienValue = $('#tongTienDG').val();
+      if(tongTienValue === 'all') {
+        datatableDG.columns(6).search('').draw();
+      } else {
+        datatableDG.columns(6).every(function () {
+          var dataColumnSearch = datatableDG.columns(6).data;
+          var column = this;
+          column.data().each(function (value, index) {
+            var khoangGiaTri = value.split('-');
+            var minVal = parseFloat(khoangGiaTri[0]);
+            var maxVal = parseFloat(khoangGiaTri[1]);
+            if (isNaN(minVal)) {
+              minVal = 0;
+            }
+            if (isNaN(maxVal)) {
+              maxVal = Number.MAX_VALUE;
+            }
+            if (dataColumnSearch >= minVal && dataColumnSearch <= maxVal) {
+              column.search(value).draw();
+            }
+          });
+        });
+      }
+    })
+
     $('#datatableSearchDG').on('mouseup', function (e) {
       var $input = $(this),
               oldValue = $input.val();
@@ -1172,6 +1299,36 @@
     $('#export-print-tc').click(function() {
       datatableTC.button('.buttons-print').trigger()
     });
+
+    $('#phuongThucThanhToanTC, #ngayTaoTC, #tongTienTC').on('change', function () {
+      var ptttValue = $('#phuongThucThanhToanTC').val();
+      var ptttFilter = (ptttValue === 'all') ? '' : ptttValue;
+      datatableTC.columns(5).search(ptttFilter).draw();
+
+      var tongTienValue = $('#tongTienTC').val();
+      if(tongTienValue === 'all') {
+        datatableTC.columns(6).search('').draw();
+      } else {
+        datatableTC.columns(6).every(function () {
+          var dataColumnSearch = datatableTC.columns(6).data;
+          var column = this;
+          column.data().each(function (value, index) {
+            var khoangGiaTri = value.split('-');
+            var minVal = parseFloat(khoangGiaTri[0]);
+            var maxVal = parseFloat(khoangGiaTri[1]);
+            if (isNaN(minVal)) {
+              minVal = 0;
+            }
+            if (isNaN(maxVal)) {
+              maxVal = Number.MAX_VALUE;
+            }
+            if (dataColumnSearch >= minVal && dataColumnSearch <= maxVal) {
+              column.search(value).draw();
+            }
+          });
+        });
+      }
+    })
 
     $('#datatableSearchTC').on('mouseup', function (e) {
       var $input = $(this),
