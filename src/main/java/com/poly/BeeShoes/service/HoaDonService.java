@@ -25,4 +25,7 @@ public interface HoaDonService {
 
     boolean capNhatTrangThaiTatCaHoaDon(User user, List<HoaDon> danhSachHoaDon, TrangThaiHoaDon trangThaiHoaDon);
 
+    HoaDon getHoaDonByMa(String ma);
+
+    HoaDon save(HoaDon hoaDon);
 }

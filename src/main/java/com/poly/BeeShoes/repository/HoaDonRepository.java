@@ -20,4 +20,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     List<HoaDon> findByNgayTaoBetween(Date startDate, Date endDate);
 
     boolean existsByMaHoaDon(String maHoaDon);
+
+    HoaDon findByMaHoaDon(String maHoaDon);
 }

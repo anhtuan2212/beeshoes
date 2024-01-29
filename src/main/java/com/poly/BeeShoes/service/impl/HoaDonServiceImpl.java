@@ -80,4 +80,14 @@ public class HoaDonServiceImpl implements HoaDonService {
             return false;
         }
     }
+
+    @Override
+    public HoaDon getHoaDonByMa(String ma) {
+        return hoaDonRepository.findByMaHoaDon(ma);
+    }
+
+    @Override
+    public HoaDon save(HoaDon hoaDon) {
+        return hoaDonRepository.save(hoaDon);
+    }
 }
