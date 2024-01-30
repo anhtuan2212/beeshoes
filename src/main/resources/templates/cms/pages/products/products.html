@@ -395,7 +395,7 @@
                         <td th:text="${sp.getTheLoai() == null ? 'N/A':sp.getTheLoai().getTen()}"></td>
                         <td th:text="${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}"></td>
                         <td th:text="${#dates.format (sp.getNgayTao(), 'dd-MM-yyyy')}"></td>
-                        <td th:text="${sp.getNguoiTao()==null?'N/A':sp.getNguoiTao()}"></td>
+                        <td th:text="${sp.getNguoiTao()==null?'N/A':sp.getNguoiTao().getNhanVien().getMaNhanVien()}"></td>
                         <td th:text="${sp.getGiaNhap()==null?0:#numbers.formatDecimal (sp.getGiaNhap(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></td>
                         <td th:text="${sp.getSoLuong()}">0</td>
                         <td th:text="${sp.isTrangThai()==true?'Đang Bán':'Chưa Bán'}">2</td>

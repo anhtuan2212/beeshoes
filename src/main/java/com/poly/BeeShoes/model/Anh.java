@@ -34,11 +34,11 @@ public class Anh {
     Timestamp ngaySua;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "nguoi_tao")
     User nguoiTao;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
     boolean trangThai;
 

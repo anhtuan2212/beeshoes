@@ -1,6 +1,8 @@
 package com.poly.BeeShoes.service;
 
 import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.TheLoai;
+import com.poly.BeeShoes.model.ThuongHieu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,6 +16,8 @@ public interface SanPhamService {
     SanPham getByTen(String name);
     boolean existsByTen(String name);
     List<SanPham> getAll();
+    boolean exitsByTheLoai(TheLoai theLoai);
+    boolean exitsByThuongHieu(ThuongHieu th);
     Page<SanPham> getAllShop(Pageable pageable);
     boolean delete(Long id);
 

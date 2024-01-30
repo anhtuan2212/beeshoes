@@ -1,9 +1,6 @@
 package com.poly.BeeShoes.repository;
 
-import com.poly.BeeShoes.model.ChiTietSanPham;
-import com.poly.BeeShoes.model.KichCo;
-import com.poly.BeeShoes.model.MauSac;
-import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +11,6 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham,L
     boolean existsBySanPham(SanPham sanPham);
     List<ChiTietSanPham> getAllBySanPham(SanPham sanPham);
     boolean existsByMaSanPham(String ma);
+    boolean existsByChatLieu(ChatLieu chatLieu);
     ChiTietSanPham getFirstByMauSacAndKichCoAndSanPham(MauSac mauSac, KichCo kichCo,SanPham sanPham);
 }

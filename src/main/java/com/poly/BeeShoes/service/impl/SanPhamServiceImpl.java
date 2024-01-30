@@ -1,8 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
-import com.poly.BeeShoes.model.ChiTietSanPham;
-import com.poly.BeeShoes.model.MauSac;
-import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.repository.SanPhamRepository;
 import com.poly.BeeShoes.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
@@ -105,6 +103,16 @@ public class SanPhamServiceImpl implements SanPhamService {
             s.setSoLuong(num);
         }
         return sp;
+    }
+
+    @Override
+    public boolean exitsByTheLoai(TheLoai theLoai) {
+        return sanPhamRepository.existsByTheLoai(theLoai);
+    }
+
+    @Override
+    public boolean exitsByThuongHieu(ThuongHieu th) {
+        return sanPhamRepository.existsByThuongHieu(th);
     }
 
     @Override

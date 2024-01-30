@@ -1,6 +1,8 @@
 package com.poly.BeeShoes.repository;
 
 import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.TheLoai;
+import com.poly.BeeShoes.model.ThuongHieu;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +19,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     @Query("SELECT s FROM SanPham s LEFT JOIN FETCH s.chiTietSanPham ctsp LEFT JOIN FETCH ctsp.mauSac ms ORDER BY ms.maMauSac")
     SanPham findByIdWithSortedChiTietSanPham(Long id);
     SanPham getFirstByTen(String name);
+    boolean existsByTheLoai(TheLoai theLoai);
+    boolean existsByThuongHieu(ThuongHieu thuongHieu);
     boolean existsByTen(String ten);
 }
