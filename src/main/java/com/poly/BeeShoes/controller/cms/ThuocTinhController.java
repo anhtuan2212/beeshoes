@@ -1,7 +1,6 @@
 package com.poly.BeeShoes.controller.cms;
 
-import com.poly.BeeShoes.model.SanPham;
-import com.poly.BeeShoes.model.TheLoai;
+import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,18 +15,49 @@ import java.util.List;
 @RequestMapping("/cms")
 public class ThuocTinhController {
     private final TheLoaiService theLoaiService;
-//    private final ChatLieuService chatLieuService;
-//    private final DeGiayService deGiayService;
+
+    private final ChatLieuService chatLieuService;
+
+        private final DeGiayService deGiayService;
 //    private final MauSacService mauSacService;
-//    private final ThuongHieuService thuongHieuService;
+    private final ThuongHieuService thuongHieuService;
 //    private final KichCoService kichCoService;
-//    private final MuiGiayService muiGiayService;
-//    private final CoGiayService coGiayService;
-@GetMapping("/shoe-category")
-public String theLoai(Model model) {
-    List<TheLoai> lst = theLoaiService.getAll();
-    System.out.println(lst.get(0).getNguoiTao().getNhanVien().getMaNhanVien());
-    model.addAttribute("lsttheloai",lst);
-    return "cms/pages/products/shoes-cate";
-}
+    private final MuiGiayService muiGiayService;
+    private final CoGiayService coGiayService;
+    @GetMapping("/shoe-category")
+    public String theLoai(Model model) {
+        List<TheLoai> lst = theLoaiService.getAll();
+        model.addAttribute("lsttheloai", lst);
+        return "cms/pages/products/shoes-cate";
+    }
+    @GetMapping("/shoe-material")
+    public String chatLieu(Model model) {
+        List<ChatLieu> lst = chatLieuService.getAll();
+        model.addAttribute("lstchatlieu", lst);
+        return "cms/pages/products/shoe-material";
+    }
+    @GetMapping("/shoe-brand")
+    public String thuongHieu(Model model) {
+        List<ThuongHieu> lst = thuongHieuService.getAll();
+        model.addAttribute("lstthuonghieu", lst);
+        return "cms/pages/products/brand";
+    }
+    @GetMapping("/shoe-sole")
+    public String deGiay(Model model) {
+        List<DeGiay> lst = deGiayService.getAll();
+        model.addAttribute("lstdegiay", lst);
+        return "cms/pages/products/de-giay";
+    }
+    @GetMapping("/shoe-toe")
+    public String muiGiay(Model model) {
+        List<MuiGiay> lst = muiGiayService.getAll();
+        model.addAttribute("lstmuigiay", lst);
+        return "cms/pages/products/mui-giay";
+    }
+    @GetMapping("/shoe-collar")
+    public String coGiay(Model model) {
+        List<CoGiay> lst = coGiayService.getAll();
+        model.addAttribute("lstcogiay", lst);
+        return "cms/pages/products/co-giay";
+    }
 }

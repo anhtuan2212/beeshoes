@@ -46,7 +46,8 @@ $(document).on('ready', function () {
         let trangThai = $('#status').is(":checked");
         let mota = $('.ql-editor').html();
         let product_details = [];
-        $('.row-data-detail').each(function () {
+        let addVariantsContainer = $('#addVariantsContainer');
+        addVariantsContainer.find('.row-data-detail').each(function () {
             let inputs = $(this).find('.form-control');
             let my_obj = {};
             let img = $(this).find('.avatar')[0];
@@ -54,11 +55,11 @@ $(document).on('ready', function () {
                 let name = $(this).attr('name');
                 let value = $(this).val();
                 my_obj[name] = value;
-                my_obj['img'] = $(img).attr('src');
             });
+            my_obj['img'] = $(img).attr('src');
             product_details.push(my_obj);
-
         });
+        console.log(product_details);
         if (isEmpty(sanPham)) {
             ToastError("Vui lòng chọn Sản Phẩm !")
             $('#sanPham').focus();
@@ -204,7 +205,6 @@ $(document).on('ready', function () {
         let soLuong = $('#soLuong').val();
         let html = '';
         mausac.forEach((mau, index1) => {
-            html += `<tr><th >${mau}</th></tr>`
             kichco.forEach((co, index2) => {
                 let size = kichco.length;
                 let img = `<th rowspan="${size}">
@@ -228,7 +228,7 @@ $(document).on('ready', function () {
                             </div>
                         </td>
                         ${index2 == 0 ? img : ''}
-                        <th class="table-column-pl-0 width-100>
+                        <th class="table-column-pl-0 width-100">
                             <input type="text" class="form-control" name="kichCo" value="${co}">
                         </th>
                         <th class="table-column-pl-0 width-100">

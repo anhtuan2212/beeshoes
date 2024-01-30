@@ -105,11 +105,11 @@
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Sản Phẩm</a></li>
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Thuộc Tính</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Thể Loại</li>
+                            <li class="breadcrumb-item active" aria-current="page">Mũi Giày</li>
                         </ol>
                     </nav>
 
-                    <h1 class="page-header-title">Thể Loại</h1>
+                    <h1 class="page-header-title">Mũi Giày</h1>
                 </div>
 
                 <div class="col-sm-auto">
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                                 <input id="datatableSearch" type="search" class="form-control"
-                                       placeholder="Tìm kiếm thể loại." aria-label="Tìm kiếm thể loại.">
+                                       placeholder="Tìm kiếm mũi giày." aria-label="Tìm kiếm mũi giày.">
                             </div>
                             <!-- End Search -->
                         </form>
@@ -1388,7 +1388,7 @@
                     </tr>
                     </thead>
                     <tbody id="dataInTable">
-                    <tr th:each="tl,iter:${lsttheloai}" th:id="'shoes'+${tl.getId()}">
+                    <tr th:each="tl,iter:${lstmuigiay}" th:id="'shoes'+${tl.getId()}">
                         <td class="table-column-pr-0">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
@@ -1457,9 +1457,9 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                <option class="showwing" th:if="${#lists.size(lsttheloai) < 10}" th:value="${#lists.size(lsttheloai)}"
-                                        selected th:text="${#lists.size(lsttheloai)}"></option>
-                                <option  class="showwing"  th:if="${#lists.size(lsttheloai) >= 10}" th:value="10" selected>10</option>
+                                <option th:if="${#lists.size(lstmuigiay) < 10}" th:value="${#lists.size(lstmuigiay)}"
+                                        selected th:text="${#lists.size(lstmuigiay)}"></option>
+                                <option th:if="${#lists.size(lstmuigiay) >= 10}" th:value="10" selected>10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
                             </select>
@@ -1523,7 +1523,7 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
-                <h4 id="editUserModalTitle" class="modal-title">Sửa Loại Giày</h4>
+                <h4 id="editUserModalTitle" class="modal-title">Sửa Tên</h4>
 
                 <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
                         aria-label="Close">
@@ -1535,7 +1535,7 @@
             <!-- Body -->
             <div class="modal-body">
                 <div class="form-group p-4">
-                    <label for="inputData">Tên Loại :</label>
+                    <label for="inputData">Tên Loại Mũi Giày :</label>
                     <input class="form-control" type="text" id="inputData" autofocus>
                     <input class="form-control" type="text" id="inputDataId" hidden="">
                 </div>
@@ -1560,7 +1560,7 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 
 <!-- JS Plugins Init. -->
-<script src="/assets/cms/js/shoe-cate.js"></script>
+<script src="/assets/cms/js/brand.js"></script>
 
 <!-- IE Support -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>

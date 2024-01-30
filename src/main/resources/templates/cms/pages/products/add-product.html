@@ -371,11 +371,6 @@
                             </thead>
                             <tbody id="addVariantsContainer">
                             <th:block th:each="ctsp, iter : ${sanPham != null and sanPham.getChiTietSanPham() != null ? sanPham.getChiTietSanPham() : null}">
-                                <tr th:if="${iter.index % #lists.size(sanPham != null and sanPham.getDistinctKichCoList() != null ? sanPham.getDistinctKichCoList() : {}) == 0}">
-                                    <td colspan="6"
-                                        th:text="${ctsp != null and ctsp.getMauSac() != null ? ctsp.getMauSac().getMaMauSac() : ''}">
-                                    </td>
-                                </tr>
                                 <tr class="row-data-detail">
                                     <td class="table-column-pr-0">
                                         <div class="custom-control custom-checkbox">
@@ -468,12 +463,11 @@
                             </td>
                             <th></th>
                             <th class="table-column-pl-0 width-100">
-                                <input type="text" class="form-control" name="kichCo" value=""
-                                       disabled>
+                                <input type="text" class="form-control" name="kichCo" value="">
                             </th>
                             <th class="table-column-pl-0 width-100">
-                                <label class="form-control-label disabled" style=""></label>
-                                <input type="text" class="form-control" name="mauSac" value="" hidden="">
+                                <label class="form-control-label disabled" style="" hidden=""></label>
+                                <input type="text" class="form-control" name="mauSac" value="">
                             </th>
                             <th class="table-column-pl-0">
                                 <input type="text" class="form-control" name="giaBan" value="">
@@ -665,6 +659,7 @@
                 <!-- End Card -->
             </div>
             <div class="d-flex justify-content-center col-12">
+                <button class="btn btn-light mr-2" type="button" href="/cms/product">Trở Về</button>
                 <button class="btn btn-primary" id="save-product-detail">Lưu</button>
             </div>
         </div>

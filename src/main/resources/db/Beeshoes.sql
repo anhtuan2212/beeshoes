@@ -25,8 +25,8 @@ CREATE TABLE anh
 (
     id bigint auto_increment,
     id_san_pham bigint,
-    ten nvarchar(256),
-    main varchar(256),
+    url nvarchar(256),
+    main bit default 0,
     ngay_tao timestamp,
     ngay_sua timestamp,
     nguoi_tao bigint,

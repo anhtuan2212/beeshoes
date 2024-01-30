@@ -106,6 +106,21 @@ $(document).on('ready', function () {
         new HSFormSearch($(this)).init()
     });
 
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
+    var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
+        select: {
+            style: 'multi',
+            selector: 'td:first-child input[type="checkbox"]',
+            classMap: {
+                checkAll: '#datatableCheckAll',
+                counter: '#datatableCounter',
+                counterInfo: '#datatableCounterInfo'
+            }
+        }
+    });
+
+
 
     // INITIALIZATION OF SELECT2
     // =======================================================

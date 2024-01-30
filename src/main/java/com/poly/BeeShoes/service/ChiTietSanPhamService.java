@@ -1,9 +1,6 @@
 package com.poly.BeeShoes.service;
 
-import com.poly.BeeShoes.model.ChiTietSanPham;
-import com.poly.BeeShoes.model.KichCo;
-import com.poly.BeeShoes.model.MauSac;
-import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ public interface ChiTietSanPhamService {
     ChiTietSanPham getBySizeAndColorAndProduct(KichCo kichCo, MauSac mauSac, SanPham sanPham);
     List<ChiTietSanPham> getAllBySanPham(SanPham samPham);
     boolean delete(Long id);
+    boolean existsByChatLieu(ChatLieu chatLieu);
     boolean existsByMaSanPham(String ma);
     boolean existsBySanPham(SanPham sanPham);
     String generateDetailCode();
