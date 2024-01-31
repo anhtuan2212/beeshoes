@@ -32,172 +32,8 @@ function setFormSendData(url, name, id) {
 }
 
 $(document).on('ready', function () {
-    $('#save-product-detail').on('click', function () {
-        let sanPham = $('#sanPham').val();
-        let theLoai = $('#theLoai').val();
-        let thuongHieu = $('#thuongHieu').val();
-        let chatLieu = $('#chatLieu').val();
-        let deGiay = $('#deGiay').val();
-        let coGiay = $('#coGiay').val();
-        let muiGiay = $('#muiGiay').val();
-        let giaNhap = $('#giaNhap').val();
-        let giaGoc = $('#giaGoc').val();
-        let sales = $('#sales').is(":checked");
-        let trangThai = $('#status').is(":checked");
-        let mota = $('.ql-editor').html();
-        let product_details = [];
-        let addVariantsContainer = $('#addVariantsContainer');
-        addVariantsContainer.find('.row-data-detail').each(function () {
-            let inputs = $(this).find('.form-control');
-            let my_obj = {};
-            let img = $(this).find('.avatar')[0];
-            inputs.each(function () {
-                let name = $(this).attr('name');
-                let value = $(this).val();
-                my_obj[name] = value;
-            });
-            my_obj['img'] = $(img).attr('src');
-            product_details.push(my_obj);
-        });
-        console.log(product_details);
-        if (isEmpty(sanPham)) {
-            ToastError("Vui lòng chọn Sản Phẩm !")
-            $('#sanPham').focus();
-            return;
-        }
-        if (isEmpty(theLoai)) {
-            ToastError("Vui lòng chọn Thể Loại !")
-            $('#theLoai').focus();
-            return;
-        }
-        if (isEmpty(thuongHieu)) {
-            ToastError("Vui lòng chọn Thể Loại !")
-            $('#thuongHieu').focus();
-            return;
-        }
-        if (isEmpty(chatLieu)) {
-            ToastError("Vui lòng chọn Chất Liệu !")
-            $('#chatLieu').focus();
-            return;
-        }
-        if (isEmpty(deGiay)) {
-            ToastError("Vui lòng chọn Đế Giày !")
-            $('#deGiay').focus();
-            return;
-        }
-        if (isEmpty(coGiay)) {
-            ToastError("Vui lòng chọn Cổ Giày !")
-            $('#coGiay').focus();
-            return;
-        }
-        if (isEmpty(muiGiay)) {
-            ToastError("Vui lòng nhập Mũi Giày !")
-            $('#muiGiay').focus();
-            return;
-        }
-        if (giaNhap == 'đ' || isEmpty(giaNhap) || convertToNumber($('#giaNhap').val()) < 0) {
-            ToastError("Vui lòng nhập Giá Nhập !")
-            $('#giaNhap').focus();
-            return;
-        }
-        if (giaGoc == 'đ' || isEmpty(giaGoc) || convertToNumber($('#giaGoc').val()) < 0) {
-            ToastError("Vui lòng nhập Giá Gốc !")
-            $('#giaGoc').focus();
-            return;
-        }
-        if ($('#giaBan').val() == 'đ' || isEmpty($('#giaBan').val()) || convertToNumber($('#giaBan').val()) < 0) {
-            ToastError("Vui lòng nhập Giá Bán !")
-            $('#giaBan').focus();
-            return;
-        }
-        if (Number($('#soLuong').val()) <= 0) {
-            ToastError("Vui lòng nhập Số Lượng !")
-            console.log($('#soLuong').val())
-            $('#soLuong').focus();
-            return;
-        }
-        if (isEmpty(mota) || mota == '<p><br></p>') {
-            ToastError("Vui lòng nhập Giới Thiệu Sản Phẩm !")
-            return;
-        }
-        if (product_details.length === 0) {
-            ToastError('Vui lòng chọn các option sản phẩm');
-            return;
-        }
-        let message = '';
-        let check = true;
-        for (let i = 0; i < product_details.length; i++) {
-            if (product_details[i].img == '/assets/cms/img/400x400/img2.jpg') {
-                product_details[i].img = null;
-                message = "Vui lòng chọn ảnh !";
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].kichCo)) {
-                message = "Vui lòng nhập Size !";
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].mauSac)) {
-                message = "Vui lòng chọn Màu Sắc !";
-                check = false;
-                break;
-            }
-            if (convertToNumber(product_details[i].giaBan) < 0) {
-                message = "Vui lòng nhập Giá Bán !";
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 0) {
-                message = "Vui lòng Số Lượng !";
-                check = false;
-                break;
-            }
-        }
-        if (check) {
-            // post data lên thôi
-            $.ajax({
-                type: "POST",
-                url: "/api/chi-tiet-san-pham",
-                data: {
-                    sanPham: sanPham,
-                    theLoai: theLoai,
-                    thuongHieu: thuongHieu,
-                    chatLieu: chatLieu,
-                    deGiay: deGiay,
-                    coGiay: coGiay,
-                    moTa: mota,
-                    muiGiay: muiGiay,
-                    giaNhap: giaNhap,
-                    giaGoc: giaGoc,
-                    sales: sales,
-                    trangThai: trangThai,
-                    product_details: JSON.stringify(product_details)
-                }, success: (data, status, xhr) => {
-                    ToastSuccess('OKE')
-                    let files = JSON.parse(sessionStorage.getItem('fileImg'));
-                    product_details.forEach((pro) => {
-                        console.log("pro")
-                        console.log(pro)
-                        if (pro.img.length > 0) {
-                            files.forEach((storage) => {
-                                console.log("storage")
-                                console.log(storage.getName())
-                                if (pro.img == storage.url) {
-                                    console.log("Bằng")
-                                }
-                            })
-                        }
-                    })
-                }, error: (e) => {
-                    ToastError(e.getResponseHeader('error'));
-                }
-            })
-        } else (
-            ToastError(message)
-        )
-    })
     //generate version product
+    /*
     $('#mauSac, #kichCo').on('change', function () {
         let mausac = $('#mauSac').val();
         let giaban = $('#giaBan').val();
@@ -270,7 +106,7 @@ $(document).on('ready', function () {
         })
         $('#addVariantsContainer').empty().append(html);
     });
-
+*/
 
     $('#btn-add-new-product').on('click', () => {
         let ten = $('#product-name-modal').val();
@@ -316,7 +152,32 @@ $(document).on('ready', function () {
             })
         }
     })
+    $('#mauSac').on('change', function () {
+        var mausac = $('#mauSac').val();
+        mausac.forEach((mau) => {
+            var ele = $('li[title="' + mau + '"]');
+            var tenmau = $('option[value="' + mau + '"]').attr('data-name');
+            var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
+            $(span[0]).text(tenmau);
+            $(ele[0]).css('background-color', mau);
+            $(ele[0]).css('color', '#FFFFFF');
+        });
+    });
 
+    $(window).on('load', function () {
+        var mausac = $('#mauSac').val();
+        mausac.forEach((mau) => {
+            var ele = $('li[title="' + mau + '"]');
+            var tenmau = $('option[value="' + mau + '"]').attr('data-name');
+            var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
+            $(span[0]).text(tenmau);
+            $(ele[0]).css('background-color', mau);
+            $(ele[0]).css('color', '#FFFFFF');
+        });
+        if ($('#status-product').val() == 1) {
+            ToastError('Sản Phẩm không tồn tại.')
+        }
+    });
     // thêm màu sắc
     $('#btn-add-new-color').on('click', () => {
         let coloCode = $('#colorChoice').val();
@@ -357,17 +218,7 @@ $(document).on('ready', function () {
     })
 
 })
-$(document).ready(function () {
-    $('.js-plus, .js-minus').on('click', function () {
-        var quantityInput = $(this).closest('.js-quantity-counter').find('.js-result');
-        var currentQuantity = parseInt(quantityInput.val(), 10);
-        if ($(this).hasClass('js-plus')) {
-            quantityInput.val(currentQuantity + 1);
-        } else if ($(this).hasClass('js-minus')) {
-            quantityInput.val(Math.max(currentQuantity - 1, 0));
-        }
-    });
-});
+
 function checkData() {
 
 }
