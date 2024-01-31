@@ -55,3 +55,35 @@
 .top-1em{
     top: 1em !important;
 }
+.img-shoe{
+    cursor: pointer;
+    position: absolute ;
+    display: inline-block;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 0.3125rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.img-shoe:not(img) {
+    background-color: #fff
+}
+.btn-del-img{
+    position: absolute;
+    top: 45%;
+    right: 90%;
+    cursor: pointer;
+}
+.background-spinner{
+    background-color: #FFFFFF;
+    position: absolute;
+    width:74px;
+    height:74px;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%,-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

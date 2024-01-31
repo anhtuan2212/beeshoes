@@ -312,44 +312,6 @@
 
                     <!-- Body -->
                     <div class="card-body">
-                        <!-- Form Group -->
-                        <div class="form-group d-none">
-                            <label for="giaNhap" class="input-label">Giá Nhập</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control money-input-mask" name="giaNhap" id="giaNhap"
-                                       placeholder="Vui lòng nhập giá nhập." aria-label=""
-                                       thvalue="0">
-                            </div>
-                        </div>
-                        <div class="form-group d-none">
-                            <label for="giaGoc" class="input-label">Giá Gốc</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control money-input-mask" name="giaGoc" id="giaGoc"
-                                       placeholder="Vui lòng nhập giá nhập." aria-label=""
-                                       th:value="${sanPham != null and sanPham.getChiTietSanPham() != null and sanPham.getChiTietSanPham().size() > 0 ?
-                                        #numbers.formatDecimal (sanPham.getChiTietSanPham().get(0).getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT'):0}">
-                            </div>
-                        </div>
-                        <div class="form-group d-none">
-                            <label for="giaBan" class="input-label">Giá Bán</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control money-input-mask" name="giaBan" id="giaBan"
-                                       placeholder="Vui lòng nhập giá nhập." aria-label=""
-                                       th:value="${sanPham != null and sanPham.getChiTietSanPham() != null and sanPham.getChiTietSanPham().size() > 0 ?
-                                       #numbers.formatDecimal (sanPham.getChiTietSanPham().get(0).getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT'):0}">
-                            </div>
-                        </div>
-                        <div class="form-group d-none">
-                            <label for="soLuong" class="input-label">Số Lượng</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control money-input-mask-num" name="soLuong" id="soLuong"
-                                       placeholder="Vui lòng nhập số lượng mỗi loại." aria-label=""
-                                       th:value="${sanPham != null and sanPham.getChiTietSanPham() != null and sanPham.getChiTietSanPham().size() > 0 ?
-                                       sanPham.getChiTietSanPham().get(0).getSoLuongTon():0}">
-                            </div>
-                        </div>
-
-
                         <!-- Toggle Switch -->
                         <label class="row toggle-switch" for="sales">
                             <span class="col-8 col-sm-9 toggle-switch-content">
@@ -473,6 +435,10 @@
                                 <!-- End Search -->
                             </form>
                         </div>
+                        <!-- End Card -->
+                        <div>
+                            <button class="btn btn-primary mr-2" id="save-product-detail">Lưu</button>
+                        </div>
                     </div>
                     <!-- End Row -->
                 </div>
@@ -483,9 +449,8 @@
                     <table id="datatable"
                            class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
                            data-hs-datatables-options='{
-                       "ordering": false,
                      "columnDefs": [{
-                        "targets": [0, 7],
+                        "targets": [0,1,2,4,5,6,7],
                         "orderable": false
                       }],
                      "order": [],
@@ -494,7 +459,7 @@
                      },
                      "search": "#datatableSearch",
                      "entries": "#datatableEntries",
-                     "pageLength": 2,
+                     "pageLength": 10,
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
@@ -562,12 +527,6 @@
                 </div>
                 <!-- End Footer -->
             </div>
-            <!-- End Card -->
-            <div class="d-flex justify-content-center col-12">
-                <button class="btn btn-light mr-2" type="button" href="/cms/product">Trở Về</button>
-                <button class="btn btn-primary mr-2" id="save-product-detail">Lưu</button>
-                <button class="btn btn-primary mr-2" id="get-data">get</button>
-            </div>
         </div>
 
         <!-- End Row -->
@@ -587,95 +546,6 @@
 <!-- ========== END MAIN CONTENT ========== -->
 
 <!-- ========== SECONDARY CONTENTS ========== -->
-<!-- Add Image from URL Modal -->
-<div class="modal fade" id="addImageFromURLModal" tabindex="-1" role="dialog"
-     aria-labelledby="addImageFromURLModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <h4 id="addImageFromURLModalTitle" class="modal-title">Add image from URL</h4>
-
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body">
-                <label for="pasteImageURLNameLabel" class="input-label">Paste image URL</label>
-                <input type="text" class="form-control" name="projectName" id="pasteImageURLNameLabel"
-                       placeholder="https://" aria-label="https://">
-            </div>
-            <!-- End Body -->
-
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
-                <button type="button" class="btn btn-primary">Add media</button>
-            </div>
-            <!-- End Footer -->
-        </div>
-    </div>
-</div>
-<!-- End Add Image from URL Modal -->
-
-<!-- Embed Video Modal -->
-<div class="modal fade" id="select_img_firebase" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document" style="max-width: 800px">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="Chọn Ảnh">Chọn Ảnh</h5>
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body">
-
-                <span class="divider"><h4>Ảnh Đã Chọn</h4></span>
-                <!-- Gallery -->
-                <div id="anh_duoc_chon" class="js-fancybox row gx-2"
-                     data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
-
-                </div>
-                <!-- End Gallery -->
-                <span class="divider"><h4>Ảnh Hiện Có</h4></span>
-                <!-- Gallery -->
-                <div id="anh_co_san" class="js-fancybox row gx-2"
-                     data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
-                    <!-- End Gallery -->
-                </div>
-                <!-- End Body -->
-
-                <!-- Footer -->
-                <div class="modal-footer pb-0">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                    <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn"
-                           style="height: 41px">
-                        <span id="customFileExample5">Thêm Ảnh</span>
-                        <input id="fileAttachmentBtn" name="custom-file" type="file" multiple
-                               class="js-file-attach custom-file-btn-input"
-                               data-hs-file-attach-options='{ "textTarget": "#customFileExample5"}'>
-                    </label>
-                    <a id="btn-reset-img" class="btn btn-primary">Làm Mới</a>
-                    <button id="btn-accept-select-img" type="button" class="btn btn-primary" data-dismiss="modal">Xác
-                        Nhận
-                    </button>
-                </div>
-                <!-- End Footer -->
-            </div>
-        </div>
-    </div>
-    <!-- End Embed Video Modal -->
-</div>
 
 <!-- add san pham Modal -->
 <div class="modal fade" id="form-add-product-attr" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -757,25 +627,21 @@
         </div>
     </div>
 </div>
-<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-    <!-- Position it -->
-    <div style="position: absolute; top: 0; right: 0;">
-        <!-- Then put toasts within -->
-        <div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
-             style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
-            <div class="toast-header">
-                <img class="avatar avatar-sm avatar-circle mr-2" id="img-toast" src="/assets/cms/img/160x160/img1.jpg"
-                     alt="Image description">
-                <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
-                <small class="ml-auto">Vừa xong</small>
-                <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
-                    <i class="tio-clear" aria-hidden="true"></i>
-                </button>
-            </div>
-            <div class="toast-body" id="system-toast-mesage">
-                Thành Công !
-            </div>
-        </div>
+
+<!-- Then put toasts within -->
+<div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
+     style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
+    <div class="toast-header">
+        <img class="avatar avatar-sm avatar-circle mr-2" id="img-toast" src="/assets/cms/img/160x160/img1.jpg"
+             alt="Image description">
+        <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
+        <small class="ml-auto">Vừa xong</small>
+        <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
+            <i class="tio-clear" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="toast-body" id="system-toast-mesage">
+        Thành Công !
     </div>
 </div>
 <!-- End Footer -->
@@ -805,6 +671,27 @@
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.js-plus, .js-minus', function () {
+            var quantityInput = $(this).closest('.js-quantity-counter').find('.js-result');
+            var currentQuantity = parseInt(quantityInput.val(), 10);
+            if ($(this).hasClass('js-plus')) {
+                quantityInput.val(currentQuantity + 1);
+            } else if ($(this).hasClass('js-minus')) {
+                quantityInput.val(Math.max(currentQuantity - 1, 0));
+            }
+            quantityInput.change(); // Sử dụng .change() thay vì .trigger('change')
+        });
+
+        $(document).on('input', '.money-input-mask', function () {
+            $(this).mask('#.###đ', {reverse: true});
+        });
+        $(document).on('input', '.money-input-mask-num', function () {
+            $(this).mask('#.###', {reverse: true});
+        });
+    });
+</script>
 <script src="/assets/cms/js/add-product.js"></script>
 <script src="/assets/cms/js/custom-firebase.js" type="module"></script>
 <script src="/assets/cms/js/custom.js"></script>
