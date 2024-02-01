@@ -19,6 +19,11 @@ public class DiaChiServiceImpl implements DiaChiService {
     }
 
     @Override
+    public DiaChi getById(Long id) {
+        return diaChiReponsitory.findById(id).get();
+    }
+
+    @Override
     public void delete(Long id) {
         diaChiReponsitory.deleteById(id);
     }
@@ -31,13 +36,11 @@ public class DiaChiServiceImpl implements DiaChiService {
 
     @Override
     public DiaChi add(DiaChi diaChi) {
-        diaChiReponsitory.save(diaChi);
-        return null;
+        return diaChiReponsitory.save(diaChi);
     }
 
     @Override
     public DiaChi update(DiaChi diaChi, Long id) {
-        diaChiReponsitory.save(diaChi);
-        return null;
+        return diaChiReponsitory.save(diaChi);
     }
 }

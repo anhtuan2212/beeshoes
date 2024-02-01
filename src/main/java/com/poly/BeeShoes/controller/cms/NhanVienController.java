@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.NhanVien;
 import com.poly.BeeShoes.service.ChucVuService;
 import com.poly.BeeShoes.service.NhanVienService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,17 +13,16 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/cms")
+@RequestMapping("/cms/nhan-vien")
 public class NhanVienController {
     private final NhanVienService nhanVienService;
     private final ChucVuService chucVuService;
 
-    @GetMapping("/nhanVien")
-    public String nhanVien(Model model) {
+    @GetMapping("/")
+    public String nhanVien(Model model){
         List<NhanVien> nv = nhanVienService.getAll();
         model.addAttribute("listCV", chucVuService.getAll());
         model.addAttribute("listNV", nv);
-        model.addAttribute("nhanVien", new NhanVien());
         return "cms/pages/users/nhanVien";
     }
 
@@ -33,11 +33,12 @@ public class NhanVienController {
         return "cms/pages/users/add-nhanVien";
     }
 
-    @PostMapping("/add-nhanVien")
+    @PostMapping("/add")
     public String addNV(@ModelAttribute("nhanVien") NhanVien nhanVien, Model model) {
         model.addAttribute("nhanVien", nhanVien);
-        nhanVienService.generateEmployeeCode();
+        nhanVien.setMaNhanVien(nhanVienService.generateEmployeeCode());
         nhanVienService.add(nhanVien);
+        model.addAttribute("thongbao", "Thêm thành công!");
         return "redirect:/cms/nhanVien";
     }
 
@@ -49,16 +50,18 @@ public class NhanVienController {
         return "cms/pages/users/detail-nhanVien";
     }
 
-    @PostMapping("/update-nhanVien/{id}")
+    @PostMapping("/update/{id}")
     public String updateNV(@PathVariable Long id, Model model,
                            @ModelAttribute("nhanVien") NhanVien nhanVien){
         nhanVienService.update(nhanVien, id);
+        model.addAttribute("thongbao", "Cập nhật thành công!");
         return "redirect:/cms/nhanVien";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteNV(@PathVariable Long id) {
+    public String deleteNV(@PathVariable Long id, Model model) {
         nhanVienService.delete(id);
+        model.addAttribute("thongbao", "Xóa thành công!");
         return "redirect:/cms/nhanVien";
     }
 }

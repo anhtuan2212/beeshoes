@@ -1,7 +1,7 @@
 package com.poly.BeeShoes.service;
 
 import com.poly.BeeShoes.model.KhachHang;
-import com.poly.BeeShoes.model.NhanVien;
+import com.poly.BeeShoes.request.KhachHangRequest;
 
 import java.util.List;
 

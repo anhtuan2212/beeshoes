@@ -20,11 +20,11 @@
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 
 <!-- ========== HEADER ========== -->
-<div th:replace="/cms/pages/_header.html"></div>
+<div th:replace="~{/cms/pages/_header.html}"></div>
 <!-- ========== END HEADER ========== -->
 
 <!-- ========== SIDEBAR ========== -->
-<div th:replace="/cms/pages/_sidebar.html"></div>
+<div th:replace="~{/cms/pages/_sidebar.html}"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
 
@@ -32,8 +32,13 @@
 <main id="content" role="main" class="main">
     <!-- Content -->
     <div class="content container-fluid">
-        <!-- Step Form -->
-        <form action="#" th:action="@{/cms/add-nhanVien}" method="post" th:object="${nhanVien}" class="js-step-form py-md-1" data-hs-step-form-options='{
+<!--        &lt;!&ndash; Step Form &ndash;&gt;-->
+<!--        <th:block th:if="${not empty thongbao}">-->
+<!--            <script th:inline="javascript">-->
+<!--                alert("[[${thongbao}]]");-->
+<!--            </script>-->
+<!--        </th:block>-->
+        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
                 "endSelector": "#addUserFinishBtn",
@@ -188,8 +193,8 @@
                                     <!-- Select -->
                                     <div class="col-sm-9">
                                         <select class="form-control" th:field="*{trangThai}">
-                                            <option th:value="true" selected="">Hoạt động</option>
-                                            <option th:value="false">Ngừng hoạt động</option>
+                                            <option th:value="false" selected="">Hoạt động</option>
+                                            <option th:value="true">Ngừng hoạt động</option>
                                         </select>
                                         <!-- End Select -->
                                     </div>
@@ -781,6 +786,6 @@
         });
     });
 </script>
-<div th:replace="/cms/pages/_IE-suport.html"></div>
+<div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

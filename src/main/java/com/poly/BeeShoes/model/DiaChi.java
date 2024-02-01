@@ -14,6 +14,7 @@ import java.util.Date;
 @Entity
 @Table(name = "dia_chi")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 /*
    id bigint auto_increment,
     id_khach_hang bigint,
