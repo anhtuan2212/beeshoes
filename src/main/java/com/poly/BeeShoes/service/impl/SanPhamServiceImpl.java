@@ -93,13 +93,13 @@ public class SanPhamServiceImpl implements SanPhamService {
             for (int j = 0; j < ctsp.size(); j++) {
                 ChiTietSanPham ct = ctsp.get(j);
                 num += ct.getSoLuongTon();
-                gn=ct.getGiaNhap();
+                gn=ct.getGiaBan();
                 if (!lst.contains(ct.getMauSac())){
                     lst.add(ct.getMauSac());
                 }
             }
             s.setMauSac(lst);
-            s.setGiaNhap(gn);
+            s.setGiaBan(gn);
             s.setSoLuong(num);
         }
         return sp;
@@ -140,7 +140,7 @@ public class SanPhamServiceImpl implements SanPhamService {
                 }
                 sp.getContent().get(i).setSale(sale);
                 sp.getContent().get(i).setMauSac(lst);
-                sp.getContent().get(i).setGiaNhap(gn);
+                sp.getContent().get(i).setGiaBan(gn);
                 sp.getContent().get(i).setSoLuong(num);
             }
         }

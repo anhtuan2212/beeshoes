@@ -70,7 +70,7 @@ public class LibService {
             int gb = Integer.valueOf(gia);
             if (gb < 999) {
                 lst.add("giaBan");
-            } else if (pr.getMauSac().isEmpty()) {
+            } else if (pr.getMaMauSac().isEmpty()) {
                 lst.add("mauSac");
             } else if (pr.getKichCo().isEmpty()) {
                 lst.add("kichCo");

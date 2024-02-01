@@ -2,8 +2,13 @@ $(document).on('ready', function () {
     $('.js-fancybox-item').each(function () {
         var fancybox = $.HSCore.components.HSFancyBox.init($(this));
     })
+    // $('.img-shoe').on('load', function() {
+    //     console.log('Image loaded:', $(this).attr('src'));
+    // }).on('error', function() {
+    //     console.log('Image failed to load:', $(this).attr('src'));
+    //     $(this).attr('src', "/assets/cms/img/icon/error.svg");
+    // });
 });
-
 
 function updateCounterInfo() {
     var checkedCount = $('.custom-control-input:checked').length;
