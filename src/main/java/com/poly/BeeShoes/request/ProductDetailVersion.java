@@ -6,28 +6,34 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductDetailVersion {
-    public ProductDetailVersion(String img, String mauSac, String kichCo, String giaBan, int soLuong) {
+    public ProductDetailVersion(String img, String maMauSac, String tenMau, String kichCo, String giaBan, String giaGoc, int soLuong) {
         this.img = img;
-        this.mauSac = mauSac;
+        this.maMauSac = maMauSac;
+        this.tenMau = tenMau;
         this.kichCo = kichCo;
         this.giaBan = giaBan;
+        this.giaGoc = giaGoc;
         this.soLuong = soLuong;
     }
 
-    public ProductDetailVersion(Long id, String img, String mauSac, String kichCo, String giaBan, int soLuong) {
+    public ProductDetailVersion(Long id, String img, String maMauSac, String tenMau, String kichCo, String giaBan, String giaGoc, int soLuong) {
         this.id = id;
         this.img = img;
-        this.mauSac = mauSac;
+        this.maMauSac = maMauSac;
+        this.tenMau = tenMau;
         this.kichCo = kichCo;
         this.giaBan = giaBan;
+        this.giaGoc = giaGoc;
         this.soLuong = soLuong;
     }
 
     Long id;
     String img;
-    String mauSac;
+    String maMauSac;
+    String tenMau;
     String kichCo;
     String giaBan;
+    String giaGoc;
     int soLuong;
 
     @Override
@@ -35,9 +41,11 @@ public class ProductDetailVersion {
         return "ProductDetailVersion{" +
                 "id=" + id +
                 ", img='" + img + '\'' +
-                ", mauSac='" + mauSac + '\'' +
+                ", maMauSac='" + maMauSac + '\'' +
+                ", tenMau='" + tenMau + '\'' +
                 ", kichCo='" + kichCo + '\'' +
                 ", giaBan='" + giaBan + '\'' +
+                ", giaGoc='" + giaGoc + '\'' +
                 ", soLuong=" + soLuong +
                 '}';
     }

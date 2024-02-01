@@ -1,8 +1,7 @@
 package com.poly.BeeShoes.controller.cms;
 
-import com.poly.BeeShoes.model.HoaDon;
-import com.poly.BeeShoes.model.HoaDonChiTiet;
-import com.poly.BeeShoes.model.LichSuHoaDon;
+import com.poly.BeeShoes.model.*;
+import com.poly.BeeShoes.service.HinhThucThanhToanService;
 import com.poly.BeeShoes.service.HoaDonChiTietService;
 import com.poly.BeeShoes.service.HoaDonService;
 import com.poly.BeeShoes.service.LichSuHoaDonService;
@@ -23,11 +22,22 @@ public class HoaDonController {
     private final HoaDonService hoaDonService;
     private final HoaDonChiTietService hoaDonChiTietService;
     private final LichSuHoaDonService lichSuHoaDonService;
+    private final HinhThucThanhToanService hinhThucThanhToanService;
     @GetMapping("/hoa-don")
     public String hoaDonPage(Model model) {
+        List<HinhThucThanhToan> hinhThucThanhToanList = hinhThucThanhToanService.getAll();
+        List<HoaDon> hoaDonChoXacNhanList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoXacNhan);
+        List<HoaDon> hoaDonChoGiaoList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoGiao);
+        List<HoaDon> hoaDonDangGiaoList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.DangGiao);
+        List<HoaDon> hoaDonThanhCongList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ThanhCong);
         List<HoaDon> hoaDonList = hoaDonService.getAllHoaDon();
         Long count = hoaDonService.count();
         model.addAttribute("hoaDonList", hoaDonList);
+        model.addAttribute("hoaDonChoXacNhanList", hoaDonChoXacNhanList);
+        model.addAttribute("hoaDonChoGiaoList", hoaDonChoGiaoList);
+        model.addAttribute("hoaDonDangGiaoList", hoaDonDangGiaoList);
+        model.addAttribute("hoaDonThanhCongList", hoaDonThanhCongList);
+        model.addAttribute("hinhThucThanhToanList", hinhThucThanhToanList);
         model.addAttribute("count", count);
         return "cms/pages/oders/orders";
     }

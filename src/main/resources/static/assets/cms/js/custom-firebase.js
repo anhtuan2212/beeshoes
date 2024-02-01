@@ -4,7 +4,6 @@ import {
     ref,
     uploadBytes,
     getDownloadURL,
-    listAll,
     deleteObject,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -21,30 +20,8 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-const fileInput = document.getElementById("fileAttachmentBtn");
-const listRef = ref(storage, "images");
-const fileInStorages = [];
-const ImgStorage = {};
-
-function generateCard(url, lst) {
-    var html = `
-    <div class="card card-sm box-shadow-img-file" data-img-src="${url}">
-        <img class="card-img-top img-product-files" src="${url}" alt="Image Description">
-        <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary position-absolute right-0 delete-btn">
-            <i class="tio-delete-outlined"></i>
-        </button>
-        <div class="card-body text-center row">
-            <div class="col-sm-6 p-0">
-                <a class="js-fancybox-item text-body" href="javascript:;" data-toggle="tooltip" data-placement="top" title="View"
-                    data-src="${url}" data-caption="Image">
-                    <i class="tio-visible-outlined mr-1"></i>
-                </a>
-            </div>
-            <div class="col-sm-6 p-0">${lst}</div>
-       </div>
-    </div>`;
-    return html;
-}
+let fileInStorages = [];
+let fileImgCurent = [];
 
 function randomString(n) {
     var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -62,14 +39,361 @@ function renameFile(file) {
     var newName = randomString(10) + ext; // tạo tên file mới bằng cách thêm chuỗi ngẫu nhiên vào trước đuôi file
     return new File([file], newName, {type: file.type}); // trả về file mới có tên mới
 }
+async function ClearImg(url) {
+    const parsedUrl = new URL(url);
+    parsedUrl.search = '';
+    const urlImg = parsedUrl.toString();
+    const startIndex = urlImg.indexOf('images%2F');
+    const imagePathWithToken = urlImg.slice(startIndex);
+    const imagePath = imagePathWithToken.replace(/%2F/g, '/');
+    try {
+        await deleteObject(ref(storage, imagePath));
+        console.log(`Đã xóa ảnh ${imagePath} thành công`);
+    } catch (error) {
+        console.error(`Lỗi khi xóa ảnh ${imagePath}:`, error);
+    }
+}
+async function ClearMultipleImages(imagePaths) {
+    try {
+        const deletionPromises = imagePaths.map(async (imagePath) => {
+            if (imagePath.path == null){
+                await deleteObject(ref(storage, imagePath.path));
+                console.log(`Đã xóa ảnh ${imagePath} thành công`);
+            }else{
+                await ClearImg(imagePath.url);
+            }
+        });
+        await Promise.all(deletionPromises);
+        console.log("Tất cả ảnh đã được xóa thành công.");
+    } catch (error) {
+        console.error("Lỗi khi xóa ảnh:", error);
+    }
+}
+window.addEventListener('beforeunload', function (event) {
+    if (fileInStorages.length>0){
+        ClearMultipleImages(fileInStorages).then(r => {
+            console.log(r)
+            event.preventDefault();
+        });
+    }
+});
 
 $(document).ready(function () {
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
+    var dataArray = [];
+    $('#datatableGetdata tr').each(function () {
+        let dataObject = {};
+        $(this).find('[name]').each(function () {
+            var name = $(this).attr('name');
+            var value = $(this).text();
+            dataObject[name] = value;
+        });
+        dataArray.push(dataObject);
+    });
+
+    var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
+        columnDefs: [
+            {targets: 0, data: 'id', orderable: false, searchable: false},
+            {targets: 1, data: 'img', orderable: false, searchable: false},
+            {targets: 2, data: 'kichCo', orderable: false, searchable: true},
+            {targets: 3, data: 'maMauSac', orderable: true, searchable: true},
+            {targets: 4, data: 'giaGoc', orderable: false, searchable: true},
+            {targets: 5, data: 'giaBan', orderable: false, searchable: true},
+            {targets: 6, data: 'soLuong', orderable: false, searchable: true},
+            {targets: 7, data: 'tenMau', orderable: false, searchable: false},
+        ],
+        select: {
+            style: 'multi', selector: 'td:first-child input[type="checkbox"]',
+            classMap: {
+                checkAll: '#datatableCheckAll', counter: '#datatableCounter', counterInfo: '#datatableCounterInfo'
+            }
+        },
+        language: {
+            zeroRecords: '<div class="text-center p-4">' + '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' + '<p class="mb-0">No data to show</p>' + '</div>'
+        },
+        createdRow: function (row, data, dataIndex) {
+            let customHTML = `
+                                <th class="table-column-pr-0 id-version-shoe" data-colum-index="0" data-color-code-id="${data.maMauSac}">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="text" class="form-control" name="id"
+                                               value="${data.id}" hidden="">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="productVariationsCheck${data.id}">
+                                        <label class="custom-control-label"
+                                               for="productVariationsCheck${data.id}"></label>
+                                    </div>
+                                </th>
+                                <th class="width-100 row-show-img position-relative" data-colum-index="1" data-color="${data.maMauSac}" style="width: 100px !important;">
+                                    <div class="background-spinner">
+                                       <div class="spinner-border text-primary d-none" role="status">
+                                           <span class="sr-only">Loading...</span>
+                                       </div>
+                                    </div>
+                                    <label for="fileimgselected${data.id}">
+                                        <img class="img-shoe" data-color-code-img="${data.maMauSac}"
+                                        src="${data.img.length === 0 ? '/assets/cms/img/400x400/img2.jpg' : data.img}"
+                                             alt="Image Description">
+                                    </label>
+                                    <i class="tio-delete btn-del-img"></i>
+                                    <input class="formAddImg form-control" data-color-code-input="${data.maMauSac}" type="file" name="img" id="fileimgselected${data.id}" hidden="">
+                                </th>
+                                <th class="table-column-pl-0 width-100 " data-colum-index="2">
+                                 <input type="text" class="form-control" name="kichCo" value="${data.kichCo}" disabled>
+                                </th>
+                                <th class="table-column-pl-0 width-100 " data-colum-index="3">
+                                    <input type="text" class="form-control" name="mauSac" value="${data.maMauSac}" style="background-color:${data.maMauSac}" disabled>
+                                </th>
+                                <th class="table-column-pl-0 " data-colum-index="4">
+                                    <input type="text" class="form-control money-input-mask-num" name="giaGoc"
+                                           value="${data.giaGoc}">
+                                </th>
+                                <th class="table-column-pl-0 " data-colum-index="5">
+                                    <input type="text" class="form-control money-input-mask-num" name="giaBan" value="${data.giaBan}">
+                                </th>
+                                <th class="table-column-pl-0 " data-colum-index="6">
+                                    <!-- Quantity Counter -->
+                                    <div class="js-quantity-counter input-group-quantity-counter">
+                                        <input type="number" name="soLuong"
+                                               class="js-result form-control input-group-quantity-counter-control"
+                                               value="${data.soLuong}">
+                                        <div class="input-group-quantity-counter-toggle">
+                                            <a class="js-minus input-group-quantity-counter-btn">
+                                                <i class="tio-remove"></i>
+                                            </a>
+                                            <a class="js-plus input-group-quantity-counter-btn">
+                                                <i class="tio-add"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="table-column-pl-0 " data-colum-index="7">
+                                    <div class="btn-group" role="group" aria-label="Edit group">
+                                        <a class="btn btn-white remove-item" data-color-code-remove="${data.maMauSac}" href="javascript:;">
+                                            <i class="tio-delete-outlined"></i>
+                                        </a>
+                                    </div>
+                                </th>`;
+            $(row).html(customHTML);
+        }
+    });
+    datatable.rows.add(dataArray).draw();
+    $('#sanPham').on('change',function () {
+        $('#kichCo').val(null).trigger('change');
+        $('#mauSac').val(null).trigger('change');
+        datatable.clear().draw();
+    })
+    function getArrIndex() {
+        let arrIndexRow = [];
+        $('.custom-control-input:checked').each(function () {
+            let index = datatable.row($(this).closest('tr')).index();
+            if (index !== undefined) {
+                let object = {index: index, tr: $(this).closest('tr')}
+                arrIndexRow.push(object);
+            }
+        });
+        return arrIndexRow;
+    }
+
+    $('#datatable').on('change', 'input', function () {
+        let rowIndex = datatable.row($(this).closest('tr')).index();
+        let name = $(this).attr('name');
+        let columnIndex = $(this).closest('th').data('colum-index');
+        console.log(columnIndex)
+        var newValue = $(this).val();
+        let arr = getArrIndex();
+        if (columnIndex > 1) {
+            let st = arr.some(function (item) {
+                return item.index === rowIndex;
+            });
+            if (st) {
+                arr.forEach((item) => {
+                    datatable.cell(item.index, columnIndex).data(newValue);
+                    let inputElement = $(item.tr).find('th[data-colum-index=' + columnIndex + ']')
+                        .find('input[name=' + name + ']');
+                    inputElement.val(newValue);
+                })
+            } else {
+                datatable.cell(rowIndex, columnIndex).data(newValue);
+            }
+        }
+    });
+
+
+    setIMG();
+
+    function setIMG() {
+        let mauSac = null;
+        let arr = [];
+        let oj = {};
+        let img = $('.row-show-img');
+        for (let i = 0; i < img.length; i++) {
+            let color = $(img[i]).attr('data-color');
+            $(img[i]).closest('tr').attr('color-code', color);
+            if (mauSac == null) {
+                mauSac = color;
+                let oj = {color: color, ele: img[i]};
+                arr.push(oj)
+            } else if (color == mauSac) {
+                $(img[i]).css('opacity', 0);
+                $(img[i]).attr('status-remove', true);
+            } else {
+                mauSac = color
+                let oj = {color: color, ele: img[i]};
+                arr.push(oj)
+            }
+        }
+        let elements = [];
+        for (let i = 0; i < arr.length; i++) {
+            $("th.row-show-img[status-remove='true']").each(function (index, element) {
+                let mau = $(element).attr('data-color');
+                if (mau == arr[i].color) {
+                    elements.push(element)
+                }
+            });
+            $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length);
+        }
+        $.each(elements, function (index, element) {
+            $(element).remove();
+        });
+    }
+
+    datatable.on('draw.dt', function () {
+        setIMG();
+    });
+
+
+    $('#datatableSearch').on('mouseup', function (e) {
+        var $input = $(this), oldValue = $input.val();
+
+        if (oldValue == "") return;
+
+        setTimeout(function () {
+            var newValue = $input.val();
+
+            if (newValue == "") {
+                // Gotcha
+                datatable.search('').draw();
+            }
+        }, 1);
+    });
+
+    function checkColor(mau) {
+        return datatable.rows().data().toArray().some(function (item) {
+            return item.maMauSac === mau;
+        });
+    }
+
+    function checkSize(co) {
+        return datatable.rows().data().toArray().some(function (item) {
+            return item.kichCo === co;
+        });
+    }
+
+    function getImgByColor(color) {
+        let img = null;
+        datatable.rows().data().each(function (rowData) {
+            if (rowData.maMauSac === color) {
+                img = rowData.img;
+                return false;
+            }
+        });
+
+        if (!img) {
+            img = '/assets/cms/img/400x400/img2.jpg';
+        }
+        return img;
+    }
+
+
+    $('#mauSac, #kichCo').on('change', function () {
+        let mausac = $('#mauSac').val();
+        let kichco = $('#kichCo').val();
+        let arrData = [];
+        mausac.forEach((mau, index1) => {
+            kichco.forEach((co, index2) => {
+                if (!checkColor(mau) || !checkSize(co)) {
+                    let newData = {
+                        id: randomString(10),
+                        img: getImgByColor(mau),
+                        kichCo: co,
+                        maMauSac: mau,
+                        tenMau: "",
+                        giaGoc: "",
+                        giaBan: "",
+                        soLuong: "",
+                    };
+                    arrData.push(newData);
+                }
+            })
+        })
+
+
+        datatable.rows.add(arrData);
+        datatable.order([3, 'asc']).draw();
+        datatable.ordering = false;
+    });
+
+
+    $(document).on('click', '.remove-item', async function () {
+        Swal.fire({
+            title: "Bạn chắc chứ?",
+            text: "Sau khi xóa sẽ không thể khôi phục lại!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Hủy",
+            confirmButtonText: "Xác Nhận"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let mau = $(this).data('color-code-remove');
+                let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
+                if (size > 1) {
+                    let num = $(this).closest('tr').find('th.row-show-img').length;
+                    if (num === 1) {
+                        let th = $(this).closest('tr').find('th.row-show-img');
+                        let rowspan = th.attr('rowspan')
+                        let arrElement = $('.id-version-shoe[data-color-code-id=' + mau + ']');
+                        th.attr('rowspan', Number(rowspan) - 1);
+                        arrElement[1].after(th[0]);
+                        let rowIndex = datatable.row($(this).closest('tr')).index();
+                        datatable.row(rowIndex).remove().draw();
+                        $(this).closest('tr').remove();
+                    } else {
+                        let th = $('th.row-show-img[data-color=' + mau + ']');
+                        console.log(th)
+                        let rowspan = th.attr('rowspan')
+                        th.attr('rowspan', Number(rowspan) - 1);
+                        let rowIndex = datatable.row($(this).closest('tr')).index();
+                        datatable.row(rowIndex).remove().draw();
+                        $(this).closest('tr').remove();
+                    }
+
+                } else {
+                    let rowIndex = datatable.row($(this).closest('tr')).index();
+                    datatable.row(rowIndex).remove().draw();
+                    $(this).closest('tr').remove();
+                }
+                ToastSuccess("Thành Công !");
+            }
+        });
+    });
+
+
     $('#addVariantsContainer').on('change', '.formAddImg', async function (e) {
+        // console.log(this)
         const files = e.target.files;
-        let img = $(this).parent().find('.avatar')[0];
+        let img = $(this).parent().find('.img-shoe')[0];
         let snip = $(this).parent().find('.spinner-border')[0];
-        $(snip).removeClass('d-none');
+        const imgUrlSrc = $(img).attr('src')
+        if (imgUrlSrc!== '/assets/cms/img/400x400/img2.jpg'){
+            let Object = {path: null,url:imgUrlSrc}
+            fileImgCurent.push(Object);
+        }
         $(img).addClass('d-none')
+        $(snip).removeClass('d-none');
+        $(snip).parent().removeClass('d-none');
         let del = $(this).parent().find('.btn-del-img')[0];
         const file = renameFile(files[0]);
         const tempUrl = URL.createObjectURL(file);
@@ -78,21 +402,36 @@ $(document).ready(function () {
         try {
             const snapshot = await uploadBytes(storageRef, file);
             const url = await getDownloadURL(snapshot.ref);
-            fileInStorages.push(storageRef);
-            console.log(storageRef)
-            sessionStorage.setItem('fileImg', JSON.stringify(fileInStorages));
-            $(this).attr('img-src')
+            let imgOJ = {path: storageRef._location.path_, url: url}
+            fileInStorages.push(imgOJ);
+            console.log(fileInStorages)
+            let rowIndex = datatable.row($(this).closest('tr')).index();
+            let ColumnIndex = 1;
+            let mauSacToUpdate = $(this).closest('th').attr('data-color');
+            datatable.cell(rowIndex, ColumnIndex).data(url);
+            datatable.rows().eq(0).each(function (index) {
+                var currentMauSac = datatable.cell(index, 3).data();
+                if (currentMauSac === mauSacToUpdate) {
+                    datatable.cell(index, 1).data(url);
+                    datatable.draw();
+                }
+            });
             img.src = url;
             $(snip).addClass('d-none')
             $(img).removeClass('d-none');
+            $(snip).parent().addClass('d-none');
         } catch (error) {
             console.error(error);
         }
         $(del).on('click', async function () {
             try {
                 await deleteObject(storageRef);
-                fileInStorages.splice(0, fileInStorages.indexOf(storageRef));
-                sessionStorage.setItem('fileImg', JSON.stringify(fileInStorages));
+                for (let i = 0; i < fileInStorages.length; i++) {
+                    if (fileInStorages[i].path === storageRef._location.path_) {
+                        fileInStorages.splice(i, 1);
+                        break;
+                    }
+                }
                 console.log("Deleted", storageRef.name);
                 img.src = '/assets/cms/img/400x400/img2.jpg';
             } catch (error) {
@@ -100,34 +439,152 @@ $(document).ready(function () {
             }
         });
     });
+$('.btn-del-img').on('click',function () {
+    console.log(this);
+})
+    function containsLetter(str) {
+        return /[a-zA-Z]/.test(str);
+    }
+
+    $('#save-product-detail').on('click', function () {
+        let sanPham = $('#sanPham').val();
+        let theLoai = $('#theLoai').val();
+        let thuongHieu = $('#thuongHieu').val();
+        let chatLieu = $('#chatLieu').val();
+        let deGiay = $('#deGiay').val();
+        let coGiay = $('#coGiay').val();
+        let muiGiay = $('#muiGiay').val();
+        let giaGoc = $('#giaGoc').val();
+        let sales = $('#sales').is(":checked");
+        let trangThai = $('#status').is(":checked");
+        let mota = $('.ql-editor').html();
+        let product_details = datatable.rows().data().toArray();
+        console.log(product_details);
+        if (isEmpty(sanPham)) {
+            ToastError("Vui lòng chọn Sản Phẩm !")
+            $('#sanPham').focus();
+            return;
+        }
+        if (isEmpty(theLoai)) {
+            ToastError("Vui lòng chọn Thể Loại !")
+            $('#theLoai').focus();
+            return;
+        }
+        if (isEmpty(thuongHieu)) {
+            ToastError("Vui lòng chọn Thể Loại !")
+            $('#thuongHieu').focus();
+            return;
+        }
+        if (isEmpty(chatLieu)) {
+            ToastError("Vui lòng chọn Chất Liệu !")
+            $('#chatLieu').focus();
+            return;
+        }
+        if (isEmpty(deGiay)) {
+            ToastError("Vui lòng chọn Đế Giày !")
+            $('#deGiay').focus();
+            return;
+        }
+        if (isEmpty(coGiay)) {
+            ToastError("Vui lòng chọn Cổ Giày !")
+            $('#coGiay').focus();
+            return;
+        }
+        if (isEmpty(muiGiay)) {
+            ToastError("Vui lòng nhập Mũi Giày !")
+            $('#muiGiay').focus();
+            return;
+        }
+        if (Number($('#soLuong').val()) <= 0) {
+            ToastError("Vui lòng nhập Số Lượng !")
+            console.log($('#soLuong').val())
+            $('#soLuong').focus();
+            return;
+        }
+        if (isEmpty(mota) || mota == '<p><br></p>') {
+            ToastError("Vui lòng nhập Giới Thiệu Sản Phẩm !")
+            return;
+        }
+        if (product_details.length === 0) {
+            ToastError('Vui lòng chọn các option sản phẩm');
+            return;
+        }
+        let message = '';
+        let check = true;
+        for (let i = 0; i < product_details.length; i++) {
+            if (containsLetter(product_details[i].id)) {
+                product_details[i].id = 0;
+            }
+            if (product_details[i].img == '/assets/cms/img/400x400/img2.jpg') {
+                product_details[i].img = null;
+                message = "Vui lòng chọn ảnh !";
+                check = false;
+                break;
+            }
+            if (isEmpty(product_details[i].kichCo)) {
+                message = "Vui lòng nhập Size !";
+                check = false;
+                break;
+            }
+            if (isEmpty(product_details[i].maMauSac)) {
+                message = "Vui lòng chọn Màu Sắc !";
+                check = false;
+                break;
+            }
+            if (convertToNumber(product_details[i].giaBan) < 0) {
+                message = "Vui lòng nhập của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                check = false;
+                break;
+            }
+            if (convertToNumber(product_details[i].giaGoc) < 0) {
+                message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                check = false;
+                break;
+            }
+            if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
+                message = "Vui lòng Số Lượng !";
+                check = false;
+                break;
+            }
+        }
+        if (check) {
+            // post data lên thôi
+            $.ajax({
+                type: "POST",
+                url: "/api/chi-tiet-san-pham",
+                data: {
+                    sanPham: sanPham,
+                    theLoai: theLoai,
+                    thuongHieu: thuongHieu,
+                    chatLieu: chatLieu,
+                    deGiay: deGiay,
+                    coGiay: coGiay,
+                    moTa: mota,
+                    muiGiay: muiGiay,
+                    giaNhap: 100,
+                    giaGoc: giaGoc,
+                    sales: sales,
+                    trangThai: trangThai,
+                    product_details: JSON.stringify(product_details)
+                }, success: (data, status, xhr) => {
+                    ToastSuccess('Lưu Thành Công !')
+                    fileInStorages = fileInStorages.filter((storage) => {
+                        return !product_details.some((pro) => pro.img === storage.url);
+                    });
+                    let arr = fileInStorages.concat(fileImgCurent);
+                    ClearMultipleImages(arr).then(r =>{
+                        console.log(r)
+                    } );
+                }, error: (e) => {
+                    ToastError(e.getResponseHeader('error'));
+                }
+            })
+        } else (
+            ToastError(message)
+        )
+    })
+
+
 })
 
-async function ClaerImg(files) {
-    let promises = files.map(file => {
-        return deleteObject(file).then(() => {
-            console.log('Deleted', file.name);
-        }).catch((error) => {
-            console.error(error);
-        });
-    });
-    return Promise.all(promises);
-}
-
-window.addEventListener('beforeunload', async function (e) {
-    let files = JSON.parse(sessionStorage.getItem('fileImg'));
-    let completed = false;
-    setTimeout(async () => {
-        try {
-            await ClaerImg(files);
-            completed = true;
-        } catch (error) {
-            completed = false;
-        }
-        if (completed) {
-            e.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang?';
-        } else {
-            e.preventDefault();
-        }
-    }, 100);
-});
 

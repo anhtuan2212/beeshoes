@@ -28,6 +28,7 @@ public class TheLoaiServiceImpl implements TheLoaiService {
         return theLoaiRepository.existsByTen(ten);
     }
 
+
     @Override
     public List<TheLoai> getAll() {
         return theLoaiRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));

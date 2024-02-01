@@ -12,6 +12,8 @@ public interface HoaDonService {
 
     List<HoaDon> getAllHoaDon();
 
+    List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon);
+
     Optional<HoaDon> getHoaDonById(Long id);
 
     Long count();
@@ -23,4 +25,7 @@ public interface HoaDonService {
 
     boolean capNhatTrangThaiTatCaHoaDon(User user, List<HoaDon> danhSachHoaDon, TrangThaiHoaDon trangThaiHoaDon);
 
+    HoaDon getHoaDonByMa(String ma);
+
+    HoaDon save(HoaDon hoaDon);
 }

@@ -24,7 +24,7 @@ public class AnhServiceImpl implements AnhService {
 
     @Override
     public Anh getAnhByURL(String url) {
-        return null;
+        return anhRepository.getFirstByUrl(url);
     }
 
     @Override
