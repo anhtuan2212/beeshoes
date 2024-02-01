@@ -20,7 +20,9 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-const fileInStorages = [];
+let fileInStorages = [];
+let fileImgCurent = [];
+
 function randomString(n) {
     var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var result = "";
@@ -29,6 +31,7 @@ function randomString(n) {
     }
     return result;
 }
+
 function renameFile(file) {
     var name = file.name; // lấy tên file
     var dotIndex = name.lastIndexOf("."); // lấy vị trí dấu chấm cuối cùng
@@ -36,9 +39,46 @@ function renameFile(file) {
     var newName = randomString(10) + ext; // tạo tên file mới bằng cách thêm chuỗi ngẫu nhiên vào trước đuôi file
     return new File([file], newName, {type: file.type}); // trả về file mới có tên mới
 }
+async function ClearImg(url) {
+    const parsedUrl = new URL(url);
+    parsedUrl.search = '';
+    const urlImg = parsedUrl.toString();
+    const startIndex = urlImg.indexOf('images%2F');
+    const imagePathWithToken = urlImg.slice(startIndex);
+    const imagePath = imagePathWithToken.replace(/%2F/g, '/');
+    try {
+        await deleteObject(ref(storage, imagePath));
+        console.log(`Đã xóa ảnh ${imagePath} thành công`);
+    } catch (error) {
+        console.error(`Lỗi khi xóa ảnh ${imagePath}:`, error);
+    }
+}
+async function ClearMultipleImages(imagePaths) {
+    try {
+        const deletionPromises = imagePaths.map(async (imagePath) => {
+            if (imagePath.path == null){
+                await deleteObject(ref(storage, imagePath.path));
+                console.log(`Đã xóa ảnh ${imagePath} thành công`);
+            }else{
+                await ClearImg(imagePath.url);
+            }
+        });
+        await Promise.all(deletionPromises);
+        console.log("Tất cả ảnh đã được xóa thành công.");
+    } catch (error) {
+        console.error("Lỗi khi xóa ảnh:", error);
+    }
+}
+window.addEventListener('beforeunload', function (event) {
+    if (fileInStorages.length>0){
+        ClearMultipleImages(fileInStorages).then(r => {
+            console.log(r)
+            event.preventDefault();
+        });
+    }
+});
 
 $(document).ready(function () {
-
     // INITIALIZATION OF DATATABLES
     // =======================================================
     var dataArray = [];
@@ -138,7 +178,11 @@ $(document).ready(function () {
         }
     });
     datatable.rows.add(dataArray).draw();
-
+    $('#sanPham').on('change',function () {
+        $('#kichCo').val(null).trigger('change');
+        $('#mauSac').val(null).trigger('change');
+        datatable.clear().draw();
+    })
     function getArrIndex() {
         let arrIndexRow = [];
         $('.custom-control-input:checked').each(function () {
@@ -159,19 +203,19 @@ $(document).ready(function () {
         var newValue = $(this).val();
         let arr = getArrIndex();
         if (columnIndex > 1) {
-        let st = arr.some(function (item) {
-            return item.index === rowIndex;
-        });
-        if (st) {
-            arr.forEach((item) => {
-                datatable.cell(item.index, columnIndex).data(newValue);
-                let inputElement = $(item.tr).find('th[data-colum-index=' + columnIndex + ']')
-                    .find('input[name=' + name + ']');
-                inputElement.val(newValue);
-            })
-        } else {
-            datatable.cell(rowIndex, columnIndex).data(newValue);
-        }
+            let st = arr.some(function (item) {
+                return item.index === rowIndex;
+            });
+            if (st) {
+                arr.forEach((item) => {
+                    datatable.cell(item.index, columnIndex).data(newValue);
+                    let inputElement = $(item.tr).find('th[data-colum-index=' + columnIndex + ']')
+                        .find('input[name=' + name + ']');
+                    inputElement.val(newValue);
+                })
+            } else {
+                datatable.cell(rowIndex, columnIndex).data(newValue);
+            }
         }
     });
 
@@ -274,10 +318,10 @@ $(document).ready(function () {
                         img: getImgByColor(mau),
                         kichCo: co,
                         maMauSac: mau,
-                        tenMau:"",
-                        giaGoc:"",
-                        giaBan:"",
-                        soLuong:"",
+                        tenMau: "",
+                        giaGoc: "",
+                        giaBan: "",
+                        soLuong: "",
                     };
                     arrData.push(newData);
                 }
@@ -291,37 +335,50 @@ $(document).ready(function () {
     });
 
 
-    $(document).on('click', '.remove-item', function () {
-        let mau = $(this).data('color-code-remove');
-        let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
-        if (size > 1) {
-            let num = $(this).closest('tr').find('th.row-show-img').length;
-            if (num === 1) {
-                let th = $(this).closest('tr').find('th.row-show-img');
-                let rowspan = th.attr('rowspan')
-                let arrElement = $('.id-version-shoe[data-color-code-id=' + mau + ']');
-                th.attr('rowspan', Number(rowspan) - 1);
-                arrElement[1].after(th[0]);
-                let rowIndex = datatable.row($(this).closest('tr')).index();
-                datatable.row(rowIndex).remove().draw();
-                $(this).closest('tr').remove();
-            } else {
-                let th = $('th.row-show-img[data-color=' + mau + ']');
-                console.log(th)
-                let rowspan = th.attr('rowspan')
-                th.attr('rowspan', Number(rowspan) - 1);
-                let rowIndex = datatable.row($(this).closest('tr')).index();
-                datatable.row(rowIndex).remove().draw();
-                $(this).closest('tr').remove();
+    $(document).on('click', '.remove-item', async function () {
+        Swal.fire({
+            title: "Bạn chắc chứ?",
+            text: "Sau khi xóa sẽ không thể khôi phục lại!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Hủy",
+            confirmButtonText: "Xác Nhận"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let mau = $(this).data('color-code-remove');
+                let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
+                if (size > 1) {
+                    let num = $(this).closest('tr').find('th.row-show-img').length;
+                    if (num === 1) {
+                        let th = $(this).closest('tr').find('th.row-show-img');
+                        let rowspan = th.attr('rowspan')
+                        let arrElement = $('.id-version-shoe[data-color-code-id=' + mau + ']');
+                        th.attr('rowspan', Number(rowspan) - 1);
+                        arrElement[1].after(th[0]);
+                        let rowIndex = datatable.row($(this).closest('tr')).index();
+                        datatable.row(rowIndex).remove().draw();
+                        $(this).closest('tr').remove();
+                    } else {
+                        let th = $('th.row-show-img[data-color=' + mau + ']');
+                        console.log(th)
+                        let rowspan = th.attr('rowspan')
+                        th.attr('rowspan', Number(rowspan) - 1);
+                        let rowIndex = datatable.row($(this).closest('tr')).index();
+                        datatable.row(rowIndex).remove().draw();
+                        $(this).closest('tr').remove();
+                    }
+
+                } else {
+                    let rowIndex = datatable.row($(this).closest('tr')).index();
+                    datatable.row(rowIndex).remove().draw();
+                    $(this).closest('tr').remove();
+                }
+                ToastSuccess("Thành Công !");
             }
-
-        } else {
-            let rowIndex = datatable.row($(this).closest('tr')).index();
-            datatable.row(rowIndex).remove().draw();
-            $(this).closest('tr').remove();
-        }
+        });
     });
-
 
 
     $('#addVariantsContainer').on('change', '.formAddImg', async function (e) {
@@ -329,8 +386,14 @@ $(document).ready(function () {
         const files = e.target.files;
         let img = $(this).parent().find('.img-shoe')[0];
         let snip = $(this).parent().find('.spinner-border')[0];
-        $(snip).removeClass('d-none');
+        const imgUrlSrc = $(img).attr('src')
+        if (imgUrlSrc!== '/assets/cms/img/400x400/img2.jpg'){
+            let Object = {path: null,url:imgUrlSrc}
+            fileImgCurent.push(Object);
+        }
         $(img).addClass('d-none')
+        $(snip).removeClass('d-none');
+        $(snip).parent().removeClass('d-none');
         let del = $(this).parent().find('.btn-del-img')[0];
         const file = renameFile(files[0]);
         const tempUrl = URL.createObjectURL(file);
@@ -339,14 +402,14 @@ $(document).ready(function () {
         try {
             const snapshot = await uploadBytes(storageRef, file);
             const url = await getDownloadURL(snapshot.ref);
-            fileInStorages.push(storageRef._location.path_);
-            console.log(storageRef)
-            sessionStorage.setItem('fileImg', JSON.stringify(fileInStorages));
+            let imgOJ = {path: storageRef._location.path_, url: url}
+            fileInStorages.push(imgOJ);
+            console.log(fileInStorages)
             let rowIndex = datatable.row($(this).closest('tr')).index();
             let ColumnIndex = 1;
             let mauSacToUpdate = $(this).closest('th').attr('data-color');
             datatable.cell(rowIndex, ColumnIndex).data(url);
-            datatable.rows().eq(0).each(function(index) {
+            datatable.rows().eq(0).each(function (index) {
                 var currentMauSac = datatable.cell(index, 3).data();
                 if (currentMauSac === mauSacToUpdate) {
                     datatable.cell(index, 1).data(url);
@@ -356,21 +419,29 @@ $(document).ready(function () {
             img.src = url;
             $(snip).addClass('d-none')
             $(img).removeClass('d-none');
+            $(snip).parent().addClass('d-none');
         } catch (error) {
             console.error(error);
         }
         $(del).on('click', async function () {
             try {
                 await deleteObject(storageRef);
-                fileInStorages.splice(0, fileInStorages.indexOf(storageRef));
-                sessionStorage.setItem('fileImg', JSON.stringify(fileInStorages));
+                for (let i = 0; i < fileInStorages.length; i++) {
+                    if (fileInStorages[i].path === storageRef._location.path_) {
+                        fileInStorages.splice(i, 1);
+                        break;
+                    }
+                }
                 console.log("Deleted", storageRef.name);
-                img.src = 'https://anhtuanlc.online/assets/imgs/img2.jpg';
+                img.src = '/assets/cms/img/400x400/img2.jpg';
             } catch (error) {
                 console.error(error);
             }
         });
     });
+$('.btn-del-img').on('click',function () {
+    console.log(this);
+})
     function containsLetter(str) {
         return /[a-zA-Z]/.test(str);
     }
@@ -441,7 +512,7 @@ $(document).ready(function () {
         let message = '';
         let check = true;
         for (let i = 0; i < product_details.length; i++) {
-            if (containsLetter(product_details[i].id)){
+            if (containsLetter(product_details[i].id)) {
                 product_details[i].id = 0;
             }
             if (product_details[i].img == '/assets/cms/img/400x400/img2.jpg') {
@@ -461,12 +532,12 @@ $(document).ready(function () {
                 break;
             }
             if (convertToNumber(product_details[i].giaBan) < 0) {
-                message = "Vui lòng nhập của Cỡ :"+product_details[i].kichCo+" Màu :"+product_details[i].maMauSac;
+                message = "Vui lòng nhập của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
                 check = false;
                 break;
             }
             if (convertToNumber(product_details[i].giaGoc) < 0) {
-                message = "Vui lòng nhập giá gốc của Cỡ :"+product_details[i].kichCo+" Màu :"+product_details[i].maMauSac;
+                message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
                 check = false;
                 break;
             }
@@ -490,27 +561,20 @@ $(document).ready(function () {
                     coGiay: coGiay,
                     moTa: mota,
                     muiGiay: muiGiay,
-                    giaNhap:100,
+                    giaNhap: 100,
                     giaGoc: giaGoc,
                     sales: sales,
                     trangThai: trangThai,
                     product_details: JSON.stringify(product_details)
                 }, success: (data, status, xhr) => {
-                    ToastSuccess('OKE')
-                    let files = JSON.parse(sessionStorage.getItem('fileImg'));
-                    product_details.forEach((pro) => {
-                        console.log("pro")
-                        console.log(pro)
-                        if (pro.img.length > 0) {
-                            files.forEach((storage) => {
-                                console.log("storage")
-                                console.log(storage.getName())
-                                if (pro.img == storage.url) {
-                                    console.log("Bằng")
-                                }
-                            })
-                        }
-                    })
+                    ToastSuccess('Lưu Thành Công !')
+                    fileInStorages = fileInStorages.filter((storage) => {
+                        return !product_details.some((pro) => pro.img === storage.url);
+                    });
+                    let arr = fileInStorages.concat(fileImgCurent);
+                    ClearMultipleImages(arr).then(r =>{
+                        console.log(r)
+                    } );
                 }, error: (e) => {
                     ToastError(e.getResponseHeader('error'));
                 }
@@ -519,19 +583,6 @@ $(document).ready(function () {
             ToastError(message)
         )
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 })

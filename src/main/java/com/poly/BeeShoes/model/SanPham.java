@@ -56,7 +56,7 @@ public class SanPham {
     int soLuong;
 
     @Transient
-    BigDecimal giaNhap;
+    BigDecimal giaBan;
     @Transient
     boolean sale;
     @Transient

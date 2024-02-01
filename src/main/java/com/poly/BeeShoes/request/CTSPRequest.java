@@ -1,13 +1,23 @@
 package com.poly.BeeShoes.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.BindParam;
-import org.springframework.web.bind.annotation.RequestParam;
 
+/*
+* sanPham: 3
+theLoai: 3
+thuongHieu: 2
+chatLieu: 1
+deGiay: 1
+coGiay: 2
+moTa: <p>ssssss</p>
+muiGiay: 1
+giaNhap: 100
+sales: false
+trangThai: true
+* */
 @Getter
 @Setter
 public class CTSPRequest {
@@ -33,12 +43,6 @@ public class CTSPRequest {
     @NotNull(message = "Mũi Giày không được để trống !")
     Long muiGiay;
 
-    @NotBlank(message = "Giá Nhập không được trống !")
-    String giaNhap;
-    @NotBlank(message = "Giá Nhập không được trống !")
-    String giaBan;
-    @NotBlank(message = "Giá Gốc được trống !")
-    String giaGoc;
     @NotBlank(message = "Mô Tả được trống !")
     String moTa;
 
@@ -61,8 +65,6 @@ public class CTSPRequest {
                 ", deGiay=" + deGiay +
                 ", coGiay=" + coGiay +
                 ", muiGiay=" + muiGiay +
-                ", giaNhap='" + giaNhap + '\'' +
-                ", giaGoc='" + giaGoc + '\'' +
                 ", moTa='" + moTa + '\'' +
                 ", sales=" + sales +
                 ", trangThai=" + trangThai +

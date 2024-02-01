@@ -1,17 +1,23 @@
 
 function Toast(status, message) {
-    $('#systoast').toast({delay: 5000, autohide: true, animation: true,});
-    $('#systoast').toast('show');
-    $('#system-toast-mesage').text(message);
-    if (status == 'success') {
-        $('#img-toast').attr('src', '/assets/cms/img/icon/success.svg')
-        $('#toast-status').text("Thành Công !");
-    } else if (status == 'error') {
-        $('#img-toast').attr('src', '/assets/cms/img/icon/error.svg')
-        $('#toast-status').text("Thất Bại !");
-    } else {
-        $('#toast-status').text("Sai Giá trị status !");
-    }
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+        customClass: {
+            popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
+        }
+    });
+    Toast.fire({
+        icon: status,
+        title: message
+    });
 }
 
 function ToastSuccess(message) {
@@ -20,6 +26,27 @@ function ToastSuccess(message) {
 
 function ToastError(message) {
     Toast('error', message)
+}
+function Confirm() {
+    Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Sau khi xóa sẽ không thể khôi phục lại!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText:"Hủy",
+        confirmButtonText: "Xác Nhận"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            ToastSuccess("Thành Công !");
+            return true;
+        }else{
+            console.log(result)
+            return false;
+        }
+    });
+
 }
 
 function setFormSendData(url, name, id) {

@@ -48,12 +48,8 @@ public class SanPhamController {
         model.addAttribute("lstsanpham", sanPhamService.getAll());
         model.addAttribute("lstkichco", kichCoService.getAll());
         if (id != null) {
-            Gson gs = new Gson();
-            // chưa code ở fe
             SanPham sp = sanPhamService.getById(id);
             List<String> lst = sanPhamService.getListKichCo(id);
-            Map<String , Map<String, Long>> str = sanPhamService.getKichCoCountByMauSac(id);
-            System.out.println(str);
             if (sp==null){
                 model.addAttribute("errorSP", 1);
             }else{
