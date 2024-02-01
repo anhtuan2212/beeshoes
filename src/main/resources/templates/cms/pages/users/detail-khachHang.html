@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Title -->
-    <title>LightBee | Thêm nhân viên</title>
+    <title>LightBee | Khách hàng</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico">
     <!-- Font -->
@@ -20,11 +20,11 @@
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 
 <!-- ========== HEADER ========== -->
-<div th:replace="/cms/pages/_header.html"></div>
+<div th:replace="~{/cms/pages/_header.html}"></div>
 <!-- ========== END HEADER ========== -->
 
 <!-- ========== SIDEBAR ========== -->
-<div th:replace="/cms/pages/_sidebar.html"></div>
+<div th:replace="~{/cms/pages/_sidebar.html}"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
 
@@ -33,14 +33,15 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form th:action="@{/cms/update-khachHang/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}" class="js-step-form py-md-1" data-hs-step-form-options='{
+        <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}"
+              class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
                 "endSelector": "#addUserFinishBtn",
                 "isValidate": false
               }'>
             <div class="row justify-content-lg-center">
-                <div class="col-lg-8">
+                <div>
                     <!-- Step -->
                     <ul id="addUserStepFormProgress"
                         class="js-step-progress step step-sm step-icon-sm step step-inline step-item-between mb-3 mb-md-5">
@@ -49,7 +50,7 @@
                       "targetSelector": "#addUserStepProfile"
                     }'>
                                 <div class="step-content">
-                                    <span class="step-title">Thông tin</span>
+                                    <span class="step-title">Khách hàng</span>
                                 </div>
                             </a>
                         </li>
@@ -59,9 +60,9 @@
                     <!-- Content Step Form -->
                     <div id="addUserStepFormContent">
                         <!-- Card -->
-                        <div id="addUserStepProfile" class="card card-lg active">
+                        <div id="addUserStepProfile" class="active">
                             <!-- Body -->
-                            <div class="card-body">
+                            <div class="row">
                                 <!-- Form Group -->
                                 <!--                                <div class="row form-group">-->
                                 <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
@@ -98,169 +99,204 @@
                                 <!--                                </div>-->
                                 <!-- End Form Group -->
 
-                                <div class="col-6">
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="firstNameLabel" class="col-sm-3 col-form-label input-label">Họ tên
-                                            <i
-                                                    class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title="Displayed on public forums, such as Front."></i></label>
-
-                                        <div class="col-sm-9">
-                                            <div class="input-group input-group-sm-down-break">
-                                                <input type="text" class="form-control" name="firstName"
-                                                       id="firstNameLabel"
-                                                       placeholder="Nguyễn" aria-label="Nguyễn">
-                                                <input type="text" class="form-control" name="middleName"
-                                                       id="middleNameLabel"
-                                                       placeholder="Minh" aria-label="Minh">
-                                                <input type="text" class="form-control" name="lastName"
-                                                       id="lastNameLabel"
-                                                       placeholder="Thư" aria-label="Thư">
-                                            </div>
+                                <div class="col-lg-5">
+                                    <!-- Card -->
+                                    <div class="card mb-3 mb-lg-5">
+                                        <!-- Header -->
+                                        <div class="card-header">
+                                            <h4 class="card-header-title">Thông tin</h4>
                                         </div>
-                                    </div>
-                                    <!-- End Form Group -->
+                                        <!-- End Header -->
 
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="phoneLabel" class="col-sm-3 col-form-label input-label">Số điện
-                                            thoại</label>
+                                        <!-- Body -->
+                                        <div class="card-body">
+                                            <!-- Form Group -->
+                                            <div class="row form-group">
+                                                <label for="firstNameLabel"
+                                                       class="col-sm-4 col-form-label input-label">Họ
+                                                    tên
+                                                    <i
+                                                            class="tio-help-outlined text-body ml-1"
+                                                            data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="Displayed on public forums, such as Front."></i></label>
 
-                                        <div class="col-sm-9">
-                                            <div class="input-group input-group-sm-down-break align-items-center">
-                                                <input type="text" class="js-masked-input form-control" name="phone"
-                                                       id="phoneLabel" placeholder="+x-xxx-xxx-xxx">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="ngaySinhLabel" class="col-sm-3 col-form-label input-label">Ngày
-                                            sinh</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="date" class="form-control" name="ngaySinh"
-                                                   id="ngaySinhLabel" placeholder="Htmlstream"
-                                                   aria-label="Htmlstream">
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label class="col-sm-3 col-form-label input-label">Trạng thái</label>
-                                        <!-- Select -->
-                                        <div class="col-sm-9">
-                                            <select class="form-control">
-                                                <option th:value="true" selected="">Hoạt động</option>
-                                                <option th:value="false">Ngừng hoạt động</option>
-                                            </select>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="row">
-                                        <label class="col-sm-3 col-form-label input-label">Giới tính</label>
-
-                                        <div class="col-sm-9">
-                                            <div class="input-group input-group-sm-down-break">
-                                                <!-- Custom Radio -->
-                                                <div class="form-control">
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input"
-                                                               name="userAccountTypeRadio"
-                                                               id="userAccountTypeRadio1"
-                                                               th:value="true">
-                                                        <label class="custom-control-label"
-                                                               for="userAccountTypeRadio1">Nam</label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group input-group-sm-down-break">
+                                                        <input type="text" class="form-control" name="firstName"
+                                                               id="firstNameLabel"
+                                                               placeholder="Nguyễn" aria-label="Nguyễn"
+                                                               th:field="*{ho}">
+                                                        <input type="text" class="form-control" name="middleName"
+                                                               id="middleNameLabel"
+                                                               placeholder="Minh" aria-label="Minh"
+                                                               th:field="*{tenDem}">
+                                                        <input type="text" class="form-control" name="lastName"
+                                                               id="lastNameLabel"
+                                                               placeholder="Thư" aria-label="Thư" th:field="*{ten}">
                                                     </div>
                                                 </div>
-                                                <!-- End Custom Radio -->
+                                            </div>
+                                            <!-- End Form Group -->
 
-                                                <!-- Custom Radio -->
-                                                <div class="form-control">
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input"
-                                                               name="userAccountTypeRadio"
-                                                               id="userAccountTypeRadio2"
-                                                               th:value="false">
-                                                        <label class="custom-control-label"
-                                                               for="userAccountTypeRadio2">Nữ</label>
+                                            <!-- Form Group -->
+                                            <div class="row form-group">
+                                                <label for="phoneLabel" class="col-sm-4 col-form-label input-label">Số
+                                                    điện thoại</label>
+
+                                                <div class="col-sm-8">
+                                                    <div class="input-group input-group-sm-down-break align-items-center">
+                                                        <input type="text" class="js-masked-input form-control"
+                                                               name="phone"
+                                                               id="phoneLabel" placeholder="+x-xxx-xxx-xxx"
+                                                               th:field="*{sdt}">
                                                     </div>
                                                 </div>
-                                                <!-- End Custom Radio -->
+                                            </div>
+
+                                            <!-- Form Group -->
+                                            <div class="row form-group">
+                                                <label for="ngaySinhLabel"
+                                                       class="col-sm-4 col-form-label input-label">Ngày sinh</label>
+
+                                                <div class="col-sm-8">
+                                                    <input type="date" class="form-control" name="ngaySinh"
+                                                           id="ngaySinhLabel" placeholder="Htmlstream"
+                                                           aria-label="Htmlstream" th:field="*{ngaySinh}">
+                                                </div>
+                                            </div>
+                                            <!-- End Form Group -->
+
+                                            <!-- Form Group -->
+                                            <div class="row form-group">
+                                                <label class="col-sm-4 col-form-label input-label">Trạng thái</label>
+                                                <!-- Select -->
+                                                <div class="col-sm-8">
+                                                    <select class="form-control" th:field="*{trangThai}">
+                                                        <option th:value="true" selected="">Hoạt động</option>
+                                                        <option th:value="false">Ngừng hoạt động</option>
+                                                    </select>
+                                                    <!-- End Select -->
+                                                </div>
+                                            </div>
+                                            <!-- End Form Group -->
+
+                                            <!-- Form Group -->
+                                            <div class="row form-group">
+                                                <label class="col-sm-4 col-form-label input-label">Giới tính</label>
+
+                                                <div class="col-sm-8">
+                                                    <div class="input-group input-group-sm-down-break">
+                                                        <!-- Custom Radio -->
+                                                        <div class="form-control">
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" class="custom-control-input"
+                                                                       name="userAccountTypeRadio"
+                                                                       id="userAccountTypeRadio1"
+                                                                       th:field="*{gioiTinh}"
+                                                                       th:value="true">
+                                                                <label class="custom-control-label"
+                                                                       for="userAccountTypeRadio1">Nam</label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Custom Radio -->
+
+                                                        <!-- Custom Radio -->
+                                                        <div class="form-control">
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" class="custom-control-input"
+                                                                       name="userAccountTypeRadio"
+                                                                       id="userAccountTypeRadio2"
+                                                                       th:field="*{gioiTinh}"
+                                                                       th:value="false">
+                                                                <label class="custom-control-label"
+                                                                       for="userAccountTypeRadio2">Nữ</label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Custom Radio -->
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End Form Group -->
                                 </div>
+                                <!-- End Form Group -->
 
-                                <div class="col-6">
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="soNhaLabel" class="col-sm-3 col-form-label input-label">Số nhà</label>
+                                <div class="col-lg-7">
+                                    <!-- Card -->
+                                    <div class="card mb-3 mb-lg-5">
+                                        <!-- Header -->
+                                        <div class="card-header">
+                                            <h4 class="card-header-title">Địa chỉ</h4>
+                                        </div>
+                                        <!-- End Header -->
+                                        <!-- Body -->
+                                        <div class="card-body row">
+                                            <div class="col-sm-6">
+                                                <!-- Form Group -->
+                                                <div class="row form-group">
+                                                    <label for="soNhaLabel"
+                                                           class="col-sm-5 col-form-label input-label">Số nhà</label>
 
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="addressLine1"
-                                                   id="soNhaLabel" placeholder="Your address"
-                                                   aria-label="Your address">
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="addressLine1"
+                                                               id="soNhaLabel" placeholder="Your address"
+                                                               aria-label="Your address" th:field="*{diaChiMacDinh.soNha}">
+                                                    </div>
+                                                    <!-- End Form Group -->
+                                                </div>
+                                                <!-- Form Group -->
+                                                <div class="row form-group">
+                                                    <label for="phuongXaLabel"
+                                                           class="col-sm-5 col-form-label input-label">Phường/Xã</label>
+
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="addressLine1"
+                                                               id="phuongXaLabel" placeholder="Your address"
+                                                               aria-label="Your address" th:field="*{diaChiMacDinh.phuongXa}">
+                                                    </div>
+                                                </div>
+                                                <!-- End Form Group -->
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <!-- Form Group -->
+                                                <div class="row form-group">
+                                                    <label for="quanHuyenLabel"
+                                                           class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
+
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="addressLine1"
+                                                               id="quanHuyenLabel" placeholder="Your address"
+                                                               aria-label="Your address" th:field="*{diaChiMacDinh.quanHuyen}">
+                                                    </div>
+                                                </div>
+                                                <!-- End Form Group -->
+
+                                                <!-- Form Group -->
+                                                <div class="row form-group">
+                                                    <label for="tinhTPLabel"
+                                                           class="col-sm-5 col-form-label input-label">Tỉnh/Thành phố</label>
+
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="addressLine1"
+                                                               id="tinhTPLabel" placeholder="Your address"
+                                                               aria-label="Your address" th:field="*{diaChiMacDinh.tinhThanhPho}">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="phuongXaLabel"
-                                               class="col-sm-3 col-form-label input-label">Phường/Xã</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="addressLine1"
-                                                   id="phuongXaLabel" placeholder="Your address"
-                                                   aria-label="Your address">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="card-footer d-sm-flex align-items-sm-center">
+                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
                                         </div>
                                     </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="quanHuyenLabel"
-                                               class="col-sm-3 col-form-label input-label">Quận/Huyện</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="addressLine1"
-                                                   id="quanHuyenLabel" placeholder="Your address"
-                                                   aria-label="Your address">
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="row form-group">
-                                        <label for="tinhTPLabel" class="col-sm-3 col-form-label input-label">Tỉnh/Thành
-                                            phố</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="addressLine1"
-                                                   id="tinhTPLabel" placeholder="Your address"
-                                                   aria-label="Your address">
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
                                 </div>
-                            </div>
-                            <!-- End Body -->
-
-                            <div class="d-flex justify-content-center">
-                                <div class="card-footer d-sm-flex align-items-sm-center">
-                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                </div>
+                                <!-- End Form Group -->
                             </div>
                         </div>
+                        <!-- End Body -->
+
                     </div>
                 </div>
             </div>
@@ -801,6 +837,6 @@
         });
     });
 </script>
-<div th:replace="/cms/pages/_IE-suport.html"></div>
+<div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>
