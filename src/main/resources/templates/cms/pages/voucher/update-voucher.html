@@ -43,12 +43,12 @@
                 <div class="col-sm mb-2 mb-sm-0">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-no-gutter">
-                            <li style="color: #75b798" class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/product">Voucher</a>
+                            <li  class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/product">Voucher</a>
                             </li>
-                            <li style="color: #75b798" class="breadcrumb-item active" aria-current="page">Sửa Voucher</li>
+                            <li  class="breadcrumb-item active" aria-current="page">Sửa Voucher</li>
                         </ol>
                     </nav>
-                    <h1 class="page-header-title"  style="color: #75b798">Sửa Voucher</h1>
+                    <h1 class="page-header-title"  >Sửa Voucher</h1>
                 </div>
             </div>
             <form th:action="@{/cms/update-voucher/{id}(id=${List.id})}" method="post" th:object="${List}" >        <!-- End Row -->
@@ -131,7 +131,7 @@
 
                     </div>
                 </div>
-                <button  type="submit" class="btn btn-success">Sửa Voucher</button> </form>
+                <button  type="submit" class="btn btn-primary">Sửa Voucher</button> </form>
         </div> </div> </div>   <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->

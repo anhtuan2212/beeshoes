@@ -48,7 +48,7 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title"  style="color: #75b798">VOUCHER </h1>
+                    <h1 class="page-header-title" >VOUCHER </h1>
 
                 </div>
 
@@ -56,7 +56,7 @@
             </div>
             <!-- End Row -->
             <div style="margin-top:50px ">  <hr>
-                <h2 class="page-header-title"  style="color: #75b798">Bộ Lọc </h2>
+                <h2 class="page-header-title"  >Bộ Lọc </h2>
 
             </div>
             <div  style="margin-bottom:20px " class="card-header">
@@ -70,7 +70,7 @@
                             <form >
                                 <div class="input-group ">
                                     <input style="width: 150px" type="text" name="key" class="form-control " placeholder="Mã Voucher,Tên Voucher, Loại Voucher,Điều kiện" aria-label="Search" aria-describedby="search-addon" />
-                                    <button class="btn btn-success" type="submit">Tìm kiếm</button>
+                                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
                                     </span>
 
                                 </div>
@@ -79,20 +79,30 @@
                             <!-- End Search -->
                         </form>
                     </div>
-                    <label style="margin-left: 40px " class="input-label">Loại Voucher</label>
-                    <select style="padding-left: 40px; width: 100px "  class="form-select form-control  "  th:name="loaiVoucher" aria-label="Default select example">
-                        <option >$</option>
-                        <option >%</option>
+                    <label style="margin-left: 380px " class="input-label">Trạng thái</label>
+                    <select style="margin-right: 50px; width: 400px  " class="form-select form-control " th:name="trangThai" aria-label="Default select example">
+                        <option  >Tất cả</option>
+                        <option  >Đang hoạt động</option>
+                        <option  >Đang hoạt động</option>
                     </select>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                        <label class="form-check-label" for="inlineRadio1">Đang hoạt động</label>
-                    </div>
+                    <div style="margin-left: 10px;margin-top: 30px;margin-right: 20px " >
                     <div  class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                        <label class="form-check-label" for="inlineRadio2">Ngừng hoạt động</label>
+                        <label style="width: 150px;margin-right: 20px "   class="form-check-label" >Ngày bắt đầu</label>
+                        <input  style="margin-right: 20px "  type="datetime-local" class="form-control money-input-mask" th:name="ngayBatDau"
+                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label=""  >
                     </div>
-
+                    <div  style="margin-right: 20px "  class="form-check form-check-inline">
+                        <label style="width: 150px; margin-right: 20px "   class="form-check-label" >Ngày kết thúc</label>
+                        <input  style="margin-right: 10px " type="datetime-local" class="form-control money-input-mask" th:name="ngayBatDau"
+                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label="" >
+                    </div>
+                </div>
+                    <label style="margin-top: 30px"  class="input-label">Số lượng</label>
+                    <select style="margin-right: 50px; width: 400px;margin-top: 30px "  class="form-select form-control  "  th:name="trangThai" aria-label="Default select example">
+                        <option  >Tất cả</option>
+                        <option >Còn số lượng</option>
+                        <option >Hết số lượng</option>
+                    </select>
                 </div>
                 <!-- End Row -->
             </div>
