@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="favicon.ico">
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
@@ -45,100 +45,93 @@
                         <ol class="breadcrumb breadcrumb-no-gutter">
                             <li style="color: #75b798" class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/product">Voucher</a>
                             </li>
-                            <li style="color: #75b798" class="breadcrumb-item active" aria-current="page">Thêm Voucher</li>
+                            <li style="color: #75b798" class="breadcrumb-item active" aria-current="page">Sửa Voucher</li>
                         </ol>
                     </nav>
-                    <h1 class="page-header-title"  style="color: #75b798">Thêm Voucher</h1>
+                    <h1 class="page-header-title"  style="color: #75b798">Sửa Voucher</h1>
                 </div>
             </div>
-            <form class="form" id="form-1" th:action="@{/cms/add}" method="post" th:object="${list}" onsubmit="return formvalidate()">        <!-- End Row -->
-                    <!-- End Toggle Switch -->
+            <form th:action="@{/cms/update-voucher/{id}(id=${List.id})}" method="post" th:object="${List}" >        <!-- End Row -->
+                <!-- End Toggle Switch -->
 
-<div class="row">
-    <div  class="col-lg-5">
-            <!-- Form Group -->
-            <div class="form-group">
-                <label class="input-label">Tên Voucher</label>
-                <div class="input-group">
-                    <input type="text" th:name="ten" class="form-control money-input-mask error" id="ten"
-                           placeholder="Vui lòng nhập tên Voucher." aria-label="">
+                <div class="row">
+                    <div  class="col-lg-5">
+                        <!-- Form Group -->
+                        <input type="hidden" th:field="*{id}" class="form-control money-input-mask"
+                        >
+                        <input type="hidden" th:field="*{ma}" class="form-control money-input-mask"
+                        >
+                        <div class="form-group">
+                            <label  class="input-label">Tên Voucher</label>
+                            <div class="input-group">
+                                <input type="text" th:field="*{ten}" class="form-control money-input-mask"
+                                      >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Loại Voucher</label>
+                            <select class="form-select form-control  "  th:name="loaiVoucher" aria-label="Default select example">
+                                <option selected>Loại Voucher</option>
+                                <option value="$">$</option>
+                                <option value="%">%</option>
+                            </select>
+                        </div>
 
+                        <div class="form-group">
+                            <label class="input-label">Giá trị tiền mặt</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control money-input-mask" th:field="*{giaTriTienMat}"
+                                       placeholder="Vui lòng nhập giá trị tiền mặt." aria-label="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Giá trị phần trăm</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control money-input-mask" th:field="*{giaTriPhanTram}"
+                                       placeholder="Vui lòng nhập giá trị phần trăm." aria-label="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Số lượng</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control money-input-mask" th:field="*{soLuong}"
+                                       placeholder="Vui lòng nhập số lượng." aria-label="">
+                            </div>
+                        </div>
+                    </div>
+                    <div  class="col-lg-5 mx-5">
+                        <div class="form-group">
+                            <label class="input-label">Giá trị tối thiểu </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control money-input-mask" th:field="*{giaTriToiDa}"
+                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Ngày bắt đầu</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control money-input-mask" th:field="*{ngayBatDau}"
+                                       placeholder="Vui lòng nhập ngày bắt đầu." aria-label="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Ngày kết thúc</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control money-input-mask" th:field="*{ngayKetThuc}"
+                                       placeholder="Vui lòng nhập ngày kết thúc." aria-label="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Điều kiện</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control money-input-mask" th:field="*{dieuKien}"
+                                       placeholder="Vui lòng nhập điều kiện." aria-label="">
+                            </div>
+                        </div>
 
-                </div> <i id="ten_emty" style="color: red;display: none">Vui lòng nhập vào tên</i>
-            </div>
-            <div class="form-group">
-                <label class="input-label">Loại Voucher</label>
-                <select class="form-select form-control  " th:name="loaiVoucher" id="loai" aria-label="Default select example">
-                    <option value="">Loại Voucher</option>
-                    <option value="$">$</option>
-                    <option value="%">%</option>
-                </select>
-                <i id="loai_emty" style="color: red;display: none">Vui lòng chọn loại voucher</i>
-            </div>
-
-            <div class="form-group">
-                <label class="input-label">Giá trị tiền mặt</label>
-                <div class="input-group">
-                    <input type="number" class="form-control money-input-mask" th:name="giaTriTienMat"
-                           placeholder="Vui lòng nhập giá trị tiền mặt." aria-label=""  id="tienmat">
-
-                </div> <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt</i>
-            </div>
-            <div class="form-group">
-                <label class="input-label">Giá trị phần trăm</label>
-                <div class="input-group">
-                    <input type="number" class="form-control money-input-mask" th:name="giaTriPhanTram"
-                           placeholder="Vui lòng nhập giá trị phần trăm." aria-label=""  id="phantram">
-
-                </div>  <i id="phantram_emty" style="color: red;display: none">Vui lòng nhập vào giá trị phần trăm</i>
-            </div>
-        <div class="form-group">
-            <label class="input-label">Số lượng</label>
-            <div class="input-group">
-                <input type="number" class="form-control money-input-mask" th:name="soLuong"
-                       placeholder="Vui lòng nhập số lượng." aria-label=""  id="soluong">
-
-            </div><i id="soluong_emty" style="color: red;display: none">Vui lòng nhập vào số lượng</i>
-        </div>
-    </div>
-    <div  class="col-lg-5 mx-5">
-        <div class="form-group">
-            <label class="input-label">Giá trị tối thiểu </label>
-            <div class="input-group">
-                <input type="number" class="form-control money-input-mask" th:name="giaTriToiDa"
-                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu">
-
-            </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu</i>
-        </div>
-        <div class="form-group">
-            <label class="input-label">Ngày bắt đầu</label>
-            <div class="input-group">
-                <input type="date" class="form-control money-input-mask" th:name="ngayBatDau"
-                       placeholder="Vui lòng nhập ngày bắt đầu." aria-label=""  id="batdau">
-
-            </div>   <i id="batdau_emty" style="color: red;display: none">Vui lòng chọn ngày bắt đầu</i>
-        </div>
-        <div class="form-group">
-            <label class="input-label">Ngày kết thúc</label>
-            <div class="input-group">
-                <input type="date" class="form-control money-input-mask" th:name="ngayKetThuc"
-                       placeholder="Vui lòng nhập ngày kết thúc." aria-label=""  id="ketthuc">
-
-            </div> <i id="ketthuc_emty" style="color: red;display: none">Vui lòng chọn ngày kết thúc phải lớn hơn ngày bắt đầu</i>
-            <i id="ketthuc1_emty" style="color: red;display: none">Vui lòng chọn ngày kết thúc phải lớn hơn ngày bắt đầu</i>
-        </div>
-        <div class="form-group">
-            <label class="input-label">Điều kiện</label>
-            <div class="input-group">
-                <input type="text" class="form-control money-input-mask" th:name="dieuKien"
-                       placeholder="Vui lòng nhập điều kiện." aria-label=""  id="dieukien">
-
-            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào điều kiện</i>
-        </div>
-
-</div>
-    </div>
-                    <button  type="submit" class="btn btn-success">Thêm Voucher</button> </form>
+                    </div>
+                </div>
+                <button  type="submit" class="btn btn-success">Sửa Voucher</button> </form>
         </div> </div> </div>   <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
@@ -761,84 +754,13 @@
 
 <!-- JS Implementing Plugins -->
 <script src="/assets/cms/js/vendor.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+
 <script src="/assets/cms/js/custom-firebase.js" type="module"></script>
 <script src="/assets/cms/js/custom.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
-    function formvalidate(){
-        var result=true;
-        var ten = document.getElementById("ten").value;
-        var tienmat = document.getElementById("tienmat").value;
-        var phantram = document.getElementById("phantram").value;
-        var toithieu = document.getElementById("toithieu").value;
-        var batdau = document.getElementById("batdau").value;
-        var ketthuc = document.getElementById("ketthuc").value;
-        var dieukien = document.getElementById("dieukien").value;
-        var soluong = document.getElementById("soluong").value;
-        var loai = document.getElementById("loai").value;
-       if(ten.length == 0){
-           document.getElementById("ten_emty").style.display="block";
-           result=false;
-       }else{
-           document.getElementById("ten_emty").style.display="none";
-       }
-        if(soluong.length == 0){
-            document.getElementById("soluong_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("soluong_emty").style.display="none";
-        } if(tienmat.length == 0){
-            document.getElementById("tienmat_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("tienmat_emty").style.display="none";
-        }
-        if(phantram.length == 0){
-            document.getElementById("phantram_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("phantram_emty").style.display="none";
-        }
-        if(toithieu.length == 0){
-            document.getElementById("toithieu_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("toithieu_emty").style.display="none";
-        }
-        if(batdau.length == 0){
-            document.getElementById("batdau_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("batdau_emty").style.display="none";
-        }
-        if(ketthuc.length == 0 ){
-            document.getElementById("ketthuc_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("ketthuc_emty").style.display="none";
-        }if( ketthuc < batdau){
-            document.getElementById("ketthuc1_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("ketthuc1_emty").style.display="none";
-        }
-        if(dieukien.length == 0){
-            document.getElementById("dieukien_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("dieukien_emty").style.display="none";
-        }
-        if(loai.length == ""){
-            document.getElementById("loai_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("loai_emty").style.display="none";
-        }
-        return result;
-    }
 
     $(document).on('ready', function () {
         // ONLY DEV
