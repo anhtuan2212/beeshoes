@@ -29,6 +29,11 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
+    public ThuongHieu getByTen(String ten) {
+        return thuongHieuRepository.getFirstByTen(ten);
+    }
+
+    @Override
     public List<ThuongHieu> getAll() {
         return thuongHieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }

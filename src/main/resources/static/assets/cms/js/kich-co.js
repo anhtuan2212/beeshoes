@@ -252,7 +252,7 @@ $(document).on('ready', function () {
             return;
         }
         $.ajax({
-            url: '/api/them-the-loai',
+            url: '/api/them-kich-co',
             type: 'POST',
             data: {
                 id: id,
@@ -334,12 +334,16 @@ function formatNumber(num) {
 }
 
 function convertTime(time) {
-    var dateObject = new Date(time);
-    var year = dateObject.getFullYear();
-    var month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
-    var day = ('0' + dateObject.getDate()).slice(-2);
-    var formattedDate = day + '-' + month + '-' + year;
-    return formattedDate;
+
+    if (time!==null){
+        var dateObject = new Date(time);
+        var year = dateObject.getFullYear();
+        var month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
+        var day = ('0' + dateObject.getDate()).slice(-2);
+        var formattedDate = day + '-' + month + '-' + year;
+        return formattedDate;
+    }
+return 'N/A';
 }
 
 function edit(element) {
@@ -397,7 +401,7 @@ function deleteCategory(element) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/xoa-the-loai",
+                url: "/api/xoa-kich-co",
                 type: "DELETE",
                 data: {
                     id: id
@@ -410,7 +414,7 @@ function deleteCategory(element) {
                 error: function (xhr, status, error) {
                     let st = xhr.getResponseHeader('status');
                     if (st == "constraint") {
-                        ToastError('Thể Loại được gắn với sản phẩm.');
+                        ToastError('Kích cỡ được gắn với sản phẩm.');
                     } else {
                         console.error("Delete request failed:", status, error);
                         ToastError('Lỗi !, Vui lòng thử lại sau.');

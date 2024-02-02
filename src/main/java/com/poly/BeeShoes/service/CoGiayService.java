@@ -7,6 +7,7 @@ import java.util.List;
 public interface CoGiayService {
     CoGiay save(CoGiay coGiay);
     CoGiay getById(Long id);
+    CoGiay getByTen(String ten);
     List<CoGiay> getAll();
     boolean delete(Long id);
     boolean existsByTen(String ten);

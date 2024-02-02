@@ -20,7 +20,12 @@ public class TheLoaiServiceImpl implements TheLoaiService {
 
     @Override
     public TheLoai getById(Long id) {
-        return theLoaiRepository.findById(id).get();
+        return theLoaiRepository.getById(id);
+    }
+
+    @Override
+    public TheLoai getByTen(String ten) {
+        return theLoaiRepository.getFirstByTen(ten);
     }
 
     @Override

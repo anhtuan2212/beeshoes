@@ -31,8 +31,12 @@
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
-
-
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        #dataInTable tr td:nth-child(2) {
+            padding-left: 0!important;
+        }
+    </style>
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
 </head>
@@ -137,7 +141,7 @@
                                     </div>
                                 </div>
                                 <input id="datatableSearch" type="search" class="form-control"
-                                       placeholder="Tìm kiếm thương hiệu." aria-label="Tìm kiếm thương hiệu.">
+                                       placeholder="Tìm kiếm." aria-label="Tìm kiếm.">
                             </div>
                             <!-- End Search -->
                         </form>
@@ -158,181 +162,6 @@
                                 </div>
                             </div>
                             <!-- End Datatable Info -->
-
-                            <!-- Unfold -->
-                            <div class="hs-unfold mr-2">
-                                <a class="js-hs-unfold-invoker btn btn-sm btn-white dropdown-toggle" href="javascript:;"
-                                   data-hs-unfold-options='{
-                         "target": "#usersExportDropdown",
-                         "type": "css-animation"
-                       }'>
-                                    <i class="tio-download-to mr-1"></i> Export
-                                </a>
-
-                                <div id="usersExportDropdown"
-                                     class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-sm-right">
-                                    <span class="dropdown-header">Options</span>
-                                    <a id="export-copy" class="dropdown-item" href="javascript:;">
-                                        <img class="avatar avatar-xss avatar-4by3 mr-2"
-                                             src="/assets/cms/svg/illustrations/copy.svg" alt="Image Description">
-                                        Copy
-                                    </a>
-                                    <a id="export-print" class="dropdown-item" href="javascript:;">
-                                        <img class="avatar avatar-xss avatar-4by3 mr-2"
-                                             src="/assets/cms/svg/illustrations/print.svg" alt="Image Description">
-                                        Print
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <span class="dropdown-header">Download options</span>
-                                    <a id="export-excel" class="dropdown-item" href="javascript:;">
-                                        <img class="avatar avatar-xss avatar-4by3 mr-2"
-                                             src="/assets/cms/svg/brands/excel.svg" alt="Image Description">
-                                        Excel
-                                    </a>
-                                    <a id="export-csv" class="dropdown-item" href="javascript:;">
-                                        <img class="avatar avatar-xss avatar-4by3 mr-2"
-                                             src="/assets/cms/svg/components/placeholder-csv-format.svg"
-                                             alt="Image Description">
-                                        .CSV
-                                    </a>
-                                    <a id="export-pdf" class="dropdown-item" href="javascript:;">
-                                        <img class="avatar avatar-xss avatar-4by3 mr-2"
-                                             src="/assets/cms/svg/brands/pdf.svg" alt="Image Description">
-                                        PDF
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- End Unfold -->
-
-                            <!-- Unfold -->
-                            <div class="hs-unfold">
-                                <a class="js-hs-unfold-invoker btn btn-sm btn-white" href="javascript:;"
-                                   data-hs-unfold-options='{
-                         "target": "#usersFilterDropdown",
-                         "type": "css-animation",
-                         "smartPositionOff": true
-                       }'>
-                                    <i class="tio-filter-list mr-1"></i> Filter <span
-                                        class="badge badge-soft-dark rounded-circle ml-1">2</span>
-                                </a>
-
-                                <div id="usersFilterDropdown"
-                                     class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-sm-right dropdown-card card-dropdown-filter-centered"
-                                     style="min-width: 22rem;">
-                                    <!-- Card -->
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-header-title">Bộ Lọc</h5>
-
-                                            <!-- Toggle Button -->
-                                            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary ml-2"
-                                               href="javascript:;" data-hs-unfold-options='{
-                              "target": "#usersFilterDropdown",
-                              "type": "css-animation",
-                              "smartPositionOff": true
-                             }'>
-                                                <i class="tio-clear tio-lg"></i>
-                                            </a>
-                                            <!-- End Toggle Button -->
-                                        </div>
-
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <small class="text-cap mb-2">Role</small>
-
-                                                    <div class="form-row">
-                                                        <div class="col">
-                                                            <!-- Checkbox -->
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input"
-                                                                       id="usersFilerCheck1" checked="">
-                                                                <label class="custom-control-label"
-                                                                       for="usersFilerCheck1">All</label>
-                                                            </div>
-                                                            <!-- End Checkbox -->
-                                                        </div>
-
-                                                        <div class="col">
-                                                            <!-- Checkbox -->
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input"
-                                                                       id="usersFilerCheck2">
-                                                                <label class="custom-control-label"
-                                                                       for="usersFilerCheck2">Employee</label>
-                                                            </div>
-                                                            <!-- End Checkbox -->
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-
-                                                <div class="form-row">
-                                                    <div class="col-sm form-group">
-                                                        <small class="text-cap mb-2">Position</small>
-
-                                                        <!-- Select -->
-                                                        <select class="js-select2-custom js-datatable-filter custom-select"
-                                                                size="1" style="opacity: 0;"
-                                                                data-target-column-index="2" data-hs-select2-options='{
-                                          "minimumResultsForSearch": "Infinity"
-                                        }'>
-                                                            <option value="">Any</option>
-                                                            <option value="Accountant">Accountant</option>
-                                                            <option value="Co-founder">Co-founder</option>
-                                                            <option value="Designer">Designer</option>
-                                                            <option value="Developer">Developer</option>
-                                                            <option value="Director">Director</option>
-                                                        </select>
-                                                        <!-- End Select -->
-                                                    </div>
-
-                                                    <div class="col-sm form-group">
-                                                        <small class="text-cap mb-2">Status</small>
-
-                                                        <!-- Select -->
-                                                        <select class="js-select2-custom js-datatable-filter custom-select"
-                                                                size="1" style="opacity: 0;"
-                                                                data-target-column-index="4" data-hs-select2-options='{
-                                          "minimumResultsForSearch": "Infinity"
-                                        }'>
-                                                            <option value="">Any status</option>
-                                                            <option value="Active"
-                                                                    data-option-template='<span class="legend-indicator bg-success"></span>Active'>
-                                                                Active
-                                                            </option>
-                                                            <option value="Pending"
-                                                                    data-option-template='<span class="legend-indicator bg-warning"></span>Pending'>
-                                                                Pending
-                                                            </option>
-                                                            <option value="Suspended"
-                                                                    data-option-template='<span class="legend-indicator bg-danger"></span>Suspended'>
-                                                                Suspended
-                                                            </option>
-                                                        </select>
-                                                        <!-- End Select -->
-                                                    </div>
-
-                                                    <div class="col-12 form-group">
-                                                        <small class="text-cap mb-2">Location</small>
-
-                                                    </div>
-                                                </div>
-                                                <!-- End Row -->
-
-                                                <a class="js-hs-unfold-invoker btn btn-block btn-primary"
-                                                   href="javascript:;" data-hs-unfold-options='{
-                                "target": "#usersFilterDropdown",
-                                "type": "css-animation",
-                                "smartPositionOff": true
-                               }'>Apply</a>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <!-- End Card -->
-                                </div>
-                            </div>
-                            <!-- End Unfold -->
                         </div>
                     </div>
                 </div>
@@ -388,11 +217,11 @@
                             </div>
                         </td>
                         <td class="table-column-pl-0">
-                            <h5 class="text-hover-primary mb-0" href="javascript:;" th:text="${tl.getTen()}">
+                            <h5 class="text-hover-primary mb-0" th:attr="data-id=${tl.getId()}" href="javascript:;" th:text="${tl.getTen()}">
                             </h5>
                         </td>
-                        <td th:text="${tl.getNgayTao()==null?'N/A':#dates.format(tl.getNgayTao(), 'HH:mm | dd-MM-yyyy')}"></td>
-                        <td th:text="${tl.getNgaySua()==null?'N/A':#dates.format(tl.getNgaySua(), 'HH:mm | dd-MM-yyyy')}"></td>
+                        <td th:text="${tl.getNgayTao()==null?'N/A':#dates.format(tl.getNgayTao(), 'dd-MM-yyyy')}"></td>
+                        <td th:text="${tl.getNgaySua()==null?'N/A':#dates.format(tl.getNgaySua(), 'dd-MM-yyyy')}"></td>
                         <td>
                             <th:block th:if="${tl.getNguoiTao() != null}">
                                 <a href="javascript:;" th:text="${tl.getNguoiTao().getNhanVien().getMaNhanVien()}">N/A</a>
@@ -415,12 +244,12 @@
                                 <span class="legend-indicator bg-success"></span>Hiển Thị
                             </th:block>
                             <th:block th:if="${tl.isTrangThai()==false}">
-                                <span class="legend-indicator bg-danger"></span>Ẩn
+                                <span class="legend-indicator bg-danger"></span>Không Hiển Thị
                             </th:block>
                         </td>
                         <td>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal"
-                               data-target="#editUserModal" th:data-name="${tl.ten}" th:data-id="${tl.id}" onclick="edit(this)">
+                               data-target="#editUserModal" th:data-status="${tl.isTrangThai() == true?1:0}"  th:data-name="${tl.ten}" th:data-id="${tl.id}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-white btn-delete" th:data-id="${tl.id}" onclick="deleteCategory(this)" href="javascript:;">
@@ -482,31 +311,6 @@
     <div th:replace="~{/cms/pages/_footer.html}"></div>
     <!-- End Footer -->
 </main>
-<!-- ========== END MAIN CONTENT ========== -->
-
-<!-- ========== SECONDARY CONTENTS ========== -->
-<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-    <!-- Position it -->
-    <div style="position: absolute; top: 0; right: 0;">
-        <!-- Then put toasts within -->
-        <div id="systoast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
-             style="position: fixed; top: 20px; right: 20px; z-index: 9999;width: 300px;">
-            <div class="toast-header">
-                <img class="avatar avatar-sm avatar-circle mr-2" id="img-toast" src="/assets/cms/img/160x160/img1.jpg"
-                     alt="Image description">
-                <h5 class="mb-0" id="toast-status">Hệ Thống</h5>
-                <small class="ml-auto">Vừa xong</small>
-                <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
-                    <i class="tio-clear" aria-hidden="true"></i>
-                </button>
-            </div>
-            <div class="toast-body" id="system-toast-mesage">
-                Thành Công !
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Edit user Modal -->
 <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalTitle"
      aria-hidden="true">
@@ -525,10 +329,17 @@
 
             <!-- Body -->
             <div class="modal-body">
-                <div class="form-group p-4">
+                <div class="form-group p-4 pb-0 mb-0">
                     <label for="inputData">Tên Thương Hiệu :</label>
                     <input class="form-control" type="text" id="inputData" autofocus>
                     <input class="form-control" type="text" id="inputDataId" hidden="">
+                </div>
+                <div class="form-group p-4 pt-0">
+                    <label for="inputData">Trạng Thái :</label>
+                    <select class="form-control" type="text" id="selectedStaus">
+                        <option value="1">Hiển Thị</option>
+                        <option value="0">Không Hiển Thị</option>
+                    </select>
                 </div>
                 <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
@@ -552,7 +363,7 @@
 
 <!-- JS Plugins Init. -->
 <script src="/assets/cms/js/brand.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>

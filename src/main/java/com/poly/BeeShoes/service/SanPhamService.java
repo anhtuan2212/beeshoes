@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service;
 
+import com.poly.BeeShoes.model.MuiGiay;
 import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.model.TheLoai;
 import com.poly.BeeShoes.model.ThuongHieu;

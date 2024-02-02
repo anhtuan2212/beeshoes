@@ -179,7 +179,7 @@ $(document).on('ready', function () {
             })
         }
     })
-    $('#mauSac').on('change', function () {
+    function changeNameToColor() {
         var mausac = $('#mauSac').val();
         mausac.forEach((mau) => {
             var ele = $('li[title="' + mau + '"]');
@@ -189,22 +189,12 @@ $(document).on('ready', function () {
             $(ele[0]).css('background-color', mau);
             $(ele[0]).css('color', '#FFFFFF');
         });
+    }
+    changeNameToColor();
+    $('#mauSac').on('change', function () {
+       changeNameToColor();
     });
 
-    $(window).on('load', function () {
-        var mausac = $('#mauSac').val();
-        mausac.forEach((mau) => {
-            var ele = $('li[title="' + mau + '"]');
-            var tenmau = $('option[value="' + mau + '"]').attr('data-name');
-            var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
-            $(span[0]).text(tenmau);
-            $(ele[0]).css('background-color', mau);
-            $(ele[0]).css('color', '#FFFFFF');
-        });
-        if ($('#status-product').val() == 1) {
-            ToastError('Sản Phẩm không tồn tại.')
-        }
-    });
     // thêm màu sắc
     $('#btn-add-new-color').on('click', () => {
         let coloCode = $('#colorChoice').val();

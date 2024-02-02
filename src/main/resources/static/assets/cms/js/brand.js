@@ -1,4 +1,5 @@
 var datatable = null;
+
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
@@ -126,7 +127,7 @@ $(document).on('ready', function () {
 
     // INITIALIZATION OF DATATABLES
     // =======================================================
-     datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
+    datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
         dom: 'Bfrtip',
         buttons: [
             {
@@ -231,7 +232,7 @@ $(document).on('ready', function () {
         $('.popover').last().addClass('popover-dark')
     })
     //===============================================================================================
-    $('#btn-add-new').on('click',function () {
+    $('#btn-add-new').on('click', function () {
         $('#editUserModal').modal('show');
         $('#inputData').val('').focus();
         $('#inputDataId').val('');
@@ -241,8 +242,13 @@ $(document).on('ready', function () {
     $('#save').on('click', function () {
         let id = $('#inputDataId').val();
         let name = $('#inputData').val();
-        if (name.length===0){
+        let trangThai = $('#selectedStaus').val();
+        if (name.length === 0) {
             ToastError("Tên không được trống.");
+            return;
+        }
+        if (trangThai===null){
+            ToastError("Trạng thái không được trống.");
             return;
         }
         $.ajax({
@@ -250,64 +256,123 @@ $(document).on('ready', function () {
             type: 'POST',
             data: {
                 id: id,
-                ten: name
+                ten: name,
+                trangThai: trangThai
             },
             success: function (data, status, xhr) {
+                console.log(data)
                 let st = xhr.getResponseHeader('status');
-                switch (st) {
-                    case "oke":ToastSuccess("Thêm thành công.")
-                        location.reload();
-                        break;
-                    default: ToastError("Thất Bại.")
+                let created = convertTime(data.ngayTao)
+                let updated = convertTime(data.ngaySua)
+                let create = data.create == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.create}</a>`;
+                let update = data.update == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.update}</a>`;
+                let trangthai = data.trangThai == true ? ' <span class="legend-indicator bg-success"></span>Hiển Thị' : ' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
+                if (data != null) {
+                    var rowData = [
+                        `<div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="usersDataCheck${data.id}">
+                                <label class="custom-control-label" for="usersDataCheck${data.id}"></label>
+                        </div>`,
+                        `<h5 class="text-hover-primary mb-0 pr-0" data-id="${data.id}" href="javascript:;">${data.ten}</h5>`,
+                        `${created}`,
+                        `${updated}`,
+                        `${create}`,
+                        `${update}`,
+                        `${trangthai}`,
+                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true ? 1 : 0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
+                                <i class="tio-edit"></i>
+                            </a>
+                            <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-id="${data.id}" onclick="deleteCategory(this)">
+                                <i class="tio-delete"></i>
+                            </a>`];
+
+                    if (id !== '') {
+                        let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
+                        datatable.row(rowIndex).remove();
+                    }
+                    datatable.row.add(rowData);
+                    datatable.draw()
+                    $('#inputDataId').val('');
+                    $('#inputData').val('');
+                    $('#selectedStaus').val('');
+                    $('#editUserModal').modal('hide')
                 }
-            },error:function (xhr) {
+                switch (st) {
+                    case "oke":
+                        ToastSuccess("Lưu thành công.")
+                        break;
+                    default:
+                        ToastError("Thất Bại.")
+                }
+
+            }, error: function (xhr) {
                 let st = xhr.getResponseHeader('status');
                 console.log(st)
                 switch (st) {
-                    case "existsByTen":ToastError("Tên đã tồn tại.")
+                    case "existsByTen":
+                        ToastError("Tên đã tồn tại.")
                         break;
-                    case "nameNull":ToastError("Tên không được trống.")
+                    case "nameNull":
+                        ToastError("Tên không được trống.")
                         break;
-                    case "oke":ToastSuccess("Thêm thành công.")
+                    case "statusNull":
+                        ToastError("Trạng thái không được trống.")
                         break;
-                    default: ToastError("Thất Bại.")
+                    case "oke":
+                        ToastSuccess("Thêm thành công.")
+                        break;
+                    default:
+                        ToastError("Thất Bại.")
                 }
             }
         })
     })
 });
+
 function formatNumber(num) {
     return num < 10 ? '0' + num : num;
 }
 
-function formatDate(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    var formattedDate = formatNumber(hours) + ':' + formatNumber(minutes) + ' | ' + formatNumber(day) + '-' + formatNumber(month) + '-' + year;
+function convertTime(time) {
+    var dateObject = new Date(time);
+    var year = dateObject.getFullYear();
+    var month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
+    var day = ('0' + dateObject.getDate()).slice(-2);
+    var formattedDate = day + '-' + month + '-' + year;
     return formattedDate;
 }
+
 function edit(element) {
     let name = element.getAttribute('data-name');
+    let st = element.getAttribute('data-status');
     let id = element.getAttribute('data-id');
+    if (st==null){
+        $('#selectedStaus').val(1);
+    }
     $('#inputData').val(name).focus();
     $('#inputDataId').val(id);
+    $('#selectedStaus').val(st);
 }
+
 function Toast(status, message) {
-    $('#systoast').toast({delay: 5000, autohide: true, animation: true,});
-    $('#systoast').toast('show');
-    $('#system-toast-mesage').text(message);
-    if (status == 'success') {
-        $('#img-toast').attr('src', '/assets/cms/img/icon/success.svg')
-        $('#toast-status').text("Thành Công !");
-    } else if (status == 'error') {
-        $('#img-toast').attr('src', '/assets/cms/img/icon/error.svg')
-        $('#toast-status').text("Thất Bại !");
-    } else {
-        $('#toast-status').text("Sai Giá trị status !");
-    }
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+        customClass: {
+            popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
+        }
+    });
+    Toast.fire({
+        icon: status,
+        title: message
+    });
 }
 
 function ToastSuccess(message) {
@@ -320,27 +385,39 @@ function ToastError(message) {
 
 function deleteCategory(element) {
     let id = $(element).attr('data-id');
-
-    if (confirm('Xác nhận xóa !')) {
-        $.ajax({
-            url: "/api/xoa-thuong-hieu",
-            type: "DELETE",
-            data: {
-                id:id
-            },
-            success: function () {
-                ToastSuccess('Xóa Thành Công.');
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                let st = xhr.getResponseHeader('status');
-                if (st=="constraint"){
-                    ToastError('Thể loại được gắn với sản phẩm.');
-                }else{
-                    console.error("Delete request failed:", status, error);
-                    ToastError('Lỗi !, Vui lòng thử lại sau.');
+    Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Sau khi xóa sẽ không thể khôi phục lại!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/api/xoa-thuong-hieu",
+                type: "DELETE",
+                data: {
+                    id: id
+                },
+                success: function () {
+                    ToastSuccess('Xóa Thành Công.');
+                    var rowIndex = datatable.row($(element).closest('tr')).index();
+                    datatable.row(rowIndex).remove().draw();
+                },
+                error: function (xhr, status, error) {
+                    let st = xhr.getResponseHeader('status');
+                    if (st == "constraint") {
+                        ToastError('Thương hiệu được gắn với sản phẩm.');
+                    } else {
+                        console.error("Delete request failed:", status, error);
+                        ToastError('Lỗi !, Vui lòng thử lại sau.');
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
+
 }

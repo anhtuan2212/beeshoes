@@ -241,7 +241,8 @@ $(document).on('ready', function () {
 
     $('#save').on('click', function () {
         let id = $('#inputDataId').val();
-        let name = $('#inputData').val();
+        let name = $('#color-name').val();
+        let code = $('#colorCode').val();
         let trangThai = $('#selectedStaus').val();
         if (name.length === 0) {
             ToastError("Tên không được trống.");
@@ -252,11 +253,12 @@ $(document).on('ready', function () {
             return;
         }
         $.ajax({
-            url: '/api/them-the-loai',
+            url: '/api/them-mau-sac',
             type: 'POST',
             data: {
                 id: id,
                 ten: name,
+                maMau: code,
                 trangThai: trangThai
             },
             success: function (data, status, xhr) {
@@ -274,12 +276,14 @@ $(document).on('ready', function () {
                                 <label class="custom-control-label" for="usersDataCheck${data.id}"></label>
                         </div>`,
                         `<h5 class="text-hover-primary mb-0 pr-0" data-id="${data.id}" href="javascript:;">${data.ten}</h5>`,
+                        `${data.maMauSac}`,
+                        `<label class="form-control" style="background-color:${data.maMauSac}"></label>`,
                         `${created}`,
                         `${updated}`,
                         `${create}`,
                         `${update}`,
                         `${trangthai}`,
-                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true ? 1 : 0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
+                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal"  data-color-code="${data.maMauSac}" data-status="${data.trangThai == true ? 1 : 0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-id="${data.id}" onclick="deleteCategory(this)">
@@ -293,8 +297,9 @@ $(document).on('ready', function () {
                     datatable.row.add(rowData);
                     datatable.draw()
                     $('#inputDataId').val('');
-                    $('#inputData').val('');
-                    $('#selectedStaus').val('');
+                    $('#color-name').val('');
+                    $('#colorCode').val('');
+                    $('#selectedStaus').val(1);
                     $('#editUserModal').modal('hide')
                 }
                 switch (st) {
@@ -312,8 +317,14 @@ $(document).on('ready', function () {
                     case "existsByTen":
                         ToastError("Tên đã tồn tại.")
                         break;
+                    case "existsByMaMau":
+                        ToastError("Mã màu đã tồn tại.")
+                        break;
                     case "nameNull":
                         ToastError("Tên không được trống.")
+                        break;
+                    case "colorCodeNull":
+                        ToastError("Mã màu không được trống.")
                         break;
                     case "statusNull":
                         ToastError("Trạng thái không được trống.")
@@ -345,12 +356,15 @@ function convertTime(time) {
 function edit(element) {
     let name = element.getAttribute('data-name');
     let st = element.getAttribute('data-status');
+    let code = element.getAttribute('data-color-code');
     let id = element.getAttribute('data-id');
     if (st==null){
         $('#selectedStaus').val(1);
     }
-    $('#inputData').val(name).focus();
+    $('#color-name').val(name).focus();
     $('#inputDataId').val(id);
+    $('#colorCode').val(code);
+    $('#colorChoice').val(code);
     $('#selectedStaus').val(st);
 }
 
@@ -397,7 +411,7 @@ function deleteCategory(element) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/xoa-the-loai",
+                url: "/api/xoa-mau-sac",
                 type: "DELETE",
                 data: {
                     id: id
@@ -410,7 +424,7 @@ function deleteCategory(element) {
                 error: function (xhr, status, error) {
                     let st = xhr.getResponseHeader('status');
                     if (st == "constraint") {
-                        ToastError('Thể Loại được gắn với sản phẩm.');
+                        ToastError('Màu Sắc được gắn với sản phẩm.');
                     } else {
                         console.error("Delete request failed:", status, error);
                         ToastError('Lỗi !, Vui lòng thử lại sau.');
@@ -420,4 +434,12 @@ function deleteCategory(element) {
         }
     });
 
+}
+function showColorCode(color) {
+    let colorCode = document.getElementById("colorCode");
+    colorCode.value = color.toUpperCase();
+}
+function setColor(color) {
+    let colorCode = document.getElementById("colorChoice");
+    colorCode.value = color;
 }

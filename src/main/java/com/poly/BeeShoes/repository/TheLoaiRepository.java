@@ -10,4 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface TheLoaiRepository extends JpaRepository<TheLoai,Long> {
 
     boolean existsByTen(String ten);
+
+
+    TheLoai getFirstByTen(String ten);
+    TheLoai getById(Long id);
 }

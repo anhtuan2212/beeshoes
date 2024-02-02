@@ -24,6 +24,11 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
+    public DeGiay getByTen(String ten) {
+        return deGiayRepository.getFirstByTen(ten);
+    }
+
+    @Override
     public List<DeGiay> getAll() {
         return deGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }

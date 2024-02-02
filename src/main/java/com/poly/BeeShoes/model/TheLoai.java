@@ -35,6 +35,7 @@ public class TheLoai {
     String update;
     @Transient
     String create;
+
     @Override
     public String toString() {
         return "TheLoai{" +
@@ -45,6 +46,8 @@ public class TheLoai {
                 ", nguoiTao=" + nguoiTao +
                 ", nguoiSua=" + nguoiSua +
                 ", trangThai=" + trangThai +
+                ", update='" + update + '\'' +
+                ", create='" + create + '\'' +
                 '}';
     }
 }

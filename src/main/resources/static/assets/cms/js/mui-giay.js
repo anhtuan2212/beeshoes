@@ -252,12 +252,12 @@ $(document).on('ready', function () {
             return;
         }
         $.ajax({
-            url: '/api/them-the-loai',
+            url: '/api/them-mui-giay',
             type: 'POST',
             data: {
                 id: id,
                 ten: name,
-                trangThai: trangThai
+                trangThai:trangThai
             },
             success: function (data, status, xhr) {
                 console.log(data)
@@ -266,7 +266,7 @@ $(document).on('ready', function () {
                 let updated = convertTime(data.ngaySua)
                 let create = data.create == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.create}</a>`;
                 let update = data.update == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.update}</a>`;
-                let trangthai = data.trangThai == true ? ' <span class="legend-indicator bg-success"></span>Hiển Thị' : ' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
+                let trangthai = data.trangThai == true ?' <span class="legend-indicator bg-success"></span>Hiển Thị':' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
                 if (data != null) {
                     var rowData = [
                         `<div class="custom-control custom-checkbox">
@@ -279,15 +279,15 @@ $(document).on('ready', function () {
                         `${create}`,
                         `${update}`,
                         `${trangthai}`,
-                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true ? 1 : 0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
+                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true?1:0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-id="${data.id}" onclick="deleteCategory(this)">
                                 <i class="tio-delete"></i>
                             </a>`];
 
-                    if (id !== '') {
-                        let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
+                    if (id !== ''){
+                        let rowIndex = datatable.row($('h5[data-id='+id+']').closest('tr')).index();
                         datatable.row(rowIndex).remove();
                     }
                     datatable.row.add(rowData);
@@ -295,7 +295,6 @@ $(document).on('ready', function () {
                     $('#inputDataId').val('');
                     $('#inputData').val('');
                     $('#selectedStaus').val('');
-                    $('#editUserModal').modal('hide')
                 }
                 switch (st) {
                     case "oke":
@@ -397,7 +396,7 @@ function deleteCategory(element) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/api/xoa-the-loai",
+                url: "/api/xoa-mui-giay",
                 type: "DELETE",
                 data: {
                     id: id
@@ -410,7 +409,7 @@ function deleteCategory(element) {
                 error: function (xhr, status, error) {
                     let st = xhr.getResponseHeader('status');
                     if (st == "constraint") {
-                        ToastError('Thể Loại được gắn với sản phẩm.');
+                        ToastError('Mũi Giày được gắn với sản phẩm.');
                     } else {
                         console.error("Delete request failed:", status, error);
                         ToastError('Lỗi !, Vui lòng thử lại sau.');

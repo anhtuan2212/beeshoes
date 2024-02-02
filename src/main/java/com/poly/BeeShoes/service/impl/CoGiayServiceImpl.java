@@ -24,6 +24,11 @@ public class CoGiayServiceImpl implements CoGiayService {
     }
 
     @Override
+    public CoGiay getByTen(String ten) {
+        return null;
+    }
+
+    @Override
     public List<CoGiay> getAll() {
         return coGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }

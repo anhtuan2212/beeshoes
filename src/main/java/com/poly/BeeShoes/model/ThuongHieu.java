@@ -29,4 +29,8 @@ public class ThuongHieu {
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
     boolean trangThai;
+    @Transient
+    String update;
+    @Transient
+    String create;
 }

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatLieuRepository extends JpaRepository<ChatLieu,Long> {
     boolean existsByTen(String ten);
+    ChatLieu getFirstByTen(String ten);
 }

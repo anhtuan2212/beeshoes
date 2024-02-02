@@ -53,8 +53,34 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
     }
 
     @Override
+    public boolean existsByMauSac(MauSac ms) {
+        return ctspRepository.existsByMauSac(ms);
+    }
+
+    @Override
     public boolean existsBySanPham(SanPham sanPham) {
         return ctspRepository.existsBySanPham(sanPham);
+    }
+
+    @Override
+    public boolean existsByCoGiay(CoGiay cg) {
+        return ctspRepository.existsByCoGiay(cg);
+    }
+
+    @Override
+    public boolean existsByKichCo(KichCo kc) {
+        return ctspRepository.existsByKichCo(kc);
+    }
+
+
+    @Override
+    public boolean existsByDeGiay(DeGiay dg) {
+        return ctspRepository.existsByDeGiay(dg);
+    }
+
+    @Override
+    public boolean existsByMuiGiay(MuiGiay mg) {
+        return ctspRepository.existsByMuiGiay(mg);
     }
 
     @Override
