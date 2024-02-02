@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MuiGiayRepository extends JpaRepository<MuiGiay,Long> {
+    boolean existsByTen(String ten);
 }

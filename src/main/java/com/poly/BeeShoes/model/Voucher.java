@@ -3,51 +3,50 @@ package com.poly.BeeShoes.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import lombok.experimental.FieldDefaults;
+
+
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 
 @Entity
-@Table(name = "voucher")
+@Table(name = "vouchers")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String ma;
-
-    private String ten;
-
-    private String loaiVoucher;
-
-    private Date ngayBatDau;
-
-    private Date ngayKetThuc;
-
-    private BigDecimal giaTriTienMat;
-
-    private byte giaTriPhanTram;
-
-    private BigDecimal giaTriToiDa;
-    private String hangKhachHang;
-    private String dieuKien;
-    private Integer soLuong;
-    private String moTa;
+    Long id;
+    String ma;
+    String ten;
+    LocalDateTime ngayBatDau;
+    LocalDateTime ngayKetThuc;
+    double giaTriTienMat;
+    int giaTriPhanTram;
+    double giaTriToiDa;
+    String dieuKien;
+    int soLuong;
+    String moTa;
+    String loaiVoucher;
     Timestamp ngayTao;
     Timestamp ngaySua;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "nguoi_tao")
     User nguoiTao;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
+
     boolean trangThai;
 
 

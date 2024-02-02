@@ -20,10 +20,6 @@ public class ChiTietSanPham {
     @Column(unique = true)
     String maSanPham;
 
-    @JoinColumn(name = "id_thuong_hieu")
-    @ManyToOne
-    ThuongHieu thuongHieu;
-
     @JoinColumn(name = "id_san_pham")
     @ManyToOne
     SanPham sanPham;
@@ -44,10 +40,6 @@ public class ChiTietSanPham {
     @ManyToOne
     ChatLieu chatLieu;
 
-    @JoinColumn(name = "id_the_loai")
-    @ManyToOne
-    TheLoai theLoai;
-
     @JoinColumn(name = "id_co_giay")
     @ManyToOne
     CoGiay coGiay;
@@ -55,6 +47,10 @@ public class ChiTietSanPham {
     @JoinColumn(name = "id_mui_giay")
     @ManyToOne
     MuiGiay muiGiay;
+
+    @JoinColumn(name = "id_anh")
+    @OneToOne
+    Anh anh;
 
     int giamPhanTram;
 
@@ -75,6 +71,7 @@ public class ChiTietSanPham {
     @JoinColumn(name = "id")
     User nguoiSua;
 
+    boolean isSale;
     int trangThai;
 
 }

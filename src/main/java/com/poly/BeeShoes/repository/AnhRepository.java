@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface AnhRepository extends JpaRepository<Anh,Long> {
     List<Anh> getAllBySanPham(SanPham sanPham);
+    void removeAnhsBySanPham(SanPham sanPham);
+    Anh getFirstByUrl(String url);
 }

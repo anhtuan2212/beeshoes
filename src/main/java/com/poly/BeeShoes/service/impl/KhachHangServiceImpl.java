@@ -10,13 +10,43 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class KhachHangServiceImpl implements KhachHangService {
 
     private final KhachHangRepository khachHangRepository;
-    private final UserRepository userRepository;
+
+    @Override
+    public List<KhachHang> getAll() {
+        return khachHangRepository.findAll();
+    }
+
+    @Override
+    public void delete(Long id) {
+        khachHangRepository.deleteById(id);
+    }
+
+    @Override
+    public KhachHang detail(Long id) {
+        KhachHang khachHang = khachHangRepository.findById(id).get();
+        return khachHang;
+    }
+
+    @Override
+    public KhachHang add(KhachHang khachHang) {
+        khachHangRepository.save(khachHang);
+        return null;
+    }
+
+    @Override
+    public KhachHang update(KhachHang khachHang, Long id) {
+        khachHangRepository.save(khachHang);
+        return null;
+    }
+
     @Override
     public KhachHang getByMa(String ma) {
         return khachHangRepository.findByMaKhachHang(ma)
@@ -26,26 +56,6 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public boolean existByMa(String ma) {
         return khachHangRepository.existsByMaKhachHang(ma);
-    }
-
-    @Override
-    public KhachHang createNew(KhachHang khachHang) {
-        return khachHangRepository.save(khachHang);
-    }
-
-    @Override
-    public KhachHang update(KhachHang khachHang) {
-        KhachHang updatedKhachHang = new KhachHang();
-        updatedKhachHang.setMaKhachHang(khachHang.getTen());
-        updatedKhachHang.setTenDem(khachHang.getTenDem());
-        updatedKhachHang.setHo(khachHang.getHo());
-        updatedKhachHang.setDiem(khachHang.getDiem());
-        updatedKhachHang.setStatus(khachHang.isStatus());
-        updatedKhachHang.setGioiTinh(khachHang.isGioiTinh());
-        updatedKhachHang.setNgaySinh(khachHang.getNgaySinh());
-        updatedKhachHang.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
-        updatedKhachHang.setSdt(khachHang.getSdt());
-        return khachHangRepository.save(updatedKhachHang);
     }
 
     @Override

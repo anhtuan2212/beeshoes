@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface KichCoService {
     KichCo save(KichCo kichCo);
+    KichCo getById(Long id);
+    KichCo getByTen(String co);
     List<KichCo> getAll();
     boolean delete(Long id);
+    boolean exitsByTen(String ten);
 }

@@ -12,4 +12,8 @@ public class HangKhachHangServiceImpl implements HangKhachHangService {
 
     private final HangKhachHangRepository hangKhachHangRepository;
 
+    @Override
+    public HangKhachHang getByMa(String bronze) {
+        return null;
+    }
 }

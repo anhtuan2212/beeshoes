@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.ChatLieu;
 import com.poly.BeeShoes.repository.ChatLieuRepository;
 import com.poly.BeeShoes.service.ChatLieuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,13 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
+    public ChatLieu getById(Long id) {
+        return chatLieuRepository.findById(id).get();
+    }
+
+    @Override
     public List<ChatLieu> getAll() {
-        return chatLieuRepository.findAll();
+        return chatLieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }
 
     @Override
@@ -29,5 +35,10 @@ public class ChatLieuServiceImpl implements ChatLieuService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return chatLieuRepository.existsByTen(ten);
     }
 }

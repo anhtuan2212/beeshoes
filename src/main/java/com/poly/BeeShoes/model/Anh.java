@@ -13,6 +13,13 @@ import java.sql.Timestamp;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Anh {
+    public Anh(SanPham sanPham, String url, boolean main, Timestamp ngayTao) {
+        this.sanPham = sanPham;
+        this.url = url;
+        this.main = main;
+        this.ngayTao = ngayTao;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -34,4 +41,19 @@ public class Anh {
     @JoinColumn(name = "id")
     User nguoiSua;
     boolean trangThai;
+
+    @Override
+    public String toString() {
+        return "Anh{" +
+                "id=" + id +
+                ", sanPham=" + sanPham +
+                ", url='" + url + '\'' +
+                ", main=" + main +
+                ", ngayTao=" + ngayTao +
+                ", ngaySua=" + ngaySua +
+                ", nguoiTao=" + nguoiTao +
+                ", nguoiSua=" + nguoiSua +
+                ", trangThai=" + trangThai +
+                '}';
+    }
 }

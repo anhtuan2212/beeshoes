@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.DeGiay;
 import com.poly.BeeShoes.repository.DeGiayRepository;
 import com.poly.BeeShoes.service.DeGiayService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +19,13 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
+    public DeGiay getById(Long id) {
+        return deGiayRepository.findById(id).get();
+    }
+
+    @Override
     public List<DeGiay> getAll() {
-        return deGiayRepository.findAll();
+        return deGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }
 
     @Override
@@ -30,5 +36,10 @@ public class DeGiayServiceImpl implements DeGiayService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return deGiayRepository.existsByTen(ten);
     }
 }

@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface MuiGiayService {
     MuiGiay save(MuiGiay muiGiay);
+    MuiGiay getById(Long id);
     List<MuiGiay> getAll();
     boolean delete(Long id);
+
+    boolean existsByTen(String ten);
 }

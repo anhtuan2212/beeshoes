@@ -27,3 +27,31 @@
 #anh_duoc_chon{
     min-height: 172px;
 }
+#colorChoice{
+    width: 100px;
+    height: 100px;
+}
+.form-control-label {
+    display: block;
+    width: 100%;
+    height: calc(1.6em + 1.21875rem);
+    padding: 0.54688rem 0.875rem;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #1e2022;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0.0625rem solid #e7eaf3;
+    border-radius: 0.3125rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.table-spinner{
+    height: 30vh;
+}
+.width-100{
+    width: 100px !important;
+}
+.top-1em{
+    top: 1em !important;
+}

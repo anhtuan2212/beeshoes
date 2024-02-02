@@ -18,6 +18,11 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
+    public MauSac getMauSacByMa(String ma) {
+        return mauSacRepository.getMauSacByMaMauSac(ma);
+    }
+
+    @Override
     public List<MauSac> getAll() {
         return mauSacRepository.findAll();
     }
@@ -30,5 +35,15 @@ public class MauSacServiceImpl implements MauSacService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean existsByMaMauSac(String ma) {
+        return mauSacRepository.existsByMaMauSac(ma);
+    }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return mauSacRepository.existsByTen(ten);
     }
 }

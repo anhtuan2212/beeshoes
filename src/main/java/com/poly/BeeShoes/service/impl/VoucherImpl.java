@@ -78,29 +78,4 @@ public class VoucherImpl implements VoucherService {
         return new PageImpl<Voucher>(list,pageable,voucherResponsitory.searchVC(key).size());
     }
 
-
-//    @Override
-//    public String generateVoucherCode() {
-//        long count = voucherResponsitory.count();
-//        int numberOfDigits = (int) Math.log10(count + 1) + 1;
-//        int numberOfZeros = Math.max(0, 5 - numberOfDigits);
-//        String ma;
-//        do {
-//            ma = String.format("VC%0" + (numberOfDigits + numberOfZeros) + "d", count + 1);
-//            count++;
-//        } while (voucherResponsitory.existsByMaVoucher(ma));
-//
-//        return ma;
-//    }
-//
-//    @Override
-//    public Voucher getByMa(String ma) {
-//        return voucherResponsitory.findByMavoucher(ma)
-//                .orElseThrow(() -> new UsernameNotFoundException("username does not exist"));
-//    }
-//
-//    @Override
-//    public boolean existByMa(String ma) {
-//        return voucherResponsitory.existsByMaVoucher(ma);
-//    }
 }

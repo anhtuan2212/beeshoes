@@ -16,6 +16,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +32,7 @@ public class VoucherController {
     @Autowired
     private VoucherResponsitory voucherResponsitory;
 
+
     @GetMapping("/voucher")
     public String getAll(Model model,
                          @RequestParam(name =
@@ -35,7 +42,6 @@ public class VoucherController {
             list = voucherService.SearchVoucher(key, page);
             model.addAttribute("key", key);
         }
-
         model.addAttribute("totalPage", list.getTotalPages());
         model.addAttribute("currenPage", page);
         model.addAttribute("listVC", list);
@@ -49,9 +55,8 @@ public class VoucherController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute Voucher voucher,
-
                       @RequestParam(name =
-                              "page", defaultValue = "1") Integer page) {
+                              "page", defaultValue = "1") Integer page)throws ParseException {
 
 
         long count = voucherResponsitory.count();

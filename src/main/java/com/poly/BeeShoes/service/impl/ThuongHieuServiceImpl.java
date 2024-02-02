@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.ThuongHieu;
 import com.poly.BeeShoes.repository.ThuongHieuRepository;
 import com.poly.BeeShoes.service.ThuongHieuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +19,18 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
+    public ThuongHieu getById(Long id) {
+        return thuongHieuRepository.findById(id).get();
+    }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return thuongHieuRepository.existsByTen(ten);
+    }
+
+    @Override
     public List<ThuongHieu> getAll() {
-        return thuongHieuRepository.findAll();
+        return thuongHieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }
 
     @Override
