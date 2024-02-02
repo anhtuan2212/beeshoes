@@ -7,6 +7,7 @@ import java.util.List;
 public interface ChatLieuService {
     ChatLieu save(ChatLieu chatLieu);
     ChatLieu getById(Long id);
+    ChatLieu getByTen(String ten);
     List<ChatLieu> getAll();
     boolean delete(Long id);
 

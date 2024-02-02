@@ -34,7 +34,18 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         #dataInTable tr td:nth-child(2) {
-            padding-left: 0!important;
+            padding-left: 0 !important;
+        }
+
+        #colorChoice {
+            width: 100px;
+            height: 100px;
+        }
+
+        #lableColorChose {
+            padding-left: 0;
+            padding-right: 0;
+            width: 100%;
         }
     </style>
     <!-- CSS Front Template -->
@@ -109,11 +120,11 @@
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Sản Phẩm</a></li>
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Thuộc Tính</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Mũi Giày</li>
+                            <li class="breadcrumb-item active" aria-current="page">Thể Loại</li>
                         </ol>
                     </nav>
 
-                    <h1 class="page-header-title">Mũi Giày</h1>
+                    <h1 class="page-header-title">Thể Loại</h1>
                 </div>
 
                 <div class="col-sm-auto">
@@ -199,6 +210,8 @@
                             </div>
                         </th>
                         <th class="table-column-pl-0">Tên</th>
+                        <th>Mã Màu</th>
+                        <th>Màu Sắc</th>
                         <th>Ngày Tạo</th>
                         <th>Ngày Sửa</th>
                         <th>Người Tạo</th>
@@ -208,7 +221,7 @@
                     </tr>
                     </thead>
                     <tbody id="dataInTable">
-                    <tr th:each="tl,iter:${lstmuigiay}" th:id="'shoes'+${tl.getId()}">
+                    <tr th:each="tl,iter:${lstmausac}" th:id="'shoes'+${tl.getId()}">
                         <td class="table-column-pr-0">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
@@ -217,14 +230,20 @@
                             </div>
                         </td>
                         <td class="table-column-pl-0">
-                            <h5 class="text-hover-primary mb-0" th:attr="data-id=${tl.getId()}" href="javascript:;" th:text="${tl.getTen()}">
+                            <h5 class="text-hover-primary mb-0" th:attr="data-id=${tl.getId()}" href="javascript:;"
+                                th:text="${tl.getTen()}">
                             </h5>
+                        </td>
+                        <td th:text="${tl.getMaMauSac()}"></td>
+                        <td>
+                            <label class="form-control" th:style="'background-color:'+${tl.getMaMauSac()}"></label>
                         </td>
                         <td th:text="${tl.getNgayTao()==null?'N/A':#dates.format(tl.getNgayTao(), 'dd-MM-yyyy')}"></td>
                         <td th:text="${tl.getNgaySua()==null?'N/A':#dates.format(tl.getNgaySua(), 'dd-MM-yyyy')}"></td>
                         <td>
                             <th:block th:if="${tl.getNguoiTao() != null}">
-                                <a href="javascript:;" th:text="${tl.getNguoiTao().getNhanVien().getMaNhanVien()}">N/A</a>
+                                <a href="javascript:;"
+                                   th:text="${tl.getNguoiTao().getNhanVien().getMaNhanVien()}">N/A</a>
                             </th:block>
                             <th:block th:if="${tl.getNguoiTao() == null}">
                                 N/A
@@ -232,7 +251,8 @@
                         </td>
                         <td>
                             <th:block th:if="${tl.getNguoiSua() != null}">
-                                <a href="javascript:;" th:text="${tl.getNguoiSua().getNhanVien().getMaNhanVien()}">N/A</a>
+                                <a href="javascript:;"
+                                   th:text="${tl.getNguoiSua().getNhanVien().getMaNhanVien()}">N/A</a>
                             </th:block>
                             <th:block th:if="${tl.getNguoiSua() == null}">
                                 N/A
@@ -249,10 +269,12 @@
                         </td>
                         <td>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal"
-                               data-target="#editUserModal" th:data-status="${tl.isTrangThai() == true?1:0}"  th:data-name="${tl.ten}" th:data-id="${tl.id}" onclick="edit(this)">
+                               data-target="#editUserModal" th:data-status="${tl.isTrangThai() == true?1:0}"
+                               th:data-name="${tl.getTen()}" th:data-id="${tl.getId()}"  th:data-color-code="${tl.getMaMauSac()}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
-                            <a class="btn btn-sm btn-white btn-delete" th:data-id="${tl.id}" onclick="deleteCategory(this)" href="javascript:;">
+                            <a class="btn btn-sm btn-white btn-delete" th:data-id="${tl.id}"
+                               onclick="deleteCategory(this)" href="javascript:;">
                                 <i class="tio-delete"></i>
                             </a>
                         </td>
@@ -277,9 +299,9 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                <option th:if="${#lists.size(lstmuigiay) < 10}" th:value="${#lists.size(lstmuigiay)}"
-                                        selected th:text="${#lists.size(lstmuigiay)}"></option>
-                                <option th:if="${#lists.size(lstmuigiay) >= 10}" th:value="10" selected>10</option>
+                                <option th:if="${#lists.size(lstmausac) < 10}" th:value="${#lists.size(lstmausac)}"
+                                        selected th:text="${#lists.size(lstmausac)}"></option>
+                                <option th:if="${#lists.size(lstmausac) >= 10}" th:value="10" selected>10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
                             </select>
@@ -330,24 +352,30 @@
                 </button>
             </div>
             <!-- End Header -->
-
             <!-- Body -->
-            <div class="modal-body">
-                <div class="form-group p-4 pb-0 mb-0">
-                    <label for="inputData">Tên Mũi Giày :</label>
-                    <input class="form-control" type="text" id="inputData" autofocus>
+            <div class="modal-body row">
+                <div class="col-md-4 col-4 form-group">
+                    <label id="lableColorChose" for="colorChoice" class="col-12">Chọn màu:</label>
+                    <input type="color" id="colorChoice" value="" onchange="showColorCode(this.value)">
+                </div>
+                <div class="col-md-8 col-8 form-group">
+                    <label class="">Mã Màu</label>
+                    <input id="colorCode" onchange="setColor(this.value)" type="text" class="form-control disabled">
+                    <label class="">Tên Màu</label>
+                    <input id="color-name" type="text" class="form-control">
                     <input class="form-control" type="text" id="inputDataId" hidden="">
                 </div>
-                <div class="form-group p-4 pt-0">
-                    <label for="inputData">Trạng Thái :</label>
+                <div class="form-group p-4 pt-0 col-6">
+                    <label for="selectedStaus">Trạng Thái :</label>
                     <select class="form-control" type="text" id="selectedStaus">
                         <option value="1">Hiển Thị</option>
                         <option value="0">Không Hiển Thị</option>
                     </select>
                 </div>
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="save">Lưu</button>
+                <div class="d-flex justify-content-around align-items-center col-6">
+                    <button type="button" class="btn btn-primary col-4" id="save">Lưu</button>
+                    <button type="button" class="btn btn-white mr-2 col-4" data-dismiss="modal" aria-label="Close">Cancel
+                    </button>
                 </div>
             </div>
             <!-- End Body -->
@@ -366,7 +394,7 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 
 <!-- JS Plugins Init. -->
-<script src="/assets/cms/js/mui-giay.js"></script>
+<script src="/assets/cms/js/mau-sac.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>

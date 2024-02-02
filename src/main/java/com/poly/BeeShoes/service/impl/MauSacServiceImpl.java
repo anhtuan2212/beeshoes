@@ -18,8 +18,18 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
+    public MauSac getById(Long id) {
+        return mauSacRepository.getById(id);
+    }
+
+    @Override
     public MauSac getMauSacByMa(String ma) {
         return mauSacRepository.getMauSacByMaMauSac(ma);
+    }
+
+    @Override
+    public MauSac getByTen(String ten) {
+        return mauSacRepository.getFirstByTen(ten);
     }
 
     @Override

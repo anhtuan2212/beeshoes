@@ -24,6 +24,11 @@ public class MuiGiayServiceImpl implements MuiGiayService {
     }
 
     @Override
+    public MuiGiay getByTen(String ten) {
+        return muiGiayRepository.getByTen(ten);
+    }
+
+    @Override
     public List<MuiGiay> getAll() {
         return muiGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }

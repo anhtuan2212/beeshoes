@@ -109,11 +109,11 @@
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Sản Phẩm</a></li>
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Thuộc Tính</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Mũi Giày</li>
+                            <li class="breadcrumb-item active" aria-current="page">Kích Cỡ</li>
                         </ol>
                     </nav>
 
-                    <h1 class="page-header-title">Mũi Giày</h1>
+                    <h1 class="page-header-title">Kích Cỡ</h1>
                 </div>
 
                 <div class="col-sm-auto">
@@ -208,7 +208,7 @@
                     </tr>
                     </thead>
                     <tbody id="dataInTable">
-                    <tr th:each="tl,iter:${lstmuigiay}" th:id="'shoes'+${tl.getId()}">
+                    <tr th:each="tl,iter:${lstkichco}" th:id="'shoes'+${tl.getId()}">
                         <td class="table-column-pr-0">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
@@ -277,9 +277,9 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                <option th:if="${#lists.size(lstmuigiay) < 10}" th:value="${#lists.size(lstmuigiay)}"
-                                        selected th:text="${#lists.size(lstmuigiay)}"></option>
-                                <option th:if="${#lists.size(lstmuigiay) >= 10}" th:value="10" selected>10</option>
+                                <option th:if="${#lists.size(lstkichco) < 10}" th:value="${#lists.size(lstkichco)}"
+                                        selected th:text="${#lists.size(lstkichco)}"></option>
+                                <option th:if="${#lists.size(lstkichco) >= 10}" th:value="10" selected>10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
                             </select>
@@ -312,9 +312,6 @@
     <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
-
-<!-- ========== SECONDARY CONTENTS ========== -->
-
 <!-- Edit user Modal -->
 <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalTitle"
      aria-hidden="true">
@@ -334,7 +331,7 @@
             <!-- Body -->
             <div class="modal-body">
                 <div class="form-group p-4 pb-0 mb-0">
-                    <label for="inputData">Tên Mũi Giày :</label>
+                    <label for="inputData">Tên Kích Cỡ :</label>
                     <input class="form-control" type="text" id="inputData" autofocus>
                     <input class="form-control" type="text" id="inputDataId" hidden="">
                 </div>
@@ -366,7 +363,7 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 
 <!-- JS Plugins Init. -->
-<script src="/assets/cms/js/mui-giay.js"></script>
+<script src="/assets/cms/js/kich-co.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>

@@ -12,6 +12,11 @@ public interface ChiTietSanPhamService {
     boolean delete(Long id);
     boolean existsByChatLieu(ChatLieu chatLieu);
     boolean existsByMaSanPham(String ma);
+    boolean existsByMauSac(MauSac ms);
     boolean existsBySanPham(SanPham sanPham);
+    boolean existsByCoGiay(CoGiay cg);
+    boolean existsByKichCo(KichCo kc);
+    boolean existsByDeGiay(DeGiay dg);
+    boolean existsByMuiGiay(MuiGiay mg);
     String generateDetailCode();
 }
