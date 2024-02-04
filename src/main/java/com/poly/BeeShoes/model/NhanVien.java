@@ -37,12 +37,13 @@ public class NhanVien {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String maNhanVien;
-    String ho;
-    String tenDem;
-    String ten;
+    String hoTen;
     boolean gioiTinh;
     Date ngaySinh;
-    String diaChi;
+    String soNha;
+    String phuongXa;
+    String quanHuyen;
+    String tinhThanhPho;
     String sdt;
     String cccd;
 

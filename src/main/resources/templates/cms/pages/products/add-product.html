@@ -300,6 +300,147 @@
                     <!-- End Row -->
                 </div>
                 <!-- End Card -->
+                <!-- Card -->
+                <div class="js-add-field card mb-3 mb-lg-5" data-hs-add-field-options='{
+                  "template": "#addVariantsTemplate",
+                  "container": "#addVariantsContainer",
+                  "defaultCreated": 0,
+                  "limit": 100
+                }'>
+                    <!-- Header -->
+                    <div class="card-header">
+                        <div class="row justify-content-between align-items-center flex-grow-1">
+                            <div class="col-12 col-sm mb-3 mb-sm-0">
+                                <h4 class="card-header-title">Variants</h4>
+                            </div>
+
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <!-- Datatable Info -->
+                                    <div id="datatableCounterInfo" style="display: none;">
+                                        <div class="d-flex align-items-center">
+                          <span class="font-size-sm mr-3">
+                            <span id="datatableCounter">0</span>
+                            Selected
+                          </span>
+                                            <a class="btn btn-sm btn-outline-danger" href="javascript:;">
+                                                <i class="tio-delete-outlined"></i> Delete
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- End Datatable Info -->
+
+                                    <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
+                                        <i class="tio-add"></i> Add variant
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+                    <!-- End Header -->
+
+                    <!-- Table -->
+                    <div class="table-responsive datatable-custom">
+                        <table id="datatable"
+                               class="table table-borderless table-thead-bordered table-nowrap table-align-middle"
+                               data-hs-datatables-options='{
+                         "columnDefs": [{
+                            "targets": [0, 1, 6],
+                            "orderable": false
+                          }],
+                         "order": [],
+                         "pageLength": 15,
+                         "isResponsive": false,
+                         "isShowPaging": false
+                       }'>
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="table-column-pr-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
+                                        <label class="custom-control-label" for="datatableCheckAll"></label>
+                                    </div>
+                                </th>
+                                <th></th>
+                                <th class="table-column-pl-0">Size</th>
+                                <th class="table-column-pl-0">Color</th>
+                                <th class="table-column-pl-0">Price</th>
+                                <th class="table-column-pl-0">Quantity</th>
+                                <th class="table-column-pl-0"></th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="addVariantsContainer">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+
+                    <!-- Footer -->
+                    <div class="card-footer">
+                        <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
+                            <i class="tio-add"></i> Add variant
+                        </a>
+                    </div>
+                    <!-- End Footer -->
+
+                    <!-- Add Variants Field -->
+                    <table style="display: none;">
+                        <tr id="addVariantsTemplate">
+                            <td class="table-column-pr-0">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input"
+                                           id="productVariationsCheck13">
+                                    <label class="custom-control-label" for="productVariationsCheck13"></label>
+                                </div>
+                            </td>
+                            <th>
+                                <img class="avatar" src="/assets/cms/img/400x400/img2.jpg" alt="Image Description">
+                            </th>
+                            <th class="table-column-pl-0">
+                                <input type="text" class="form-control">
+                            </th>
+                            <th class="table-column-pl-0">
+                                <input type="text" class="form-control">
+                            </th>
+                            <th class="table-column-pl-0">
+                                    <input type="text" class="form-control">
+                            </th>
+                            <th class="table-column-pl-0">
+                                <!-- Quantity Counter -->
+                                <div class="js-quantity-counter-dynamic input-group-quantity-counter">
+                                    <input type="number"
+                                           class="js-result form-control input-group-quantity-counter-control"
+                                           value="1">
+
+                                    <div class="input-group-quantity-counter-toggle">
+                                        <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                                            <i class="tio-remove"></i>
+                                        </a>
+                                        <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                                            <i class="tio-add"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- End Quantity Counter -->
+                            </th>
+                            <th class="table-column-pl-0">
+                                <div class="btn-group" role="group" aria-label="Edit group">
+                                    <a class="btn btn-white" href="#">
+                                        <i class="tio-edit"></i>
+                                    </a>
+                                    <a class="btn btn-white" href="#">
+                                        <i class="tio-delete-outlined"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                    <!-- End Add Variants Field -->
+                </div>
+                <!-- End Card -->
             </div>
 
             <div class="col-lg-4">

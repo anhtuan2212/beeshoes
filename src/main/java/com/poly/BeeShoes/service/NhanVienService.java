@@ -1,10 +1,13 @@
 package com.poly.BeeShoes.service;
 
 import com.poly.BeeShoes.model.NhanVien;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface NhanVienService {
+    Page<NhanVien> phanTrang(Integer pageNum, Integer pageNo);
+
     List<NhanVien> getAll();
 
     void delete(Long id);

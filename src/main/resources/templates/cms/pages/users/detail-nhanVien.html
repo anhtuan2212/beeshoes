@@ -1,275 +1,312 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <!-- Required Meta Tags Always Come First -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Title -->
-  <title>LightBee | Thêm nhân viên</title>
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="favicon.ico">
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <!-- CSS Implementing Plugins -->
-  <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
-  <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
-  <!-- CSS Front Template -->
-  <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Title -->
+    <title>LightBee | Thông tin nhân viên</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
+    <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
+    <!-- CSS Front Template -->
+    <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
 </head>
 <body class="footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 
 <!-- ========== HEADER ========== -->
-<div th:replace="/cms/pages/_header.html"></div>
+<div th:replace="~{/cms/pages/_header.html}"></div>
 <!-- ========== END HEADER ========== -->
 
 <!-- ========== SIDEBAR ========== -->
-<div th:replace="/cms/pages/_sidebar.html"></div>
+<div th:replace="~{/cms/pages/_sidebar.html}"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
 
 <!-- ========== MAIN CONTENT ========== -->
 <main id="content" role="main" class="main">
-  <!-- Content -->
-  <div class="content container-fluid">
-    <!-- Step Form -->
-    <form action="#" th:action="@{/cms/update-nhanVien/{id}(id=${nhanVien.id})}" method="post" th:object="${nhanVien}" class="js-step-form py-md-1" data-hs-step-form-options='{
+    <!-- Content -->
+    <div class="content container-fluid">
+        <!-- Step Form -->
+        <form action="#" th:action="@{/cms/nhan-vien/update/{id}(id=${nhanVien.id})}" method="post" onsubmit="return formvalidate(event)"
+              th:object="${nhanVien}"
+              class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
                 "endSelector": "#addUserFinishBtn",
                 "isValidate": false
               }'>
-      <div class="row justify-content-lg-center">
-        <div class="col-lg-8">
-          <!-- Step -->
-          <ul id="addUserStepFormProgress"
-              class="js-step-progress step step-sm step-icon-sm step step-inline step-item-between mb-3 mb-md-5">
-            <li class="step-item">
-              <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
+            <div class="row justify-content-lg-center">
+                <div class="col-lg-8">
+                    <!-- Step -->
+                    <ul id="addUserStepFormProgress"
+                        class="js-step-progress step step-sm step-icon-sm step step-inline step-item-between mb-3 mb-md-5">
+                        <li class="step-item">
+                            <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
                       "targetSelector": "#addUserStepProfile"
                     }'>
-                <div class="step-content">
-                  <span class="step-title">Thông tin</span>
-                </div>
-              </a>
-            </li>
-          </ul>
-          <!-- End Step -->
+                                <div class="step-content">
+                                    <span class="step-title">Thông tin</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- End Step -->
 
-          <!-- Content Step Form -->
-          <div id="addUserStepFormContent">
-            <!-- Card -->
-            <div id="addUserStepProfile" class="card card-lg active">
-              <!-- Body -->
-              <div class="card-body">
-                <!-- Form Group -->
-                <!--                                <div class="row form-group">-->
-                <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
+                    <!-- Content Step Form -->
+                    <div id="addUserStepFormContent">
+                        <!-- Card -->
+                        <div id="addUserStepProfile" class="card card-lg active">
+                            <!-- Body -->
+                            <div class="card-body row">
+                                <!-- Form Group -->
+                                <!--                                <div class="row form-group">-->
+                                <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
 
-                <!--                                    <div class="col-sm-9">-->
-                <!--                                        <div class="d-flex align-items-center">-->
-                <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
-                <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
-                <!--                                                   for="avatarUploader">-->
-                <!--                                                <img id="avatarImg" class="avatar-img"-->
-                <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
+                                <!--                                    <div class="col-sm-9">-->
+                                <!--                                        <div class="d-flex align-items-center">-->
+                                <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
+                                <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
+                                <!--                                                   for="avatarUploader">-->
+                                <!--                                                <img id="avatarImg" class="avatar-img"-->
+                                <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
 
-                <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
-                <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
-                <!--                                      "textTarget": "#avatarImg",-->
-                <!--                                      "mode": "image",-->
-                <!--                                      "targetAttr": "src",-->
-                <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
-                <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
-                <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
-                <!--                                   }'>-->
+                                <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
+                                <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
+                                <!--                                      "textTarget": "#avatarImg",-->
+                                <!--                                      "mode": "image",-->
+                                <!--                                      "targetAttr": "src",-->
+                                <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
+                                <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
+                                <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
+                                <!--                                   }'>-->
 
-                <!--                                                <span class="avatar-uploader-trigger">-->
-                <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
-                <!--                            </span>-->
-                <!--                                            </label>-->
-                <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
+                                <!--                                                <span class="avatar-uploader-trigger">-->
+                                <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
+                                <!--                            </span>-->
+                                <!--                                            </label>-->
+                                <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
 
-                <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
-                <!--                                                Delete-->
-                <!--                                            </button>-->
-                <!--                                        </div>-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
-                <!-- End Form Group -->
+                                <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
+                                <!--                                                Delete-->
+                                <!--                                            </button>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+                                <!-- End Form Group -->
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label for="firstNameLabel" class="col-sm-3 col-form-label input-label">Họ tên <i
-                          class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
-                          data-placement="top" title="Displayed on public forums, such as Front."></i></label>
+                                <div class="col-sm-6">
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label for="hoTen" class="col-sm-4 col-form-label input-label">Họ tên
+                                            <i
+                                                    class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Displayed on public forums, such as Front."></i></label>
 
-                  <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                      <input type="text" class="form-control" name="firstName" id="firstNameLabel"
-                             placeholder="Nguyễn" aria-label="Nguyễn" th:field="*{ho}">
-                      <input type="text" class="form-control" name="middleName"
-                             id="middleNameLabel"
-                             placeholder="Minh" aria-label="Minh" th:field="*{tenDem}">
-                      <input type="text" class="form-control" name="lastName" id="lastNameLabel"
-                             placeholder="Thư" aria-label="Thư" th:field="*{ten}">
-                    </div>
-                  </div>
-                </div>
-                <!-- End Form Group -->
+                                        <div class="col-sm-8">
+                                            <div class="input-group input-group-sm-down-break">
+                                                <input type="text" class="form-control" name="hoTen"
+                                                       id="hoTen"
+                                                       placeholder="Nguyễn" aria-label="Nguyễn" th:field="*{hoTen}">
+                                            </div>
+                                            <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập tên</i>
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label for="phoneLabel" class="col-sm-3 col-form-label input-label">Số điện
-                    thoại</label>
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label for="sdt" class="col-sm-4 col-form-label input-label">Số điện thoại</label>
 
-                  <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break align-items-center">
-                      <input type="text" class="js-masked-input form-control" name="phone"
-                             id="phoneLabel" placeholder="+x-xxx-xxx-xxx" th:field="*{sdt}">
-                    </div>
-                  </div>
-                </div>
+                                        <div class="col-sm-8">
+                                            <div class="input-group input-group-sm-down-break align-items-center">
+                                                <input type="text" class="js-masked-input form-control" name="phone"
+                                                       id="sdt" placeholder="+x-xxx-xxx-xxx" th:field="*{sdt}">
+                                            </div>
+                                            <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
+                                        </div>
+                                    </div>
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label for="CCCDLabel" class="col-sm-3 col-form-label input-label">CCCD</label>
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 col-form-label input-label">Chức vụ</label>
+                                        <!-- Select -->
+                                        <div class="col-sm-8">
+                                            <select class="form-control" th:field="*{chucVu}">
+                                                <option th:each="cv:${listCV}" th:value="${cv.getId()}"
+                                                        th:selected="${nhanVien.chucVu.getId() == cv.id}"
+                                                        th:text="${cv.getTen()}"></option>
+                                            </select>
+                                            <!-- End Select -->
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
 
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" name="CCCD"
-                           id="CCCDLabel" placeholder="Htmlstream"
-                           aria-label="Htmlstream" th:field="*{cccd}">
-                  </div>
-                </div>
-                <!-- End Form Group -->
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 col-form-label input-label">Trạng thái</label>
+                                        <!-- Select -->
+                                        <div class="col-sm-8">
+                                            <select class="form-control" th:field="*{trangThai}">
+                                                <option th:value="true" selected="">Hoạt động</option>
+                                                <option th:value="false">Ngừng hoạt động</option>
+                                            </select>
+                                            <!-- End Select -->
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label for="diaChiLabel" class="col-sm-3 col-form-label input-label">Địa chỉ</label>
+                                    <div class="row form-group">
+                                        <label for="cccd" class="col-sm-4 col-form-label input-label">CCCD</label>
 
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control" name="diaChi"
-                           id="diaChiLabel" placeholder="Htmlstream"
-                           aria-label="Htmlstream" th:field="*{diaChi}">
-                  </div>
-                </div>
-                <!-- End Form Group -->
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="CCCD"
+                                                   id="cccd" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{cccd}">
+                                        </div>
+                                        <i id="cccd_emty" style="color: red;display: none">Vui lòng nhập vào cccd</i>
+                                    </div>
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 col-form-label input-label">Giới tính</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group input-group-sm-down-break">
+                                                <!-- Custom Radio -->
+                                                <div class="form-control">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input"
+                                                               name="userAccountTypeRadio"
+                                                               id="userAccountTypeRadio1" th:field="*{gioiTinh}"
+                                                               th:value="true">
+                                                        <label class="custom-control-label"
+                                                               for="userAccountTypeRadio1">Nam</label>
+                                                    </div>
+                                                </div>
+                                                <!-- End Custom Radio -->
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label for="ngaySinhLabel" class="col-sm-3 col-form-label input-label">Ngày
-                    sinh</label>
+                                                <!-- Custom Radio -->
+                                                <div class="form-control">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input"
+                                                               name="userAccountTypeRadio"
+                                                               id="userAccountTypeRadio2" th:field="*{gioiTinh}"
+                                                               th:value="false">
+                                                        <label class="custom-control-label"
+                                                               for="userAccountTypeRadio2">Nữ</label>
+                                                    </div>
+                                                </div>
+                                                <!-- End Custom Radio -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                  <div class="col-sm-9">
-                    <input type="date" class="form-control" name="ngaySinh"
-                           id="ngaySinhLabel" placeholder="Htmlstream"
-                           aria-label="Htmlstream" th:field="*{ngaySinh}">
-                  </div>
-                </div>
-                <!-- End Form Group -->
+                                <!-- Form Group -->
+                                <div class="col-sm-6">
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label for="ngaySinh" class="col-sm-4 col-form-label input-label">Ngày sinh</label>
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label class="col-sm-3 col-form-label input-label">Chức vụ</label>
-                  <!-- Select -->
-                  <div class="col-sm-9">
-                    <select class="form-control" th:field="*{chucVu}">
-                      <option th:each="cv:${listCV}" th:value="${cv.getId()}"
-                              th:selected="${nhanVien.chucVu.getId() == cv.id}" th:text="${cv.getTen()}"></option>
-                    </select>
-                    <!-- End Select -->
-                  </div>
-                </div>
-                <!-- End Form Group -->
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control" name="ngaySinh"
+                                                   id="ngaySinh" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{ngaySinh}">
+                                        </div>
+                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
+                                    </div>
+                                    <!-- End Form Group -->
 
-                <!-- Form Group -->
-                <div class="row form-group">
-                  <label class="col-sm-3 col-form-label input-label">Trạng thái</label>
-                  <!-- Select -->
-                  <div class="col-sm-9">
-                    <select class="form-control" th:field="*{trangThai}">
-                      <option th:value="true" selected="">Hoạt động</option>
-                      <option th:value="false">Ngừng hoạt động</option>
-                    </select>
-                    <!-- End Select -->
-                  </div>
-                </div>
-                <!-- End Form Group -->
+                                    <div class="row form-group">
+                                        <label for="soNha" class="col-sm-4 col-form-label input-label">Số nhà</label>
 
-                <!-- Form Group -->
-                <div class="row">
-                  <label class="col-sm-3 col-form-label input-label">Giới tính</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="soNha"
+                                                   id="soNha" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{soNha}">
+                                        </div>
+                                        <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
+                                    </div>
 
-                  <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                      <!-- Custom Radio -->
-                      <div class="form-control">
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input"
-                                 name="userAccountTypeRadio"
-                                 id="userAccountTypeRadio1" th:field="*{gioiTinh}" th:value="true">
-                          <label class="custom-control-label"
-                                 for="userAccountTypeRadio1">Nam</label>
+                                    <div class="row form-group">
+                                        <label for="phuongxa" class="col-sm-4 col-form-label input-label">Phường xã</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="phuongXa"
+                                                   id="phuongXa" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{phuongXa}">
+                                        </div>
+                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label for="quanHuyen" class="col-sm-4 col-form-label input-label">Quận huyện</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="quanHuyen"
+                                                   id="quanHuyen" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{quanHuyen}">
+                                        </div>
+                                        <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label for="tinhTP" class="col-sm-4 col-form-label input-label">Tỉnh thành phố</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="tinhTP"
+                                                   id="tinhTP" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{tinhThanhPho}">
+                                        </div>
+                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+                            </div>
+                            <!-- End Body -->
+
+                            <div class="d-flex justify-content-center">
+                                <div class="card-footer d-sm-flex align-items-sm-center">
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <!-- End Custom Radio -->
-
-                      <!-- Custom Radio -->
-                      <div class="form-control">
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input"
-                                 name="userAccountTypeRadio"
-                                 id="userAccountTypeRadio2" th:field="*{gioiTinh}" th:value="false">
-                          <label class="custom-control-label"
-                                 for="userAccountTypeRadio2">Nữ</label>
-                        </div>
-                      </div>
-                      <!-- End Custom Radio -->
                     </div>
-                  </div>
                 </div>
-                <!-- End Form Group -->
-              </div>
-              <!-- End Body -->
-
-              <div class="d-flex justify-content-center">
-                <div class="card-footer d-sm-flex align-items-sm-center">
-                  <button type="submit" class="btn btn-primary">Cập nhật</button>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Row -->
-    </form>
-    <!-- End Step Form -->
-  </div>
+            <!-- End Row -->
+        </form>
+        <!-- End Step Form -->
+    </div>
 
 
-  <div class="footer">
-    <div class="row justify-content-between align-items-center">
-      <div class="col">
-        <p class="font-size-sm mb-0">&copy; Front. <span
-                class="d-none d-sm-inline-block">2020 Htmlstream.</span></p>
-      </div>
-      <div class="col-auto">
-        <div class="d-flex justify-content-end">
-          <!-- List Dot -->
-          <ul class="list-inline list-separator">
-            <li class="list-inline-item">
-              <a class="list-separator-link" href="#">FAQ</a>
-            </li>
+    <div class="footer">
+        <div class="row justify-content-between align-items-center">
+            <div class="col">
+                <p class="font-size-sm mb-0">&copy; Front. <span
+                        class="d-none d-sm-inline-block">2020 Htmlstream.</span></p>
+            </div>
+            <div class="col-auto">
+                <div class="d-flex justify-content-end">
+                    <!-- List Dot -->
+                    <ul class="list-inline list-separator">
+                        <li class="list-inline-item">
+                            <a class="list-separator-link" href="#">FAQ</a>
+                        </li>
 
-            <li class="list-inline-item">
-              <a class="list-separator-link" href="#">License</a>
-            </li>
+                        <li class="list-inline-item">
+                            <a class="list-separator-link" href="#">License</a>
+                        </li>
 
-            <li class="list-inline-item">
-              <!-- Keyboard Shortcuts Toggle -->
-              <div class="hs-unfold">
-                <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                   href="javascript:;" data-hs-unfold-options='{
+                        <li class="list-inline-item">
+                            <!-- Keyboard Shortcuts Toggle -->
+                            <div class="hs-unfold">
+                                <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
+                                   href="javascript:;" data-hs-unfold-options='{
                               "target": "#keyboardShortcutsSidebar",
                               "type": "css-animation",
                               "animationIn": "fadeInRight",
@@ -277,32 +314,32 @@
                               "hasOverlay": true,
                               "smartPositionOff": true
                              }'>
-                  <i class="tio-command-key"></i>
-                </a>
-              </div>
-              <!-- End Keyboard Shortcuts Toggle -->
-            </li>
-          </ul>
-          <!-- End List Dot -->
+                                    <i class="tio-command-key"></i>
+                                </a>
+                            </div>
+                            <!-- End Keyboard Shortcuts Toggle -->
+                        </li>
+                    </ul>
+                    <!-- End List Dot -->
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 
-  <!-- End Footer -->
+    <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
 <!-- ========== SECONDARY CONTENTS ========== -->
 <!-- Keyboard Shortcuts -->
 <div id="keyboardShortcutsSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow">
-  <div class="card card-lg sidebar-card">
-    <div class="card-header">
-      <h4 class="card-header-title">Keyboard shortcuts</h4>
+    <div class="card card-lg sidebar-card">
+        <div class="card-header">
+            <h4 class="card-header-title">Keyboard shortcuts</h4>
 
-      <!-- Toggle Button -->
-      <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;"
-         data-hs-unfold-options='{
+            <!-- Toggle Button -->
+            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;"
+               data-hs-unfold-options='{
                 "target": "#keyboardShortcutsSidebar",
                 "type": "css-animation",
                 "animationIn": "fadeInRight",
@@ -310,348 +347,348 @@
                 "hasOverlay": true,
                 "smartPositionOff": true
                }'>
-        <i class="tio-clear tio-lg"></i>
-      </a>
-      <!-- End Toggle Button -->
+                <i class="tio-clear tio-lg"></i>
+            </a>
+            <!-- End Toggle Button -->
+        </div>
+
+        <!-- Body -->
+        <div class="card-body sidebar-body sidebar-scrollbar">
+            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
+                <div class="list-group-item">
+                    <h5 class="mb-1">Formatting</h5>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span class="font-weight-bold">Bold</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">b</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <em>italic</em>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">i</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <u>Underline</u>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">u</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <s>Strikethrough</s>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">s</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span class="small">Small text</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">s</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <mark>Highlight</mark>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">e</kbd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
+                <div class="list-group-item">
+                    <h5 class="mb-1">Insert</h5>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Mention person <a href="#">(@Brian)</a></span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">@</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Link to doc <a href="#">(+Meeting notes)</a></span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">+</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <a href="#">#hashtag</a>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">#hashtag</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Date</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">/date</kbd>
+                            <kbd class="d-inline-block mb-1">Space</kbd>
+                            <kbd class="d-inline-block mb-1">/datetime</kbd>
+                            <kbd class="d-inline-block mb-1">/datetime</kbd>
+                            <kbd class="d-inline-block mb-1">Space</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Time</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">/time</kbd>
+                            <kbd class="d-inline-block mb-1">Space</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Note box</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">/note</kbd>
+                            <kbd class="d-inline-block mb-1">Enter</kbd>
+                            <kbd class="d-inline-block mb-1">/note red</kbd>
+                            <kbd class="d-inline-block mb-1">/note red</kbd>
+                            <kbd class="d-inline-block mb-1">Enter</kbd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
+                <div class="list-group-item">
+                    <h5 class="mb-1">Editing</h5>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Find and replace</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">r</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Find next</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">n</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Find previous</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">p</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Indent</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Tab</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Un-indent</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Tab</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Move line up</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Move line down</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1"><i
+                                class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Add a comment</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">m</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Undo</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">z</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Redo</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">y</kbd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group list-group-sm list-group-flush list-group-no-gutters">
+                <div class="list-group-item">
+                    <h5 class="mb-1">Application</h5>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Create new doc</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">n</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Present</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">p</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Share</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">s</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Search docs</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">o</kbd>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <span>Keyboard shortcuts</span>
+                        </div>
+                        <div class="col-7 text-right">
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">/</kbd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Body -->
     </div>
-
-    <!-- Body -->
-    <div class="card-body sidebar-body sidebar-scrollbar">
-      <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-        <div class="list-group-item">
-          <h5 class="mb-1">Formatting</h5>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span class="font-weight-bold">Bold</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">b</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <em>italic</em>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">i</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <u>Underline</u>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">u</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <s>Strikethrough</s>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">s</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span class="small">Small text</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">s</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <mark>Highlight</mark>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">e</kbd>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-        <div class="list-group-item">
-          <h5 class="mb-1">Insert</h5>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Mention person <a href="#">(@Brian)</a></span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">@</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Link to doc <a href="#">(+Meeting notes)</a></span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">+</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <a href="#">#hashtag</a>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">#hashtag</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Date</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">/date</kbd>
-              <kbd class="d-inline-block mb-1">Space</kbd>
-              <kbd class="d-inline-block mb-1">/datetime</kbd>
-              <kbd class="d-inline-block mb-1">/datetime</kbd>
-              <kbd class="d-inline-block mb-1">Space</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Time</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">/time</kbd>
-              <kbd class="d-inline-block mb-1">Space</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Note box</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">/note</kbd>
-              <kbd class="d-inline-block mb-1">Enter</kbd>
-              <kbd class="d-inline-block mb-1">/note red</kbd>
-              <kbd class="d-inline-block mb-1">/note red</kbd>
-              <kbd class="d-inline-block mb-1">Enter</kbd>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
-        <div class="list-group-item">
-          <h5 class="mb-1">Editing</h5>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Find and replace</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">r</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Find next</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">n</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Find previous</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">p</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Indent</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Tab</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Un-indent</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Tab</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Move line up</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Move line down</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1"><i
-                    class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Add a comment</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">m</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Undo</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">z</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Redo</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">y</kbd>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="list-group list-group-sm list-group-flush list-group-no-gutters">
-        <div class="list-group-item">
-          <h5 class="mb-1">Application</h5>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Create new doc</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">n</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Present</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">p</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Share</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">s</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Search docs</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">o</kbd>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <span>Keyboard shortcuts</span>
-            </div>
-            <div class="col-7 text-right">
-              <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                    class="d-inline-block mb-1">/</kbd>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Body -->
-  </div>
 </div>
 <!-- End Keyboard Shortcuts -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
@@ -661,123 +698,188 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
-  $(document).on('ready', function () {
-    // ONLY DEV
-    // =======================================================
-
-    if (window.localStorage.getItem('hs-builder-popover') === null) {
-      $('#builderPopover').popover('show')
-              .on('shown.bs.popover', function () {
-                $('.popover').last().addClass('popover-dark')
-              });
-
-      $(document).on('click', '#closeBuilderPopover', function () {
-        window.localStorage.setItem('hs-builder-popover', true);
-        $('#builderPopover').popover('dispose');
-      });
-    } else {
-      $('#builderPopover').on('show.bs.popover', function () {
-        return false
-      });
+    function formvalidate(e){
+        if(confirm('Bạn có muốn cập nhật không?')){
+            var result=true;
+            var hoTen = document.getElementById("hoTen").value;
+            var sdt = document.getElementById("sdt").value;
+            var cccd = document.getElementById("cccd").value;
+            var ngaySinh = document.getElementById("ngaySinh").value;
+            var soNha = document.getElementById("soNha").value;
+            var phuongXa = document.getElementById("phuongXa").value;
+            var quanHuyen = document.getElementById("quanHuyen").value;
+            var tinhTP = document.getElementById("tinhTP").value;
+            if(hoTen.length == 0){
+                document.getElementById("hoTen_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("hoTen_emty").style.display="none";
+            }
+            if(sdt.length == 0){
+                document.getElementById("sdt_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("sdt_emty").style.display="none";
+            }
+            if(cccd.length == 0){
+                document.getElementById("cccd_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("cccd_emty").style.display="none";
+            }
+            if(ngaySinh.length == 0){
+                document.getElementById("ngaySinh_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("ngaySinh_emty").style.display="none";
+            }
+            if(soNha.length == 0){
+                document.getElementById("soNha_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("soNha_emty").style.display="none";
+            }
+            if(quanHuyen.length == ""){
+                document.getElementById("quanHuyen_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("quanHuyen_emty").style.display="none";
+            }
+            if(phuongXa.length == ""){
+                document.getElementById("phuongXa_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("phuongXa_emty").style.display="none";
+            }
+            if(tinhTP.length == ""){
+                document.getElementById("tinhTP_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("tinhTP_emty").style.display="none";
+            }
+            return result;
+        }else{
+            e.preventDefault();
+        }
     }
 
-    // END ONLY DEV
-    // =======================================================
+    $(document).on('ready', function () {
+        // ONLY DEV
+        // =======================================================
 
+        if (window.localStorage.getItem('hs-builder-popover') === null) {
+            $('#builderPopover').popover('show')
+                .on('shown.bs.popover', function () {
+                    $('.popover').last().addClass('popover-dark')
+                });
 
-    // BUILDER TOGGLE INVOKER
-    // =======================================================
-    $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-      $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-    });
-
-
-    // INITIALIZATION OF MEGA MENU
-    // =======================================================
-    var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-      desktop: {
-        position: 'left'
-      }
-    }).init();
-
-
-    // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-    // =======================================================
-    var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-    // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-    // =======================================================
-    $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-    $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-      if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-        return false;
-      }
-    });
-
-
-    // INITIALIZATION OF UNFOLD
-    // =======================================================
-    $('.js-hs-unfold-invoker').each(function () {
-      var unfold = new HSUnfold($(this)).init();
-    });
-
-
-    // INITIALIZATION OF FORM SEARCH
-    // =======================================================
-    $('.js-form-search').each(function () {
-      new HSFormSearch($(this)).init()
-    });
-
-
-    // INITIALIZATION OF FILE ATTACH
-    // =======================================================
-    $('.js-file-attach').each(function () {
-      var customFile = new HSFileAttach($(this)).init();
-    });
-
-
-    // INITIALIZATION OF STEP FORM
-    // =======================================================
-    $('.js-step-form').each(function () {
-      var stepForm = new HSStepForm($(this), {
-        finish: function () {
-          $("#addUserStepFormProgress").hide();
-          $("#addUserStepFormContent").hide();
-          $("#successMessageContent").show();
+            $(document).on('click', '#closeBuilderPopover', function () {
+                window.localStorage.setItem('hs-builder-popover', true);
+                $('#builderPopover').popover('dispose');
+            });
+        } else {
+            $('#builderPopover').on('show.bs.popover', function () {
+                return false
+            });
         }
-      }).init();
+
+        // END ONLY DEV
+        // =======================================================
+
+
+        // BUILDER TOGGLE INVOKER
+        // =======================================================
+        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
+            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
+        });
+
+
+        // INITIALIZATION OF MEGA MENU
+        // =======================================================
+        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
+            desktop: {
+                position: 'left'
+            }
+        }).init();
+
+
+        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
+        // =======================================================
+        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
+
+
+        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
+        // =======================================================
+        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
+
+        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
+            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
+                return false;
+            }
+        });
+
+
+        // INITIALIZATION OF UNFOLD
+        // =======================================================
+        $('.js-hs-unfold-invoker').each(function () {
+            var unfold = new HSUnfold($(this)).init();
+        });
+
+
+        // INITIALIZATION OF FORM SEARCH
+        // =======================================================
+        $('.js-form-search').each(function () {
+            new HSFormSearch($(this)).init()
+        });
+
+
+        // INITIALIZATION OF FILE ATTACH
+        // =======================================================
+        $('.js-file-attach').each(function () {
+            var customFile = new HSFileAttach($(this)).init();
+        });
+
+
+        // INITIALIZATION OF STEP FORM
+        // =======================================================
+        $('.js-step-form').each(function () {
+            var stepForm = new HSStepForm($(this), {
+                finish: function () {
+                    $("#addUserStepFormProgress").hide();
+                    $("#addUserStepFormContent").hide();
+                    $("#successMessageContent").show();
+                }
+            }).init();
+        });
+
+
+        // INITIALIZATION OF MASKED INPUT
+        // =======================================================
+        $('.js-masked-input').each(function () {
+            var mask = $.HSCore.components.HSMask.init($(this));
+        });
+
+
+        // INITIALIZATION OF SELECT2
+        // =======================================================
+        $('.js-select2-custom').each(function () {
+            var select2 = $.HSCore.components.HSSelect2.init($(this));
+        });
+
+
+        // INITIALIZATION OF ADD INPUT FILED
+        // =======================================================
+        $('.js-add-field').each(function () {
+            new HSAddField($(this), {
+                addedField: function () {
+                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
+                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
+                    });
+                }
+            }).init();
+        });
     });
-
-
-    // INITIALIZATION OF MASKED INPUT
-    // =======================================================
-    $('.js-masked-input').each(function () {
-      var mask = $.HSCore.components.HSMask.init($(this));
-    });
-
-
-    // INITIALIZATION OF SELECT2
-    // =======================================================
-    $('.js-select2-custom').each(function () {
-      var select2 = $.HSCore.components.HSSelect2.init($(this));
-    });
-
-
-    // INITIALIZATION OF ADD INPUT FILED
-    // =======================================================
-    $('.js-add-field').each(function () {
-      new HSAddField($(this), {
-        addedField: function () {
-          $('.js-add-field .js-select2-custom-dynamic').each(function () {
-            var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
-          });
-        }
-      }).init();
-    });
-  });
 </script>
-<div th:replace="/cms/pages/_IE-suport.html"></div>
+<div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface DiaChiService {
     List<DiaChi> getAll();
+
+    DiaChi getById(Long id);
     void delete(Long id);
     DiaChi detail(Long id);
     DiaChi add(DiaChi diaChi);

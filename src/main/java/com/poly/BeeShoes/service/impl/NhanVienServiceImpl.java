@@ -5,6 +5,9 @@ import com.poly.BeeShoes.repository.NhanVienRepository;
 import com.poly.BeeShoes.service.NhanVienService;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class NhanVienServiceImpl implements NhanVienService {
     private final NhanVienRepository nhanVienRepository;
+
+    @Override
+    public Page<NhanVien> phanTrang(Integer pageNum, Integer pageNo) {
+        Pageable pageable = PageRequest.of(pageNum, pageNo);
+        return nhanVienRepository.findAll(pageable);
+    }
 
     @Override
     public List<NhanVien> getAll() {
@@ -34,14 +43,12 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public NhanVien add(NhanVien nhanVien) {
-        nhanVienRepository.save(nhanVien);
-        return null;
+        return nhanVienRepository.save(nhanVien);
     }
 
     @Override
     public NhanVien update(NhanVien nhanVien, Long id) {
-        nhanVienRepository.save(nhanVien);
-        return null;
+        return nhanVienRepository.save(nhanVien);
     }
 
     @Override

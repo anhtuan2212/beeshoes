@@ -2,7 +2,7 @@ package com.poly.BeeShoes.controller.cms;
 
 import com.poly.BeeShoes.model.DiaChi;
 import com.poly.BeeShoes.model.KhachHang;
-import com.poly.BeeShoes.model.NhanVien;
+import com.poly.BeeShoes.request.KhachHangRequest;
 import com.poly.BeeShoes.service.DiaChiService;
 import com.poly.BeeShoes.service.KhachHangService;
 import lombok.RequiredArgsConstructor;
@@ -10,17 +10,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/cms")
+@RequestMapping("/cms/khach-hang")
 public class KhachHangController {
     private final KhachHangService khachHangService;
     private final DiaChiService diaChiService;
 
-    @GetMapping("/khachHang")
-    public String khachHang(Model model){
+    @GetMapping("")
+    public String khachHang(Model model) {
         List<KhachHang> kh = khachHangService.getAll();
         List<DiaChi> dc = diaChiService.getAll();
         model.addAttribute("listKH", kh);
@@ -33,34 +35,73 @@ public class KhachHangController {
     @GetMapping("/deleteKH/{id}")
     public String deleteKH(@PathVariable Long id) {
         khachHangService.delete(id);
-        return "redirect:/cms/khachHang";
+        return "redirect:/cms/khach-hang";
     }
 
     @GetMapping("/view-addKH")
     public String viewAdd(Model model) {
-        model.addAttribute("khachHang", new KhachHang());
-        model.addAttribute("diaChi", new DiaChi());
+        model.addAttribute("khachHang", new KhachHangRequest());
         model.addAttribute("listKH", khachHangService.getAll());
         model.addAttribute("listDC", diaChiService.getAll());
         return "cms/pages/users/add-khachHang";
     }
-    @PostMapping("/add-diaChi")
-    public String addDiaChi(@ModelAttribute("diaChi") DiaChi diaChi, Model model) {
-        model.addAttribute("diaChi", diaChi);
-        diaChiService.add(diaChi);
-        return "redirect:/cms/khachHang";
-    }
 
-    @PostMapping("/add-khachHang")
-    public void addKH(@ModelAttribute("khachHang") KhachHang khachHang, Model model) {
+    @PostMapping("/add")
+    public String addKH(@ModelAttribute("khachHang") KhachHangRequest khachHang, Model model) {
         model.addAttribute("khachHang", khachHang);
-        khachHangService.generateCustomerCode();
-        khachHangService.add(khachHang);
-//        return "redirect:/cms/nhanVien";
+        KhachHang kh1 = new KhachHang();
+        kh1.setHoTen(khachHang.getHoTen());
+        kh1.setGioiTinh(khachHang.isGioiTinh());
+        kh1.setNgaySinh(khachHang.getNgaySinh());
+        kh1.setSdt(khachHang.getSdt());
+        kh1.setNgayTao(Timestamp.from(Instant.now()));
+        kh1.setMaKhachHang(khachHangService.generateCustomerCode());
+        kh1.setTrangThai(khachHang.isTrangThai());
+        KhachHang kh = khachHangService.add(kh1);
+        DiaChi dc = new DiaChi();
+        dc.setSoNha(khachHang.getSoNha());
+        dc.setPhuongXa(khachHang.getPhuongXa());
+        dc.setQuanHuyen(khachHang.getQuanHuyen());
+        dc.setTinhThanhPho(khachHang.getTinhThanhPho());
+        dc.setNgayTao(Timestamp.from(Instant.now()));
+        dc.setKhachHang(kh);
+        DiaChi diaChi = diaChiService.add(dc);
+        kh.setDiaChiMacDinh(diaChi);
+        khachHangService.add(kh);
+        System.out.println(kh.toString());
+        System.out.println(khachHang.toString());
+        return "redirect:/cms/khach-hang";
     }
 
-    @GetMapping("/khachHang-detail")
-    public String khachHangDetail() {
-        return "cms/pages/users/customer-detail";
+    @GetMapping("/detail/{id}")
+    public String khachHangDetail(@PathVariable Long id, Model model) {
+        KhachHang khachHang = khachHangService.detail(id);
+        model.addAttribute("khachHang", khachHang);
+        return "cms/pages/users/detail-khachHang";
     }
+
+    @PostMapping("/update/{id}")
+    public String updateNV(@PathVariable Long id, Model model,
+                           @ModelAttribute("khachHang") KhachHang khachHang) {
+        KhachHang kh1 = khachHangService.detail(id);
+        kh1.setHoTen(khachHang.getHoTen());
+        kh1.setGioiTinh(khachHang.isGioiTinh());
+        kh1.setNgaySinh(khachHang.getNgaySinh());
+        kh1.setSdt(khachHang.getSdt());
+        kh1.setTrangThai(khachHang.isTrangThai());
+        KhachHang kh = khachHangService.update(kh1, id);
+
+        DiaChi dc = diaChiService.detail(kh.getDiaChiMacDinh().getId());
+        System.out.println(dc.getSoNha());
+        dc.setSoNha(khachHang.getDiaChiMacDinh().getSoNha());
+        dc.setPhuongXa(khachHang.getDiaChiMacDinh().getPhuongXa());
+        dc.setQuanHuyen(khachHang.getDiaChiMacDinh().getQuanHuyen());
+        dc.setTinhThanhPho(khachHang.getDiaChiMacDinh().getTinhThanhPho());
+        DiaChi diaChi = diaChiService.update(dc, kh1.getDiaChiMacDinh().getId());
+        kh.setDiaChiMacDinh(dc);
+        khachHangService.update(kh,id);
+
+        return "redirect:/cms/khach-hang";
+    }
+
 }

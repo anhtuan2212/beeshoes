@@ -1,17 +1,14 @@
 package com.poly.BeeShoes.service.impl;
 
-import com.poly.BeeShoes.utility.ConvertUtility;
 import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.repository.KhachHangRepository;
-import com.poly.BeeShoes.repository.UserRepository;
+import com.poly.BeeShoes.request.KhachHangRequest;
 import com.poly.BeeShoes.service.KhachHangService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +34,12 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang add(KhachHang khachHang) {
-        khachHangRepository.save(khachHang);
-        return null;
+        return khachHangRepository.save(khachHang);
     }
 
     @Override
     public KhachHang update(KhachHang khachHang, Long id) {
-        khachHangRepository.save(khachHang);
-        return null;
+        return khachHangRepository.save(khachHang);
     }
 
     @Override
