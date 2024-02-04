@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -57,8 +58,8 @@ public class VoucherController {
     public String add(@ModelAttribute Voucher voucher,
                       @RequestParam(name =
                               "page", defaultValue = "1") Integer page)throws ParseException {
-
-
+        voucher.setNgayBatDau(Timestamp.valueOf(voucher.getStartDate()));
+        voucher.setNgayKetThuc(Timestamp.valueOf(voucher.getEndDate()));
         long count = voucherResponsitory.count();
         int numberOfDigits = (int) Math.log10(count + 1) + 1;
         int numberOfZeros = Math.max(0, 5 - numberOfDigits);

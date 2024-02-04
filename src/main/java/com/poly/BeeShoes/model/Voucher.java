@@ -27,8 +27,12 @@ public class Voucher {
     Long id;
     String ma;
     String ten;
-    LocalDateTime ngayBatDau;
-    LocalDateTime ngayKetThuc;
+    Timestamp ngayBatDau;
+    Timestamp ngayKetThuc;
+    @Transient
+    LocalDateTime startDate;
+    @Transient
+    LocalDateTime endDate;
     double giaTriTienMat;
     int giaTriPhanTram;
     double giaTriToiDa;
@@ -46,7 +50,6 @@ public class Voucher {
     @OneToOne
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
-
     boolean trangThai;
 
 
