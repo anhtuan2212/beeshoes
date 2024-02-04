@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+    <!-- CSS Timeline -->
+    <link rel="stylesheet" href="/assets/cms/css/timeline.css">
   </head>
   <body class="   footer-offset">
       <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
@@ -46,7 +48,7 @@
               </nav>
               
               <div class="d-sm-flex align-items-sm-center">
-                <h1 class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.id}"></h1>
+                <h1 class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
                 <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
                     (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')} + ' ml-sm-3'" th:text="'Trạng thái: ' + ${hoaDon.trangThai}">
                   <span class="legend-indicator bg-success"></span>
@@ -60,35 +62,6 @@
                 <a class="text-body mr-3" href="javascript:;" onclick="window.print(); return false;">
                   <i class="tio-print mr-1"></i> Print order
                 </a>
-                
-                <!-- Unfold -->
-                <div class="hs-unfold">
-                  <a class="js-hs-unfold-invoker text-body" href="javascript:;" data-hs-unfold-options='{
-                       "target": "#moreOptionsDropdown",
-                       "type": "css-animation"
-                     }'>
-                    More options <i class="tio-chevron-down"></i>
-                  </a>
-
-                  <div id="moreOptionsDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu mt-1">
-                    <a class="dropdown-item" href="#">
-                      <i class="tio-copy dropdown-item-icon"></i> Duplicate
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="tio-clear dropdown-item-icon"></i> Cancel order
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="tio-archive dropdown-item-icon"></i> Archive
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="tio-visible dropdown-item-icon"></i> View order status page
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="tio-edit dropdown-item-icon"></i> Edit order
-                    </a>
-                  </div>
-                </div>
-                <!-- End Unfold -->
               </div>
             </div>
 
@@ -103,6 +76,8 @@
           </div>
         </div>
         <!-- End Page Header -->
+
+        <div class="row col-12" th:include="~{/cms/pages/orders/_timeline.html}"></div>
   
         <div class="row">
           <div class="col-lg-8 mb-3 mb-lg-0">
@@ -110,7 +85,7 @@
             <div class="card mb-3 mb-lg-5">
               <!-- Header -->
               <div class="card-header">
-                <h4 class="card-header-title">Order details <span class="badge badge-soft-dark rounded-circle ml-1" th:text="${hoaDonChiTietList.size()}"></span></h4>
+                <h4 class="card-header-title">Chi tiết đơn hàng <span class="badge badge-soft-dark rounded-circle ml-1" th:text="${hoaDonChiTietList.size()}"></span></h4>
                 <a class="link" href="javascript:;">Edit</a>
               </div>
               <!-- End Header -->
@@ -127,11 +102,6 @@
                     <div class="row">
                       <div class="col-md-6 mb-3 mb-md-0">
                         <a class="h5 d-block" href="/cms/product-detail" th:text="${hdct.chiTietSanPham.sanPham.ten}"></a>
-
-                        <div class="font-size-sm text-body">
-                          <span>Gender:</span>
-                          <span class="font-weight-bold">Women</span>
-                        </div>
                         <div class="font-size-sm text-body">
                           <span>Color:</span>
                           <span class="font-weight-bold" th:text="${hdct.chiTietSanPham.mauSac.ten}"></span>
