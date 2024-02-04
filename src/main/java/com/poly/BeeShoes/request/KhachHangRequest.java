@@ -12,9 +12,7 @@ import java.sql.Date;
 public class KhachHangRequest {
     private Long id;
     private String maKhachHang;
-    private String ho;
-    private String tenDem;
-    private String ten;
+    private String hoTen;
     private boolean gioiTinh;
     private Date ngaySinh;
     private String sdt;

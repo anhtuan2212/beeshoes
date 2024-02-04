@@ -18,7 +18,7 @@ public class NhanVienController {
     private final NhanVienService nhanVienService;
     private final ChucVuService chucVuService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String nhanVien(Model model){
         List<NhanVien> nv = nhanVienService.getAll();
         model.addAttribute("listCV", chucVuService.getAll());
@@ -39,7 +39,7 @@ public class NhanVienController {
         nhanVien.setMaNhanVien(nhanVienService.generateEmployeeCode());
         nhanVienService.add(nhanVien);
         model.addAttribute("thongbao", "Thêm thành công!");
-        return "redirect:/cms/nhanVien";
+        return "redirect:/cms/nhan-vien";
     }
 
     @GetMapping("/view-detail/{id}")
@@ -55,13 +55,13 @@ public class NhanVienController {
                            @ModelAttribute("nhanVien") NhanVien nhanVien){
         nhanVienService.update(nhanVien, id);
         model.addAttribute("thongbao", "Cập nhật thành công!");
-        return "redirect:/cms/nhanVien";
+        return "redirect:/cms/nhan-vien";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteNV(@PathVariable Long id, Model model) {
         nhanVienService.delete(id);
         model.addAttribute("thongbao", "Xóa thành công!");
-        return "redirect:/cms/nhanVien";
+        return "redirect:/cms/nhan-vien";
     }
 }

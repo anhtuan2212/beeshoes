@@ -32,13 +32,8 @@
 <main id="content" role="main" class="main">
     <!-- Content -->
     <div class="content container-fluid">
-<!--        &lt;!&ndash; Step Form &ndash;&gt;-->
-<!--        <th:block th:if="${not empty thongbao}">-->
-<!--            <script th:inline="javascript">-->
-<!--                alert("[[${thongbao}]]");-->
-<!--            </script>-->
-<!--        </th:block>-->
-        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" class="js-step-form py-md-1" data-hs-step-form-options='{
+        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" onsubmit="return formvalidate()"
+              class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
                 "endSelector": "#addUserFinishBtn",
@@ -66,183 +61,213 @@
                         <!-- Card -->
                         <div id="addUserStepProfile" class="card card-lg active">
                             <!-- Body -->
-                            <div class="card-body">
+                            <div class="card-body row">
                                 <!-- Form Group -->
-<!--                                <div class="row form-group">-->
-<!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
+                                <!--                                <div class="row form-group">-->
+                                <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
 
-<!--                                    <div class="col-sm-9">-->
-<!--                                        <div class="d-flex align-items-center">-->
-<!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
-<!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
-<!--                                                   for="avatarUploader">-->
-<!--                                                <img id="avatarImg" class="avatar-img"-->
-<!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
+                                <!--                                    <div class="col-sm-9">-->
+                                <!--                                        <div class="d-flex align-items-center">-->
+                                <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
+                                <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
+                                <!--                                                   for="avatarUploader">-->
+                                <!--                                                <img id="avatarImg" class="avatar-img"-->
+                                <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
 
-<!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
-<!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
-<!--                                      "textTarget": "#avatarImg",-->
-<!--                                      "mode": "image",-->
-<!--                                      "targetAttr": "src",-->
-<!--                                      "resetTarget": ".js-file-attach-reset-img",-->
-<!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
-<!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
-<!--                                   }'>-->
+                                <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
+                                <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
+                                <!--                                      "textTarget": "#avatarImg",-->
+                                <!--                                      "mode": "image",-->
+                                <!--                                      "targetAttr": "src",-->
+                                <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
+                                <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
+                                <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
+                                <!--                                   }'>-->
 
-<!--                                                <span class="avatar-uploader-trigger">-->
-<!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
-<!--                            </span>-->
-<!--                                            </label>-->
-<!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
+                                <!--                                                <span class="avatar-uploader-trigger">-->
+                                <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
+                                <!--                            </span>-->
+                                <!--                                            </label>-->
+                                <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
 
-<!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
-<!--                                                Delete-->
-<!--                                            </button>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
+                                <!--                                                Delete-->
+                                <!--                                            </button>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
                                 <!-- End Form Group -->
 
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="firstNameLabel" class="col-sm-3 col-form-label input-label">Họ tên <i
-                                            class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
-                                            data-placement="top" title="Displayed on public forums, such as Front."></i></label>
+                                <div class="col-sm-6">
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label for="hoTen" class="col-sm-4 col-form-label input-label">Họ tên
+                                            <i
+                                                    class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Displayed on public forums, such as Front."></i></label>
 
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break">
-                                            <input type="text" class="form-control" name="firstName" id="firstNameLabel"
-                                                   placeholder="Nguyễn" aria-label="Nguyễn" th:field="*{ho}">
-                                            <input type="text" class="form-control" name="middleName"
-                                                   id="middleNameLabel"
-                                                   placeholder="Minh" aria-label="Minh" th:field="*{tenDem}">
-                                            <input type="text" class="form-control" name="lastName" id="lastNameLabel"
-                                                   placeholder="Thư" aria-label="Thư" th:field="*{ten}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="phoneLabel" class="col-sm-3 col-form-label input-label">Số điện
-                                        thoại</label>
-
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break align-items-center">
-                                            <input type="text" class="js-masked-input form-control" name="phone"
-                                                   id="phoneLabel" placeholder="+x-xxx-xxx-xxx" th:field="*{sdt}">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="CCCDLabel" class="col-sm-3 col-form-label input-label">CCCD</label>
-
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="CCCD"
-                                               id="CCCDLabel" placeholder="Htmlstream"
-                                               aria-label="Htmlstream" th:field="*{cccd}">
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="diaChiLabel" class="col-sm-3 col-form-label input-label">Địa chỉ</label>
-
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="diaChi"
-                                               id="diaChiLabel" placeholder="Htmlstream"
-                                               aria-label="Htmlstream" th:field="*{diaChi}">
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="ngaySinhLabel" class="col-sm-3 col-form-label input-label">Ngày
-                                        sinh</label>
-
-                                    <div class="col-sm-9">
-                                        <input type="date" class="form-control" name="ngaySinh"
-                                               id="ngaySinhLabel" placeholder="Htmlstream"
-                                               aria-label="Htmlstream" th:field="*{ngaySinh}">
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label class="col-sm-3 col-form-label input-label">Chức vụ</label>
-                                    <!-- Select -->
-                                    <div class="col-sm-9">
-                                        <select class="form-control" th:field="*{chucVu}">
-                                            <option th:each="cv:${listCV}" th:value="${cv.getId()}"
-                                                    th:text="${cv.getTen()}"></option>
-                                        </select>
-                                        <!-- End Select -->
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label class="col-sm-3 col-form-label input-label">Trạng thái</label>
-                                    <!-- Select -->
-                                    <div class="col-sm-9">
-                                        <select class="form-control" th:field="*{trangThai}">
-                                            <option th:value="false" selected="">Hoạt động</option>
-                                            <option th:value="true">Ngừng hoạt động</option>
-                                        </select>
-                                        <!-- End Select -->
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row">
-                                    <label class="col-sm-3 col-form-label input-label">Giới tính</label>
-
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break">
-                                            <!-- Custom Radio -->
-                                            <div class="form-control">
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input"
-                                                           name="userAccountTypeRadio"
-                                                           id="userAccountTypeRadio1" th:field="*{gioiTinh}" th:value="true">
-                                                    <label class="custom-control-label"
-                                                           for="userAccountTypeRadio1">Nam</label>
-                                                </div>
+                                        <div class="col-sm-8">
+                                            <div class="input-group input-group-sm-down-break">
+                                                <input type="text" class="form-control" name="hoTen"
+                                                       id="hoTen"
+                                                       placeholder="Nguyễn" aria-label="Nguyễn" th:field="*{hoTen}">
                                             </div>
-                                            <!-- End Custom Radio -->
+                                            <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập tên</i>
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
 
-                                            <!-- Custom Radio -->
-                                            <div class="form-control">
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input"
-                                                           name="userAccountTypeRadio"
-                                                           id="userAccountTypeRadio2" th:field="*{gioiTinh}" th:value="false">
-                                                    <label class="custom-control-label"
-                                                           for="userAccountTypeRadio2">Nữ</label>
-                                                </div>
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label for="sdt" class="col-sm-4 col-form-label input-label">Số điện thoại</label>
+
+                                        <div class="col-sm-8">
+                                            <div class="input-group input-group-sm-down-break align-items-center">
+                                                <input type="text" class="js-masked-input form-control" name="phone"
+                                                       id="sdt" placeholder="+x-xxx-xxx-xxx" th:field="*{sdt}">
                                             </div>
-                                            <!-- End Custom Radio -->
+                                            <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 col-form-label input-label">Chức vụ</label>
+                                        <!-- Select -->
+                                        <div class="col-sm-8">
+                                            <select class="form-control" th:field="*{chucVu}">
+                                                <option th:each="cv:${listCV}" th:value="${cv.getId()}"
+                                                        th:text="${cv.getTen()}"></option>
+                                            </select>
+                                            <!-- End Select -->
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
+
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 col-form-label input-label">Trạng thái</label>
+                                        <!-- Select -->
+                                        <div class="col-sm-8">
+                                            <select class="form-control" th:field="*{trangThai}">
+                                                <option th:value="true" selected="">Hoạt động</option>
+                                                <option th:value="false">Ngừng hoạt động</option>
+                                            </select>
+                                            <!-- End Select -->
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
+
+                                    <div class="row form-group">
+                                        <label for="cccd" class="col-sm-4 col-form-label input-label">CCCD</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="CCCD"
+                                                   id="cccd" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{cccd}">
+                                        </div>
+                                        <i id="cccd_emty" style="color: red;display: none">Vui lòng nhập vào cccd</i>
+                                    </div>
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 col-form-label input-label">Giới tính</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group input-group-sm-down-break">
+                                                <!-- Custom Radio -->
+                                                <div class="form-control">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input"
+                                                               name="userAccountTypeRadio"
+                                                               id="userAccountTypeRadio1" th:field="*{gioiTinh}"
+                                                               th:value="true">
+                                                        <label class="custom-control-label"
+                                                               for="userAccountTypeRadio1">Nam</label>
+                                                    </div>
+                                                </div>
+                                                <!-- End Custom Radio -->
+
+                                                <!-- Custom Radio -->
+                                                <div class="form-control">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input"
+                                                               name="userAccountTypeRadio"
+                                                               id="userAccountTypeRadio2" th:field="*{gioiTinh}"
+                                                               th:value="false">
+                                                        <label class="custom-control-label"
+                                                               for="userAccountTypeRadio2">Nữ</label>
+                                                    </div>
+                                                </div>
+                                                <!-- End Custom Radio -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Form Group -->
+
+                                <!-- Form Group -->
+                                <div class="col-sm-6">
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label for="ngaySinh" class="col-sm-4 col-form-label input-label">Ngày sinh</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control" name="ngaySinh"
+                                                   id="ngaySinh" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{ngaySinh}">
+                                        </div>
+                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
+                                    </div>
+                                    <!-- End Form Group -->
+
+                                    <div class="row form-group">
+                                        <label for="soNha" class="col-sm-4 col-form-label input-label">Số nhà</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="soNha"
+                                                   id="soNha" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{soNha}">
+                                        </div>
+                                        <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label for="phuongxa" class="col-sm-4 col-form-label input-label">Phường xã</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="phuongXa"
+                                                   id="phuongXa" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{phuongXa}">
+                                        </div>
+                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label for="quanHuyen" class="col-sm-4 col-form-label input-label">Quận huyện</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="quanHuyen"
+                                                   id="quanHuyen" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{quanHuyen}">
+                                        </div>
+                                        <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label for="tinhTP" class="col-sm-4 col-form-label input-label">Tỉnh thành phố</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="tinhTP"
+                                                   id="tinhTP" placeholder="Htmlstream"
+                                                   aria-label="Htmlstream" th:field="*{tinhThanhPho}">
+                                        </div>
+                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
+                                    </div>
+                                </div>
                             </div>
                             <!-- End Body -->
 
                             <div class="d-flex justify-content-center">
                                 <div class="card-footer d-sm-flex align-items-sm-center">
                                     <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
-<!--                                    <a class="btn btn-primary" href="/cms/add-nhanVien">-->
-<!--                                        <i class="tio-user-add mr-1"></i> Thêm nhân viên-->
-<!--                                    </a>-->
                                 </div>
                             </div>
                         </div>
@@ -669,6 +694,68 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
+    function formvalidate(){
+        var result=true;
+        var hoTen = document.getElementById("hoTen").value;
+        var sdt = document.getElementById("sdt").value;
+        var cccd = document.getElementById("cccd").value;
+        var ngaySinh = document.getElementById("ngaySinh").value;
+        var soNha = document.getElementById("soNha").value;
+        var phuongXa = document.getElementById("phuongXa").value;
+        var quanHuyen = document.getElementById("quanHuyen").value;
+        var tinhTP = document.getElementById("tinhTP").value;
+        if(hoTen.length == 0){
+            document.getElementById("hoTen_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("hoTen_emty").style.display="none";
+        }
+        if(sdt.length == 0){
+            document.getElementById("sdt_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("sdt_emty").style.display="none";
+        }
+        if(cccd.length == 0){
+            document.getElementById("cccd_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("cccd_emty").style.display="none";
+        }
+        if(ngaySinh.length == 0){
+            document.getElementById("ngaySinh_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("ngaySinh_emty").style.display="none";
+        }
+        if(soNha.length == 0){
+            document.getElementById("soNha_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("soNha_emty").style.display="none";
+        }
+        if(quanHuyen.length == ""){
+            document.getElementById("quanHuyen_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("quanHuyen_emty").style.display="none";
+        }
+        if(phuongXa.length == ""){
+            document.getElementById("phuongXa_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("phuongXa_emty").style.display="none";
+        }
+        if(tinhTP.length == ""){
+            document.getElementById("tinhTP_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("tinhTP_emty").style.display="none";
+        }
+        return result;
+    }
+
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
