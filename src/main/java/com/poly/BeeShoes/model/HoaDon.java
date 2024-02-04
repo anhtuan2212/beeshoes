@@ -27,6 +27,7 @@ public class HoaDon {
     @JoinColumn(name = "id_khach_hang")
     KhachHang khachHang;
     String maHoaDon;
+    boolean loaiHoaDon;
 
     @OneToOne
     @JoinColumn(name = "id_voucher")
