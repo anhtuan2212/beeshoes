@@ -60,11 +60,6 @@
         </div>
         <!-- End Page Header -->
         <div>
-                <th:block th:if="${not #strings.isEmpty(thongbao)}">
-                    <script th:inline="javascript">
-                        alert([[${thongbao}]]);
-                    </script>
-                </th:block>
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Bộ lọc</h5>
@@ -175,10 +170,10 @@
                                 <th>STT</th>
                                 <th class="table-column-pl-0">Tên nhân viên</th>
                                 <th>Chức vụ</th>
-                                <th>CCCD</th>
                                 <th>Số điện thoại</th>
                                 <th>Ngày sinh</th>
                                 <th>Giới tính</th>
+                                <th>Địa chỉ</th>
                                 <th>Trạng thái</th>
                                 <th>Hoạt động</th>
                             </tr>
@@ -197,18 +192,18 @@
                                 </td>
                                 <td th:text="${iter.index+1}"></td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="/cms/nhanVien-detail">
+                                    <a class="media align-items-center" th:href="@{/cms/nhan-vien/view-detail/{id}(id=${nv.id})}">
                                         <div class="media-body">
                                             <h5 class="text-hover-primary mb-0"
-                                                th:text="${nv.getHo()+' '+ nv.getTenDem()+ ' '+ nv.getTen()}"></h5>
+                                                th:text="${nv.getHoTen()}"></h5>
                                         </div>
                                     </a>
                                 </td>
                                 <td th:text="${nv.getChucVu().getTen()}"></td>
-                                <td th:text="${nv.getCccd()}"></td>
                                 <td th:text="${nv.getSdt()}"></td>
                                 <td th:text="${#dates.format (nv.getNgaySinh(), 'dd-MM-yyyy')}"></td>
                                 <td th:text="${nv.isGioiTinh()==true?'Nam':'Nữ'}"></td>
+                                <td th:text="${nv.getSoNha()+','+nv.getPhuongXa()+','+nv.getQuanHuyen()+','+nv.getTinhThanhPho()}"></td>
                                 <td th:text="${nv.isTrangThai()==true?'Hoạt động':'Ngừng hoạt động'}"></td>
                                 <td>
                                     <div class="btn-group" role="group">

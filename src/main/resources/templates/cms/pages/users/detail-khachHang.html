@@ -15,9 +15,11 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body class="footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 
 <!-- ========== HEADER ========== -->
 <div th:replace="~{/cms/pages/_header.html}"></div>
@@ -34,6 +36,7 @@
     <div class="content container-fluid">
         <!-- Step Form -->
         <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}"
+              onsubmit="return formvalidate(event)"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -61,248 +64,387 @@
                     <div id="addUserStepFormContent">
                         <!-- Card -->
                         <div id="addUserStepProfile" class="active">
-                            <!-- Body -->
-                            <div class="row">
-                                <!-- Form Group -->
-                                <!--                                <div class="row form-group">-->
-                                <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Body -->
+                                    <div class="row">
+                                        <!-- Form Group -->
+                                        <!--                                <div class="row form-group">-->
+                                        <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
 
-                                <!--                                    <div class="col-sm-9">-->
-                                <!--                                        <div class="d-flex align-items-center">-->
-                                <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
-                                <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
-                                <!--                                                   for="avatarUploader">-->
-                                <!--                                                <img id="avatarImg" class="avatar-img"-->
-                                <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
+                                        <!--                                    <div class="col-sm-9">-->
+                                        <!--                                        <div class="d-flex align-items-center">-->
+                                        <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
+                                        <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
+                                        <!--                                                   for="avatarUploader">-->
+                                        <!--                                                <img id="avatarImg" class="avatar-img"-->
+                                        <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
 
-                                <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
-                                <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
-                                <!--                                      "textTarget": "#avatarImg",-->
-                                <!--                                      "mode": "image",-->
-                                <!--                                      "targetAttr": "src",-->
-                                <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
-                                <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
-                                <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
-                                <!--                                   }'>-->
+                                        <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
+                                        <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
+                                        <!--                                      "textTarget": "#avatarImg",-->
+                                        <!--                                      "mode": "image",-->
+                                        <!--                                      "targetAttr": "src",-->
+                                        <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
+                                        <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
+                                        <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
+                                        <!--                                   }'>-->
 
-                                <!--                                                <span class="avatar-uploader-trigger">-->
-                                <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
-                                <!--                            </span>-->
-                                <!--                                            </label>-->
-                                <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
+                                        <!--                                                <span class="avatar-uploader-trigger">-->
+                                        <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
+                                        <!--                            </span>-->
+                                        <!--                                            </label>-->
+                                        <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
 
-                                <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
-                                <!--                                                Delete-->
-                                <!--                                            </button>-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-                                <!-- End Form Group -->
+                                        <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
+                                        <!--                                                Delete-->
+                                        <!--                                            </button>-->
+                                        <!--                                        </div>-->
+                                        <!--                                    </div>-->
+                                        <!--                                </div>-->
+                                        <!-- End Form Group -->
 
-                                <div class="col-lg-5">
-                                    <!-- Card -->
-                                    <div class="card mb-3 mb-lg-5">
-                                        <!-- Header -->
-                                        <div class="card-header">
-                                            <h4 class="card-header-title">Thông tin</h4>
-                                        </div>
-                                        <!-- End Header -->
-
-                                        <!-- Body -->
-                                        <div class="card-body">
-                                            <!-- Form Group -->
-                                            <div class="row form-group">
-                                                <label for="firstNameLabel"
-                                                       class="col-sm-4 col-form-label input-label">Họ
-                                                    tên
-                                                    <i
-                                                            class="tio-help-outlined text-body ml-1"
-                                                            data-toggle="tooltip"
-                                                            data-placement="top"
-                                                            title="Displayed on public forums, such as Front."></i></label>
-
-                                                <div class="col-sm-8">
-                                                    <div class="input-group input-group-sm-down-break">
-                                                        <input type="text" class="form-control" name="firstName"
-                                                               id="firstNameLabel"
-                                                               placeholder="Nguyễn" aria-label="Nguyễn"
-                                                               th:field="*{ho}">
-                                                        <input type="text" class="form-control" name="middleName"
-                                                               id="middleNameLabel"
-                                                               placeholder="Minh" aria-label="Minh"
-                                                               th:field="*{tenDem}">
-                                                        <input type="text" class="form-control" name="lastName"
-                                                               id="lastNameLabel"
-                                                               placeholder="Thư" aria-label="Thư" th:field="*{ten}">
-                                                    </div>
+                                        <div class="col-lg-5">
+                                            <!-- Card -->
+                                            <div class="mb-3 mb-lg-5">
+                                                <!-- Header -->
+                                                <div class="header">
+                                                    <h4 class="card-header-title">Thông tin</h4>
                                                 </div>
-                                            </div>
-                                            <!-- End Form Group -->
+                                                <!-- End Header -->
 
-                                            <!-- Form Group -->
-                                            <div class="row form-group">
-                                                <label for="phoneLabel" class="col-sm-4 col-form-label input-label">Số
-                                                    điện thoại</label>
+                                                <!-- Body -->
+                                                <div class="body">
+                                                    <!-- Form Group -->
+                                                    <div class="row form-group">
+                                                        <label for="firstNameLabel"
+                                                               class="col-sm-4 col-form-label input-label">Họ tên
+                                                            <i
+                                                                    class="tio-help-outlined text-body ml-1"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    title="Displayed on public forums, such as Front."></i></label>
 
-                                                <div class="col-sm-8">
-                                                    <div class="input-group input-group-sm-down-break align-items-center">
-                                                        <input type="text" class="js-masked-input form-control"
-                                                               name="phone"
-                                                               id="phoneLabel" placeholder="+x-xxx-xxx-xxx"
-                                                               th:field="*{sdt}">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Form Group -->
-                                            <div class="row form-group">
-                                                <label for="ngaySinhLabel"
-                                                       class="col-sm-4 col-form-label input-label">Ngày sinh</label>
-
-                                                <div class="col-sm-8">
-                                                    <input type="date" class="form-control" name="ngaySinh"
-                                                           id="ngaySinhLabel" placeholder="Htmlstream"
-                                                           aria-label="Htmlstream" th:field="*{ngaySinh}">
-                                                </div>
-                                            </div>
-                                            <!-- End Form Group -->
-
-                                            <!-- Form Group -->
-                                            <div class="row form-group">
-                                                <label class="col-sm-4 col-form-label input-label">Trạng thái</label>
-                                                <!-- Select -->
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" th:field="*{trangThai}">
-                                                        <option th:value="true" selected="">Hoạt động</option>
-                                                        <option th:value="false">Ngừng hoạt động</option>
-                                                    </select>
-                                                    <!-- End Select -->
-                                                </div>
-                                            </div>
-                                            <!-- End Form Group -->
-
-                                            <!-- Form Group -->
-                                            <div class="row form-group">
-                                                <label class="col-sm-4 col-form-label input-label">Giới tính</label>
-
-                                                <div class="col-sm-8">
-                                                    <div class="input-group input-group-sm-down-break">
-                                                        <!-- Custom Radio -->
-                                                        <div class="form-control">
-                                                            <div class="custom-control custom-radio">
-                                                                <input type="radio" class="custom-control-input"
-                                                                       name="userAccountTypeRadio"
-                                                                       id="userAccountTypeRadio1"
-                                                                       th:field="*{gioiTinh}"
-                                                                       th:value="true">
-                                                                <label class="custom-control-label"
-                                                                       for="userAccountTypeRadio1">Nam</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group input-group-sm-down-break">
+                                                                <input type="text" class="form-control" name="firstName"
+                                                                       id="firstNameLabel"
+                                                                       placeholder="Nguyễn" aria-label="Nguyễn"
+                                                                       th:field="*{hoTen}">
                                                             </div>
+                                                            <i id="hoTen_emty" style="color: red;display: none">Vui lòng
+                                                                nhập
+                                                                vào tên</i>
                                                         </div>
-                                                        <!-- End Custom Radio -->
-
-                                                        <!-- Custom Radio -->
-                                                        <div class="form-control">
-                                                            <div class="custom-control custom-radio">
-                                                                <input type="radio" class="custom-control-input"
-                                                                       name="userAccountTypeRadio"
-                                                                       id="userAccountTypeRadio2"
-                                                                       th:field="*{gioiTinh}"
-                                                                       th:value="false">
-                                                                <label class="custom-control-label"
-                                                                       for="userAccountTypeRadio2">Nữ</label>
-                                                            </div>
-                                                        </div>
-                                                        <!-- End Custom Radio -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <div class="col-lg-7">
-                                    <!-- Card -->
-                                    <div class="card mb-3 mb-lg-5">
-                                        <!-- Header -->
-                                        <div class="card-header">
-                                            <h4 class="card-header-title">Địa chỉ</h4>
-                                        </div>
-                                        <!-- End Header -->
-                                        <!-- Body -->
-                                        <div class="card-body row">
-                                            <div class="col-sm-6">
-                                                <!-- Form Group -->
-                                                <div class="row form-group">
-                                                    <label for="soNhaLabel"
-                                                           class="col-sm-5 col-form-label input-label">Số nhà</label>
-
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" name="addressLine1"
-                                                               id="soNhaLabel" placeholder="Your address"
-                                                               aria-label="Your address" th:field="*{diaChiMacDinh.soNha}">
                                                     </div>
                                                     <!-- End Form Group -->
-                                                </div>
-                                                <!-- Form Group -->
-                                                <div class="row form-group">
-                                                    <label for="phuongXaLabel"
-                                                           class="col-sm-5 col-form-label input-label">Phường/Xã</label>
 
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" name="addressLine1"
-                                                               id="phuongXaLabel" placeholder="Your address"
-                                                               aria-label="Your address" th:field="*{diaChiMacDinh.phuongXa}">
+                                                    <!-- Form Group -->
+                                                    <div class="row form-group">
+                                                        <label for="sdt" class="col-sm-4 col-form-label input-label">Số
+                                                            điện
+                                                            thoại</label>
+
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group input-group-sm-down-break align-items-center">
+                                                                <input type="text" class="js-masked-input form-control"
+                                                                       name="phone"
+                                                                       id="sdt" placeholder="+x-xxx-xxx-xxx"
+                                                                       th:field="*{sdt}">
+                                                            </div>
+                                                        </div>
+                                                        <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập
+                                                            vào
+                                                            sdt</i>
+                                                        <i id="sdt1_emty" style="color: red;display: none">Vui lòng nhập
+                                                            đúng
+                                                            định dạng sdt(x-xxx-xxx-xxx)</i>
                                                     </div>
-                                                </div>
-                                                <!-- End Form Group -->
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <!-- Form Group -->
-                                                <div class="row form-group">
-                                                    <label for="quanHuyenLabel"
-                                                           class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
 
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" name="addressLine1"
-                                                               id="quanHuyenLabel" placeholder="Your address"
-                                                               aria-label="Your address" th:field="*{diaChiMacDinh.quanHuyen}">
+                                                    <!-- Form Group -->
+                                                    <div class="row form-group">
+                                                        <label for="ngaySinh"
+                                                               class="col-sm-4 col-form-label input-label">Ngày
+                                                            sinh</label>
+
+                                                        <div class="col-sm-8">
+                                                            <input type="date" class="form-control" name="ngaySinh"
+                                                                   id="ngaySinh" placeholder="Htmlstream"
+                                                                   aria-label="Htmlstream" th:field="*{ngaySinh}">
+                                                        </div>
+                                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng
+                                                            chọn
+                                                            ngày sinh</i>
                                                     </div>
-                                                </div>
-                                                <!-- End Form Group -->
+                                                    <!-- End Form Group -->
 
-                                                <!-- Form Group -->
-                                                <div class="row form-group">
-                                                    <label for="tinhTPLabel"
-                                                           class="col-sm-5 col-form-label input-label">Tỉnh/Thành phố</label>
+                                                    <!-- Form Group -->
+                                                    <div class="row form-group">
+                                                        <label class="col-sm-4 col-form-label input-label">Trạng
+                                                            thái</label>
+                                                        <!-- Select -->
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" th:field="*{trangThai}">
+                                                                <option th:value="true" selected="">Hoạt động</option>
+                                                                <option th:value="false">Ngừng hoạt động</option>
+                                                            </select>
+                                                            <!-- End Select -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Form Group -->
 
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" name="addressLine1"
-                                                               id="tinhTPLabel" placeholder="Your address"
-                                                               aria-label="Your address" th:field="*{diaChiMacDinh.tinhThanhPho}">
+                                                    <!-- Form Group -->
+                                                    <div class="row form-group">
+                                                        <label class="col-sm-4 col-form-label input-label">Giới
+                                                            tính</label>
+
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group input-group-sm-down-break">
+                                                                <!-- Custom Radio -->
+                                                                <div class="form-control">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" class="custom-control-input"
+                                                                               name="userAccountTypeRadio"
+                                                                               id="userAccountTypeRadio1"
+                                                                               th:field="*{gioiTinh}"
+                                                                               th:value="true">
+                                                                        <label class="custom-control-label"
+                                                                               for="userAccountTypeRadio1">Nam</label>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- End Custom Radio -->
+
+                                                                <!-- Custom Radio -->
+                                                                <div class="form-control">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" class="custom-control-input"
+                                                                               name="userAccountTypeRadio"
+                                                                               id="userAccountTypeRadio2"
+                                                                               th:field="*{gioiTinh}"
+                                                                               th:value="false">
+                                                                        <label class="custom-control-label"
+                                                                               for="userAccountTypeRadio2">Nữ</label>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- End Custom Radio -->
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="card-footer d-sm-flex align-items-sm-center">
-                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        <!-- End Form Group -->
+
+                                        <div class="col-lg-7">
+                                            <div class="body">
+                                                <li class="navbar-vertical-aside-has-menu">
+                                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle "
+                                                       href="javascript:;"
+                                                       title="Pages">
+                                                        <i class="tio-pages-outlined nav-icon"></i>
+                                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Thêm địa chỉ mới</span>
+                                                    </a>
+
+                                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                                        <!-- Body -->
+                                                        <div class="card-body row">
+                                                            <div class="col-sm-6">
+                                                                <!-- Form Group -->
+                                                                <div class="row form-group">
+                                                                    <label for="soNhaMoi"
+                                                                           class="col-sm-5 col-form-label input-label">Số
+                                                                        nhà</label>
+
+                                                                    <div class="col-sm-7">
+                                                                        <input type="text" class="form-control"
+                                                                               name="addressLine1"
+                                                                               id="soNhaMoi" placeholder="Your address"
+                                                                               aria-label="Your address">
+                                                                    </div>
+                                                                    <!-- End Form Group -->
+                                                                </div>
+                                                                <!-- Form Group -->
+                                                                <div class="row form-group">
+                                                                    <label for="phuongXaMoi"
+                                                                           class="col-sm-5 col-form-label input-label">Phường/Xã</label>
+
+                                                                    <div class="col-sm-7">
+                                                                        <input type="text" class="form-control"
+                                                                               name="addressLine1"
+                                                                               id="phuongXaMoi"
+                                                                               placeholder="Your address"
+                                                                               aria-label="Your address">
+                                                                    </div>
+                                                                </div>
+                                                                <!-- End Form Group -->
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <!-- Form Group -->
+                                                                <div class="row form-group">
+                                                                    <label for="quanHuyenMoi"
+                                                                           class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
+
+                                                                    <div class="col-sm-7">
+                                                                        <input type="text" class="form-control"
+                                                                               name="addressLine1"
+                                                                               id="quanHuyenMoi"
+                                                                               placeholder="Your address"
+                                                                               aria-label="Your address">
+                                                                    </div>
+                                                                </div>
+                                                                <!-- End Form Group -->
+
+                                                                <!-- Form Group -->
+                                                                <div class="row form-group">
+                                                                    <label for="tinhTPMoi"
+                                                                           class="col-sm-5 col-form-label input-label">Tỉnh/Thành
+                                                                        phố</label>
+
+                                                                    <div class="col-sm-7">
+                                                                        <input type="text" class="form-control"
+                                                                               name="addressLine1"
+                                                                               id="tinhTPMoi" placeholder="Your address"
+                                                                               aria-label="Your address">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6">
+                                                                <a href="#" class="btn btn-secondary">Thêm địa chỉ
+                                                                    mới</a>
+                                                            </div>
+                                                        </div>
+                                                    </ul>
+                                                </li>
+
+                                                <!--                                                <li class="navbar-vertical-aside-has-menu ">-->
+                                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle "
+                                                   href="javascript:;"
+                                                   title="Pages">
+                                                    <i class="tio-pages-outlined nav-icon"></i>
+                                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Địa chỉ mặc định</span>
+                                                </a>
+
+                                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                                    <div class="card-body row">
+                                                        <div class="col-sm-6">
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="soNha"
+                                                                       class="col-sm-5 col-form-label input-label">Số
+                                                                    nhà</label>
+
+                                                                <div class="col-sm-7">
+                                                                    <input type="text" class="form-control"
+                                                                           name="addressLine1"
+                                                                           id="soNha" placeholder="Your address"
+                                                                           aria-label="Your address"
+                                                                           th:field="*{diaChiMacDinh.soNha}">
+                                                                </div>
+                                                                <i id="soNha_emty" style="color: red;display: none">Vui
+                                                                    lòng
+                                                                    nhập vào số nhà</i>
+                                                                <!-- End Form Group -->
+                                                            </div>
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="phuongXa"
+                                                                       class="col-sm-5 col-form-label input-label">Phường/Xã</label>
+
+                                                                <div class="col-sm-7">
+                                                                    <input type="text" class="form-control"
+                                                                           name="addressLine1"
+                                                                           id="phuongXa" placeholder="Your address"
+                                                                           aria-label="Your address"
+                                                                           th:field="*{diaChiMacDinh.phuongXa}">
+                                                                </div>
+                                                                <i id="phuongXa_emty"
+                                                                   style="color: red;display: none">Vui
+                                                                    lòng nhập vào phường xã</i>
+                                                            </div>
+                                                            <!-- End Form Group -->
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="quanHuyen"
+                                                                       class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
+
+                                                                <div class="col-sm-7">
+                                                                    <input type="text" class="form-control"
+                                                                           name="addressLine1"
+                                                                           id="quanHuyen" placeholder="Your address"
+                                                                           aria-label="Your address"
+                                                                           th:field="*{diaChiMacDinh.quanHuyen}">
+                                                                </div>
+                                                                <i id="quanHuyen_emty"
+                                                                   style="color: red;display: none">Vui
+                                                                    lòng nhập vào quận huyện</i>
+                                                            </div>
+                                                            <!-- End Form Group -->
+
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="tinhTP"
+                                                                       class="col-sm-5 col-form-label input-label">Tỉnh/Thành
+                                                                    phố</label>
+
+                                                                <div class="col-sm-7">
+                                                                    <input type="text" class="form-control"
+                                                                           name="addressLine1"
+                                                                           id="tinhTP" placeholder="Your address"
+                                                                           aria-label="Your address"
+                                                                           th:field="*{diaChiMacDinh.tinhThanhPho}">
+                                                                </div>
+                                                                <i id="tinhTP_emty"
+                                                                   style="color: red;display: none">Vui
+                                                                    lòng nhập vào tỉnh thành phố</i>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <div class="row form-group">
+                                                                <div class="d-flex justify-content-between">
+                                                                        <!-- Checkbox Switch -->
+                                                                        <label class="toggle-switch toggle-switch col-sm-10"
+                                                                               for="preferencesSwitch1">Địa chỉ mặc định
+                                                                            <span class="col-sm-2">
+                                                                                <input type="checkbox" class="toggle-switch-input" id="preferencesSwitch1">
+                                                                                <span class="toggle-switch-label ml-auto">
+                                                                                    <span class="toggle-switch-indicator"></span>
+                                                                                </span>
+                                                                            </span>
+                                                                        <!-- End Checkbox Switch -->
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </ul>
+                                                <!--                                                </li>-->
+                                            </div>
+                                            <!-- Body -->
+
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="card-footer d-sm-flex align-items-sm-center">
+                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                            </div>
                                         </div>
                                     </div>
+                                    <!-- End Form Group -->
                                 </div>
-                                <!-- End Form Group -->
                             </div>
                         </div>
-                        <!-- End Body -->
-
                     </div>
+                    <!-- End Body -->
+
                 </div>
             </div>
-            <!-- End Row -->
-        </form>
-        <!-- End Step Form -->
+    <!-- End Row -->
+    </form>
+    <!-- End Step Form -->
     </div>
 
 
@@ -720,6 +862,69 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
+    function formvalidate(e) {
+        if (confirm('Bạn có muốn cập nhật không?')) {
+            var result = true;
+            var hoTen = document.getElementById("hoTen").value;
+            var sdt = document.getElementById("sdt").value;
+            var ngaySinh = document.getElementById("ngaySinh").value;
+            var soNha = document.getElementById("soNha").value;
+            var phuongXa = document.getElementById("phuongXa").value;
+            var quanHuyen = document.getElementById("quanHuyen").value;
+            var tinhTP = document.getElementById("tinhTP").value;
+            if (hoTen.length == 0) {
+                document.getElementById("hoTen_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("hoTen_emty").style.display = "none";
+            }
+            if (sdt.length == 0) {
+                document.getElementById("sdt_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("sdt_emty").style.display = "none";
+            }
+            if (sdt.length > 10) {
+                document.getElementById("sdt1_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("sdt1_emty").style.display = "none";
+            }
+            if (ngaySinh.length == 0) {
+                document.getElementById("ngaySinh_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("ngaySinh_emty").style.display = "none";
+            }
+            if (soNha.length == 0) {
+                document.getElementById("soNha_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("soNha_emty").style.display = "none";
+            }
+            if (quanHuyen.length == "") {
+                document.getElementById("quanHuyen_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("quanHuyen_emty").style.display = "none";
+            }
+            if (phuongXa.length == "") {
+                document.getElementById("phuongXa_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("phuongXa_emty").style.display = "none";
+            }
+            if (tinhTP.length == "") {
+                document.getElementById("tinhTP_emty").style.display = "block";
+                result = false;
+            } else {
+                document.getElementById("tinhTP_emty").style.display = "none";
+            }
+            return result;
+        }
+        e.preventDefault();
+    }
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================

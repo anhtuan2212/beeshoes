@@ -21,7 +21,7 @@ public class KhachHangController {
     private final KhachHangService khachHangService;
     private final DiaChiService diaChiService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String khachHang(Model model) {
         List<KhachHang> kh = khachHangService.getAll();
         List<DiaChi> dc = diaChiService.getAll();
@@ -35,7 +35,7 @@ public class KhachHangController {
     @GetMapping("/deleteKH/{id}")
     public String deleteKH(@PathVariable Long id) {
         khachHangService.delete(id);
-        return "redirect:/cms/khachHang";
+        return "redirect:/cms/khach-hang";
     }
 
     @GetMapping("/view-addKH")
@@ -49,23 +49,8 @@ public class KhachHangController {
     @PostMapping("/add")
     public String addKH(@ModelAttribute("khachHang") KhachHangRequest khachHang, Model model) {
         model.addAttribute("khachHang", khachHang);
-        var check = 0;
-        if (khachHang.getTen().isEmpty() || khachHang.getTenDem().isEmpty() || khachHang.getTen().isEmpty()) {
-            model.addAttribute("tb", "Không được để trống");
-            check = 1;
-        }
-        if (khachHang.getSdt().isEmpty()) {
-            model.addAttribute("tb1", "Không để trống sdt");
-            check = 1;
-        }
-
-        if (check == 1) {
-            return "cms/pages/users/add-khachHang";
-        }
         KhachHang kh1 = new KhachHang();
-        kh1.setHo(khachHang.getHo());
-        kh1.setTenDem(khachHang.getTenDem());
-        kh1.setTen(khachHang.getTen());
+        kh1.setHoTen(khachHang.getHoTen());
         kh1.setGioiTinh(khachHang.isGioiTinh());
         kh1.setNgaySinh(khachHang.getNgaySinh());
         kh1.setSdt(khachHang.getSdt());
@@ -85,7 +70,7 @@ public class KhachHangController {
         khachHangService.add(kh);
         System.out.println(kh.toString());
         System.out.println(khachHang.toString());
-        return "redirect:/cms/khachHang";
+        return "redirect:/cms/khach-hang";
     }
 
     @GetMapping("/detail/{id}")
@@ -98,26 +83,8 @@ public class KhachHangController {
     @PostMapping("/update/{id}")
     public String updateNV(@PathVariable Long id, Model model,
                            @ModelAttribute("khachHang") KhachHang khachHang) {
-
-
-        var check = 0;
-        if (khachHang.getTen().isEmpty() || khachHang.getTenDem().isEmpty() || khachHang.getTen().isEmpty()) {
-            model.addAttribute("tb", "Không được để trống");
-            check = 1;
-        }
-        if (khachHang.getSdt().isEmpty()) {
-            model.addAttribute("tb1", "Không để trống sdt");
-            check = 1;
-        }
-
-        if (check == 1) {
-            return "cms/pages/users/detail-khachHang";
-        }
-
         KhachHang kh1 = khachHangService.detail(id);
-        kh1.setHo(khachHang.getHo());
-        kh1.setTenDem(khachHang.getTenDem());
-        kh1.setTen(khachHang.getTen());
+        kh1.setHoTen(khachHang.getHoTen());
         kh1.setGioiTinh(khachHang.isGioiTinh());
         kh1.setNgaySinh(khachHang.getNgaySinh());
         kh1.setSdt(khachHang.getSdt());
@@ -134,9 +101,7 @@ public class KhachHangController {
         kh.setDiaChiMacDinh(dc);
         khachHangService.update(kh,id);
 
-        System.out.println(diaChi.getSoNha() + " | " + diaChi.getKhachHang().getMaKhachHang());
-
-        return "redirect:/cms/khachHang";
+        return "redirect:/cms/khach-hang";
     }
 
 }

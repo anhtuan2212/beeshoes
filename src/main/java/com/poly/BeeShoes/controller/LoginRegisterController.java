@@ -101,9 +101,7 @@ public class LoginRegisterController {
             } else {
                 try {
                     KhachHang khachHang = new KhachHang();
-                    khachHang.setHo(registerDto.getHo());
-                    khachHang.setTenDem(registerDto.getTenDem());
-                    khachHang.setTen(registerDto.getTen());
+                    khachHang.setHoTen(registerDto.getHo());
                     khachHang.setTrangThai(true);
                     khachHang.setDiem(0);
                     khachHang.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
@@ -135,7 +133,7 @@ public class LoginRegisterController {
                         session = request.getSession(true);
                         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
                         User userTest = (User) authentication.getPrincipal();
-                        System.out.println("hi " + userTest.getKhachHang().getTen());
+                        System.out.println("hi " + userTest.getKhachHang().getHoTen());
                         return "redirect:/light-bee/";
                     }
                 } catch (Exception e) {
