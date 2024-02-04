@@ -23,7 +23,7 @@ public class ShopController {
         model.addAttribute("lstsanpham",spx);
         return "customer/pages/shop/shop";
     }
-    @GetMapping({"/shop-detail","/shop-detail/"})
+    @GetMapping({"/shop-details","/shop-detail/"})
     public String shopDetail(){
         return "customer/pages/shop/shop-details";
     }

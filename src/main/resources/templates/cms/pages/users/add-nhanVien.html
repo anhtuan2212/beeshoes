@@ -60,6 +60,16 @@
                     <div id="addUserStepFormContent">
                         <!-- Card -->
                         <div id="addUserStepProfile" class="card card-lg active">
+                            <div class="card-header d-flex justify-content-between">
+                                <div></div>
+                                <div>
+                                    <a class="btn btn-info" data-toggle="modal"
+                                       data-target="#form-qr-code">QR Code
+                                        <i class="tio tio-qr-code"></i>
+                                    </a>
+                                </div>
+
+                            </div>
                             <!-- Body -->
                             <div class="card-body row">
                                 <!-- Form Group -->
@@ -239,7 +249,6 @@
                                         </div>
                                         <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
                                     </div>
-
                                     <div class="row form-group">
                                         <label for="quanHuyen" class="col-sm-4 col-form-label input-label">Quận huyện</label>
 
@@ -258,6 +267,7 @@
                                             <input type="text" class="form-control" name="tinhTP"
                                                    id="tinhTP" placeholder="Htmlstream"
                                                    aria-label="Htmlstream" th:field="*{tinhThanhPho}">
+
                                         </div>
                                         <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
                                     </div>
@@ -686,9 +696,42 @@
         <!-- End Body -->
     </div>
 </div>
+<div class="modal fade" id="form-qr-code" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center" role="document">
+        <div class="modal-content" style="width: 70%">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="form-add-color-Label">Vui lòng đưa mã QR vào khung camera !</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="modal-body pt-0 pb-0 row justify-content-center">
+                <div style="width: 300px;height: 300px">
+                    <video id="video_show_camera" width="300" height="300" autoplay></video>
+                    <canvas id="canvas_context" width="200" height="200" style="display: none"></canvas>
+                    <audio id="sound_beep" src="/assets/cms/audio/bleep.mp3" style="display: none"
+                           preload="auto"></audio>
+                </div>
+            </div>
+            <!-- End Body -->
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+</div>
 <!-- End Keyboard Shortcuts -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>

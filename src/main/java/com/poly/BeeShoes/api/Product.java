@@ -55,7 +55,6 @@ public class Product {
     }
 
 
-
     @PostMapping("/chi-tiet-san-pham")
     public ResponseEntity<SanPham> chiTietSanPham(@ModelAttribute CTSPRequest ctspRequest) {
 
@@ -78,7 +77,7 @@ public class Product {
             if (productdetail.get(i).getSoLuong() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Quantity in option product can't null").body(null);
             }
-            if (productdetail.get(i).getImg() == null||productdetail.get(i).getImg() == "/assets/cms/img/400x400/img2.jpg") {
+            if (productdetail.get(i).getImg() == null || productdetail.get(i).getImg() == "/assets/cms/img/400x400/img2.jpg") {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "IMG in option product can't null").body(null);
             }
 
@@ -95,6 +94,7 @@ public class Product {
         }
         sp.setThuongHieu(th);
         sp.setTrangThai(ctspRequest.isTrangThai());
+        sp.setSale(ctspRequest.isSales());
         sp.setTheLoai(tl);
         sp.setMoTa(ctspRequest.getMoTa());
         SanPham sanPham = sanPhamService.save(sp);
@@ -109,21 +109,27 @@ public class Product {
             }
             Anh anhC = anhService.getAnhByURL(productdetail.get(i).getImg());
             Anh anh = new Anh();
-            if (anhC!=null){
-                anh=anhC;
-            }else{
+            if (anhC != null) {
+                anh = anhC;
+            } else {
                 anh.setUrl(productdetail.get(i).getImg());
                 anh.setSanPham(sanPham);
                 anh.setNgayTao(Timestamp.from(Instant.now()));
                 anh.setTrangThai(true);
             }
-            if (i==1){
+            if (i == 0) {
                 anh.setMain(true);
-            }else{
-                anh.setMain(false);
+            } else {
+                if (anh.isMain() != true) {
+                    anh.setMain(false);
+                }
             }
-            Anh a = anhService.save(anh);
-            ctsp.setAnh(a);
+            if (anh.getId() == null) {
+                anh = anhService.save(anh);
+            }
+            System.out.println(anh);
+            System.out.println(i);
+            ctsp.setAnh(anh);
             ctsp.setChatLieu(cl);
             ctsp.setDeGiay(dg);
             ctsp.setCoGiay(cg);

@@ -58,7 +58,7 @@ public class TheLoaiApi {
             }
         }
 
-        if (id > 0) {
+        if (id !=null) {
             th = theLoaiService.getById(id);
             th.setNgaySua(Timestamp.from(Instant.now()));
         } else {

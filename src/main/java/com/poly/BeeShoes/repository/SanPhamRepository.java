@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
-    @Query("SELECT sp FROM SanPham sp WHERE EXISTS (SELECT 1 FROM sp.chiTietSanPham ctsp)")
+    @Query("SELECT sp FROM SanPham sp WHERE EXISTS (SELECT 1 FROM sp.chiTietSanPham ctsp) AND sp.trangThai=true")
     Page<SanPham> getAllByChiTietSanPhamExists(Pageable pageable);
     @Query("SELECT s FROM SanPham s LEFT JOIN FETCH s.chiTietSanPham ctsp LEFT JOIN FETCH ctsp.mauSac ms ORDER BY ms.maMauSac")
     SanPham findByIdWithSortedChiTietSanPham(Long id);

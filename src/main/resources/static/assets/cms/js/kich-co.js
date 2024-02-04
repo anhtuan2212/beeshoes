@@ -312,6 +312,12 @@ $(document).on('ready', function () {
                     case "existsByTen":
                         ToastError("Tên đã tồn tại.")
                         break;
+                    case "NotIsNum":
+                        ToastError('Kích Cỡ phải là số.');
+                        break;
+                    case "faildkhoang":
+                        ToastError('Kích Cỡ phải từ 20->50.');
+                        break;
                     case "nameNull":
                         ToastError("Tên không được trống.")
                         break;
