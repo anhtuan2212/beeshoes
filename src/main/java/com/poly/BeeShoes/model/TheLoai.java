@@ -22,11 +22,32 @@ public class TheLoai {
     Timestamp ngaySua;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "nguoi_tao")
     User nguoiTao;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
+
     boolean trangThai;
+
+    @Transient
+    String update;
+    @Transient
+    String create;
+
+    @Override
+    public String toString() {
+        return "TheLoai{" +
+                "id=" + id +
+                ", ten='" + ten + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", ngaySua=" + ngaySua +
+                ", nguoiTao=" + nguoiTao +
+                ", nguoiSua=" + nguoiSua +
+                ", trangThai=" + trangThai +
+                ", update='" + update + '\'' +
+                ", create='" + create + '\'' +
+                '}';
+    }
 }

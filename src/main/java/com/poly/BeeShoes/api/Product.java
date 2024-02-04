@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,12 +34,13 @@ public class Product {
     private final SanPhamService sanPhamService;
     private final ChiTietSanPhamService chiTietSanPhamService;
     Gson gs = new Gson();
+
     @PostMapping("/them-san-pham")
     public ResponseEntity<SanPham> themSanPham(@RequestParam("ten") String ten) {
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
-        if(sanPhamService.existsByTen(ten)){
+        if (sanPhamService.existsByTen(ten)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
         }
         SanPham sanPham = new SanPham();
@@ -56,169 +54,7 @@ public class Product {
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
 
-    @PostMapping("/them-the-loai")
-    public ResponseEntity<TheLoai> themTheLoai(@RequestParam("ten") String ten) {
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (theLoaiService.existsByTen(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        TheLoai theLoai = new TheLoai();
-        theLoai.setNgayTao(Timestamp.from(Instant.now()));
-        theLoai.setNgaySua(Timestamp.from(Instant.now()));
-        theLoai.setTrangThai(true);
-        theLoai.setTen(ten);
-        TheLoai sp = theLoaiService.save(theLoai);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
 
-    @PostMapping("/them-thuong-hieu")
-    public ResponseEntity<ThuongHieu> themThuongHieu(@RequestParam("ten") String ten) {
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (thuongHieuService.existsByTen(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        ThuongHieu th = new ThuongHieu();
-        th.setNgayTao(Timestamp.from(Instant.now()));
-        th.setNgaySua(Timestamp.from(Instant.now()));
-        th.setTrangThai(true);
-        th.setTen(ten);
-        ThuongHieu sp = thuongHieuService.save(th);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-
-    @PostMapping("/them-chat-lieu")
-    public ResponseEntity<ChatLieu> themChatLieu(@RequestParam("ten") String ten) {
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (chatLieuService.existsByTen(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        ChatLieu th = new ChatLieu();
-        th.setNgayTao(Timestamp.from(Instant.now()));
-        th.setNgaySua(Timestamp.from(Instant.now()));
-        th.setTrangThai(true);
-        th.setTen(ten);
-        ChatLieu sp = chatLieuService.save(th);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-
-    @PostMapping("/them-de-giay")
-    public ResponseEntity<DeGiay> themDeGiay(@RequestParam("ten") String ten) {
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (deGiayService.existsByTen(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        DeGiay dg = new DeGiay();
-        dg.setNgayTao(Timestamp.from(Instant.now()));
-        dg.setNgaySua(Timestamp.from(Instant.now()));
-        dg.setTrangThai(true);
-        dg.setTen(ten);
-        DeGiay sp = deGiayService.save(dg);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-
-    @PostMapping("/them-co-giay")
-    public ResponseEntity<CoGiay> themCoGiay(@RequestParam("ten") String ten) {
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (coGiayService.existsByTen(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        CoGiay cg = new CoGiay();
-        cg.setNgayTao(Timestamp.from(Instant.now()));
-        cg.setNgaySua(Timestamp.from(Instant.now()));
-        cg.setTrangThai(true);
-        cg.setTen(ten);
-        CoGiay sp = coGiayService.save(cg);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-
-    @PostMapping("/them-mui-giay")
-    public ResponseEntity<MuiGiay> themMuiGiay(@RequestParam("ten") String ten) {
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (muiGiayService.existsByTen(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        MuiGiay cg = new MuiGiay();
-        cg.setNgayTao(Timestamp.from(Instant.now()));
-        cg.setNgaySua(Timestamp.from(Instant.now()));
-        cg.setTrangThai(true);
-        cg.setTen(ten);
-        MuiGiay sp = muiGiayService.save(cg);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-
-    @PostMapping("/them-kich-co")
-    public ResponseEntity<KichCo> kichCo(@RequestParam("ten") String ten) {
-        if (Integer.parseInt(ten)>30||Integer.parseInt(ten)<50) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameSize").body(null);
-        }
-        if (ten.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
-        }
-        if (kichCoService.exitsByTen(ten)) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "existsByTen").body(null);
-        }
-        KichCo cg = new KichCo();
-        cg.setNgayTao(Timestamp.from(Instant.now()));
-        cg.setNgaySua(Timestamp.from(Instant.now()));
-        cg.setTrangThai(true);
-        cg.setTen(ten);
-        KichCo sp = kichCoService.save(cg);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "false").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-
-    @PostMapping("/them-mau-sac")
-    public ResponseEntity<MauSac> themMauSac(@RequestParam("ten_mau") String ten, @RequestParam("ma_mau") String ma) {
-        if (mauSacService.existsByMaMauSac(ma)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByMa").body(null);
-        }
-        if (mauSacService.existsByTen(ten)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-        }
-        MauSac ms = new MauSac();
-        ms.setNgayTao(Timestamp.from(Instant.now()));
-        ms.setNgaySua(Timestamp.from(Instant.now()));
-        ms.setTrangThai(true);
-        ms.setTen(ten);
-        ms.setMaMauSac(ma);
-        MauSac sp = mauSacService.save(ms);
-        if (sp.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK).header("status-cus", "oke").body(sp);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }
 
     @PostMapping("/chi-tiet-san-pham")
     public ResponseEntity<SanPham> chiTietSanPham(@ModelAttribute CTSPRequest ctspRequest) {
@@ -226,38 +62,26 @@ public class Product {
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
-        if (productdetail.size()==0){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Option product can't null").body(null);
+        if (productdetail.size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Option product can't null").body(null);
         }
-        String mau ="";
-        for (int i=0;i< productdetail.size();i++){
-            if (productdetail.get(i).getKichCo().isBlank()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Size in option product can't null").body(null);
+        for (int i = 0; i < productdetail.size(); i++) {
+            if (productdetail.get(i).getKichCo().isBlank()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Size in option product can't null").body(null);
             }
-            if (productdetail.get(i).getMauSac().isBlank()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Color in option product can't null").body(null);
+            if (productdetail.get(i).getMaMauSac().isBlank()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Color in option product can't null").body(null);
             }
-            if (productdetail.get(i).getGiaBan().isBlank()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Price in option product can't null").body(null);
+            if (productdetail.get(i).getGiaBan().isBlank()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Price in option product can't null").body(null);
             }
-            if (productdetail.get(i).getSoLuong()<0){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","Quantity in option product can't null").body(null);
+            if (productdetail.get(i).getSoLuong() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Quantity in option product can't null").body(null);
             }
-            if(i==0){
-                mau = productdetail.get(i).getMauSac();
-                if (productdetail.get(i).getImg()==null){
-                    System.out.println(productdetail.get(i).getImg());
-                    System.out.println("Index ="+i);
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","IMG in option product can't null").body(null);
-                }
-            }else {
-                if (!mau.equals(productdetail.get(i).getMauSac())){
-                    if (productdetail.get(i).getImg()==null){
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error","IMG in option product can't null").body(null);
-                    }
-                    mau=productdetail.get(i).getMauSac();
-                }
+            if (productdetail.get(i).getImg() == null||productdetail.get(i).getImg() == "/assets/cms/img/400x400/img2.jpg") {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "IMG in option product can't null").body(null);
             }
+
         }
         SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
         ChatLieu cl = chatLieuService.getById(ctspRequest.getChatLieu());
@@ -266,7 +90,7 @@ public class Product {
         DeGiay dg = deGiayService.getById(ctspRequest.getDeGiay());
         CoGiay cg = coGiayService.getById(ctspRequest.getCoGiay());
         MuiGiay mg = muiGiayService.getById(ctspRequest.getMuiGiay());
-        if (sp==null || cl==null || th==null || tl==null || dg==null || cg==null || mg==null ){
+        if (sp == null || cl == null || th == null || tl == null || dg == null || cg == null || mg == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         sp.setThuongHieu(th);
@@ -274,45 +98,32 @@ public class Product {
         sp.setTheLoai(tl);
         sp.setMoTa(ctspRequest.getMoTa());
         SanPham sanPham = sanPhamService.save(sp);
-        Anh anh = null;
-        for (int i=0;i<productdetail.size();i++) {
-            int in = productdetail.indexOf(productdetail.get(i));
+        for (int i = 0; i < productdetail.size(); i++) {
+            System.out.println(i);
             KichCo kc = kichCoService.getByTen(productdetail.get(i).getKichCo());
-            MauSac ms = mauSacService.getMauSacByMa(productdetail.get(i).getMauSac());
-            ChiTietSanPham ct = chiTietSanPhamService.getBySizeAndColorAndProduct(kc, ms,sanPham);
+            MauSac ms = mauSacService.getMauSacByMa(productdetail.get(i).getMaMauSac());
+            ChiTietSanPham ct = chiTietSanPhamService.getBySizeAndColorAndProduct(kc, ms, sanPham);
             ChiTietSanPham ctsp = new ChiTietSanPham();
             if (ct != null) {
                 ctsp = ct;
             }
-
-            String img = productdetail.get(i).getImg();
-            if (img != null) {
-                List<Anh> lsta = anhService.getAllBySanPham(sanPham);
-                Anh a2 = null;
-                for (Anh a : lsta) {
-                    if (a.getUrl().equals(img)) {
-                        anh = a;
-                        a2 = a;
-                        break;
-                    }
-                }
-                if (a2 != null) {
-                    ctsp.setAnh(anh);
-                } else {
-                    boolean main = true;
-                    for (Anh a : lsta) {
-                        if (a.isMain()==true) {
-                            main = false;
-                        }
-                    }
-                    Anh an = new Anh(sanPham, img, main, Timestamp.from(Instant.now()));
-                    main = false;
-                    anh = anhService.save(an);
-                    ctsp.setAnh(anh);
-                }
-            } else {
-                ctsp.setAnh(anh);
+            Anh anhC = anhService.getAnhByURL(productdetail.get(i).getImg());
+            Anh anh = new Anh();
+            if (anhC!=null){
+                anh=anhC;
+            }else{
+                anh.setUrl(productdetail.get(i).getImg());
+                anh.setSanPham(sanPham);
+                anh.setNgayTao(Timestamp.from(Instant.now()));
+                anh.setTrangThai(true);
             }
+            if (i==1){
+                anh.setMain(true);
+            }else{
+                anh.setMain(false);
+            }
+            Anh a = anhService.save(anh);
+            ctsp.setAnh(a);
             ctsp.setChatLieu(cl);
             ctsp.setDeGiay(dg);
             ctsp.setCoGiay(cg);
@@ -321,18 +132,17 @@ public class Product {
             ctsp.setTrangThai(1);
             ctsp.setSanPham(sp);
             ctsp.setKichCo(kc);
-            ctsp.setGiaGoc(LibService.convertStringToBigDecimal(ctspRequest.getGiaGoc()));
-            ctsp.setGiaNhap(LibService.convertStringToBigDecimal(ctspRequest.getGiaNhap()));
+            ctsp.setGiaGoc(LibService.convertStringToBigDecimal(productdetail.get(i).getGiaGoc()));
+            ctsp.setGiaNhap(LibService.convertStringToBigDecimal("0"));
             ctsp.setGiaBan(LibService.convertStringToBigDecimal(productdetail.get(i).getGiaBan()));
             ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
-            ctsp.setSoLuongNhap(productdetail.get(i).getSoLuong());
+            ctsp.setSoLuongNhap(productdetail.get(i).getSoLuong());//tạm bỏ qua
             ctsp.setSoLuongTon(productdetail.get(i).getSoLuong());
             ctsp.setTrangThai(1);
             ctsp.setNgayTao(Timestamp.from(Instant.now()));
-            ctsp.setMauSac(mauSacService.getMauSacByMa(productdetail.get(i).getMauSac()));
+            ctsp.setMauSac(ms);
             chiTietSanPhamService.save(ctsp);
         }
-        SanPham sp1 = sanPhamService.getById(sanPham.getId());
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 

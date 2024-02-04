@@ -1,9 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
-import com.poly.BeeShoes.model.ChiTietSanPham;
-import com.poly.BeeShoes.model.KichCo;
-import com.poly.BeeShoes.model.MauSac;
-import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.repository.ChiTietSanPhamRepository;
 import com.poly.BeeShoes.service.ChiTietSanPhamService;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +43,44 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
     }
 
     @Override
+    public boolean existsByChatLieu(ChatLieu chatLieu) {
+        return ctspRepository.existsByChatLieu(chatLieu);
+    }
+
+    @Override
     public boolean existsByMaSanPham(String ma) {
         return false;
+    }
+
+    @Override
+    public boolean existsByMauSac(MauSac ms) {
+        return ctspRepository.existsByMauSac(ms);
+    }
+
+    @Override
+    public boolean existsBySanPham(SanPham sanPham) {
+        return ctspRepository.existsBySanPham(sanPham);
+    }
+
+    @Override
+    public boolean existsByCoGiay(CoGiay cg) {
+        return ctspRepository.existsByCoGiay(cg);
+    }
+
+    @Override
+    public boolean existsByKichCo(KichCo kc) {
+        return ctspRepository.existsByKichCo(kc);
+    }
+
+
+    @Override
+    public boolean existsByDeGiay(DeGiay dg) {
+        return ctspRepository.existsByDeGiay(dg);
+    }
+
+    @Override
+    public boolean existsByMuiGiay(MuiGiay mg) {
+        return ctspRepository.existsByMuiGiay(mg);
     }
 
     @Override

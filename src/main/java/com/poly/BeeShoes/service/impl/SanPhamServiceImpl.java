@@ -1,8 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
-import com.poly.BeeShoes.model.ChiTietSanPham;
-import com.poly.BeeShoes.model.MauSac;
-import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.repository.SanPhamRepository;
 import com.poly.BeeShoes.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
@@ -14,23 +12,63 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class SanPhamServiceImpl implements SanPhamService {
     private final SanPhamRepository sanPhamRepository;
+
+
+    @Override
+    public List<String> getListKichCo(Long id) {
+        SanPham sp = sanPhamRepository.findById(id).orElse(null);
+        List<String> lst = new ArrayList<>();
+        if (sp != null) {
+            for (ChiTietSanPham ctsp : sp.getChiTietSanPham()) {
+                String kichCoTen = ctsp.getKichCo().getTen();
+                if (!lst.contains(kichCoTen)) {
+                    lst.add(kichCoTen);
+                }
+            }
+        }
+        return lst;
+    }
+
     @Override
     public SanPham save(SanPham sanPham) {
         sanPham.setNgaySua(Timestamp.from(Instant.now()));
         return sanPhamRepository.save(sanPham);
     }
-
     @Override
     public SanPham getById(Long id) {
-        return sanPhamRepository.findById(id).get();
+        Optional<SanPham> optionalSanPham = sanPhamRepository.findById(id);
+        if (optionalSanPham.isPresent()) {
+            SanPham sanPham = optionalSanPham.get();
+            List<ChiTietSanPham> sortedChiTietSanPham = sanPham.getSortedChiTietSanPhamByMauSac();
+            sanPham.setChiTietSanPham(sortedChiTietSanPham);
+            return sanPham;
+        } else {
+            return null;
+        }
+    }
+    @Override
+    public Map<String, Map<String, Long>> getKichCoCountByMauSac(Long sanPhamId) {
+        SanPham sanPham = getById(sanPhamId);
+        Map<String, Map<String, Long>> result = new HashMap<>();
+
+        if (sanPham != null && sanPham.getChiTietSanPham() != null) {
+            for (ChiTietSanPham chiTietSanPham : sanPham.getChiTietSanPham()) {
+                if (chiTietSanPham.getMauSac() != null && chiTietSanPham.getKichCo() != null) {
+                    String mauSac = chiTietSanPham.getMauSac().getMaMauSac();
+                    String kichCo = chiTietSanPham.getKichCo().getTen();
+                    result.computeIfAbsent(mauSac, k -> new HashMap<>());
+                    result.get(mauSac).merge(kichCo, 1L, Long::sum);
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -55,16 +93,26 @@ public class SanPhamServiceImpl implements SanPhamService {
             for (int j = 0; j < ctsp.size(); j++) {
                 ChiTietSanPham ct = ctsp.get(j);
                 num += ct.getSoLuongTon();
-                gn=ct.getGiaNhap();
+                gn=ct.getGiaBan();
                 if (!lst.contains(ct.getMauSac())){
                     lst.add(ct.getMauSac());
                 }
             }
             s.setMauSac(lst);
-            s.setGiaNhap(gn);
+            s.setGiaBan(gn);
             s.setSoLuong(num);
         }
         return sp;
+    }
+
+    @Override
+    public boolean exitsByTheLoai(TheLoai theLoai) {
+        return sanPhamRepository.existsByTheLoai(theLoai);
+    }
+
+    @Override
+    public boolean exitsByThuongHieu(ThuongHieu th) {
+        return sanPhamRepository.existsByThuongHieu(th);
     }
 
     @Override
@@ -92,7 +140,7 @@ public class SanPhamServiceImpl implements SanPhamService {
                 }
                 sp.getContent().get(i).setSale(sale);
                 sp.getContent().get(i).setMauSac(lst);
-                sp.getContent().get(i).setGiaNhap(gn);
+                sp.getContent().get(i).setGiaBan(gn);
                 sp.getContent().get(i).setSoLuong(num);
             }
         }

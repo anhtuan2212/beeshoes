@@ -6,7 +6,10 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -53,9 +56,30 @@ public class SanPham {
     int soLuong;
 
     @Transient
-    BigDecimal giaNhap;
+    BigDecimal giaBan;
     @Transient
     boolean sale;
     @Transient
     List<MauSac> mauSac;
+    // Phương thức mới để lấy danh sách kích cỡ không trùng lặp
+    public List<KichCo> getDistinctKichCoList() {
+        if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
+            return List.of();
+        }
+        // Sử dụng Java Stream để lọc các kích cỡ không trùng lặp
+        return chiTietSanPham.stream()
+                .map(ChiTietSanPham::getKichCo)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+    public List<ChiTietSanPham> getSortedChiTietSanPhamByMauSac() {
+        if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
+            return Collections.emptyList();
+        }
+        // Sắp xếp danh sách chi tiết sản phẩm theo mã màu sắc
+        chiTietSanPham.sort(Comparator.comparing(ctsp -> ctsp.getMauSac().getMaMauSac()));
+
+        return chiTietSanPham;
+    }
+
 }

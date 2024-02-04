@@ -6,6 +6,11 @@ import com.poly.BeeShoes.repository.ThuongHieuRepository;
 import com.poly.BeeShoes.repository.VoucherResponsitory;
 import com.poly.BeeShoes.service.VoucherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +33,14 @@ public class VoucherImpl implements VoucherService {
     }
 
     @Override
+    public Voucher detail(Long id) {
+        Voucher voucher=voucherResponsitory.findById(id).get();
+        return voucher;
+    }
+
+
+
+    @Override
     public Voucher update(Long id, Voucher voucher) {
         Optional<Voucher> optional=voucherResponsitory.findById(id);
         return optional.map(o->
@@ -46,4 +59,23 @@ public class VoucherImpl implements VoucherService {
             return o;
         }).orElse(null);
     }
+
+    @Override
+    public Page<Voucher> getAllpage(Integer page) {
+        Pageable page1= PageRequest.of(page-1,5);
+
+        return voucherResponsitory.findAll(page1);
+    }
+
+    @Override
+    public Page<Voucher> SearchVoucher(String key, Integer page) {
+       List list=voucherResponsitory.searchVC(key);
+       Pageable pageable=PageRequest.of(page-1,5);
+       Integer start= (int)pageable.getOffset();
+       Integer end=(int)((pageable.getOffset() + pageable.getPageSize()) >list.size()
+               ?list.size() : pageable.getOffset() +pageable.getPageSize());
+       list=list.subList(start,end);
+        return new PageImpl<Voucher>(list,pageable,voucherResponsitory.searchVC(key).size());
+    }
+
 }

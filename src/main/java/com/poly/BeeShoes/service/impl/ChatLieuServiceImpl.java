@@ -23,6 +23,11 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
+    public ChatLieu getByTen(String ten) {
+        return chatLieuRepository.getFirstByTen(ten);
+    }
+
+    @Override
     public List<ChatLieu> getAll() {
         return chatLieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
     }

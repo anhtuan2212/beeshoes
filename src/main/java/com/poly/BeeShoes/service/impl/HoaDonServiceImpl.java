@@ -25,6 +25,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon) {
+        return hoaDonRepository.findByTrangThai(trangThaiHoaDon);
+    }
+
+    @Override
     public Optional<HoaDon> getHoaDonById(Long id) {
         return hoaDonRepository.findById(id);
     }
@@ -74,5 +79,15 @@ public class HoaDonServiceImpl implements HoaDonService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public HoaDon getHoaDonByMa(String ma) {
+        return hoaDonRepository.findByMaHoaDon(ma);
+    }
+
+    @Override
+    public HoaDon save(HoaDon hoaDon) {
+        return hoaDonRepository.save(hoaDon);
     }
 }

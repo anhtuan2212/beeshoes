@@ -48,15 +48,65 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title"  style="color: #75b798">VOUCHER </h1>
+                    <h1 class="page-header-title" >VOUCHER </h1>
 
                 </div>
-                <div class="col-sm-auto">
-                    <a class="btn btn-primary" href="add-voucher">Thêm Voucher</a>
-                </div>
+
 
             </div>
             <!-- End Row -->
+            <div style="margin-top:50px ">  <hr>
+                <h2 class="page-header-title"  >Bộ Lọc </h2>
+
+            </div>
+            <div  style="margin-bottom:20px " class="card-header">
+                <div class="row justify-content-between align-items-center flex-grow-1">
+
+
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <form>
+                            <!-- Search -->
+
+                            <form >
+                                <div class="input-group ">
+                                    <input style="width: 150px" type="text" name="key" class="form-control " placeholder="Mã Voucher,Tên Voucher, Loại Voucher,Điều kiện" aria-label="Search" aria-describedby="search-addon" />
+                                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                                    </span>
+
+                                </div>
+                            </form>
+
+                            <!-- End Search -->
+                        </form>
+                    </div>
+                    <label style="margin-left: 380px " class="input-label">Trạng thái</label>
+                    <select style="margin-right: 50px; width: 400px  " class="form-select form-control " th:name="trangThai" aria-label="Default select example">
+                        <option  >Tất cả</option>
+                        <option  >Đang hoạt động</option>
+                        <option  >Đang hoạt động</option>
+                    </select>
+                    <div style="margin-left: 10px;margin-top: 30px;margin-right: 20px " >
+                    <div  class="form-check form-check-inline">
+                        <label style="width: 150px;margin-right: 20px "   class="form-check-label" >Ngày bắt đầu</label>
+                        <input  style="margin-right: 20px "  type="datetime-local" class="form-control money-input-mask" th:name="ngayBatDau"
+                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label=""  >
+                    </div>
+                    <div  style="margin-right: 20px "  class="form-check form-check-inline">
+                        <label style="width: 150px; margin-right: 20px "   class="form-check-label" >Ngày kết thúc</label>
+                        <input  style="margin-right: 10px " type="datetime-local" class="form-control money-input-mask" th:name="ngayBatDau"
+                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label="" >
+                    </div>
+                </div>
+                    <label style="margin-top: 30px"  class="input-label">Số lượng</label>
+                    <select style="margin-right: 50px; width: 400px;margin-top: 30px "  class="form-select form-control  "  th:name="trangThai" aria-label="Default select example">
+                        <option  >Tất cả</option>
+                        <option >Còn số lượng</option>
+                        <option >Hết số lượng</option>
+                    </select>
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Header -->
 
             <!-- Nav Scroller -->
             <div class="js-nav-scroller hs-nav-scroller-horizontal">
@@ -76,6 +126,12 @@
                 <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">All Voucher</a>
+
+                    </li>
+                    <li  style="margin-left: 1200px" class="nav-item">
+                        <div  class="col-sm-auto ">
+                            <a class="btn btn-primary" href="add-voucher">Thêm Voucher</a>
+                        </div>
 
                     </li>
 
@@ -119,45 +175,16 @@
             <!-- Header -->
             <div class="card-header">
                 <div class="row justify-content-between align-items-center flex-grow-1">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <form>
-                            <!-- Search -->
-                            <div class="input-group input-group-merge input-group-flush">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="tio-search"></i>
-                                    </div>
-                                </div>
-                                <input id="datatableSearch" type="search" class="form-control" placeholder="Mã voucher" aria-label="Search users">
-                            </div>
-                            <!-- End Search -->
-                        </form>
-                    </div>
-
                     <div class="col-auto">
                         <!-- Unfold -->
                         <div class="hs-unfold mr-2">
-                            <a class="js-hs-unfold-invoker btn btn-white" href="javascript:;" data-hs-unfold-options='{
-                      "target": "#datatableFilterSidebar",
-                      "type": "css-animation",
-                      "animationIn": "fadeInRight",
-                      "animationOut": "fadeOutRight",
-                      "hasOverlay": true,
-                      "smartPositionOff": true
-                     }'>
-                                <i class="tio-filter-list mr-1"></i> Filters
-                            </a>
+
                         </div>
                         <!-- End Unfold -->
 
                         <!-- Unfold -->
                         <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-white" href="javascript:;" data-hs-unfold-options='{
-                       "target": "#showHideDropdown",
-                       "type": "css-animation"
-                     }'>
-                                <i class="tio-table mr-1"></i> Columns <span class="badge badge-soft-dark rounded-circle ml-1">6</span>
-                            </a>
+
 
                             <div id="showHideDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card" style="width: 15rem;">
                                 <div class="card card-sm">
@@ -167,7 +194,7 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_product">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_product" checked="">
+                                                <input name="key" type="checkbox" class="toggle-switch-input" id="toggleColumn_product" checked="" th:value="${key}">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -305,28 +332,28 @@
             <div class="table-responsive datatable-custom">
                 <table id="datatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
                      "columnDefs": [{
-                        "targets": [0, 4, 9],
+                        "targets": [0, 8, 13],
                         "width": "5%",
                         "orderable": false
                       }],
                      "order": [],
                      "info": {
-                       "totalQty": "#datatableWithPaginationInfoTotalQty"
+                       "totalQty": "#datatableWithPagifinationInfoTotalQty"
                      },
                      "search": "#datatableSearch",
                      "entries": "#datatableEntries",
-                     "pageLength": 12,
+                     "pageLength": 14,
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
                    }'>
                     <thead class="thead-light">
-                    <tr>
-
-
+                    <tr >
+                        <th >STT</th>
                         <th >Mã Voucher</th>
                         <th>Tên Voucher</th>
                         <th>Loại Voucher</th>
+                        <th>Số Lượng</th>
                         <th>Giá Trị Tiền Mặt</th>
                         <th>Giá Trị Phần Trăm</th>
                         <th>Giá Trị Tối Đa</th>
@@ -339,22 +366,24 @@
                     </thead>
 
                     <tbody>
-                    <th:block th:each="voucher : ${listVC}">
+                    <th:block th:each="voucher,loop : ${listVC}" >
                         <tr>
-
+                            <td>[[${loop.index + 1}]]</td>
                             <td>[[${voucher.ma}]]</td>
                             <td>[[${voucher.ten}]]</td>
                             <td>[[${voucher.loaiVoucher}]]</td>
+                            <td>[[${voucher.soLuong}]]</td>
                             <td>[[${voucher.giaTriTienMat}]]</td>
                             <td>[[${voucher.giaTriPhanTram}]]</td>
                             <td>[[${voucher.giaTriToiDa}]]</td>
                             <td>[[${voucher.ngayBatDau}]]</td>
                             <td>[[${voucher.ngayKetThuc}]]</td>
                             <td>[[${voucher.dieuKien}]]</td>
-                            <td>[[${voucher.trangThai==true?"Còn hoạt động":"Ngưng hoạt động"}]]</td>
+                            <td>[[${voucher.trangThai == true ? 'Còn hoạt động' : (voucher.trangThai == false ? 'Ngưng hoạt động' : 'Sắp diễn ra')}]]</td>
+
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-sm btn-white" href="/cms/product-detail">
+                                    <a class="btn btn-sm btn-white"  th:href="@{/cms/detail/{id}(id=${voucher.id})}">
                                         <i class="tio-edit"></i> Edit
                                     </a>
 
@@ -383,43 +412,34 @@
             <!-- End Table -->
 
             <!-- Footer -->
-            <div class="card-footer">
-                <!-- Pagination -->
-                <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
-                    <div class="col-sm mb-2 mb-sm-0">
-                        <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                            <span class="mr-2">Showing:</span>
 
-                            <!-- Select -->
-                            <select id="datatableEntries" class="js-select2-custom" data-hs-select2-options='{
-                            "minimumResultsForSearch": "Infinity",
-                            "customClass": "custom-select custom-select-sm custom-select-borderless",
-                            "dropdownAutoWidth": true,
-                            "width": true
-                          }'>
-                                <option value="12" selected="">12</option>
-                                <option value="14">14</option>
-                                <option value="16">16</option>
-                                <option value="18">18</option>
-                            </select>
-                            <!-- End Select -->
+            <div class="row justify-content-between align-items-center flex-grow-1">
 
-                            <span class="text-secondary mr-2">of</span>
 
-                            <!-- Pagination Quantity -->
-                            <span id="datatableWithPaginationInfoTotalQty"></span>
-                        </div>
-                    </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card-footer">
+                        <!-- Pagination -->
+                        <nav  aria-label="Page navigation example ">
+                            <ul class="pagination">
+                                <li class="page-item" th:if="${currentPage != null && currentPage > 1}" >
+                                    <a class="page-link" th:href="@{'?page=' + ${currenPage - 1}}"  >
 
-                    <div class="col-sm-auto">
-                        <div class="d-flex justify-content-center justify-content-sm-end">
-                            <!-- Pagination -->
-                            <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-                        </div>
+                                        <<
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="i:${#numbers.sequence(1,totalPage)}" th:classappend="${currenPage == i ? 'active' : ''}">
+                                    <a class="page-link" th:href="@{${key != null && key != '' ? '?key='+key+'&':'?'}+'page=' + ${i}}" th:text="${i}"></a></li>
+                                <li class="page-item" th:if="${currentPage != null && currentPage < totalPage}" >
+                                    <a class="page-link" th:href="@{'?page=' + ${currenPage + 1}}"  >
+
+                                        >>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- End Pagination -->
                     </div>
                 </div>
-                <!-- End Pagination -->
-            </div>
             <!-- End Footer -->
         </div>
         <!-- End Card -->
@@ -427,47 +447,7 @@
     <!-- End Content -->
 
     <!-- Footer -->
-
-    <div class="footer">
-        <div class="row justify-content-between align-items-center">
-            <div class="col">
-                <p class="font-size-sm mb-0">&copy; Front. <span class="d-none d-sm-inline-block">2020 Htmlstream.</span></p>
-            </div>
-            <div class="col-auto">
-                <div class="d-flex justify-content-end">
-                    <!-- List Dot -->
-                    <ul class="list-inline list-separator">
-                        <li class="list-inline-item">
-                            <a class="list-separator-link" href="#">FAQ</a>
-                        </li>
-
-                        <li class="list-inline-item">
-                            <a class="list-separator-link" href="#">License</a>
-                        </li>
-
-                        <li class="list-inline-item">
-                            <!-- Keyboard Shortcuts Toggle -->
-                            <div class="hs-unfold">
-                                <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle" href="javascript:;" data-hs-unfold-options='{
-                              "target": "#keyboardShortcutsSidebar",
-                              "type": "css-animation",
-                              "animationIn": "fadeInRight",
-                              "animationOut": "fadeOutRight",
-                              "hasOverlay": true,
-                              "smartPositionOff": true
-                             }'>
-                                    <i class="tio-command-key"></i>
-                                </a>
-                            </div>
-                            <!-- End Keyboard Shortcuts Toggle -->
-                        </li>
-                    </ul>
-                    <!-- End List Dot -->
-                </div>
-            </div>
-        </div>
     </div>
-
 
 
     <!-- End Footer -->
@@ -924,208 +904,10 @@
 <!-- End Import Products Modal -->
 
 <!-- Product Filter Modal -->
-<div id="datatableFilterSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow">
-    <div class="card card-lg sidebar-card sidebar-footer-fixed">
-        <div class="card-header">
-            <h4 class="card-header-title">Filters</h4>
 
-            <!-- Toggle Button -->
-            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;" data-hs-unfold-options='{
-                "target": "#datatableFilterSidebar",
-                "type": "css-animation",
-                "animationIn": "fadeInRight",
-                "animationOut": "fadeOutRight",
-                "hasOverlay": true,
-                "smartPositionOff": true
-               }'>
-                <i class="tio-clear tio-lg"></i>
-            </a>
-            <!-- End Toggle Button -->
-        </div>
 
-        <!-- Body -->
-        <div class="card-body sidebar-body sidebar-scrollbar">
-            <small class="text-cap mb-3">Product vendor</small>
-
-            <div class="row">
-                <div class="col-6">
-                    <!-- Custom Checkbox -->
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio1" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio1">Google</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio2" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio2">Topman</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio3" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio3">RayBan</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio4" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio4">Mango</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio5" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio5">Calvin Klein</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio6" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio6">Givenchy</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio7" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio7">Asos</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio8" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio8">Apple</label>
-                    </div>
-                    <!-- End Custom Checkbox -->
-                </div>
-
-                <div class="col-6">
-                    <!-- Custom Checkbox -->
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio9" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio9">Times</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio10" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio10">Asos</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio11" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio11">Nike Jordan</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio12" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio12">VA RVCA</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio13" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio13">Levis</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio14" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio14">Beats</label>
-                    </div>
-                    <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="productVendorFilterRadio15" name="productVendorFilterRadio" class="custom-control-input">
-                        <label class="custom-control-label" for="productVendorFilterRadio15">Clarks</label>
-                    </div>
-                    <!-- End Custom Checkbox -->
-                </div>
-            </div>
-            <!-- End Row -->
-
-            <a class="link mt-2" href="javascript:;">
-                <i class="tio-clear"></i> Clear
-            </a>
-
-            <hr class="my-4">
-
-            <small class="text-cap mb-3">Availability</small>
-
-            <!-- Custom Checkbox -->
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productAvailabilityFilterRadio1" name="productAvailabilityFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productAvailabilityFilterRadio1">Available on Online Store</label>
-            </div>
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productAvailabilityFilterRadio2" name="productAvailabilityFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productAvailabilityFilterRadio2">Unavailable on Online Store</label>
-            </div>
-            <!-- End Custom Checkbox -->
-
-            <a class="link mt-2" href="javascript:;">
-                <i class="tio-clear"></i> Clear
-            </a>
-
-            <hr class="my-4">
-
-            <small class="text-cap mb-3">Tagged with</small>
-
-            <div class="mb-2">
-                <input type="text" class="js-tagify tagify-form-control form-control" name="tagsName" id="tagsLabel" placeholder="Enter tags here" aria-label="Enter tags here">
-            </div>
-
-            <a class="link mt-2" href="javascript:;">
-                <i class="tio-clear"></i> Clear
-            </a>
-
-            <hr class="my-4">
-
-            <small class="text-cap mb-3">Product type</small>
-
-            <!-- Custom Checkbox -->
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productTypeFilterRadio1" name="productTypeFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productTypeFilterRadio1">Shoes</label>
-            </div>
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productTypeFilterRadio2" name="productTypeFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productTypeFilterRadio2">Accessories</label>
-            </div>
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productTypeFilterRadio3" name="productTypeFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productTypeFilterRadio3">Clothing</label>
-            </div>
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productTypeFilterRadio4" name="productTypeFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productTypeFilterRadio4">Electronics</label>
-            </div>
-            <!-- End Custom Checkbox -->
-
-            <a class="link mt-2" href="javascript:;">
-                <i class="tio-clear"></i> Clear
-            </a>
-
-            <hr class="my-4">
-
-            <small class="text-cap mb-3">Collection</small>
-
-            <!-- Input Group -->
-            <div class="input-group input-group-merge mb-2">
-                <div class="input-group-prepend">
-              <span class="input-group-text">
-                <i class="tio-search"></i>
-              </span>
-                </div>
-
-                <input type="search" class="form-control" placeholder="Search for collections" aria-label="Search for collections">
-            </div>
-            <!-- End Input Group -->
-
-            <!-- Custom Checkbox -->
-            <div class="custom-control custom-radio mb-2">
-                <input type="radio" id="productCollectionFilterRadio1" name="productCollectionFilterRadio" class="custom-control-input">
-                <label class="custom-control-label" for="productCollectionFilterRadio1">Home page</label>
-            </div>
-            <!-- End Custom Checkbox -->
-
-            <a class="link mt-2" href="javascript:;">
-                <i class="tio-clear"></i> Clear
-            </a>
-        </div>
         <!-- End Body -->
 
-        <!-- Footer -->
-        <div class="card-footer sidebar-footer">
-            <div class="row gx-2">
-                <div class="col">
-                    <button type="button" class="btn btn-block btn-white">Clear all filters</button>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-block btn-primary">Save</button>
-                </div>
-            </div>
-            <!-- End Row -->
-        </div>
-        <!-- End Footer -->
-    </div>
-</div>
 <!-- End Product Filter Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
