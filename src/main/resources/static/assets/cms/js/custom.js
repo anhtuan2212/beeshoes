@@ -1,4 +1,3 @@
-
 function Toast(status, message) {
     const Toast = Swal.mixin({
         toast: true,
@@ -27,6 +26,7 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
+
 function Confirm() {
     Swal.fire({
         title: "Bạn chắc chứ?",
@@ -35,13 +35,13 @@ function Confirm() {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        cancelButtonText:"Hủy",
+        cancelButtonText: "Hủy",
         confirmButtonText: "Xác Nhận"
     }).then((result) => {
         if (result.isConfirmed) {
             ToastSuccess("Thành Công !");
             return true;
-        }else{
+        } else {
             console.log(result)
             return false;
         }
@@ -145,7 +145,8 @@ $(document).on('ready', function () {
                 type: "POST",
                 url: "/api/them-" + url,
                 data: {
-                    ten: ten
+                    ten: ten,
+                    trangThai: true
                 },
                 success: (data, status, xhr) => {
                     let id = $('#id-element-data').val();
@@ -166,6 +167,12 @@ $(document).on('ready', function () {
                         case "existsByTen":
                             ToastError('Tên Đã Tồn Tại.');
                             break;
+                        case "NotIsNum":
+                            ToastError('Kích Cỡ phải là số.');
+                            break;
+                        case "faildkhoang":
+                            ToastError('Kích Cỡ phải từ 20->50.');
+                            break;
                         case "nameNull":
                             ToastError("Tên không được để trống.");
                             break;
@@ -179,6 +186,7 @@ $(document).on('ready', function () {
             })
         }
     })
+
     function changeNameToColor() {
         var mausac = $('#mauSac').val();
         mausac.forEach((mau) => {
@@ -190,9 +198,10 @@ $(document).on('ready', function () {
             $(ele[0]).css('color', '#FFFFFF');
         });
     }
+
     changeNameToColor();
     $('#mauSac').on('change', function () {
-       changeNameToColor();
+        changeNameToColor();
     });
 
     // thêm màu sắc
@@ -206,28 +215,56 @@ $(document).on('ready', function () {
                 type: "POST",
                 url: "/api/them-mau-sac",
                 data: {
-                    ten_mau: coloName,
-                    ma_mau: coloCode.toUpperCase()
+                    ten: coloName,
+                    maMau: coloCode.toUpperCase(),
+                    trangThai: true
                 },
                 success: (data, status, xhr) => {
-                        let html = `<option value="${data.maMauSac}" data-name="${data.ten}">${data.maMauSac}</option>`;
-                        $('#mauSac').append(html);
-                        Toast('success', 'Thêm Thành Công !');
-                        if (confirm('Bạn có muốn tạo thêm !')) {
+                    let html = `<option value="${data.maMauSac}" data-name="${data.ten}">${data.maMauSac}</option>`;
+                    $('#mauSac').append(html);
+                    Toast('success', 'Thêm Thành Công !');
+                    Swal.fire({
+                        title: "Bạn muốn thêm tiếp?",
+                        text: "Bạn có muốn tạo thêm màu nữa không?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        cancelButtonText: "không",
+                        confirmButtonText: "Có"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                             $('#color-name').val('');
                         } else {
                             $('#form-add-color').modal('hide');
                             $('#color-name').val('');
                         }
+                    })
                 },
                 error: (xhr) => {
-                    let mes = xhr.getResponseHeader('status');
-                    switch (mes){
-                        case "existsByMa":ToastError('Mã màu đã tồn tại.')
+                    let st = xhr.getResponseHeader('status');
+                    console.log(st)
+                    switch (st) {
+                        case "existsByTen":
+                            ToastError("Tên đã tồn tại.")
                             break;
-                        case "existsByTen":ToastError('Tên màu đã tồn tại.')
+                        case "existsByMaMau":
+                            ToastError("Mã màu đã tồn tại.")
                             break;
-                        default:ToastError('Lỗi hệ thống ! Vui lòng thử lại sau.')
+                        case "nameNull":
+                            ToastError("Tên không được trống.")
+                            break;
+                        case "colorCodeNull":
+                            ToastError("Mã màu không được trống.")
+                            break;
+                        case "statusNull":
+                            ToastError("Trạng thái không được trống.")
+                            break;
+                        case "oke":
+                            ToastSuccess("Thêm thành công.")
+                            break;
+                        default:
+                            ToastError("Thất Bại.")
                     }
                 }
             })

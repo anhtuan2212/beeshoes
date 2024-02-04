@@ -117,15 +117,22 @@ $(document).on('ready', function () {
             datatable.columns(9).search('').draw();
         }
     });
-    $('#thuongHieu, #theLoai').on('change', function() {
-        var thuongHieuValue = $('#thuongHieu').val();
-        var theLoaiValue = $('#theLoai').val();
+    $('#thuongHieuFilter, #theLoaiFilter, #mauSacFilter, #kichCoFilter').on('change', function() {
+        var thuongHieuValue = $('#thuongHieuFilter').val();
+        var theLoaiValue = $('#theLoaiFilter').val();
+        var mau = $('#mauSacFilter').val();
+        var co = $('#kichCoFilter').val();
+
         var thuongHieuFilter = (thuongHieuValue === 'all') ? '' : thuongHieuValue;
         var theLoaiFilter = (theLoaiValue === 'all') ? '' : theLoaiValue;
-        datatable.columns(4).search(thuongHieuFilter).draw();
-        datatable.columns(3).search(theLoaiFilter).draw();
-    });
+        var mauF = (mau === 'all') ? '' : mau;
+        var coF = (co === 'all') ? '' : co;
 
+        datatable.columns(3).search(mauF).draw();
+        datatable.columns(4).search(coF).draw();
+        datatable.columns(5).search(theLoaiFilter).draw();
+        datatable.columns(6).search(thuongHieuFilter).draw();
+    });
 
     $('#datatableSearch').on('mouseup', function (e) {
         var $input = $(this),
@@ -148,20 +155,20 @@ $(document).on('ready', function () {
     $('#toggleColumn_product').change(function (e) {
         datatable.columns(2).visible(e.target.checked)
     })
-    $('#toggleColumn_type').change(function (e) {
+    $('#toggleColumn_color').change(function (e) {
         datatable.columns(3).visible(e.target.checked)
     })
-    $('#toggleColumn_vendor').change(function (e) {
+    $('#toggleColumn_size').change(function (e) {
         datatable.columns(4).visible(e.target.checked)
     })
-    datatable.columns(5).visible(false)
-    $('#toggleColumn_stocks').change(function (e) {
+    $('#toggleColumn_type').change(function (e) {
         datatable.columns(5).visible(e.target.checked)
     })
-    datatable.columns(6).visible(false)
-    $('#toggleColumn_sku').change(function (e) {
+    $('#toggleColumn_vendor').change(function (e) {
         datatable.columns(6).visible(e.target.checked)
     })
+    datatable.columns(3).visible(false)
+    datatable.columns(4).visible(false)
     $('#toggleColumn_price').change(function (e) {
         datatable.columns(7).visible(e.target.checked)
     })

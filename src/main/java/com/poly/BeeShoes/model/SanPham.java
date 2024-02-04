@@ -61,7 +61,15 @@ public class SanPham {
     boolean sale;
     @Transient
     List<MauSac> mauSac;
-    // Phương thức mới để lấy danh sách kích cỡ không trùng lặp
+
+    public boolean isSales() {
+        if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
+            return false;
+        }
+        // Sử dụng Java Stream để kiểm tra xem có đối tượng nào có isSale là true và trạng thái là 1 hay không
+        return chiTietSanPham.stream()
+                .anyMatch(ctsp -> ctsp.isSale() && ctsp.getTrangThai() == 1);
+    }
     public List<KichCo> getDistinctKichCoList() {
         if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
             return List.of();

@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.api;
 
+import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.DeGiay;
 import com.poly.BeeShoes.model.KichCo;
 import com.poly.BeeShoes.service.ChiTietSanPhamService;
@@ -20,11 +21,18 @@ public class KichCoApi {
     @PostMapping("/them-kich-co")
     public ResponseEntity<KichCo> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
         KichCo th = new KichCo();
+
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
         if (trangThai==null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
+        }
+        if (!LibService.isNumeric(ten)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotIsNum").body(null);
+        }
+        if (Integer.parseInt(ten) < 20 || Integer.parseInt(ten) > 50) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "faildkhoang").body(null);
         }
         if (id != null) {
             th = kichCoService.getByTen(ten);

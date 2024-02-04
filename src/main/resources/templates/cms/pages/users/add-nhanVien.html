@@ -33,7 +33,8 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form action="#" th:action="@{/cms/add-nhanVien}" method="post" th:object="${nhanVien}" class="js-step-form py-md-1" data-hs-step-form-options='{
+        <form action="#" th:action="@{/cms/add-nhanVien}" method="post" th:object="${nhanVien}"
+              class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
                 "endSelector": "#addUserFinishBtn",
@@ -60,42 +61,52 @@
                     <div id="addUserStepFormContent">
                         <!-- Card -->
                         <div id="addUserStepProfile" class="card card-lg active">
+                            <div class="card-header d-flex justify-content-between">
+                                <div></div>
+                                <div>
+                                    <a class="btn btn-info" data-toggle="modal"
+                                       data-target="#form-qr-code">QR Code
+                                        <i class="tio tio-qr-code"></i>
+                                    </a>
+                                </div>
+
+                            </div>
                             <!-- Body -->
                             <div class="card-body">
                                 <!-- Form Group -->
-<!--                                <div class="row form-group">-->
-<!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
+                                <!--                                <div class="row form-group">-->
+                                <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
 
-<!--                                    <div class="col-sm-9">-->
-<!--                                        <div class="d-flex align-items-center">-->
-<!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
-<!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
-<!--                                                   for="avatarUploader">-->
-<!--                                                <img id="avatarImg" class="avatar-img"-->
-<!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
+                                <!--                                    <div class="col-sm-9">-->
+                                <!--                                        <div class="d-flex align-items-center">-->
+                                <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
+                                <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
+                                <!--                                                   for="avatarUploader">-->
+                                <!--                                                <img id="avatarImg" class="avatar-img"-->
+                                <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
 
-<!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
-<!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
-<!--                                      "textTarget": "#avatarImg",-->
-<!--                                      "mode": "image",-->
-<!--                                      "targetAttr": "src",-->
-<!--                                      "resetTarget": ".js-file-attach-reset-img",-->
-<!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
-<!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
-<!--                                   }'>-->
+                                <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
+                                <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
+                                <!--                                      "textTarget": "#avatarImg",-->
+                                <!--                                      "mode": "image",-->
+                                <!--                                      "targetAttr": "src",-->
+                                <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
+                                <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
+                                <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
+                                <!--                                   }'>-->
 
-<!--                                                <span class="avatar-uploader-trigger">-->
-<!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
-<!--                            </span>-->
-<!--                                            </label>-->
-<!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
+                                <!--                                                <span class="avatar-uploader-trigger">-->
+                                <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
+                                <!--                            </span>-->
+                                <!--                                            </label>-->
+                                <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
 
-<!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
-<!--                                                Delete-->
-<!--                                            </button>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
+                                <!--                                                Delete-->
+                                <!--                                            </button>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
                                 <!-- End Form Group -->
 
                                 <!-- Form Group -->
@@ -207,7 +218,8 @@
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" class="custom-control-input"
                                                            name="userAccountTypeRadio"
-                                                           id="userAccountTypeRadio1" th:field="*{gioiTinh}" th:value="true">
+                                                           id="userAccountTypeRadio1" th:field="*{gioiTinh}"
+                                                           th:value="true">
                                                     <label class="custom-control-label"
                                                            for="userAccountTypeRadio1">Nam</label>
                                                 </div>
@@ -219,7 +231,8 @@
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" class="custom-control-input"
                                                            name="userAccountTypeRadio"
-                                                           id="userAccountTypeRadio2" th:field="*{gioiTinh}" th:value="false">
+                                                           id="userAccountTypeRadio2" th:field="*{gioiTinh}"
+                                                           th:value="false">
                                                     <label class="custom-control-label"
                                                            for="userAccountTypeRadio2">Nữ</label>
                                                 </div>
@@ -235,9 +248,9 @@
                             <div class="d-flex justify-content-center">
                                 <div class="card-footer d-sm-flex align-items-sm-center">
                                     <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
-<!--                                    <a class="btn btn-primary" href="/cms/add-nhanVien">-->
-<!--                                        <i class="tio-user-add mr-1"></i> Thêm nhân viên-->
-<!--                                    </a>-->
+                                    <!--                                    <a class="btn btn-primary" href="/cms/add-nhanVien">-->
+                                    <!--                                        <i class="tio-user-add mr-1"></i> Thêm nhân viên-->
+                                    <!--                                    </a>-->
                                 </div>
                             </div>
                         </div>
@@ -656,14 +669,117 @@
         <!-- End Body -->
     </div>
 </div>
+<div class="modal fade" id="form-qr-code" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center" role="document">
+        <div class="modal-content" style="width: 70%">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="form-add-color-Label">Vui lòng đưa mã QR vào khung camera !</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="modal-body pt-0 pb-0 row justify-content-center">
+                <div style="width: 300px;height: 300px">
+                    <video id="video_show_camera" width="300" height="300" autoplay></video>
+                    <canvas id="canvas_context" width="200" height="200" style="display: none"></canvas>
+                    <audio id="sound_beep" src="/assets/cms/audio/bleep.mp3" style="display: none"
+                           preload="auto"></audio>
+                </div>
+            </div>
+            <!-- End Body -->
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+</div>
 <!-- End Keyboard Shortcuts -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
+    $('#form-qr-code').on('shown.bs.modal', function () {
+        startQRCodeScanner();
+    });
+
+    function startQRCodeScanner() {
+        let video = document.getElementById("video_show_camera");
+        let canvas = document.getElementById("canvas_context");
+        let context = canvas.getContext("2d");
+        let beepAudio = document.getElementById("sound_beep");
+
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices
+                .getUserMedia({video: true})
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    setTimeout(() => {
+                        requestAnimationFrame(tick);
+                    }, 500);
+                })
+                .catch(function (error) {
+                    console.log("Something went wrong");
+                });
+        }
+
+        function playBeepSound() {
+            // Phát âm thanh beep
+            beepAudio.play();
+        }
+
+        function closeCamera() {
+            // Dừng camera
+            var tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvas.hidden = false;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                var imageData = context.getImageData(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+                var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "dontInvert",
+                });
+                if (code) {
+                    var data = code.data;
+                    console.log(code.data);
+                    result = data.split("|");
+                    console.log(result);
+                    playBeepSound();
+                    closeCamera();
+                    $('#CCCDLabel').val(result[0])
+                    let fullname = result[2].split(" ");
+                    if (fullname.length==3){
+                        $('#firstNameLabel').val(fullname[0])
+                        $('#middleNameLabel').val(fullname[1])
+                        $('#lastNameLabel').val(fullname[fullname.length-1])
+                    }
+                    $('#diaChiLabel').val(result[5]);
+                    $('#form-qr-code').modal('hide');
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+    }
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================

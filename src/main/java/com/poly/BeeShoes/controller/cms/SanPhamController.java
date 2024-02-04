@@ -31,6 +31,8 @@ public class SanPhamController {
     public String product(Model model) {
         List<SanPham> sp = sanPhamService.getAll();
         model.addAttribute("lstsanpham", sp);
+        model.addAttribute("lstkichco", kichCoService.getAll());
+        model.addAttribute("lstmausac", mauSacService.getAll());
         model.addAttribute("lsttheloai", theLoaiService.getAll());
         model.addAttribute("lstthuonghieu", thuongHieuService.getAll());
         return "cms/pages/products/products";
