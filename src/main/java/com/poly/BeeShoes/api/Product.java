@@ -55,7 +55,6 @@ public class Product {
     }
 
 
-
     @PostMapping("/chi-tiet-san-pham")
     public ResponseEntity<SanPham> chiTietSanPham(@ModelAttribute CTSPRequest ctspRequest) {
 
@@ -63,23 +62,29 @@ public class Product {
         }.getType();
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
         if (productdetail.size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Option product can't null").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "OptionNull").body(null);
         }
         for (int i = 0; i < productdetail.size(); i++) {
             if (productdetail.get(i).getKichCo().isBlank()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Size in option product can't null").body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "SizeNull").body(null);
             }
             if (productdetail.get(i).getMaMauSac().isBlank()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Color in option product can't null").body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "ColorNull").body(null);
             }
             if (productdetail.get(i).getGiaBan().isBlank()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Price in option product can't null").body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "GiaBanNull").body(null);
+            }
+            if (productdetail.get(i).getGiaGoc().isBlank()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "GiaGocNull").body(null);
             }
             if (productdetail.get(i).getSoLuong() < 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Quantity in option product can't null").body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "QuantityNull").body(null);
             }
-            if (productdetail.get(i).getImg() == null||productdetail.get(i).getImg() == "/assets/cms/img/400x400/img2.jpg") {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "IMG in option product can't null").body(null);
+            if (productdetail.get(i).getImg() == null || productdetail.get(i).getImg() == "/assets/cms/img/400x400/img2.jpg") {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "IMGNull").body(null);
+            }
+            if (ctspRequest.getMoTa().length()>2000) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "MaxLenghtMota").body(null);
             }
 
         }
@@ -95,6 +100,7 @@ public class Product {
         }
         sp.setThuongHieu(th);
         sp.setTrangThai(ctspRequest.isTrangThai());
+        sp.setSale(ctspRequest.isSales());
         sp.setTheLoai(tl);
         sp.setMoTa(ctspRequest.getMoTa());
         SanPham sanPham = sanPhamService.save(sp);
@@ -109,21 +115,27 @@ public class Product {
             }
             Anh anhC = anhService.getAnhByURL(productdetail.get(i).getImg());
             Anh anh = new Anh();
-            if (anhC!=null){
-                anh=anhC;
-            }else{
+            if (anhC != null) {
+                anh = anhC;
+            } else {
                 anh.setUrl(productdetail.get(i).getImg());
                 anh.setSanPham(sanPham);
                 anh.setNgayTao(Timestamp.from(Instant.now()));
                 anh.setTrangThai(true);
             }
-            if (i==1){
+            if (i == 0) {
                 anh.setMain(true);
-            }else{
-                anh.setMain(false);
+            } else {
+                if (anh.isMain() != true) {
+                    anh.setMain(false);
+                }
             }
-            Anh a = anhService.save(anh);
-            ctsp.setAnh(a);
+            if (anh.getId() == null) {
+                anh = anhService.save(anh);
+            }
+            System.out.println(anh);
+            System.out.println(i);
+            ctsp.setAnh(anh);
             ctsp.setChatLieu(cl);
             ctsp.setDeGiay(dg);
             ctsp.setCoGiay(cg);
@@ -136,7 +148,6 @@ public class Product {
             ctsp.setGiaNhap(LibService.convertStringToBigDecimal("0"));
             ctsp.setGiaBan(LibService.convertStringToBigDecimal(productdetail.get(i).getGiaBan()));
             ctsp.setMaSanPham(chiTietSanPhamService.generateDetailCode());
-            ctsp.setSoLuongNhap(productdetail.get(i).getSoLuong());//tạm bỏ qua
             ctsp.setSoLuongTon(productdetail.get(i).getSoLuong());
             ctsp.setTrangThai(1);
             ctsp.setNgayTao(Timestamp.from(Instant.now()));
@@ -145,5 +156,16 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
+    @DeleteMapping("/xoa-chi-tiet-san-pham")
+    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("id")String id) {
+        if (id.isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
+        }
+        boolean st = chiTietSanPhamService.delete(Long.parseLong(id));
+        if (st){
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotExits").body(null);
+        }
+    }
 }

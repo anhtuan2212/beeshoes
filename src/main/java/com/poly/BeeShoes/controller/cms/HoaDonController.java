@@ -39,7 +39,7 @@ public class HoaDonController {
         model.addAttribute("hoaDonThanhCongList", hoaDonThanhCongList);
         model.addAttribute("hinhThucThanhToanList", hinhThucThanhToanList);
         model.addAttribute("count", count);
-        return "cms/pages/oders/orders";
+        return "cms/pages/orders/orders";
     }
 
     @GetMapping("/hoa-don/{idHoaDon}/chi-tiet")
@@ -62,12 +62,12 @@ public class HoaDonController {
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("tongTien", tongTien);
         model.addAttribute("countHoaDonCuaKhachHang", countHoaDonCuaKhachHang);
-        return "cms/pages/oders/order-details";
+        return "cms/pages/orders/order-details";
     }
 
     @GetMapping("/check-out")
     public String checkout() {
-        return "cms/pages/oders/checkout";
+        return "cms/pages/orders/checkout";
     }
 
 }

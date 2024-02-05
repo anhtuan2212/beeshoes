@@ -202,3 +202,7 @@
 .rating .giaGoc{
     text-decoration: line-through;
 }
+.product__item {
+    border: solid 1px;
+    border-color: #fcf0f0;
+}

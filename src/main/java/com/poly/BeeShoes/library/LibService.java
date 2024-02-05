@@ -17,7 +17,10 @@ public class LibService {
         BigDecimal bd = new BigDecimal(str);
         return bd;
     }
-
+    public static boolean isNumeric(String str) {
+        // Sử dụng regex để kiểm tra xem chuỗi chỉ chứa số hay không
+        return str.matches("\\d+");
+    }
     public static List<String> checkDataProduct(Long sanPham, Long theLoai, Long thuongHieu, Long chatLieu, Long deGiay, Long coGiay, Long muiGiay, String giaNhap, String giaGoc) {
         List<String> lst = new ArrayList<>();
         if (sanPham < 1) {

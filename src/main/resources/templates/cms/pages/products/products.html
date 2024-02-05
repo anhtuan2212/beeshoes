@@ -47,8 +47,6 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title">Sản Phẩm <span class="badge badge-fsoft-dark ml-2" th:text="${#lists.size(lstsanpham)}"></span></h1>
-
                     <h1 class="page-header-title">Sản Phẩm <span class="badge badge-soft-dark ml-2"
                                                                  th:text="${#lists.size(lstsanpham)}"></span></h1>
 
@@ -56,9 +54,6 @@
                         <a class="text-body mr-3" href="javascript:;" data-toggle="modal"
                            data-target="#exportProductsModal">
                             <i class="tio-download-to mr-1"></i> Export
-                        </a>
-                        <a class="text-body" href="javascript:;" data-toggle="modal" data-target="#importProductsModal">
-                            <i class="tio-publish mr-1"></i> Import
                         </a>
                     </div>
                 </div>
@@ -78,9 +73,9 @@
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2">Bộ Lọc</h6>
                         <div class="row align-items-center gx-2">
-                            <div class="row justify-content-between align-items-center flex-grow-1">
-                                <div class="col-md-3 mb-3 mb-md-0">
-                                    <form>
+                            <div class="row align-items-center flex-grow-1">
+                                <div class="col-md-4 mb-3 mb-md-0">
+                                    <form class="col-12 mb-3">
                                         <!-- Search -->
                                         <div class="input-group input-group-merge input-group-flush">
                                             <div class="input-group-prepend">
@@ -89,17 +84,17 @@
                                                 </div>
                                             </div>
                                             <input id="datatableSearch" type="search" class="form-control"
-                                                   placeholder="Tìm kiếm sản phẩm" aria-label="Tìm sản phẩm" autofocus>
+                                                   placeholder="Tìm kiếm." aria-label="Tìm sản phẩm" autofocus>
                                         </div>
                                         <!-- End Search -->
                                     </form>
                                 </div>
-
-                                <div class="col-auto top-1em">
-                                    <!-- Form Check -->
+                                <div class="col-md-4 form-group">
+                                    <label class="col-12 pl-0">Trạng Thái</label>
                                     <div class="form-check form-check-inline">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" id="customInlineRadio1" class="custom-control-input" checked
+                                            <input type="radio" id="customInlineRadio1" class="custom-control-input"
+                                                   checked
                                                    name="status" value="">
                                             <label class="custom-control-label" for="customInlineRadio1">Tất cả</label>
                                         </div>
@@ -110,8 +105,10 @@
                                     <div class="form-check form-check-inline">
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="customInlineRadio2"
-                                                   class="custom-control-input indeterminate-checkbox" name="status" value="active">
-                                            <label class="custom-control-label" for="customInlineRadio2">Đang Bán</label>
+                                                   class="custom-control-input indeterminate-checkbox" name="status"
+                                                   value="active">
+                                            <label class="custom-control-label" for="customInlineRadio2">Đang
+                                                Bán</label>
                                         </div>
                                     </div>
                                     <!-- End Form Check -->
@@ -120,183 +117,67 @@
                                     <div class="form-check form-check-inline">
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="customInlineRadio3"
-                                                   class="custom-control-input indeterminate-checkbox" name="status" value="noActive">
-                                            <label class="custom-control-label" for="customInlineRadio3">Chưa Bán</label>
+                                                   class="custom-control-input indeterminate-checkbox" name="status"
+                                                   value="noActive">
+                                            <label class="custom-control-label" for="customInlineRadio3">Chưa
+                                                Bán</label>
                                         </div>
                                     </div>
-                                    <div class="hs-unfold mr-2 form-group">
-                                        <select class="js-select2-custom custom-select" name="theLoai"
-                                                id="theLoai" size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                </div>
+                                <div class="hs-unfold form-group col-4">
+                                    <label>Thể Loại</label>
+                                    <select class="js-select2-custom custom-select" name="theLoai"
+                                            id="theLoaiFilter" size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Chọn thể loại...",
                                     "searchInputPlaceholder": "Tìm thể loại..."
                                     }'>
-                                            <option value="all" selected>Chọn Thể Loại</option>
-                                            <option th:each="tl:${lsttheloai}" th:value="${tl.getTen()}"
-                                                    th:text="${tl.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <!-- Unfold -->
-                                    <div class="hs-unfold mr-2 form-group">
-                                        <select class="js-select2-custom custom-select" name="thuongHieu"
-                                                id="thuongHieu" size="1"
-                                                style="opacity: 0;"
-                                                data-hs-select2-options='{
+                                        <option value="all" selected>Tất Cả</option>
+                                        <option th:each="tl:${lsttheloai}" th:value="${tl.getTen()}"
+                                                th:text="${tl.getTen()}"></option>
+                                    </select>
+                                </div>
+                                <div class="hs-unfold form-group col-md-4">
+                                    <label>Thương Hiệu</label>
+                                    <select class="js-select2-custom custom-select" name="thuongHieu"
+                                            id="thuongHieuFilter" size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
                                     "placeholder": "Chọn thương hiệu...",
                                     "searchInputPlaceholder": "Tìm thương hiệu..."
                                     }'>
-                                            <option value="all" selected>Chọn Thương Hiệu</option>
-                                            <option th:each="th:${lstthuonghieu}" th:value="${th.getTen()}"
-                                                    th:text="${th.getTen()}"></option>
-                                        </select>
-                                    </div>
-                                    <!-- End Unfold -->
+                                        <option value="all" selected>Tất Cả</option>
+                                        <option th:each="th:${lstthuonghieu}" th:value="${th.getTen()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
+                                </div>
+                                <div class="hs-unfold form-group col-md-4">
+                                    <label>Kích Cỡ</label>
+                                    <select class="js-select2-custom custom-select" name="kichCo"
+                                            id="kichCoFilter" size="1"
+                                            style="opacity: 0;"
+                                            data-hs-select2-options='{
+                                    "placeholder": "Chọn kích cỡ...",
+                                    "searchInputPlaceholder": "Tìm kích cỡ..."
+                                    }'>
+                                        <option value="all" selected>Tất Cả</option>
+                                        <option th:each="th:${lstkichco}" th:value="${th.getTen()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
+                                </div>
 
-                                    <!-- Unfold -->
-                                    <div class="hs-unfold">
-                                        <a class="js-hs-unfold-invoker btn btn-white" href="javascript:;" data-hs-unfold-options='{
-                       "target": "#showHideDropdown",
-                       "type": "css-animation"
-                     }'>
-                                            <i class="tio-table mr-1"></i> Columns <span
-                                                class="badge badge-soft-dark rounded-circle ml-1">6</span>
-                                        </a>
-
-                                        <div id="showHideDropdown"
-                                             class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card"
-                                             style="width: 15rem;">
-                                            <div class="card card-sm">
-                                                <div class="card-body">
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">STT</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_stt">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_stt" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Sản Phẩm</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_product">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_product" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Thể Loại</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_type">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_type" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Thương Hiệu</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_vendor">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_vendor" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Ngày Thêm</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_stocks">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_stocks">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Người Thêm</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_sku">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_sku">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Giá Nhập</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_price">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_price" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="mr-2">Số Lượng</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_quantity">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_quantity" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <span class="mr-2">Trạng Thái</span>
-
-                                                        <!-- Checkbox Switch -->
-                                                        <label class="toggle-switch toggle-switch-sm" for="toggleColumn_variants">
-                                                            <input type="checkbox" class="toggle-switch-input"
-                                                                   id="toggleColumn_variants" checked="">
-                                                            <span class="toggle-switch-label">
-                              <span class="toggle-switch-indicator"></span>
-                            </span>
-                                                        </label>
-                                                        <!-- End Checkbox Switch -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Unfold -->
+                                <div class="hs-unfold form-group col-md-4">
+                                    <label>Màu Sắc</label>
+                                    <select class="js-select2-custom custom-select" name="mauSac"
+                                            id="mauSacFilter" size="1" style="opacity: 0;"
+                                            data-hs-select2-options='{
+                                            "placeholder": "Chọn màu sắc...",
+                                            "searchInputPlaceholder": "Tìm màu sắc..."}'>
+                                        <option value="all" selected>Tất Cả</option>
+                                        <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"
+                                                th:text="${th.getTen()}"></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -308,11 +189,129 @@
         </div>
         <!-- Card -->
         <div class="card">
-            <!-- Header -->
-            <div class="card-header">
 
+            <div class="card-header">
+                <div class="row justify-content-between align-items-center flex-grow-1">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <h3>Danh Sách Sản Phẩm</h3>
+                    </div>
+
+                    <div class="col-auto">
+                        <!-- Unfold -->
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker btn btn-white" href="javascript:;" data-hs-unfold-options="{
+                       &quot;target&quot;: &quot;#showHideDropdown&quot;,
+                       &quot;type&quot;: &quot;css-animation&quot;
+                     }" data-hs-unfold-target="#showHideDropdown" data-hs-unfold-invoker="">
+                                <i class="tio-table mr-1"></i> Columns <span
+                                    class="badge badge-soft-dark rounded-circle ml-1">9</span>
+                            </a>
+                            <div id="showHideDropdown"
+                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card"
+                                 style="width: 15rem;">
+                                <div class="card card-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">STT</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_stt">
+                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_stt"
+                                                       checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Sản Phẩm</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_product">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_product" checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Màu Sắc</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_color">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_color">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Kích Cỡ</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_size">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_size">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Thể Loại</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_type">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_type" checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Thương Hiệu</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_vendor">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_vendor" checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Giá Nhập</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_price">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_price" checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="mr-2">Số Lượng</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_quantity">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_quantity" checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="mr-2">Trạng Thái</span>
+                                            <label class="toggle-switch toggle-switch-sm" for="toggleColumn_variants">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_variants" checked="">
+                                                <span class="toggle-switch-label">
+                                                    <span class="toggle-switch-indicator"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Unfold -->
+                    </div>
+                </div>
                 <!-- End Row -->
             </div>
+            <!-- Header -->
+
             <!-- End Header -->
 
             <!-- Table -->
@@ -333,7 +332,7 @@
                      },
                      "search": "#datatableSearch",
                      "entries": "#datatableEntries",
-                     "pageLength": 10,
+                     "pageLength": 5,
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
@@ -347,11 +346,11 @@
                             </div>
                         </th>
                         <th>STT</th>
-                        <th class="table-column-pl-0">Sản Phẩm</th>
+                        <th>Sản Phẩm</th>
+                        <th>Màu Sắc</th>
+                        <th>Kích Cỡ</th>
                         <th>Thể Loại</th>
                         <th>Thương Hiệu</th>
-                        <th>Ngày Thêm</th>
-                        <th>Người Thêm</th>
                         <th>Giá Bán</th>
                         <th>Số Lượng</th>
                         <th>Trạng Thái</th>
@@ -384,45 +383,35 @@
                                 </div>
                             </a>
                         </td>
+                        <td class="pt-0 pb-0">
+                            <div class="show-color">
+                                <p class="mb-0" th:if="${sp.getMauSac() != null}" th:each="ms, iter : ${sp.getMauSac()}"
+                                   th:text="${ms.getTen()}+'|'+${ms.getMaMauSac()}"></p>
+                            </div>
+                            <label th:if="${#lists.isEmpty(sp.getMauSac())}">N/A</label>
+                        </td>
+                        <td class="pt-0 pb-0">
+                            <label class="mb-0" th:if="${#lists.isEmpty(sp.getDistinctKichCoList()) == false}"
+                                   th:each="kc, iter : ${sp.getDistinctKichCoList()}"
+                                   th:text="${iter.index > 0} ? ', ' + ${kc.getTen()} : ${kc.getTen()}"></label>
+                            <label th:if="${#lists.isEmpty(sp.getDistinctKichCoList())}">N/A</label>
+                        </td>
                         <td th:text="${sp.getTheLoai() == null ? 'N/A':sp.getTheLoai().getTen()}"></td>
                         <td th:text="${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}"></td>
-                        <td th:text="${#dates.format (sp.getNgayTao(), 'dd-MM-yyyy')}"></td>
-                        <td th:text="${sp.getNguoiTao()==null?'N/A':sp.getNguoiTao().getNhanVien().getMaNhanVien()}"></td>
-                        <td th:text="${sp.getGiaBan()==null?'N/A':#numbers.formatDecimal (sp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
+                       <td th:text="${sp.getGiaBan()==null?'N/A':#numbers.formatDecimal (sp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
                         <td th:text="${sp.getSoLuong()}">0</td>
-                        <td th:text="${sp.isTrangThai()==true?'Đang Bán':'Chưa Bán'}">2</td>
+                        <td>
+                            <span class="badge badge-success" th:if="${sp.isTrangThai()==true}">Đang Bán</span>
+                            <span class="badge badge-danger" th:if="${sp.isTrangThai()==false}">Ngưng Bán</span>
+                        </td>
                         <td>
                             <div class="btn-group" role="group">
                                 <a class="btn btn-sm btn-white" th:href="@{/cms/product-detail(id=${sp.getId()})}">
-                                    <i class="tio-edit"></i> Edit
+                                    <i class="tio-edit"></i>
                                 </a>
-
-                                <!-- Unfold -->
-                                <div class="hs-unfold btn-group">
-                                    <a class="js-hs-unfold-invoker btn btn-icon btn-sm btn-white dropdown-toggle dropdown-toggle-empty"
-                                       href="javascript:;" data-hs-unfold-options='{
-                             "target": "#productsEditDropdown1",
-                             "type": "css-animation",
-                             "smartPositionOffEl": "#datatable"
-                           }'></a>
-
-                                    <div id="productsEditDropdown1"
-                                         class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="tio-delete-outlined dropdown-item-icon"></i> Delete
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="tio-archive dropdown-item-icon"></i> Archive
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="tio-publish dropdown-item-icon"></i> Publish
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="tio-clear dropdown-item-icon"></i> Unpublish
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- End Unfold -->
+                                <a class="btn btn-sm btn-white" th:href="@{/cms/view-product(id=${sp.getId()})}">
+                                    <i class="tio tio-visible"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>
@@ -445,11 +434,11 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                <option th:if="${#lists.size(lstsanpham) < 10}" th:value="${#lists.size(lstsanpham)}"
+                                <option th:if="${#lists.size(lstsanpham) < 5}" th:value="${#lists.size(lstsanpham)}"
                                         selected th:text="${#lists.size(lstsanpham)}"></option>
-                                <option th:if="${#lists.size(lstsanpham) >= 10}" th:value="10" selected>10</option>
+                                <option th:if="${#lists.size(lstsanpham) >= 5}" th:value="5" selected>5</option>
+                                <option value="10">10</option>
                                 <option value="20">20</option>
-                                <option value="30">30</option>
                                 <option value="50">50</option>
                             </select>
                             <!-- End Select -->

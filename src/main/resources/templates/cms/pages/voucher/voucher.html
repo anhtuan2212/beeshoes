@@ -366,7 +366,7 @@
                     </thead>
 
                     <tbody>
-                    <th:block th:each="voucher,loop : ${listVC}" >
+                    <th:block th:each="voucher,loop : ${listVC.content}" >
                         <tr>
                             <td>[[${loop.index + 1}]]</td>
                             <td>[[${voucher.ma}]]</td>
@@ -376,8 +376,8 @@
                             <td>[[${voucher.giaTriTienMat}]]</td>
                             <td>[[${voucher.giaTriPhanTram}]]</td>
                             <td>[[${voucher.giaTriToiDa}]]</td>
-                            <td>[[${voucher.ngayBatDau}]]</td>
-                            <td>[[${voucher.ngayKetThuc}]]</td>
+                            <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayBatDau, 'yyyy-MM-dd | HH:mm')}"></td>
+                            <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayKetThuc, 'yyyy-MM-dd | HH:mm')}"></td>
                             <td>[[${voucher.dieuKien}]]</td>
                             <td>[[${voucher.trangThai == true ? 'Còn hoạt động' : (voucher.trangThai == false ? 'Ngưng hoạt động' : 'Sắp diễn ra')}]]</td>
 
@@ -421,16 +421,15 @@
                         <!-- Pagination -->
                         <nav  aria-label="Page navigation example ">
                             <ul class="pagination">
-                                <li class="page-item" th:if="${currentPage != null && currentPage > 1}" >
-                                    <a class="page-link" th:href="@{'?page=' + ${currenPage - 1}}"  >
-
+                                <li class="page-item" th:if="${listVC.number + 1 > 1 }" >
+                                    <a class="page-link" th:href="@{'?page=' + ${listVC.number}}"  >
                                         <<
                                     </a>
                                 </li>
                                 <li class="page-item" th:each="i:${#numbers.sequence(1,totalPage)}" th:classappend="${currenPage == i ? 'active' : ''}">
                                     <a class="page-link" th:href="@{${key != null && key != '' ? '?key='+key+'&':'?'}+'page=' + ${i}}" th:text="${i}"></a></li>
-                                <li class="page-item" th:if="${currentPage != null && currentPage < totalPage}" >
-                                    <a class="page-link" th:href="@{'?page=' + ${currenPage + 1}}"  >
+                                <li class="page-item" th:if="${listVC.number + 1 < totalPage}" >
+                                    <a class="page-link" th:href="@{'?page=' + ${listVC.number + 2}}"  >
 
                                         >>
                                     </a>

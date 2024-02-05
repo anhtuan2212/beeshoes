@@ -58,7 +58,6 @@ public class ChiTietSanPham {
     BigDecimal giaNhap;
     BigDecimal giaGoc;
     BigDecimal giaBan;
-    int soLuongNhap;
     int soLuongTon;
     Timestamp ngayTao;
     Timestamp ngaySua;
