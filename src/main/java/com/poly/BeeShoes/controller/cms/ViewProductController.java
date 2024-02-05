@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -48,6 +49,7 @@ public class ViewProductController {
         model.addAttribute("lstkichco", kichCoService.getAll());
         if (id != null) {
             SanPham sp = sanPhamService.getById(id);
+            System.out.println(Arrays.toString(sp.getAnh().toArray()));
             List<String> lst = sanPhamService.getListKichCo(id);
             if (sp == null) {
                 return "redirect:cms/product";
@@ -76,6 +78,9 @@ public class ViewProductController {
             }
             if (productdetail.get(i).getSoLuong() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "QuantityNull").body(null);
+            }
+            if (ctspRequest.getMoTa().length()>8000) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "MaxLenghtMota").body(null);
             }
         }
         SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());

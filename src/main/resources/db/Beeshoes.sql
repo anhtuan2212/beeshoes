@@ -257,7 +257,7 @@ CREATE TABLE user
 (
     id bigint auto_increment,
     email varchar(256),
-    password varchar(999),
+    password varchar(2000),
     role nvarchar(256),
     id_khach_hang bigint,
     id_nhan_vien bigint,
@@ -300,6 +300,7 @@ CREATE TABLE vouchers -- bỏ field loai_voucher
     id_hang_khach_hang bigint,
     dieu_kien nvarchar(256),
     so_luong int,
+    loai_voucher varchar(256),
     ngay_bat_dau timestamp,
     ngay_ket_thuc timestamp,
     ngay_tao timestamp,
@@ -431,47 +432,47 @@ CREATE TABLE gio_hang_chi_tiet
 
 -- Ràng Buộc, Liên Kết
 -- Sản Phẩm (nguoi_tao, nguoi_sua)
-ALTER TABLE san_pham ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE san_pham ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE san_pham ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE san_pham ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 ALTER TABLE san_pham ADD FOREIGN KEY(id_thuong_hieu) REFERENCES thuong_hieu(id);
 ALTER TABLE san_pham ADD FOREIGN KEY(id_the_loai) REFERENCES the_loai(id);
 
 -- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
 ALTER TABLE anh ADD FOREIGN KEY(id_san_pham) REFERENCES san_pham(id);
-ALTER TABLE anh ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE anh ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE anh ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE anh ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Thương Hiệu (nguoi_tao, nguoi_sua)
-ALTER TABLE thuong_hieu ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE thuong_hieu ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE thuong_hieu ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE thuong_hieu ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Đế Giày (nguoi_tao, nguoi_sua)
-ALTER TABLE de_giay ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE de_giay ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE de_giay ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE de_giay ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Màu Sắc (nguoi_tao, nguoi_sua)
-ALTER TABLE mau_sac ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE mau_sac ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE mau_sac ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE mau_sac ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Kích Cỡ (nguoi_tao, nguoi_sua)
-ALTER TABLE kich_co ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE kich_co ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE kich_co ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE kich_co ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Thể Loại (nguoi_tao, nguoi_sua)
-ALTER TABLE the_loai ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE the_loai ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE the_loai ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE the_loai ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Chất Liệu (nguoi_tao, nguoi_sua)
-ALTER TABLE chat_lieu ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE chat_lieu ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE chat_lieu ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE chat_lieu ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Cỡ Giày (nguoi_tao, nguoi_sua)
-ALTER TABLE co_giay ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE co_giay ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE co_giay ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE co_giay ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Mũi Giày (nguoi_tao, nguoi_sua)
-ALTER TABLE mui_giay ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE mui_giay ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE mui_giay ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE mui_giay ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Chi Tiết Sản Phẩm (id_san_pham, id_thuong_hieu, id_mau_sac,
 -- id_de_giay, id_kich_co, id_chat_lieu, id_the_loai, id_co_giay, id_mui_giay, nguoi_tao, nguoi_sua)
@@ -483,49 +484,49 @@ ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(id_kich_co) REFERENCES kich_co(id)
 ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(id_chat_lieu) REFERENCES chat_lieu(id);
 ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(id_co_giay) REFERENCES co_giay(id);
 ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(id_mui_giay) REFERENCES mui_giay(id);
-ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE chi_tiet_san_pham ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Chức Vụ (nguoi_tao, nguoi_sua)
-ALTER TABLE chuc_vu ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE chuc_vu ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE chuc_vu ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE chuc_vu ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Nhân Viên (id_chuc_vu, nguoi_tao, nguoi_sua)
 ALTER TABLE nhan_vien ADD FOREIGN KEY(id_chuc_vu) REFERENCES chuc_vu(id);
-ALTER TABLE nhan_vien ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE nhan_vien ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE nhan_vien ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE nhan_vien ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Địa Chỉ (id_khach_hang, nguoi_tao, nguoi_sua
 ALTER TABLE dia_chi ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
-ALTER TABLE dia_chi ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE dia_chi ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE dia_chi ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE dia_chi ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Khách Hàng (id_hang_khach_hang, dia_chi_mac_dinh, nguoi_tao, nguoi_sua)
 ALTER TABLE khach_hang ADD FOREIGN KEY(id_hang_khach_hang) REFERENCES hang_khach_hang(id);
 ALTER TABLE khach_hang ADD FOREIGN KEY(dia_chi_mac_dinh) REFERENCES dia_chi(id);
-ALTER TABLE khach_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE khach_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE khach_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE khach_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
--- Users (id_khach_hang, id_nhan_vien, nguoi_tao, nguoi_sua)
-ALTER TABLE users ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
-ALTER TABLE users ADD FOREIGN KEY(id_nhan_vien) REFERENCES nhan_vien(id);
-ALTER TABLE users ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE users ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+-- User (id_khach_hang, id_nhan_vien, nguoi_tao, nguoi_sua)
+ALTER TABLE user ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
+ALTER TABLE user ADD FOREIGN KEY(id_nhan_vien) REFERENCES nhan_vien(id);
+ALTER TABLE user ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE user ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Đơn Vị Vận Chuyển (nguoi_tao, nguoi_sua)
-ALTER TABLE don_vi_van_chuyen ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE don_vi_van_chuyen ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE don_vi_van_chuyen ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE don_vi_van_chuyen ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Voucher (id_hang_khach_hang, nguoi_tao, nguoi_sua)
 ALTER TABLE vouchers ADD FOREIGN KEY(id_hang_khach_hang) REFERENCES nhan_vien(id);
-ALTER TABLE vouchers ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE vouchers ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE vouchers ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE vouchers ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Vouchers cho khách hàng (id_khach_hang, id_vou_cher, nguoi_tao, nguoi_sua)
 ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
 ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(id_voucher) REFERENCES vouchers(id);
-ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Hóa Đơn (id_nhan_vien, id_khach_hang, id_voucher, id_don_vi_van_chuyen, id_thanh_toan, nguoi_tao, nguoi_sua)
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_nhan_vien) REFERENCES nhan_vien(id);
@@ -533,8 +534,8 @@ ALTER TABLE hoa_don ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_voucher) REFERENCES vouchers(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_don_vi_van_chuyen) REFERENCES don_vi_van_chuyen(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_thanh_toan) REFERENCES thanh_toan(id);
-ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Hóa Đơn Chi Tiết (id_hoa_don, id_chi_tiet_san_pham)
 ALTER TABLE hoa_don_chi_tiet ADD FOREIGN KEY(id_hoa_don) REFERENCES hoa_don(id);
@@ -542,22 +543,22 @@ ALTER TABLE hoa_don_chi_tiet ADD FOREIGN KEY(id_chi_tiet_san_pham) REFERENCES ch
 
 -- Lịch Sử Hóa Đơn (id_hoa_don, nguoi_thuc_hien)
 ALTER TABLE lich_su_hoa_don ADD FOREIGN KEY(id_hoa_don) REFERENCES hoa_don(id);
-ALTER TABLE lich_su_hoa_don ADD FOREIGN KEY(nguoi_thuc_hien) REFERENCES users(id);
+ALTER TABLE lich_su_hoa_don ADD FOREIGN KEY(nguoi_thuc_hien) REFERENCES user(id);
 
 -- Hình Thức Thanh Toán (nguoi_tao, nguoi_sua)
-ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Thanh Toán (id_hoa_don, id_hinh_thuc_thanh_toan, nguoi_tao, nguoi_sua)
 ALTER TABLE thanh_toan ADD FOREIGN KEY(id_hoa_don) REFERENCES hoa_don(id);
 ALTER TABLE thanh_toan ADD FOREIGN KEY(id_hinh_thuc_thanh_toan) REFERENCES hinh_thuc_thanh_toan(id);
-ALTER TABLE thanh_toan ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE thanh_toan ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE thanh_toan ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE thanh_toan ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Giỏ Hàng (id_khach_hang, nguoi_tao, nguoi_sua)
 ALTER TABLE gio_hang ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
-ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES users(id);
-ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES users(id);
+ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Giỏ Hàng Chi Tiết (id_gio_hang, id_chi_tiet_san_pham)
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_gio_hang) REFERENCES gio_hang(id);
