@@ -39,6 +39,7 @@ function renameFile(file) {
     var newName = randomString(10) + ext; // tạo tên file mới bằng cách thêm chuỗi ngẫu nhiên vào trước đuôi file
     return new File([file], newName, {type: file.type}); // trả về file mới có tên mới
 }
+
 async function ClearImg(url) {
     const parsedUrl = new URL(url);
     parsedUrl.search = '';
@@ -53,13 +54,14 @@ async function ClearImg(url) {
         console.error(`Lỗi khi xóa ảnh ${imagePath}:`, error);
     }
 }
+
 async function ClearMultipleImages(imagePaths) {
     try {
         const deletionPromises = imagePaths.map(async (imagePath) => {
-            if (imagePath.path == null){
+            if (imagePath.path == null) {
                 await deleteObject(ref(storage, imagePath.path));
                 console.log(`Đã xóa ảnh ${imagePath} thành công`);
-            }else{
+            } else {
                 await ClearImg(imagePath.url);
             }
         });
@@ -69,8 +71,9 @@ async function ClearMultipleImages(imagePaths) {
         console.error("Lỗi khi xóa ảnh:", error);
     }
 }
+
 window.addEventListener('beforeunload', function (event) {
-    if (fileInStorages.length>0){
+    if (fileInStorages.length > 0) {
         ClearMultipleImages(fileInStorages).then(r => {
             console.log(r)
             event.preventDefault();
@@ -167,9 +170,9 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                 </th>
-                                <th class="table-column-pl-0 " data-colum-index="7">
+                                <th class="table-column-pr-0 pl-lg-7 " data-colum-index="7">
                                     <div class="btn-group" role="group" aria-label="Edit group">
-                                        <a class="btn btn-white remove-item" data-color-code-remove="${data.maMauSac}" href="javascript:;">
+                                        <a class="btn btn-white remove-item" data-id="${data.id}" data-color-code-remove="${data.maMauSac}" href="javascript:;">
                                             <i class="tio-delete-outlined"></i>
                                         </a>
                                     </div>
@@ -178,11 +181,12 @@ $(document).ready(function () {
         }
     });
     datatable.rows.add(dataArray).draw();
-    $('#sanPham').on('change',function () {
+    $('#sanPham').on('change', function () {
         $('#kichCo').val(null).trigger('change');
         $('#mauSac').val(null).trigger('change');
         datatable.clear().draw();
     })
+
     function getArrIndex() {
         let arrIndexRow = [];
         $('.custom-control-input:checked').each(function () {
@@ -223,6 +227,7 @@ $(document).ready(function () {
     setIMG();
 
     function setIMG() {
+        console.log("load")
         let mauSac = null;
         let arr = [];
         let oj = {};
@@ -257,9 +262,15 @@ $(document).ready(function () {
             $(element).remove();
         });
     }
-
+    function resetRowData() {
+        let data =datatable.data();
+        datatable.clear().draw();
+        datatable.rows.add(data).draw();
+        setIMG();
+    }
     datatable.on('draw.dt', function () {
         setIMG();
+        console.log("draw in d")
     });
 
 
@@ -327,11 +338,11 @@ $(document).ready(function () {
                 }
             })
         })
-
-
         datatable.rows.add(arrData);
         datatable.order([3, 'asc']).draw();
-        datatable.ordering = false;
+        datatable.draw();
+        resetRowData()
+        console.log("draw in add")
     });
 
 
@@ -347,6 +358,7 @@ $(document).ready(function () {
             confirmButtonText: "Xác Nhận"
         }).then((result) => {
             if (result.isConfirmed) {
+                let id = $(this).data('id');
                 let mau = $(this).data('color-code-remove');
                 let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
                 if (size > 1) {
@@ -375,11 +387,35 @@ $(document).ready(function () {
                     datatable.row(rowIndex).remove().draw();
                     $(this).closest('tr').remove();
                 }
-                ToastSuccess("Thành Công !");
+                DeleteCTSP(id)
+                resetRowData()
             }
         });
     });
 
+    function DeleteCTSP(id) {
+        $.ajax({
+            url: "/api/xoa-chi-tiet-san-pham",
+            type: "DELETE",
+            data: {
+                id: id
+            },
+            success: function () {
+                ToastSuccess("Xóa thành công.")
+            }, error: function (e) {
+                switch (e.getResponseHeader('status')) {
+                    case "IdNull":
+                        ToastError("ID không được trống.")
+                        break;
+                    case "NotExits":
+                        ToastError("CTSP không tồn tại.")
+                        break;
+                    default:
+                        ToastError("Lỗi !")
+                }
+            }
+        })
+    }
 
     $('#addVariantsContainer').on('change', '.formAddImg', async function (e) {
         // console.log(this)
@@ -387,8 +423,8 @@ $(document).ready(function () {
         let img = $(this).parent().find('.img-shoe')[0];
         let snip = $(this).parent().find('.spinner-border')[0];
         const imgUrlSrc = $(img).attr('src')
-        if (imgUrlSrc!== '/assets/cms/img/400x400/img2.jpg'){
-            let Object = {path: null,url:imgUrlSrc}
+        if (imgUrlSrc !== '/assets/cms/img/400x400/img2.jpg') {
+            let Object = {path: null, url: imgUrlSrc}
             fileImgCurent.push(Object);
         }
         $(img).addClass('d-none')
@@ -439,9 +475,10 @@ $(document).ready(function () {
             }
         });
     });
-$('.btn-del-img').on('click',function () {
-    console.log(this);
-})
+    $('.btn-del-img').on('click', function () {
+        console.log(this);
+    })
+
     function containsLetter(str) {
         return /[a-zA-Z]/.test(str);
     }
@@ -459,7 +496,6 @@ $('.btn-del-img').on('click',function () {
         let trangThai = $('#status').is(":checked");
         let mota = $('.ql-editor').html();
         let product_details = datatable.rows().data().toArray();
-        console.log(product_details);
         if (isEmpty(sanPham)) {
             ToastError("Vui lòng chọn Sản Phẩm !")
             $('#sanPham').focus();
@@ -572,11 +608,39 @@ $('.btn-del-img').on('click',function () {
                         return !product_details.some((pro) => pro.img === storage.url);
                     });
                     let arr = fileInStorages.concat(fileImgCurent);
-                    ClearMultipleImages(arr).then(r =>{
+                    ClearMultipleImages(arr).then(r => {
                         console.log(r)
-                    } );
+                    });
                 }, error: (e) => {
-                    ToastError(e.getResponseHeader('error'));
+                    switch (e.getResponseHeader('error')) {
+                        case "GiaBanNull":
+                            ToastError('Giá bán không được để trống.')
+                            break;
+                        case "GiaGocNull":
+                            ToastError('Giá gốc không được để trống.')
+                            break;
+                        case "QuantityNull":
+                            ToastError('Số lượng không được để trống.')
+                            break;
+                        case "OptionNull":
+                            ToastError('Vui lòng chọn phiên bản.')
+                            break;
+                        case "SizeNull":
+                            ToastError('Kích cỡ không được để trống.')
+                            break;
+                        case "IMGNull":
+                            ToastError('Màu sắc không được để trống.')
+                            break;
+                        case "ColorNull":
+                            ToastError('Màu sắc không được để trống.')
+                            break;
+                        case "MaxLenghtMota":
+                            ToastError('Màu sắc không được để trống.')
+                            break;
+                        default:
+                            ToastError('Lỗi !')
+                    }
+
                 }
             })
         } else (

@@ -27,6 +27,12 @@ function ToastError(message) {
     Toast('error', message)
 }
 $(document).ready(function () {
+    // INITIALIZATION OF FANCYBOX
+    // =======================================================
+    $('.js-fancybox').each(function() {
+        var fancybox = $.HSCore.components.HSFancyBox.init($(this));
+    })
+
     $(document).on('click', '.js-plus, .js-minus', function () {
         var quantityInput = $(this).closest('.js-quantity-counter').find('.js-result');
         if (!quantityInput.prop('disabled')) {

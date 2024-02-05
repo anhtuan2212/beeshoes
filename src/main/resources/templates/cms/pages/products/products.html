@@ -47,8 +47,6 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title">Sản Phẩm <span class="badge badge-fsoft-dark ml-2" th:text="${#lists.size(lstsanpham)}"></span></h1>
-
                     <h1 class="page-header-title">Sản Phẩm <span class="badge badge-soft-dark ml-2"
                                                                  th:text="${#lists.size(lstsanpham)}"></span></h1>
 
@@ -393,9 +391,9 @@
                             <label th:if="${#lists.isEmpty(sp.getMauSac())}">N/A</label>
                         </td>
                         <td class="pt-0 pb-0">
-                            <p class="mb-0" th:if="${#lists.isEmpty(sp.getDistinctKichCoList())==false}"
-                               th:each="kc, iter : ${sp.getDistinctKichCoList()}"
-                               th:text="${kc.getTen()}"></p>
+                            <label class="mb-0" th:if="${#lists.isEmpty(sp.getDistinctKichCoList()) == false}"
+                                   th:each="kc, iter : ${sp.getDistinctKichCoList()}"
+                                   th:text="${iter.index > 0} ? ', ' + ${kc.getTen()} : ${kc.getTen()}"></label>
                             <label th:if="${#lists.isEmpty(sp.getDistinctKichCoList())}">N/A</label>
                         </td>
                         <td th:text="${sp.getTheLoai() == null ? 'N/A':sp.getTheLoai().getTen()}"></td>

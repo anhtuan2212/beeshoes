@@ -102,6 +102,12 @@
     background-color: #f5f5f5;
     z-index: 2;
 }
+#datatable tbody th:last-child {
+    position: sticky;
+    right:-2em;
+    background-color: #f5f5f5;
+    z-index: 2;
+}
 
 #productsEditDropdown1 {
     left: auto;
@@ -149,4 +155,16 @@
 .border-1{
     border: solid 1px;
     border-color:#f9dbdb;
+}
+.custom-table {
+    table-layout: fixed;
+    width: 100%; /* Đặt chiều rộng của bảng */
+}
+
+.table-row {
+    display: table-row;
+    direction: rtl; /* Đặt hướng của văn bản về bên phải */
+}
+.card-img-top{
+    object-fit: cover;
 }
