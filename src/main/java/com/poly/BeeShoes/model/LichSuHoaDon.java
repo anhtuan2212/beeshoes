@@ -27,4 +27,7 @@ public class LichSuHoaDon {
     @OneToOne
     @JoinColumn(name = "nguoi_thuc_hien")
     User nguoiThucHien;
+
+    @Column(name = "trang_thai_sau_update")
+    String trangThaiSauUpdate;
 }

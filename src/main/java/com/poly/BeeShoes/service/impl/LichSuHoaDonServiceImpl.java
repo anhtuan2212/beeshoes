@@ -18,4 +18,9 @@ public class LichSuHoaDonServiceImpl implements LichSuHoaDonService {
     public List<LichSuHoaDon> getAllLichSuHoaDonByIdHoaDon(Long id) {
         return lichSuHoaDonRepository.findByHoaDon_Id(id);
     }
+
+    @Override
+    public LichSuHoaDon save(LichSuHoaDon lichSuHoaDon) {
+        return lichSuHoaDonRepository.save(lichSuHoaDon);
+    }
 }
