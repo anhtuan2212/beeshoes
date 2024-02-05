@@ -46,12 +46,6 @@
     border-bottom-right-radius: 50%;
     border-bottom-left-radius: 50%;
 }
-.timeline .timeline-item .timeline-badge i,
-.timeline .timeline-item .timeline-badge .fa,
-.timeline .timeline-item .timeline-badge .glyphicon {
-    top: 2px;
-    left: 0px;
-}
 .timeline .timeline-item .timeline-badge.primary {
     background-color: #1f9eba;
 }
@@ -131,9 +125,9 @@
 }
 .timeline-horizontal .timeline-item {
     display: table-cell;
-    height: 280px;
+    height: 180px;
     width: 20%;
-    min-width: 320px;
+    min-width: 170px;
     float: none !important;
     padding-left: 0px;
     padding-right: 20px;

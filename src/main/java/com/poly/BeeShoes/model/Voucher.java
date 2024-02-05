@@ -13,7 +13,6 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "vouchers")
 @Setter
 @Getter
 @NoArgsConstructor
