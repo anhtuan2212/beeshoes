@@ -18,4 +18,5 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham,L
     boolean existsByDeGiay(DeGiay dg);
     ChiTietSanPham getFirstByMauSacAndKichCoAndSanPham(MauSac mauSac, KichCo kichCo,SanPham sanPham);
     boolean existsByKichCo(KichCo kc);
+    boolean existsByAnh(Anh anh);
 }

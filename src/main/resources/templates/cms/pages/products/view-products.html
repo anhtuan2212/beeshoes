@@ -46,7 +46,7 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title">
+                    <h1 class="page-header-title" th:attr="data-product-id=${sanPham.getId()}">
                         <th:block th:text="${sanPham.getTen()}"></th:block>
                         <span class="badge badge-soft-dark ml-2"
                               th:text="${#lists.size(sanPham.getChiTietSanPham())}"></span></h1>
@@ -428,8 +428,8 @@
         <div class="card-header">
             <h4 class="card-header-title">Media</h4>
             <div>
-                <button class="btn btn-primary d-none" id="btn-save-img">Lưu Ảnh</button>
-                <label for="chooseImg" class="btn btn-outline-info" href="javascript:;">Thêm Ảnh</label>
+                <button class="btn btn-primary" id="btn-save-img">Lưu Ảnh</button>
+                <label for="chooseImg" class="btn btn-outline-info mb-0" href="javascript:;">Thêm Ảnh</label>
                 <input id="chooseImg" th:attr="data-num-img=${#lists.size(sanPham.getAnh())}" type="file" hidden=""
                        multiple>
             </div>
@@ -442,7 +442,7 @@
             <div id="fancyboxGallery" class="js-fancybox row justify-content-sm-center gx-2" data-hs-fancybox-options="{
                        &quot;selector&quot;: &quot;#fancyboxGallery .js-fancybox-item&quot;
                      }">
-                <div th:each="anh:${sanPham.getAnh()}" class="col-6 col-sm-4 col-md-3 mb-3 mb-lg-5">
+                <div th:each="anh:${sanPham.getAnh()}" class="col-6 col-sm-4 col-md-3 mb-3 mb-lg-5" data-index="show-img-in-form">
                     <!-- Card -->
                     <div class="card card-sm" style="width: 180px;height: 230px">
                         <img class="card-img-top" width="179" height="179" th:src="${anh.getUrl()}"

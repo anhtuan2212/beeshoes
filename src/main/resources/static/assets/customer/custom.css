@@ -84,7 +84,7 @@
     width: 320px;
     min-height: 240px;
     max-height: 350px;
-    overflow-y: auto;
+    overflow-y: scroll;
     opacity: 1;
     top: 26px;
     visibility: visible;
@@ -156,6 +156,7 @@
 /* custom scrollbar */
 .cart-dropdown::-webkit-scrollbar {
     width: 20px;
+    display: none;
 }
 
 .cart-dropdown::-webkit-scrollbar-track {
@@ -172,7 +173,7 @@
 .cart_trash{
     cursor: pointer;
     position: absolute !important;
-    right: 5px;
+    right: 17px;
     top: 18px;
     display: inline-block !important;
     left: auto;

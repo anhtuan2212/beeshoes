@@ -6,6 +6,7 @@ import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.request.CTSPRequest;
 import com.poly.BeeShoes.request.ProductDetailVersion;
+import com.poly.BeeShoes.request.UploadImgRequest;
 import com.poly.BeeShoes.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,8 @@ public class ViewProductController {
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
     private final ChiTietSanPhamService chiTietSanPhamService;
+    private final AnhService anhService;
+
     Gson gs = new Gson();
 
     @GetMapping("/view-product")
@@ -49,7 +52,7 @@ public class ViewProductController {
         model.addAttribute("lstkichco", kichCoService.getAll());
         if (id != null) {
             SanPham sp = sanPhamService.getById(id);
-            System.out.println(Arrays.toString(sp.getAnh().toArray()));
+//            System.out.println(Arrays.toString(sp.getAnh().toArray()));
             List<String> lst = sanPhamService.getListKichCo(id);
             if (sp == null) {
                 return "redirect:cms/product";
@@ -61,6 +64,48 @@ public class ViewProductController {
         }
         return "redirect:cms/product";
 
+    }
+    @PostMapping("/upload-img")
+    public ResponseEntity upload(@RequestParam("data")String data,@RequestParam("id")Long id){
+        Type listType = new TypeToken<List<UploadImgRequest>>() {}.getType();
+        SanPham sp = sanPhamService.getById(id);
+        Anh anhMain = sp.getMainImage();
+        List<UploadImgRequest> lst = gs.fromJson(data, listType);
+        System.out.println(Arrays.toString(lst.toArray()));
+        for (int i = 0; i < lst.size(); i++) {
+            Anh anh = anhService.getAnhByURL(lst.get(i).getUrl());
+            if (anh == null) {
+                // Tạo ảnh mới nếu không tồn tại
+                anh = new Anh();
+                anh.setUrl(lst.get(i).getUrl());
+                anh.setSanPham(sp);
+                anh.setMain(lst.get(i).isMain());
+                anh.setNgayTao(Timestamp.from(Instant.now()));
+                anh.setNgaySua(Timestamp.from(Instant.now()));
+                anh = anhService.save(anh);
+                // Kiểm tra và cập nhật ảnh chính
+                if (anh.isMain()) {
+                    if (anhMain != null) {
+                        anhMain.setMain(false);
+                        anhService.save(anhMain);
+                    }
+                    anhMain = anh;
+                }
+            } else {
+                // Cập nhật thông tin ảnh nếu đã tồn tại
+                if (lst.get(i).isMain() != anh.isMain()) {
+                    anh.setMain(lst.get(i).isMain());
+                    anh = anhService.save(anh);
+                    // Kiểm tra và cập nhật ảnh chính
+                    if (anhMain != null && anhMain.getId() != anh.getId() && lst.get(i).isMain()) {
+                        anhMain.setMain(false);
+                        anhService.save(anhMain);
+                        anhMain = anh;
+                    }
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @PostMapping("/update-quick-product")

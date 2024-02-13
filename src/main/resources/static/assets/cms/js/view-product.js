@@ -26,6 +26,20 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
+function showLoader() {
+    Swal.fire({
+        title: 'Đang xử lý...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
+
+function hideLoader() {
+    Swal.close();
+}
 $(document).ready(function () {
     // INITIALIZATION OF FANCYBOX
     // =======================================================

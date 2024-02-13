@@ -19,4 +19,6 @@ public interface ChiTietSanPhamService {
     boolean existsByDeGiay(DeGiay dg);
     boolean existsByMuiGiay(MuiGiay mg);
     String generateDetailCode();
+
+    boolean existsByAnh(Anh anh);
 }

@@ -20,7 +20,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-let ImgStorage = [];
+
 
 function randomString(n) {
     var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -39,16 +39,40 @@ function renameFile(file) {
     return new File([file], newName, {type: file.type}); // trả về file mới có tên mới
 }
 
+let filesStorage = [];
 document.getElementById('chooseImg').addEventListener("change", function (e) {
+    let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]');
     $('#btn-save-img').removeClass('d-none');
     let files = Array.from(e.target.files);
-    console.log(files);
+    files.forEach((file) => {
+        const existingFile = filesStorage.find((obj) => obj.file.name === file.name && obj.file.size === file.size);
+        if (!existingFile) {
+            let obj = {deleted: false, file: file, isMain: false};
+            filesStorage.push(obj);
+        }
+    });
     for (let i = 0; i < files.length; i++) {
+        let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]');
+        console.log(num.length)
         const file = files[i];
-        const tempUrl = URL.createObjectURL(file);
-        let div = document.createElement('div');
-        div.className = "col-6 col-sm-4 col-md-3 mb-3 mb-lg-5";
-        div.innerHTML = `
+        if (num.length < 4) {
+            let filename = $('a.js-fancybox-item[data-caption]');
+            console.log(filename)
+            let found = false;
+            for (let j = 0; j < filename.length; j++) {
+                if (file.name == $(filename[j]).data('caption')) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                continue;
+            }
+            const tempUrl = URL.createObjectURL(file);
+            let div = document.createElement('div');
+            div.className = "col-6 col-sm-4 col-md-3 mb-3 mb-lg-5";
+            div.setAttribute('data-index', 'show-img-in-form')
+            div.innerHTML = `
             <div class="card card-sm" style="width: 180px;height: 230px">
                 <img class="card-img-top"  width="179" height="179"  src="${tempUrl}" alt="Image Description">
                 <div class="card-body">
@@ -73,112 +97,156 @@ document.getElementById('chooseImg').addEventListener("change", function (e) {
                     </div>
                 </div>
             </div>`;
-        document.getElementById("fancyboxGallery").appendChild(div);
-        const deleteButton = div.querySelector(".btn-delete-img");
-        deleteButton.addEventListener("click", function () {
-            const index = Array.from(div.parentElement.children).indexOf(div);
-            if (files.length > 1) {
-                files.splice(index, 1);
-            } else {
-                console.log("vào")
-                document.getElementById('chooseImg').value = '';
-            }
-            div.remove();
-            console.log(document.getElementById('chooseImg').files);
-        });
+            document.getElementById("fancyboxGallery").appendChild(div);
+            const checkMainRadio = div.querySelector("input.check-main-radio");
+            checkMainRadio.addEventListener("change", function () {
+                if (checkMainRadio.checked) {
+                    const existingFile = filesStorage.find((obj) => obj.file.name === file.name);
+                    if (existingFile) {
+                        existingFile.isMain = true;
+                    }
+                    filesStorage.forEach((obj) => {
+                        if (obj.file.name !== file.name) {
+                            obj.isMain = false;
+                        }
+                    });
+                }
+                console.log(filesStorage);
+            });
+            const deleteButton = div.querySelector(".btn-delete-img");
+            deleteButton.addEventListener("click", function () {
+                const existingFile = filesStorage.find((obj) => obj.file.name === file.name);
+                if (existingFile) {
+                    if (existingFile.isMain) {
+                        ToastError('Vui lòng thay đổi ảnh chính.')
+                    } else {
+                        existingFile.deleted = true;
+                        div.remove();
+                    }
+                }
+
+            });
+        } else {
+            $('label[for="chooseImg"]').addClass('d-none');
+            filesStorage = filesStorage.filter((obj) => {
+                if (obj.file.name !== file.name) {
+                    return true;
+                }
+                return false;
+            });
+        }
     }
 });
 
-$(document).on('ready', '#btn-save-img', function () {
-
-   let files = document.getElementById("chooseImg").files;
-   let lstURL = [];
-   if (files.length ===0){
-       ToastError('File rỗng.')
-       return;
-   }
+$(document).on('click', '#btn-save-img', function () {
+    showLoader();
+    let files = filesStorage;
+    files = files.filter(item => !item.deleted);
+    let lstURL = [];
+    let promises = []; // Mảng chứa các promise
+    let NotExitMain = true;
     for (let i = 0; i < files.length; i++) {
+        let file = renameFile(files[i].file)
         const storageRef = ref(storage, "images/" + file.name);
-        uploadBytes(storageRef, file).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url) => {
-              lstURL.push(url);
+        let promise = uploadBytes(storageRef, file).then((snapshot) => {
+            return getDownloadURL(snapshot.ref).then((url) => {
+                let img = $('a.js-fancybox-item[data-caption="' + files[i].file.name + '"]').closest('div[data-index="show-img-in-form"]').find('img.card-img-top');
+                img.attr('src', url);
+                console.log(img)
+                console.log(files[i].file.name)
+                let object = {url: url, main: false}
+                if (files[i].isMain) {
+                    NotExitMain = false;
+                    object.main = true;
+                }
+                lstURL.push(object);
             });
         });
+        promises.push(promise); // Thêm promise vào mảng
+    }
+
+    Promise.all(promises).then(() => { // Chờ tất cả các promise hoàn thành
+        if (NotExitMain) {
+            let checkedURL = $('input.check-main-radio[name="main-img"]:checked').closest('div[data-index="show-img-in-form"]').find('img.card-img-top').attr("src");
+            console.log(checkedURL);
+            let object = {url: checkedURL, main: true}
+            lstURL.push(object)
+        }
+        let id = $('h1.page-header-title[data-product-id]').data('product-id');
+        $.ajax({
+            url: "/cms/upload-img",
+            type: "POST",
+            data: {
+                data: JSON.stringify(lstURL),
+                id: id
+            },
+            success: function () {
+                hideLoader();
+                ToastSuccess("Thành Công.")
+            },
+            error: function () {
+                ToastSuccess("Lỗi !")
+            }
+        });
+    });
+});
+
+async function deleteImageFromFirebaseStorage(imageUrl) {
+    try {
+        const fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1, imageUrl.indexOf('?'));
+        const correctedFileName = fileName.replace(/%2F/g, '/');
+        console.log(correctedFileName);
+        const imageRef = ref(storage, correctedFileName);
+        await deleteObject(imageRef);
+        ToastSuccess("Xóa thành công.")
+    } catch (error) {
+        ToastError("Lỗi khi xóa trên Cloud !")
+        console.error("Error deleting image from Firebase Storage:", error);
+    }
+}
+
+$(document).on('click', '.btn-delete-img', function () {
+    const url = $(this).closest('div[data-index="show-img-in-form"]').find('img.card-img-top').attr("src");
+    if (url.includes('blob')) {
+        return;
     }
     $.ajax({
-        url: "",
-        type: "POST",
-        data: {},
-        success: function () {
-
+        url: "/api/delete-anh",
+        type: "DELETE",
+        data: {url: url},
+        success: function (data, status, xhr) {
+            deleteImageFromFirebaseStorage(url).then();
+            $(this).closest('div[data-index="show-img-in-form"]').remove();
+            let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]').length;
+            console.log(num);
+            if (num > 3) {
+                $('label[for="chooseImg"]').addClass('d-none');
+            } else {
+                $('label[for="chooseImg"]').removeClass('d-none');
+            }
         },
-        error: function () {
+        error: function (xhr) {
+            switch (xhr.getResponseHeader('status')) {
+                case "imgNull":
+                    ToastError("Đường dẫn không tồn tại !")
+                    break;
+                case "isMain":
+                    ToastError("Không được xóa ảnh chính !")
+                    break;
+                case "inProDetail":
+                    ToastError("Ảnh được gán với màu !")
+                    break;
 
+            }
         }
     })
-})
-
-// document.getElementById('chooseImg').addEventListener("change",function (e) {
-//
-//     const files = e.target.files;
-//     for (let i = 0; i < files.length; i++) {
-//         const file = renameFile(files[i]);
-//         const tempUrl = URL.createObjectURL(file);
-//         var itemRef = null;
-//         var div = document.createElement('div');
-//         div.className ="col-6 col-sm-4 col-md-3 mb-3 mb-lg-5"
-//         div.innerHTML = `
-//                     <div class="card card-sm" style="width: 180px;height: 230px">
-//                         <img class="card-img-top"  width="179" height="179"  src="${tempUrl}" alt="Image Description">
-//                         <div class="card-body">
-//                             <div class="row text-center">
-//                                 <div class="col-4">
-//                                     <a class="js-fancybox-item text-body" href="javascript:;" data-toggle="tooltip"
-//                                        data-placement="top" title="" data-src="${tempUrl}"
-//                                        data-caption="${file.name}" data-original-title="View">
-//                                         <i class="tio-visible-outlined"></i>
-//                                     </a>
-//                                 </div>
-//                                  <div class="col-4 column-divider ">
-//                                     <input type="radio" class="check-main-radio" name="main-img" data-toggle="tooltip"
-//                                            data-placement="top" title="" data-original-title="Main">
-//                                 </div>
-//                                 <div class="col-4 column-divider">
-//                                     <a class="text-danger btn-delete-img" href="javascript:;" data-toggle="tooltip"
-//                                        data-placement="top" title="" data-original-title="Delete">
-//                                         <i class="tio-delete-outlined"></i>
-//                                     </a>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>`;
-//         document.getElementById("fancyboxGallery").appendChild(div);
-//         const storageRef = ref(storage, "images/" + file.name);
-//         uploadBytes(storageRef, file).then((snapshot) => {
-//             itemRef = snapshot.ref;
-//             getDownloadURL(snapshot.ref).then((url) => {
-//                 // Cập nhật src của ảnh và data-src của link xem với URL đã upload
-//                 var img = div.querySelector('.card-img-top');
-//                 img.src = url;
-//                 var viewLink = div.querySelector('.js-fancybox-item');
-//                 viewLink.dataset.src = url;
-//                 let oj = {url:url,ref:storageRef}
-//                 ImgStorage.push(oj)
-//                 console.log(ImgStorage)
-//             });
-//         });
-//         var deleteBtn = div.querySelector('.btn-delete-img');
-//         deleteBtn.addEventListener('click', function () {
-//             if (confirm("Bạn có chắc chắn muốn xóa?")) {
-//                 deleteObject(itemRef)
-//                     .then(() => {
-//                         console.log("Deleted", itemRef.name);
-//                         div.remove(); // Xóa div chứa hình ảnh
-//                     })
-//                     .catch((error) => {
-//                         console.error(error);
-//                     });
-//             }
-//         });
-//     }
-// })
+});
+$(document).ready(function () {
+    let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]').length;
+    console.log(num);
+    if (num > 3) {
+        $('label[for="chooseImg"]').addClass('d-none');
+    } else {
+        $('label[for="chooseImg"]').removeClass('d-none');
+    }
+});

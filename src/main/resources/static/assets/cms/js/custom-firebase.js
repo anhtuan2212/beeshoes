@@ -160,7 +160,7 @@ $(document).ready(function () {
                                         <input type="number" name="soLuong"
                                                class="js-result form-control input-group-quantity-counter-control"
                                                value="${data.soLuong}">
-                                        <div class="input-group-quantity-counter-toggle">
+                                        <div class=" input-group-quantity-counter-toggle">
                                             <a class="js-minus input-group-quantity-counter-btn">
                                                 <i class="tio-remove"></i>
                                             </a>

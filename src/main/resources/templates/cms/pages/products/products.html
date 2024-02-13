@@ -74,7 +74,7 @@
                         <h6 class="card-subtitle mb-2">Bộ Lọc</h6>
                         <div class="row align-items-center gx-2">
                             <div class="row align-items-center flex-grow-1">
-                                <div class="col-md-4 mb-3 mb-md-0">
+                                <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
                                     <form class="col-12 mb-3">
                                         <!-- Search -->
                                         <div class="input-group input-group-merge input-group-flush">
@@ -89,7 +89,7 @@
                                         <!-- End Search -->
                                     </form>
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-sm-6 col-md-4 form-group">
                                     <label class="col-12 pl-0">Trạng Thái</label>
                                     <div class="form-check form-check-inline">
                                         <div class="custom-control custom-radio">
@@ -124,7 +124,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="hs-unfold form-group col-4">
+                                <div class="hs-unfold form-group col-sm-6 col-md-4">
                                     <label>Thể Loại</label>
                                     <select class="js-select2-custom custom-select" name="theLoai"
                                             id="theLoaiFilter" size="1"
@@ -138,7 +138,7 @@
                                                 th:text="${tl.getTen()}"></option>
                                     </select>
                                 </div>
-                                <div class="hs-unfold form-group col-md-4">
+                                <div class="hs-unfold form-group col-sm-6 col-md-4">
                                     <label>Thương Hiệu</label>
                                     <select class="js-select2-custom custom-select" name="thuongHieu"
                                             id="thuongHieuFilter" size="1"
@@ -152,33 +152,58 @@
                                                 th:text="${th.getTen()}"></option>
                                     </select>
                                 </div>
-                                <div class="hs-unfold form-group col-md-4">
-                                    <label>Kích Cỡ</label>
-                                    <select class="js-select2-custom custom-select" name="kichCo"
-                                            id="kichCoFilter" size="1"
-                                            style="opacity: 0;"
-                                            data-hs-select2-options='{
-                                    "placeholder": "Chọn kích cỡ...",
-                                    "searchInputPlaceholder": "Tìm kích cỡ..."
-                                    }'>
-                                        <option value="all" selected>Tất Cả</option>
-                                        <option th:each="th:${lstkichco}" th:value="${th.getTen()}"
-                                                th:text="${th.getTen()}"></option>
-                                    </select>
+                                <div class="hs-unfold form-group col-sm-6 col-md-4">
+                                    <label>Khoảng SL</label>
+                                    <div class="row align-items-center">
+                                        <label  for="quantity_from" class="col-2">Từ</label><input class="number-input-mask form-control col-4" type="text" id="quantity_from"
+                                                  value="0">
+                                        <label for="quantity_to" class="col-2">Đến</label><input class="number-input-mask form-control col-4" type="text" id="quantity_to"
+                                                   value="9999">
+                                    </div>
                                 </div>
+                                <div class="hs-unfold form-group col-sm-12 col-md-6">
+                                    <label>Khoảng Giá</label>
+                                    <!-- Range Slider -->
+                                    <input class="js-ion-range-slider" type="text" id="price_sort"
+                                           data-hs-ion-range-slider-options='{
+                                                "extra_classes": "range-slider-custom range-slider-indicator range-slider-grid",
+                                                "type": "double",
+                                                "grid": false,
+                                                "hide_from_to": false,
+                                                "postfix": " 000đ",
+                                                "min": 1,
+                                                "max": 50000,
+                                                "from": 1,
+                                                "to": 50000
+                                              }'>
+                                </div>
+                                <!--                                <div class="hs-unfold form-group col-sm-6 col-md-4">-->
+                                <!--                                    <label>Kích Cỡ</label>-->
+                                <!--                                    <select class="js-select2-custom custom-select" name="kichCo"-->
+                                <!--                                            id="kichCoFilter" size="1"-->
+                                <!--                                            style="opacity: 0;"-->
+                                <!--                                            data-hs-select2-options='{-->
+                                <!--                                    "placeholder": "Chọn kích cỡ...",-->
+                                <!--                                    "searchInputPlaceholder": "Tìm kích cỡ..."-->
+                                <!--                                    }'>-->
+                                <!--                                        <option value="all" selected>Tất Cả</option>-->
+                                <!--                                        <option th:each="th:${lstkichco}" th:value="${th.getTen()}"-->
+                                <!--                                                th:text="${th.getTen()}"></option>-->
+                                <!--                                    </select>-->
+                                <!--                                </div>-->
 
-                                <div class="hs-unfold form-group col-md-4">
-                                    <label>Màu Sắc</label>
-                                    <select class="js-select2-custom custom-select" name="mauSac"
-                                            id="mauSacFilter" size="1" style="opacity: 0;"
-                                            data-hs-select2-options='{
-                                            "placeholder": "Chọn màu sắc...",
-                                            "searchInputPlaceholder": "Tìm màu sắc..."}'>
-                                        <option value="all" selected>Tất Cả</option>
-                                        <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"
-                                                th:text="${th.getTen()}"></option>
-                                    </select>
-                                </div>
+                                <!--                                <div class="hs-unfold form-group col-sm-6 col-md-4">-->
+                                <!--                                    <label>Màu Sắc</label>-->
+                                <!--                                    <select class="js-select2-custom custom-select" name="mauSac"-->
+                                <!--                                            id="mauSacFilter" size="1" style="opacity: 0;"-->
+                                <!--                                            data-hs-select2-options='{-->
+                                <!--                                            "placeholder": "Chọn màu sắc...",-->
+                                <!--                                            "searchInputPlaceholder": "Tìm màu sắc..."}'>-->
+                                <!--                                        <option value="all" selected>Tất Cả</option>-->
+                                <!--                                        <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"-->
+                                <!--                                                th:text="${th.getTen()}"></option>-->
+                                <!--                                    </select>-->
+                                <!--                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -203,7 +228,7 @@
                        &quot;target&quot;: &quot;#showHideDropdown&quot;,
                        &quot;type&quot;: &quot;css-animation&quot;
                      }" data-hs-unfold-target="#showHideDropdown" data-hs-unfold-invoker="">
-                                <i class="tio-table mr-1"></i> Columns <span
+                                <i class="tio-table mr-1"></i> Hiển Thịc <span
                                     class="badge badge-soft-dark rounded-circle ml-1">9</span>
                             </a>
                             <div id="showHideDropdown"
@@ -336,7 +361,7 @@
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
-                   }'>
+                   }' style="width: 100%">
                     <thead class="thead-light">
                     <tr>
                         <th scope="col" class="table-column-pr-0">
@@ -369,7 +394,7 @@
                         </td>
                         <td th:text="${iter.index+1}"></td>
                         <td class="table-column-pl-0">
-                            <a class="media align-items-center" th:href="@{/cms/product-detail(id=${sp.getId()})}">
+                            <a class="media align-items-center" th:href="@{/cms/view-product(id=${sp.getId()})}">
                                 <th:block th:if="${#lists.size(sp.getAnh()) == 0}">
                                     <img class="avatar avatar-lg mr-3" src="/assets/cms/img/400x400/img2.jpg"
                                          alt="Image Description">
@@ -398,7 +423,7 @@
                         </td>
                         <td th:text="${sp.getTheLoai() == null ? 'N/A':sp.getTheLoai().getTen()}"></td>
                         <td th:text="${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}"></td>
-                       <td th:text="${sp.getGiaBan()==null?'N/A':#numbers.formatDecimal (sp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
+                        <td th:text="${sp.getGiaBan()==null?'N/A':#numbers.formatDecimal (sp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
                         <td th:text="${sp.getSoLuong()}">0</td>
                         <td>
                             <span class="badge badge-success" th:if="${sp.isTrangThai()==true}">Đang Bán</span>
