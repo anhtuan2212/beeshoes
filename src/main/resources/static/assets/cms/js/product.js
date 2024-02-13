@@ -1,6 +1,10 @@
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
+    $(document).on('input', '.number-input-mask', function () {
+        // Sử dụng jQuery Mask Plugin để áp dụng mask
+        $(this).mask('0000');
+    });
 
     if (window.localStorage.getItem('hs-builder-popover') === null) {
         $('#builderPopover').popover('show')
@@ -117,6 +121,40 @@ $(document).on('ready', function () {
             datatable.columns(9).search('').draw();
         }
     });
+    const quantityFromInput = document.querySelector('#quantity_from');
+    const quantityToInput = document.querySelector('#quantity_to');
+    var table = $('#datatable').DataTable();
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        let quantityFrom = parseInt(quantityFromInput.value, 10) || 0;
+        let quantityTo = parseInt(quantityToInput.value, 10) || Infinity; // Sử dụng Infinity cho giá trị tới vô cực
+
+        let quantity = parseFloat(data[8]) || 0; // Sử dụng data cho cột số lượng
+        // console.log(quantity)
+        if ((isNaN(quantityFrom) && isNaN(quantityTo)) ||
+            (isNaN(quantityFrom) && quantity <= quantityTo) ||
+            (quantityFrom <= quantity && isNaN(quantityTo)) ||
+            (quantityFrom <= quantity && quantity <= quantityTo)) {
+            return true;
+        }
+
+        return false;
+    });
+
+    quantityFromInput.addEventListener('input', function() {
+        table.draw();
+    });
+
+    quantityToInput.addEventListener('input', function() {
+        table.draw();
+    });
+
+    $('#price_sort').on('change',function () {
+        console.log($(this).val())
+    })
+    $('.js-ion-range-slider').each(function () {
+        $.HSCore.components.HSIonRangeSlider.init($(this));
+    });
+
     $('#thuongHieuFilter, #theLoaiFilter, #mauSacFilter, #kichCoFilter').on('change', function() {
         var thuongHieuValue = $('#thuongHieuFilter').val();
         var theLoaiValue = $('#theLoaiFilter').val();

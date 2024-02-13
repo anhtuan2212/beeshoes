@@ -188,11 +188,11 @@ $(document).on('ready', function () {
     })
 
     function changeNameToColor() {
-        var mausac = $('#mauSac').val();
+        let mausac = $('#mauSac').val();
         mausac.forEach((mau) => {
-            var ele = $('li[title="' + mau + '"]');
-            var tenmau = $('option[value="' + mau + '"]').attr('data-name');
-            var span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
+            let tenmau = $('option[value="' + mau + '"]').attr('data-name');
+            let ele = $('#selectedColor').find('li.select2-selection__choice[title="'+tenmau+'"]');
+            let span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
             $(span[0]).text(tenmau);
             $(ele[0]).css('background-color', mau);
             $(ele[0]).css('color', '#FFFFFF');
@@ -202,7 +202,20 @@ $(document).on('ready', function () {
     changeNameToColor();
     $('#mauSac').on('change', function () {
         changeNameToColor();
+
     });
+
+    // let field = $('#selectedColor').find('input.select2-search__field');
+    // field.focus(function () {
+    //     let allOptions = $('#mauSac').find('option');
+    //     allOptions.each((index, element) => {
+    //         let maMau = $(element).val();
+    //         let tenMau = $(element).data('name');
+    //        let ele = $('span.select2-dropdown').find('span:contains(' + maMau + ')')
+    //         console.log(ele);
+    //     });
+    // });
+
 
     // thêm màu sắc
     $('#btn-add-new-color').on('click', () => {
@@ -220,7 +233,7 @@ $(document).on('ready', function () {
                     trangThai: true
                 },
                 success: (data, status, xhr) => {
-                    let html = `<option value="${data.maMauSac}" data-name="${data.ten}">${data.maMauSac}</option>`;
+                    let html = `<option value="${data.maMauSac}" data-name="${data.ten}">${data.ten}</option>`;
                     $('#mauSac').append(html);
                     Toast('success', 'Thêm Thành Công !');
                     Swal.fire({

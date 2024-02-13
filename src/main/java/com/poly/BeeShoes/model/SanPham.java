@@ -61,7 +61,20 @@ public class SanPham {
     boolean sale;
     @Transient
     List<MauSac> mauSac;
+    public Anh getMainImage() {
+        if (anh == null || anh.isEmpty()) {
+            return null;
+        }
 
+        // Duyệt qua danh sách ảnh của sản phẩm
+        for (Anh image : anh) {
+            if (image.isMain()) {
+                return image; // Trả về ảnh chính nếu tìm thấy
+            }
+        }
+
+        return null; // Trả về null nếu không tìm thấy ảnh chính
+    }
     public boolean isSales() {
         if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
             return false;
