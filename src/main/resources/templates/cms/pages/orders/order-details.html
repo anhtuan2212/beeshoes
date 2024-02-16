@@ -49,7 +49,7 @@
                     </nav>
 
                     <div class="d-sm-flex align-items-sm-center">
-                        <h1 class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
+                        <h1 id="id-for-attribute" th:attr="id-for-call-api=${hoaDon.id}" class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
                         <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
                     (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')} + ' ml-sm-3'"
                               th:text="'Trạng thái: ' + ${hoaDon.trangThai}">
@@ -84,19 +84,23 @@
         <div class="row col-12" th:include="~{/cms/pages/orders/_timeline.html}"></div>
 
         <div class="row mt-2 mb-2">
-            <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start">
+            <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start" id="myButton">
                 <button th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}"
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}" class="btn btn-sm btn-outline-danger"
+                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChoGiao'}" class="btn btn-sm btn-outline-danger mr-1"
                         id="huyFromDetail">
                     <i class="tio-delete-outlined"></i> Hủy
+                </button>
+                <button class="btn btn-sm btn-outline-primary d-none"
+                        id="hoanTacFromDetail">
+                    <i class="tio-history"></i> Hoàn Tác
                 </button>
             </div>
             <div class="col-6 d-flex justify-content-end">
                 <button class="btn btn-sm btn-outline-dark mr-1" data-toggle="modal" data-target="#history">
-                    <i class="tio-history"></i> Lịch Sử
+                    <i class="tio-timer"></i> Lịch Sử
                 </button>
             </div>
         </div>
@@ -144,11 +148,11 @@
                                     </div>
 
                                     <div class="col col-md-2 align-self-center">
-                                        <h6>2</h6>
+                                        <h6 th:text="${hdct.getSoLuong()}"></h6>
                                     </div>
 
                                     <div class="col col-md-2 align-self-center text-right">
-                                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue() * 2, 0, 'COMMA')}"></h6>
+                                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue() * hdct.getSoLuong(), 0, 'COMMA')}"></h6>
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +199,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- Step -->
-                                <ul class="step step-icon-xs">
+                                <ul class="step step-icon-xs" id="myHistory">
                                     <li class="step-item" th:each="lshd : ${lichSuHoaDonList}">
                                         <div class="step-content-wrapper">
                                             <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
@@ -205,8 +209,8 @@
                                                     <a class="text-dark" href="#" th:text="${lshd.hanhDong}"></a>
                                                 </h5>
 
-                                                <p class="font-size-sm mb-0" th:text="'Thực hiện bởi: ' + ${lshd.nguoiThucHien.nhanVien.hoTen} +
-                        ', thời gian thực hiện: ' + ${lshd.thoiGian}"></p>
+                                                <p class="font-size-sm mb-0" th:utext="'Thực hiện bởi: <h6>' + ${lshd.nguoiThucHien.nhanVien.hoTen} +
+                                                '</h6> Thời gian thực hiện: <h6>' + ${lshd.thoiGian} + '</h6>'"></p>
                                             </div>
                                         </div>
                                     </li>
@@ -836,69 +840,6 @@
         // END ONLY DEV
         // =======================================================
 
-        // handle timeline
-        $('#xacNhanFromDetail').on('click', function () {
-            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
-            $.ajax({
-                type: "POST",
-                url: "/api/hoa-don/xac-nhan-detail",
-                contentType: "application/json",
-                data: JSON.stringify(idHoaDon),
-                success: function (response,stt,xhr) {
-                    // let status =  String(xhr.getResponseHeader('status'));
-                    // var type = 'success';
-                    // if (status === 'ChoGiao') {
-                    //     status = 'Chờ Giao';
-                    // } else if (status === 'DangGiao') {
-                    //     status = 'Đang Giao';
-                    // } else if (status === 'ThanhCong') {
-                    //     status = 'Thành Công';
-                    // }
-                    // printTimeline(status, type);
-                    alert(response);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error);
-                }
-            });
-        })
-
-        $('#huyFromDetail').on('click', function () {
-            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
-            $.ajax({
-                type: "POST",
-                url: "/api/hoa-don/huy-detail",
-                contentType: "application/json",
-                data: JSON.stringify(idHoaDon),
-                success: function (response,stt,xhr) {
-                    // let status = String(xhr.getResponseHeader('status'));
-                    // if(status === 'Huy') status = 'Hủy';
-                    // var type = 'danger';
-                    // printTimeline(status, type);
-                    alert(response);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error);
-                }
-            });
-        })
-
-        function printTimeline(status, type) {
-            let ul = $('#myTimeline');
-            let li = document.createElement('li');
-            li.className = 'timeline-item';
-            let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">${status}</h4>
-                                <p><small class="text-muted"><i class="tio-timer"></i> 11 hours ago </small></p>
-                            </div>
-                        </div>`;
-            li.innerHTML = html;
-            ul.append(li);
-        }
 
         // BUILDER TOGGLE INVOKER
         // =======================================================
@@ -949,6 +890,173 @@
         $('.js-form-search').each(function () {
             new HSFormSearch($(this)).init()
         });
+    });
+
+    $(document).on('ready', function () {
+        // print
+        function printTimeline(status, type) {
+            let ul = $('#myTimeline');
+            let li = document.createElement('li');
+            li.className = 'timeline-item';
+            let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">${status}</h4>
+                                <p><small class="text-muted"><i class="tio-timer"></i> 11 hours ago </small></p>
+                            </div>
+                        </div>`;
+            li.innerHTML = html;
+            ul.append(li);
+        }
+
+        function printHistory(thoiGian, nguoiThucHien, hanhDong) {
+            let ul = $('#myHistory');
+            let li = document.createElement('li');
+            li.className = 'step-item';
+            let html = `<div class="step-content-wrapper">
+                <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                <div class="step-content">
+                    <h5 class="mb-1">
+                        <a class="text-dark" href="#">${hanhDong}</a>
+                    </h5>
+                    <p class="font-size-sm mb-0">Thực hiện bởi: <h6>${nguoiThucHien}</h6> Thời gian thực hiện: <h6>${thoiGian}</h6></p>
+                </div>
+            </div>`;
+            li.innerHTML = html;
+            ul.append(li);
+        }
+
+        function printButtonReverse() {
+            let div = $('#myButton');
+            let html = '<button class="btn btn-sm btn-outline-primary"\n' +
+                '                        id="HoanTacFromDetail">\n' +
+                '                    <i class="tio-history"></i> Hoàn Tác\n' +
+                '                </button>';
+            div.append(html);
+        }
+
+        // get data from server
+        // function loadTimeline() {
+        //     let idHoaDon = parseInt($("#id-for-attribute").attr("id-for-call-api"));
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/api/hoa-don/" + idHoaDon + "/lich-su",
+        //         success: function (response) {
+        //             console.log(response);
+        //             // Xử lý dữ liệu và hiển thị lên trang
+        //             $.each(response, function (index, lichSu) {
+        //                 let status = String(lichSu.trangThaiSauUpdate);
+        //                 let type = 'success';
+        //                 let thoiGian = lichSu.thoiGian;
+        //                 let nguoiThucHien = lichSu.nguoiThucHien;
+        //                 let hanhDong = lichSu.hanhDong;
+        //                 if (status === 'Huy') {
+        //                     status = 'Hủy';
+        //                     type = 'danger';
+        //                 } else if (status === 'ChoXacNhan') {
+        //                     status = 'Chờ Xác Nhận';
+        //                 } else if (status === 'ChoGiao') {
+        //                     status = 'Chờ Giao';
+        //                 } else if (status === 'DangGiao') {
+        //                     status = 'Đang Giao';
+        //                 } else if (status === 'ThanhCong') {
+        //                     status = 'Thành Công';
+        //                 }
+        //                 printTimeline(status, type);
+        //                 printHistory(thoiGian, nguoiThucHien, hanhDong);
+        //             });
+        //         },
+        //         error: function (error) {
+        //             console.log("Error: " + error);
+        //         }
+        //     });
+        // }
+
+        // handle timeline
+        $('#xacNhanFromDetail').on('click', function () {
+            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            $.ajax({
+                type: "POST",
+                url: "/api/hoa-don/xac-nhan-detail",
+                contentType: "application/json",
+                data: JSON.stringify(idHoaDon),
+                success: function (response) {
+                    let type = 'success';
+                    let status = response.trangThaiSauUpdate;
+                    if (status === 'Huy') {
+                        status = 'Hủy';
+                        type = 'danger';
+                        $('#xacNhanFromDetail').hide();
+                        $('#huyFromDetail').hide();
+                    } else if (status === 'ChoXacNhan') {
+                        status = 'Chờ Xác Nhận';
+                    } else if (status === 'ChoGiao') {
+                        status = 'Chờ Giao';
+                        $('#hoanTacFromDetail').removeClass('d-none');
+                    } else if (status === 'DangGiao') {
+                        status = 'Đang Giao';
+                    } else if (status === 'ThanhCong') {
+                        status = 'Thành Công';
+                        $('#xacNhanFromDetail').hide();
+                        $('#huyFromDetail').hide();
+                    }
+                    printTimeline(status, type);
+                    printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
+                    console.log(response);
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error);
+                }
+            });
+        })
+
+        $('#huyFromDetail').on('click', function () {
+            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            $.ajax({
+                type: "POST",
+                url: "/api/hoa-don/huy-detail",
+                contentType: "application/json",
+                data: JSON.stringify(idHoaDon),
+                success: function (response) {
+                    let type = 'danger';
+                    let status = 'Hủy';
+                    let nguoiThucHien = response.nguoiThucHien;
+                    let thoiGian = response.thoiGian;
+                    let hanhDong = response.hanhDong;
+                    $('#xacNhanFromDetail').hide();
+                    $('#huyFromDetail').hide();
+                    printTimeline(status, type);
+                    printHistory(thoiGian, nguoiThucHien, hanhDong);
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error);
+                }
+            });
+        })
+
+        // reverse status
+        $('#hoanTacFromDetail').on('click', function () {
+            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            $.ajax({
+                type: "POST",
+                url: "/api/hoa-don/hoan-tac-detail",
+                contentType: "application/json",
+                data: JSON.stringify(idHoaDon),
+                success: function (response) {
+                    let type = 'success';
+                    let status = response.trangThaiSauUpdate;
+                    $('#hoanTacFromDetail').hide();
+                    printTimeline(status, type);
+                    printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
+                    console.log(response);
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error);
+                }
+            });
+        })
+
+        // loadTimeline();
     });
 </script>
 <!-- IE Support -->

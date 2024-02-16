@@ -55,7 +55,7 @@ public class HoaDonController {
 
         double tongTien = 0;
         for(HoaDonChiTiet hdct : hoaDonChiTietList) {
-            tongTien = hdct.getChiTietSanPham().getGiaBan().doubleValue() + tongTien;
+            tongTien = (hdct.getChiTietSanPham().getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
         }
         model.addAttribute("lichSuHoaDonList", lichSuHoaDonList);
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);
