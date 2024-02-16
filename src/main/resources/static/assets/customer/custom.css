@@ -203,7 +203,12 @@
 .rating .giaGoc{
     text-decoration: line-through;
 }
-.product__item {
-    border: solid 1px;
-    border-color: #fcf0f0;
+/*.product__item {*/
+/*    border: solid 1px;*/
+/*    border-color: #fcf0f0;*/
+/*}*/
+.product_name{
+    max-width: 261px;
+    overflow: hidden;
+    white-space: nowrap;
 }

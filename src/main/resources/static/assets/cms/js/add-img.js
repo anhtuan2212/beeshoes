@@ -207,6 +207,7 @@ async function deleteImageFromFirebaseStorage(imageUrl) {
 
 $(document).on('click', '.btn-delete-img', function () {
     const url = $(this).closest('div[data-index="show-img-in-form"]').find('img.card-img-top').attr("src");
+    let element = $(this).closest('div[data-index="show-img-in-form"]');
     if (url.includes('blob')) {
         return;
     }
@@ -216,7 +217,7 @@ $(document).on('click', '.btn-delete-img', function () {
         data: {url: url},
         success: function (data, status, xhr) {
             deleteImageFromFirebaseStorage(url).then();
-            $(this).closest('div[data-index="show-img-in-form"]').remove();
+            element.remove();
             let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]').length;
             console.log(num);
             if (num > 3) {

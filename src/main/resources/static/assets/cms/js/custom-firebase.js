@@ -222,10 +222,7 @@ $(document).ready(function () {
             }
         }
     });
-
-
     setIMG();
-
     function setIMG() {
         console.log("load")
         let mauSac = null;

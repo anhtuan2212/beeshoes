@@ -194,8 +194,7 @@ $(document).on('ready', function () {
             let ele = $('#selectedColor').find('li.select2-selection__choice[title="'+tenmau+'"]');
             let span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
             $(span[0]).text(tenmau);
-            $(ele[0]).css('background-color', mau);
-            $(ele[0]).css('color', '#FFFFFF');
+            $(ele[0]).css('background-color', mau).css('color', '#FFFFFF').css('border','solid 1px').css('border-color','#f9dbdb');
         });
     }
 
@@ -204,18 +203,6 @@ $(document).on('ready', function () {
         changeNameToColor();
 
     });
-
-    // let field = $('#selectedColor').find('input.select2-search__field');
-    // field.focus(function () {
-    //     let allOptions = $('#mauSac').find('option');
-    //     allOptions.each((index, element) => {
-    //         let maMau = $(element).val();
-    //         let tenMau = $(element).data('name');
-    //        let ele = $('span.select2-dropdown').find('span:contains(' + maMau + ')')
-    //         console.log(ele);
-    //     });
-    // });
-
 
     // thêm màu sắc
     $('#btn-add-new-color').on('click', () => {
