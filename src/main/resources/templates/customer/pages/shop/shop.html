@@ -282,11 +282,12 @@
                                 </div>
                                 </th:block>
                                 <div class="product__item__text">
-                                    <h6 th:text="${sp.getTen()}"></h6>
+                                    <h6 class="product_name" th:text="${sp.getTen()}"></h6>
                                     <a href="#" class="add-cart">+ Add To Cart</a>
                                     <th:block th:each="ctsp,iter:${sp.getChiTietSanPham()}">
                                     <div class="rating">
-                                        <h6 class="giaGoc" th:if="${iter.index == 0}" th:text="${#numbers.formatDecimal (ctsp.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></h6>
+                                        <h6 class="giaGoc pb-3" th:if="${iter.index == 0 and ctsp.getGiaGoc()==ctsp.getGiaBan()}" >   </h6>
+                                        <h6 class="giaGoc" th:if="${iter.index == 0 and ctsp.getGiaGoc()!=ctsp.getGiaBan()}" th:text="${#numbers.formatDecimal (ctsp.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></h6>
                                     </div>
                                     <h5 th:if="${iter.index == 0}" th:text="${#numbers.formatDecimal (ctsp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></h5>
                                     </th:block>

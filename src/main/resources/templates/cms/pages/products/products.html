@@ -9,7 +9,7 @@
     <title>LigthBee | Product</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="/assets/cms/img/icon/favicon.ico">
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -47,6 +47,12 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-no-gutter">
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/">CMS</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Sản Phẩm</li>
+                        </ol>
+                    </nav>
                     <h1 class="page-header-title">Sản Phẩm <span class="badge badge-soft-dark ml-2"
                                                                  th:text="${#lists.size(lstsanpham)}"></span></h1>
 
@@ -152,16 +158,16 @@
                                                 th:text="${th.getTen()}"></option>
                                     </select>
                                 </div>
-                                <div class="hs-unfold form-group col-sm-6 col-md-4">
+                                <div class="hs-unfold form-group col-sm-6 col-md-4 d-none">
                                     <label>Khoảng SL</label>
                                     <div class="row align-items-center">
                                         <label  for="quantity_from" class="col-2">Từ</label><input class="number-input-mask form-control col-4" type="text" id="quantity_from"
-                                                  value="0">
+                                                  value="">
                                         <label for="quantity_to" class="col-2">Đến</label><input class="number-input-mask form-control col-4" type="text" id="quantity_to"
-                                                   value="9999">
+                                                   value="">
                                     </div>
                                 </div>
-                                <div class="hs-unfold form-group col-sm-12 col-md-6">
+                                <div class="hs-unfold form-group col-sm-6 col-md-4 d-none">
                                     <label>Khoảng Giá</label>
                                     <!-- Range Slider -->
                                     <input class="js-ion-range-slider" type="text" id="price_sort"
@@ -177,33 +183,33 @@
                                                 "to": 50000
                                               }'>
                                 </div>
-                                <!--                                <div class="hs-unfold form-group col-sm-6 col-md-4">-->
-                                <!--                                    <label>Kích Cỡ</label>-->
-                                <!--                                    <select class="js-select2-custom custom-select" name="kichCo"-->
-                                <!--                                            id="kichCoFilter" size="1"-->
-                                <!--                                            style="opacity: 0;"-->
-                                <!--                                            data-hs-select2-options='{-->
-                                <!--                                    "placeholder": "Chọn kích cỡ...",-->
-                                <!--                                    "searchInputPlaceholder": "Tìm kích cỡ..."-->
-                                <!--                                    }'>-->
-                                <!--                                        <option value="all" selected>Tất Cả</option>-->
-                                <!--                                        <option th:each="th:${lstkichco}" th:value="${th.getTen()}"-->
-                                <!--                                                th:text="${th.getTen()}"></option>-->
-                                <!--                                    </select>-->
-                                <!--                                </div>-->
+                                                                <div class="hs-unfold form-group col-sm-6 col-md-4">
+                                                                    <label>Kích Cỡ</label>
+                                                                    <select class="js-select2-custom custom-select" name="kichCo"
+                                                                            id="kichCoFilter" size="1"
+                                                                            style="opacity: 0;"
+                                                                            data-hs-select2-options='{
+                                                                    "placeholder": "Chọn kích cỡ...",
+                                                                    "searchInputPlaceholder": "Tìm kích cỡ..."
+                                                                    }'>
+                                                                        <option value="all" selected>Tất Cả</option>
+                                                                        <option th:each="th:${lstkichco}" th:value="${th.getTen()}"
+                                                                                th:text="${th.getTen()}"></option>
+                                                                    </select>
+                                                                </div>
 
-                                <!--                                <div class="hs-unfold form-group col-sm-6 col-md-4">-->
-                                <!--                                    <label>Màu Sắc</label>-->
-                                <!--                                    <select class="js-select2-custom custom-select" name="mauSac"-->
-                                <!--                                            id="mauSacFilter" size="1" style="opacity: 0;"-->
-                                <!--                                            data-hs-select2-options='{-->
-                                <!--                                            "placeholder": "Chọn màu sắc...",-->
-                                <!--                                            "searchInputPlaceholder": "Tìm màu sắc..."}'>-->
-                                <!--                                        <option value="all" selected>Tất Cả</option>-->
-                                <!--                                        <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"-->
-                                <!--                                                th:text="${th.getTen()}"></option>-->
-                                <!--                                    </select>-->
-                                <!--                                </div>-->
+                                                                <div class="hs-unfold form-group col-sm-6 col-md-4">
+                                                                    <label>Màu Sắc</label>
+                                                                    <select class="js-select2-custom custom-select" name="mauSac"
+                                                                            id="mauSacFilter" size="1" style="opacity: 0;"
+                                                                            data-hs-select2-options='{
+                                                                            "placeholder": "Chọn màu sắc...",
+                                                                            "searchInputPlaceholder": "Tìm màu sắc..."}'>
+                                                                        <option value="all" selected>Tất Cả</option>
+                                                                        <option th:each="th:${lstmausac}" th:value="${th.getMaMauSac()}"
+                                                                                th:text="${th.getTen()}"></option>
+                                                                    </select>
+                                                                </div>
                             </div>
                         </div>
                     </div>
@@ -228,7 +234,7 @@
                        &quot;target&quot;: &quot;#showHideDropdown&quot;,
                        &quot;type&quot;: &quot;css-animation&quot;
                      }" data-hs-unfold-target="#showHideDropdown" data-hs-unfold-invoker="">
-                                <i class="tio-table mr-1"></i> Hiển Thịc <span
+                                <i class="tio-table mr-1"></i> Hiển Thị<span
                                     class="badge badge-soft-dark rounded-circle ml-1">9</span>
                             </a>
                             <div id="showHideDropdown"
