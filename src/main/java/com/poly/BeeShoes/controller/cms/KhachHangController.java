@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.controller.cms;
 
+import com.poly.BeeShoes.dto.DiaChiDto;
 import com.poly.BeeShoes.model.DiaChi;
 import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.request.KhachHangRequest;
@@ -76,13 +77,35 @@ public class KhachHangController {
     @GetMapping("/detail/{id}")
     public String khachHangDetail(@PathVariable Long id, Model model) {
         KhachHang khachHang = khachHangService.detail(id);
+        List<DiaChi> diaChiList = diaChiService.getByIdKhachHang(id);
+        model.addAttribute("diaChiList", diaChiList);
+        model.addAttribute("diaChiDto", new DiaChiDto());
         model.addAttribute("khachHang", khachHang);
+        model.addAttribute("listDC", khachHang.getDiaChi());
         return "cms/pages/users/detail-khachHang";
     }
 
+    @PostMapping("/update/{id}/add-diachi")
+    public String addDiaChi(
+            @PathVariable("id") Long id,
+            @ModelAttribute("diaChiDto") DiaChiDto diaChiDto
+    ) {
+        System.out.println(diaChiDto.toString());
+        DiaChi diaChi = new DiaChi();
+        diaChi.setSoNha(diaChiDto.getSoNhaDto());
+        diaChi.setPhuongXa(diaChiDto.getPhuongXaDto());
+        diaChi.setQuanHuyen(diaChiDto.getQuanHuyenDto());
+        diaChi.setTinhThanhPho(diaChiDto.getTinhThanhPhoDto());
+        diaChi.setKhachHang(khachHangService.detail(id));
+        diaChiService.add(diaChi);
+        return "redirect:/cms/khach-hang";
+    }
+
     @PostMapping("/update/{id}")
-    public String updateNV(@PathVariable Long id, Model model,
-                           @ModelAttribute("khachHang") KhachHang khachHang) {
+    public String updateKH(
+            @PathVariable Long id, Model model,
+            @ModelAttribute("khachHang") KhachHang khachHang
+    ) {
         KhachHang kh1 = khachHangService.detail(id);
         kh1.setHoTen(khachHang.getHoTen());
         kh1.setGioiTinh(khachHang.isGioiTinh());
@@ -91,14 +114,13 @@ public class KhachHangController {
         kh1.setTrangThai(khachHang.isTrangThai());
         KhachHang kh = khachHangService.update(kh1, id);
 
-        DiaChi dc = diaChiService.detail(kh.getDiaChiMacDinh().getId());
-        System.out.println(dc.getSoNha());
-        dc.setSoNha(khachHang.getDiaChiMacDinh().getSoNha());
-        dc.setPhuongXa(khachHang.getDiaChiMacDinh().getPhuongXa());
-        dc.setQuanHuyen(khachHang.getDiaChiMacDinh().getQuanHuyen());
-        dc.setTinhThanhPho(khachHang.getDiaChiMacDinh().getTinhThanhPho());
-        DiaChi diaChi = diaChiService.update(dc, kh1.getDiaChiMacDinh().getId());
-        kh.setDiaChiMacDinh(dc);
+//        DiaChi dc = diaChiService.detail(kh.getDiaChiMacDinh().getId());
+//        dc.setSoNha(khachHang.getDiaChiMacDinh().getSoNha());
+//        dc.setPhuongXa(khachHang.getDiaChiMacDinh().getPhuongXa());
+//        dc.setQuanHuyen(khachHang.getDiaChiMacDinh().getQuanHuyen());
+//        dc.setTinhThanhPho(khachHang.getDiaChiMacDinh().getTinhThanhPho());
+//        DiaChi diaChi = diaChiService.update(dc, kh1.getDiaChiMacDinh().getId());
+//        kh.setDiaChiMacDinh(dc);
         khachHangService.update(kh,id);
 
         return "redirect:/cms/khach-hang";

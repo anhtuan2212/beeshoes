@@ -36,7 +36,7 @@
     <div class="content container-fluid">
         <!-- Step Form -->
         <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}"
-              onsubmit="return formvalidate(event)"
+
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -132,14 +132,16 @@
                                                                        placeholder="Nguyễn" aria-label="Nguyễn"
                                                                        th:field="*{hoTen}">
                                                             </div>
-                                                            <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập vào tên</i>
+                                                            <i id="hoTen_emty" style="color: red;display: none">Vui lòng
+                                                                nhập vào tên</i>
                                                         </div>
                                                     </div>
                                                     <!-- End Form Group -->
 
                                                     <!-- Form Group -->
                                                     <div class="row form-group">
-                                                        <label for="sdt" class="col-sm-4 col-form-label input-label">Số điện thoại</label>
+                                                        <label for="sdt" class="col-sm-4 col-form-label input-label">Số
+                                                            điện thoại</label>
 
                                                         <div class="col-sm-8">
                                                             <div class="input-group input-group-sm-down-break align-items-center">
@@ -244,70 +246,75 @@
                                                     <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
                                                         <!-- Body -->
                                                         <div class="card-body row">
-                                                            <div class="col-sm-6">
-                                                                <!-- Form Group -->
-                                                                <div class="row form-group">
-                                                                    <label for="soNhaMoi"
-                                                                           class="col-sm-5 col-form-label input-label">Số
-                                                                        nhà</label>
+                                                            <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})/add-diachi}" th:object="${diaChiDto}" method="post">
+                                                                <div class="col-sm-6">
+                                                                    <!-- Form Group -->
+                                                                    <div class="row form-group">
+                                                                        <label for="soNhaMoi"
+                                                                               class="col-sm-5 col-form-label input-label">Số
+                                                                            nhà</label>
 
-                                                                    <div class="col-sm-7">
-                                                                        <input type="text" class="form-control"
-                                                                               name="addressLine1"
-                                                                               id="soNhaMoi" placeholder="Your address"
-                                                                               aria-label="Your address">
+                                                                        <div class="col-sm-7">
+                                                                            <input type="text" class="form-control"
+                                                                                   name="soNhaDto"
+                                                                                   id="soNhaMoi"
+                                                                                   placeholder="Your address"
+                                                                                   aria-label="Your address">
+                                                                        </div>
+                                                                        <!-- End Form Group -->
+                                                                    </div>
+                                                                    <!-- Form Group -->
+                                                                    <div class="row form-group">
+                                                                        <label for="phuongXaMoi"
+                                                                               class="col-sm-5 col-form-label input-label">Phường/Xã</label>
+
+                                                                        <div class="col-sm-7">
+                                                                            <input type="text" class="form-control"
+                                                                                   name="phuongXaDto"
+                                                                                   id="phuongXaMoi"
+                                                                                   placeholder="Your address"
+                                                                                   aria-label="Your address">
+                                                                        </div>
                                                                     </div>
                                                                     <!-- End Form Group -->
                                                                 </div>
-                                                                <!-- Form Group -->
-                                                                <div class="row form-group">
-                                                                    <label for="phuongXaMoi"
-                                                                           class="col-sm-5 col-form-label input-label">Phường/Xã</label>
+                                                                <div class="col-sm-6">
+                                                                    <!-- Form Group -->
+                                                                    <div class="row form-group">
+                                                                        <label for="quanHuyenMoi"
+                                                                               class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
 
-                                                                    <div class="col-sm-7">
-                                                                        <input type="text" class="form-control"
-                                                                               name="addressLine1"
-                                                                               id="phuongXaMoi"
-                                                                               placeholder="Your address"
-                                                                               aria-label="Your address">
+                                                                        <div class="col-sm-7">
+                                                                            <input type="text" class="form-control"
+                                                                                   name="quanHuyenDto"
+                                                                                   id="quanHuyenMoi"
+                                                                                   placeholder="Your address"
+                                                                                   aria-label="Your address">
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- End Form Group -->
+
+                                                                    <!-- Form Group -->
+                                                                    <div class="row form-group">
+                                                                        <label for="tinhTPMoi"
+                                                                               class="col-sm-5 col-form-label input-label">Tỉnh/Thành
+                                                                            phố</label>
+
+                                                                        <div class="col-sm-7">
+                                                                            <input type="text" class="form-control"
+                                                                                   name="tinhThanhPhoDto"
+                                                                                   id="tinhTPMoi"
+                                                                                   placeholder="Your address"
+                                                                                   aria-label="Your address">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- End Form Group -->
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <!-- Form Group -->
-                                                                <div class="row form-group">
-                                                                    <label for="quanHuyenMoi"
-                                                                           class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
 
-                                                                    <div class="col-sm-7">
-                                                                        <input type="text" class="form-control"
-                                                                               name="addressLine1"
-                                                                               id="quanHuyenMoi"
-                                                                               placeholder="Your address"
-                                                                               aria-label="Your address">
-                                                                    </div>
+                                                                <div class="col-sm-6">
+                                                                    <button type="submit" class="btn btn-secondary">Thêm địa chỉ
+                                                                        mới</button>
                                                                 </div>
-                                                                <!-- End Form Group -->
-
-                                                                <!-- Form Group -->
-                                                                <div class="row form-group">
-                                                                    <label for="tinhTPMoi"
-                                                                           class="col-sm-5 col-form-label input-label">Tỉnh/Thành
-                                                                        phố</label>
-
-                                                                    <div class="col-sm-7">
-                                                                        <input type="text" class="form-control"
-                                                                               name="addressLine1"
-                                                                               id="tinhTPMoi" placeholder="Your address"
-                                                                               aria-label="Your address">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-sm-6">
-                                                                <a href="#" class="btn btn-secondary">Thêm địa chỉ mới</a>
-                                                            </div>
+                                                            </form>
                                                         </div>
                                                     </ul>
                                                 </li>
@@ -317,11 +324,11 @@
                                                    href="javascript:;"
                                                    title="Pages">
                                                     <i class="tio-pages-outlined nav-icon"></i>
-                                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Địa chỉ mặc định</span>
+                                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Địa chỉ</span>
                                                 </a>
 
                                                 <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
-                                                    <div class="card-body row">
+                                                    <div class="card-body row" th:each="dc,iter:${diaChiList}">
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
                                                             <div class="row form-group">
@@ -330,11 +337,11 @@
                                                                     nhà</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <input type="text" class="form-control"
+                                                                    <input class="form-control"
                                                                            name="addressLine1"
                                                                            id="soNha" placeholder="Your address"
                                                                            aria-label="Your address"
-                                                                           th:field="*{diaChiMacDinh.soNha}">
+                                                                           th:value="${dc.getSoNha()}">
                                                                 </div>
                                                                 <i id="soNha_emty" style="color: red;display: none">Vui
                                                                     lòng
@@ -351,7 +358,7 @@
                                                                            name="addressLine1"
                                                                            id="phuongXa" placeholder="Your address"
                                                                            aria-label="Your address"
-                                                                           th:field="*{diaChiMacDinh.phuongXa}">
+                                                                           th:value="${dc.getPhuongXa()}">
                                                                 </div>
                                                                 <i id="phuongXa_emty"
                                                                    style="color: red;display: none">Vui
@@ -370,7 +377,7 @@
                                                                            name="addressLine1"
                                                                            id="quanHuyen" placeholder="Your address"
                                                                            aria-label="Your address"
-                                                                           th:field="*{diaChiMacDinh.quanHuyen}">
+                                                                           th:value="${dc.getQuanHuyen()}">
                                                                 </div>
                                                                 <i id="quanHuyen_emty"
                                                                    style="color: red;display: none">Vui
@@ -389,7 +396,7 @@
                                                                            name="addressLine1"
                                                                            id="tinhTP" placeholder="Your address"
                                                                            aria-label="Your address"
-                                                                           th:field="*{diaChiMacDinh.tinhThanhPho}">
+                                                                           th:value="${dc.getTinhThanhPho()}">
                                                                 </div>
                                                                 <i id="tinhTP_emty"
                                                                    style="color: red;display: none">Vui
@@ -400,11 +407,13 @@
                                                         <div class="col-sm-6">
                                                             <div class="row form-group">
                                                                 <div class="d-flex justify-content-between">
-                                                                        <!-- Checkbox Switch -->
-                                                                        <label class="toggle-switch toggle-switch col-sm-10"
-                                                                               for="preferencesSwitch1">Địa chỉ mặc định
-                                                                            <span class="col-sm-2">
-                                                                                <input type="checkbox" class="toggle-switch-input" id="preferencesSwitch1">
+                                                                    <!-- Checkbox Switch -->
+                                                                    <label class="toggle-switch toggle-switch col-sm-10"
+                                                                           for="preferencesSwitch1">Địa chỉ mặc định
+                                                                        <span class="col-sm-2">
+                                                                                <input type="checkbox"
+                                                                                       class="toggle-switch-input"
+                                                                                       id="preferencesSwitch1">
                                                                                 <span class="toggle-switch-label ml-auto">
                                                                                     <span class="toggle-switch-indicator"></span>
                                                                                 </span>
@@ -437,9 +446,9 @@
 
                 </div>
             </div>
-    <!-- End Row -->
-    </form>
-    <!-- End Step Form -->
+            <!-- End Row -->
+        </form>
+        <!-- End Step Form -->
     </div>
 
 

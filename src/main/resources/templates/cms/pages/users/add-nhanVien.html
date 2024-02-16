@@ -19,7 +19,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 </head>
 <body class="footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
@@ -75,10 +74,6 @@
                                 </div>
 
                             </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> d7d60945f4c425eb4c64a25ff7505658c51598f8
                             <!-- Body -->
                             <div class="card-body row">
                                 <!-- Form Group -->
@@ -276,17 +271,11 @@
                                         <label for="Ward" class="col-sm-4 col-form-label input-label">Phường xã</label>
 
                                         <div class="col-sm-8">
-<<<<<<< HEAD
                                             <select id="Ward" class="form-control" th:field="*{phuongXa}"></select>
 <!--                                            <input type="text" class="form-control" name="tinhTP"-->
 <!--                                                   id="tinhTP" placeholder="Htmlstream"-->
 <!--                                                   aria-label="Htmlstream" th:field="*{tinhThanhPho}">-->
-=======
-                                            <input type="text" class="form-control" name="tinhTP"
-                                                   id="tinhTP" placeholder="Htmlstream"
-                                                   aria-label="Htmlstream" th:field="*{tinhThanhPho}">
 
->>>>>>> d7d60945f4c425eb4c64a25ff7505658c51598f8
                                         </div>
                                         <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
                                     </div>
@@ -387,8 +376,6 @@
         </div>
     </div>
 </div>
-
-<!-- ========== END MAIN CONTENT ========== -->
 <!-- ========== SECONDARY CONTENTS ========== -->
 <!-- Keyboard Shortcuts -->
 <div id="keyboardShortcutsSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow">
@@ -749,39 +736,6 @@
         <!-- End Body -->
     </div>
 </div>
-<div class="modal fade" id="form-qr-code" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog d-flex justify-content-center" role="document">
-        <div class="modal-content" style="width: 70%">
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="form-add-color-Label">Vui lòng đưa mã QR vào khung camera !</h5>
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body pt-0 pb-0 row justify-content-center">
-                <div style="width: 300px;height: 300px">
-                    <video id="video_show_camera" width="300" height="300" autoplay></video>
-                    <canvas id="canvas_context" width="200" height="200" style="display: none"></canvas>
-                    <audio id="sound_beep" src="/assets/cms/audio/bleep.mp3" style="display: none"
-                           preload="auto"></audio>
-                </div>
-            </div>
-            <!-- End Body -->
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-            </div>
-            <!-- End Footer -->
-        </div>
-    </div>
-</div>
-<!-- End Keyboard Shortcuts -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
@@ -937,8 +891,8 @@
                 placeholder: placeholder,
                 data: data.map(function (item) {
                     return {
-                        text: item.Name,
-                        id: item.Id
+                        id: item.Id,
+                        text: item.Name
                     };
                 }),
                 allowClear: true,
