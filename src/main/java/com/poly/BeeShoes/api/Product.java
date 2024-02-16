@@ -83,7 +83,7 @@ public class Product {
             if (productdetail.get(i).getImg() == null || productdetail.get(i).getImg() == "/assets/cms/img/400x400/img2.jpg") {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "IMGNull").body(null);
             }
-            if (ctspRequest.getMoTa().length()>2000) {
+            if (ctspRequest.getMoTa().length() > 2000) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "MaxLenghtMota").body(null);
             }
 
@@ -124,7 +124,9 @@ public class Product {
                 anh.setTrangThai(true);
             }
             if (i == 0) {
-                anh.setMain(true);
+                if (sanPham.getMainImage() == null) {
+                    anh.setMain(true);
+                }
             } else {
                 if (anh.isMain() != true) {
                     anh.setMain(false);
@@ -156,15 +158,16 @@ public class Product {
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
     @DeleteMapping("/xoa-chi-tiet-san-pham")
-    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("id")String id) {
-        if (id.isBlank()){
+    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("id") String id) {
+        if (id.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
         }
         boolean st = chiTietSanPhamService.delete(Long.parseLong(id));
-        if (st){
+        if (st) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotExits").body(null);
         }
     }
