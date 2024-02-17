@@ -356,15 +356,14 @@
                                                                        class="col-sm-5 col-form-label input-label">Phường/Xã</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <input type="text" class="form-control"
-                                                                           name="addressLine1"
-                                                                           id="phuongXa" placeholder="Your address"
-                                                                           aria-label="Your address"
-                                                                           th:value="${dc.getPhuongXa()}">
+                                                                    <select id="phuongXaSelect" name="phuongXa" class="js-select2-custom custom-select phuongXa"
+                                                                            data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
+                                                                               "searchInputPlaceholder": "Tìm Phường Xã..."}'>
+                                                                        <option value="">Chọn Phường Xã</option>
+                                                                    </select>
+                                                                    <input type="text" id="phuongXa" th:value="${dc.getPhuongXa()}" hidden>
                                                                 </div>
-                                                                <i id="phuongXa_emty"
-                                                                   style="color: red;display: none">Vui
-                                                                    lòng nhập vào phường xã</i>
+                                                                <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
                                                             </div>
                                                             <!-- End Form Group -->
                                                         </div>
@@ -375,11 +374,13 @@
                                                                        class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <input type="text" class="form-control"
-                                                                           name="addressLine1"
-                                                                           id="quanHuyen" placeholder="Your address"
-                                                                           aria-label="Your address"
-                                                                           th:value="${dc.getQuanHuyen()}">
+                                                                    <select name="quanHuyen"
+                                                                            id="quanHuyenSelect" class="js-select2-custom custom-select quanHuyen"
+                                                                            data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
+                                                                                "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
+                                                                        <option value="">Chọn Quận Huyện</option>
+                                                                    </select>
+                                                                    <input type="text" id="quanHuyen" th:value="${dc.getQuanHuyen()}" hidden>
                                                                 </div>
                                                                 <i id="quanHuyen_emty"
                                                                    style="color: red;display: none">Vui
@@ -394,11 +395,13 @@
                                                                     phố</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <input type="text" class="form-control"
-                                                                           name="addressLine1"
-                                                                           id="tinhTP" placeholder="Your address"
-                                                                           aria-label="Your address"
-                                                                           th:value="${dc.getTinhThanhPho()}">
+                                                                    <select name="tinhThanhPho"
+                                                                            id="tinhTPSelect" class="js-select2-custom custom-select tinhTP"
+                                                                            data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
+                                                                                "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>
+                                                                        <option value="">Chọn Tỉnh Thành</option>
+                                                                    </select>
+                                                                    <input type="text" id="tinhTP" th:value="${dc.getTinhThanhPho()}" hidden>
                                                                 </div>
                                                                 <i id="tinhTP_emty"
                                                                    style="color: red;display: none">Vui
