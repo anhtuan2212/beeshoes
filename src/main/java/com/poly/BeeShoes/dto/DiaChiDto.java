@@ -12,4 +12,5 @@ public class DiaChiDto {
     private String phuongXaDto;
     private String quanHuyenDto;
     private String tinhThanhPhoDto;
+    private Long idKH;
 }

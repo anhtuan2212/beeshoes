@@ -36,7 +36,7 @@
 <main id="content" role="main" class="main">
     <!-- Content -->
     <div class="content container-fluid">
-        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" onsubmit="return formvalidate()"
+        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" onsubmit="return validate()"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -125,7 +125,7 @@
                                             <div class="input-group input-group-sm-down-break">
                                                 <input type="text" class="form-control" name="hoTen"
                                                        id="hoTen"
-                                                       placeholder="Nguyễn" aria-label="Nguyễn" th:field="*{hoTen}">
+                                                       placeholder="Vui lòng nhập họ tên" aria-label="Nguyễn" th:field="*{hoTen}">
                                             </div>
                                             <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập tên</i>
                                         </div>
@@ -139,7 +139,7 @@
                                         <div class="col-sm-8">
                                             <div class="input-group input-group-sm-down-break align-items-center">
                                                 <input type="text" class="js-masked-input form-control" name="phone"
-                                                       id="sdt" placeholder="+x-xxx-xxx-xxx" th:field="*{sdt}">
+                                                       id="sdt" placeholder="Vui lòng nhập sdt" th:field="*{sdt}">
                                             </div>
                                             <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
                                         </div>
@@ -178,7 +178,7 @@
 
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" name="cccd"
-                                                   id="cccd" placeholder="Htmlstream"
+                                                   id="cccd" placeholder="Vui lòng nhập CCCD"
                                                    aria-label="Htmlstream" th:field="*{cccd}">
                                         </div>
                                         <i id="cccd_emty" style="color: red;display: none">Vui lòng nhập vào cccd</i>
@@ -225,7 +225,7 @@
 
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" name="ngaySinh"
-                                                   id="ngaySinh" placeholder="Htmlstream"
+                                                   id="ngaySinh"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
                                             <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
                                         </div>
@@ -238,44 +238,47 @@
 
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" name="soNha"
-                                                   id="soNha" placeholder="Htmlstream"
+                                                   id="soNha" placeholder="Vui lòng nhập số nhà"
                                                    aria-label="Htmlstream" th:field="*{soNha}">
                                         </div>
                                         <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
                                     </div>
-
                                     <div class="row form-group">
                                         <label for="Province" class="col-sm-4 col-form-label input-label">Tỉnh/thành phố</label>
-
                                         <div class="col-sm-8">
-                                            <select id="Province" class="form-control" th:field="*{tinhThanhPho}"></select>
-<!--                                            <input type="text" class="form-control" name="phuongXa"-->
-<!--                                                   id="phuongXa" placeholder="Htmlstream"-->
-<!--                                                   aria-label="Htmlstream" th:field="*{phuongXa}">-->
+                                            <select id="Province" class="js-select2-custom custom-select"
+                                                    data-hs-select2-options='{
+                                            "placeholder": "Chọn Tỉnh Thành...",
+                                            "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'
+                                                    th:field="*{tinhThanhPho}">
+                                                <option value="">Chọn Tỉnh Thành</option>
+                                            </select>
                                         </div>
                                         <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
                                     </div>
                                     <div class="row form-group">
                                         <label for="District" class="col-sm-4 col-form-label input-label">Quận huyện</label>
-
                                         <div class="col-sm-8">
-                                            <select id="District" class="form-control" th:field="*{quanHuyen}"></select>
-<!--                                            <input type="text" class="form-control" name="quanHuyen"-->
-<!--                                                   id="quanHuyen" placeholder="Htmlstream"-->
-<!--                                                   aria-label="Htmlstream" th:field="*{quanHuyen}">-->
+                                            <select id="District" class="js-select2-custom custom-select"
+                                                    data-hs-select2-options='{
+                                            "placeholder": "Chọn Quận Huyện...",
+                                            "searchInputPlaceholder": "Tìm Quận Huyện..."}'
+                                                    th:field="*{quanHuyen}">
+                                                <option value="">Chọn Quận Huyện</option>
+                                            </select>
                                         </div>
                                         <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
                                     </div>
-
                                     <div class="row form-group">
                                         <label for="Ward" class="col-sm-4 col-form-label input-label">Phường xã</label>
-
                                         <div class="col-sm-8">
-                                            <select id="Ward" class="form-control" th:field="*{phuongXa}"></select>
-<!--                                            <input type="text" class="form-control" name="tinhTP"-->
-<!--                                                   id="tinhTP" placeholder="Htmlstream"-->
-<!--                                                   aria-label="Htmlstream" th:field="*{tinhThanhPho}">-->
-
+                                            <select id="Ward" class="js-select2-custom custom-select"
+                                                    data-hs-select2-options='{
+                                            "placeholder": "Chọn Phường Xã...",
+                                            "searchInputPlaceholder": "Tìm Phường Xã..."}'
+                                                    th:field="*{phuongXa}">
+                                                <option value="">Chọn Phường Xã</option>
+                                            </select>
                                         </div>
                                         <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
                                     </div>
@@ -743,369 +746,7 @@
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
-
-<script>
-    function formvalidate() {
-        var result = true;
-        var hoTen = document.getElementById("hoTen").value;
-        var sdt = document.getElementById("sdt").value;
-        var cccd = document.getElementById("cccd").value;
-        var ngaySinh = document.getElementById("ngaySinh").value;
-        var soNha = document.getElementById("soNha").value;
-        var phuongXa = document.getElementById("phuongXa").value;
-        var quanHuyen = document.getElementById("quanHuyen").value;
-        var tinhTP = document.getElementById("tinhTP").value;
-        if (hoTen.length == 0) {
-            document.getElementById("hoTen_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("hoTen_emty").style.display = "none";
-        }
-        if (sdt.length == 0) {
-            document.getElementById("sdt_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("sdt_emty").style.display = "none";
-        }
-        if (cccd.length == 0) {
-            document.getElementById("cccd_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("cccd_emty").style.display = "none";
-        }
-        if (ngaySinh.length == "") {
-            document.getElementById("ngaySinh_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("ngaySinh_emty").style.display = "none";
-        }
-        if (soNha.length == 0) {
-            document.getElementById("soNha_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("soNha_emty").style.display = "none";
-        }
-        if (District.length == "") {
-            document.getElementById("quanHuyen_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("quanHuyen_emty").style.display = "none";
-        }
-        if (Ward.length == "") {
-            document.getElementById("phuongXa_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("phuongXa_emty").style.display = "none";
-        }
-        if (Province.length == "") {
-            document.getElementById("tinhTP_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("tinhTP_emty").style.display = "none";
-        }
-        return result;
-    }
-
-    //quét QR
-    $('#form-qr-code').on('shown.bs.modal', function () {
-        startQRCodeScanner();
-    });
-
-    function startQRCodeScanner() {
-        let video = document.getElementById("video_show_camera");
-        let canvas = document.getElementById("canvas_context");
-        let context = canvas.getContext("2d");
-        let beepAudio = document.getElementById("sound_beep");
-
-        if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices
-                .getUserMedia({video: true})
-                .then(function (stream) {
-                    video.srcObject = stream;
-                    setTimeout(() => {
-                        requestAnimationFrame(tick);
-                    }, 500);
-                })
-                .catch(function (error) {
-                    console.log("Something went wrong");
-                });
-        }
-
-        function playBeepSound() {
-            // Phát âm thanh beep
-            beepAudio.play();
-        }
-
-        function closeCamera() {
-            // Dừng camera
-            var tracks = video.srcObject.getTracks();
-            tracks.forEach(track => track.stop());
-        }
-
-        function tick() {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                canvas.hidden = false;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                var imageData = context.getImageData(
-                    0,
-                    0,
-                    canvas.width,
-                    canvas.height
-                );
-                var code = jsQR(imageData.data, imageData.width, imageData.height, {
-                    inversionAttempts: "dontInvert",
-                });
-                if (code) {
-                    var data = code.data;
-                    result = data.split("|");
-                    console.log(result);
-                    playBeepSound();
-                    closeCamera();
-                    $('#hoTen').val(result[0])
-                    $('#sdt').val(result[1]);
-                    $('#cccd').val(result[2]);
-                    //nếu là nam thì Set the value of the radio button with id="maleRadio" to "male"
-                    $('#gioi_tinh_nam').prop('checked', true)
-                    $('#gioi_tinh_nu').prop('checked', false)
-                    $('#ngaySinh').val(result[4]);
-                    $('#form-qr-code').modal('hide');
-                }
-            }
-            requestAnimationFrame(tick);
-        }
-    }
-
-    //==================
-    //api địa chỉ
-    const provice_url = "https://api.npoint.io/ac646cb54b295b9555be";
-    const district_url = "https://api.npoint.io/34608ea16bebc5cffd42";
-    const ward_url = "https://api.npoint.io/dd278dc276e65c68cdf5";
-
-    var province_list = [];
-    var district_list = [];
-    var ward_list = [];
-
-    var singleSelectDropdown = function (id, placeholder, data, selectItem) {
-        setTimeout(function () {
-            $("#" + id).select2({
-                placeholder: placeholder,
-                data: data.map(function (item) {
-                    return {
-                        id: item.Id,
-                        text: item.Name
-                    };
-                }),
-                allowClear: true,
-            });
-        }, 200);
-
-        if (selectItem !== null) {
-            setTimeout(function () {
-                $("#" + id)
-                    .val(selectItem)
-                    .trigger("change");
-            }, 200);
-        }
-    };
-
-    var getProviceData = function (callback) {
-        $.getJSON(provice_url, function (list) {
-            callback(list);
-        });
-    };
-
-    var getDistrictData = function (callback) {
-        $.getJSON(district_url, function (list) {
-            callback(list);
-        });
-    };
-
-    var getWardData = function (callback) {
-        $.getJSON(ward_url, function (list) {
-            callback(list);
-        });
-    };
-
-    var hanldeOnchangeProvice = function () {
-        $("#Province").on("change", function () {
-            var id = $(this).val();
-            if (id) {
-
-                $("#District").empty();
-
-                var data_filter = district_list.filter(
-                    (entry) => entry.ProvinceId === parseInt(id)
-                );
-
-                singleSelectDropdown("District", "Chọn Quận/Huyện", data_filter);
-            }
-        });
-    };
-
-    var hanldeOnchangeDistrict = function () {
-        $("#District").on("change", function () {
-            var id = $(this).val();
-            if (id) {
-
-                $("#Ward").empty();
-
-                var data_filter = ward_list.filter(
-                    (entry) => entry.DistrictId === parseInt(id)
-                );
-
-                singleSelectDropdown("Ward", "Chọn Xã/Phường", data_filter);
-            }
-        });
-    };
-
-    var initProviceDropdown = function () {
-        var interval = setInterval(function () {
-            if (province_list.length > 0) {
-                singleSelectDropdown("Province", "Chọn Tỉnh/Thành Phố", province_list);
-                clearInterval(interval);
-            }
-        }, 100);
-    };
-
-    var getAllDataForDropdown = function () {
-        getProviceData(function (list) {
-            province_list = list;
-        });
-
-        getDistrictData(function (list) {
-            district_list = list;
-        });
-
-        getWardData(function (list) {
-            ward_list = list;
-        });
-    };
-
-    $(document).ready(function () {
-        getAllDataForDropdown();
-        initProviceDropdown();
-        hanldeOnchangeProvice();
-        hanldeOnchangeDistrict();
-    });
-
-    //===========================
-    $(document).on('ready', function () {
-        // ONLY DEV
-        // =======================================================
-
-        if (window.localStorage.getItem('hs-builder-popover') === null) {
-            $('#builderPopover').popover('show')
-                .on('shown.bs.popover', function () {
-                    $('.popover').last().addClass('popover-dark')
-                });
-
-            $(document).on('click', '#closeBuilderPopover', function () {
-                window.localStorage.setItem('hs-builder-popover', true);
-                $('#builderPopover').popover('dispose');
-            });
-        } else {
-            $('#builderPopover').on('show.bs.popover', function () {
-                return false
-            });
-        }
-
-        // END ONLY DEV
-        // =======================================================
-
-
-        // BUILDER TOGGLE INVOKER
-        // =======================================================
-        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-        });
-
-
-        // INITIALIZATION OF MEGA MENU
-        // =======================================================
-        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-            desktop: {
-                position: 'left'
-            }
-        }).init();
-
-
-        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-        // =======================================================
-        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-        // =======================================================
-        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-                return false;
-            }
-        });
-
-
-        // INITIALIZATION OF UNFOLD
-        // =======================================================
-        $('.js-hs-unfold-invoker').each(function () {
-            var unfold = new HSUnfold($(this)).init();
-        });
-
-
-        // INITIALIZATION OF FORM SEARCH
-        // =======================================================
-        $('.js-form-search').each(function () {
-            new HSFormSearch($(this)).init()
-        });
-
-
-        // INITIALIZATION OF FILE ATTACH
-        // =======================================================
-        $('.js-file-attach').each(function () {
-            var customFile = new HSFileAttach($(this)).init();
-        });
-
-
-        // INITIALIZATION OF STEP FORM
-        // =======================================================
-        $('.js-step-form').each(function () {
-            var stepForm = new HSStepForm($(this), {
-                finish: function () {
-                    $("#addUserStepFormProgress").hide();
-                    $("#addUserStepFormContent").hide();
-                    $("#successMessageContent").show();
-                }
-            }).init();
-        });
-
-
-        // INITIALIZATION OF MASKED INPUT
-        // =======================================================
-        $('.js-masked-input').each(function () {
-            var mask = $.HSCore.components.HSMask.init($(this));
-        });
-
-
-        // INITIALIZATION OF SELECT2
-        // =======================================================
-        $('.js-select2-custom').each(function () {
-            var select2 = $.HSCore.components.HSSelect2.init($(this));
-        });
-
-
-        // INITIALIZATION OF ADD INPUT FILED
-        // =======================================================
-        $('.js-add-field').each(function () {
-            new HSAddField($(this), {
-                addedField: function () {
-                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
-                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
-                    });
-                }
-            }).init();
-        });
-    });
-</script>
+<script src="/assets/cms/js/khachHangJS/nhanVien.js"></script>
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

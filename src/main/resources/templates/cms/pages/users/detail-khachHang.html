@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body class="footer-offset">
@@ -35,14 +38,14 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}"
-
+        <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}" onsubmit="return formvalidate(event)"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
                 "endSelector": "#addUserFinishBtn",
                 "isValidate": false
               }'>
+            <input type="text" id="idKhachHang" th:value="${khachHang.getId()}" hidden>
             <div class="row justify-content-lg-center">
                 <div>
                     <!-- Step -->
@@ -245,76 +248,74 @@
 
                                                     <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
                                                         <!-- Body -->
-                                                        <div class="card-body row">
-                                                            <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})/add-diachi}" th:object="${diaChiDto}" method="post">
-                                                                <div class="col-sm-6">
-                                                                    <!-- Form Group -->
-                                                                    <div class="row form-group">
-                                                                        <label for="soNhaMoi"
-                                                                               class="col-sm-5 col-form-label input-label">Số
-                                                                            nhà</label>
+                                                        <div class="card-body">
 
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control"
-                                                                                   name="soNhaDto"
-                                                                                   id="soNhaMoi"
-                                                                                   placeholder="Your address"
-                                                                                   aria-label="Your address">
-                                                                        </div>
-                                                                        <!-- End Form Group -->
-                                                                    </div>
-                                                                    <!-- Form Group -->
-                                                                    <div class="row form-group">
-                                                                        <label for="phuongXaMoi"
-                                                                               class="col-sm-5 col-form-label input-label">Phường/Xã</label>
-
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control"
-                                                                                   name="phuongXaDto"
-                                                                                   id="phuongXaMoi"
-                                                                                   placeholder="Your address"
-                                                                                   aria-label="Your address">
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- End Form Group -->
-                                                                </div>
-                                                                <div class="col-sm-6">
-                                                                    <!-- Form Group -->
-                                                                    <div class="row form-group">
-                                                                        <label for="quanHuyenMoi"
-                                                                               class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
-
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control"
-                                                                                   name="quanHuyenDto"
-                                                                                   id="quanHuyenMoi"
-                                                                                   placeholder="Your address"
-                                                                                   aria-label="Your address">
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- End Form Group -->
-
-                                                                    <!-- Form Group -->
-                                                                    <div class="row form-group">
-                                                                        <label for="tinhTPMoi"
-                                                                               class="col-sm-5 col-form-label input-label">Tỉnh/Thành
-                                                                            phố</label>
-
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control"
-                                                                                   name="tinhThanhPhoDto"
-                                                                                   id="tinhTPMoi"
-                                                                                   placeholder="Your address"
-                                                                                   aria-label="Your address">
-                                                                        </div>
+                                                                <!-- Form Group -->
+                                                                <div class="row form-group">
+                                                                    <label for="soNhaMoi"
+                                                                           class="col-sm-3 col-form-label input-label">Số nhà</label>
+                                                                    <div class="col-sm-9">
+                                                                        <input type="text" class="form-control"
+                                                                               name="soNhaDto"
+                                                                               id="soNhaMoi"
+                                                                               placeholder="Your address"
+                                                                               aria-label="Your address">
                                                                     </div>
                                                                 </div>
+                                                            <!-- End Form Group -->
 
-                                                                <div class="col-sm-6">
-                                                                    <button type="submit" class="btn btn-secondary">Thêm địa chỉ
-                                                                        mới</button>
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="tinhTPMoi"
+                                                                       class="col-sm-3 col-form-label input-label">Tỉnh Thành</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <select name="tinhThanhPhoDto"
+                                                                            id="tinhTPMoi" class="js-select2-custom custom-select"
+                                                                            data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
+                                                                                "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>
+                                                                        <option value="">Chọn Tỉnh Thành</option>
+                                                                    </select>
                                                                 </div>
-                                                            </form>
+                                                            </div>
+                                                            <!-- End Form Group -->
+
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="quanHuyenMoi"
+                                                                       class="col-sm-3 col-form-label input-label">Quận/Huyện</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <select name="quanHuyenDto"
+                                                                            id="quanHuyenMoi" class="js-select2-custom custom-select"
+                                                                            data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
+                                                                                "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
+                                                                        <option value="">Chọn Quận Huyện</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End Form Group -->
+
+                                                            <!-- Form Group -->
+                                                            <div class="row form-group">
+                                                                <label for="phuongXaMoi"
+                                                                       class="col-sm-3 col-form-label input-label">Phường/Xã</label>
+
+                                                                <div class="col-sm-9">
+                                                                    <select id="phuongXaMoi" name="phuongXaDto" class="js-select2-custom custom-select"
+                                                                            data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
+                                                                               "searchInputPlaceholder": "Tìm Phường Xã..."}'>
+                                                                        <option value="">Chọn Phường Xã</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End Form Group -->
+
+                                                            <div class="col-sm-6">
+                                                                <button id="addNewAddress" type="button"
+                                                                        class="btn btn-secondary">Thêm địa chỉ mới
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </ul>
                                                 </li>
@@ -327,8 +328,9 @@
                                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Địa chỉ</span>
                                                 </a>
 
-                                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
-                                                    <div class="card-body row" th:each="dc,iter:${diaChiList}">
+                                                <ul id="listAddress"
+                                                    class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                                    <div class="card-body row" th:each="dc,iter:${listDC}">
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
                                                             <div class="row form-group">
@@ -405,15 +407,16 @@
                                                         </div>
 
                                                         <div class="col-sm-6">
-                                                            <div class="row form-group">
+                                                            <div lass="row form-group">
                                                                 <div class="d-flex justify-content-between">
                                                                     <!-- Checkbox Switch -->
                                                                     <label class="toggle-switch toggle-switch col-sm-10"
-                                                                           for="preferencesSwitch1">Địa chỉ mặc định
+                                                                           th:for="'preferencesSwitch'+${dc.getId()}">Địa chỉ mặc định
                                                                         <span class="col-sm-2">
-                                                                                <input type="checkbox"
-                                                                                       class="toggle-switch-input"
-                                                                                       id="preferencesSwitch1">
+                                                                                <input type="radio" name="addressDefault"
+                                                                                       th:checked="${dc.getId() == khachHang.getDiaChiMacDinh().getId()}"
+                                                                                       class="toggle-switch-input addressDefaultSwitch"
+                                                                                       th:id="'preferencesSwitch'+${dc.getId()}" th:value="${dc.getId()}">
                                                                                 <span class="toggle-switch-label ml-auto">
                                                                                     <span class="toggle-switch-indicator"></span>
                                                                                 </span>
@@ -865,187 +868,8 @@
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
-<script>
-    function formvalidate(e) {
-        if (confirm('Bạn có muốn cập nhật không?')) {
-            var result = true;
-            var hoTen = document.getElementById("hoTen").value;
-            var sdt = document.getElementById("sdt").value;
-            var ngaySinh = document.getElementById("ngaySinh").value;
-            var soNha = document.getElementById("soNha").value;
-            var phuongXa = document.getElementById("phuongXa").value;
-            var quanHuyen = document.getElementById("quanHuyen").value;
-            var tinhTP = document.getElementById("tinhTP").value;
-            if (hoTen.length == 0) {
-                document.getElementById("hoTen_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("hoTen_emty").style.display = "none";
-            }
-            if (sdt.length == 0) {
-                document.getElementById("sdt_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("sdt_emty").style.display = "none";
-            }
-            if (sdt.length > 10) {
-                document.getElementById("sdt1_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("sdt1_emty").style.display = "none";
-            }
-            if (ngaySinh.length == 0) {
-                document.getElementById("ngaySinh_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("ngaySinh_emty").style.display = "none";
-            }
-            if (soNha.length == 0) {
-                document.getElementById("soNha_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("soNha_emty").style.display = "none";
-            }
-            if (quanHuyen.length == "") {
-                document.getElementById("quanHuyen_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("quanHuyen_emty").style.display = "none";
-            }
-            if (phuongXa.length == "") {
-                document.getElementById("phuongXa_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("phuongXa_emty").style.display = "none";
-            }
-            if (tinhTP.length == "") {
-                document.getElementById("tinhTP_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("tinhTP_emty").style.display = "none";
-            }
-            return result;
-        }
-        e.preventDefault();
-    }
-
-    $(document).on('ready', function () {
-        // ONLY DEV
-        // =======================================================
-
-        if (window.localStorage.getItem('hs-builder-popover') === null) {
-            $('#builderPopover').popover('show')
-                .on('shown.bs.popover', function () {
-                    $('.popover').last().addClass('popover-dark')
-                });
-
-            $(document).on('click', '#closeBuilderPopover', function () {
-                window.localStorage.setItem('hs-builder-popover', true);
-                $('#builderPopover').popover('dispose');
-            });
-        } else {
-            $('#builderPopover').on('show.bs.popover', function () {
-                return false
-            });
-        }
-
-        // END ONLY DEV
-        // =======================================================
-
-
-        // BUILDER TOGGLE INVOKER
-        // =======================================================
-        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-        });
-
-
-        // INITIALIZATION OF MEGA MENU
-        // =======================================================
-        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-            desktop: {
-                position: 'left'
-            }
-        }).init();
-
-
-        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-        // =======================================================
-        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-        // =======================================================
-        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-                return false;
-            }
-        });
-
-
-        // INITIALIZATION OF UNFOLD
-        // =======================================================
-        $('.js-hs-unfold-invoker').each(function () {
-            var unfold = new HSUnfold($(this)).init();
-        });
-
-
-        // INITIALIZATION OF FORM SEARCH
-        // =======================================================
-        $('.js-form-search').each(function () {
-            new HSFormSearch($(this)).init()
-        });
-
-
-        // INITIALIZATION OF FILE ATTACH
-        // =======================================================
-        $('.js-file-attach').each(function () {
-            var customFile = new HSFileAttach($(this)).init();
-        });
-
-
-        // INITIALIZATION OF STEP FORM
-        // =======================================================
-        $('.js-step-form').each(function () {
-            var stepForm = new HSStepForm($(this), {
-                finish: function () {
-                    $("#addUserStepFormProgress").hide();
-                    $("#addUserStepFormContent").hide();
-                    $("#successMessageContent").show();
-                }
-            }).init();
-        });
-
-
-        // INITIALIZATION OF MASKED INPUT
-        // =======================================================
-        $('.js-masked-input').each(function () {
-            var mask = $.HSCore.components.HSMask.init($(this));
-        });
-
-
-        // INITIALIZATION OF SELECT2
-        // =======================================================
-        $('.js-select2-custom').each(function () {
-            var select2 = $.HSCore.components.HSSelect2.init($(this));
-        });
-
-
-        // INITIALIZATION OF ADD INPUT FILED
-        // =======================================================
-        $('.js-add-field').each(function () {
-            new HSAddField($(this), {
-                addedField: function () {
-                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
-                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
-                    });
-                }
-            }).init();
-        });
-    });
-</script>
+<script src="/assets/cms/js/khachHangJS/khachHang.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>
