@@ -156,8 +156,8 @@ function startQRCodeScanner() {
                 } else {
                     $('#gioi_tinh_nu').prop('checked', true)
                 }
-                var str = result[3];
-                var formattedDate = str.substring(4) + '-' + str.substring(2, 4) + '-' + str.substring(0, 2);
+                let str = result[3];
+                let formattedDate = str.substring(4) + '-' + str.substring(2, 4) + '-' + str.substring(0, 2);
                 $('#ngaySinh').val(formattedDate);
                 $('#form-qr-code').modal('hide');
             }
