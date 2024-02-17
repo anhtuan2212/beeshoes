@@ -81,10 +81,11 @@ public class VoucherController {
         return "redirect:/cms/voucher";
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/update-voucher/{id}")
     public String detail(@PathVariable Long id, Model model) {
         Voucher voucher1 = voucherService.detail(id);
-        model.addAttribute("List", voucher1);
+        model.addAttribute("Listvv", voucher1);
+        model.addAttribute("options", voucherService.getAll());
         return "cms/pages/voucher/update-voucher.html";
     }
 }
