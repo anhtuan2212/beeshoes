@@ -28,7 +28,9 @@ public class NhanVienController {
 
     @GetMapping("/view-add")
     public String viewAdd(Model model) {
-        model.addAttribute("nhanVien", new NhanVien());
+        NhanVien nv = new NhanVien();
+        nv.setTrangThai(true);
+        model.addAttribute("nhanVien", nv);
         model.addAttribute("listCV", chucVuService.getAll());
         return "cms/pages/users/add-nhanVien";
     }

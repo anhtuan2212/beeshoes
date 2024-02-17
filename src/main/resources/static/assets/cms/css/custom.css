@@ -51,6 +51,7 @@
 }
 .width-100{
     width: 100px !important;
+    min-width: 100px !important;
 }
 .top-1em{
     top: 1em !important;
@@ -89,4 +90,82 @@
 }
 .custom-toast-class{
     top: 55px;
+}
+#datatable thead th:last-child {
+    position: sticky;
+    right:-2.3em;
+    background-color: #f5f5f5;
+    z-index: 2;
+}
+#datatable tbody td:last-child {
+    position: sticky;
+    right:-2em;
+    background-color: #f5f5f5;
+    z-index: 2;
+}
+#datatable tbody th:last-child {
+    position: sticky;
+    right:-2em;
+    background-color: #f5f5f5;
+    z-index: 2;
+}
+
+#productsEditDropdown1 {
+    left: auto;
+    right: 0;
+}
+#datatable {
+    border-collapse: collapse;
+}
+.table-responsive::-webkit-scrollbar {
+    height: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+}
+.show-color{
+    max-height:77px;overflow:auto
+}
+.show-color::-webkit-scrollbar {
+    height:2px;
+    width:2px;
+}
+
+.show-color::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 10px;
+}
+
+.show-color::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+}
+.text-big{
+    font-size: 16px;
+    font-weight: 600;
+    padding-left: 0;
+}
+.font-size-100{
+    font-size: 100%;
+}
+.border-1{
+    border: solid 1px;
+    border-color:#f9dbdb;
+}
+.custom-table {
+    table-layout: fixed;
+    width: 100%; /* Đặt chiều rộng của bảng */
+}
+
+.table-row {
+    display: table-row;
+    direction: rtl; /* Đặt hướng của văn bản về bên phải */
+}
+.card-img-top{
+    object-fit: cover;
 }

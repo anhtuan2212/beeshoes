@@ -96,4 +96,9 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
 
         return productCode;
     }
+
+    @Override
+    public boolean existsByAnh(Anh anh) {
+        return ctspRepository.existsByAnh(anh);
+    }
 }

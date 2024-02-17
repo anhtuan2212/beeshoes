@@ -8,7 +8,7 @@
     <!-- Title -->
     <title>LightBee | Add product</title>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="/assets/cms/img/icon/favicon.ico">
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
@@ -67,7 +67,7 @@
                     <div class="card-body">
                         <!-- Form Group -->
                         <div class="row">
-                            <div class="form-group col-md-11">
+                            <div class="form-group col-10 col-sm-10 col-md-11 ">
                                 <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
                                 <select class="js-select2-custom custom-select" name="sanPham" id="sanPham" size="1"
                                         style="opacity: 0;"
@@ -81,7 +81,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-md-1 p-0">
+                            <div class="col-1 col-md-1 col-sm-1 col-sm-auto p-0">
                                 <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                         data-placement="top"
                                         title="Thêm Sản Phẩm.">
@@ -96,9 +96,9 @@
 
                         <div class="row">
                             <!--Thể loại-->
-                            <div class="col-sm-6 row p-0 m-0">
+                            <div class="col-sm-12 col-md-6 row p-0 m-0">
                                 <!-- Form Group -->
-                                <div class="form-group col-md-10">
+                                <div class="form-group col-10">
                                     <label for="theLoai" class="input-label">Thể Loại</label>
                                     <select class="js-select2-custom custom-select" name="theLoai" id="theLoai"
                                             size="1"
@@ -114,7 +114,7 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 pl-0 m-0">
+                                <div class="col-1 pl-0 m-0">
                                     <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                             data-placement="top"
                                             title="Thêm Thể Loại.">
@@ -127,9 +127,9 @@
                                 <!-- End Form Group -->
                             </div>
                             <!--Thương hiệu-->
-                            <div class="col-sm-6 row p-0 m-0">
+                            <div class="col-sm-12 col-md-6 row p-0 m-0">
                                 <!-- Form Group -->
-                                <div class="form-group col-md-10 ">
+                                <div class="form-group col-10">
                                     <label for="thuongHieu" class="input-label">Thương Hiệu</label>
 
                                     <select class="js-select2-custom custom-select" name="thuongHieu"
@@ -145,7 +145,7 @@
                                                 th:text="${th.getTen()}"></option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 pl-0 m-0">
+                                <div class="col-1 pl-0 m-0">
                                     <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                             data-placement="top"
                                             title="Thêm thương hiệu.">
@@ -158,9 +158,9 @@
                                 <!-- End Form Group -->
                             </div>
                             <!--Chất liệu-->
-                            <div class="col-sm-6 row p-0 m-0">
+                            <div class="col-sm-12 col-md-6 row p-0 m-0">
                                 <!-- Form Group -->
-                                <div class="form-group col-md-10 ">
+                                <div class="form-group col-10">
                                     <label for="chatLieu" class="input-label">Chất Liệu</label>
 
                                     <select class="js-select2-custom custom-select" name="chatLieu" id="chatLieu"
@@ -176,7 +176,7 @@
                                                 th:text="${th.getTen() != null ? th.getTen() : ''}"></option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 pl-0 m-0">
+                                <div class="col-1 pl-0 m-0">
                                     <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                             data-placement="top"
                                             title="Thêm chất liệu.">
@@ -189,9 +189,9 @@
                                 <!-- End Form Group -->
                             </div>
                             <!--Đế Giày-->
-                            <div class="col-sm-6 row p-0 m-0">
+                            <div class="col-sm-12 col-md-6 row p-0 m-0">
                                 <!-- Form Group -->
-                                <div class="form-group col-md-10 ">
+                                <div class="form-group col-10">
                                     <label for="deGiay" class="input-label">Đế Giày</label>
 
                                     <select class="js-select2-custom custom-select" id="deGiay" size="1"
@@ -206,7 +206,7 @@
                                                 th:text="${th.getTen() != null ? th.getTen() : ''}"></option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 pl-0 m-0">
+                                <div class="col-1 pl-0 m-0">
                                     <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                             data-placement="top"
                                             title="Thêm đế giày.">
@@ -219,9 +219,9 @@
                                 <!-- End Form Group -->
                             </div>
                             <!--Cổ Giày-->
-                            <div class="col-sm-6 row p-0 m-0">
+                            <div class="col-sm-12 col-md-6 row p-0 m-0">
                                 <!-- Form Group -->
-                                <div class="form-group col-md-10 ">
+                                <div class="form-group col-10">
                                     <label for="coGiay" class="input-label">Cổ Giày</label>
 
                                     <select class="js-select2-custom custom-select" name="coGiay" id="coGiay"
@@ -237,7 +237,7 @@
                                                 th:text="${th.getTen() != null ? th.getTen() : ''}"></option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 pl-0 m-0">
+                                <div class="col-1 pl-0 m-0">
                                     <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                             data-placement="top"
                                             title="Thêm cổ giày.">
@@ -250,9 +250,9 @@
                                 <!-- End Form Group -->
                             </div>
                             <!--Mũi Giày-->
-                            <div class="col-sm-6 row p-0 m-0">
+                            <div class="col-sm-12 col-md-6 row p-0 m-0">
                                 <!-- Form Group -->
-                                <div class="form-group col-md-10 ">
+                                <div class="form-group col-10">
                                     <label for="muiGiay" class="input-label">Mũi Giày</label>
 
                                     <select class="js-select2-custom custom-select" name="muiGiay" id="muiGiay"
@@ -269,7 +269,7 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 pl-0 m-0">
+                                <div class="col-1 pl-0 m-0">
                                     <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                             data-placement="top"
                                             title="Thêm mũi giày.">
@@ -298,147 +298,6 @@
                         <!-- End Quill -->
                     </div>
                     <!-- End Row -->
-                </div>
-                <!-- End Card -->
-                <!-- Card -->
-                <div class="js-add-field card mb-3 mb-lg-5" data-hs-add-field-options='{
-                  "template": "#addVariantsTemplate",
-                  "container": "#addVariantsContainer",
-                  "defaultCreated": 0,
-                  "limit": 100
-                }'>
-                    <!-- Header -->
-                    <div class="card-header">
-                        <div class="row justify-content-between align-items-center flex-grow-1">
-                            <div class="col-12 col-sm mb-3 mb-sm-0">
-                                <h4 class="card-header-title">Variants</h4>
-                            </div>
-
-                            <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                    <!-- Datatable Info -->
-                                    <div id="datatableCounterInfo" style="display: none;">
-                                        <div class="d-flex align-items-center">
-                          <span class="font-size-sm mr-3">
-                            <span id="datatableCounter">0</span>
-                            Selected
-                          </span>
-                                            <a class="btn btn-sm btn-outline-danger" href="javascript:;">
-                                                <i class="tio-delete-outlined"></i> Delete
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- End Datatable Info -->
-
-                                    <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
-                                        <i class="tio-add"></i> Add variant
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Row -->
-                    </div>
-                    <!-- End Header -->
-
-                    <!-- Table -->
-                    <div class="table-responsive datatable-custom">
-                        <table id="datatable"
-                               class="table table-borderless table-thead-bordered table-nowrap table-align-middle"
-                               data-hs-datatables-options='{
-                         "columnDefs": [{
-                            "targets": [0, 1, 6],
-                            "orderable": false
-                          }],
-                         "order": [],
-                         "pageLength": 15,
-                         "isResponsive": false,
-                         "isShowPaging": false
-                       }'>
-                            <thead class="thead-light">
-                            <tr>
-                                <th scope="col" class="table-column-pr-0">
-                                    <div class="custom-control custom-checkbox">
-                                        <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
-                                        <label class="custom-control-label" for="datatableCheckAll"></label>
-                                    </div>
-                                </th>
-                                <th></th>
-                                <th class="table-column-pl-0">Size</th>
-                                <th class="table-column-pl-0">Color</th>
-                                <th class="table-column-pl-0">Price</th>
-                                <th class="table-column-pl-0">Quantity</th>
-                                <th class="table-column-pl-0"></th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="addVariantsContainer">
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- End Table -->
-
-                    <!-- Footer -->
-                    <div class="card-footer">
-                        <a class="js-create-field btn btn-sm btn-ghost-secondary" href="javascript:;">
-                            <i class="tio-add"></i> Add variant
-                        </a>
-                    </div>
-                    <!-- End Footer -->
-
-                    <!-- Add Variants Field -->
-                    <table style="display: none;">
-                        <tr id="addVariantsTemplate">
-                            <td class="table-column-pr-0">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input"
-                                           id="productVariationsCheck13">
-                                    <label class="custom-control-label" for="productVariationsCheck13"></label>
-                                </div>
-                            </td>
-                            <th>
-                                <img class="avatar" src="/assets/cms/img/400x400/img2.jpg" alt="Image Description">
-                            </th>
-                            <th class="table-column-pl-0">
-                                <input type="text" class="form-control">
-                            </th>
-                            <th class="table-column-pl-0">
-                                <input type="text" class="form-control">
-                            </th>
-                            <th class="table-column-pl-0">
-                                    <input type="text" class="form-control">
-                            </th>
-                            <th class="table-column-pl-0">
-                                <!-- Quantity Counter -->
-                                <div class="js-quantity-counter-dynamic input-group-quantity-counter">
-                                    <input type="number"
-                                           class="js-result form-control input-group-quantity-counter-control"
-                                           value="1">
-
-                                    <div class="input-group-quantity-counter-toggle">
-                                        <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
-                                            <i class="tio-remove"></i>
-                                        </a>
-                                        <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                            <i class="tio-add"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- End Quantity Counter -->
-                            </th>
-                            <th class="table-column-pl-0">
-                                <div class="btn-group" role="group" aria-label="Edit group">
-                                    <a class="btn btn-white" href="#">
-                                        <i class="tio-edit"></i>
-                                    </a>
-                                    <a class="btn btn-white" href="#">
-                                        <i class="tio-delete-outlined"></i>
-                                    </a>
-                                </div>
-                            </th>
-                        </tr>
-                    </table>
-                    <!-- End Add Variants Field -->
                 </div>
                 <!-- End Card -->
             </div>
@@ -499,7 +358,7 @@
                     <!-- Body -->
                     <div class="card-body">
                         <!-- Form Group -->
-                        <div class="form-group">
+                        <div class="form-group" id="selectedColor">
                             <div class="d-flex justify-content-between">
                                 <label for="mauSac" class="input-label">Màu Sắc</label>
                                 <a class="text-primary" href="javascript:;" data-toggle="modal"
@@ -519,7 +378,7 @@
                                 <option th:each="th : ${lstmausac}"
                                         th:value="${th.getMaMauSac()}"
                                         th:attr="data-name=${th.getTen()}"
-                                        th:text="${th.getMaMauSac()}"
+                                        th:text="${th.getTen()}"
                                         th:selected="${sanPham != null and sanPham.getMauSac() != null and sanPham.getMauSac().contains(th)}">
                                 </option>
                             </select>
@@ -558,11 +417,11 @@
                 <!-- End Card -->
             </div>
             <!-- Card -->
-            <div class="card col-12">
+            <div class="card md-3 mt-3 col-12">
                 <!-- Header -->
-                <div class="card-header">
-                    <div class="row justify-content-between align-items-center flex-grow-1">
-                        <div class="col-sm-6 col-md-4 mb-3 mb-sm-0">
+                <div class="card-header pl-0 pr-0">
+                    <div class="row justify-content-between align-items-center flex-grow-1 col-12 p-0">
+                        <div class="col-10 col-sm-6 col-md-4 mb-3 mb-sm-0">
                             <form>
                                 <!-- Search -->
                                 <div class="input-group input-group-merge input-group-flush">
@@ -578,7 +437,7 @@
                             </form>
                         </div>
                         <!-- End Card -->
-                        <div>
+                        <div class="col-2 col-sm-1">
                             <button class="btn btn-primary mr-2" id="save-product-detail">Lưu</button>
                         </div>
                     </div>
@@ -587,7 +446,7 @@
                 <!-- End Header -->
 
                 <!-- Table -->
-                <div class="table-responsive datatable-custom">
+                <div class="table-responsive datatable-custom" style="overflow-y: hidden">
                     <table id="datatable"
                            class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
                            data-hs-datatables-options='{
@@ -601,7 +460,7 @@
                      },
                      "search": "#datatableSearch",
                      "entries": "#datatableEntries",
-                     "pageLength": 10,
+                     "pageLength": 6,
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
@@ -617,10 +476,10 @@
                             <th class="width-100">Ảnh</th>
                             <th>Kích Cỡ</th>
                             <th>Màu Sắc</th>
-                            <th>Giá Gốc</th>
-                            <th>Giá Bán</th>
-                            <th>Số Lượng</th>
-                            <th></th>
+                            <th>Giá Gốc(đ)</th>
+                            <th>Giá Bán(đ)</th>
+                            <th>Số Lượng(đôi)</th>
+                            <th>Hành Động</th>
                         </tr>
                         </thead>
                         <tbody id="addVariantsContainer">
@@ -644,8 +503,8 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                    <option value="2" selected>2</option>
-                                    <option value="6">6</option>
+                                    <option value="6" selected>6</option>
+                                    <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="40">40</option>
                                 </select>
@@ -806,7 +665,6 @@
     </tr>
 </table>
 <!-- ========== END SECONDARY CONTENTS ========== -->
-
 
 <!-- JS Implementing Plugins -->
 <script src="/assets/cms/js/vendor.min.js"></script>

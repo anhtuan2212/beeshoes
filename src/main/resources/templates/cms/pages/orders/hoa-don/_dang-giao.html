@@ -261,7 +261,7 @@
                 <td ><a th:href="@{|/cms/hoa-don/${hoaDon.id}/chi-tiet|}" th:text="${hoaDon.maHoaDon}"></a></td>
                 <td>
                     <a class="text-body" th:if="${hoaDon.khachHang != null}" th:href="@{|/cms/customer/${hoaDon.khachHang.id}|}"
-                       th:text="${hoaDon.khachHang.ho + ' ' + hoaDon.khachHang.tenDem + ' ' + hoaDon.khachHang.ten}"></a>
+                       th:text="${hoaDon.khachHang.hoTen}"></a>
                     <span th:if="${hoaDon.khachHang == null}">N/A</span>
                 </td>
                 <td>

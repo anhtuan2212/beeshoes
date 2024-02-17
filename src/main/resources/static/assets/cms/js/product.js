@@ -1,6 +1,10 @@
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
+    $(document).on('input', '.number-input-mask', function () {
+        // Sử dụng jQuery Mask Plugin để áp dụng mask
+        $(this).mask('0000');
+    });
 
     if (window.localStorage.getItem('hs-builder-popover') === null) {
         $('#builderPopover').popover('show')
@@ -107,7 +111,7 @@ $(document).on('ready', function () {
     //         cell.innerHTML = i + 1;
     //     });
     // }).draw();
-    $('input[name="status"]').on('change', function() {
+    $('input[name="status"]').on('change', function () {
         var value = $(this).val();
         if (value === 'active') {
             datatable.columns(9).search('Đang Bán').draw();
@@ -117,15 +121,70 @@ $(document).on('ready', function () {
             datatable.columns(9).search('').draw();
         }
     });
-    $('#thuongHieu, #theLoai').on('change', function() {
-        var thuongHieuValue = $('#thuongHieu').val();
-        var theLoaiValue = $('#theLoai').val();
-        var thuongHieuFilter = (thuongHieuValue === 'all') ? '' : thuongHieuValue;
-        var theLoaiFilter = (theLoaiValue === 'all') ? '' : theLoaiValue;
-        datatable.columns(4).search(thuongHieuFilter).draw();
-        datatable.columns(3).search(theLoaiFilter).draw();
+    const quantityFromInput = document.querySelector('#quantity_from');
+    const quantityToInput = document.querySelector('#quantity_to');
+
+    var table = $('#datatable').DataTable();
+
+    function applyFilters() {
+        const priceSortSlider = document.querySelector('#price_sort');
+        let quantityFrom = parseInt(quantityFromInput.value, 10) || 0;
+        let quantityTo = parseInt(quantityToInput.value, 10) || Infinity; // Sử dụng Infinity cho giá trị tới vô cực
+        console.log(123)
+        let minPrice = 0;
+        let maxPrice = Infinity;
+
+        if (priceSortSlider) {
+            let priceRange = priceSortSlider.value.split(";");
+            minPrice = parseFloat(priceRange[0]) * 1000 || 0;
+            maxPrice = parseFloat(priceRange[1]) * 1000 || Infinity;
+        }
+
+        // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+        $.fn.dataTable.ext.search.pop();
+
+        // Thêm hàm lọc mới
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+            let quantity = parseFloat(data[8]) || 0; // Sử dụng data cho cột số lượng
+            let price = parseFloat(data[7].replace(/\./g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+            return ((isNaN(quantityFrom) && isNaN(quantityTo)) ||
+                    (isNaN(quantityFrom) && quantity <= quantityTo) ||
+                    (quantityFrom <= quantity && isNaN(quantityTo)) ||
+                    (quantityFrom <= quantity && quantity <= quantityTo)) &&
+                (price >= minPrice && price <= maxPrice);
+        });
+        table.draw();
+    }
+
+    quantityFromInput.addEventListener('input', applyFilters);
+    quantityToInput.addEventListener('input', applyFilters);
+    $('#price_sort').on('change', function () {
+        setTimeout(() => {
+            applyFilters();
+        }, 500)
+    })
+
+
+    $('.js-ion-range-slider').each(function () {
+        $.HSCore.components.HSIonRangeSlider.init($(this));
     });
 
+    $('#thuongHieuFilter, #theLoaiFilter, #mauSacFilter, #kichCoFilter').on('change', function () {
+        var thuongHieuValue = $('#thuongHieuFilter').val();
+        var theLoaiValue = $('#theLoaiFilter').val();
+        var mau = $('#mauSacFilter').val();
+        var co = $('#kichCoFilter').val();
+
+        var thuongHieuFilter = (thuongHieuValue === 'all') ? '' : thuongHieuValue;
+        var theLoaiFilter = (theLoaiValue === 'all') ? '' : theLoaiValue;
+        var mauF = (mau === 'all') ? '' : mau;
+        var coF = (co === 'all') ? '' : co;
+
+        datatable.columns(3).search(mauF).draw();
+        datatable.columns(4).search(coF).draw();
+        datatable.columns(5).search(theLoaiFilter).draw();
+        datatable.columns(6).search(thuongHieuFilter).draw();
+    });
 
     $('#datatableSearch').on('mouseup', function (e) {
         var $input = $(this),
@@ -148,20 +207,20 @@ $(document).on('ready', function () {
     $('#toggleColumn_product').change(function (e) {
         datatable.columns(2).visible(e.target.checked)
     })
-    $('#toggleColumn_type').change(function (e) {
+    $('#toggleColumn_color').change(function (e) {
         datatable.columns(3).visible(e.target.checked)
     })
-    $('#toggleColumn_vendor').change(function (e) {
+    $('#toggleColumn_size').change(function (e) {
         datatable.columns(4).visible(e.target.checked)
     })
-    datatable.columns(5).visible(false)
-    $('#toggleColumn_stocks').change(function (e) {
+    $('#toggleColumn_type').change(function (e) {
         datatable.columns(5).visible(e.target.checked)
     })
-    datatable.columns(6).visible(false)
-    $('#toggleColumn_sku').change(function (e) {
+    $('#toggleColumn_vendor').change(function (e) {
         datatable.columns(6).visible(e.target.checked)
     })
+    datatable.columns(3).visible(false)
+    datatable.columns(4).visible(false)
     $('#toggleColumn_price').change(function (e) {
         datatable.columns(7).visible(e.target.checked)
     })
