@@ -75,20 +75,20 @@
                                     </div>
                                 </div>
                                 <input id="datatableSearch" type="search" class="form-control"
-                                       placeholder="Tìm kiếm" aria-label="Tìm kiếm">
+                                       placeholder="Tìm kiếm theo Họ tên, Sdt, Địa chỉ" aria-label="Tìm kiếm">
                             </div>
                             <!-- End Search -->
                         </div>
 
                         <div class="col-6">
-                                                        <label>Ngày sinh</label>
-                                                        <!-- Daterangepicker -->
-                                                        <button id="js-daterangepicker-predefined"
-                                                                class="btn btn-sm btn-white dropdown-toggle mb-2 mb-sm-0 form-control">
-                                                            <i class="tio-date-range" style="text-align: center"></i>
-                                                            <span class="js-daterangepicker-predefined-preview ml-1"></span>
-                                                        </button>
-                             End Daterangepicker
+                            <label>Ngày sinh</label>
+                            <!-- Daterangepicker -->
+                            <button id="js-daterangepicker-predefined"
+                                    class="btn btn-sm btn-white dropdown-toggle mb-2 mb-sm-0 form-control">
+                                <i class="tio-date-range" style="text-align: center"></i>
+                                <span class="js-daterangepicker-predefined-preview ml-1"></span>
+                            </button>
+                            <!-- End Daterangepicker -->
                         </div>
                     </div>
                     <br>
@@ -97,12 +97,11 @@
                             <label>Chức vụ</label>
                             <!-- Select -->
                             <select class="js-select2-custom custom-select-sm form-control" name="chucVu"
-                                    id="chucVu" size="1" style="opacity: 0;"
+                                    id="chucVu" size="1" style="opacity: 0"
                                     data-hs-select2-options='{
                           "minimumResultsForSearch": "Infinity",
                           "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
-                          "dropdownAutoWidth": true,
-                          "width": true
+                          "dropdownAutoWidth": true
                         }'>
                                 <option value="all" selected>Tất cả</option>
                                 <option th:each="cv:${listCV}" th:value="${cv.getTen()}"
@@ -113,19 +112,18 @@
 
 
                         <div class="col-6">
-                                                        <label>Trạng thái</label>
-                                                        <!-- Select -->
-                                                        <select id="trangThai" class="js-select2-custom custom-select-sm form-control" size="1" style="opacity: 0;"
-                                                                data-hs-select2-options='{
-                                                      "minimumResultsForSearch": "Infinity",
-                                                      "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
-                                                      "dropdownAutoWidth": true,
-                                                      "width": true
-                                                    }'>
-                                                            <option value="all" selected>Tất cả</option>
-                                                            <option value="Hoạt động">Hoạt động</option>
-                                                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
-                                                        </select>
+                            <label>Trạng thái</label>
+                            <!-- Select -->
+                            <select id="trangThai" class="js-select2-custom custom-select-sm form-control" size="1" style="opacity: 0;"
+                                    data-hs-select2-options='{
+                                    "minimumResultsForSearch": "Infinity",
+                                    "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
+                                    "dropdownAutoWidth": true
+                                    }'>
+                                <option value="all" selected>Tất cả</option>
+                                <option value="Hoạt động">Hoạt động</option>
+                                <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                            </select>
                         </div>
                     </div>
 

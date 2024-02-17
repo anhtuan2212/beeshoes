@@ -40,7 +40,6 @@ public class NhanVienController {
         model.addAttribute("nhanVien", nhanVien);
         nhanVien.setMaNhanVien(nhanVienService.generateEmployeeCode());
         nhanVienService.add(nhanVien);
-        model.addAttribute("thongbao", "Thêm thành công!");
         return "redirect:/cms/nhan-vien";
     }
 
@@ -56,14 +55,12 @@ public class NhanVienController {
     public String updateNV(@PathVariable Long id, Model model,
                            @ModelAttribute("nhanVien") NhanVien nhanVien){
         nhanVienService.update(nhanVien, id);
-        model.addAttribute("thongbao", "Cập nhật thành công!");
         return "redirect:/cms/nhan-vien";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteNV(@PathVariable Long id, Model model) {
         nhanVienService.delete(id);
-        model.addAttribute("thongbao", "Xóa thành công!");
         return "redirect:/cms/nhan-vien";
     }
 }

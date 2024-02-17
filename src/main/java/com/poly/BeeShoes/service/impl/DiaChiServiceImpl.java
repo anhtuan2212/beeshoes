@@ -43,4 +43,9 @@ public class DiaChiServiceImpl implements DiaChiService {
     public DiaChi update(DiaChi diaChi, Long id) {
         return diaChiReponsitory.save(diaChi);
     }
+
+    @Override
+    public List<DiaChi> getByIdKhachHang(Long id) {
+        return diaChiReponsitory.findByKhachHang_Id(id);
+    }
 }
