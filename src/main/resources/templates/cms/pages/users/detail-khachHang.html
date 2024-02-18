@@ -7,7 +7,7 @@
     <!-- Title -->
     <title>LightBee | Khách hàng</title>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="favicon.ico">
+<!--    <link rel="shortcut icon" href="favicon.ico">-->
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
@@ -330,85 +330,76 @@
 
                                                 <ul id="listAddress"
                                                     class="js-navbar-vertical-aside-submenu nav nav-sub">
-                                                    <div class="card-body row" th:each="dc,iter:${listDC}">
+                                                    <div class="card-body form-address row position-relative" th:each="dc,iter:${listDC}">
+                                                        <button type="button" th:attr="data-id-address=${dc.getId()}" class="btn btn-primary position-absolute btn_save_address d-none"><i class="tio-save"></i></button>
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
                                                             <div class="row form-group">
-                                                                <label for="soNha"
+                                                                <label th:for="'soNha'+${dc.getId()}"
                                                                        class="col-sm-5 col-form-label input-label">Số
                                                                     nhà</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <input class="form-control"
+                                                                    <input class="form-control soNha"
                                                                            name="addressLine1"
-                                                                           id="soNha" placeholder="Your address"
+                                                                           th:id="'soNha'+${dc.getId()}" placeholder="Your address"
                                                                            aria-label="Your address"
                                                                            th:value="${dc.getSoNha()}">
                                                                 </div>
-                                                                <i id="soNha_emty" style="color: red;display: none">Vui
-                                                                    lòng
-                                                                    nhập vào số nhà</i>
+<!--                                                                <i id="soNha_emty" style="color: red;display: none">Vui-->
+<!--                                                                    lòng-->
+<!--                                                                    nhập vào số nhà</i>-->
                                                                 <!-- End Form Group -->
                                                             </div>
                                                             <!-- Form Group -->
                                                             <div class="row form-group">
-                                                                <label for="phuongXa"
+                                                                <label th:for="'phuongXa'+${dc.getId()}"
                                                                        class="col-sm-5 col-form-label input-label">Phường/Xã</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <select id="phuongXaSelect" name="phuongXa" class="js-select2-custom custom-select phuongXa"
+                                                                    <select name="phuong_xa" class="js-select2-custom custom-select phuong_xa"
                                                                             data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
                                                                                "searchInputPlaceholder": "Tìm Phường Xã..."}'>
                                                                         <option value="">Chọn Phường Xã</option>
                                                                     </select>
-                                                                    <input type="text" id="phuongXa" th:value="${dc.getPhuongXa()}" hidden>
+                                                                    <input type="text" th:id="'phuongXa'+${dc.getId()}" th:value="${dc.getPhuongXa()}" hidden>
                                                                 </div>
-                                                                <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
                                                             </div>
                                                             <!-- End Form Group -->
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
                                                             <div class="row form-group">
-                                                                <label for="quanHuyen"
+                                                                <label th:for="'quanHuyen'+${dc.getId()}"
                                                                        class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <select name="quanHuyen"
-                                                                            id="quanHuyenSelect" class="js-select2-custom custom-select quanHuyen"
+                                                                    <select name="quanHuyen" class="js-select2-custom custom-select quanHuyen"
                                                                             data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
                                                                                 "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
                                                                         <option value="">Chọn Quận Huyện</option>
                                                                     </select>
-                                                                    <input type="text" id="quanHuyen" th:value="${dc.getQuanHuyen()}" hidden>
+                                                                    <input type="text" th:id="'quanHuyen'+${dc.getId()}" th:value="${dc.getQuanHuyen()}" hidden>
                                                                 </div>
-                                                                <i id="quanHuyen_emty"
-                                                                   style="color: red;display: none">Vui
-                                                                    lòng nhập vào quận huyện</i>
                                                             </div>
                                                             <!-- End Form Group -->
 
                                                             <!-- Form Group -->
                                                             <div class="row form-group">
-                                                                <label for="tinhTP"
+                                                                <label th:id="'tinhTP'+${dc.getId()}"
                                                                        class="col-sm-5 col-form-label input-label">Tỉnh/Thành
                                                                     phố</label>
 
                                                                 <div class="col-sm-7">
-                                                                    <select name="tinhThanhPho"
-                                                                            id="tinhTPSelect" class="js-select2-custom custom-select tinhTP"
+                                                                    <select name="tinhThanhPho" class="js-select2-custom custom-select tinhTP"
                                                                             data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
                                                                                 "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>
                                                                         <option value="">Chọn Tỉnh Thành</option>
                                                                     </select>
-                                                                    <input type="text" id="tinhTP" th:value="${dc.getTinhThanhPho()}" hidden>
+                                                                    <input type="text" th:id="'tinhTP'+${dc.getId()}" th:value="${dc.getTinhThanhPho()}" hidden>
                                                                 </div>
-                                                                <i id="tinhTP_emty"
-                                                                   style="color: red;display: none">Vui
-                                                                    lòng nhập vào tỉnh thành phố</i>
                                                             </div>
                                                         </div>
-
                                                         <div class="col-sm-6">
                                                             <div lass="row form-group">
                                                                 <div class="d-flex justify-content-between">

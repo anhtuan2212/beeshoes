@@ -4,6 +4,7 @@ import com.poly.BeeShoes.dto.DiaChiDto;
 import com.poly.BeeShoes.model.DiaChi;
 import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.request.KhachHangRequest;
+import com.poly.BeeShoes.request.UpdateCusAdressRequest;
 import com.poly.BeeShoes.service.DiaChiService;
 import com.poly.BeeShoes.service.KhachHangService;
 import lombok.RequiredArgsConstructor;
@@ -117,7 +118,32 @@ public class KhachHangController {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(diaChi1);
     }
+    @PostMapping("/update/update-diachi")
+    public ResponseEntity updateAdress(@ModelAttribute UpdateCusAdressRequest request) {
+        if(request.getSoNhaDto().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status","soNhaNull").body(null);
+        }
+        if(request.getPhuongXaDto().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status","tinhTPNull").body(null);
+        }
+        if(request.getQuanHuyenDto().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status","quanHuyenNull").body(null);
+        }
+        if(request.getTinhThanhPhoDto().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status","phuongXaNull").body(null);
+        }
+        DiaChi dc = diaChiService.detail(request.getId());
+        if(dc==null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status","AddressNull").body(null);
+        }
 
+        dc.setSoNha(request.getSoNhaDto());
+        dc.setPhuongXa(request.getPhuongXaDto());
+        dc.setQuanHuyen(request.getQuanHuyenDto());
+        dc.setTinhThanhPho(request.getTinhThanhPhoDto());
+        diaChiService.add(dc);
+        return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(null);
+    }
     @PostMapping("/set-default-address")
     public ResponseEntity setAddess(@RequestParam("idDiaChi") Long idDiaChi,
                                     @RequestParam("idKhachHang") Long idKhachHang){
