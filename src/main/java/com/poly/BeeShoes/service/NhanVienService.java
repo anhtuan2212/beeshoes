@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service;
 
+import com.poly.BeeShoes.model.ChucVu;
 import com.poly.BeeShoes.model.NhanVien;
 import org.springframework.data.domain.Page;
 
@@ -23,4 +24,6 @@ public interface NhanVienService {
     boolean existByMa(String ma);
 
     String generateEmployeeCode();
+
+    boolean existsByChucVu(ChucVu cv);
 }

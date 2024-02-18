@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.ChucVu;
+import com.poly.BeeShoes.model.MuiGiay;
 import com.poly.BeeShoes.repository.ChucVuReponsitory;
 import com.poly.BeeShoes.service.ChucVuService;
 import lombok.RequiredArgsConstructor;
@@ -19,25 +20,33 @@ public class ChucVuServiceImpl implements ChucVuService {
     }
 
     @Override
-    public void delete(Long id) {
-        chucVuReponsitory.deleteById(id);
+    public boolean delete(Long id) {
+        ChucVu cv = chucVuReponsitory.findById(id).get();
+        if (cv.getId()!=null){
+            chucVuReponsitory.deleteById(cv.getId());
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public ChucVu detail(Long id) {
+    public ChucVu getById(Long id) {
         ChucVu chucVu = chucVuReponsitory.findById(id).get();
         return chucVu;
     }
 
     @Override
-    public ChucVu add(ChucVu chucVu) {
-        chucVuReponsitory.save(chucVu);
-        return null;
+    public ChucVu save(ChucVu chucVu) {
+        return chucVuReponsitory.save(chucVu);
     }
 
     @Override
-    public ChucVu update(ChucVu chucVu, Long id) {
-        chucVuReponsitory.save(chucVu);
-        return null;
+    public ChucVu getByTen(String ten) {
+        return chucVuReponsitory.getFirstByTen(ten);
+    }
+
+    @Override
+    public boolean existsByTen(String ten) {
+        return chucVuReponsitory.existsByTen(ten);
     }
 }
