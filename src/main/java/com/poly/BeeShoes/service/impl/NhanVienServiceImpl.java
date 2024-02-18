@@ -1,18 +1,16 @@
 package com.poly.BeeShoes.service.impl;
 
+import com.poly.BeeShoes.model.ChucVu;
 import com.poly.BeeShoes.model.NhanVien;
 import com.poly.BeeShoes.repository.NhanVienRepository;
 import com.poly.BeeShoes.service.NhanVienService;
-import com.poly.BeeShoes.utility.ConvertUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +72,10 @@ public class NhanVienServiceImpl implements NhanVienService {
         } while (nhanVienRepository.existsByMaNhanVien(employeeCode));
 
         return employeeCode;
+    }
+
+    @Override
+    public boolean existsByChucVu(ChucVu cv) {
+        return nhanVienRepository.existsByChucVu(cv);
     }
 }
