@@ -1,5 +1,7 @@
 package com.poly.BeeShoes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,6 +21,7 @@ public class LichSuHoaDon {
 
     @ManyToOne
     @JoinColumn(name = "id_hoa_don")
+    @JsonIgnore
     HoaDon hoaDon;
 
     String hanhDong;
@@ -26,8 +29,8 @@ public class LichSuHoaDon {
 
     @OneToOne
     @JoinColumn(name = "nguoi_thuc_hien")
+    @JsonIgnore
     User nguoiThucHien;
 
-    @Column(name = "trang_thai_sau_update")
     String trangThaiSauUpdate;
 }

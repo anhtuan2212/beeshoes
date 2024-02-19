@@ -5,8 +5,9 @@ import java.util.List;
 
 public interface ChucVuService {
     List<ChucVu> getAll();
-    void delete(Long id);
-    ChucVu detail(Long id);
-    ChucVu add(ChucVu chucVu);
-    ChucVu update(ChucVu chucVu, Long id);
+    boolean delete(Long id);
+    ChucVu getById(Long id);
+    ChucVu save(ChucVu chucVu);;
+    ChucVu getByTen(String ten);
+    boolean existsByTen(String ten);
 }

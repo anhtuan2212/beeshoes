@@ -11,6 +11,8 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
@@ -18,6 +20,11 @@
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
     <!-- CSS Timeline -->
     <link rel="stylesheet" href="/assets/cms/css/timeline.css">
+    <style>
+        .swal2-timer-progress-bar{
+            background-color: #a5dc86;
+        }
+    </style>
 </head>
 <body class="   footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
@@ -49,12 +56,14 @@
                     </nav>
 
                     <div class="d-sm-flex align-items-sm-center">
-                        <h1 class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
-                        <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')} + ' ml-sm-3'"
-                              th:text="'Trạng thái: ' + ${hoaDon.trangThai}">
+                        <h1 id="id-for-attribute" th:attr="id-for-call-api=${hoaDon.id}" class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
+                        <div class="trangThaiHeader ml-sm-3">
+                            <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
+                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                                  th:text="'Trạng thái: ' + ${hoaDon.trangThai}">
                   <span class="legend-indicator bg-success"></span>
                 </span>
+                        </div>
                         <span class="badge badge-soft-success ml-2 ml-sm-3" th:text="'Ngày Tạo: ' + ${hoaDon.ngayTao}">
                   <i class="tio-date-range"></i>
                 </span>
@@ -84,19 +93,23 @@
         <div class="row col-12" th:include="~{/cms/pages/orders/_timeline.html}"></div>
 
         <div class="row mt-2 mb-2">
-            <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start">
+            <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start" id="myButton">
                 <button th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}"
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}" class="btn btn-sm btn-outline-danger"
+                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChoGiao'}" class="btn btn-sm btn-outline-danger mr-1"
                         id="huyFromDetail">
                     <i class="tio-delete-outlined"></i> Hủy
+                </button>
+                <button class="btn btn-sm btn-outline-primary d-none"
+                        id="hoanTacFromDetail">
+                    <i class="tio-history"></i> Hoàn Tác
                 </button>
             </div>
             <div class="col-6 d-flex justify-content-end">
                 <button class="btn btn-sm btn-outline-dark mr-1" data-toggle="modal" data-target="#history">
-                    <i class="tio-history"></i> Lịch Sử
+                    <i class="tio-timer"></i> Lịch Sử
                 </button>
             </div>
         </div>
@@ -144,11 +157,11 @@
                                     </div>
 
                                     <div class="col col-md-2 align-self-center">
-                                        <h6>2</h6>
+                                        <h6 th:text="${hdct.getSoLuong()}"></h6>
                                     </div>
 
                                     <div class="col col-md-2 align-self-center text-right">
-                                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue() * 2, 0, 'COMMA')}"></h6>
+                                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue() * hdct.getSoLuong(), 0, 'COMMA')}"></h6>
                                     </div>
                                 </div>
                             </div>
@@ -184,18 +197,18 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="historyTitle">Lịch Sử Đơn Hàng <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                      (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
-                                                                                                 th:text="${hoaDon.trangThai}">
-                      </span>
-                                </h5>
+                                <h5 class="modal-title" id="historyTitle">Lịch Sử Đơn Hàng </h5>
+                                <div class="trangThaiHeader ml-sm-1">
+                                    <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
+                      (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}" th:text="'Trạng thái: ' + ${hoaDon.trangThai}"></span>
+                                </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <!-- Step -->
-                                <ul class="step step-icon-xs">
+                                <ul class="step step-icon-xs" id="myHistory">
                                     <li class="step-item" th:each="lshd : ${lichSuHoaDonList}">
                                         <div class="step-content-wrapper">
                                             <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
@@ -205,8 +218,8 @@
                                                     <a class="text-dark" href="#" th:text="${lshd.hanhDong}"></a>
                                                 </h5>
 
-                                                <p class="font-size-sm mb-0" th:text="'Thực hiện bởi: ' + ${lshd.nguoiThucHien.nhanVien.hoTen} +
-                        ', thời gian thực hiện: ' + ${lshd.thoiGian}"></p>
+                                                <p class="font-size-sm mb-0" th:utext="'Thực hiện bởi: <h6>' + ${lshd.nguoiThucHien.nhanVien.hoTen} +
+                                                '</h6> Thời gian thực hiện: <h6>' + ${lshd.thoiGian} + '</h6>'"></p>
                                             </div>
                                         </div>
                                     </li>
@@ -836,69 +849,6 @@
         // END ONLY DEV
         // =======================================================
 
-        // handle timeline
-        $('#xacNhanFromDetail').on('click', function () {
-            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
-            $.ajax({
-                type: "POST",
-                url: "/api/hoa-don/xac-nhan-detail",
-                contentType: "application/json",
-                data: JSON.stringify(idHoaDon),
-                success: function (response,stt,xhr) {
-                    // let status =  String(xhr.getResponseHeader('status'));
-                    // var type = 'success';
-                    // if (status === 'ChoGiao') {
-                    //     status = 'Chờ Giao';
-                    // } else if (status === 'DangGiao') {
-                    //     status = 'Đang Giao';
-                    // } else if (status === 'ThanhCong') {
-                    //     status = 'Thành Công';
-                    // }
-                    // printTimeline(status, type);
-                    alert(response);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error);
-                }
-            });
-        })
-
-        $('#huyFromDetail').on('click', function () {
-            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
-            $.ajax({
-                type: "POST",
-                url: "/api/hoa-don/huy-detail",
-                contentType: "application/json",
-                data: JSON.stringify(idHoaDon),
-                success: function (response,stt,xhr) {
-                    // let status = String(xhr.getResponseHeader('status'));
-                    // if(status === 'Huy') status = 'Hủy';
-                    // var type = 'danger';
-                    // printTimeline(status, type);
-                    alert(response);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error);
-                }
-            });
-        })
-
-        function printTimeline(status, type) {
-            let ul = $('#myTimeline');
-            let li = document.createElement('li');
-            li.className = 'timeline-item';
-            let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">${status}</h4>
-                                <p><small class="text-muted"><i class="tio-timer"></i> 11 hours ago </small></p>
-                            </div>
-                        </div>`;
-            li.innerHTML = html;
-            ul.append(li);
-        }
 
         // BUILDER TOGGLE INVOKER
         // =======================================================
@@ -950,7 +900,214 @@
             new HSFormSearch($(this)).init()
         });
     });
+
+    $(document).on('ready', function () {
+
+        function Toast(status, message) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                },
+                customClass: {
+                    popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
+                }
+            });
+            Toast.fire({
+                icon: status,
+                title: message
+            });
+        }
+
+        function ToastSuccess(message) {
+            Toast('success', message)
+        }
+
+        function ToastError(message) {
+            Toast('error', message)
+        }
+
+        // print
+        function printTimeline(status, type) {
+            let ul = $('#myTimeline');
+            let li = document.createElement('li');
+            li.className = 'timeline-item';
+            let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">${status}</h4>
+                                <p><small class="text-muted"><i class="tio-timer"></i> 11 hours ago </small></p>
+                            </div>
+                        </div>`;
+            li.innerHTML = html;
+            ul.append(li);
+        }
+
+        function printHistory(thoiGian, nguoiThucHien, hanhDong) {
+            let ul = $('#myHistory');
+            let li = document.createElement('li');
+            li.className = 'step-item';
+            let html = `<div class="step-content-wrapper">
+                <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                <div class="step-content">
+                    <h5 class="mb-1">
+                        <a class="text-dark" href="#">${hanhDong}</a>
+                    </h5>
+                    <p class="font-size-sm mb-0">Thực hiện bởi: <h6>${nguoiThucHien}</h6> Thời gian thực hiện: <h6>${thoiGian}</h6></p>
+                </div>
+            </div>`;
+            li.innerHTML = html;
+            ul.append(li);
+        }
+
+        function printStatusHeader(typeOfColor, status) {
+            let div = $('.trangThaiHeader');
+            let html = `<span class="badge badge-soft-${typeOfColor}">Trạng Thái: ${status}
+                  <span class="legend-indicator bg-${typeOfColor}"></span>
+                </span>`;
+            div.html('');
+            div.append(html);
+        }
+
+        // handle timeline
+        $('#xacNhanFromDetail').on('click', function () {
+            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            Swal.fire({
+                title: "Bạn chắc chứ?",
+                text: "Bạn đang xác nhận đơn hàng!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Hủy",
+                confirmButtonText: "Xác Nhận"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/hoa-don/xac-nhan-detail",
+                        contentType: "application/json",
+                        data: JSON.stringify(idHoaDon),
+                        success: function (response) {
+                            ToastSuccess('Xác nhận đơn hàng thành công');
+                            let type = 'success';
+                            let status = response.trangThaiSauUpdate;
+                            let typeOfColor = 'success';
+                            if (status == 'Huy') {
+                                type = 'danger';
+                                typeOfColor = 'danger';
+                                $('#xacNhanFromDetail').hide();
+                                $('#huyFromDetail').hide();
+                            } else if (status == 'ChoXacNhan') {
+                                typeOfColor = 'danger';
+                            } else if (status == 'ChoGiao') {
+                                typeOfColor = 'warning';
+                                $('#hoanTacFromDetail').removeClass('d-none');
+                            } else if (status == 'ThanhCong') {
+                                $('#xacNhanFromDetail').hide();
+                                $('#huyFromDetail').hide();
+                                $('#hoanTacFromDetail').hide();
+                            }
+                            printStatusHeader(typeOfColor, status);
+                            printTimeline(status, type);
+                            printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            ToastError('Xác nhận đơn hàng thất bại');
+                            console.error('Xảy ra lỗi: ', error);
+                        }
+                    });
+                }
+            });
+        });
+
+        $('#huyFromDetail').on('click', function () {
+            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            Swal.fire({
+                title: "Bạn chắc chứ?",
+                text: "Sau khi hủy sẽ không thể khôi phục lại!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Hủy",
+                confirmButtonText: "Xác Nhận"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/hoa-don/huy-detail",
+                        contentType: "application/json",
+                        data: JSON.stringify(idHoaDon),
+                        success: function (response) {
+                            ToastSuccess('Hủy đơn hàng thành công');
+                            let type = 'danger';
+                            let status = 'Hủy';
+                            let nguoiThucHien = response.nguoiThucHien;
+                            let thoiGian = response.thoiGian;
+                            let hanhDong = response.hanhDong;
+                            $('#xacNhanFromDetail').hide();
+                            $('#huyFromDetail').hide();
+                            printStatusHeader(type, status);
+                            printTimeline(status, type);
+                            printHistory(thoiGian, nguoiThucHien, hanhDong);
+                        },
+                        error: function (error) {
+                            ToastError('Xảy ra lỗi khi hủy đơn hàng, vui lòng thử lại!')
+                            console.error('Xảy ra lỗi: ', error);
+                        }
+                    });
+                }
+            });
+        })
+
+        // reverse status
+        $('#hoanTacFromDetail').on('click', function () {
+            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            Swal.fire({
+                title: "Bạn chắc chứ?",
+                text: "Bạn đang hoàn tác đơn hàng!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Hủy",
+                confirmButtonText: "Xác Nhận"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/hoa-don/hoan-tac-detail",
+                        contentType: "application/json",
+                        data: JSON.stringify(idHoaDon),
+                        success: function (response) {
+                            ToastSuccess('Hoàn tác đơn hàng thành công');
+                            let type = 'success';
+                            let status = response.trangThaiSauUpdate;
+                            $('#hoanTacFromDetail').hide();
+                            printStatusHeader(type, status);
+                            printTimeline(status, type);
+                            printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            ToastError('Xảy ra lỗi khi hoàn tác đơn hàng, vui lòng thử lại!');
+                            console.error('Xảy ra lỗi: ', error);
+                        }
+                    });
+                }
+            });
+        })
+
+    });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
 <div th:replace="/cms/pages/_IE-suport.html"></div>
 </body>

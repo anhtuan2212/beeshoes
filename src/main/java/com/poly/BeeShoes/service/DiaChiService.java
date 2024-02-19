@@ -12,4 +12,6 @@ public interface DiaChiService {
     DiaChi detail(Long id);
     DiaChi add(DiaChi diaChi);
     DiaChi update(DiaChi diaChi, Long id);
+
+    List<DiaChi> getByIdKhachHang(Long id);
 }

@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
 </head>
 <body class="footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
@@ -32,7 +36,7 @@
 <main id="content" role="main" class="main">
     <!-- Content -->
     <div class="content container-fluid">
-        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" onsubmit="return formvalidate()"
+        <form th:action="@{/cms/nhan-vien/add}" method="post" th:object="${nhanVien}" onsubmit="return validate()"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -121,7 +125,7 @@
                                             <div class="input-group input-group-sm-down-break">
                                                 <input type="text" class="form-control" name="hoTen"
                                                        id="hoTen"
-                                                       placeholder="Nguyễn" aria-label="Nguyễn" th:field="*{hoTen}">
+                                                       placeholder="Vui lòng nhập họ tên" aria-label="Nguyễn" th:field="*{hoTen}">
                                             </div>
                                             <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập tên</i>
                                         </div>
@@ -135,7 +139,7 @@
                                         <div class="col-sm-8">
                                             <div class="input-group input-group-sm-down-break align-items-center">
                                                 <input type="text" class="js-masked-input form-control" name="phone"
-                                                       id="sdt" placeholder="+x-xxx-xxx-xxx" th:field="*{sdt}">
+                                                       id="sdt" placeholder="Vui lòng nhập sdt" th:field="*{sdt}">
                                             </div>
                                             <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
                                         </div>
@@ -161,8 +165,8 @@
                                         <!-- Select -->
                                         <div class="col-sm-8">
                                             <select class="form-control" th:field="*{trangThai}">
-                                                <option th:value="true" selected="">Hoạt động</option>
-                                                <option th:value="false">Ngừng hoạt động</option>
+                                                <option value="true">Hoạt động</option>
+                                                <option value="false">Ngừng hoạt động</option>
                                             </select>
                                             <!-- End Select -->
                                         </div>
@@ -173,8 +177,8 @@
                                         <label for="cccd" class="col-sm-4 col-form-label input-label">CCCD</label>
 
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="CCCD"
-                                                   id="cccd" placeholder="Htmlstream"
+                                            <input type="text" class="form-control" name="cccd"
+                                                   id="cccd" placeholder="Vui lòng nhập CCCD"
                                                    aria-label="Htmlstream" th:field="*{cccd}">
                                         </div>
                                         <i id="cccd_emty" style="color: red;display: none">Vui lòng nhập vào cccd</i>
@@ -188,10 +192,10 @@
                                                     <div class="custom-control custom-radio">
                                                         <input type="radio" class="custom-control-input"
                                                                name="userAccountTypeRadio"
-                                                               id="userAccountTypeRadio1" th:field="*{gioiTinh}"
+                                                               id="gioi_tinh_nam" th:field="*{gioiTinh}"
                                                                th:value="true">
                                                         <label class="custom-control-label"
-                                                               for="userAccountTypeRadio1">Nam</label>
+                                                               for="gioi_tinh_nam">Nam</label>
                                                     </div>
                                                 </div>
                                                 <!-- End Custom Radio -->
@@ -201,10 +205,10 @@
                                                     <div class="custom-control custom-radio">
                                                         <input type="radio" class="custom-control-input"
                                                                name="userAccountTypeRadio"
-                                                               id="userAccountTypeRadio2" th:field="*{gioiTinh}"
+                                                               id="gioi_tinh_nu" th:field="*{gioiTinh}"
                                                                th:value="false">
                                                         <label class="custom-control-label"
-                                                               for="userAccountTypeRadio2">Nữ</label>
+                                                               for="gioi_tinh_nu">Nữ</label>
                                                     </div>
                                                 </div>
                                                 <!-- End Custom Radio -->
@@ -221,10 +225,11 @@
 
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" name="ngaySinh"
-                                                   id="ngaySinh" placeholder="Htmlstream"
+                                                   id="ngaySinh"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
+                                            <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
                                         </div>
-                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
+
                                     </div>
                                     <!-- End Form Group -->
 
@@ -233,43 +238,49 @@
 
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" name="soNha"
-                                                   id="soNha" placeholder="Htmlstream"
+                                                   id="soNha" placeholder="Vui lòng nhập số nhà"
                                                    aria-label="Htmlstream" th:field="*{soNha}">
                                         </div>
                                         <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
                                     </div>
-
                                     <div class="row form-group">
-                                        <label for="phuongxa" class="col-sm-4 col-form-label input-label">Phường xã</label>
-
+                                        <label for="Province" class="col-sm-4 col-form-label input-label">Tỉnh/thành phố</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="phuongXa"
-                                                   id="phuongXa" placeholder="Htmlstream"
-                                                   aria-label="Htmlstream" th:field="*{phuongXa}">
+                                            <select id="Province" class="js-select2-custom custom-select"
+                                                    data-hs-select2-options='{
+                                            "placeholder": "Chọn Tỉnh Thành...",
+                                            "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'
+                                                    th:field="*{tinhThanhPho}">
+                                                <option value="">Chọn Tỉnh Thành</option>
+                                            </select>
                                         </div>
-                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
+                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
                                     </div>
                                     <div class="row form-group">
-                                        <label for="quanHuyen" class="col-sm-4 col-form-label input-label">Quận huyện</label>
-
+                                        <label for="District" class="col-sm-4 col-form-label input-label">Quận huyện</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="quanHuyen"
-                                                   id="quanHuyen" placeholder="Htmlstream"
-                                                   aria-label="Htmlstream" th:field="*{quanHuyen}">
+                                            <select id="District" class="js-select2-custom custom-select"
+                                                    data-hs-select2-options='{
+                                            "placeholder": "Chọn Quận Huyện...",
+                                            "searchInputPlaceholder": "Tìm Quận Huyện..."}'
+                                                    th:field="*{quanHuyen}">
+                                                <option value="">Chọn Quận Huyện</option>
+                                            </select>
                                         </div>
                                         <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
                                     </div>
-
                                     <div class="row form-group">
-                                        <label for="tinhTP" class="col-sm-4 col-form-label input-label">Tỉnh thành phố</label>
-
+                                        <label for="Ward" class="col-sm-4 col-form-label input-label">Phường xã</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="tinhTP"
-                                                   id="tinhTP" placeholder="Htmlstream"
-                                                   aria-label="Htmlstream" th:field="*{tinhThanhPho}">
-
+                                            <select id="Ward" class="js-select2-custom custom-select"
+                                                    data-hs-select2-options='{
+                                            "placeholder": "Chọn Phường Xã...",
+                                            "searchInputPlaceholder": "Tìm Phường Xã..."}'
+                                                    th:field="*{phuongXa}">
+                                                <option value="">Chọn Phường Xã</option>
+                                            </select>
                                         </div>
-                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
+                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +346,39 @@
 
     <!-- End Footer -->
 </main>
-<!-- ========== END MAIN CONTENT ========== -->
+
+<div class="modal fade" id="form-qr-code" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center" role="document">
+        <div class="modal-content" style="width: 70%">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="form-add-color-Label">Vui lòng đưa mã QR vào khung camera !</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="modal-body pt-0 pb-0 row justify-content-center">
+                <div style="width: 300px;height: 300px">
+                    <video id="video_show_camera" width="300" height="300" autoplay></video>
+                    <canvas id="canvas_context" width="200" height="200" style="display: none"></canvas>
+                    <audio id="sound_beep" th:src="@{/assets/cms/audio/bleep.mp3}" style="display: none"
+                           preload="auto"></audio>
+                </div>
+            </div>
+            <!-- End Body -->
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+</div>
 <!-- ========== SECONDARY CONTENTS ========== -->
 <!-- Keyboard Shortcuts -->
 <div id="keyboardShortcutsSidebar" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow">
@@ -696,39 +739,6 @@
         <!-- End Body -->
     </div>
 </div>
-<div class="modal fade" id="form-qr-code" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog d-flex justify-content-center" role="document">
-        <div class="modal-content" style="width: 70%">
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="form-add-color-Label">Vui lòng đưa mã QR vào khung camera !</h5>
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body pt-0 pb-0 row justify-content-center">
-                <div style="width: 300px;height: 300px">
-                    <video id="video_show_camera" width="300" height="300" autoplay></video>
-                    <canvas id="canvas_context" width="200" height="200" style="display: none"></canvas>
-                    <audio id="sound_beep" src="/assets/cms/audio/bleep.mp3" style="display: none"
-                           preload="auto"></audio>
-                </div>
-            </div>
-            <!-- End Body -->
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-            </div>
-            <!-- End Footer -->
-        </div>
-    </div>
-</div>
-<!-- End Keyboard Shortcuts -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
@@ -736,186 +746,7 @@
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
-<script>
-    function formvalidate(){
-        var result=true;
-        var hoTen = document.getElementById("hoTen").value;
-        var sdt = document.getElementById("sdt").value;
-        var cccd = document.getElementById("cccd").value;
-        var ngaySinh = document.getElementById("ngaySinh").value;
-        var soNha = document.getElementById("soNha").value;
-        var phuongXa = document.getElementById("phuongXa").value;
-        var quanHuyen = document.getElementById("quanHuyen").value;
-        var tinhTP = document.getElementById("tinhTP").value;
-        if(hoTen.length == 0){
-            document.getElementById("hoTen_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("hoTen_emty").style.display="none";
-        }
-        if(sdt.length == 0){
-            document.getElementById("sdt_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("sdt_emty").style.display="none";
-        }
-        if(cccd.length == 0){
-            document.getElementById("cccd_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("cccd_emty").style.display="none";
-        }
-        if(ngaySinh.length == 0){
-            document.getElementById("ngaySinh_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("ngaySinh_emty").style.display="none";
-        }
-        if(soNha.length == 0){
-            document.getElementById("soNha_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("soNha_emty").style.display="none";
-        }
-        if(quanHuyen.length == ""){
-            document.getElementById("quanHuyen_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("quanHuyen_emty").style.display="none";
-        }
-        if(phuongXa.length == ""){
-            document.getElementById("phuongXa_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("phuongXa_emty").style.display="none";
-        }
-        if(tinhTP.length == ""){
-            document.getElementById("tinhTP_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("tinhTP_emty").style.display="none";
-        }
-        return result;
-    }
-
-
-    $(document).on('ready', function () {
-        // ONLY DEV
-        // =======================================================
-
-        if (window.localStorage.getItem('hs-builder-popover') === null) {
-            $('#builderPopover').popover('show')
-                .on('shown.bs.popover', function () {
-                    $('.popover').last().addClass('popover-dark')
-                });
-
-            $(document).on('click', '#closeBuilderPopover', function () {
-                window.localStorage.setItem('hs-builder-popover', true);
-                $('#builderPopover').popover('dispose');
-            });
-        } else {
-            $('#builderPopover').on('show.bs.popover', function () {
-                return false
-            });
-        }
-
-        // END ONLY DEV
-        // =======================================================
-
-
-        // BUILDER TOGGLE INVOKER
-        // =======================================================
-        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-        });
-
-
-        // INITIALIZATION OF MEGA MENU
-        // =======================================================
-        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-            desktop: {
-                position: 'left'
-            }
-        }).init();
-
-
-        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-        // =======================================================
-        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-        // =======================================================
-        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-                return false;
-            }
-        });
-
-
-        // INITIALIZATION OF UNFOLD
-        // =======================================================
-        $('.js-hs-unfold-invoker').each(function () {
-            var unfold = new HSUnfold($(this)).init();
-        });
-
-
-        // INITIALIZATION OF FORM SEARCH
-        // =======================================================
-        $('.js-form-search').each(function () {
-            new HSFormSearch($(this)).init()
-        });
-
-
-        // INITIALIZATION OF FILE ATTACH
-        // =======================================================
-        $('.js-file-attach').each(function () {
-            var customFile = new HSFileAttach($(this)).init();
-        });
-
-
-        // INITIALIZATION OF STEP FORM
-        // =======================================================
-        $('.js-step-form').each(function () {
-            var stepForm = new HSStepForm($(this), {
-                finish: function () {
-                    $("#addUserStepFormProgress").hide();
-                    $("#addUserStepFormContent").hide();
-                    $("#successMessageContent").show();
-                }
-            }).init();
-        });
-
-
-        // INITIALIZATION OF MASKED INPUT
-        // =======================================================
-        $('.js-masked-input').each(function () {
-            var mask = $.HSCore.components.HSMask.init($(this));
-        });
-
-
-        // INITIALIZATION OF SELECT2
-        // =======================================================
-        $('.js-select2-custom').each(function () {
-            var select2 = $.HSCore.components.HSSelect2.init($(this));
-        });
-
-
-        // INITIALIZATION OF ADD INPUT FILED
-        // =======================================================
-        $('.js-add-field').each(function () {
-            new HSAddField($(this), {
-                addedField: function () {
-                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
-                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
-                    });
-                }
-            }).init();
-        });
-    });
-</script>
+<script src="/assets/cms/js/khachHangJS/nhanVien.js"></script>
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>
