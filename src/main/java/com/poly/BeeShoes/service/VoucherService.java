@@ -18,7 +18,7 @@ public interface VoucherService {
     Page<Voucher> getAllpage(Integer page);
     Page <Voucher> SearchVoucher(String key,Integer page);
 //    Page <Voucher> Searchlaoi(String loai,Integer page);
-    Page <Voucher> Searchtt(Boolean isTru,Integer page);
+    Page <Voucher> Searchtt(Integer isTru,Integer page);
     Page <Voucher> findByCreatedat(LocalDateTime startDate, LocalDateTime endDate, Integer page);
     Page <Voucher> findBysoluong(Integer  soluong1, Integer  soluong2, Integer page);
     Page <Voucher> findBytienmat(BigDecimal TienMat1, BigDecimal  TienMat2, Integer page);
@@ -26,6 +26,4 @@ public interface VoucherService {
     void updateVoucherStatus(List<Voucher> voucher);
 //    String generateVoucherCode();
 //    Voucher getByMa(String ma);
-//
-//    boolean existByMa(String ma);
 }
