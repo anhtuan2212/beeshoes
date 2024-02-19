@@ -172,7 +172,7 @@ $(document).ready(function () {
                                 </th>
                                 <th class="table-column-pr-0 pl-lg-7 " data-colum-index="7">
                                     <div class="btn-group" role="group" aria-label="Edit group">
-                                        <a class="btn btn-white remove-item" data-id="${data.id}" data-color-code-remove="${data.maMauSac}" href="javascript:;">
+                                        <a class="btn btn-white remove-item" data-id="${data.id}" data-color-code-remove="${data.maMauSac}" data-size-remove="${data.kichCo}" href="javascript:;">
                                             <i class="tio-delete-outlined"></i>
                                         </a>
                                     </div>
@@ -182,10 +182,15 @@ $(document).ready(function () {
     });
     datatable.rows.add(dataArray).draw();
     $('#sanPham').on('change', function () {
+        let selectedText = $(this).find('option:selected').text();
+        console.log(selectedText);
+        $('#sanPham_input').val(selectedText)
         $('#kichCo').val(null).trigger('change');
         $('#mauSac').val(null).trigger('change');
         datatable.clear().draw();
     })
+    let selectedText = $('#sanPham').find('option:selected').text();
+    $('#sanPham_input').val(selectedText)
 
     function getArrIndex() {
         let arrIndexRow = [];
@@ -223,8 +228,8 @@ $(document).ready(function () {
         }
     });
     setIMG();
+
     function setIMG() {
-        console.log("load")
         let mauSac = null;
         let arr = [];
         let oj = {};
@@ -259,15 +264,16 @@ $(document).ready(function () {
             $(element).remove();
         });
     }
+
     function resetRowData() {
-        let data =datatable.data();
+        let data = datatable.data();
         datatable.clear().draw();
         datatable.rows.add(data).draw();
         setIMG();
     }
+
     datatable.on('draw.dt', function () {
         setIMG();
-        console.log("draw in d")
     });
 
 
@@ -342,6 +348,10 @@ $(document).ready(function () {
         console.log("draw in add")
     });
 
+    function containsAlphabetic(str) {
+        return /[a-zA-Z]/.test(str);
+    }
+
 
     $(document).on('click', '.remove-item', async function () {
         Swal.fire({
@@ -356,6 +366,9 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 let id = $(this).data('id');
+                let dtColor = $(this).data('color-code-remove');
+                let dtSize = $(this).data('size-remove');
+                console.log(this)
                 let mau = $(this).data('color-code-remove');
                 let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
                 if (size > 1) {
@@ -384,18 +397,18 @@ $(document).ready(function () {
                     datatable.row(rowIndex).remove().draw();
                     $(this).closest('tr').remove();
                 }
-                DeleteCTSP(id)
+                DeleteCTSP(id, dtColor, dtSize)
                 resetRowData()
             }
         });
     });
 
-    function DeleteCTSP(id) {
+    function DeleteCTSP(id, color, size) {
         $.ajax({
             url: "/api/xoa-chi-tiet-san-pham",
             type: "DELETE",
             data: {
-                id: id
+                id: id, color: color, size: size
             },
             success: function () {
                 ToastSuccess("Xóa thành công.")
@@ -482,6 +495,7 @@ $(document).ready(function () {
 
     $('#save-product-detail').on('click', function () {
         let sanPham = $('#sanPham').val();
+        let tenSanPham = $('#sanPham_input').val();
         let theLoai = $('#theLoai').val();
         let thuongHieu = $('#thuongHieu').val();
         let chatLieu = $('#chatLieu').val();
@@ -496,6 +510,11 @@ $(document).ready(function () {
         if (isEmpty(sanPham)) {
             ToastError("Vui lòng chọn Sản Phẩm !")
             $('#sanPham').focus();
+            return;
+        }
+        if (isEmpty(tenSanPham)) {
+            ToastError("Vui lòng nhập tên sản phẩm !")
+            $('#sanPham_input').focus();
             return;
         }
         if (isEmpty(theLoai)) {
@@ -587,6 +606,7 @@ $(document).ready(function () {
                 url: "/api/chi-tiet-san-pham",
                 data: {
                     sanPham: sanPham,
+                    tenSanPham: tenSanPham,
                     theLoai: theLoai,
                     thuongHieu: thuongHieu,
                     chatLieu: chatLieu,

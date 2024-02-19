@@ -161,7 +161,9 @@
     table-layout: fixed;
     width: 100%; /* Đặt chiều rộng của bảng */
 }
-
+.swal2-timer-progress-bar{
+    background-color: #a5dc86;
+}
 .table-row {
     display: table-row;
     direction: rtl; /* Đặt hướng của văn bản về bên phải */

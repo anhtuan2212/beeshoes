@@ -61,6 +61,9 @@ public class Product {
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
+        if (ctspRequest.getTenSanPham().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "NameProNull").body(null);
+        }
         if (productdetail.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "OptionNull").body(null);
         }
@@ -89,6 +92,8 @@ public class Product {
 
         }
         SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
+        sp.setTen(ctspRequest.getTenSanPham());
+        sp = sanPhamService.save(sp);
         ChatLieu cl = chatLieuService.getById(ctspRequest.getChatLieu());
         ThuongHieu th = thuongHieuService.getById(ctspRequest.getThuongHieu());
         TheLoai tl = theLoaiService.getById(ctspRequest.getTheLoai());
@@ -160,11 +165,28 @@ public class Product {
     }
 
     @DeleteMapping("/xoa-chi-tiet-san-pham")
-    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("id") String id) {
+    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("id") String id, @RequestParam("color") String color, @RequestParam("size") String size) {
         if (id.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
         }
-        boolean st = chiTietSanPhamService.delete(Long.parseLong(id));
+        ChiTietSanPham chiTietSanPham=null;
+        if (!LibService.containsAlphabetic(id)){
+         chiTietSanPham = chiTietSanPhamService.getById(Long.parseLong(id));
+        }
+        if (LibService.containsAlphabetic(id)) {
+            MauSac mauSac = mauSacService.getMauSacByMa(color);
+            KichCo kichCo = kichCoService.getByTen(size);
+            chiTietSanPham = chiTietSanPhamService.getBySizeAndColor(kichCo, mauSac);
+            if (chiTietSanPham == null) {
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            }
+        }
+        int num = chiTietSanPham.getSanPham().getChiTietSanPham().size();
+        if (num == 1) {
+            chiTietSanPham.getSanPham().setTrangThai(false);
+            sanPhamService.save(chiTietSanPham.getSanPham());
+        }
+        boolean st = chiTietSanPhamService.delete(chiTietSanPham.getId());
         if (st) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {

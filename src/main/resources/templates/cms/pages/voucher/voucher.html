@@ -379,7 +379,8 @@
                             <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayBatDau, 'yyyy-MM-dd | HH:mm')}"></td>
                             <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayKetThuc, 'yyyy-MM-dd | HH:mm')}"></td>
                             <td>[[${voucher.dieuKien}]]</td>
-                            <td>[[${voucher.trangThai == true ? 'Còn hoạt động' : (voucher.trangThai == false ? 'Ngưng hoạt động' : 'Sắp diễn ra')}]]</td>
+                            <td>[[${voucher.trangThai}]]</td>
+
 
                             <td>
                                 <div class="btn-group" role="group">

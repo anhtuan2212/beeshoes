@@ -155,13 +155,13 @@ public class ViewProductController {
             ctsp.setCoGiay(cg);
             ctsp.setMuiGiay(mg);
             ctsp.setSale(ctspRequest.isSales());
-            System.out.println(ctsp.isSale());
             ctsp.setSanPham(sanPham);
             ctsp.setGiaGoc(LibService.convertStringToBigDecimal(productdetail.get(i).getGiaGoc()));
             ctsp.setGiaNhap(LibService.convertStringToBigDecimal("0"));
             ctsp.setGiaBan(LibService.convertStringToBigDecimal(productdetail.get(i).getGiaBan()));
             ctsp.setSoLuongTon(productdetail.get(i).getSoLuong());
-            ctsp.setTrangThai(productdetail.get(i).isTrangThai() == true ? 1 : 0);
+            ctsp.setTrangThai(productdetail.get(i).getTrangThai());
+            System.out.println(productdetail.get(i).getTrangThai());
             chiTietSanPhamService.save(ctsp);
         }
         return ResponseEntity.status(HttpStatus.OK).header("success", "ok").body(null);

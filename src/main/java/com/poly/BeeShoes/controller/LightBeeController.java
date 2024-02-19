@@ -10,4 +10,8 @@ public class LightBeeController {
     public String indexLightBee(){
         return "customer/index";
     }
+    @GetMapping({"/checkout","/checkout/"})
+    public String checkout(){
+        return "customer/pages/shop/checkout";
+    }
 }

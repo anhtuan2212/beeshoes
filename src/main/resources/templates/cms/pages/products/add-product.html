@@ -19,8 +19,9 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+
 </head>
-<body class="   footer-offset">
+<body class="footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 <!-- ONLY DEV -->
 <!-- ========== HEADER ========== -->
@@ -67,7 +68,7 @@
                     <div class="card-body">
                         <!-- Form Group -->
                         <div class="row">
-                            <div class="form-group col-10 col-sm-10 col-md-11 ">
+                            <div id="showSelectedProduct" class="form-group col-10 col-sm-10 col-md-11">
                                 <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
                                 <select class="js-select2-custom custom-select" name="sanPham" id="sanPham" size="1"
                                         style="opacity: 0;"
@@ -81,7 +82,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-1 col-md-1 col-sm-1 col-sm-auto p-0">
+                            <div id="btn_add_new_product" class="col-1 col-md-1 col-sm-1 col-sm-auto p-0">
                                 <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                         data-placement="top"
                                         title="Thêm Sản Phẩm.">
@@ -90,6 +91,10 @@
                                         <i class="tio-add-circle"></i>
                                     </a>
                                 </button>
+                            </div>
+                            <div id="showInputProduct" class="form-group col-12 col-sm-12 col-md-12 d-none">
+                                <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
+                                <input class="form-control" name="sanPham" id="sanPham_input" th:value="${sanPham == null ?'':sanPham.getTen()}">
                             </div>
                         </div>
                         <!-- End Form Group -->
@@ -671,6 +676,13 @@
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+<th:block th:if="${editproduct!=null and editproduct==1}">
+    <script>
+        $('#showSelectedProduct').addClass('d-none');
+        $('#btn_add_new_product').addClass('d-none');
+        $('#showInputProduct').removeClass('d-none');
+    </script>
+</th:block>
 <script>
     $(document).ready(function () {
         $(document).on('click', '.js-plus, .js-minus', function () {
@@ -685,10 +697,10 @@
         });
 
         $(document).on('input', '.money-input-mask', function () {
-            $(this).mask('#.###đ', {reverse: true});
+            $(this).mask('#.###.###.###đ', {reverse: true});
         });
         $(document).on('input', '.money-input-mask-num', function () {
-            $(this).mask('#.###', {reverse: true});
+            $(this).mask('#.###.###.###', {reverse: true});
         });
     });
 </script>
