@@ -432,6 +432,7 @@
                             <td>[[${voucher.ten}]]</td>
                             <td th:text="${voucher.loaiVoucher == '%' ? 'Phần trăm' : 'Tiền mặt'}"></td>
                             <td>[[${voucher.soLuong}]]</td>
+
                             <th:block th:if="${voucher.loaiVoucher=='$'}">
                                 <td th:text="${#numbers.formatDecimal(voucher.giaTriTienMat, 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ' "></td>
                             </th:block>
@@ -452,6 +453,7 @@
                               <span th:case="4">Hủy voucher</span>
                                  </span>
                             </td>
+
                             <td>
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm "

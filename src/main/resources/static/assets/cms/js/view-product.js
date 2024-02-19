@@ -26,6 +26,7 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
+
 function showLoader() {
     Swal.fire({
         title: 'Đang xử lý...',
@@ -40,10 +41,11 @@ function showLoader() {
 function hideLoader() {
     Swal.close();
 }
+
 $(document).ready(function () {
     // INITIALIZATION OF FANCYBOX
     // =======================================================
-    $('.js-fancybox').each(function() {
+    $('.js-fancybox').each(function () {
         var fancybox = $.HSCore.components.HSFancyBox.init($(this));
     })
 
@@ -60,10 +62,10 @@ $(document).ready(function () {
         }
     });
     $(document).on('input', '.money-input-mask', function () {
-        $(this).mask('#.###đ', {reverse: true});
+        $(this).mask('#.###.###.###đ', {reverse: true});
     });
     $(document).on('input', '.money-input-mask-num', function () {
-        $(this).mask('#.###', {reverse: true});
+        $(this).mask('#.###.###.###', {reverse: true});
     });
 });
 $(document).on('ready', function () {
@@ -228,9 +230,9 @@ $(document).on('ready', function () {
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td data-colum-index="8">
                                <label class="toggle-switch form-edit d-flex align-items-center" for="customSwitch${data.id}">
-                                    <input type="checkbox" class="toggle-switch-input" id="customSwitch${data.id}" ${data.trangThai == true?'checked':''} disabled>
+                                    <input type="checkbox" class="toggle-switch-input" id="customSwitch${data.id}" ${data.trangThai == true ? 'checked' : ''} disabled>
                                          <span class="toggle-switch-label">
                                              <span class="toggle-switch-indicator"></span>
                                          </span>
@@ -315,6 +317,9 @@ $(document).on('ready', function () {
         let name = $(this).attr('name');
         let columnIndex = $(this).closest('td').data('colum-index');
         var newValue = $(this).val();
+        if (columnIndex == 8) {
+            newValue = $(this).prop('checked') == true ? '1' : '0';
+        }
         let arr = getArrIndex();
         if (columnIndex > 4) {
             let st = arr.some(function (item) {
@@ -332,7 +337,11 @@ $(document).on('ready', function () {
             $('#btn-save').removeClass('d-none');
         }
     });
-
+    $('.toggle-switch-input').on('change', function () {
+            if (getArrIndex()==null){
+                $(this).closest()
+            }
+    })
 
     $('.edit-item').on('click', function () {
         var row = $(this).closest('tr');
@@ -366,6 +375,9 @@ $(document).on('ready', function () {
     $('#btn-edit-product').on('click', function () {
         $('#edit-thuoc-tinh').removeClass('d-none')
         $('#view-thuoc-tinh').addClass('d-none')
+        $('#btn-save').removeClass('d-none');
+    })
+    $('.toggle-switch-input').on('change', function () {
         $('#btn-save').removeClass('d-none');
     })
     setIMG();
@@ -421,6 +433,7 @@ $(document).on('ready', function () {
     function isEmpty(str) {
         return (!str || str.length === 0);
     }
+
     function convertToNumber(text) {
         text = text.replace(/[.,]/g, "");
         text = text.replace(/[a-zA-Z]/g, "");

@@ -6,7 +6,8 @@
                 <div class="navbar-brand-wrapper justify-content-between">
                     <!-- Logo -->
                     <a class="navbar-brand" href="/cms/" aria-label="Front">
-                        <img class="navbar-brand-logo" src="/assets/cms/svg/logos/logo-color-no-background.png" style="width: 9.5rem" alt="Logo">
+                        <img class="navbar-brand-logo" src="/assets/cms/svg/logos/logo-color-no-background.png"
+                             style="width: 9.5rem" alt="Logo">
                         <img class="navbar-brand-logo-mini" src="/assets/cms/svg/logos/logo-short.svg" alt="Logo">
                     </a>
                     <!-- End Logo -->
@@ -21,10 +22,10 @@
 
                 <!-- Content -->
                 <div class="navbar-vertical-content">
-                    <ul class="navbar-nav navbar-nav-lg nav-tabs">
+                    <ul id="siderbar" class="navbar-nav navbar-nav-lg nav-tabs">
                         <!-- Dashboards -->
-                        <li class="nav-item show">
-                            <a class="js-nav-tooltip-link nav-link active" href="/cms/"
+                        <li class="nav-item">
+                            <a id="dashboards" class="js-nav-tooltip-link nav-link" href="/cms/"
                                title="Dashboards">
                                 <i class="tio-home-vs-1-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Dashboards</span>
@@ -37,82 +38,89 @@
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
                         <li class="nav-item">
-                            <a class="js-nav-tooltip-link nav-link" href="layouts.html" title="" data-placement="left" data-original-title="Layouts">
-                                <i class="tio-dashboard-vs-outlined nav-icon"></i>
+                            <a id="ban_hang" class="js-nav-tooltip-link nav-link" href="layouts.html" title=""
+                               data-placement="left" data-original-title="Layouts">
+                                <i class="tio-shop-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Bán Hàng</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="js-nav-tooltip-link nav-link" href="/cms/hoa-don" title="" data-placement="left" data-original-title="Layouts">
-                                <i class="tio-dashboard-vs-outlined nav-icon"></i>
+                            <a id="quan_ly_don_hang" class="js-nav-tooltip-link nav-link" href="/cms/hoa-don" title=""
+                               data-placement="left" data-original-title="Layouts">
+                                <i class="tio-receipt-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Quản Lý Đơn Hàng</span>
                             </a>
                         </li>
                         <!-- Sản Phẩm -->
-                        <li class="navbar-vertical-aside-has-menu ">
+                        <li id="li_san_pham" class="navbar-vertical-aside-has-menu">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
                                title="Sản Phẩm">
-                                <i class="tio-pages-outlined nav-icon"></i>
+                                <i class="tio-format-points nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Sản Phẩm</span>
                             </a>
 
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
                                 <li class="nav-item">
-                                    <a class="nav-link " href="/cms/product" title="Sản Phẩm">
+                                    <a id="san_pham" class="nav-link " href="/cms/product" title="Sản Phẩm">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">Sản Phẩm</span>
                                     </a>
                                 </li>
-                                <li class="navbar-vertical-aside-has-menu">
-                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:;" title="Thuộc Tính">
+                                <li id="li_thuoc_tinh" class="navbar-vertical-aside-has-menu">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+                                       href="javascript:;" title="Thuộc Tính">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">Thuộc Tính</span>
                                     </a>
-                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display: none; top: 83.6px;">
+                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                        style="display: none; top: 83.6px;">
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-material" title="Chất Liệu">
+                                            <a id="chat_lieu" class="nav-link" href="/cms/shoe-material"
+                                               title="Chất Liệu">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Chất Liệu</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-color" title="Chất Liệu">
+                                            <a id="mau_sac" class="nav-link " href="/cms/shoe-color" title="Màu Sắc">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Màu Sắc</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-size" title="Chất Liệu">
+                                            <a id="kich_co" class="nav-link " href="/cms/shoe-size" title="Kích Cỡ">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Kích Cỡ</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-brand" title="Thương Hiệu">
+                                            <a id="thuong_hieu" class="nav-link " href="/cms/shoe-brand"
+                                               title="Thương Hiệu">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Thương Hiệu</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-category" title="Thể Loại">
+                                            <a id="the_loai" class="nav-link " href="/cms/shoe-category"
+                                               title="Thể Loại">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate"> Thể Loại</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-sole" title="Đế Giày">
+                                            <a id="de_giay" class="nav-link " href="/cms/shoe-sole" title="Đế Giày">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Đế Giày</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-toe" title="Mũi Giày">
+                                            <a id="mui_giay" class="nav-link " href="/cms/shoe-toe" title="Mũi Giày">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Mũi Giày</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="/cms/shoe-collar" title="Cổ Giày">
+                                            <a id="co_giay" class="nav-link " href="/cms/shoe-collar" title="Cổ Giày">
                                                 <span class="tio-circle-outlined nav-indicator-icon"></span>
                                                 <span class="text-truncate">Cổ Giày</span>
                                             </a>
@@ -126,11 +134,17 @@
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
                                title="Pages">
-                                <i class="tio-pages-outlined nav-icon"></i>
-                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">User</span>
+                                <i class="tio-user-big-outlined nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Tài Khoản</span>
                             </a>
 
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                <li class="nav-item">
+                                    <a class="nav-link " th:href="@{/cms/chuc-vu}" title="Referrals">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Chức vụ</span>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Referrals">
                                         <span class="tio-circle nav-indicator-icon"></span>
@@ -150,7 +164,7 @@
                         <li class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
                                title="Pages">
-                                <i class="tio-pages-outlined nav-icon"></i>
+                                <i class="tio-ticket nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Voucher</span>
                             </a>
 
@@ -162,7 +176,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " href="/cms/voucher"  title="Referrals">
+                                    <a class="nav-link " href="/cms/voucher" title="Referrals">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">Quản Lý Voucher</span>
                                     </a>
@@ -179,7 +193,7 @@
                     <ul class="navbar-vertical-footer-list">
                         <li class="navbar-vertical-footer-list-item">
                             <!-- Unfold -->
-<!--                            CONTENT FOOTER-->
+                            <!--                            CONTENT FOOTER-->
                             <!-- End Unfold -->
                         </li>
                     </ul>
@@ -189,31 +203,41 @@
         </div>
     </aside>
 </div>
-
+<script>
+    function activeSiderbar(id, idCha,idOng) {
+        $('#' + id).addClass('active').closest('li.nav-item').addClass('show')
+        if (idCha.length > 0) {
+            $('#' + idCha).addClass('show')
+        }
+        if (idOng.length > 0) {
+            $('#' + idOng).addClass('show')
+        }
+    }
+</script>
 <div id="sidebarCompact" class="d-none">
 </div>
-    <!--    CHƯA RÕ LÝ DO SAU KHI XÓA ĐI ĐOẠN CODE NÀY SIDEBAR SẼ BỊ LỖI HIỂN THỊ-->
-    <!-- Builder -->
-    <div id="styleSwitcherDropdown" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow"
-         style="width: 35rem;">
-        <div class="card card-lg border-0 h-100">
-            <!-- Footer -->
-            <div class="card-footer">
-                <div class="row gx-2">
-                    <div class="col">
-                        <button type="button" id="js-builder-reset" class="btn btn-block btn-lg btn-white">
-                            <i class="tio-restore"></i> Reset
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button type="button" id="js-builder-preview" class="btn btn-block btn-lg btn-primary">
-                            <i class="tio-visible"></i> Preview
-                        </button>
-                    </div>
+<!--    CHƯA RÕ LÝ DO SAU KHI XÓA ĐI ĐOẠN CODE NÀY SIDEBAR SẼ BỊ LỖI HIỂN THỊ-->
+<!-- Builder -->
+<div id="styleSwitcherDropdown" class="hs-unfold-content sidebar sidebar-bordered sidebar-box-shadow"
+     style="width: 35rem;">
+    <div class="card card-lg border-0 h-100">
+        <!-- Footer -->
+        <div class="card-footer">
+            <div class="row gx-2">
+                <div class="col">
+                    <button type="button" id="js-builder-reset" class="btn btn-block btn-lg btn-white">
+                        <i class="tio-restore"></i> Reset
+                    </button>
                 </div>
-                <!-- End Row -->
+                <div class="col">
+                    <button type="button" id="js-builder-preview" class="btn btn-block btn-lg btn-primary">
+                        <i class="tio-visible"></i> Preview
+                    </button>
+                </div>
             </div>
-            <!-- End Footer -->
+            <!-- End Row -->
         </div>
+        <!-- End Footer -->
     </div>
-    <!-- End Builder -->
+</div>
+<!-- End Builder -->

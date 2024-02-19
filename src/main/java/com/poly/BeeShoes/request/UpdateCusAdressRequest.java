@@ -1,16 +1,14 @@
-package com.poly.BeeShoes.dto;
+package com.poly.BeeShoes.request;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class DiaChiDto {
+public class UpdateCusAdressRequest {
     private String soNhaDto;
     private String phuongXaDto;
     private String quanHuyenDto;
     private String tinhThanhPhoDto;
-    private Long idKH;
+    private Long id;
 }

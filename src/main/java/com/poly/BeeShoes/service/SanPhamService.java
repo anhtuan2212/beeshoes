@@ -21,6 +21,6 @@ public interface SanPhamService {
     boolean exitsByThuongHieu(ThuongHieu th);
     Page<SanPham> getAllShop(Pageable pageable);
     boolean delete(Long id);
-
+    List<SanPham> getSanPhamEmtyCTSP();
     Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
 }

@@ -106,19 +106,19 @@
 
     <div class="tab-content mt-2">
       <div class="tab-pane fade show active" id="all">
-        <div th:include="~{/cms/pages/orders/hoa-don/_tat-ca.html}"></div>
+        <div th:insert="~{/cms/pages/orders/hoa-don/_tat-ca.html}"></div>
       </div>
       <div class="tab-pane fade" id="choxacnhan">
-        <div th:include="~{/cms/pages/orders/hoa-don/_cho-xac-nhan.html}"></div>
+        <div th:insert="~{/cms/pages/orders/hoa-don/_cho-xac-nhan.html}"></div>
       </div>
       <div class="tab-pane fade" id="chogiao">
-        <div th:include="~{/cms/pages/orders/hoa-don/_cho-giao.html}"></div>
+        <div th:insert="~{/cms/pages/orders/hoa-don/_cho-giao.html}"></div>
       </div>
       <div class="tab-pane fade" id="danggiao">
-        <div th:include="~{/cms/pages/orders/hoa-don/_dang-giao.html}"></div>
+        <div th:insert="~{/cms/pages/orders/hoa-don/_dang-giao.html}"></div>
       </div>
       <div class="tab-pane fade" id="thanhcong">
-        <div th:include="~{/cms/pages/orders/hoa-don/_thanh-cong.html}"></div>
+        <div th:insert="~{/cms/pages/orders/hoa-don/_thanh-cong.html}"></div>
       </div>
     </div>
   </div>
@@ -729,7 +729,7 @@
       datatable.button('.buttons-print').trigger()
     });
 
-    $('#loaiHoaDon, #ngayTao, #trangThai, #tongTien').on('change', function () {
+    $('#loaiHoaDon, #trangThai').on('change', function () {
       var loaiHoaDonValue = $('#loaiHoaDon').val();
       var loaiHoaDonFilter = (loaiHoaDonValue === 'all') ? '' : (loaiHoaDonValue === 'true' ? 'Bán Tại Quầy' : 'Bán Giao Hàng');
       datatable.columns(5).search(loaiHoaDonFilter).draw();
@@ -737,28 +737,26 @@
       var trangThaiValue = $('#trangThai').val();
       var trangThaiFilter = (trangThaiValue === 'all' ? '' : trangThaiValue);
       datatable.columns(6).search(trangThaiFilter).draw();
-
-      var tongTienValue = $('#tongTien').val();
-      if(tongTienValue === 'all') {
-        datatable.columns(4).search('').draw();
-      } else {
-        var minValue = tongTienValue.split('-')[0];
-        var maxValue = tongTienValue.split('-')[1];
-        var colValue = datatable.columns(4).data;
-        colValue.forEach(val => function (val) {
-          var itemArr = val.split(',');
-          var itemVal = '';
-          if(itemArr.length === 2) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1]));
-          } else if (itemArr.length === 3) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1].concat(itemArr[2])));
-          }
-          if(itemVal > minValue && itemVal < maxValue) {
-            datatable.columns(4).search(val).draw();
-          }
-        });
-      }
     })
+
+    var table = $('#datatable').DataTable();
+
+    $('#tongTien').on('change', function () {
+      const tongTien = $('#tongTien');
+      console.log(123)
+      let priceRange = tongTien.val().split("-");
+      minPrice = parseFloat(priceRange[0]);
+      maxPrice = parseFloat(priceRange[1]);
+      // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+      $.fn.dataTable.ext.search.pop();
+      // Thêm hàm lọc mới
+      $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        let price = parseFloat(data[4].replace(/,/g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+        return (price >= minPrice && price <= maxPrice);
+      });
+      table.draw();
+      // }
+    });
 
     $('#datatableSearch').on('mouseup', function (e) {
       var $input = $(this),
@@ -872,32 +870,30 @@
       datatableCXN.button('.buttons-print').trigger()
     });
 
-    $('#loaiHoaDonCXN, #tongTienCXN').on('change', function () {
+    $('#loaiHoaDonCXN').on('change', function () {
       var loaiHoaDonValue = $('#loaiHoaDonCXN').val();
       var loaiHoaDonFilter = (loaiHoaDonValue === 'all') ? '' : (loaiHoaDonValue === 'true' ? 'Bán Tại Quầy' : 'Bán Giao Hàng');
       datatableCXN.columns(6).search(loaiHoaDonFilter).draw();
-
-      var tongTienValue = $('#tongTienCXN').val();
-      if(tongTienValue === 'all') {
-        datatableCXN.columns(5).search('').draw();
-      } else {
-        var minValue = tongTienValue.split('-')[0];
-        var maxValue = tongTienValue.split('-')[1];
-        var colValue = datatable.columns(5).data;
-        colValue.forEach(val => function (val) {
-          var itemArr = val.split(',');
-          var itemVal = '';
-          if(itemArr.length === 2) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1]));
-          } else if (itemArr.length === 3) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1].concat(itemArr[2])));
-          }
-          if(itemVal > minValue && itemVal < maxValue) {
-            datatableCXN.columns(5).search(val).draw();
-          }
-        });
-      }
     })
+
+    var tableCXN = $('#datatableCXN').DataTable();
+
+    $('#tongTienCXN').on('change', function () {
+      const tongTienCXN = $('#tongTienCXN');
+      console.log(123)
+      let priceRange = tongTienCXN.val().split("-");
+      minPrice = parseFloat(priceRange[0]);
+      maxPrice = parseFloat(priceRange[1]);
+      // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+      $.fn.dataTable.ext.search.pop();
+      // Thêm hàm lọc mới
+      $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        let price = parseFloat(data[5].replace(/,/g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+        return (price >= minPrice && price <= maxPrice);
+      });
+      tableCXN.draw();
+      // }
+    });
 
     $('#datatableSearchCXN').on('mouseup', function (e) {
       var $input = $(this),
@@ -949,7 +945,7 @@
 
     // INITIALIZATION OF DATATABLES
     // =======================================================
-    // Hóa đơn chờ xác nhận
+    // Hóa đơn chờ giao
     var datatableCG = $.HSCore.components.HSDatatables.init($('#datatableCG'), {
       dom: 'Bfrtip',
       buttons: [
@@ -1011,32 +1007,30 @@
       datatableCG.button('.buttons-print').trigger()
     });
 
-    $('#loaiHoaDonCG, #tongTienCG').on('change', function () {
+    $('#loaiHoaDonCG').on('change', function () {
       var loaiHoaDonValue = $('#loaiHoaDonCG').val();
       var loaiHoaDonFilter = (loaiHoaDonValue === 'all') ? '' : (loaiHoaDonValue === 'true' ? 'Bán Tại Quầy' : 'Bán Giao Hàng');
       datatableCG.columns(6).search(loaiHoaDonFilter).draw();
-
-      var tongTienValue = $('#tongTienCG').val();
-      if(tongTienValue === 'all') {
-        datatableCG.columns(5).search('').draw();
-      } else {
-        var minValue = tongTienValue.split('-')[0];
-        var maxValue = tongTienValue.split('-')[1];
-        var colValue = datatableCG.columns(5).data;
-        colValue.forEach(val => function (val) {
-          var itemArr = val.split(',');
-          var itemVal = '';
-          if(itemArr.length === 2) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1]));
-          } else if (itemArr.length === 3) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1].concat(itemArr[2])));
-          }
-          if(itemVal > minValue && itemVal < maxValue) {
-            datatableCG.columns(5).search(val).draw();
-          }
-        });
-      }
     })
+
+    var tableCG = $('#datatableCG').DataTable();
+
+    $('#tongTienCG').on('change', function () {
+      const tongTienCG = $('#tongTienCG');
+      console.log(123)
+      let priceRange = tongTienCG.val().split("-");
+      minPrice = parseFloat(priceRange[0]);
+      maxPrice = parseFloat(priceRange[1]);
+      // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+      $.fn.dataTable.ext.search.pop();
+      // Thêm hàm lọc mới
+      $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        let price = parseFloat(data[5].replace(/,/g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+        return (price >= minPrice && price <= maxPrice);
+      });
+      tableCG.draw();
+      // }
+    });
 
     $('#datatableSearchCG').on('mouseup', function (e) {
       var $input = $(this),
@@ -1150,32 +1144,30 @@
       datatableDG.button('.buttons-print').trigger()
     });
 
-    $('#loaiHoaDonDG, #tongTienDG').on('change', function () {
+    $('#loaiHoaDonDG').on('change', function () {
       var loaiHoaDonValue = $('#loaiHoaDonDG').val();
       var loaiHoaDonFilter = (loaiHoaDonValue === 'all') ? '' : (loaiHoaDonValue === 'true' ? 'Bán Tại Quầy' : 'Bán Giao Hàng');
       datatableDG.columns(6).search(loaiHoaDonFilter).draw();
-
-      var tongTienValue = $('#tongTienDG').val();
-      if(tongTienValue === 'all') {
-        datatableDG.columns(5).search('').draw();
-      } else {
-        var minValue = tongTienValue.split('-')[0];
-        var maxValue = tongTienValue.split('-')[1];
-        var colValue = datatableDG.columns(5).data;
-        colValue.forEach(val => function (val) {
-          var itemArr = val.split(',');
-          var itemVal = '';
-          if(itemArr.length === 2) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1]));
-          } else if (itemArr.length === 3) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1].concat(itemArr[2])));
-          }
-          if(itemVal > minValue && itemVal < maxValue) {
-            datatableDG.columns(5).search(val).draw();
-          }
-        });
-      }
     })
+
+    var tableDG = $('#datatableDG').DataTable();
+
+    $('#tongTienDG').on('change', function () {
+      const tongTienDG = $('#tongTienDG');
+      console.log(123)
+      let priceRange = tongTienDG.val().split("-");
+      minPrice = parseFloat(priceRange[0]);
+      maxPrice = parseFloat(priceRange[1]);
+      // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+      $.fn.dataTable.ext.search.pop();
+      // Thêm hàm lọc mới
+      $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        let price = parseFloat(data[5].replace(/,/g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+        return (price >= minPrice && price <= maxPrice);
+      });
+      tableDG.draw();
+      // }
+    });
 
     $('#datatableSearchDG').on('mouseup', function (e) {
       var $input = $(this),
@@ -1289,32 +1281,34 @@
       datatableTC.button('.buttons-print').trigger()
     });
 
-    $('#loaiHoaDonTC, #tongTienTC').on('change', function () {
+    $('#loaiHoaDonTC').on('change', function () {
       var loaiHoaDonValue = $('#loaiHoaDonTC').val();
       var loaiHoaDonFilter = (loaiHoaDonValue === 'all') ? '' : (loaiHoaDonValue === 'true' ? 'Bán Tại Quầy' : 'Bán Giao Hàng');
       datatableTC.columns(5).search(loaiHoaDonFilter).draw();
-
-      var tongTienValue = $('#tongTienTC').val();
-      if(tongTienValue === 'all') {
-        datatableTC.columns(4).search('').draw();
-      } else {
-        var minValue = tongTienValue.split('-')[0];
-        var maxValue = tongTienValue.split('-')[1];
-        var colValue = datatableTC.columns(4).data;
-        colValue.forEach(val => function (val) {
-          var itemArr = val.split(',');
-          var itemVal = '';
-          if(itemArr.length === 2) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1]));
-          } else if (itemArr.length === 3) {
-            itemVal = parseInt(itemArr[0].concat(itemArr[1].concat(itemArr[2])));
-          }
-          if(itemVal > minValue && itemVal < maxValue) {
-            datatableTC.columns(4).search(val).draw();
-          }
-        });
-      }
     })
+
+    var tableTC = $('#datatableTC').DataTable();
+    
+    $('#tongTienTC').on('change', function () {
+      const tongTienTC = $('#tongTienTC');
+      // if(tongTienTC.val() == 'all') {
+      //   $.fn.dataTable.ext.search.pop();
+      //   // datatableTC.columns(4).search('').draw();
+      // } else {
+        console.log(123)
+        let priceRange = tongTienTC.val().split("-");
+        minPrice = parseFloat(priceRange[0]);
+        maxPrice = parseFloat(priceRange[1]);
+        // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+        $.fn.dataTable.ext.search.pop();
+        // Thêm hàm lọc mới
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+          let price = parseFloat(data[4].replace(/,/g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+          return (price >= minPrice && price <= maxPrice);
+        });
+        tableTC.draw();
+      // }
+    });
 
     $('#datatableSearchTC').on('mouseup', function (e) {
       var $input = $(this),

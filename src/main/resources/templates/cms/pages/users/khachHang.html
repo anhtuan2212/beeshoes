@@ -40,10 +40,9 @@
                 <div class="col-sm mb-2 mb-sm-0">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-no-gutter">
-                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Pages</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Khách hàng</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Overview</li>
                         </ol>
                     </nav>
 
@@ -77,7 +76,7 @@
                                     </div>
                                 </div>
                                 <input id="datatableSearch" type="search" class="form-control"
-                                       placeholder="Tìm kiếm" aria-label="Tìm kiếm">
+                                       placeholder="Tìm kiếm theo Họ Tên, Sđt" aria-label="Tìm kiếm">
                             </div>
                             <!-- End Search -->
                         </div>
@@ -94,21 +93,38 @@
                         </div>
                     </div>
                     <br>
-                    <div class="col-6">
-                        <label>Trạng thái</label>
-                        <!-- Select -->
-                        <select id="trangThai" class="js-select2-custom custom-select-sm form-control" size="1" style="opacity: 0;"
-                                data-hs-select2-options='{
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Trạng thái</label>
+                            <!-- Select -->
+                            <select id="trangThai" class="js-select2-custom custom-select-sm form-control" size="1" style="opacity: 0;"
+                                    data-hs-select2-options='{
                                                       "minimumResultsForSearch": "Infinity",
                                                       "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
-                                                      "dropdownAutoWidth": true,
-                                                      "width": true
+                                                      "dropdownAutoWidth": true
                                                     }'>
-                            <option value="all" selected>Tất cả</option>
-                            <option value="Hoạt động">Hoạt động</option>
-                            <option value="Ngừng hoạt động">Ngừng hoạt động</option>
-                        </select>
+                                <option value="all" selected>Tất cả</option>
+                                <option value="Hoạt động">Hoạt động</option>
+                                <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label>Giới tính</label>
+                            <!-- Select -->
+                            <select id="gioiTinh" class="js-select2-custom custom-select-sm form-control" size="1" style="opacity: 0;"
+                                    data-hs-select2-options='{
+                                                      "minimumResultsForSearch": "Infinity",
+                                                      "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
+                                                      "dropdownAutoWidth": true
+                                                    }'>
+                                <option value="all" selected>Tất cả</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
                     </div>
+
 
                 </div>
             </div>
@@ -2584,10 +2600,13 @@
             }
         });
 
-        $('#trangThai').on('change', function () {
+        $('#trangThai, #gioiTinh').on('change', function () {
             var trangThaiValue = $('#trangThai').val();
             var trangThaiFilter = (trangThaiValue === 'all') ? '' : trangThaiValue;
+            var gioiTinhValue = $('#gioiTinh').val();
+            var gioiTinhFilter = (gioiTinhValue === 'all') ? '' : gioiTinhValue;
             datatable.columns(7).search(trangThaiFilter).draw();
+            datatable.columns(6).search(gioiTinhFilter).draw();
         });
 
         $('#export-copy').click(function () {

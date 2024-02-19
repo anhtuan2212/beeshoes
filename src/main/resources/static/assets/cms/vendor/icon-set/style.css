@@ -43,7 +43,10 @@
 .tio-xl {
   font-size: 1.75rem;
 }
-
+.btn_save_address{
+  right: 36px;
+  bottom: 22px;
+}
 .tio-add-circle-outlined:before {
   content: "\e900";
 }

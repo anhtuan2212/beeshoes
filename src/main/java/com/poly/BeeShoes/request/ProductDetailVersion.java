@@ -6,28 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductDetailVersion {
-    public ProductDetailVersion(Long id, String img, String maMauSac, String tenMau, String kichCo, String giaBan, String giaGoc, int soLuong, boolean trangThai) {
-        this.id = id;
-        this.img = img;
-        this.maMauSac = maMauSac;
-        this.tenMau = tenMau;
-        this.kichCo = kichCo;
-        this.giaBan = giaBan;
-        this.giaGoc = giaGoc;
-        this.soLuong = soLuong;
-        this.trangThai = trangThai;
-    }
-
-    public ProductDetailVersion(String img, String maMauSac, String tenMau, String kichCo, String giaBan, String giaGoc, int soLuong, boolean trangThai) {
-        this.img = img;
-        this.maMauSac = maMauSac;
-        this.tenMau = tenMau;
-        this.kichCo = kichCo;
-        this.giaBan = giaBan;
-        this.giaGoc = giaGoc;
-        this.soLuong = soLuong;
-        this.trangThai = trangThai;
-    }
 
     Long id;
     String img;
@@ -37,7 +15,7 @@ public class ProductDetailVersion {
     String giaBan;
     String giaGoc;
     int soLuong;
-    boolean trangThai;
+    int trangThai;
 
     @Override
     public String toString() {

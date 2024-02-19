@@ -157,4 +157,9 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
         return false;
     }
+
+    @Override
+    public List<SanPham> getSanPhamEmtyCTSP() {
+        return sanPhamRepository.findAllWithoutChiTietSanPham();
+    }
 }
