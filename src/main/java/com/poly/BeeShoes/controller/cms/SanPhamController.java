@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,7 @@ public class SanPhamController {
         model.addAttribute("lstcogiay", coGiayService.getAll());
         model.addAttribute("lstsanpham", sanPhamService.getAll());
         model.addAttribute("lstkichco", kichCoService.getAll());
+        model.addAttribute("editproduct",1);
         if (id != null) {
             SanPham sp = sanPhamService.getById(id);
             List<String> lst = sanPhamService.getListKichCo(id);
@@ -72,7 +74,7 @@ public class SanPhamController {
         model.addAttribute("lstdegiay", deGiayService.getAll());
         model.addAttribute("lstmuigiay", muiGiayService.getAll());
         model.addAttribute("lstcogiay", coGiayService.getAll());
-        model.addAttribute("lstsanpham", sanPhamService.getAll());
+        model.addAttribute("lstsanpham", sanPhamService.getSanPhamEmtyCTSP());
         model.addAttribute("lstkichco", kichCoService.getAll());
         return "cms/pages/products/add-product";
     }

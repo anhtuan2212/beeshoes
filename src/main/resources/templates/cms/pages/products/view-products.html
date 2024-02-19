@@ -442,7 +442,7 @@
             <div id="fancyboxGallery" class="js-fancybox row justify-content-sm-center gx-2" data-hs-fancybox-options="{
                        &quot;selector&quot;: &quot;#fancyboxGallery .js-fancybox-item&quot;
                      }">
-                <div th:each="anh:${sanPham.getAnh()}" class="col-6 col-sm-4 col-md-3 mb-3 mb-lg-5" data-index="show-img-in-form">
+                <div th:each="anh:${sanPham.getAnh()}" class="col-6 col-sm-4 col-md-3 mb-3 mb-lg-5 d-flex justify-content-center" data-index="show-img-in-form">
                     <!-- Card -->
                     <div class="card card-sm" style="width: 180px;height: 230px">
                         <img class="card-img-top" width="179" height="179" th:src="${anh.getUrl()}"

@@ -394,7 +394,6 @@
                             <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayBatDau, 'yyyy-MM-dd | HH:mm')}"></td>
                             <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayKetThuc, 'yyyy-MM-dd | HH:mm')}"></td>
                             <td>[[${voucher.trangThai}]]</td>
-
                             <td>
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-white"  th:href="@{/cms/update-voucher/{id}(id=${voucher.id})}">
