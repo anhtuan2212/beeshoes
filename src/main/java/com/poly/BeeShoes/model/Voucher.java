@@ -15,6 +15,7 @@ import java.util.Date;
 @Entity
 @Setter
 @Getter
+@Table(name = "vouchers")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -29,14 +30,14 @@ public class Voucher {
     Timestamp ngayBatDau;
     Timestamp ngayKetThuc;
     @Transient
-    LocalDateTime startDate;
+    LocalDateTime startDate1;
     @Transient
-    LocalDateTime endDate;
-    double giaTriTienMat;
-    int giaTriPhanTram;
-    double giaTriToiDa;
-    String dieuKien;
-    int soLuong;
+    LocalDateTime endDate1;
+    BigDecimal giaTriTienMat;
+    Integer giaTriPhanTram;
+    BigDecimal giaTriToiDa;
+    BigDecimal giaTriToiThieu;
+    Integer  soLuong;
     String moTa;
     String loaiVoucher;
     Timestamp ngayTao;
@@ -49,7 +50,7 @@ public class Voucher {
     @OneToOne
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
-    boolean trangThai;
+    int trangThai;
 
 
 }
