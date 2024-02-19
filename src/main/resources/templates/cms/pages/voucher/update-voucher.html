@@ -51,7 +51,7 @@
                     <h1 class="page-header-title"  >Sửa Voucher</h1>
                 </div>
             </div>
-            <form th:action="@{/cms/update-voucher/{id}(id=${List.id})}" method="post" th:object="${List}" >        <!-- End Row -->
+            <form th:action="@{/cms/update-voucher/{id}(id=${Listvv.id})}" method="post" th:object="${Listvv}" >        <!-- End Row -->
                 <!-- End Toggle Switch -->
 
                 <div class="row">
@@ -64,71 +64,81 @@
                         <div class="form-group">
                             <label  class="input-label">Tên Voucher</label>
                             <div class="input-group">
-                                <input type="text" th:field="*{ten}" class="form-control money-input-mask"
+                                <input id="ten" type="text" th:field="*{ten}" class="form-control money-input-mask"
                                       >
                             </div>
+                            <i id="ten_emty" style="color: red;display: none">Vui lòng nhập vào tên</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Loại Voucher</label>
-                            <select class="form-select form-control  "  th:name="loaiVoucher" aria-label="Default select example">
-                                <option selected>Loại Voucher</option>
-                                <option value="$">$</option>
-                                <option value="%">%</option>
+                            <select  id="loai" style="margin-right: 50px" class="form-select form-control" th:name="loaiVoucher" aria-label="Default select example">
+                                <option th:each="option : ${options}" th:value="${option.loaiVoucher}" th:text="${option.loaiVoucher}" th:selected="${option.loaiVoucher == Listvv.loaiVoucher}"></option>
                             </select>
+                            <i id="loai_emty" style="color: red;display: none">Vui lòng chọn loại voucher</i>
                         </div>
 
                         <div class="form-group">
                             <label class="input-label">Giá trị tiền mặt</label>
                             <div class="input-group">
-                                <input type="number" class="form-control money-input-mask" th:field="*{giaTriTienMat}"
+                                <input  id="tienmat" type="number" class="form-control money-input-mask" th:field="*{giaTriTienMat}"
                                        placeholder="Vui lòng nhập giá trị tiền mặt." aria-label="">
                             </div>
+                            <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Giá trị phần trăm</label>
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:field="*{giaTriPhanTram}"
-                                       placeholder="Vui lòng nhập giá trị phần trăm." aria-label="">
+                                       placeholder="Vui lòng nhập giá trị phần trăm." aria-label="" id="phantram">
                             </div>
+                            <i id="phantram1_emty" style="color: red;display: none">Vui lòng nhập vào giá trị phần trăm lớn hơn hoặc bằng 0 và nhỏ hơn hoặc bằng 100</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Số lượng</label>
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:field="*{soLuong}"
-                                       placeholder="Vui lòng nhập số lượng." aria-label="">
-                            </div>
+                                       placeholder="Vui lòng nhập số lượng." aria-label="" id="soluong">
+                            </div><i id="soluong_emty" style="color: red;display: none">Vui lòng nhập vào số lượng</i>
                         </div>
                     </div>
                     <div  class="col-lg-5 mx-5">
                         <div class="form-group">
-                            <label class="input-label">Giá trị tối thiểu </label>
+                            <label class="input-label">Giá trị tối đa </label>
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:field="*{giaTriToiDa}"
-                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label="">
-                            </div>
+                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu" >
+                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa</i>
+                        </div>
+                        <div class="form-group">
+                            <label class="input-label">Giá trị tối thiểu</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control money-input-mask" th:field="*{giaTriToiThieu}"
+                                       placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" >
+                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày bắt đầu</label>
                             <div class="input-group">
-                                <input type="date" class="form-control money-input-mask" th:field="*{ngayBatDau}"
-                                       placeholder="Vui lòng nhập ngày bắt đầu." aria-label="">
-                            </div>
+                                <input type="datetime-local" class="form-control money-input-mask" th:field="*{ngayBatDau}"
+                                       placeholder="Vui lòng nhập ngày bắt đầu." aria-label="" id="batdau">
+                            </div><i id="batdau_emty" style="color: red;display: none">Vui lòng chọn ngày bắt đầu</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày kết thúc</label>
                             <div class="input-group">
-                                <input type="date" class="form-control money-input-mask" th:field="*{ngayKetThuc}"
-                                       placeholder="Vui lòng nhập ngày kết thúc." aria-label="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="input-label">Điều kiện</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control money-input-mask" th:field="*{dieuKien}"
-                                       placeholder="Vui lòng nhập điều kiện." aria-label="">
-                            </div>
+                                <input type="datetime-local" class="form-control money-input-mask" th:field="*{ngayKetThuc}"
+                                       placeholder="Vui lòng nhập ngày kết thúc." aria-label="" id="ketthuc">
+                            </div><i id="ketthuc_emty" style="color: red;display: none">Vui lòng chọn ngày kết thúc </i>
+                            <i id="ketthuc1_emty" style="color: red;display: none">Vui lòng chọn ngày kết thúc phải lớn hơn ngày bắt đầu</i>
                         </div>
 
+                        <div class="form-group">
+                            <label class="input-label">Loại Voucher</label>
+                            <select  id="trangThai" style="margin-right: 50px" class="form-select form-control" th:name="trangThai" aria-label="Default select example">
+                                <option th:each="option : ${option}" th:value="${option.trangThai}" th:text="${option.trangThai}" th:selected="${option.trangThai == Listvv.trangThai}"></option>
+                            </select>
+                            <i id="trangThai_emty" style="color: red;display: none">Vui lòng chọn trạng thái</i>
+                        </div>
                     </div>
                 </div>
                 <button  type="submit" class="btn btn-primary">Sửa Voucher</button> </form>
@@ -761,7 +771,86 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
-
+    function formvalidate(){
+        var result=true;
+        var ten = document.getElementById("ten").value;
+        var tienmat = document.getElementById("tienmat").value;
+        var phantram = document.getElementById("phantram").value;
+        var toithieu = document.getElementById("toithieu").value;
+        var batdau = document.getElementById("batdau").value;
+        var ketthuc = document.getElementById("ketthuc").value;
+        var dieukien = document.getElementById("dieukien").value;
+        var soluong = document.getElementById("soluong").value;
+        var loai = document.getElementById("loai").value;
+        if(ten.length == 0){
+            document.getElementById("ten_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("ten_emty").style.display="none";
+        }
+        if(soluong.length == 0){
+            document.getElementById("soluong_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("soluong_emty").style.display="none";
+        } if(tienmat.length == 0){
+            document.getElementById("tienmat_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("tienmat_emty").style.display="none";
+        }
+        if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100) {
+            document.getElementById("phantram1_emty").style.display = "none"
+        } else {
+            document.getElementById("phantram1_emty").style.display = "block";
+            result = false;
+            ;
+        }
+        if(toithieu.length == 0){
+            document.getElementById("toithieu_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("toithieu_emty").style.display="none";
+        }
+        if(batdau.length == 0){
+            document.getElementById("batdau_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("batdau_emty").style.display="none";
+        }
+        if(ketthuc.length == 0 ){
+            document.getElementById("ketthuc_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("ketthuc_emty").style.display="none";
+        }if( ketthuc < batdau){
+            document.getElementById("ketthuc1_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("ketthuc1_emty").style.display="none";
+        }
+        if(dieukien.length == 0){
+            document.getElementById("dieukien_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("dieukien_emty").style.display="none";
+        }
+        if(loai.length == ""){
+            document.getElementById("loai_emty").style.display="block";
+            result=false;
+        }else{
+            document.getElementById("loai_emty").style.display="none";
+        }
+        return result;
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        var loaiVoucher = document.getElementById("loai").value;
+        if (loaiVoucher === "$") {
+            document.getElementById("phantram").disabled = true;
+        } else if (loaiVoucher === "%") {
+            document.getElementById("tienmat").disabled = true;
+        }
+    });
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
