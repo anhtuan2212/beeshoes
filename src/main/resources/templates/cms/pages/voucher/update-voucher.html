@@ -6,23 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
-    <title>LightBee | Add product</title>
+    <title>LigthBee |Add Voucher</title>
+
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico">
+
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
-    <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
-    <link rel="stylesheet" href="/assets/cms/css/custom.css">
+
+
+
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
 </head>
+
 <body class="   footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
-<!-- ONLY DEV -->
 <!-- ========== HEADER ========== -->
 <div th:replace="/cms/pages/_header.html"></div>
 <!-- ========== END HEADER ========== -->
@@ -31,8 +34,12 @@
 <div th:replace="/cms/pages/_sidebar.html"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
-<!-- END ONLY DEV -->
 <!-- ========== MAIN CONTENT ========== -->
+<!-- Navbar Vertical -->
+
+
+
+<!-- End Navbar Vertical -->
 
 <main id="content" role="main" class="main">
     <!-- Content -->
@@ -43,7 +50,7 @@
                 <div class="col-sm mb-2 mb-sm-0">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-no-gutter">
-                            <li  class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/product">Voucher</a>
+                            <li  class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/voucher">Voucher</a>
                             </li>
                             <li  class="breadcrumb-item active" aria-current="page">Sửa Voucher</li>
                         </ol>
@@ -51,7 +58,7 @@
                     <h1 class="page-header-title"  >Sửa Voucher</h1>
                 </div>
             </div>
-            <form th:action="@{/cms/update-voucher/{id}(id=${Listvv.id})}" method="post" th:object="${Listvv}" >        <!-- End Row -->
+            <form th:action="@{/cms/update-voucher/{id}(id=${Listvv.id})}" method="post" th:object="${Listvv}" onsubmit="return formvalidate()" >        <!-- End Row -->
                 <!-- End Toggle Switch -->
 
                 <div class="row">
@@ -65,7 +72,7 @@
                             <label  class="input-label">Tên Voucher</label>
                             <div class="input-group">
                                 <input id="ten" type="text" th:field="*{ten}" class="form-control money-input-mask"
-                                      >
+                                >
                             </div>
                             <i id="ten_emty" style="color: red;display: none">Vui lòng nhập vào tên</i>
                         </div>
@@ -77,15 +84,17 @@
                             <i id="loai_emty" style="color: red;display: none">Vui lòng chọn loại voucher</i>
                         </div>
 
-                        <div class="form-group">
+                        <div id="tienmatdiv" class="form-group">
                             <label class="input-label">Giá trị tiền mặt</label>
                             <div class="input-group">
-                                <input  id="tienmat" type="number" class="form-control money-input-mask" th:field="*{giaTriTienMat}"
-                                       placeholder="Vui lòng nhập giá trị tiền mặt." aria-label="">
+                                <input  id="tienmat" type="number" name="giaTriTienMat" class="form-control money-input-mask" th:value="*{#numbers.formatDecimal(giaTriTienMat, 1, 'DEFAULT', 0, 'DEFAULT')}"
+                                        placeholder="Vui lòng nhập giá trị tiền mặt." aria-label="">
                             </div>
                             <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt</i>
                         </div>
-                        <div class="form-group">
+
+
+                        <div id="phantramdiv" class="form-group">
                             <label class="input-label">Giá trị phần trăm</label>
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:field="*{giaTriPhanTram}"
@@ -93,6 +102,7 @@
                             </div>
                             <i id="phantram1_emty" style="color: red;display: none">Vui lòng nhập vào giá trị phần trăm lớn hơn hoặc bằng 0 và nhỏ hơn hoặc bằng 100</i>
                         </div>
+
                         <div class="form-group">
                             <label class="input-label">Số lượng</label>
                             <div class="input-group">
@@ -105,16 +115,16 @@
                         <div class="form-group">
                             <label class="input-label">Giá trị tối đa </label>
                             <div class="input-group">
-                                <input type="number" class="form-control money-input-mask" th:field="*{giaTriToiDa}"
+                                <input type="number" name="giaTriToiDa" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')}"
                                        placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu" >
                             </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Giá trị tối thiểu</label>
                             <div class="input-group">
-                                <input type="text" class="form-control money-input-mask" th:field="*{giaTriToiThieu}"
+                                <input type="number" name="giaTriToiThieu" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')}"
                                        placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" >
-                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu</i>
+                            </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày bắt đầu</label>
@@ -131,18 +141,10 @@
                             </div><i id="ketthuc_emty" style="color: red;display: none">Vui lòng chọn ngày kết thúc </i>
                             <i id="ketthuc1_emty" style="color: red;display: none">Vui lòng chọn ngày kết thúc phải lớn hơn ngày bắt đầu</i>
                         </div>
-
-                        <div class="form-group">
-                            <label class="input-label">Loại Voucher</label>
-                            <select  id="trangThai" style="margin-right: 50px" class="form-select form-control" th:name="trangThai" aria-label="Default select example">
-                                <option th:each="option : ${option}" th:value="${option.trangThai}" th:text="${option.trangThai}" th:selected="${option.trangThai == Listvv.trangThai}"></option>
-                            </select>
-                            <i id="trangThai_emty" style="color: red;display: none">Vui lòng chọn trạng thái</i>
-                        </div>
                     </div>
                 </div>
                 <button  type="submit" class="btn btn-primary">Sửa Voucher</button> </form>
-        </div> </div> </div>   <!-- End Footer -->
+        </div> </div> </div>
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
 
@@ -154,8 +156,7 @@
             <h4 class="card-header-title">Keyboard shortcuts</h4>
 
             <!-- Toggle Button -->
-            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;"
-               data-hs-unfold-options='{
+            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;" data-hs-unfold-options='{
                 "target": "#keyboardShortcutsSidebar",
                 "type": "css-animation",
                 "animationIn": "fadeInRight",
@@ -180,8 +181,7 @@
                             <span class="font-weight-bold">Bold</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">b</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">b</kbd>
                         </div>
                     </div>
                 </div>
@@ -191,8 +191,7 @@
                             <em>italic</em>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">i</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">i</kbd>
                         </div>
                     </div>
                 </div>
@@ -202,8 +201,7 @@
                             <u>Underline</u>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">u</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">u</kbd>
                         </div>
                     </div>
                 </div>
@@ -213,9 +211,7 @@
                             <s>Strikethrough</s>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">s</kbd>
                         </div>
                     </div>
                 </div>
@@ -225,8 +221,7 @@
                             <span class="small">Small text</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">s</kbd>
                         </div>
                     </div>
                 </div>
@@ -236,8 +231,7 @@
                             <mark>Highlight</mark>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">e</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">e</kbd>
                         </div>
                     </div>
                 </div>
@@ -328,8 +322,7 @@
                             <span>Find and replace</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">r</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">r</kbd>
                         </div>
                     </div>
                 </div>
@@ -339,8 +332,7 @@
                             <span>Find next</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">n</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">n</kbd>
                         </div>
                     </div>
                 </div>
@@ -350,8 +342,7 @@
                             <span>Find previous</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">p</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">p</kbd>
                         </div>
                     </div>
                 </div>
@@ -371,8 +362,7 @@
                             <span>Un-indent</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Tab</kbd>
+                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Tab</kbd>
                         </div>
                     </div>
                 </div>
@@ -382,9 +372,7 @@
                             <span>Move line up</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
                         </div>
                     </div>
                 </div>
@@ -394,10 +382,7 @@
                             <span>Move line down</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1"><i
-                                class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1"><i class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
                         </div>
                     </div>
                 </div>
@@ -407,9 +392,7 @@
                             <span>Add a comment</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">m</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">m</kbd>
                         </div>
                     </div>
                 </div>
@@ -419,8 +402,7 @@
                             <span>Undo</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">z</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">z</kbd>
                         </div>
                     </div>
                 </div>
@@ -430,8 +412,7 @@
                             <span>Redo</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">y</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">y</kbd>
                         </div>
                     </div>
                 </div>
@@ -447,9 +428,7 @@
                             <span>Create new doc</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">n</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">n</kbd>
                         </div>
                     </div>
                 </div>
@@ -459,9 +438,7 @@
                             <span>Present</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">p</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">p</kbd>
                         </div>
                     </div>
                 </div>
@@ -471,9 +448,7 @@
                             <span>Share</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">s</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">s</kbd>
                         </div>
                     </div>
                 </div>
@@ -483,9 +458,7 @@
                             <span>Search docs</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">o</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">o</kbd>
                         </div>
                     </div>
                 </div>
@@ -495,9 +468,7 @@
                             <span>Keyboard shortcuts</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
-                                class="d-inline-block mb-1">/</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">/</kbd>
                         </div>
                     </div>
                 </div>
@@ -508,17 +479,15 @@
 </div>
 <!-- End Keyboard Shortcuts -->
 
-<!-- Add Image from URL Modal -->
-<div class="modal fade" id="addImageFromURLModal" tabindex="-1" role="dialog"
-     aria-labelledby="addImageFromURLModalTitle" aria-hidden="true">
+<!-- Export Products Modal -->
+<div class="modal fade" id="exportProductsModal" tabindex="-1" role="dialog" aria-labelledby="exportProductsModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
-                <h4 id="addImageFromURLModalTitle" class="modal-title">Add image from URL</h4>
+                <h4 id="exportProductsModalTitle" class="modal-title">Export products</h4>
 
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal" aria-label="Close">
                     <i class="tio-clear tio-lg"></i>
                 </button>
             </div>
@@ -526,85 +495,64 @@
 
             <!-- Body -->
             <div class="modal-body">
-                <label for="pasteImageURLNameLabel" class="input-label">Paste image URL</label>
-                <input type="text" class="form-control" name="projectName" id="pasteImageURLNameLabel"
-                       placeholder="https://" aria-label="https://">
+                <p>This CSV file can update all product information. To update just inventory quantites use the <a href="#">CSV file for inventory.</a></p>
+
+                <!-- Form Group -->
+                <div class="form-group">
+                    <label class="input-label">Export</label>
+
+                    <!-- Custom Checkbox -->
+                    <div class="custom-control custom-radio mb-2">
+                        <input type="radio" id="exportProductsRadio1" name="exportProductsRadio" class="custom-control-input" checked="">
+                        <label class="custom-control-label" for="exportProductsRadio1">Current page</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-2">
+                        <input type="radio" id="exportProductsRadio2" name="exportProductsRadio" class="custom-control-input">
+                        <label class="custom-control-label" for="exportProductsRadio2">All products</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="exportProductsRadio3" name="exportProductsRadio" class="custom-control-input" disabled="">
+                        <label class="custom-control-label" for="exportProductsRadio3">Selected: 20 products</label>
+                    </div>
+                    <!-- End Custom Checkbox -->
+                </div>
+                <!-- End Form Group -->
+
+                <label class="input-label">Export as</label>
+
+                <!-- Custom Checkbox -->
+                <div class="custom-control custom-radio mb-2">
+                    <input type="radio" id="exportProductsAsRadio1" name="exportProductsAsRadio" class="custom-control-input" checked="">
+                    <label class="custom-control-label" for="exportProductsAsRadio1">CSV for Excel, Numbers, or other spreadsheet programs</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="exportProductsAsRadio2" name="exportProductsAsRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="exportProductsAsRadio2">Plain CSV file</label>
+                </div>
+                <!-- End Custom Checkbox -->
             </div>
             <!-- End Body -->
 
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
-                <button type="button" class="btn btn-primary">Add media</button>
+                <button type="button" class="btn btn-primary">Export products</button>
             </div>
             <!-- End Footer -->
         </div>
     </div>
 </div>
-<!-- End Add Image from URL Modal -->
+<!-- End Export Products Modal -->
 
-<!-- Embed Video Modal -->
-<div class="modal fade" id="select_img_firebase" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document" style="max-width: 800px">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="Chọn Ảnh">Chọn Ảnh</h5>
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body">
-
-                <span class="divider"><h4>Ảnh Đã Chọn</h4></span>
-                <!-- Gallery -->
-                <div id="anh_duoc_chon" class="js-fancybox row gx-2"
-                     data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
-
-                </div>
-                <!-- End Gallery -->
-                <span class="divider"><h4>Ảnh Hiện Có</h4></span>
-                <!-- Gallery -->
-                <div id="anh_co_san" class="js-fancybox row gx-2"
-                     data-hs-fancybox-options='{ "selector": "#fancyboxGalleryModalEg .js-fancybox-item", "loop": true }'>
-                    <!-- End Gallery -->
-                </div>
-                <!-- End Body -->
-
-                <!-- Footer -->
-                <div class="modal-footer pb-0">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                    <label class="btn btn-sm btn-primary transition-3d-hover custom-file-btn" for="fileAttachmentBtn"
-                           style="height: 41px">
-                        <span id="customFileExample5">Thêm Ảnh</span>
-                        <input id="fileAttachmentBtn" name="custom-file" type="file" multiple
-                               class="js-file-attach custom-file-btn-input"
-                               data-hs-file-attach-options='{ "textTarget": "#customFileExample5"}'>
-                    </label>
-                    <a id="btn-reset-img" class="btn btn-primary">Làm Mới</a>
-                    <button id="btn-accept-select-img" type="button" class="btn btn-primary" data-dismiss="modal">Xác
-                        Nhận
-                    </button>
-                </div>
-                <!-- End Footer -->
-            </div>
-        </div>
-    </div>
-    <!-- End Embed Video Modal -->
-</div>
-<!-- Products Advanced Features Modal -->
-<div class="modal fade" id="productsAdvancedFeaturesModal" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- Import Products Modal -->
+<div class="modal fade" id="importProductsModal" tabindex="-1" role="dialog" aria-labelledby="importProductsModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <!-- Header -->
-            <div class="modal-close">
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
+            <div class="modal-header">
+                <h4 id="importProductsModalTitle" class="modal-title">Import products by CSV</h4>
+
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal" aria-label="Close">
                     <i class="tio-clear tio-lg"></i>
                 </button>
             </div>
@@ -612,161 +560,52 @@
 
             <!-- Body -->
             <div class="modal-body">
-                <div class="text-center mb-7">
-                    <h4 class="h1">Advanced features</h4>
-                    <p>"Compare to" Price, Bulk Discount Pricing, Inventory Tracking</p>
+                <p><a href="#">Download a sample CSV template</a> to see an example of the format required.</p>
 
-                    <a class="btn btn-primary" href="#">
-                        <i class="tio-star mr-1"></i> Upgrade to get these features
-                    </a>
-                </div>
-
-                <!-- Media -->
-                <div class="d-sm-flex">
-                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                         src="/assets/cms/svg/illustrations/choice.svg" alt="Image Description">
-
-                    <div class="media-body">
-                        <h4>"Compare to" price</h4>
-                        <p>Use this feature when you want to put a product on sale or show savings off suggested
-                            retail
-                            pricing.</p>
-                    </div>
-                </div>
-                <!-- End Media -->
-
-                <hr class="my-4">
-
-                <!-- Media -->
-                <div class="d-sm-flex">
-                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                         src="/assets/cms/svg/illustrations/presenting.svg" alt="Image Description">
-
-                    <div class="media-body">
-                        <h4>Bulk discount pricing</h4>
-                        <p>Encourage higher purchase quantities with volume discounts.</p>
-                    </div>
-                </div>
-                <!-- End Media -->
-
-                <hr class="my-4">
-
-                <!-- Media -->
-                <div class="d-sm-flex">
-                    <img class="avatar avatar-xl avatar-4by3 mb-3 mb-sm-0 mr-4"
-                         src="/assets/cms/svg/illustrations/book.svg" alt="Image Description">
-
-                    <div class="media-body">
-                        <h4>Inventory tracking</h4>
-                        <p>Automatically keep track of product availability and receive notifications when inventory
-                            levels get low.</p>
-                    </div>
-                </div>
-                <!-- End Media -->
-            </div>
-            <!-- End Body -->
-
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Close
-                </button>
-                <button type="button" class="btn btn-primary">Upgrade now</button>
-            </div>
-            <!-- End Footer -->
-        </div>
-    </div>
-    -
-</div>
-<!-- End Products Advanced Features Modal -->
-
-<div class="modal fade" id="add_new_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thêm Mới Sản Phẩm</h5>
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="modal-body">
                 <!-- Form Group -->
                 <div class="form-group">
-                    <div class="input-group input-group-merge">
-                        <input type="text" id="product-name-modal" class="js-form-search form-control" placeholder="Tên Sản Phẩm...">
-                        <a class="input-group-append" href="javascript:;">
-                            <span class="input-group-text">
-                                <i id="clearIconModalEg" class="tio-clear tio-lg" style="display: none;"></i>
-                            </span>
-                        </a>
+                    <!-- Dropzone -->
+                    <div id="attachFilesNewProjectLabel" class="js-dropzone dropzone-custom custom-file-boxed">
+                        <div class="dz-message custom-file-boxed-label">
+                            <img class="avatar avatar-xl avatar-4by3 mb-3" src="/assets/cms/svg/illustrations/browse.svg" alt="Image Description">
+                            <h5 class="mb-1">Choose files to upload</h5>
+                            <p class="mb-2">or</p>
+                            <span class="btn btn-sm btn-primary">Browse files</span>
+                        </div>
                     </div>
+                    <!-- End Dropzone -->
                 </div>
                 <!-- End Form Group -->
+
+                <!-- Custom Checkbox -->
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="overwriteCurrentProductsCheckbox">
+                    <label class="custom-control-label" for="overwriteCurrentProductsCheckbox">Overwrite any current products that have the same handle. Existing values will be used for any missing columns.<a href="#">Learn more</a></label>
+                </div>
+                <!-- End Custom Checkbox -->
             </div>
             <!-- End Body -->
 
             <!-- Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                <button type="button" id="btn-add-new-product" class="btn btn-primary">Thêm Mới</button>
+                <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-primary">Upload and continue</button>
             </div>
             <!-- End Footer -->
         </div>
     </div>
 </div>
-<div class="modal fade" id="add_new_category" tabindex="-1" role="dialog" aria-labelledby="add_new_categoryLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="add_new_categoryLabel">Thêm Mới Thể Loại</h5>
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- End Header -->
+<!-- End Import Products Modal -->
 
-            <!-- Body -->
-            <div class="modal-body">
-                <!-- Form Group -->
-                <div class="form-group">
-                    <div class="input-group input-group-merge">
-                        <input type="text" id="category-name-modal" class="js-form-search form-control" placeholder="Tên Thể Loại...">
-                        <a class="input-group-append" href="javascript:;">
-                            <span class="input-group-text">
-                                <i id="clearIconModalEg1" class="tio-clear tio-lg" style="display: none;"></i>
-                            </span>
-                        </a>
-                    </div>
-                </div>
-                <!-- End Form Group -->
-            </div>
-            <!-- End Body -->
+<!-- Product Filter Modal -->
 
-            <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                <button type="button" id="btn-add-new-category" class="btn btn-primary">Thêm Mới</button>
-            </div>
-            <!-- End Footer -->
-        </div>
-    </div>
-</div>
+
+<!-- End Body -->
+
+<!-- End Product Filter Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
-
-
 <!-- JS Implementing Plugins -->
 <script src="/assets/cms/js/vendor.min.js"></script>
-
-<script src="/assets/cms/js/custom-firebase.js" type="module"></script>
-<script src="/assets/cms/js/custom.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
@@ -793,18 +632,22 @@
             result=false;
         }else{
             document.getElementById("soluong_emty").style.display="none";
-        } if(tienmat.length == 0){
-            document.getElementById("tienmat_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("tienmat_emty").style.display="none";
         }
-        if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100) {
-            document.getElementById("phantram1_emty").style.display = "none"
-        } else {
-            document.getElementById("phantram1_emty").style.display = "block";
-            result = false;
-            ;
+        if($('#loai').val()=='$'){
+            if(tienmat.length == 0){
+                document.getElementById("tienmat_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("tienmat_emty").style.display="none";
+            }
+        }else{
+            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 && tienmat.length == 0) {
+                document.getElementById("phantram1_emty").style.display = "none"
+            } else {
+                document.getElementById("phantram1_emty").style.display = "block";
+                result = false;
+                ;
+            }
         }
         if(toithieu.length == 0){
             document.getElementById("toithieu_emty").style.display="block";
@@ -843,18 +686,28 @@
         }
         return result;
     }
-    document.addEventListener("DOMContentLoaded", function() {
-        var loaiVoucher = document.getElementById("loai").value;
-        if (loaiVoucher === "$") {
-            document.getElementById("phantram").disabled = true;
-        } else if (loaiVoucher === "%") {
-            document.getElementById("tienmat").disabled = true;
-        }
-    });
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
-
+        let data =  $('#loai').val()
+        if(data == '$' ){
+            $('#phantramdiv').addClass('d-none')
+        }else{
+            $('#tienmatdiv').addClass('d-none')
+        }
+        $('#loai').on('change',function (){
+   let  val =$(this).val();
+if(val == '$' ){
+    $('#phantramdiv').addClass('d-none')
+    $('#phantram').val('')
+    $('#tienmatdiv').removeClass('d-none')
+}else{
+    $('#tienmatdiv').addClass('d-none')
+    $('#tienmat').val('')
+    $('#phantramdiv').removeClass('d-none')
+}
+        })
         if (window.localStorage.getItem('hs-builder-popover') === null) {
             $('#builderPopover').popover('show')
                 .on('shown.bs.popover', function () {
@@ -870,7 +723,6 @@
                 return false
             });
         }
-
         // END ONLY DEV
         // =======================================================
 
@@ -1024,8 +876,6 @@
         });
     });
 </script>
-
-<!-- IE Support -->
 <div th:replace="/cms/pages/_IE-suport.html"></div>
 </body>
 </html>
