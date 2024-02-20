@@ -76,43 +76,45 @@
                             </div>
                             <!-- Body -->
                             <div class="card-body row">
-                                <!-- Form Group -->
-                                <!--                                <div class="row form-group">-->
-                                <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
-
-                                <!--                                    <div class="col-sm-9">-->
-                                <!--                                        <div class="d-flex align-items-center">-->
-                                <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
-                                <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
-                                <!--                                                   for="avatarUploader">-->
-                                <!--                                                <img id="avatarImg" class="avatar-img"-->
-                                <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
-
-                                <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
-                                <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
-                                <!--                                      "textTarget": "#avatarImg",-->
-                                <!--                                      "mode": "image",-->
-                                <!--                                      "targetAttr": "src",-->
-                                <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
-                                <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
-                                <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
-                                <!--                                   }'>-->
-
-                                <!--                                                <span class="avatar-uploader-trigger">-->
-                                <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
-                                <!--                            </span>-->
-                                <!--                                            </label>-->
-                                <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
-
-                                <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
-                                <!--                                                Delete-->
-                                <!--                                            </button>-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-                                <!-- End Form Group -->
-
                                 <div class="col-sm-6">
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 col-form-label input-label">Avatar</label>
+
+                                        <div class="col-sm-9">
+                                            <div class="d-flex align-items-center">
+                                                <!-- Avatar -->
+                                                <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
+                                                       for="avatarUploader">
+                                                    <img id="avatarImg" class="avatar-img"
+                                                         src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">
+
+                                                    <input type="file" class="js-file-attach avatar-uploader-input"
+                                                           id="avatarUploader" data-hs-file-attach-options='{
+                                                                      "textTarget": "#avatarImg",
+                                                                      "mode": "image",
+                                                                      "targetAttr": "src",
+                                                                      "resetTarget": ".js-file-attach-reset-img",
+                                                                      "resetImg": "/assets/img/160x160/img1.jpg",
+                                                                      "allowTypes": [".png", ".jpeg", ".jpg"]
+                                                                   }'>
+
+                                                    <input type="text" id="urlImgAvatar" name="avatar" th:field="*{avatar}" value="/assets/cms/img/160x160/img1.jpg" hidden>
+
+                                                    <span class="avatar-uploader-trigger">
+                                                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
+                                                            </span>
+                                                </label>
+                                                <!-- End Avatar -->
+
+                                                <button type="button" class="js-file-attach-reset-img btn btn-white">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
+
                                     <!-- Form Group -->
                                     <div class="row form-group">
                                         <label for="hoTen" class="col-sm-4 col-form-label input-label">Họ tên
@@ -139,7 +141,9 @@
                                         <div class="col-sm-8">
                                             <div class="input-group input-group-sm-down-break align-items-center">
                                                 <input type="text" class="js-masked-input form-control" name="phone"
-                                                       id="sdt" placeholder="Vui lòng nhập sdt" th:field="*{sdt}">
+                                                       id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx" data-hs-mask-options='{
+                                     "template": "0000000000"
+                                   }' th:field="*{sdt}">
                                             </div>
                                             <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
                                         </div>
@@ -150,7 +154,7 @@
                                         <label class="col-sm-4 col-form-label input-label">Chức vụ</label>
                                         <!-- Select -->
                                         <div class="col-sm-8">
-                                            <select class="form-control" th:field="*{chucVu}">
+                                            <select class="form-control" th:field="*{idCV}">
                                                 <option th:each="cv:${listCV}" th:value="${cv.getId()}"
                                                         th:text="${cv.getTen()}"></option>
                                             </select>
@@ -221,15 +225,26 @@
                                 <div class="col-sm-6">
                                     <!-- Form Group -->
                                     <div class="row form-group">
+                                        <label for="email" class="col-sm-4 col-form-label input-label">Email</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="email"
+                                                   id="email" placeholder="example@gmail.com"
+                                                   aria-label="Htmlstream" th:field="*{email}">
+                                        </div>
+                                    </div>
+                                    <!-- End Form Group -->
+
+                                    <!-- Form Group -->
+                                    <div class="row form-group">
                                         <label for="ngaySinh" class="col-sm-4 col-form-label input-label">Ngày sinh</label>
 
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" name="ngaySinh"
                                                    id="ngaySinh"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
-                                            <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
                                         </div>
-
+                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
                                     </div>
                                     <!-- End Form Group -->
 

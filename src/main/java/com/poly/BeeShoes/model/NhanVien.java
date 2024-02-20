@@ -54,9 +54,13 @@ public class NhanVien {
     Timestamp ngayTao;
     Timestamp ngaySua;
 
-    Long nguoiTao;
+    @OneToOne
+    @JoinColumn(name = "nguoi_tao")
+    User nguoiTao;
 
-    Long nguoiSua;
+    @OneToOne
+    @JoinColumn(name = "nguoi_sua")
+    User nguoiSua;
 
     boolean trangThai;
 }

@@ -5,6 +5,7 @@ import com.poly.BeeShoes.request.ProductDetailVersion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LibService {
     public static BigDecimal convertStringToBigDecimal(String str) {
@@ -91,5 +92,43 @@ public class LibService {
 
         }
         return lst;
+    }
+
+    //==========
+    public static String generateRandomString(int length) {
+        String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowercase = "abcdefghijklmnopqrstuvwxyz";
+        String specialChars = "!@#$%^&*()-_=+[{]};:'\",<.>/?";
+        String allChars = uppercase + lowercase + specialChars;
+
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+
+        // Thêm ít nhất một kí tự hoa, một kí tự thường và một kí tự đặc biệt vào chuỗi
+        sb.append(uppercase.charAt(random.nextInt(uppercase.length())));
+        sb.append(lowercase.charAt(random.nextInt(lowercase.length())));
+        sb.append(specialChars.charAt(random.nextInt(specialChars.length())));
+
+        // Thêm các kí tự ngẫu nhiên cho đến khi đạt được độ dài mong muốn
+        for (int i = 3; i < length; i++) {
+            sb.append(allChars.charAt(random.nextInt(allChars.length())));
+        }
+
+        // Trộn ngẫu nhiên chuỗi
+        String shuffledString = shuffleString(sb.toString());
+
+        return shuffledString;
+    }
+
+    public static String shuffleString(String string) {
+        char[] charArray = string.toCharArray();
+        Random random = new Random();
+        for (int i = 0; i < charArray.length; i++) {
+            int randomIndex = random.nextInt(charArray.length);
+            char temp = charArray[i];
+            charArray[i] = charArray[randomIndex];
+            charArray[randomIndex] = temp;
+        }
+        return new String(charArray);
     }
 }

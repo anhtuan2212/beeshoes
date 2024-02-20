@@ -121,7 +121,7 @@
                                     }'>
                                 <option value="all" selected>Tất cả</option>
                                 <option value="Hoạt động">Hoạt động</option>
-                                <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                                <option value="Đã nghỉ">Đã nghỉ</option>
                             </select>
                         </div>
                     </div>
@@ -201,7 +201,7 @@
                                 <td th:text="${#dates.format (nv.getNgaySinh(), 'dd-MM-yyyy')}"></td>
                                 <td th:text="${nv.isGioiTinh()==true?'Nam':'Nữ'}"></td>
                                 <td th:text="${nv.getSoNha()+','+nv.getPhuongXa()+','+nv.getQuanHuyen()+','+nv.getTinhThanhPho()}"></td>
-                                <td th:text="${nv.isTrangThai()==true?'Hoạt động':'Ngừng hoạt động'}"></td>
+                                <td th:text="${nv.isTrangThai()==true?'Hoạt động':'Đã nghỉ'}"></td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a class="btn btn-sm btn-white" th:href="@{/cms/nhan-vien/view-detail/{id}(id=${nv.id})}">

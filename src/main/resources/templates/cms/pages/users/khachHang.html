@@ -105,7 +105,7 @@
                                                     }'>
                                 <option value="all" selected>Tất cả</option>
                                 <option value="Hoạt động">Hoạt động</option>
-                                <option value="Ngừng hoạt động">Ngừng hoạt động</option>
+                                <option value="Đã nghỉ">Đã nghỉ</option>
                             </select>
                         </div>
 
@@ -199,7 +199,7 @@
                             <td th:text="${kh.getSdt()}"></td>
                             <td th:text="${#dates.format (kh.getNgaySinh(), 'dd-MM-yyyy')}"></td>
                             <td th:text="${kh.isGioiTinh()==true?'Nam':'Nữ'}"></td>
-                            <td th:text="${kh.isTrangThai()==true?'Hoạt động':'Ngừng hoạt động'}"></td>
+                            <td th:text="${kh.isTrangThai()==true?'Hoạt động':'Đã nghỉ'}"></td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-white" th:href="@{/cms/khach-hang/detail/{id}(id=${kh.id})}">
