@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -23,8 +25,15 @@ public class ShopController {
         model.addAttribute("lstsanpham",spx);
         return "customer/pages/shop/shop";
     }
-    @GetMapping({"/shop-details","/shop-detail/"})
-    public String shopDetail(){
+    @GetMapping({"/shop-detail","/shop-detail/"})
+    public String shopDetail(@RequestParam("product")Long id,Model model){
+        SanPham sanPham = sanPhamService.getById(id);
+        if (sanPham==null || !sanPham.isTrangThai()){
+            return "redirect:/shop";
+        }
+        List<SanPham> lst = sanPhamService.findTop4ByTheLoaiOrderByNgayTaoDesc(sanPham.getTheLoai());
+        model.addAttribute("sanPham",sanPham);
+        model.addAttribute("lstRelatedProduct",lst);
         return "customer/pages/shop/shop-details";
     }
     @GetMapping({"/shopping-cart","/shopping-cart/"})

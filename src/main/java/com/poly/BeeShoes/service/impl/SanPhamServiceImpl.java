@@ -45,6 +45,21 @@ public class SanPhamServiceImpl implements SanPhamService {
         Optional<SanPham> optionalSanPham = sanPhamRepository.findById(id);
         if (optionalSanPham.isPresent()) {
             SanPham sanPham = optionalSanPham.get();
+            List<ChiTietSanPham> ctsp = sanPham.getChiTietSanPham();
+            int num = 0;
+            BigDecimal gn =null;
+            List<MauSac> lst = new ArrayList<>();
+            for (int j = 0; j < ctsp.size(); j++) {
+                ChiTietSanPham ct = ctsp.get(j);
+                num += ct.getSoLuongTon();
+                gn=ct.getGiaBan();
+                if (!lst.contains(ct.getMauSac())){
+                    lst.add(ct.getMauSac());
+                }
+            }
+            sanPham.setMauSac(lst);
+            sanPham.setGiaBan(gn);
+            sanPham.setSoLuong(num);
             List<ChiTietSanPham> sortedChiTietSanPham = sanPham.getSortedChiTietSanPhamByMauSac();
             sanPham.setChiTietSanPham(sortedChiTietSanPham);
             return sanPham;
@@ -83,7 +98,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPham> getAll() {
-        List<SanPham> sp = sanPhamRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        List<SanPham> sp = sanPhamRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
         for (int i = 0; i < sp.size(); i++) {
             SanPham s = sp.get(i);
             List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
@@ -161,5 +176,10 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public List<SanPham> getSanPhamEmtyCTSP() {
         return sanPhamRepository.findAllWithoutChiTietSanPham();
+    }
+
+    @Override
+    public List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai) {
+        return sanPhamRepository.findTop4ByTheLoaiOrderByNgayTaoDesc(theLoai);
     }
 }
