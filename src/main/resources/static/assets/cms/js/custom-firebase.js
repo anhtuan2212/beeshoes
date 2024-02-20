@@ -503,8 +503,6 @@ $(document).ready(function () {
         let coGiay = $('#coGiay').val();
         let muiGiay = $('#muiGiay').val();
         let giaGoc = $('#giaGoc').val();
-        let sales = $('#sales').is(":checked");
-        let trangThai = $('#status').is(":checked");
         let mota = $('.ql-editor').html();
         let product_details = datatable.rows().data().toArray();
         if (isEmpty(sanPham)) {
@@ -594,7 +592,7 @@ $(document).ready(function () {
                 break;
             }
             if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
-                message = "Vui lòng Số Lượng !";
+                message = "Vui lòng nhập Số Lượng !";
                 check = false;
                 break;
             }
@@ -616,8 +614,6 @@ $(document).ready(function () {
                     muiGiay: muiGiay,
                     giaNhap: 100,
                     giaGoc: giaGoc,
-                    sales: sales,
-                    trangThai: trangThai,
                     product_details: JSON.stringify(product_details)
                 }, success: (data, status, xhr) => {
                     ToastSuccess('Lưu Thành Công !')
@@ -626,9 +622,15 @@ $(document).ready(function () {
                     });
                     let arr = fileInStorages.concat(fileImgCurent);
                     ClearMultipleImages(arr).then(r => {
-                        console.log(r)
+                        redirectToProductPage()
                     });
+                    function redirectToProductPage() {
+                        setTimeout(() => {
+                            window.location.href = "/cms/product";
+                        }, 3000);
+                    }
                 }, error: (e) => {
+                    console.log(e.getResponseHeader('error'))
                     switch (e.getResponseHeader('error')) {
                         case "GiaBanNull":
                             ToastError('Giá bán không được để trống.')

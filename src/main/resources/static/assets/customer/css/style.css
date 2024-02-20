@@ -1037,9 +1037,11 @@ ol {
 }
 
 .product__item__pic {
+	width: 265px;
 	height: 260px;
 	position: relative;
 	background-position: center center;
+	background-color: #afdbd3;
 }
 
 .product__item__pic .label {
@@ -1115,7 +1117,7 @@ ol {
 }
 
 .product__item__text {
-	padding-top: 25px;
+	padding: 25px 10px 0px 10px;
 	position: relative;
 }
 
@@ -1124,6 +1126,8 @@ ol {
 	color: #e53637;
 	font-weight: 700;
 	position: absolute;
+	padding: 0px 10px 0px 10px
+;
 	left: 0;
 	top: 0;
 	opacity: 0;

@@ -22,5 +22,6 @@ public interface SanPhamService {
     Page<SanPham> getAllShop(Pageable pageable);
     boolean delete(Long id);
     List<SanPham> getSanPhamEmtyCTSP();
+    List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
     Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
 }

@@ -154,6 +154,9 @@ $(document).on('ready', function () {
                     if (id == 'kichCo') {
                         html = `<option value="${data.ten}" selected>${data.ten}</option>`;
                     }
+                    if (id=='sanPham'){
+                        $('#sanPham_input').val(data.ten);
+                    }
                     $('#' + id).append(html);
                     Toast('success', 'Thêm Thành Công !');
                     $('#product-name-modal').val('');

@@ -102,5 +102,20 @@ public class SanPham {
 
         return chiTietSanPham;
     }
+    public List<MauSac> getDistinctMauSacList() {
+        if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
+            return List.of(); // Trả về danh sách rỗng nếu danh sách chi tiết sản phẩm là null hoặc rỗng
+        }
+
+        // Sử dụng Java Stream để lấy danh sách các màu sắc từ danh sách chi tiết sản phẩm
+        List<MauSac> allColors = chiTietSanPham.stream()
+                .map(ChiTietSanPham::getMauSac)
+                .collect(Collectors.toList());
+
+        // Lọc các màu sắc không trùng lặp
+        return allColors.stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
 }

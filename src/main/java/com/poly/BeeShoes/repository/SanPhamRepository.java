@@ -27,4 +27,5 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     boolean existsByTheLoai(TheLoai theLoai);
     boolean existsByThuongHieu(ThuongHieu thuongHieu);
     boolean existsByTen(String ten);
+    List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
 }

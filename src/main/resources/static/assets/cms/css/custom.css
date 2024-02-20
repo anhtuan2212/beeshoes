@@ -171,3 +171,6 @@
 .card-img-top{
     object-fit: cover;
 }
+#wraperKichCo .select2-selection__choice span:not(.select2-selection__choice__remove) {
+    color: white;
+}
