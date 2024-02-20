@@ -1,3 +1,4 @@
+activeSiderbar('san_pham',"",'li_san_pham')
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================

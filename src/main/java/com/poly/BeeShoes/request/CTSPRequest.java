@@ -5,25 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-/*
-* sanPham: 3
-theLoai: 3
-thuongHieu: 2
-chatLieu: 1
-deGiay: 1
-coGiay: 2
-moTa: <p>ssssss</p>
-muiGiay: 1
-giaNhap: 100
-sales: false
-trangThai: true
-* */
 @Getter
 @Setter
 public class CTSPRequest {
 
     @NotNull(message = "Sản Phẩm không được để trống !")
     Long sanPham;
+
+    String tenSanPham;
 
     @NotNull(message = "Thể Loại không được để trống !")
     Long theLoai;

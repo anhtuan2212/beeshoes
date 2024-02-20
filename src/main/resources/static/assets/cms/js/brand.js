@@ -1,5 +1,5 @@
 var datatable = null;
-
+activeSiderbar('thuong_hieu',"li_thuoc_tinh",'li_san_pham')
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================

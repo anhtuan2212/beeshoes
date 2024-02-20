@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
 
 
-
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
 </head>
@@ -38,7 +37,6 @@
 <!-- Navbar Vertical -->
 
 
-
 <!-- End Navbar Vertical -->
 
 <main id="content" role="main" class="main">
@@ -48,63 +46,121 @@
         <div class="page-header">
             <div class="row align-items-center mb-3">
                 <div class="col-sm mb-2 mb-sm-0">
-                    <h1 class="page-header-title" >VOUCHER </h1>
+                    <h1 class="page-header-title">VOUCHER </h1>
 
                 </div>
-
+                <div class="col-sm-auto ">
+                    <a class="btn btn-primary" href="add-voucher">Thêm Voucher</a>
+                </div>
 
             </div>
             <!-- End Row -->
-            <div style="margin-top:50px ">  <hr>
-                <h2 class="page-header-title"  >Bộ Lọc </h2>
+            <div style="margin-top:50px ">
+                <hr>
+                <h2 class="page-header-title">Bộ Lọc </h2>
 
             </div>
-            <div  style="margin-bottom:20px " class="card-header">
+            <div style="margin-bottom:20px " class="card-header">
                 <div class="row justify-content-between align-items-center flex-grow-1">
 
+                    <form>
 
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <form>
-                            <!-- Search -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input style="margin-top: 35px;width: 100%;" type="text" name="key" class="form-control"
+                                       placeholder="Mã Voucher, Tên Voucher, Loại Voucher" aria-label="Search"
+                                       aria-describedby="search-addon"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Trạng thái</label>
+                                <select style="width: 100%;" class="form-select form-control" name="isTru"
+                                        aria-label="Default select example">
+                                    <option value="">Tất cả</option>
+                                    <option value="1">Sắp diễn ra</option>
+                                    <option value="2">Đang diễn ra</option>
+                                    <option value="3">Đã kết thúc</option>
+                                    <option value="4">Hủy voucher</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <div style="margin-left: 10px;margin-top: 5px;margin-right: 20px ">
+                                    <div class="form-check form-check-inline">
+                                        <label style="width: 250px;margin-right: 20px  " class="form-check-label">Tiền mặt từ</label>
+                                        <input style="margin-right: 20px " type="number" name="TienMat1"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập giá trị tiền mặt." aria-label="">
+                                    </div>
+                                    <div style="margin-right: 20px " class="form-check form-check-inline">
+                                        <label style="width: 250px; margin-right: 20px " class="form-check-label">Đến</label>
+                                        <input style="margin-right: 10px;margin-top:20px  " type="number" name="TienMat2"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập giá trị tiền mặt" aria-label="">
+                                    </div>
+                                </div>
+                                </select>
+                            </div>
+                        </div>
 
-                            <form >
-                                <div class="input-group ">
-                                    <input style="width: 150px" type="text" name="key" class="form-control " placeholder="Mã Voucher,Tên Voucher, Loại Voucher,Điều kiện" aria-label="Search" aria-describedby="search-addon" />
-                                    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-                                    </span>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div style="margin-left: 10px;margin-top: 40px;margin-right: 20px ">
+                                    <div class="form-check form-check-inline">
+                                        <label style="width: 250px;margin-right: 20px  " class="form-check-label">Ngày
+                                            bắt đầu</label>
+                                        <input style="margin-right: 20px " name="startDate" type="datetime-local"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label="">
+                                    </div>
+                                    <div style="margin-right: 20px " class="form-check form-check-inline">
+                                        <label style="width: 250px; margin-right: 20px " class="form-check-label">Ngày
+                                            kết thúc</label>
+                                        <input style="margin-right: 10px;margin-top:20px  " type="datetime-local"
+                                               class="form-control money-input-mask" name="endDate"
+                                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label="">
+                                    </div>
 
                                 </div>
-                            </form>
+                            </div>
+                            <div class="col-md-4">
+                                <div style="margin-left: 10px;margin-top: 40px;margin-right: 20px ">
+                                    <div class="form-check form-check-inline">
+                                        <label style="width: 250px;margin-right: 20px  " class="form-check-label">Số lượng từ</label>
+                                        <input style="margin-right: 20px " type="number" name="soluong1"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập số lượng." aria-label="">
+                                    </div>
+                                    <div style="margin-right: 20px " class="form-check form-check-inline">
+                                        <label style="width: 250px; margin-right: 20px " class="form-check-label">Đến</label>
+                                        <input style="margin-right: 10px;margin-top:20px  " type="number" name="soluong2"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập số lượng." aria-label="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div style="margin-left: 10px;margin-top: 40px;margin-right: 20px ">
+                                    <div class="form-check form-check-inline">
+                                        <label style="width: 250px;margin-right: 20px  " class="form-check-label">Phần trăm từ</label>
+                                        <input style="margin-right: 20px " type="number" name="phantram1"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập giá trị phần trăm." aria-label="">
+                                    </div>
+                                    <div style="margin-right: 20px " class="form-check form-check-inline">
+                                        <label style="width: 250px; margin-right: 20px " class="form-check-label">Đến</label>
+                                        <input style="margin-right: 10px;margin-top:20px  " type="number" name="phantram2"
+                                               class="form-control money-input-mask"
+                                               placeholder="Vui lòng nhập giá trị phần trăm." aria-label="">
+                                    </div>
+                                </div>
+                                </select>
+                            </div>
+                        </div>
 
-                            <!-- End Search -->
-                        </form>
-                    </div>
-                    <label style="margin-left: 380px " class="input-label">Trạng thái</label>
-                    <select style="margin-right: 50px; width: 400px  " class="form-select form-control " th:name="trangThai" aria-label="Default select example">
-                        <option  >Tất cả</option>
-                        <option  >Đang hoạt động</option>
-                        <option  >Đang hoạt động</option>
-                    </select>
-                    <div style="margin-left: 10px;margin-top: 30px;margin-right: 20px " >
-                    <div  class="form-check form-check-inline">
-                        <label style="width: 150px;margin-right: 20px "   class="form-check-label" >Ngày bắt đầu</label>
-                        <input  style="margin-right: 20px "  type="datetime-local" class="form-control money-input-mask" th:name="ngayBatDau"
-                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label=""  >
-                    </div>
-                    <div  style="margin-right: 20px "  class="form-check form-check-inline">
-                        <label style="width: 150px; margin-right: 20px "   class="form-check-label" >Ngày kết thúc</label>
-                        <input  style="margin-right: 10px " type="datetime-local" class="form-control money-input-mask" th:name="ngayBatDau"
-                               placeholder="Vui lòng nhập ngày bắt đầu." aria-label="" >
-                    </div>
+
+                        <!-- End Row -->
+                        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                    </form>
                 </div>
-                    <label style="margin-top: 30px"  class="input-label">Số lượng</label>
-                    <select style="margin-right: 50px; width: 400px;margin-top: 30px "  class="form-select form-control  "  th:name="trangThai" aria-label="Default select example">
-                        <option  >Tất cả</option>
-                        <option >Còn số lượng</option>
-                        <option >Hết số lượng</option>
-                    </select>
-                </div>
-                <!-- End Row -->
             </div>
             <!-- End Header -->
 
@@ -128,13 +184,6 @@
                         <a class="nav-link active" href="#">All Voucher</a>
 
                     </li>
-                    <li  style="margin-left: 1200px" class="nav-item">
-                        <div  class="col-sm-auto ">
-                            <a class="btn btn-primary" href="add-voucher">Thêm Voucher</a>
-                        </div>
-
-                    </li>
-
                 </ul>
                 <!-- End Nav -->
             </div>
@@ -186,7 +235,9 @@
                         <div class="hs-unfold">
 
 
-                            <div id="showHideDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card" style="width: 15rem;">
+                            <div id="showHideDropdown"
+                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card"
+                                 style="width: 15rem;">
                                 <div class="card card-sm">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -194,7 +245,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_product">
-                                                <input name="key" type="checkbox" class="toggle-switch-input" id="toggleColumn_product" checked="" th:value="${key}">
+                                                <input name="key" type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_product" checked="" th:value="${key}">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -207,7 +259,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_type">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_type" checked="">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_type" checked="">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -233,7 +286,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_stocks">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_stocks" checked="">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_stocks" checked="">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -246,7 +300,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_sku">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_sku" checked="">
+                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_sku"
+                                                       checked="">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -259,7 +314,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_price">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_price" checked="">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_price" checked="">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -272,7 +328,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_quantity">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_quantity">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_quantity">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -297,7 +354,8 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_variants">
-                                                <input type="checkbox" class="toggle-switch-input" id="toggleColumn_variants" checked="">
+                                                <input type="checkbox" class="toggle-switch-input"
+                                                       id="toggleColumn_variants" checked="">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -309,7 +367,7 @@
 
                                             <!-- Checkbox Switch -->
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_variants">
-                                                <input type="checkbox" class="toggle-switch-input"  checked="">
+                                                <input type="checkbox" class="toggle-switch-input" checked="">
                                                 <span class="toggle-switch-label">
                               <span class="toggle-switch-indicator"></span>
                             </span>
@@ -330,7 +388,9 @@
 
             <!-- Table -->
             <div class="table-responsive datatable-custom">
-                <table id="datatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
+                <table id="datatable"
+                       class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
+                       data-hs-datatables-options='{
                      "columnDefs": [{
                         "targets": [0, 8, 13],
                         "width": "5%",
@@ -348,59 +408,64 @@
                      "pagination": "datatablePagination"
                    }'>
                     <thead class="thead-light">
-                    <tr >
-                        <th >STT</th>
-                        <th >Mã Voucher</th>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã Voucher</th>
                         <th>Tên Voucher</th>
                         <th>Loại Voucher</th>
                         <th>Số Lượng</th>
-                        <th>Giá Trị Tiền Mặt</th>
-                        <th>Giá Trị Phần Trăm</th>
+                        <th>Giá Trị</th>
                         <th>Giá Trị Tối Đa</th>
+                        <th>Giá Trị Tối Thiểu</th>
                         <th>Ngày Bắt Đầu</th>
                         <th>Ngày Kết Thúc</th>
-                        <th>Điều Kiện</th>
                         <td>Trạng Thái</td>
                         <td>Action</td>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <th:block th:each="voucher,loop : ${listVC.content}" >
+                    <th:block th:each="voucher,loop : ${listVC.content}">
                         <tr>
                             <td>[[${loop.index + 1}]]</td>
                             <td>[[${voucher.ma}]]</td>
                             <td>[[${voucher.ten}]]</td>
-                            <td>[[${voucher.loaiVoucher}]]</td>
+                            <td th:text="${voucher.loaiVoucher == '%' ? 'Phần trăm' : 'Tiền mặt'}"></td>
                             <td>[[${voucher.soLuong}]]</td>
-                            <td>[[${voucher.giaTriTienMat}]]</td>
-                            <td>[[${voucher.giaTriPhanTram}]]</td>
-                            <td>[[${voucher.giaTriToiDa}]]</td>
-                            <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayBatDau, 'yyyy-MM-dd | HH:mm')}"></td>
-                            <td th:if="${voucher != null}" th:text="${#dates.format(voucher.ngayKetThuc, 'yyyy-MM-dd | HH:mm')}"></td>
-                            <td>[[${voucher.dieuKien}]]</td>
-                            <td>[[${voucher.trangThai == true ? 'Còn hoạt động' : (voucher.trangThai == false ? 'Ngưng hoạt động' : 'Sắp diễn ra')}]]</td>
+
+                            <th:block th:if="${voucher.loaiVoucher=='$'}">
+                                <td th:text="${#numbers.formatDecimal(voucher.giaTriTienMat, 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ' "></td>
+                            </th:block>
+                            <th:block th:if="${voucher.loaiVoucher=='%'}">
+                            <td>[[${voucher.giaTriPhanTram}]] %</td>
+                            </th:block>
+                            <td th:text="${#numbers.formatDecimal(voucher.giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ'"></td>
+                            <td th:text="${#numbers.formatDecimal(voucher.giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')} + 'đ' "></td>
+                            <td th:if="${voucher != null}"
+                                th:text="${#dates.format(voucher.ngayBatDau, 'yyyy-MM-dd | HH:mm')}"></td>
+                            <td th:if="${voucher != null}"
+                                th:text="${#dates.format(voucher.ngayKetThuc, 'yyyy-MM-dd | HH:mm')}"></td>
+                            <td>
+                             <span th:switch="${voucher.trangThai}" th:classappend="${'status-' + voucher.trangThai}">
+                              <span th:case="1">Sắp diễn ra</span>
+                              <span th:case="2">Đang diễn ra</span>
+                             <span th:case="3">Đã kết thúc</span>
+                              <span th:case="4">Hủy voucher</span>
+                                 </span>
+                            </td>
 
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-sm btn-white"  th:href="@{/cms/detail/{id}(id=${voucher.id})}">
-                                        <i class="tio-edit"></i> Edit
+                                    <a class="btn btn-sm "
+                                       th:href="@{/cms/update-voucher/{id}(id=${voucher.id})}">
+                                        <i class="tio-edit"></i>
                                     </a>
 
-                                    <!-- Unfold -->
-                                    <div class="hs-unfold btn-group">
-                                        <a class="js-hs-unfold-invoker btn btn-icon btn-sm btn-white dropdown-toggle dropdown-toggle-empty" href="javascript:;" data-hs-unfold-options='{
-                             "target": "#productsEditDropdown2",
-                             "type": "css-animation",
-                             "smartPositionOffEl": "#datatable"
-                           }'></a>
-
-                                        <div id="productsEditDropdown2" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1">
-                                            <a class="dropdown-item" href="#">
-                                                <i class="tio-delete-outlined dropdown-item-icon"></i> Delete
+                                            <a class="dropdown-item"
+                                               th:href="@{/cms/delete-voucher/{id}(id=${voucher.id})}" >
+                                                <i class="tio-delete-outlined dropdown-item-icon"></i>
                                             </a>
-                                        </div>
-                                    </div>
+
                                     <!-- End Unfold -->
                                 </div>
                             </td>
@@ -419,19 +484,31 @@
                 <div class="col-md-4 mb-3 mb-md-0">
                     <div class="card-footer">
                         <!-- Pagination -->
-                        <nav  aria-label="Page navigation example ">
+                        <nav aria-label="Page navigation example ">
                             <ul class="pagination">
-                                <li class="page-item" th:if="${listVC.number + 1 > 1 }" >
-                                    <a class="page-link" th:href="@{'?page=' + ${listVC.number}}"  >
-                                        <<
+                                <li class="page-item" th:if="${listVC.number + 1 > 1 }">
+                                    <a class="page-link" th:href="@{'?page=' + ${listVC.number}}">
+                                        Next
                                     </a>
                                 </li>
-                                <li class="page-item" th:each="i:${#numbers.sequence(1,totalPage)}" th:classappend="${currenPage == i ? 'active' : ''}">
-                                    <a class="page-link" th:href="@{${key != null && key != '' ? '?key='+key+'&':'?'}+'page=' + ${i}}" th:text="${i}"></a></li>
-                                <li class="page-item" th:if="${listVC.number + 1 < totalPage}" >
-                                    <a class="page-link" th:href="@{'?page=' + ${listVC.number + 2}}"  >
-
-                                        >>
+                                <li class="page-item" th:each="i:${#numbers.sequence(1,totalPage)}"
+                                    th:classappend="${currenPage == i ? 'active' : ''}">
+                                    <a class="page-link"
+                                       th:href="@{${key != null && key != '' ? '?key='+key+'&':'?'} +
+                         ${soluong1 != null && soluong1 != '' ? 'soluong1='+soluong1+'&':''} +
+                         ${soluong2 != null && soluong2 != ''? 'soluong2='+soluong2+'&':''} +
+                         ${phantram1 != null && phantram1 != '' ? 'phantram1='+phantram1+'&':''} +
+                         ${phantram2 != null && phantram2 != '' ? 'phantram2='+phantram2 +'&':''} +
+                         ${TienMat1 != null && TienMat1 != '' ? 'TienMat1='+TienMat1 +'&':''} +
+                         ${TienMat2 != null && TienMat2 != '' ? 'TienMat2='+TienMat2 +'&':''} +
+                         ${startDate != null && startDate != '' ? 'startDate='+startDate+'&':''} +
+                         ${endDate != null && endDate != '' ? 'endDate='+endDate +'&':''} +
+                         ${isTru != null && isTru != '' ? 'isTru='+isTru +'&':''} +
+                         'page=' + ${i}}" th:text="${i}"></a>
+                                </li>
+                                <li class="page-item" th:if="${listVC.number + 1 < totalPage}">
+                                    <a class="page-link" th:href="@{'?page=' + ${listVC.number + 2}}">
+                                        Pre
                                     </a>
                                 </li>
                             </ul>
@@ -439,13 +516,13 @@
                         <!-- End Pagination -->
                     </div>
                 </div>
-            <!-- End Footer -->
+                <!-- End Footer -->
+            </div>
+            <!-- End Card -->
         </div>
-        <!-- End Card -->
-    </div>
-    <!-- End Content -->
+        <!-- End Content -->
 
-    <!-- Footer -->
+        <!-- Footer -->
     </div>
 
 
@@ -461,7 +538,8 @@
             <h4 class="card-header-title">Keyboard shortcuts</h4>
 
             <!-- Toggle Button -->
-            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;" data-hs-unfold-options='{
+            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-dark ml-2" href="javascript:;"
+               data-hs-unfold-options='{
                 "target": "#keyboardShortcutsSidebar",
                 "type": "css-animation",
                 "animationIn": "fadeInRight",
@@ -486,7 +564,8 @@
                             <span class="font-weight-bold">Bold</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">b</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">b</kbd>
                         </div>
                     </div>
                 </div>
@@ -496,7 +575,8 @@
                             <em>italic</em>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">i</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">i</kbd>
                         </div>
                     </div>
                 </div>
@@ -506,7 +586,8 @@
                             <u>Underline</u>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">u</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">u</kbd>
                         </div>
                     </div>
                 </div>
@@ -516,7 +597,9 @@
                             <s>Strikethrough</s>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">s</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">s</kbd>
                         </div>
                     </div>
                 </div>
@@ -526,7 +609,8 @@
                             <span class="small">Small text</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">s</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">s</kbd>
                         </div>
                     </div>
                 </div>
@@ -536,7 +620,8 @@
                             <mark>Highlight</mark>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">e</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">e</kbd>
                         </div>
                     </div>
                 </div>
@@ -627,7 +712,8 @@
                             <span>Find and replace</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">r</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">r</kbd>
                         </div>
                     </div>
                 </div>
@@ -637,7 +723,8 @@
                             <span>Find next</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">n</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">n</kbd>
                         </div>
                     </div>
                 </div>
@@ -647,7 +734,8 @@
                             <span>Find previous</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">p</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">p</kbd>
                         </div>
                     </div>
                 </div>
@@ -667,7 +755,8 @@
                             <span>Un-indent</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Tab</kbd>
+                            <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Tab</kbd>
                         </div>
                     </div>
                 </div>
@@ -677,7 +766,9 @@
                             <span>Move line up</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1"><i class="tio-arrow-large-upward-outlined"></i></kbd>
                         </div>
                     </div>
                 </div>
@@ -687,7 +778,10 @@
                             <span>Move line down</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1"><i class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1"><i
+                                class="tio-arrow-large-downward-outlined font-size-sm"></i></kbd>
                         </div>
                     </div>
                 </div>
@@ -697,7 +791,9 @@
                             <span>Add a comment</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">m</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">m</kbd>
                         </div>
                     </div>
                 </div>
@@ -707,7 +803,8 @@
                             <span>Undo</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">z</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">z</kbd>
                         </div>
                     </div>
                 </div>
@@ -717,7 +814,8 @@
                             <span>Redo</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">y</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">y</kbd>
                         </div>
                     </div>
                 </div>
@@ -733,7 +831,9 @@
                             <span>Create new doc</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">n</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Alt</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">n</kbd>
                         </div>
                     </div>
                 </div>
@@ -743,7 +843,9 @@
                             <span>Present</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">p</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">p</kbd>
                         </div>
                     </div>
                 </div>
@@ -753,7 +855,9 @@
                             <span>Share</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">s</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">s</kbd>
                         </div>
                     </div>
                 </div>
@@ -763,7 +867,9 @@
                             <span>Search docs</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">o</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">o</kbd>
                         </div>
                     </div>
                 </div>
@@ -773,7 +879,9 @@
                             <span>Keyboard shortcuts</span>
                         </div>
                         <div class="col-7 text-right">
-                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd class="d-inline-block mb-1">/</kbd>
+                            <kbd class="d-inline-block mb-1">Ctrl</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">Shift</kbd> <small class="text-muted">+</small> <kbd
+                                class="d-inline-block mb-1">/</kbd>
                         </div>
                     </div>
                 </div>
@@ -785,14 +893,16 @@
 <!-- End Keyboard Shortcuts -->
 
 <!-- Export Products Modal -->
-<div class="modal fade" id="exportProductsModal" tabindex="-1" role="dialog" aria-labelledby="exportProductsModalTitle" aria-hidden="true">
+<div class="modal fade" id="exportProductsModal" tabindex="-1" role="dialog" aria-labelledby="exportProductsModalTitle"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
                 <h4 id="exportProductsModalTitle" class="modal-title">Export products</h4>
 
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
                     <i class="tio-clear tio-lg"></i>
                 </button>
             </div>
@@ -800,7 +910,8 @@
 
             <!-- Body -->
             <div class="modal-body">
-                <p>This CSV file can update all product information. To update just inventory quantites use the <a href="#">CSV file for inventory.</a></p>
+                <p>This CSV file can update all product information. To update just inventory quantites use the <a
+                        href="#">CSV file for inventory.</a></p>
 
                 <!-- Form Group -->
                 <div class="form-group">
@@ -808,15 +919,18 @@
 
                     <!-- Custom Checkbox -->
                     <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="exportProductsRadio1" name="exportProductsRadio" class="custom-control-input" checked="">
+                        <input type="radio" id="exportProductsRadio1" name="exportProductsRadio"
+                               class="custom-control-input" checked="">
                         <label class="custom-control-label" for="exportProductsRadio1">Current page</label>
                     </div>
                     <div class="custom-control custom-radio mb-2">
-                        <input type="radio" id="exportProductsRadio2" name="exportProductsRadio" class="custom-control-input">
+                        <input type="radio" id="exportProductsRadio2" name="exportProductsRadio"
+                               class="custom-control-input">
                         <label class="custom-control-label" for="exportProductsRadio2">All products</label>
                     </div>
                     <div class="custom-control custom-radio">
-                        <input type="radio" id="exportProductsRadio3" name="exportProductsRadio" class="custom-control-input" disabled="">
+                        <input type="radio" id="exportProductsRadio3" name="exportProductsRadio"
+                               class="custom-control-input" disabled="">
                         <label class="custom-control-label" for="exportProductsRadio3">Selected: 20 products</label>
                     </div>
                     <!-- End Custom Checkbox -->
@@ -827,11 +941,14 @@
 
                 <!-- Custom Checkbox -->
                 <div class="custom-control custom-radio mb-2">
-                    <input type="radio" id="exportProductsAsRadio1" name="exportProductsAsRadio" class="custom-control-input" checked="">
-                    <label class="custom-control-label" for="exportProductsAsRadio1">CSV for Excel, Numbers, or other spreadsheet programs</label>
+                    <input type="radio" id="exportProductsAsRadio1" name="exportProductsAsRadio"
+                           class="custom-control-input" checked="">
+                    <label class="custom-control-label" for="exportProductsAsRadio1">CSV for Excel, Numbers, or other
+                        spreadsheet programs</label>
                 </div>
                 <div class="custom-control custom-radio">
-                    <input type="radio" id="exportProductsAsRadio2" name="exportProductsAsRadio" class="custom-control-input">
+                    <input type="radio" id="exportProductsAsRadio2" name="exportProductsAsRadio"
+                           class="custom-control-input">
                     <label class="custom-control-label" for="exportProductsAsRadio2">Plain CSV file</label>
                 </div>
                 <!-- End Custom Checkbox -->
@@ -850,14 +967,16 @@
 <!-- End Export Products Modal -->
 
 <!-- Import Products Modal -->
-<div class="modal fade" id="importProductsModal" tabindex="-1" role="dialog" aria-labelledby="importProductsModalTitle" aria-hidden="true">
+<div class="modal fade" id="importProductsModal" tabindex="-1" role="dialog" aria-labelledby="importProductsModalTitle"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
                 <h4 id="importProductsModalTitle" class="modal-title">Import products by CSV</h4>
 
-                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
                     <i class="tio-clear tio-lg"></i>
                 </button>
             </div>
@@ -872,7 +991,8 @@
                     <!-- Dropzone -->
                     <div id="attachFilesNewProjectLabel" class="js-dropzone dropzone-custom custom-file-boxed">
                         <div class="dz-message custom-file-boxed-label">
-                            <img class="avatar avatar-xl avatar-4by3 mb-3" src="/assets/cms/svg/illustrations/browse.svg" alt="Image Description">
+                            <img class="avatar avatar-xl avatar-4by3 mb-3"
+                                 src="/assets/cms/svg/illustrations/browse.svg" alt="Image Description">
                             <h5 class="mb-1">Choose files to upload</h5>
                             <p class="mb-2">or</p>
                             <span class="btn btn-sm btn-primary">Browse files</span>
@@ -885,7 +1005,9 @@
                 <!-- Custom Checkbox -->
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="overwriteCurrentProductsCheckbox">
-                    <label class="custom-control-label" for="overwriteCurrentProductsCheckbox">Overwrite any current products that have the same handle. Existing values will be used for any missing columns.<a href="#">Learn more</a></label>
+                    <label class="custom-control-label" for="overwriteCurrentProductsCheckbox">Overwrite any current
+                        products that have the same handle. Existing values will be used for any missing columns.<a
+                                href="#">Learn more</a></label>
                 </div>
                 <!-- End Custom Checkbox -->
             </div>
@@ -905,8 +1027,35 @@
 <!-- Product Filter Modal -->
 
 
-        <!-- End Body -->
+<!-- End Body -->
+<style>
+    .status-1 {
+        background-color: #428bca;
+        color:white ;
+        border-radius: 50px;
+        padding: 5px;
+    }
 
+    .status-2 {
+        background-color: #69a948;
+        color:white ;
+        border-radius: 50px;
+        padding: 5px;
+    }
+
+    .status-3 {
+        background-color: red;
+        color:white ;
+        border-radius: 50px;
+        padding: 5px;
+    }
+    .status-4 {
+        background-color: black;
+        color:white ;
+        border-radius: 50px;
+        padding: 5px;
+    }
+</style>
 <!-- End Product Filter Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
@@ -915,6 +1064,7 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
@@ -925,7 +1075,7 @@
                     $('.popover').last().addClass('popover-dark')
                 });
 
-            $(document).on('click', '#closeBuilderPopover' , function() {
+            $(document).on('click', '#closeBuilderPopover', function () {
                 window.localStorage.setItem('hs-builder-popover', true);
                 $('#builderPopover').popover('dispose');
             });
@@ -955,7 +1105,6 @@
         }).init();
 
 
-
         // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
         // =======================================================
         var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
@@ -963,9 +1112,9 @@
 
         // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
         // =======================================================
-        $('.js-nav-tooltip-link').tooltip({ boundary: 'window' })
+        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
 
-        $(".js-nav-tooltip-link").on("show.bs.tooltip", function(e) {
+        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
             if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
                 return false;
             }
@@ -1020,7 +1169,7 @@
             }
         });
 
-        $('.js-datatable-filter').on('change', function() {
+        $('.js-datatable-filter').on('change', function () {
             var $this = $(this),
                 elVal = $this.val(),
                 targetColumnIndex = $this.data('target-column-index');
@@ -1034,10 +1183,10 @@
 
             if (oldValue == "") return;
 
-            setTimeout(function(){
+            setTimeout(function () {
                 var newValue = $input.val();
 
-                if (newValue == ""){
+                if (newValue == "") {
                     // Gotcha
                     datatable.search('').draw();
                 }
