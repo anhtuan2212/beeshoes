@@ -1,15 +1,21 @@
 package com.poly.BeeShoes.controller.cms;
 
 import com.poly.BeeShoes.dto.DiaChiDto;
+import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.DiaChi;
 import com.poly.BeeShoes.model.KhachHang;
+import com.poly.BeeShoes.model.Role;
+import com.poly.BeeShoes.model.User;
 import com.poly.BeeShoes.request.KhachHangRequest;
 import com.poly.BeeShoes.request.UpdateCusAdressRequest;
 import com.poly.BeeShoes.service.DiaChiService;
 import com.poly.BeeShoes.service.KhachHangService;
+import com.poly.BeeShoes.service.UserService;
+import com.poly.BeeShoes.utility.MailUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +30,12 @@ import java.util.List;
 public class KhachHangController {
     private final KhachHangService khachHangService;
     private final DiaChiService diaChiService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserService userService;
+
+    private final MailUtility mailUtility;
 
     @GetMapping("")
     public String khachHang(Model model) {
@@ -71,15 +83,43 @@ public class KhachHangController {
         dc.setKhachHang(kh);
         DiaChi diaChi = diaChiService.add(dc);
         kh.setDiaChiMacDinh(diaChi);
-        khachHangService.add(kh);
+        kh = khachHangService.add(kh);
+        User user = new User();
+        user.setEmail(khachHang.getEmail());
+        user.setAvatar(khachHang.getAvatar());
+        user.setRole(Role.CUSTOMER);
+        String password = LibService.generateRandomString(10);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setKhachHang(kh);
+        User u =  userService.createNewUser(user);
+        if(u!=null){
+            String tb = "Chúc mừng bạn đã tạo tài khoản thành công!";
+            String body = "<h1>Đăng Ký Thành Công !</h1><h2>email đăng nhập là : "+user.getEmail() +"</h2><h2>Mật Khẩu là : "+password+"</h2>";
+            mailUtility.sendMail(user.getEmail(), tb, body);
+        }
         return "redirect:/cms/khach-hang";
     }
 
     @GetMapping("/detail/{id}")
     public String khachHangDetail(@PathVariable Long id, Model model) {
         KhachHang khachHang = khachHangService.detail(id);
-        model.addAttribute("khachHang", khachHang);
-        model.addAttribute("listDC", khachHang.getDiaChi());
+        User user = userService.findByKhachHang_Id(khachHang.getId());
+        KhachHangRequest kh = new KhachHangRequest();
+        kh.setId(khachHang.getId());
+        kh.setAvatar(user.getAvatar());
+        kh.setEmail(user.getEmail());
+        kh.setMaKhachHang(khachHang.getMaKhachHang());
+        kh.setSdt(khachHang.getSdt());
+        kh.setHoTen(khachHang.getHoTen());
+        kh.setNgaySinh(khachHang.getNgaySinh());
+        kh.setGioiTinh(khachHang.isGioiTinh());
+        kh.setTrangThai(khachHang.isTrangThai());
+        kh.setIdDiaChi(khachHang.getDiaChiMacDinh().getId());
+
+        List<DiaChi> diaChiOfKH = diaChiService.getByIdKhachHang(khachHang.getId());
+
+        model.addAttribute("khachHang", kh);
+        model.addAttribute("listDC", diaChiOfKH);
         return "cms/pages/users/detail-khachHang";
     }
 
@@ -157,24 +197,22 @@ public class KhachHangController {
     @PostMapping("/update/{id}")
     public String updateKH(
             @PathVariable Long id, Model model,
-            @ModelAttribute("khachHang") KhachHang khachHang
+            @ModelAttribute("khachHang") KhachHangRequest khachHang
     ) {
-        KhachHang kh1 = khachHangService.detail(id);
-        kh1.setHoTen(khachHang.getHoTen());
-        kh1.setGioiTinh(khachHang.isGioiTinh());
-        kh1.setNgaySinh(khachHang.getNgaySinh());
-        kh1.setSdt(khachHang.getSdt());
-        kh1.setTrangThai(khachHang.isTrangThai());
-        KhachHang kh = khachHangService.update(kh1, id);
-
-//        DiaChi dc = diaChiService.detail(kh.getDiaChiMacDinh().getId());
-//        dc.setSoNha(khachHang.getDiaChiMacDinh().getSoNha());
-//        dc.setPhuongXa(khachHang.getDiaChiMacDinh().getPhuongXa());
-//        dc.setQuanHuyen(khachHang.getDiaChiMacDinh().getQuanHuyen());
-//        dc.setTinhThanhPho(khachHang.getDiaChiMacDinh().getTinhThanhPho());
-//        DiaChi diaChi = diaChiService.update(dc, kh1.getDiaChiMacDinh().getId());
-//        kh.setDiaChiMacDinh(dc);
-        khachHangService.update(kh,id);
+        KhachHang updateKhachHang = khachHangService.detail(id);
+        User user = userService.findByKhachHang_Id(khachHang.getId());
+        updateKhachHang.setId(khachHang.getId());
+        updateKhachHang.setHoTen(khachHang.getHoTen());
+        updateKhachHang.setGioiTinh(khachHang.isGioiTinh());
+        updateKhachHang.setNgaySinh(khachHang.getNgaySinh());
+        updateKhachHang.setSdt(khachHang.getSdt());
+        updateKhachHang.setTrangThai(khachHang.isTrangThai());
+//        updateKhachHang.setDiaChiMacDinh(diaChiService.getById(khachHang.getIdDiaChi()));
+        user.setEmail(khachHang.getEmail());
+        user.setAvatar(khachHang.getAvatar());
+        user.setKhachHang(updateKhachHang);
+        khachHangService.update(updateKhachHang, id);
+        userService.update(user);
 
         return "redirect:/cms/khach-hang";
     }

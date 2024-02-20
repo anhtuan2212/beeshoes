@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required Meta Tags Always Come First -->
@@ -38,7 +39,7 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}" onsubmit="return formvalidate(event)"
+        <form id="form-data-cus" th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}" onsubmit="return formvalidate(event)"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -71,42 +72,6 @@
                                 <div class="card-body">
                                     <!-- Body -->
                                     <div class="row">
-                                        <!-- Form Group -->
-                                        <!--                                <div class="row form-group">-->
-                                        <!--                                    <label class="col-sm-3 col-form-label input-label">Avatar</label>-->
-
-                                        <!--                                    <div class="col-sm-9">-->
-                                        <!--                                        <div class="d-flex align-items-center">-->
-                                        <!--                                            &lt;!&ndash; Avatar &ndash;&gt;-->
-                                        <!--                                            <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"-->
-                                        <!--                                                   for="avatarUploader">-->
-                                        <!--                                                <img id="avatarImg" class="avatar-img"-->
-                                        <!--                                                     src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">-->
-
-                                        <!--                                                <input type="file" class="js-file-attach avatar-uploader-input"-->
-                                        <!--                                                       id="avatarUploader" data-hs-file-attach-options='{-->
-                                        <!--                                      "textTarget": "#avatarImg",-->
-                                        <!--                                      "mode": "image",-->
-                                        <!--                                      "targetAttr": "src",-->
-                                        <!--                                      "resetTarget": ".js-file-attach-reset-img",-->
-                                        <!--                                      "resetImg": "/assets/img/160x160/img1.jpg",-->
-                                        <!--                                      "allowTypes": [".png", ".jpeg", ".jpg"]-->
-                                        <!--                                   }'>-->
-
-                                        <!--                                                <span class="avatar-uploader-trigger">-->
-                                        <!--                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>-->
-                                        <!--                            </span>-->
-                                        <!--                                            </label>-->
-                                        <!--                                            &lt;!&ndash; End Avatar &ndash;&gt;-->
-
-                                        <!--                                            <button type="button" class="js-file-attach-reset-img btn btn-white">-->
-                                        <!--                                                Delete-->
-                                        <!--                                            </button>-->
-                                        <!--                                        </div>-->
-                                        <!--                                    </div>-->
-                                        <!--                                </div>-->
-                                        <!-- End Form Group -->
-
                                         <div class="col-lg-5">
                                             <!-- Card -->
                                             <div class="mb-3 mb-lg-5">
@@ -118,6 +83,43 @@
 
                                                 <!-- Body -->
                                                 <div class="body">
+                                                    <!-- Form Group -->
+                                                    <div class="row form-group">
+                                                        <label class="col-sm-4 col-form-label input-label">Avatar</label>
+
+                                                        <div class="col-sm-8">
+                                                            <div class="d-flex align-items-center">
+                                                                <!-- Avatar -->
+                                                                <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
+                                                                       for="avatarUploader">
+                                                                    <img id="avatarImg" class="avatar-img"
+                                                                         src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">
+
+                                                                    <input type="file" class="js-file-attach avatar-uploader-input"
+                                                                           id="avatarUploader" data-hs-file-attach-options='{
+                                                                              "textTarget": "#avatarImg",
+                                                                              "mode": "image",
+                                                                              "targetAttr": "src",
+                                                                              "resetTarget": ".js-file-attach-reset-img",
+                                                                              "resetImg": "/assets/img/160x160/img1.jpg",
+                                                                              "allowTypes": [".png", ".jpeg", ".jpg"]
+                                                                           }'>
+                                                                    <input type="text" id="urlImgAvatar" name="avatar" th:field="*{avatar}" value="/assets/cms/img/160x160/img1.jpg" hidden>
+
+                                                                    <span class="avatar-uploader-trigger">
+                                                                      <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
+                                                                    </span>
+                                                                </label>
+                                                                <!-- End Avatar -->
+
+                                                                <button type="button" class="js-file-attach-reset-img btn btn-white">
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Form Group -->
+
                                                     <!-- Form Group -->
                                                     <div class="row form-group">
                                                         <label for="firstNameLabel"
@@ -150,8 +152,8 @@
                                                             <div class="input-group input-group-sm-down-break align-items-center">
                                                                 <input type="text" class="js-masked-input form-control"
                                                                        name="phone"
-                                                                       id="sdt" placeholder="+x-xxx-xxx-xxx"
-                                                                       th:field="*{sdt}">
+                                                                       id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx"
+                                                                       data-hs-mask-options='{"template": "0000000000"}' th:field="*{sdt}">
                                                             </div>
                                                         </div>
                                                         <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập
@@ -160,6 +162,21 @@
                                                         <i id="sdt1_emty" style="color: red;display: none">Vui lòng nhập
                                                             đúng
                                                             định dạng sdt(x-xxx-xxx-xxx)</i>
+                                                    </div>
+
+                                                    <div class="row form-group">
+                                                        <label for="sdt" class="col-sm-4 col-form-label input-label">Email</label>
+
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group input-group-sm-down-break align-items-center">
+                                                                <input type="text" class="js-masked-input form-control"
+                                                                       name="phone"
+                                                                       id="email" placeholder="+x-xxx-xxx-xxx"
+                                                                       th:field="*{email}">
+                                                            </div>
+                                                            <i id="email_emty" style="color: red;display: none">Vui lòng nhập email</i>
+                                                            <i id="email_eror_" style="color: red;display: none">Email không hợp lệ</i>
+                                                        </div>
                                                     </div>
 
                                                     <!-- Form Group -->
@@ -334,13 +351,13 @@
                                                         <button type="button" th:attr="data-id-address=${dc.getId()}" class="btn btn-primary position-absolute btn_save_address d-none"><i class="tio-save"></i></button>
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
-                                                            <div class="row form-group">
+                                                            <div class="form-group">
                                                                 <label th:for="'soNha'+${dc.getId()}"
-                                                                       class="col-sm-5 col-form-label input-label">Số
+                                                                       class="col col-form-label input-label">Số
                                                                     nhà</label>
 
-                                                                <div class="col-sm-7">
-                                                                    <input class="form-control soNha"
+                                                                <div class="col">
+                                                                    <input data-attr-sonha="sonha" class="form-control soNha"
                                                                            name="addressLine1"
                                                                            th:id="'soNha'+${dc.getId()}" placeholder="Your address"
                                                                            aria-label="Your address"
@@ -352,11 +369,11 @@
                                                                 <!-- End Form Group -->
                                                             </div>
                                                             <!-- Form Group -->
-                                                            <div class="row form-group">
+                                                            <div class="form-group">
                                                                 <label th:for="'phuongXa'+${dc.getId()}"
-                                                                       class="col-sm-5 col-form-label input-label">Phường/Xã</label>
+                                                                       class="col col-form-label input-label">Phường/Xã</label>
 
-                                                                <div class="col-sm-7">
+                                                                <div class="col">
                                                                     <select name="phuong_xa" class="js-select2-custom custom-select phuong_xa"
                                                                             data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
                                                                                "searchInputPlaceholder": "Tìm Phường Xã..."}'>
@@ -369,11 +386,11 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
-                                                            <div class="row form-group">
+                                                            <div class="form-group">
                                                                 <label th:for="'quanHuyen'+${dc.getId()}"
-                                                                       class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
+                                                                       class="col col-form-label input-label">Quận/Huyện</label>
 
-                                                                <div class="col-sm-7">
+                                                                <div class="col">
                                                                     <select name="quanHuyen" class="js-select2-custom custom-select quanHuyen"
                                                                             data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
                                                                                 "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
@@ -385,12 +402,12 @@
                                                             <!-- End Form Group -->
 
                                                             <!-- Form Group -->
-                                                            <div class="row form-group">
+                                                            <div class="form-group">
                                                                 <label th:id="'tinhTP'+${dc.getId()}"
-                                                                       class="col-sm-5 col-form-label input-label">Tỉnh/Thành
+                                                                       class="col col-form-label input-label">Tỉnh/Thành
                                                                     phố</label>
 
-                                                                <div class="col-sm-7">
+                                                                <div class="col">
                                                                     <select name="tinhThanhPho" class="js-select2-custom custom-select tinhTP"
                                                                             data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
                                                                                 "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>
@@ -408,7 +425,7 @@
                                                                            th:for="'preferencesSwitch'+${dc.getId()}">Địa chỉ mặc định
                                                                         <span class="col-sm-2">
                                                                                 <input type="radio" name="addressDefault"
-                                                                                       th:checked="${dc.getId() == khachHang.getDiaChiMacDinh().getId()}"
+                                                                                       th:checked="${dc.getId() == khachHang.getIdDiaChi()}"
                                                                                        class="toggle-switch-input addressDefaultSwitch"
                                                                                        th:id="'preferencesSwitch'+${dc.getId()}" th:value="${dc.getId()}">
                                                                                 <span class="toggle-switch-label ml-auto">
@@ -430,7 +447,7 @@
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <div class="card-footer d-sm-flex align-items-sm-center">
-                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                                <button id="btn-submit" type="submit" class="btn btn-primary">Cập nhật</button>
                                             </div>
                                         </div>
                                     </div>
