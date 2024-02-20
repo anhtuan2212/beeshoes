@@ -23,12 +23,13 @@ public interface VoucherResponsitory extends JpaRepository<Voucher,Long> {
 @Query("SELECT v FROM Voucher v WHERE v.ngayBatDau BETWEEN :startDate AND :endDate AND v.ngayKetThuc BETWEEN :startDate AND :endDate")
 List<Voucher> findByNgayBatDauBetweenAndNgayKetThuc(LocalDateTime startDate, LocalDateTime endDate);
   @Query("SELECT v FROM Voucher v WHERE v.trangThai = :isTru")
-  List<Voucher> searchtt(Boolean isTru);
-  List<Voucher> findAllByOrderByNgayBatDauAsc();
+  List<Voucher> searchtt(Integer isTru);
+  List<Voucher> findAllByTrangThaiInOrderByNgayBatDauAsc(List<Integer> trangThaiList);
   @Query("select c from Voucher c where c.soLuong BETWEEN :soluong1 and :soluong2")
   List<Voucher> findBySoLuongBetweenAndSoLuong(Integer  soluong1, Integer  soluong2);
   @Query("select c from Voucher c where c.giaTriTienMat BETWEEN :TienMat1 and :TienMat2")
   List<Voucher> findByGiaTriTienMatBetweenAndGiaTriTienMat(BigDecimal TienMat1, BigDecimal  TienMat2);
   @Query("select c from Voucher c where c.giaTriPhanTram BETWEEN :phantram1 and :phantram2")
   List<Voucher> findByGiaTriPhanTramBetweenAndGiaTriPhanTram(Integer  phantram1, Integer  phantram2);
+  Page<Voucher> findAllByTrangThaiNot(Integer trangThai, Pageable pageable);
 }

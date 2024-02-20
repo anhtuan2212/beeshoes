@@ -258,6 +258,10 @@ $(document).on('ready', function () {
         $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
     });
 
+    $('.js-masked-input').each(function () {
+        var mask = $.HSCore.components.HSMask.init($(this));
+    });
+
 
     // INITIALIZATION OF MEGA MENU
     // =======================================================

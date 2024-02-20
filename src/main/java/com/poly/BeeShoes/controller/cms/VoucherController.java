@@ -3,6 +3,7 @@ package com.poly.BeeShoes.controller.cms;
 
 import com.poly.BeeShoes.model.Voucher;
 import com.poly.BeeShoes.repository.VoucherResponsitory;
+import com.poly.BeeShoes.request.VoucherRequest;
 import com.poly.BeeShoes.service.VoucherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -54,7 +56,7 @@ public class VoucherController {
                          @Param("TienMat2") BigDecimal TienMat2,
                          @Param("startDate") LocalDateTime startDate,
                          @Param("endDate") LocalDateTime endDate,
-                         @Param("isTru") Boolean isTru) {
+                         @Param("isTru") Integer isTru) {
         Page<Voucher> list = voucherService.getAllpage(page);
         if (key != null) {
             list = voucherService.SearchVoucher(key, page);
@@ -98,11 +100,6 @@ public class VoucherController {
     }
 
 
-    @Scheduled(fixedRate = 60000) // Chạy mỗi phút
-    public void updateVoucherStatus() {
-        List<Voucher> vouchers = voucherResponsitory.findAllByOrderByNgayBatDauAsc();
-        voucherService.updateVoucherStatus(vouchers);
-    }
     @GetMapping("/add-voucher")
     public String addvoucher() {
         return "cms/pages/voucher/add.html";
@@ -116,31 +113,41 @@ public class VoucherController {
         voucher.setNgayBatDau(Timestamp.valueOf(voucher.getStartDate1()));
         voucher.setNgayKetThuc(Timestamp.valueOf(voucher.getEndDate1()));
         long count = voucherResponsitory.count();
+
         int numberOfDigits = (int) Math.log10(count + 1) + 1;
         int numberOfZeros = Math.max(0, 5 - numberOfDigits);
         String ma = String.format("VC%0" + (numberOfDigits + numberOfZeros) + "d", count + 1);
         count++;
         voucher.setMa(ma);
-        voucherService.updateVoucherStatus(list);
+        voucher.setTrangThai(1);
         voucherService.save(voucher);
         return "redirect:/cms/voucher";
     }
 
     @PostMapping("/update-voucher/{id}")
     public String update(@PathVariable Long id, Model model,
-                         @ModelAttribute("Voucher") Voucher voucher) {
+                         @ModelAttribute("Voucher") VoucherRequest voucher) {
         Voucher voucher1 = voucherService.detail(id);
-        model.addAttribute("options", voucherService.getAll());
-        model.addAttribute("List", voucher1);
-        voucherService.update(id, voucher);
-
-        return "redirect:/cms/voucher";
+        voucher1.setLoaiVoucher(voucher.getLoaiVoucher());
+        voucher1.setTen(voucher.getTen());
+        voucher1.setMa(voucher.getMa());
+        voucher1.setGiaTriTienMat(voucher.getGiaTriTienMat());
+        voucher1.setGiaTriPhanTram(voucher.getGiaTriPhanTram());
+        voucher1.setGiaTriToiDa(voucher.getGiaTriToiDa());
+        voucher1.setGiaTriToiThieu(voucher.getGiaTriToiThieu());
+        voucher1.setSoLuong(voucher.getSoLuong());
+        voucher1.setNgayBatDau(Timestamp.valueOf(voucher.getNgayBatDau()));
+        voucher1.setNgayKetThuc(Timestamp.valueOf(voucher.getNgayKetThuc()));
+        voucherService.update(id, voucher1);
+            return "redirect:/cms/voucher";
     }
 
     @GetMapping("/update-voucher/{id}")
     public String detail(@PathVariable Long id, Model model) {
         Voucher voucher1 = voucherService.detail(id);
         List<Voucher> options=voucherService.getAll();
+        voucher1.setStartDate1(voucher1.getNgayBatDau().toLocalDateTime());
+        voucher1.setStartDate1(voucher1.getNgayKetThuc().toLocalDateTime());
         model.addAttribute("Listvv", voucher1);
         List<Voucher> uniqueOptions = options.stream()
                 .collect(Collectors.toMap(Voucher::getLoaiVoucher, Function.identity(), (existing, replacement) -> existing))
@@ -150,17 +157,17 @@ public class VoucherController {
                 .collect(Collectors.toMap(Voucher::getTrangThai, Function.identity(), (existing, replacement) -> existing))
                 .values().stream()
                 .collect(Collectors.toList());
+
+
         model.addAttribute("option", unique);
         model.addAttribute("options", uniqueOptions);
         return "cms/pages/voucher/update-voucher.html";
     }
-    @GetMapping("/delete-voucher/{id}")
+    @GetMapping ("/delete-voucher/{id}")
     public String delete(@PathVariable Long id, Model model,
                          @ModelAttribute("Voucher") Voucher voucher) {
         Voucher voucher1 = voucherService.detail(id);
-       voucher.setTrangThai(3);
-        model.addAttribute("Listvv", voucher1);
-        model.addAttribute("options", voucherService.getAll());
+       voucherService.delete(id);
         return "redirect:/cms/voucher";
     }
 }

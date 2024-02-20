@@ -41,9 +41,15 @@ public class KhachHang {
     private Timestamp ngayTao;
     private Timestamp ngaySua;
 
-    private Long nguoiTao;
 
-    private Long nguoiSua;
+
+    @OneToOne
+    @JoinColumn(name = "nguoi_tao")
+    User nguoiTao;
+
+    @OneToOne
+    @JoinColumn(name = "nguoi_sua")
+    User nguoiSua;
 
     private boolean trangThai;
 }
