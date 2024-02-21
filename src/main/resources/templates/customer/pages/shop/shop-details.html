@@ -78,7 +78,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3 col-md-3">
-                    <ul class="nav nav-tabs " role="tablist">
+                    <ul class="nav nav-tabs mini_img " role="tablist">
                         <th:block th:each="img:${sanPham.getAnh()}">
                             <li class="nav-item">
                                 <a th:attr="class='nav-link '+${img.getId()==sanPham.getMainImage().getId()?'active':''} " data-toggle="tab" th:href="'#tabs-'+${img.getId()}" role="tab">
@@ -297,7 +297,7 @@
 </section>
 <!-- Related Section End -->
 
-<table border="1">
+
     <table border="1">
         <tr th:each="ctsp:${sanPham.getChiTietSanPham()}">
             <td data-nane="id" th:text="${ctsp.getId()}"></td>
@@ -333,6 +333,7 @@
             </form>
         </div>
     </div>
+
     <!-- Search End -->
 
     <!-- Js Plugins -->

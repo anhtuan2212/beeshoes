@@ -1,12 +1,16 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.MauSac;
+import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.repository.MauSacRepository;
 import com.poly.BeeShoes.service.MauSacService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
@@ -49,11 +53,26 @@ public class MauSacServiceImpl implements MauSacService {
 
     @Override
     public boolean existsByMaMauSac(String ma) {
-        return mauSacRepository.existsByMaMauSac(ma);
+        String mamau = chuanHoaTen(ma);
+        List<MauSac> danhSachCoGiay = mauSacRepository.findAll();
+        List<MauSac> coGiayTrungTen = danhSachCoGiay.stream()
+                .filter(cg -> chuanHoaTen(cg.getMaMauSac()).equals(mamau))
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 
     @Override
-    public boolean existsByTen(String ten) {
-        return mauSacRepository.existsByTen(ten);
+    public boolean existsByTen(String ten, Long id) {
+        String tenChuanHoa = chuanHoaTen(ten);
+        List<MauSac> danhSachCoGiay = mauSacRepository.findAll();
+        List<MauSac> coGiayTrungTen = danhSachCoGiay.stream()
+                .filter(cg -> {
+                    if (chuanHoaTen(cg.getTen()).equals(tenChuanHoa) && !cg.getId().equals(id)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 }

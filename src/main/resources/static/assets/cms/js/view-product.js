@@ -196,11 +196,11 @@ $(document).on('ready', function () {
                                 </td>
                                 <td class="table-column-pl-0 width-100 " data-colum-index="3">
                                     <label class="form-control d-flex justify-content-between" name="maSanPham">${data.maSanPham}
-                                    <a class="btn btn-light p-0 dropdown-toggle" data-product-code="${data.maSanPham}" data-id="${data.id}"  role="button" title="Barcode" id="barcodeDropdown${data.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="btn btn-light p-0 dropdown-toggle show-barcode" data-product-code="${data.maSanPham}" data-id="${data.id}"  role="button" title="Barcode" id="barcodeDropdown${data.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="tio tio-barcode"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="barcodeDropdown${data.id}">
-                                        <span class="dropdown-item" id="barcode${data.id}">Barcode: ||||||</span>
+                                        <span class="dropdown-item" id="barcodeSpan${data.id}"><svg id="barcode${data.id}"></svg></span>
                                     </div>
                                     </label>
                                 </td>
@@ -249,6 +249,11 @@ $(document).on('ready', function () {
         }
     });
     datatable.rows.add(dataArray).draw();
+    $(document).on('click','.show-barcode',function () {
+        let code = $(this).data('product-code');
+        let id = $(this).data('id');
+        JsBarcode("#barcode"+id, code);
+    })
     $('#datatableSearch').on('mouseup', function (e) {
         var $input = $(this),
             oldValue = $input.val();

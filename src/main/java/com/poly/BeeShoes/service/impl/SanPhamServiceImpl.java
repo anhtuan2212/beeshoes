@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +96,12 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public boolean existsByTen(String name) {
-        return sanPhamRepository.existsByTen(name);
+        String tenChuanHoa = chuanHoaTen(name);
+        List<SanPham> danhSachCoGiay = sanPhamRepository.findAll();
+        List<SanPham> coGiayTrungTen = danhSachCoGiay.stream()
+                .filter(cg -> chuanHoaTen(cg.getTen()).equals(tenChuanHoa))
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 
     @Override

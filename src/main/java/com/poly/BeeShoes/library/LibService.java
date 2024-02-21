@@ -18,6 +18,9 @@ public class LibService {
         BigDecimal bd = new BigDecimal(str);
         return bd;
     }
+    public static String chuanHoaTen(String ten) {
+        return ten.toLowerCase().replaceAll("\\s+", "");
+    }
     public static boolean isNumeric(String str) {
         // Sử dụng regex để kiểm tra xem chuỗi chỉ chứa số hay không
         return str.matches("\\d+");
