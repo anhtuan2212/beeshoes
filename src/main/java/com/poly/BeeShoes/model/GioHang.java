@@ -5,33 +5,36 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "dia_chi")
+@Table(name = "gio_hang")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString
-public class DiaChi {
+public class GioHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_khach_hang")
     KhachHang khachHang;
 
-    String soNha;
-    String phuongXa;
-    String quanHuyen;
-    String tinhThanhPho;
+    @OneToMany(mappedBy = "gioHang")
+    List<GioHangChiTiet> gioHangChiTiets;
+
     Timestamp ngayTao;
     Timestamp ngaySua;
 
-    Long nguoiTao;
+    @OneToOne
+    @JoinColumn(name = "nguoi_tao")
+    User nguoiTao;
 
-    Long trangThai;
+    @OneToOne
+    @JoinColumn(name = "nguoi_sua")
+    User nguoiSua;
+    boolean trangThai;
 }

@@ -10,5 +10,5 @@ public interface DeGiayService {
     List<DeGiay> getAll();
     boolean delete(Long id);
 
-    boolean existsByTen(String ten);
+    boolean existsByTen(String ten,Long id);
 }

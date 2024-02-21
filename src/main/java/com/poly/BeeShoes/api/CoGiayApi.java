@@ -27,15 +27,11 @@ public class CoGiayApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
         if (id != null) {
-            th = coGiayService.getByTen(ten);
-            System.out.println(ten);
-            if (th != null) {
-                if (th.getId() != id){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-                }
+            if (coGiayService.existsByTen(ten,id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (coGiayService.existsByTen(ten)) {
+            if (coGiayService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }

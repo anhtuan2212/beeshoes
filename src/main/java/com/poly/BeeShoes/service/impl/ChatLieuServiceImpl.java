@@ -8,6 +8,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
+
 @Service
 @RequiredArgsConstructor
 public class ChatLieuServiceImpl implements ChatLieuService {
@@ -43,7 +47,17 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
-    public boolean existsByTen(String ten) {
-        return chatLieuRepository.existsByTen(ten);
+    public boolean existsByTen(String ten, Long id) {
+        String tenChuanHoa = chuanHoaTen(ten);
+        List<ChatLieu> lst = chatLieuRepository.findAll();
+        List<ChatLieu> coGiayTrungTen = lst.stream()
+                .filter(cg -> {
+                    if (chuanHoaTen(cg.getTen()).equals(tenChuanHoa) && !cg.getId().equals(id)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 }

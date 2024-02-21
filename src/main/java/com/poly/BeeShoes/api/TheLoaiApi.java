@@ -45,15 +45,11 @@ public class TheLoaiApi {
         }
 
         if (id != null) {
-            th = theLoaiService.getByTen(ten);
-            System.out.println(ten);
-            if (th != null) {
-                if (th.getId() != id){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-                }
+            if (theLoaiService.existsByTen(ten,id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (theLoaiService.existsByTen(ten)) {
+            if (theLoaiService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }

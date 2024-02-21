@@ -10,5 +10,5 @@ public interface KichCoService {
     KichCo getByTen(String co);
     List<KichCo> getAll();
     boolean delete(Long id);
-    boolean exitsByTen(String ten);
+    boolean existsByTen(String ten,Long id);
 }

@@ -1,11 +1,14 @@
 package com.poly.BeeShoes.controller.customer;
 
 import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.User;
 import com.poly.BeeShoes.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +21,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShopController {
     private final SanPhamService sanPhamService;
+    public Authentication getUserAuth(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication;
+    }
     @GetMapping({"/shop","/shop/"})
     public String shop(Model model){
+        Authentication auth = getUserAuth();
+        System.out.println(auth.toString());
+
         Pageable pageable = PageRequest.of(0,12);
         Page<SanPham> spx = sanPhamService.getAllShop(pageable);
         model.addAttribute("lstsanpham",spx);

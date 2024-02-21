@@ -104,7 +104,7 @@ public class Product {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         sp.setThuongHieu(th);
-        sp.setTrangThai(ctspRequest.isTrangThai());
+        sp.setTrangThai(true);
         sp.setSale(ctspRequest.isSales());
         sp.setTheLoai(tl);
         sp.setMoTa(ctspRequest.getMoTa());
