@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -26,13 +27,14 @@ public class Product {
     private final ChatLieuService chatLieuService;
     private final DeGiayService deGiayService;
     private final MauSacService mauSacService;
-    private final ThuongHieuService thuongHieuService;
     private final KichCoService kichCoService;
+    private final ThuongHieuService thuongHieuService;
     private final AnhService anhService;
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
     private final ChiTietSanPhamService chiTietSanPhamService;
+    private final TagsService tagsService;
     Gson gs = new Gson();
 
     @PostMapping("/them-san-pham")
@@ -60,6 +62,7 @@ public class Product {
 
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
+        System.out.println(ctspRequest.getTags());
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
         if (ctspRequest.getTenSanPham().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "NameProNull").body(null);
@@ -93,6 +96,26 @@ public class Product {
         }
         SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
         sp.setTen(ctspRequest.getTenSanPham());
+
+        List<String> lstTags = ctspRequest.getTags();
+        List<Tags> lst = new ArrayList<>();
+
+        if (lstTags != null) {
+            for (String tag : lstTags) {
+                String name = LibService.convertNameTags(tag);
+                Tags tags = tagsService.getByTen(name);
+                if (tags == null) {
+                    tags = new Tags();
+                    tags.setTen(name);
+                    tags.setTrangThai(true);
+                    tags.setNgayTao(Timestamp.from(Instant.now()));
+                    tags.setNgaySua(Timestamp.from(Instant.now()));
+                    tags = tagsService.save(tags);
+                }
+                lst.add(tags);
+            }
+        }
+        sp.setTags(lst);
         sp = sanPhamService.save(sp);
         ChatLieu cl = chatLieuService.getById(ctspRequest.getChatLieu());
         ThuongHieu th = thuongHieuService.getById(ctspRequest.getThuongHieu());
@@ -169,9 +192,9 @@ public class Product {
         if (id.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
         }
-        ChiTietSanPham chiTietSanPham=null;
-        if (!LibService.containsAlphabetic(id)){
-         chiTietSanPham = chiTietSanPhamService.getById(Long.parseLong(id));
+        ChiTietSanPham chiTietSanPham = null;
+        if (!LibService.containsAlphabetic(id)) {
+            chiTietSanPham = chiTietSanPhamService.getById(Long.parseLong(id));
         }
         if (LibService.containsAlphabetic(id)) {
             MauSac mauSac = mauSacService.getMauSacByMa(color);

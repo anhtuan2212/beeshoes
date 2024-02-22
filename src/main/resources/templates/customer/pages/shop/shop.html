@@ -34,8 +34,8 @@
 <div class="offcanvas-menu-wrapper">
     <div class="offcanvas__option">
         <div class="offcanvas__links">
-            <a href="#">Sign in</a>
-            <a href="#">FAQs</a>
+            <a href="javascript:;">Sign in</a>
+            <a href="javascript:;">FAQs</a>
         </div>
         <div class="offcanvas__top__hover">
             <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -47,9 +47,9 @@
         </div>
     </div>
     <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
-        <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
-        <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
+        <a href="javascript:;" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
+        <a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+        <a href="javascript:;"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
         <div class="price">$0.00</div>
     </div>
     <div id="mobile-menu-wrap"></div>
@@ -88,7 +88,7 @@
             <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
-                        <form action="#">
+                        <form action="javascript:;">
                             <input type="text" placeholder="Search...">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
@@ -97,21 +97,17 @@
                         <div class="accordion" id="accordionExample">
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    <a data-toggle="collapse" data-target="#collapseOne">Thể Loại</a>
                                 </div>
                                 <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
-                                                <li><a href="#">Men (20)</a></li>
-                                                <li><a href="#">Women (20)</a></li>
-                                                <li><a href="#">Bags (20)</a></li>
-                                                <li><a href="#">Clothing (20)</a></li>
-                                                <li><a href="#">Shoes (20)</a></li>
-                                                <li><a href="#">Accessories (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
+                                                <th:block th:each="tl:${lsttheloai}">
+                                                    <li><a href="javascript:;"
+                                                           th:text="${tl.getTen()}+' ( '+${tl.getCountProduct()}+' )'"></a>
+                                                    </li>
+                                                </th:block>
                                             </ul>
                                         </div>
                                     </div>
@@ -119,16 +115,15 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                    <a data-toggle="collapse" data-target="#collapseTwo">Thương Hiệu</a>
                                 </div>
                                 <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__brand">
                                             <ul>
-                                                <li><a href="#">Louis Vuitton</a></li>
-                                                <li><a href="#">Chanel</a></li>
-                                                <li><a href="#">Hermes</a></li>
-                                                <li><a href="#">Gucci</a></li>
+                                                <th:block th:each="th:${lstthuonghieu}">
+                                                    <li><a href="javascript:;" th:text="${th.getTen()}"></a></li>
+                                                </th:block>
                                             </ul>
                                         </div>
                                     </div>
@@ -136,18 +131,16 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                    <a data-toggle="collapse" data-target="#collapseThree">Khoảng Giá</a>
                                 </div>
                                 <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li><a href="#">$0.00 - $50.00</a></li>
-                                                <li><a href="#">$50.00 - $100.00</a></li>
-                                                <li><a href="#">$100.00 - $150.00</a></li>
-                                                <li><a href="#">$150.00 - $200.00</a></li>
-                                                <li><a href="#">$200.00 - $250.00</a></li>
-                                                <li><a href="#">250.00+</a></li>
+                                                <li><a href="javascript:;">0đ - 1.000.000đ</a></li>
+                                                <li><a href="javascript:;">1.000.000đ - 5.000.000đ</a></li>
+                                                <li><a href="javascript:;">5.000.000đ - 10.000.000đ</a></li>
+                                                <li><a href="javascript:;">10.000.000đ +</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -155,35 +148,17 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseFour">Size</a>
+                                    <a data-toggle="collapse" data-target="#collapseFour">Kích Cỡ</a>
                                 </div>
                                 <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
-                                            <label for="xs">xs
-                                                <input type="radio" id="xs">
-                                            </label>
-                                            <label for="sm">s
-                                                <input type="radio" id="sm">
-                                            </label>
-                                            <label for="md">m
-                                                <input type="radio" id="md">
-                                            </label>
-                                            <label for="xl">xl
-                                                <input type="radio" id="xl">
-                                            </label>
-                                            <label for="2xl">2xl
-                                                <input type="radio" id="2xl">
-                                            </label>
-                                            <label for="xxl">xxl
-                                                <input type="radio" id="xxl">
-                                            </label>
-                                            <label for="3xl">3xl
-                                                <input type="radio" id="3xl">
-                                            </label>
-                                            <label for="4xl">4xl
-                                                <input type="radio" id="4xl">
-                                            </label>
+                                            <th:block th:each="size:${lstkichco}">
+                                                <label th:for="'size'+${size.getId()}">
+                                                    <th:block th:text="${size.getTen()}"></th:block>
+                                                    <input type="radio" th:id="'size'+${size.getId()}">
+                                                </label>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>
@@ -195,33 +170,13 @@
                                 <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
-                                            <label class="c-1" for="sp-1">
-                                                <input type="radio" id="sp-1">
-                                            </label>
-                                            <label class="c-2" for="sp-2">
-                                                <input type="radio" id="sp-2">
-                                            </label>
-                                            <label class="c-3" for="sp-3">
-                                                <input type="radio" id="sp-3">
-                                            </label>
-                                            <label class="c-4" for="sp-4">
-                                                <input type="radio" id="sp-4">
-                                            </label>
-                                            <label class="c-5" for="sp-5">
-                                                <input type="radio" id="sp-5">
-                                            </label>
-                                            <label class="c-6" for="sp-6">
-                                                <input type="radio" id="sp-6">
-                                            </label>
-                                            <label class="c-7" for="sp-7">
-                                                <input type="radio" id="sp-7">
-                                            </label>
-                                            <label class="c-8" for="sp-8">
-                                                <input type="radio" id="sp-8">
-                                            </label>
-                                            <label class="c-9" for="sp-9">
-                                                <input type="radio" id="sp-9">
-                                            </label>
+                                            <th:block th:each="color:${lstmausac}">
+                                                <label class="label_select_color" data-toggle="tooltip" data-placement="top" title="Tooltip on top" th:for="'color'+${color.getId()}"
+                                                       th:style="'background-color:'+${color.getMaMauSac()} ">
+                                                    <input class="select_color"  type="radio"
+                                                           th:id="'color'+${color.getId()}">
+                                                </label>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>
@@ -233,13 +188,9 @@
                                 <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__tags">
-                                            <a href="#">Product</a>
-                                            <a href="#">Bags</a>
-                                            <a href="#">Shoes</a>
-                                            <a href="#">Fashio</a>
-                                            <a href="#">Clothing</a>
-                                            <a href="#">Hats</a>
-                                            <a href="#">Accessories</a>
+                                            <th:block th:each="tag:${lsttags}">
+                                                <a href="javascript:;" th:text="${tag.getTen()}"></a>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>
@@ -253,16 +204,21 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>Showing 1–12 of 126 results</p>
+                                <p>Hiển Thị 1–
+                                    <th:block th:text="${#lists.size(lstsanpham.getContent())}"></th:block>
+                                    Trong Tổng Số
+                                    <th:block th:text="${totalsize}"></th:block>
+                                    Kết Quả
+                                </p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
-                                <p>Sort by Price:</p>
+                                <p>Xắp xếp theo giá:</p>
                                 <select>
-                                    <option value="">Low To High</option>
-                                    <option value="">$0 - $55</option>
-                                    <option value="">$55 - $100</option>
+                                    <option value="all">Tất Cả</option>
+                                    <option value="cao-den-thap">Cao đến Thấp</option>
+                                    <option value="thap-den-cao">Thấp đến Cao</option>
                                 </select>
                             </div>
                         </div>
@@ -276,9 +232,9 @@
                                      th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-details(product=${sp.getId()})}">
                                     <span class="label" th:if="${sp.isSale()}">SALE</span>
                                     <ul class="product__hover">
-                                        <li><a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+                                        <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
                                         </li>
-                                        <li><a href="#"><img src="/assets/customer/img/icon/shopping-cart-add.svg"
+                                        <li><a href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg"
                                                              alt=""></a></li>
                                         <li><a th:href="@{/shop-detail(product=${sp.getId()})}"><img
                                                 src="/assets/customer/img/icon/eye.svg" alt=""></a></li>
@@ -314,11 +270,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <a class="active" href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <span>...</span>
-                            <a href="#">21</a>
+                            <button id="btn-load-more-product" class="primary-btn" type="button">Load More</button>
                         </div>
                     </div>
                 </div>
@@ -355,6 +307,7 @@
 <script src="/assets/customer/js/mixitup.min.js"></script>
 <script src="/assets/customer/js/owl.carousel.min.js"></script>
 <script src="/assets/customer/js/main.js"></script>
+<script src="/assets/customer/js/shop/shop.js"></script>
 <script>
     setTabsHeader('shop');
 </script>

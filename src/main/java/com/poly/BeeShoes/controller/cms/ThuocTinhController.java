@@ -26,7 +26,7 @@ public class ThuocTinhController {
     private final KichCoService kichCoService;
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
-
+    private final TagsService tagsService;
     @GetMapping("/shoe-category")
     public String theLoai(Model model) {
         List<TheLoai> lst = theLoaiService.getAll();
@@ -46,6 +46,12 @@ public class ThuocTinhController {
         List<ThuongHieu> lst = thuongHieuService.getAll();
         model.addAttribute("lstthuonghieu", lst);
         return "cms/pages/products/brand";
+    }
+    @GetMapping("/tags")
+    public String tags(Model model) {
+        List<Tags> lst = tagsService.getAll();
+        model.addAttribute("lsttags", lst);
+        return "cms/pages/tags/tags";
     }
 
     @GetMapping("/shoe-sole")

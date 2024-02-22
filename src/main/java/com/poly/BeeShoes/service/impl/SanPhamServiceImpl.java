@@ -90,6 +90,11 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public Integer getCount() {
+        return sanPhamRepository.countByTrangThaiIsTrue();
+    }
+
+    @Override
     public SanPham getByTen(String name) {
         return sanPhamRepository.getFirstByTen(name);
     }

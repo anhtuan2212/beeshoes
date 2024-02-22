@@ -24,4 +24,5 @@ public interface SanPhamService {
     List<SanPham> getSanPhamEmtyCTSP();
     List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
     Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
+    Integer getCount();
 }

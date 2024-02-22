@@ -42,7 +42,7 @@ public class LoginRegisterController {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final KhachHangService khachHangService;
-    private final HangKhachHangService hangKhachHangService;
+    private final HangKhachHangService hangKhachHangService; // page đăng ký nmmowr cho em
 
     @GetMapping("/login")
     public String formLogin(Model model) {

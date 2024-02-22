@@ -249,10 +249,10 @@ $(document).on('ready', function () {
         }
     });
     datatable.rows.add(dataArray).draw();
-    $(document).on('click','.show-barcode',function () {
+    $(document).on('click', '.show-barcode', function () {
         let code = $(this).data('product-code');
         let id = $(this).data('id');
-        JsBarcode("#barcode"+id, code);
+        JsBarcode("#barcode" + id, code);
     })
     $('#datatableSearch').on('mouseup', function (e) {
         var $input = $(this),
@@ -343,9 +343,9 @@ $(document).on('ready', function () {
         }
     });
     $('.toggle-switch-input').on('change', function () {
-            if (getArrIndex()==null){
-                $(this).closest()
-            }
+        if (getArrIndex() == null) {
+            $(this).closest()
+        }
     })
 
     $('.edit-item').on('click', function () {
@@ -445,112 +445,130 @@ $(document).on('ready', function () {
         var number = Number(text);
         return number;
     }
+    function redirectToProductPage() {
+        setTimeout(() => {
+            window.location.href = "/cms/product";
+        }, 3000);
+    }
 
     $('#btn-save').on('click', function () {
-
-        let sanPham = $('#product-id').val();
-        let theLoai = $('#theLoai').val();
-        let thuongHieu = $('#thuongHieu').val();
-        let chatLieu = $('#chatLieuSelected').val();
-        let deGiay = $('#deGiaySelect').val();
-        let coGiay = $('#coGiaySelect').val();
-        let muiGiay = $('#muiGiaySelect').val();
-        let sales = $('#isSales').val();
-        let trangThai = $('#trangThai').val();
-        let mota = $('.ql-editor').html();
-        let product_details = datatable.rows().data().toArray();
-        console.log(product_details);
-        if (isEmpty(sanPham)) {
-            ToastError("Vui lòng chọn Sản Phẩm !")
-            $('#product-id').focus();
-            return;
-        }
-        if (isEmpty(theLoai)) {
-            ToastError("Vui lòng chọn Thể Loại !")
-            $('#theLoai').focus();
-            return;
-        }
-        if (isEmpty(thuongHieu)) {
-            ToastError("Vui lòng chọn Thể Loại !")
-            $('#thuongHieu').focus();
-            return;
-        }
-        if (isEmpty(chatLieu)) {
-            ToastError("Vui lòng chọn Chất Liệu !")
-            $('#chatLieuSelected').focus();
-            return;
-        }
-        if (isEmpty(deGiay)) {
-            ToastError("Vui lòng chọn Đế Giày !")
-            $('#deGiaySelect').focus();
-            return;
-        }
-        if (isEmpty(coGiay)) {
-            ToastError("Vui lòng chọn Cổ Giày !")
-            $('#coGiaySelect').focus();
-            return;
-        }
-        if (isEmpty(muiGiay)) {
-            ToastError("Vui lòng nhập Mũi Giày !")
-            $('#muiGiaySelect').focus();
-            return;
-        }
-        if (isEmpty(mota) || mota == '<p><br></p>') {
-            ToastError("Vui lòng nhập Giới Thiệu Sản Phẩm !")
-            return;
-        }
-        if (product_details.length === 0) {
-            ToastError('Vui lòng chọn các option sản phẩm');
-            return;
-        }
-        let message = '';
-        let check = true;
-        for (let i = 0; i < product_details.length; i++) {
-            if (containsLetter(product_details[i].id)) {
-                product_details[i].id = 0;
-            }
-            if (convertToNumber(product_details[i].giaGoc) < 0) {
-                message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
-                check = false;
-                break;
-            }
-            if (convertToNumber(product_details[i].giaBan) < 0) {
-                message = "Vui lòng nhập giá bán của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
-                message = "Vui lòng số lượng của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
-                check = false;
-                break;
-            }
-        }
-        if (check) {
-            // post data lên thôi
-            $.ajax({
-                type: "POST",
-                url: "/cms/update-quick-product",
-                data: {
-                    sanPham: sanPham,
-                    theLoai: theLoai,
-                    thuongHieu: thuongHieu,
-                    chatLieu: chatLieu,
-                    deGiay: deGiay,
-                    coGiay: coGiay,
-                    moTa: mota,
-                    muiGiay: muiGiay,
-                    sales: sales,
-                    trangThai: trangThai,
-                    product_details: JSON.stringify(product_details)
-                }, success: (data, status, xhr) => {
-                    ToastSuccess('Lưu Thành Công !')
-                }, error: (e) => {
-                    ToastError(e.getResponseHeader('error'));
+        Swal.fire({
+            title: "Bạn chắc chứ?",
+            text: "Các thay đổi sẽ được áp dụng !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Hủy",
+            confirmButtonText: "Xác Nhận"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let sanPham = $('#product-id').val();
+                let theLoai = $('#theLoai').val();
+                let thuongHieu = $('#thuongHieu').val();
+                let chatLieu = $('#chatLieuSelected').val();
+                let deGiay = $('#deGiaySelect').val();
+                let coGiay = $('#coGiaySelect').val();
+                let muiGiay = $('#muiGiaySelect').val();
+                let sales = $('#isSales').val();
+                let trangThai = $('#trangThai').val();
+                let mota = $('.ql-editor').html();
+                let product_details = datatable.rows().data().toArray();
+                console.log(product_details);
+                if (isEmpty(sanPham)) {
+                    ToastError("Vui lòng chọn Sản Phẩm !")
+                    $('#product-id').focus();
+                    return;
                 }
-            })
-        } else (
-            ToastError(message)
-        )
+                if (isEmpty(theLoai)) {
+                    ToastError("Vui lòng chọn Thể Loại !")
+                    $('#theLoai').focus();
+                    return;
+                }
+                if (isEmpty(thuongHieu)) {
+                    ToastError("Vui lòng chọn Thể Loại !")
+                    $('#thuongHieu').focus();
+                    return;
+                }
+                if (isEmpty(chatLieu)) {
+                    ToastError("Vui lòng chọn Chất Liệu !")
+                    $('#chatLieuSelected').focus();
+                    return;
+                }
+                if (isEmpty(deGiay)) {
+                    ToastError("Vui lòng chọn Đế Giày !")
+                    $('#deGiaySelect').focus();
+                    return;
+                }
+                if (isEmpty(coGiay)) {
+                    ToastError("Vui lòng chọn Cổ Giày !")
+                    $('#coGiaySelect').focus();
+                    return;
+                }
+                if (isEmpty(muiGiay)) {
+                    ToastError("Vui lòng nhập Mũi Giày !")
+                    $('#muiGiaySelect').focus();
+                    return;
+                }
+                if (isEmpty(mota) || mota == '<p><br></p>') {
+                    ToastError("Vui lòng nhập Giới Thiệu Sản Phẩm !")
+                    return;
+                }
+                if (product_details.length === 0) {
+                    ToastError('Vui lòng chọn các option sản phẩm');
+                    return;
+                }
+                let message = '';
+                let check = true;
+                for (let i = 0; i < product_details.length; i++) {
+                    if (containsLetter(product_details[i].id)) {
+                        product_details[i].id = 0;
+                    }
+                    if (convertToNumber(product_details[i].giaGoc) < 0) {
+                        message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        check = false;
+                        break;
+                    }
+                    if (convertToNumber(product_details[i].giaBan) < 0) {
+                        message = "Vui lòng nhập giá bán của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        check = false;
+                        break;
+                    }
+                    if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
+                        message = "Vui lòng số lượng của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        check = false;
+                        break;
+                    }
+                }
+                if (check) {
+                    // post data lên thôi
+                    $.ajax({
+                        type: "POST",
+                        url: "/cms/update-quick-product",
+                        data: {
+                            sanPham: sanPham,
+                            theLoai: theLoai,
+                            thuongHieu: thuongHieu,
+                            chatLieu: chatLieu,
+                            deGiay: deGiay,
+                            coGiay: coGiay,
+                            moTa: mota,
+                            muiGiay: muiGiay,
+                            sales: sales,
+                            trangThai: trangThai,
+                            product_details: JSON.stringify(product_details)
+                        }, success: (data, status, xhr) => {
+                            ToastSuccess('Lưu Thành Công !')
+                            redirectToProductPage()
+                        }, error: (e) => {
+                            ToastError(e.getResponseHeader('error'));
+                        }
+                    })
+                } else (
+                    ToastError(message)
+                )
+            }
+        });
     })
 
 });
