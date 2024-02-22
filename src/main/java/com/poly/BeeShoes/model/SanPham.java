@@ -27,6 +27,8 @@ public class SanPham {
     Timestamp ngayTao;
     Timestamp ngaySua;
 
+
+
     @OneToOne
     @JoinColumn(name = "id")
     User nguoiTao;
@@ -37,6 +39,13 @@ public class SanPham {
 
     boolean trangThai;
 
+    @ManyToMany
+    @JoinTable(
+            name = "tags_san_pham",
+            joinColumns = @JoinColumn(name = "id_san_pham"),
+            inverseJoinColumns = @JoinColumn(name = "id_tag")
+    )
+    List<Tags> tags;
 
     @JoinColumn(name = "id_thuong_hieu")
     @ManyToOne
@@ -92,6 +101,9 @@ public class SanPham {
                 .map(ChiTietSanPham::getKichCo)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+    public boolean constrainTags(Tags tags){
+        return this.getTags().contains(tags);
     }
     public List<ChiTietSanPham> getSortedChiTietSanPhamByMauSac() {
         if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {

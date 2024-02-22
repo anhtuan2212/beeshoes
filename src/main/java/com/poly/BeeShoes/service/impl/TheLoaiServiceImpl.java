@@ -16,6 +16,7 @@ import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 @RequiredArgsConstructor
 public class TheLoaiServiceImpl implements TheLoaiService {
     private final TheLoaiRepository theLoaiRepository;
+
     @Override
     public TheLoai save(TheLoai theLoai) {
         return theLoaiRepository.save(theLoai);
@@ -55,10 +56,19 @@ public class TheLoaiServiceImpl implements TheLoaiService {
     @Override
     public boolean delete(Long id) {
         TheLoai theLoai = theLoaiRepository.findById(id).get();
-        if (theLoai.getId()!=null){
+        if (theLoai.getId() != null) {
             theLoaiRepository.deleteById(theLoai.getId());
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<TheLoai> getAllClient() {
+        List<TheLoai> lst = theLoaiRepository.findAllByTrangThaiIsTrue();
+        for (int i = 0; i < lst.size(); i++) {
+            lst.get(i).setCountProduct(theLoaiRepository.countSanPhamByTheLoaiIdAndTrangThai(lst.get(i).getId()));
+        }
+        return lst;
     }
 }

@@ -11,4 +11,6 @@ public interface TheLoaiService {
     boolean existsByTen(String ten,Long id);
     List<TheLoai> getAll();
     boolean delete(Long id);
+
+    List<TheLoai> getAllClient();
 }

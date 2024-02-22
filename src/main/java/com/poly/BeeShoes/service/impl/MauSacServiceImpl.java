@@ -62,6 +62,11 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
+    public List<MauSac> getAllClient() {
+        return mauSacRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean existsByTen(String ten, Long id) {
         String tenChuanHoa = chuanHoaTen(ten);
         List<MauSac> danhSachCoGiay = mauSacRepository.findAll();

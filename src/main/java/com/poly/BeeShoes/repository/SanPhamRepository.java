@@ -28,4 +28,5 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     boolean existsByThuongHieu(ThuongHieu thuongHieu);
     boolean existsByTen(String ten);
     List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
+    Integer countByTrangThaiIsTrue();
 }

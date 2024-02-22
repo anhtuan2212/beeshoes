@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="/assets/cms/css/sweetalert2.min.css">
     <style>
         #dataInTable tr td:nth-child(2) {
-            padding-left: 0 !important;
+            padding-left: 0!important;
         }
     </style>
     <!-- CSS Front Template -->
@@ -106,13 +106,14 @@
                 <div class="col-sm mb-2 mb-sm-0">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-no-gutter">
-                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
-                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Chức vụ</a>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Sản Phẩm</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Thuộc Tính</a>
                             </li>
+                            <li class="breadcrumb-item active" aria-current="page">Tags</li>
                         </ol>
                     </nav>
 
-                    <h1 class="page-header-title">Chức vụ</h1>
+                    <h1 class="page-header-title">Tags</h1>
                 </div>
 
                 <div class="col-sm-auto">
@@ -140,7 +141,7 @@
                                     </div>
                                 </div>
                                 <input id="datatableSearch" type="search" class="form-control"
-                                       placeholder="Tìm kiếm theo Tên" aria-label="Tìm kiếm theo Tên">
+                                       placeholder="Tìm kiếm." aria-label="Tìm kiếm.">
                             </div>
                             <!-- End Search -->
                         </form>
@@ -207,7 +208,7 @@
                     </tr>
                     </thead>
                     <tbody id="dataInTable">
-                    <tr th:each="cv,iter:${listCV}" th:id="'chucVu'+${cv.getId()}">
+                    <tr th:each="tl,iter:${lsttags}" th:id="'shoes'+${tl.getId()}">
                         <td class="table-column-pr-0">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
@@ -216,47 +217,42 @@
                             </div>
                         </td>
                         <td class="table-column-pl-0">
-                            <h5 class="text-hover-primary mb-0" th:attr="data-id=${cv.getId()}" href="javascript:;"
-                                th:text="${cv.getTen()}">
+                            <h5 class="text-hover-primary mb-0" th:attr="data-id=${tl.getId()}" href="javascript:;" th:text="${tl.getTen()}">
                             </h5>
                         </td>
-                        <td th:text="${cv.getNgayTao()==null?'N/A':#dates.format(cv.getNgayTao(), 'dd-MM-yyyy')}"></td>
-                        <td th:text="${cv.getNgaySua()==null?'N/A':#dates.format(cv.getNgaySua(), 'dd-MM-yyyy')}"></td>
+                        <td th:text="${tl.getNgayTao()==null?'N/A':#dates.format(tl.getNgayTao(), 'dd-MM-yyyy')}"></td>
+                        <td th:text="${tl.getNgaySua()==null?'N/A':#dates.format(tl.getNgaySua(), 'dd-MM-yyyy')}"></td>
                         <td>
-                            <th:block th:if="${cv.getNguoiTao() != null}">
-                                <a href="javascript:;"
-                                   th:text="${cv.getNguoiTao().getNhanVien().getMaNhanVien()}">N/A</a>
+                            <th:block th:if="${tl.getNguoiTao() != null}">
+                                <a href="javascript:;" th:text="${tl.getNguoiTao().getNhanVien().getMaNhanVien()}">N/A</a>
                             </th:block>
-                            <th:block th:if="${cv.getNguoiTao() == null}">
+                            <th:block th:if="${tl.getNguoiTao() == null}">
                                 N/A
                             </th:block>
                         </td>
                         <td>
-                            <th:block th:if="${cv.getNguoiSua() != null}">
-                                <a href="javascript:;"
-                                   th:text="${cv.getNguoiSua().getNhanVien().getMaNhanVien()}">N/A</a>
+                            <th:block th:if="${tl.getNguoiSua() != null}">
+                                <a href="javascript:;" th:text="${tl.getNguoiSua().getNhanVien().getMaNhanVien()}">N/A</a>
                             </th:block>
-                            <th:block th:if="${cv.getNguoiSua() == null}">
+                            <th:block th:if="${tl.getNguoiSua() == null}">
                                 N/A
                             </th:block>
 
                         </td>
                         <td>
-                            <th:block th:if="${cv.isTrangThai()==true}">
+                            <th:block th:if="${tl.isTrangThai()==true}">
                                 <span class="legend-indicator bg-success"></span>Hiển Thị
                             </th:block>
-                            <th:block th:if="${cv.isTrangThai()==false}">
+                            <th:block th:if="${tl.isTrangThai()==false}">
                                 <span class="legend-indicator bg-danger"></span>Không Hiển Thị
                             </th:block>
                         </td>
                         <td>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal"
-                               data-target="#editUserModal" th:data-status="${cv.isTrangThai() == true?1:0}"
-                               th:data-name="${cv.ten}" th:data-id="${cv.id}" onclick="edit(this)">
+                               data-target="#editUserModal" th:data-status="${tl.isTrangThai() == true?1:0}"  th:data-name="${tl.ten}" th:data-id="${tl.id}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
-                            <a class="btn btn-sm btn-white btn-delete" th:data-id="${cv.id}"
-                               onclick="deleteCategory(this)" href="javascript:;">
+                            <a class="btn btn-sm btn-white btn-delete" th:data-id="${tl.id}" onclick="deleteCategory(this)" href="javascript:;">
                                 <i class="tio-delete"></i>
                             </a>
                         </td>
@@ -281,9 +277,9 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                <option th:if="${#lists.size(listCV) < 10}" th:value="${#lists.size(listCV)}"
-                                        selected th:text="${#lists.size(listCV)}"></option>
-                                <option th:if="${#lists.size(listCV) >= 10}" th:value="10" selected>10</option>
+                                <option th:if="${#lists.size(lsttags) < 10}" th:value="${#lists.size(lsttags)}"
+                                        selected th:text="${#lists.size(lsttags)}"></option>
+                                <option th:if="${#lists.size(lsttags) >= 10}" th:value="10" selected>10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
                             </select>
@@ -338,7 +334,7 @@
             <!-- Body -->
             <div class="modal-body">
                 <div class="form-group p-4 pb-0 mb-0">
-                    <label for="inputData">Tên chức vụ :</label>
+                    <label for="inputData">Tên Tags :</label>
                     <input class="form-control" type="text" id="inputData" autofocus>
                     <input class="form-control" type="text" id="inputDataId" hidden="">
                 </div>
@@ -350,8 +346,7 @@
                     </select>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel
-                    </button>
+                    <button type="button" class="btn btn-white mr-2" data-dismiss="modal" aria-label="Close">Cancel</button>
                     <button type="button" class="btn btn-primary" id="save">Lưu</button>
                 </div>
             </div>
@@ -371,7 +366,7 @@
 <script src="/assets/cms/js/theme.min.js"></script>
 
 <!-- JS Plugins Init. -->
-<script src="/assets/cms/js/khachHangJS/chuc-vu.js"></script>
+<script src="/assets/cms/js/tags.js"></script>
 <script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>

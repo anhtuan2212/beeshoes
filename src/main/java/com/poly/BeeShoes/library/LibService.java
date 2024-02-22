@@ -21,6 +21,13 @@ public class LibService {
     public static String chuanHoaTen(String ten) {
         return ten.toLowerCase().replaceAll("\\s+", "");
     }
+    public static String convertNameTags(String input) {
+        input = input.replaceAll("[^A-Za-z0-9]", "").toUpperCase();
+        if (input.length() > 0 && input.charAt(0) != '#') {
+            input = "#" + input;
+        }
+        return input;
+    }
     public static boolean isNumeric(String str) {
         // Sử dụng regex để kiểm tra xem chuỗi chỉ chứa số hay không
         return str.matches("\\d+");

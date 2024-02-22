@@ -139,60 +139,73 @@ document.getElementById('chooseImg').addEventListener("change", function (e) {
 });
 
 $(document).on('click', '#btn-save-img', function () {
-    showLoader();
-
-    let files = filesStorage;
-    console.log(filesStorage)
-    files = files.filter(item => !item.deleted);
-    let lstURL = [];
-    let promises = []; // Mảng chứa các promise
-    let NotExitMain = true;
-    for (let i = 0; i < files.length; i++) {
-        let file = renameFile(files[i].file)
-        const storageRef = ref(storage, "images/" + file.name);
-        let promise = uploadBytes(storageRef, file).then((snapshot) => {
-            return getDownloadURL(snapshot.ref).then((url) => {
-                let img = $('a.js-fancybox-item[data-caption="' + files[i].file.name + '"]').closest('div[data-index="show-img-in-form"]').find('img.card-img-top');
-                img.attr('src', url);
-                // console.log(img)
-                // console.log(files[i].file.name)
-                let object = {url: url, main: false}
-                if (files[i].isMain) {
-                    NotExitMain = false;
-                    object.main = true;
-                }
-                lstURL.push(object);
-            });
-        });
-        let index = filesStorage.indexOf(files[i]);
-        filesStorage[index].deleted = true;
-        console.log(filesStorage)
-        promises.push(promise); // Thêm promise vào mảng
-    }
-
-    Promise.all(promises).then(() => { // Chờ tất cả các promise hoàn thành
-        if (NotExitMain) {
-            let checkedURL = $('input.check-main-radio[name="main-img"]:checked').closest('div[data-index="show-img-in-form"]').find('img.card-img-top').attr("src");
-            // console.log(checkedURL);
-            let object = {url: checkedURL, main: true}
-            lstURL.push(object)
-        }
-        let id = $('h1.page-header-title[data-product-id]').data('product-id');
-        $.ajax({
-            url: "/cms/upload-img",
-            type: "POST",
-            data: {
-                data: JSON.stringify(lstURL),
-                id: id
-            },
-            success: function () {
-                hideLoader();
-                ToastSuccess("Thành Công.")
-            },
-            error: function () {
-                ToastSuccess("Lỗi !")
+    Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Các thay đổi sẽ được áp dụng !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let files = filesStorage;
+            if (files.length != 0) {
+                showLoader();
             }
-        });
+            files = files.filter(item => !item.deleted);
+            let lstURL = [];
+            let promises = []; // Mảng chứa các promise
+            let NotExitMain = true;
+            for (let i = 0; i < files.length; i++) {
+                let file = renameFile(files[i].file)
+                const storageRef = ref(storage, "images/" + file.name);
+                let promise = uploadBytes(storageRef, file).then((snapshot) => {
+                    return getDownloadURL(snapshot.ref).then((url) => {
+                        let img = $('a.js-fancybox-item[data-caption="' + files[i].file.name + '"]').closest('div[data-index="show-img-in-form"]').find('img.card-img-top');
+                        img.attr('src', url);
+                        // console.log(img)
+                        // console.log(files[i].file.name)
+                        let object = {url: url, main: false}
+                        if (files[i].isMain) {
+                            NotExitMain = false;
+                            object.main = true;
+                        }
+                        lstURL.push(object);
+                    });
+                });
+                let index = filesStorage.indexOf(files[i]);
+                filesStorage[index].deleted = true;
+                console.log(filesStorage)
+                promises.push(promise); // Thêm promise vào mảng
+            }
+
+            Promise.all(promises).then(() => { // Chờ tất cả các promise hoàn thành
+                if (NotExitMain) {
+                    let checkedURL = $('input.check-main-radio[name="main-img"]:checked').closest('div[data-index="show-img-in-form"]').find('img.card-img-top').attr("src");
+                    // console.log(checkedURL);
+                    let object = {url: checkedURL, main: true}
+                    lstURL.push(object)
+                }
+                let id = $('h1.page-header-title[data-product-id]').data('product-id');
+                $.ajax({
+                    url: "/cms/upload-img",
+                    type: "POST",
+                    data: {
+                        data: JSON.stringify(lstURL),
+                        id: id
+                    },
+                    success: function () {
+                            hideLoader();
+                        ToastSuccess("Thành Công.")
+                    },
+                    error: function () {
+                        ToastSuccess("Lỗi !")
+                    }
+                });
+            });
+        }
     });
 });
 

@@ -81,7 +81,8 @@
                     <ul class="nav nav-tabs mini_img " role="tablist">
                         <th:block th:each="img:${sanPham.getAnh()}">
                             <li class="nav-item">
-                                <a th:attr="class='nav-link '+${img.getId()==sanPham.getMainImage().getId()?'active':''} " data-toggle="tab" th:href="'#tabs-'+${img.getId()}" role="tab">
+                                <a th:attr="class='nav-link '+${img.getId()==sanPham.getMainImage().getId()?'active':''} "
+                                   data-toggle="tab" th:href="'#tabs-'+${img.getId()}" role="tab">
                                     <div class="product__thumb__pic set-bg" th:attr="data-setbg=${img.getUrl()}">
                                     </div>
                                 </a>
@@ -92,7 +93,8 @@
                 <div class="col-lg-6 col-md-9 product-img-show">
                     <div class="tab-content">
                         <th:block th:each="img:${sanPham.getAnh()}">
-                            <div th:attr="class='tab-pane '+${img.getId()==sanPham.getMainImage().getId()?'active':''} " th:id="'tabs-'+${img.getId()}" role="tabpanel">
+                            <div th:attr="class='tab-pane '+${img.getId()==sanPham.getMainImage().getId()?'active':''} "
+                                 th:id="'tabs-'+${img.getId()}" role="tabpanel">
                                 <div class="product__details__pic__item">
                                     <img class="product-img-show" th:src="${img.getUrl()}" alt="">
                                 </div>
@@ -110,10 +112,9 @@
                     <div class="product__details__text">
                         <h4 th:text="${sanPham.getTen()}">Product Name</h4>
                         <div class="rating">
-                            <span>Tổng số lượng : <th:block th:text="${sanPham.getSoLuong()}"></th:block></span>
-                            <span></span>
+                            <span >Tổng số lượng : <th:block th:text="${sanPham.getSoLuong()}"></th:block></span> |<span id="total-num-product"></span>
                         </div>
-                        <h3>
+                        <h3 id="show-price">
                             <th:block
                                     th:if="${sanPham != null and sanPham.giaBan != null and sanPham.chiTietSanPham != null and sanPham.chiTietSanPham.size() > 0}">
                                 <th:block
@@ -132,7 +133,8 @@
                                 <th:block th:each="kichCo,iter:${sanPham.getDistinctKichCoList()}">
                                     <label th:for="'size_id_'+${kichCo.getId()}">
                                         <th:block th:text="${kichCo.getTen()}"></th:block>
-                                        <input type="radio" th:id="'size_id_'+${kichCo.getId()}">
+                                        <input class="size_selected" name="kichthuoc" type="radio"
+                                               th:id="'size_id_'+${kichCo.getId()}" th:value="${kichCo.getTen()}" th:attr="data-id-size=${kichCo.getId()}">
                                     </label>
                                 </th:block>
                             </div>
@@ -142,7 +144,7 @@
                                     <label class="label_select_color"
                                            th:style="'background-color: ' + ${color.getMaMauSac()}"
                                            th:for="'color_id_'+${color.getId()}">
-                                        <input class="select_color" type="radio" th:id="'color_id_'+${color.getId()}"
+                                        <input class="select_color" type="radio" th:id="'color_id_'+${color.getId()}" th:value="${color.getMaMauSac()}"
                                                name="color" th:attr="data-id-color=${color.getId()}"/>
                                     </label>
                                 </th:block>
@@ -151,27 +153,32 @@
                         <div class="product__details__cart__option">
                             <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input id="quantity-selected" type="text" value="1">
                                 </div>
                             </div>
                             <a href="#" class="primary-btn">Mua Ngay</a>
                         </div>
                         <div class="product__details__btns__option">
-                            <a href="#"><i class="fa fa-heart"></i> Thêm Vào Yêu Thích</a>
-                            <a href="#"><i class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng</a>
+                            <a href="javascript:;"><i class="fa fa-heart"></i> Thêm Vào Yêu Thích</a>
+                            <a href="javascript:;" id="add-to-cart"><i class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng</a>
                         </div>
                         <div class="product__details__last__option">
                             <h5><span>Các Hình Thức Thanh Toán</span></h5>
                             <img src="/assets/customer/img/shop-details/details-payment.png" alt="">
                             <ul>
-                                <li><span>SKU:</span> 3812912</li>
+                                <li id="product-sku"><span>SKU:</span> 3812912</li>
                                 <li><span>Thể Loại :</span>
                                     <th:block th:text="${sanPham.getTheLoai().getTen()}"></th:block>
                                 </li>
                                 <li><span>Thương Hiệu :</span>
                                     <th:block th:text="${sanPham.getThuongHieu().getTen()}"></th:block>
                                 </li>
-                                <li><span>Tag:</span> Clothes, Skin, Body</li>
+                                <li th:if="${#lists.size(sanPham.getTags())>0}"><span>Tag:</span>
+                                    <th:block th:each="tag,iter:${sanPham.getTags()}">
+                                        <th:block th:if="${iter.index > 0}">,</th:block>
+                                        <th:block th:text="${tag.getTen()}"></th:block>
+                                    </th:block>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -298,56 +305,57 @@
 <!-- Related Section End -->
 
 
-    <table border="1">
-        <tr th:each="ctsp:${sanPham.getChiTietSanPham()}">
-            <td data-nane="id" th:text="${ctsp.getId()}"></td>
-            <td data-nane="color_name" th:text="${ctsp.getMauSac().getTen()}"></td>
-            <td data-nane="color_code" th:text="${ctsp.getMauSac().getMaMauSac()}"></td>
-            <td data-name="size" th:text="${ctsp.getKichCo().getTen()}"></td>
-            <td data-name="detail_code" th:text="${ctsp.getMaSanPham()}"></td>
-            <td style="max-width: 50px;overflow: hidden" data-name="product_img"
-                th:text="${ctsp.getAnh().getUrl()}"></td>
-            <td data-name="gia_ban"
-                th:text="${#numbers.formatDecimal(ctsp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
-            <td data-name="gia_goc"
-                th:text="${#numbers.formatDecimal(ctsp.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
-            <td data-name="so_luong_ton" th:text="${ctsp.getSoLuongTon()}"></td>
-            <td data-name="chat_lieu" th:text="${ctsp.getChatLieu().getTen()}"></td>
-            <td data-name="co_giay" th:text="${ctsp.getCoGiay().getTen()}"></td>
-            <td data-name="de_giay" th:text="${ctsp.getDeGiay().getTen()}"></td>
-            <td data-name="mui_giay" th:text="${ctsp.getMuiGiay().getTen()}"></td>
-            <td data-name="Inventory_number" th:text="${ctsp.getTrangThai()}"></td>
-        </tr>
-    </table>
-    <!-- Footer Section Begin -->
-    <div th:replace="/customer/pages/_footer.html"></div>
-    <!-- Footer Section End -->
+<table border="1" id="table-data" class="d-none">
+    <tr th:each="ctsp:${sanPham.getChiTietSanPham()}">
+        <td data-name="id" th:text="${ctsp.getId()}"></td>
+        <td data-name="name" th:text="${sanPham.getTen()}"></td>
+        <td data-name="color_name" th:text="${ctsp.getMauSac().getTen()}"></td>
+        <td data-name="color_code" th:text="${ctsp.getMauSac().getMaMauSac()}"></td>
+        <td data-name="size" th:text="${ctsp.getKichCo().getTen()}"></td>
+        <td data-name="detail_code" th:text="${ctsp.getMaSanPham()}"></td>
+        <td style="max-width: 50px;overflow: hidden" data-name="product_img"
+            th:text="${ctsp.getAnh().getUrl()}"></td>
+        <td data-name="gia_ban"
+            th:text="${#numbers.formatDecimal(ctsp.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
+        <td data-name="gia_goc"
+            th:text="${#numbers.formatDecimal(ctsp.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
+        <td data-name="so_luong_ton" th:text="${ctsp.getSoLuongTon()}"></td>
+        <td data-name="chat_lieu" th:text="${ctsp.getChatLieu().getTen()}"></td>
+        <td data-name="co_giay" th:text="${ctsp.getCoGiay().getTen()}"></td>
+        <td data-name="de_giay" th:text="${ctsp.getDeGiay().getTen()}"></td>
+        <td data-name="mui_giay" th:text="${ctsp.getMuiGiay().getTen()}"></td>
+        <td data-name="Inventory_number" th:text="${ctsp.getTrangThai()}"></td>
+    </tr>
+</table>
+<!-- Footer Section Begin -->
+<div th:replace="/customer/pages/_footer.html"></div>
+<!-- Footer Section End -->
 
 
-    <!-- Search Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
-        </div>
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
     </div>
+</div>
 
-    <!-- Search End -->
+<!-- Search End -->
 
-    <!-- Js Plugins -->
-    <script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
-    <script src="/assets/customer/js/bootstrap.min.js"></script>
-    <script src="/assets/customer/js/jquery.nice-select.min.js"></script>
-    <script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
-    <script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
-    <script src="/assets/customer/js/jquery.countdown.min.js"></script>
-    <script src="/assets/customer/js/jquery.slicknav.js"></script>
-    <script src="/assets/customer/js/mixitup.min.js"></script>
-    <script src="/assets/customer/js/owl.carousel.min.js"></script>
-    <script src="/assets/customer/js/main.js"></script>
-    <script src="/assets/customer/js/shop/shop-detail.js"></script>
+<!-- Js Plugins -->
+<script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/customer/js/bootstrap.min.js"></script>
+<script src="/assets/customer/js/jquery.nice-select.min.js"></script>
+<script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
+<script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
+<script src="/assets/customer/js/jquery.countdown.min.js"></script>
+<script src="/assets/customer/js/jquery.slicknav.js"></script>
+<script src="/assets/customer/js/mixitup.min.js"></script>
+<script src="/assets/customer/js/owl.carousel.min.js"></script>
+<script src="/assets/customer/js/main.js"></script>
+<script src="/assets/customer/js/shop/shop-detail.js"></script>
 
 </body>
 
