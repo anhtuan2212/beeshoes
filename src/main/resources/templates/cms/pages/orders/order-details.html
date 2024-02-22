@@ -90,7 +90,7 @@
         </div>
         <!-- End Page Header -->
 
-        <div class="row col-12" th:include="~{/cms/pages/orders/_timeline.html}"></div>
+        <div class="row col-12" th:insert="~{/cms/pages/orders/_timeline.html}"></div>
 
         <div class="row mt-2 mb-2">
             <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start" id="myButton">
@@ -98,7 +98,7 @@
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChoGiao'}" class="btn btn-sm btn-outline-danger mr-1"
+                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}" class="btn btn-sm btn-outline-danger mr-1"
                         id="huyFromDetail">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
@@ -285,9 +285,6 @@
                         <ul class="list-unstyled list-unstyled-py-2">
                             <li th:text="${hoaDon.khachHang.sdt}">
                                 <i class="tio-online mr-2"></i>
-                            </li>
-                            <li th:text="${hoaDon.khachHang.sdt}">
-                                <i class="tio-android-phone-vs mr-2"></i>
                             </li>
                         </ul>
 
@@ -1007,6 +1004,7 @@
                                 typeOfColor = 'danger';
                             } else if (status == 'ChoGiao') {
                                 typeOfColor = 'warning';
+                                $('#huyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').removeClass('d-none');
                             } else if (status == 'ThanhCong') {
                                 $('#xacNhanFromDetail').hide();
@@ -1088,6 +1086,7 @@
                         data: JSON.stringify(idHoaDon),
                         success: function (response) {
                             ToastSuccess('Hoàn tác đơn hàng thành công');
+                            $('#huyFromDetail').removeClass('d-none');
                             let type = 'success';
                             let status = response.trangThaiSauUpdate;
                             $('#hoanTacFromDetail').hide();
@@ -1109,6 +1108,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
-<div th:replace="/cms/pages/_IE-suport.html"></div>
+<div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

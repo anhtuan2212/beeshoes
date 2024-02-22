@@ -101,7 +101,7 @@ public class LoginRegisterController {
             } else {
                 try {
                     KhachHang khachHang = new KhachHang();
-                    khachHang.setHoTen(registerDto.getHo());
+                    khachHang.setHoTen(registerDto.getHo() + " " + registerDto.getTenDem() + " " + registerDto.getTen());
                     khachHang.setTrangThai(true);
                     khachHang.setDiem(0);
                     khachHang.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
@@ -110,7 +110,7 @@ public class LoginRegisterController {
                     khachHang.setMaKhachHang(khachHangService.generateCustomerCode());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date date = sdf.parse(registerDto.getNgaySinh());
-                    khachHang.setNgaySinh((java.sql.Date) date);
+                    khachHang.setNgaySinh(new java.sql.Date(date.getTime()));
                     KhachHang createdKhachHang = khachHangService.add(khachHang);
 
                     User user = new User();

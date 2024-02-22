@@ -92,9 +92,6 @@
                         <span id="datatableCounter">0</span>
                         đơn được chọn
                       </span>
-                            <button class="btn btn-sm btn-outline-danger mr-3 huyFromCheckBox">
-                                <i class="tio-delete-outlined"></i> Hủy
-                            </button>
                             <button class="btn btn-sm btn-outline-success xacNhanFromCheckBox">
                                 <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                             </button>
@@ -302,7 +299,7 @@
                                 <button class="btn btn-sm btn-outline-success xacNhanFromAction">
                                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận</button>
                             </li>
-                            <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
+                            <li th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}">
                                 <button class="btn btn-sm btn-outline-danger huyFromAction">
                                     <i class="tio-delete-outlined"></i> Hủy</button>
                             </li>
