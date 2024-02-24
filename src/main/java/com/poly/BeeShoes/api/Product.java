@@ -1,8 +1,7 @@
 package com.poly.BeeShoes.api;
 
 import com.google.gson.Gson;
-import com.poly.BeeShoes.request.CTSPRequest;
-import com.poly.BeeShoes.request.ProductDetailVersion;
+import com.poly.BeeShoes.request.*;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.service.*;
@@ -18,6 +17,7 @@ import java.util.List;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -215,5 +215,75 @@ public class Product {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotExits").body(null);
         }
+    }
+
+    @GetMapping("/get-all-san-pham")
+    public List<SanPhamApiRequest> getAllSanPham() {
+        List<SanPham> lstSp = sanPhamService.getAllApi();
+        List<SanPhamApiRequest> lst = new ArrayList<>();
+        for (int i = 0; i < lstSp.size(); i++) {
+            SanPham spx = lstSp.get(i);
+            SanPhamApiRequest sp = new SanPhamApiRequest();
+
+            sp.setId(spx.getId());
+            sp.setTen(spx.getTen());
+
+            List<Tags> lstTags = spx.getTags();
+            List<String> lstT = new ArrayList<>();
+            for (Tags t : lstTags) {
+                lstT.add(t.getTen());
+            }
+            sp.setTags(lstT);
+
+            sp.setThuongHieu(spx.getThuongHieu().getId());
+
+            sp.setTheLoai(spx.getTheLoai().getId());
+
+            List<KichCo> lstKC = spx.getDistinctKichCoList();
+            List<kichCoApiRequest> LstSize = new ArrayList<>();
+            for (KichCo kc : lstKC) {
+                kichCoApiRequest kca = new kichCoApiRequest();
+                kca.setTen(kc.getTen());
+                kca.setId(kc.getId());
+            }
+            sp.setKichCo(LstSize);
+
+            if (spx.getDistinctMauSacList() != null) {
+                List<MauSac> lstMS = spx.getDistinctMauSacList();
+                List<String> maMauSac = new ArrayList<>();
+                for (MauSac ms : lstMS) {
+                    maMauSac.add(ms.getMaMauSac());
+                }
+                sp.setMaMauSac(maMauSac);
+            }
+            List<Anh> lstImg = spx.getAnh();
+            List<AnhApiRequest> lstAnh = new ArrayList<>();
+            for (Anh a : lstImg) {
+                AnhApiRequest rq = new AnhApiRequest();
+                rq.setUrl(a.getUrl());
+                rq.setMain(a.isMain());
+                lstAnh.add(rq);
+            }
+            sp.setAnh(lstAnh);
+
+            List<ChiTietSanPham> listCTSP = spx.getChiTietSanPham();
+            List<chiTietSanPhamApiRquest> lstct = new ArrayList<>();
+            for (ChiTietSanPham ctsp : listCTSP) {
+                chiTietSanPhamApiRquest ctspRq = new chiTietSanPhamApiRquest();
+                ctspRq.setMaSanPham(ctsp.getMaSanPham());
+                ctspRq.setAnh(ctsp.getAnh().getUrl());
+                ctspRq.setId(ctsp.getId());
+                ctspRq.setKichCo(ctsp.getKichCo().getTen());
+                ctspRq.setMauSac(ctsp.getMauSac().getMaMauSac());
+                ctspRq.setGiaGoc(ctsp.getGiaGoc().intValue());
+                ctspRq.setGiaBan(ctsp.getGiaBan().intValue());
+                ctspRq.setSoLuongTon(ctsp.getSoLuongTon());
+                ctspRq.setSale(ctsp.isSale());
+                lstct.add(ctspRq);
+            }
+            sp.setChiTietSanPham(lstct);
+            lst.add(sp);
+        }
+        return lst;
     }
 }

@@ -63,7 +63,7 @@ CREATE TABLE tags
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
-CREATE TABLE product_tags
+CREATE TABLE tags_san_pham
 (
     id bigint auto_increment,
     id_tag bigint,

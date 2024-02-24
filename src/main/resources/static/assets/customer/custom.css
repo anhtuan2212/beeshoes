@@ -247,3 +247,47 @@
     background-position: center;
     object-fit: cover;
 }
+.swal2-timer-progress-bar{
+    background-color: black;
+}
+.shop__sidebar__categories ul li .active, .shop__sidebar__price ul li .active, .shop__sidebar__brand ul li .active {
+    color: #111111;
+}
+.shop__sidebar__tags .active{
+    background: #111111;
+    color: #ffffff;
+}
+.product__option__size label{
+    color: #111111;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    border: 1px solid #e5e5e5;
+    padding: 0px 3px;
+    margin-bottom: 2px;
+    margin-right: 0;
+    cursor: pointer;
+}
+
+
+.product__option__size label input {
+    position: absolute;
+    visibility: hidden;
+}
+.product__option__size {
+    display: inline-block;
+    position: absolute;
+    opacity: 0;
+}
+
+.product__option__size span {
+    color: #111111;
+    display: inline-block;
+    margin-right: 10px;
+}
+.product__option__size .active {
+    background: #111111;
+    color: #ffffff;
+    border-color: #111111;
+}
