@@ -109,6 +109,10 @@
         $(".product__color__select label, .shop__sidebar__size label, .product__details__option__size label").removeClass('active');
         $(this).addClass('active');
     });
+    $(".label_select_size").on('click', function () {
+        $(".label_select_size").removeClass('active');
+        $(this).addClass('active');
+    });
 
     /*-------------------
 		Scroll
@@ -167,11 +171,11 @@
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
         if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
+            var newVal = parseFloat(oldValue) - 1;
         } else {
             // Don't allow decrementing below zero
             if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
+                var newVal = parseFloat(oldValue) + 1;
             } else {
                 newVal = 0;
             }

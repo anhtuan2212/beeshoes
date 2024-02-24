@@ -35,7 +35,7 @@ public class ShopController {
     public String shop(Model model){
         Authentication auth = getUserAuth();
         System.out.println(auth.toString());
-        Pageable pageable = PageRequest.of(0,12);
+        Pageable pageable = PageRequest.of(0,9);
         Page<SanPham> spx = sanPhamService.getAllShop(pageable);
         model.addAttribute("lstkichco",kichCoService.getAllClient());
         model.addAttribute("lstmausac",mauSacService.getAllClient());

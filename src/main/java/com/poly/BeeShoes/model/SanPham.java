@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SanPham {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -68,6 +69,7 @@ public class SanPham {
     BigDecimal giaBan;
     @Transient
     boolean sale;
+
     @Transient
     List<MauSac> mauSac;
     public Anh getMainImage() {

@@ -17,6 +17,7 @@ public interface SanPhamService {
     SanPham getByTen(String name);
     boolean existsByTen(String name);
     List<SanPham> getAll();
+    List<SanPham> getAllApi();
     boolean exitsByTheLoai(TheLoai theLoai);
     boolean exitsByThuongHieu(ThuongHieu th);
     Page<SanPham> getAllShop(Pageable pageable);

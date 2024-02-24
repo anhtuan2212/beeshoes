@@ -45,7 +45,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
     @Override
     public SanPham getById(Long id) {
-        Optional<SanPham> optionalSanPham = sanPhamRepository.findById(id);
+        Optional<SanPham> optionalSanPham = sanPhamRepository.getByIdClient(id);
         if (optionalSanPham.isPresent()) {
             SanPham sanPham = optionalSanPham.get();
             List<ChiTietSanPham> ctsp = sanPham.getChiTietSanPham();
@@ -131,6 +131,12 @@ public class SanPhamServiceImpl implements SanPhamService {
             s.setSoLuong(num);
         }
         return sp;
+    }
+
+    @Override
+    public List<SanPham> getAllApi() {
+        List<SanPham> lst =sanPhamRepository.findAllWithChiTietSanPham(1);
+        return lst;
     }
 
     @Override
