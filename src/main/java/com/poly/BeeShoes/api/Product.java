@@ -62,7 +62,7 @@ public class Product {
 
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
-        System.out.println(ctspRequest.getTags());
+        System.out.println(ctspRequest.toString());
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
         if (ctspRequest.getTenSanPham().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "NameProNull").body(null);
@@ -94,7 +94,8 @@ public class Product {
             }
 
         }
-        SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
+        SanPham sp = sanPhamService.getByIdcms(ctspRequest.getSanPham());
+        System.out.println(sp.getId());
         sp.setTen(ctspRequest.getTenSanPham());
 
         List<String> lstTags = ctspRequest.getTags();
