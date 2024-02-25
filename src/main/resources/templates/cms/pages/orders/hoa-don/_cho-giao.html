@@ -72,9 +72,6 @@
                         <span id="datatableCounterCG">0</span>
                         đơn được chọn
                       </span>
-                            <button class="btn btn-sm btn-outline-danger mr-3" id="huyFromCheckBoxCG">
-                                <i class="tio-delete-outlined"></i> Hủy
-                            </button>
                             <button class="btn btn-sm btn-outline-success" id="xacNhanFromCheckBoxCG">
                                 <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                             </button>
@@ -236,7 +233,7 @@
                         <label class="custom-control-label" for="datatableCheckAllCG"></label>
                     </div>
                 </th>
-                <th class="table-column-pr-0">STT</th>
+                <th class="table-column-pl-0">STT</th>
                 <th>Mã Hóa Đơn</th>
                 <th>Tên Khách Hàng</th>
                 <th>SĐT Khách Hàng</th>
@@ -293,10 +290,6 @@
                             <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
                                 <button class="btn btn-sm btn-outline-success" id="xacNhanFromActionCG">
                                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận</button>
-                            </li>
-                            <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
-                                <button class="btn btn-sm btn-outline-danger" id="huyFromActionCG">
-                                    <i class="tio-delete-outlined"></i> Hủy</button>
                             </li>
                         </ul>
                     </div>
