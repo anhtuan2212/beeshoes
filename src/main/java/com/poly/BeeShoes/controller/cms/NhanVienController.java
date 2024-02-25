@@ -1,18 +1,15 @@
 package com.poly.BeeShoes.controller.cms;
 
 import com.poly.BeeShoes.library.LibService;
-import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.NhanVien;
 import com.poly.BeeShoes.model.Role;
 import com.poly.BeeShoes.model.User;
-import com.poly.BeeShoes.request.KhachHangRequest;
 import com.poly.BeeShoes.request.NhanVienRequest;
 import com.poly.BeeShoes.service.ChucVuService;
 import com.poly.BeeShoes.service.NhanVienService;
 import com.poly.BeeShoes.service.UserService;
 import com.poly.BeeShoes.utility.MailUtility;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,8 +50,49 @@ public class NhanVienController {
     }
 
     @PostMapping("/add")
-    public String addNV(@ModelAttribute("nhanVien") NhanVienRequest nhanVien, Model model) {
-        model.addAttribute("nhanVien", nhanVien);
+    public String addNV(@ModelAttribute("nhanVien") NhanVienRequest nhanVien, Model model,
+                        @RequestParam("sdt") String sdt,
+                        @RequestParam("email") String email) {
+        boolean check = false;
+        if(nhanVien.getHoTen().isBlank()){
+            model.addAttribute("errorHoTen", "Họ tên không được để trống");
+            check=true;
+        }if(nhanVien.getSdt().isBlank()){
+            model.addAttribute("errorSdt", "Sdt không được để trống");
+            check=true;
+        }
+        if(nhanVienService.existsBySdt(sdt)){
+            model.addAttribute("messageSdt", "Số điện thoại đã tồn tại");
+            check=true;
+        }
+        if(nhanVien.getCccd().isBlank()){
+            model.addAttribute("errorCCCD", "CCCD không được để trống");
+            check=true;
+        }if(nhanVien.getEmail().isBlank()){
+            model.addAttribute("errorEmail", "Email không được để trống");
+            check=true;
+        }
+        if(userService.existsByEmail(email)){
+            model.addAttribute("errorEmail_", "Email đã tồn tại");
+            check=true;
+        }if(nhanVien.getSoNha().isBlank()){
+            model.addAttribute("errorSoNha", "Số nhà không được để trống");
+            check=true;
+        }if(nhanVien.getPhuongXa().isBlank()){
+            model.addAttribute("errorPhuongXa", "Phường xã không được để trống");
+            check=true;
+        }if(nhanVien.getQuanHuyen().isBlank()){
+            model.addAttribute("errorQuanHuyen", "Quận huyện không được để trống");
+            check=true;
+        }if(nhanVien.getTinhThanhPho().isBlank()){
+            model.addAttribute("errorTinhTP", "Tỉnh tp không được để trống");
+            check=true;
+        }
+        if(check){
+            model.addAttribute("nhanVien", nhanVien);
+            model.addAttribute("listCV", chucVuService.getAll());
+            return "cms/pages/users/add-nhanVien";
+        }
         NhanVien nv = new NhanVien();
         nv.setHoTen(nhanVien.getHoTen());
         nv.setGioiTinh(nhanVien.isGioiTinh());
@@ -140,5 +178,12 @@ public class NhanVienController {
     public String deleteNV(@PathVariable Long id, Model model) {
         nhanVienService.delete(id);
         return "redirect:/cms/nhan-vien";
+    }
+
+    @PostMapping("/check-duplicate-phone-number")
+    @ResponseBody
+    public boolean checkDuplicatePhoneNumber(@RequestParam("phoneNumber") String sdt) {
+        // Thực hiện kiểm tra số điện thoại trùng lặp ở đây
+        return nhanVienService.existsBySdt(sdt);
     }
 }

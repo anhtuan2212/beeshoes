@@ -26,4 +26,6 @@ public interface NhanVienService {
     String generateEmployeeCode();
 
     boolean existsByChucVu(ChucVu cv);
+
+    boolean existsBySdt(String sdt);
 }

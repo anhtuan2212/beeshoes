@@ -26,66 +26,115 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
+function isEmpty(str) {
+    return (!str || str.length === 0 );
+}
+function isValidEmail(email) {
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+function checkDuplicatePhoneNumber(sdt) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/cms/nhan-vien/check-duplicate-phone-number', // Đường dẫn mới đã được định nghĩa trong controller
+            type: 'POST',
+            data: { sdt: sdt },
+            dataType: 'json',
+            success: function(response) {
+                resolve(response); // Trả về kết quả kiểm tra
+                console.log(response)
+            },
+            error: function(xhr, status, error) {
+                reject(error); // Xử lý lỗi nếu có
+            }
+        });
+    });
+}
 
 function validate() {
-    var result = true;
-    var hoTen = document.getElementById("hoTen").value;
-    var sdt = document.getElementById("sdt").value;
-    var cccd = document.getElementById("cccd").value;
-    var ngaySinh = document.getElementById("ngaySinh").value;
-    var soNha = document.getElementById("soNha").value;
-    var phuongXa = document.getElementById("phuongXa").value;
-    var quanHuyen = document.getElementById("quanHuyen").value;
-    var tinhTP = document.getElementById("tinhTP").value;
-    if (hoTen.length == 0) {
-        document.getElementById("hoTen_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("hoTen_emty").style.display = "none";
+    var hoTen = $('#hoTen').val();
+    var email = $('#email').val();
+    var sdt = $('#sdt').val();
+    var cccd = $('#cccd').val();
+    var ngaySinh = $('#ngaySinh').val();
+    var soNha = $('#soNha').val();
+    var phuongXa = $('#phuongXa').val();
+    var quanHuyen = $('#quanHuyen').val();
+    var tinhTP = $('#tinhTP').val();
+
+    if (isEmpty(hoTen)) {
+        ToastError("Họ tên không được để trống.");
+        return false;
     }
-    if (sdt.length == 0) {
-        document.getElementById("sdt_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("sdt_emty").style.display = "none";
+
+    if (isEmpty(email)) {
+        ToastError("Email không được để trống.");
+        return false;
+    } else if (!isValidEmail(email)) {
+        ToastError("Email không đúng định dạng.");
+        return false;
     }
-    if (cccd.length == 0) {
-        document.getElementById("cccd_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("cccd_emty").style.display = "none";
+
+    if (isEmpty(sdt)) {
+        ToastError("Số điện thoại không được để trống.");
+        return false;
     }
-    if (ngaySinh.length == "") {
-        document.getElementById("ngaySinh_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("ngaySinh_emty").style.display = "none";
+
+    if (isEmpty(cccd)) {
+        ToastError("CCCD không được để trống.");
+        return false;
     }
-    if (soNha.length == 0) {
-        document.getElementById("soNha_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("soNha_emty").style.display = "none";
+
+    if (isEmpty(ngaySinh)) {
+        ToastError("Ngày sinh không được để trống.");
+        return false;
     }
-    if (District.length == "") {
-        document.getElementById("quanHuyen_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("quanHuyen_emty").style.display = "none";
+
+    if (isEmpty(soNha)) {
+        ToastError("Số nhà không được để trống.");
+        return false;
     }
-    if (Ward.length == "") {
-        document.getElementById("phuongXa_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("phuongXa_emty").style.display = "none";
+
+    if (isEmpty(quanHuyen)) {
+        ToastError("Quận/huyện không được để trống.");
+        return false;
     }
-    if (Province.length == "") {
-        document.getElementById("tinhTP_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("tinhTP_emty").style.display = "none";
+
+    if (isEmpty(phuongXa)) {
+        ToastError("Phường/xã không được để trống.");
+        return false;
     }
-    return result;
+
+    if (isEmpty(tinhTP)) {
+        ToastError("Tỉnh/thành phố không được để trống.");
+        return false;
+    }
+    ToastSuccess("Lưu hành công")
+    if (result==false){
+        ToastError("Thất bại")
+        e.preventDefault();
+        return result;
+    }
+
+    // Kiểm tra trùng số điện thoại
+    checkDuplicatePhoneNumber(sdt)
+        .then(function(exists) {
+            if (exists) {
+                ToastError("Số điện thoại đã tồn tại.");
+                return false;
+            } else {
+                // Nếu không có trùng số điện thoại, có thể tiếp tục thực hiện các hành động khác ở đây, hoặc submit form.
+                // Ví dụ: $('#yourFormId').submit();
+                ToastSuccess("Lưu thành công.");
+                return true;
+            }
+        })
+        .catch(function(error) {
+            console.error("Đã xảy ra lỗi: " + error);
+            ToastError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+            return false;
+        });
 }
 
 //================================
@@ -200,7 +249,7 @@ $(document).on('ready', function () {
     // Gọi API và xử lý dữ liệu cho các tỉnh/thành phố
     fetchData(provice_url, function (data) {
         province_list = data;
-        handleData(data, $('#Province'), 'Id', 'Name');
+        handleData(data, $('#tinhTP'), 'Id', 'Name');
     });
 
     // Gọi API và xử lý dữ liệu cho các quận/huyện
@@ -214,17 +263,17 @@ $(document).on('ready', function () {
     });
 
     // Xử lý sự kiện khi thay đổi tỉnh/thành phố
-    $('#Province').on('change', function () {
+    $('#tinhTP').on('change', function () {
         let id = $(this).find('option:selected').data('id');
-        let dis = $('#District');
-        $('#Ward').html('')
+        let dis = $('#quanHuyen');
+        $('#phuongXa').html('')
         handleData(district_list.filter(district => district.ProvinceId === parseInt(id)), dis, 'Id', 'Name');
     });
 
     // Xử lý sự kiện khi thay đổi quận/huyện
-    $('#District').on('change', function () {
+    $('#quanHuyen').on('change', function () {
         let id = $(this).find('option:selected').data('id');
-        let war = $('#Ward');
+        let war = $('#phuongXa');
         handleData(ward_list.filter(ward => ward.DistrictId === parseInt(id)), war, 'Id', 'Name');
     });
 

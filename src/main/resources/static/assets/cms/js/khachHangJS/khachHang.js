@@ -33,6 +33,7 @@ function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
+
 function formvalidate(e) {
     if (confirm('Bạn có muốn cập nhật không?')) {
         var result = true;
@@ -40,7 +41,6 @@ function formvalidate(e) {
         var email = $('#email').val();
         var sdt = document.getElementById("sdt").value;
         var ngaySinh = document.getElementById("ngaySinh").value;
-
         if (isEmpty(hoTen)) {
             document.getElementById("hoTen_emty").style.display = "block";
             result = false;
@@ -48,28 +48,19 @@ function formvalidate(e) {
             document.getElementById("hoTen_emty").style.display = "none";
         }
         if (isEmpty(email)) {
-            document.getElementById("email_emty").style.display = "block";
+            document.getElementById("email_emty").innerText = "Vui lòng nhập email";
+            result = false;
+        } else if (!isValidEmail(email)) {
+            document.getElementById("email_emty").innerText = "Email sai định dạng";
             result = false;
         } else {
             document.getElementById("email_emty").style.display = "none";
-        }
-        if (!isValidEmail(email)) {
-            document.getElementById("email_eror_").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("email_eror_").style.display = "none";
         }
         if (sdt.length == 0) {
             document.getElementById("sdt_emty").style.display = "block";
             result = false;
         } else {
             document.getElementById("sdt_emty").style.display = "none";
-        }
-        if (sdt.length > 10) {
-            document.getElementById("sdt1_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("sdt1_emty").style.display = "none";
         }
         if (ngaySinh.length == 0) {
             document.getElementById("ngaySinh_emty").style.display = "block";
