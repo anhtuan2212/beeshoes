@@ -105,11 +105,12 @@
     /*-------------------
 		Radio Btn
 	--------------------- */
-    $(".product__color__select label, .shop__sidebar__size label, .product__details__option__size label").on('click', function () {
+    $(document).on('click',".product__color__select label, .shop__sidebar__size label, .product__details__option__size label", function () {
         $(".product__color__select label, .shop__sidebar__size label, .product__details__option__size label").removeClass('active');
         $(this).addClass('active');
     });
-    $(".label_select_size").on('click', function () {
+    
+    $(document).on('click',".label_select_size", function () {
         $(".label_select_size").removeClass('active');
         $(this).addClass('active');
     });
