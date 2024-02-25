@@ -1,8 +1,9 @@
 package com.poly.BeeShoes.controller.customer;
 
 import com.poly.BeeShoes.model.SanPham;
+import com.poly.BeeShoes.model.TheLoai;
 import com.poly.BeeShoes.model.User;
-import com.poly.BeeShoes.service.SanPhamService;
+import com.poly.BeeShoes.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShopController {
     private final SanPhamService sanPhamService;
+    private final TheLoaiService theLoaiService;
+    private final ThuongHieuService thuongHieuService;
+    private final MauSacService mauSacService;
+    private final KichCoService kichCoService;
+    private final TagsService tagsService;
     public Authentication getUserAuth(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication;
@@ -29,10 +35,15 @@ public class ShopController {
     public String shop(Model model){
         Authentication auth = getUserAuth();
         System.out.println(auth.toString());
-
-        Pageable pageable = PageRequest.of(0,12);
+        Pageable pageable = PageRequest.of(0,9);
         Page<SanPham> spx = sanPhamService.getAllShop(pageable);
+        model.addAttribute("lstkichco",kichCoService.getAllClient());
+        model.addAttribute("lstmausac",mauSacService.getAllClient());
+        model.addAttribute("lsttheloai",theLoaiService.getAllClient());
+        model.addAttribute("lsttags",tagsService.getAllClient());
+        model.addAttribute("lstthuonghieu",thuongHieuService.getAllClient());
         model.addAttribute("lstsanpham",spx);
+        model.addAttribute("totalsize",sanPhamService.getCount());
         return "customer/pages/shop/shop";
     }
     @GetMapping({"/shop-detail","/shop-detail/"})

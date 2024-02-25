@@ -1284,6 +1284,9 @@
                     to_district_id: quanHuyenSelected
                 },
                 success: function (response) {
+                    console.log(phuongXaSelected);
+                    console.log(quanHuyenSelected);
+                    console.log(tinhThanhPhoSelected);
                     var fee = response.data.total;
                     var formattedMoney = parseFloat(fee).toLocaleString('en-US');
                     console.log(formattedMoney);
@@ -1300,24 +1303,57 @@
             phuongXaSelected = $('#phuongXa').val();
 
             $.ajax({
-                type: "GET",
-                url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime",
+                type: "POST",
+                url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
                 contentType: "application/json",
                 headers: {
-                    ShopID: "190713",
-                    Token: "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                    "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
                 },
-                data: {
-                    from_district_id: 3440,
-                    to_district_id: quanHuyenSelected,
-                    to_ward_code: phuongXaSelected,
-                    service_id: 53320
-                },
+                data: JSON.stringify(
+                    {
+                        shop_id: "190713",
+                        from_name: "Tấn Tảo Lù",
+                        from_phone: "0866755653",
+                        from_address: "Hà Nội",
+                        from_ward_name: "Phường Xuân Phương",
+                        from_district_name: "Nam Từ Liêm",
+                        from_province_name: "Hà Nội",
+                        to_name: "Test",
+                        to_phone: "0359966461",
+                        to_address: "Nam Định",
+                        to_ward_code: phuongXaSelected,
+                        to_district_id: quanHuyenSelected,
+                        service_id: 0,
+                        service_type_id: 2,
+                        payment_type_id: 2,
+                        required_note: "KHONGCHOXEMHANG",
+                        items: [
+                            {
+                                name: "Áo Polo",
+                                code: "Polo123",
+                                quantity: 1,
+                                price: 200000,
+                                length: 12,
+                                width: 12,
+                                height: 12,
+                                weight: 1200,
+                                category: {
+                                    level1: "Áo"
+                                }
+                            }
+                        ],
+                        weight: 2000,
+                        length: 1,
+                        width: 19,
+                        height: 10
+                    }
+                ),
                 success: function (response) {
+                    console.log(response.data.expected_delivery_time);
                     let label = $('#typeNhanh')
                     let span = document.createElement('span');
-                    var leadDate = new Date(response.data.leadtime);
-                    let html = `<span class="d-block">Dự kiến nhận hàng vào: <i>${leadDate.toLocaleDateString('vi-VN')}</i></span>`;
+                    var leadDate = new Date(response.data.expected_delivery_time);
+                    let html = `<span class="d-block" xmlns="http://www.w3.org/1999/html">Dự kiến nhận hàng vào: <strong>${leadDate.toLocaleDateString('vi-VN')}</strong></span>`;
                     span.innerHTML = html;
                     label.append(span);
                 },

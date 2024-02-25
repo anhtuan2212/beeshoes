@@ -10,9 +10,9 @@ import com.poly.BeeShoes.service.LichSuHoaDonService;
 import com.poly.BeeShoes.service.UserService;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +28,7 @@ public class HoaDonRestController {
     private final HoaDonService hoaDonService;
     private final LichSuHoaDonService lichSuHoaDonService;
     private final UserService userService;
+    private final RestTemplate restTemplate;
 
     @PostMapping("/xac-nhan")
     public ResponseEntity<String> xacNhanDon(
@@ -179,5 +180,18 @@ public class HoaDonRestController {
                                 lshd.getTrangThaiSauUpdate()
                         )).collect(Collectors.toList());
         return new ResponseEntity<>(lichSuHoaDonDtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/printOrder")
+    public ResponseEntity<String> callApiGHN(
+        @RequestParam("token") String token
+    ) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Token", "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551");
+        HttpEntity entity = new HttpEntity<>(headers);
+        String apiUrl = "https://dev-online-gateway.ghn.vn/a5/public-api/print80x80?token=" + token;
+
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
 }

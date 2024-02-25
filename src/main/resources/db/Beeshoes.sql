@@ -48,6 +48,32 @@ CREATE TABLE thuong_hieu
     primary key(id)
 )engine=INNODB;
 
+CREATE TABLE tags
+(
+    id bigint auto_increment,
+    ten nvarchar(256),
+    ngay_tao timestamp,
+    ngay_sua timestamp,
+    nguoi_tao bigint,
+    nguoi_sua bigint,
+    trang_thai bit default 1,
+    primary key(id)
+)engine=INNODB;
+-- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
+ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
+
+CREATE TABLE tags_san_pham
+(
+    id bigint auto_increment,
+    id_tag bigint,
+    id_san_pham bigint,
+    primary key(id)
+)engine=INNODB;
+-- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
+-- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
+ALTER TABLE san_pham ADD FOREIGN KEY(id_san_pham) REFERENCES san_pham(id);
+ALTER TABLE tags ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
 -- Đế Giày (nguoi_tao, nguoi_sua) //done
 CREATE TABLE de_giay
 (
@@ -126,6 +152,8 @@ CREATE TABLE co_giay
     trang_thai bit default 1,
     primary key(id)
 )engine=INNODB;
+
+
 
 -- Mũi Giày (nguoi_tao, nguoi_sua) //done
 CREATE TABLE mui_giay

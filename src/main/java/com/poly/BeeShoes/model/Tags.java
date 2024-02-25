@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TheLoai {
+public class Tags {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -20,8 +21,7 @@ public class TheLoai {
     String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;
-    @Transient
-    Long CountProduct;
+
     @OneToOne
     @JoinColumn(name = "nguoi_tao")
     User nguoiTao;
@@ -30,25 +30,13 @@ public class TheLoai {
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
 
-    boolean trangThai;
-
     @Transient
     String update;
     @Transient
     String create;
 
-    @Override
-    public String toString() {
-        return "TheLoai{" +
-                "id=" + id +
-                ", ten='" + ten + '\'' +
-                ", ngayTao=" + ngayTao +
-                ", ngaySua=" + ngaySua +
-                ", nguoiTao=" + nguoiTao +
-                ", nguoiSua=" + nguoiSua +
-                ", trangThai=" + trangThai +
-                ", update='" + update + '\'' +
-                ", create='" + create + '\'' +
-                '}';
-    }
+    boolean trangThai;
+
+    @ManyToMany(mappedBy = "tags")
+    List<SanPham> sanPhams;
 }

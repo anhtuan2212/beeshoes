@@ -10,5 +10,6 @@ public interface ThuongHieuService {
     boolean existsByTen(String ten,Long id);
     ThuongHieu getByTen(String ten);
     List<ThuongHieu> getAll();
+    List<ThuongHieu> getAllClient();
     boolean delete(Long id);
 }

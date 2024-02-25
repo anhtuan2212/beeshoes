@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SanPham {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -26,6 +27,8 @@ public class SanPham {
     String moTa;
     Timestamp ngayTao;
     Timestamp ngaySua;
+
+
 
     @OneToOne
     @JoinColumn(name = "id")
@@ -37,6 +40,13 @@ public class SanPham {
 
     boolean trangThai;
 
+    @ManyToMany
+    @JoinTable(
+            name = "tags_san_pham",
+            joinColumns = @JoinColumn(name = "id_san_pham"),
+            inverseJoinColumns = @JoinColumn(name = "id_tag")
+    )
+    List<Tags> tags;
 
     @JoinColumn(name = "id_thuong_hieu")
     @ManyToOne
@@ -59,6 +69,7 @@ public class SanPham {
     BigDecimal giaBan;
     @Transient
     boolean sale;
+
     @Transient
     List<MauSac> mauSac;
     public Anh getMainImage() {
@@ -92,6 +103,9 @@ public class SanPham {
                 .map(ChiTietSanPham::getKichCo)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+    public boolean constrainTags(Tags tags){
+        return this.getTags().contains(tags);
     }
     public List<ChiTietSanPham> getSortedChiTietSanPhamByMauSac() {
         if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {

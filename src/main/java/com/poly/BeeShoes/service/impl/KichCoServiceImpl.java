@@ -37,6 +37,11 @@ public class KichCoServiceImpl implements KichCoService {
     }
 
     @Override
+    public List<KichCo> getAllClient() {
+        return kichCoRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         KichCo co = kichCoRepository.findById(id).get();
         if (co.getId()!=null){

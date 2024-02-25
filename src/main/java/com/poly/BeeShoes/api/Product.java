@@ -1,8 +1,7 @@
 package com.poly.BeeShoes.api;
 
 import com.google.gson.Gson;
-import com.poly.BeeShoes.request.CTSPRequest;
-import com.poly.BeeShoes.request.ProductDetailVersion;
+import com.poly.BeeShoes.request.*;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.service.*;
@@ -13,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,13 +27,14 @@ public class Product {
     private final ChatLieuService chatLieuService;
     private final DeGiayService deGiayService;
     private final MauSacService mauSacService;
-    private final ThuongHieuService thuongHieuService;
     private final KichCoService kichCoService;
+    private final ThuongHieuService thuongHieuService;
     private final AnhService anhService;
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
     private final ChiTietSanPhamService chiTietSanPhamService;
+    private final TagsService tagsService;
     Gson gs = new Gson();
 
     @PostMapping("/them-san-pham")
@@ -60,6 +62,7 @@ public class Product {
 
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
+        System.out.println(ctspRequest.getTags());
         List<ProductDetailVersion> productdetail = gs.fromJson(ctspRequest.getProduct_details(), listType);
         if (ctspRequest.getTenSanPham().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "NameProNull").body(null);
@@ -93,6 +96,26 @@ public class Product {
         }
         SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
         sp.setTen(ctspRequest.getTenSanPham());
+
+        List<String> lstTags = ctspRequest.getTags();
+        List<Tags> lst = new ArrayList<>();
+
+        if (lstTags != null) {
+            for (String tag : lstTags) {
+                String name = LibService.convertNameTags(tag);
+                Tags tags = tagsService.getByTen(name);
+                if (tags == null) {
+                    tags = new Tags();
+                    tags.setTen(name);
+                    tags.setTrangThai(true);
+                    tags.setNgayTao(Timestamp.from(Instant.now()));
+                    tags.setNgaySua(Timestamp.from(Instant.now()));
+                    tags = tagsService.save(tags);
+                }
+                lst.add(tags);
+            }
+        }
+        sp.setTags(lst);
         sp = sanPhamService.save(sp);
         ChatLieu cl = chatLieuService.getById(ctspRequest.getChatLieu());
         ThuongHieu th = thuongHieuService.getById(ctspRequest.getThuongHieu());
@@ -169,9 +192,9 @@ public class Product {
         if (id.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
         }
-        ChiTietSanPham chiTietSanPham=null;
-        if (!LibService.containsAlphabetic(id)){
-         chiTietSanPham = chiTietSanPhamService.getById(Long.parseLong(id));
+        ChiTietSanPham chiTietSanPham = null;
+        if (!LibService.containsAlphabetic(id)) {
+            chiTietSanPham = chiTietSanPhamService.getById(Long.parseLong(id));
         }
         if (LibService.containsAlphabetic(id)) {
             MauSac mauSac = mauSacService.getMauSacByMa(color);
@@ -192,5 +215,76 @@ public class Product {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotExits").body(null);
         }
+    }
+
+    @GetMapping("/get-all-san-pham")
+    public List<SanPhamApiRequest> getAllSanPham() {
+        List<SanPham> lstSp = sanPhamService.getAllApi();
+        List<SanPhamApiRequest> lst = new ArrayList<>();
+        for (int i = 0; i < lstSp.size(); i++) {
+            SanPham spx = lstSp.get(i);
+            SanPhamApiRequest sp = new SanPhamApiRequest();
+
+            sp.setId(spx.getId());
+            sp.setTen(spx.getTen());
+
+            List<Tags> lstTags = spx.getTags();
+            List<String> lstT = new ArrayList<>();
+            for (Tags t : lstTags) {
+                lstT.add(t.getTen());
+            }
+            sp.setTags(lstT);
+
+            sp.setThuongHieu(spx.getThuongHieu().getId());
+
+            sp.setTheLoai(spx.getTheLoai().getId());
+
+            List<KichCo> lstKC = spx.getDistinctKichCoList();
+            List<kichCoApiRequest> LstSize = new ArrayList<>();
+            for (KichCo kc : lstKC) {
+                kichCoApiRequest kca = new kichCoApiRequest();
+                kca.setTen(kc.getTen());
+                kca.setId(kc.getId());
+                LstSize.add(kca);
+            }
+            sp.setKichCo(LstSize);
+
+            if (spx.getDistinctMauSacList() != null) {
+                List<MauSac> lstMS = spx.getDistinctMauSacList();
+                List<String> maMauSac = new ArrayList<>();
+                for (MauSac ms : lstMS) {
+                    maMauSac.add(ms.getMaMauSac());
+                }
+                sp.setMaMauSac(maMauSac);
+            }
+            List<Anh> lstImg = spx.getAnh();
+            List<AnhApiRequest> lstAnh = new ArrayList<>();
+            for (Anh a : lstImg) {
+                AnhApiRequest rq = new AnhApiRequest();
+                rq.setUrl(a.getUrl());
+                rq.setMain(a.isMain());
+                lstAnh.add(rq);
+            }
+            sp.setAnh(lstAnh);
+
+            List<ChiTietSanPham> listCTSP = spx.getChiTietSanPham();
+            List<chiTietSanPhamApiRquest> lstct = new ArrayList<>();
+            for (ChiTietSanPham ctsp : listCTSP) {
+                chiTietSanPhamApiRquest ctspRq = new chiTietSanPhamApiRquest();
+                ctspRq.setMaSanPham(ctsp.getMaSanPham());
+                ctspRq.setAnh(ctsp.getAnh().getUrl());
+                ctspRq.setId(ctsp.getId());
+                ctspRq.setKichCo(ctsp.getKichCo().getTen());
+                ctspRq.setMauSac(ctsp.getMauSac().getMaMauSac());
+                ctspRq.setGiaGoc(ctsp.getGiaGoc().intValue());
+                ctspRq.setGiaBan(ctsp.getGiaBan().intValue());
+                ctspRq.setSoLuongTon(ctsp.getSoLuongTon());
+                ctspRq.setSale(ctsp.isSale());
+                lstct.add(ctspRq);
+            }
+            sp.setChiTietSanPham(lstct);
+            lst.add(sp);
+        }
+        return lst;
     }
 }

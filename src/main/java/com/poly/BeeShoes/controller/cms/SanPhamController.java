@@ -27,6 +27,7 @@ public class SanPhamController {
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
+    private final TagsService tagsService;
 
     @GetMapping("/product")
     public String product(Model model) {
@@ -46,6 +47,7 @@ public class SanPhamController {
         model.addAttribute("lstthuonghieu", thuongHieuService.getAll());
         model.addAttribute("lstmausac", mauSacService.getAll());
         model.addAttribute("lstdegiay", deGiayService.getAll());
+        model.addAttribute("lsttags", tagsService.getAll());
         model.addAttribute("lstmuigiay", muiGiayService.getAll());
         model.addAttribute("lstcogiay", coGiayService.getAll());
         model.addAttribute("lstsanpham", sanPhamService.getAll());
@@ -67,6 +69,7 @@ public class SanPhamController {
 
     @GetMapping("/add-product")
     public String addProduct(Model model) {
+        model.addAttribute("lsttags", tagsService.getAll());
         model.addAttribute("lsttheloai", theLoaiService.getAll());
         model.addAttribute("lstchatlieu", chatLieuService.getAll());
         model.addAttribute("lstthuonghieu", thuongHieuService.getAll());

@@ -105,8 +105,13 @@
     /*-------------------
 		Radio Btn
 	--------------------- */
-    $(".product__color__select label, .shop__sidebar__size label, .product__details__option__size label").on('click', function () {
+    $(document).on('click',".product__color__select label, .shop__sidebar__size label, .product__details__option__size label", function () {
         $(".product__color__select label, .shop__sidebar__size label, .product__details__option__size label").removeClass('active');
+        $(this).addClass('active');
+    });
+    
+    $(document).on('click',".label_select_size", function () {
+        $(".label_select_size").removeClass('active');
         $(this).addClass('active');
     });
 
@@ -167,11 +172,11 @@
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
         if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
+            var newVal = parseFloat(oldValue) - 1;
         } else {
             // Don't allow decrementing below zero
             if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
+                var newVal = parseFloat(oldValue) + 1;
             } else {
                 newVal = 0;
             }

@@ -52,6 +52,11 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
+    public List<ThuongHieu> getAllClient() {
+        return thuongHieuRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         ThuongHieu th = thuongHieuRepository.findById(id).get();
         if (th.getId()!=null){

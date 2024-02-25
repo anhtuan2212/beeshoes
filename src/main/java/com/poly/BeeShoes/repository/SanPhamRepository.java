@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
@@ -23,9 +24,14 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     SanPham findByIdWithSortedChiTietSanPham(Long id);
     @Query("SELECT sp FROM SanPham sp WHERE sp.chiTietSanPham IS EMPTY")
     List<SanPham> findAllWithoutChiTietSanPham();
+    @Query("SELECT sp FROM SanPham sp JOIN FETCH sp.chiTietSanPham cts WHERE sp.trangThai = true AND cts.trangThai = :chiTietSanPhamTrangThai")
+    List<SanPham> findAllWithChiTietSanPham(@Param("chiTietSanPhamTrangThai") Integer chiTietSanPhamTrangThai);
+    @Query("SELECT sp FROM SanPham sp JOIN FETCH sp.chiTietSanPham cts WHERE sp.trangThai = true AND cts.trangThai = 1 AND sp.id=:id")
+    Optional<SanPham> getByIdClient(@Param("id")Long id);
     SanPham getFirstByTen(String name);
     boolean existsByTheLoai(TheLoai theLoai);
     boolean existsByThuongHieu(ThuongHieu thuongHieu);
     boolean existsByTen(String ten);
     List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
+    Integer countByTrangThaiIsTrue();
 }
