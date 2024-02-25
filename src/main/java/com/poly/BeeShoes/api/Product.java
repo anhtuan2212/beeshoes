@@ -245,6 +245,7 @@ public class Product {
                 kichCoApiRequest kca = new kichCoApiRequest();
                 kca.setTen(kc.getTen());
                 kca.setId(kc.getId());
+                LstSize.add(kca);
             }
             sp.setKichCo(LstSize);
 
