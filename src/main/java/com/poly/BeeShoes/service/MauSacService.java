@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service;
 
 import com.poly.BeeShoes.model.MauSac;
+import com.poly.BeeShoes.model.ThuongHieu;
 
 import java.util.List;
 
@@ -12,6 +13,6 @@ public interface MauSacService {
     List<MauSac> getAll();
     boolean delete(Long id);
     boolean existsByMaMauSac(String ma);
-
-    boolean existsByTen(String ten);
+    List<MauSac> getAllClient();
+    boolean existsByTen(String ten,Long id);
 }

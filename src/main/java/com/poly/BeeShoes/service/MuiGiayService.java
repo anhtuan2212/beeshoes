@@ -12,5 +12,5 @@ public interface MuiGiayService {
     List<MuiGiay> getAll();
     boolean delete(Long id);
 
-    boolean existsByTen(String ten);
+    boolean existsByTen(String ten,Long id);
 }

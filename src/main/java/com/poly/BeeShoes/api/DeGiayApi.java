@@ -27,15 +27,11 @@ public class DeGiayApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
         if (id != null) {
-            th = deGiayService.getByTen(ten);
-            System.out.println(ten);
-            if (th != null) {
-                if (th.getId() != id){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-                }
+            if (deGiayService.existsByTen(ten,id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (deGiayService.existsByTen(ten)) {
+            if (deGiayService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }

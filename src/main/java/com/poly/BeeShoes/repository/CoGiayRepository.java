@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CoGiayRepository extends JpaRepository<CoGiay,Long> {
     boolean existsByTen(String Ten);
     CoGiay getFirstByTen(String ten);
+//    boolean existsByTenIgnoreCaseAndTrangThai(String tenChuanHoa, boolean b);
 }

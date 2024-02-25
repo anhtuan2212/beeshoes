@@ -13,10 +13,13 @@ public class KhachHangRequest {
     private Long id;
     private String maKhachHang;
     private String hoTen;
+    private String email;
+    private String avatar;
     private boolean gioiTinh;
     private Date ngaySinh;
     private String sdt;
     private boolean trangThai;
+    Long idDiaChi;
     String soNha;
     String phuongXa;
     String quanHuyen;

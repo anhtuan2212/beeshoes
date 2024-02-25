@@ -17,10 +17,13 @@ public interface SanPhamService {
     SanPham getByTen(String name);
     boolean existsByTen(String name);
     List<SanPham> getAll();
+    List<SanPham> getAllApi();
     boolean exitsByTheLoai(TheLoai theLoai);
     boolean exitsByThuongHieu(ThuongHieu th);
     Page<SanPham> getAllShop(Pageable pageable);
     boolean delete(Long id);
-
+    List<SanPham> getSanPhamEmtyCTSP();
+    List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
     Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
+    Integer getCount();
 }

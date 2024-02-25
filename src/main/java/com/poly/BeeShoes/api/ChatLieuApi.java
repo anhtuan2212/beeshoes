@@ -50,17 +50,12 @@ public class ChatLieuApi {
         if (trangThai==null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
-
         if (id != null) {
-            th = chatLieuService.getByTen(ten);
-            System.out.println(ten);
-            if (th != null) {
-                if (th.getId() != id){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-                }
+            if (chatLieuService.existsByTen(ten,id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (chatLieuService.existsByTen(ten)) {
+            if (chatLieuService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }

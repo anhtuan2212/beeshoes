@@ -20,7 +20,8 @@ public class TheLoai {
     String ten;
     Timestamp ngayTao;
     Timestamp ngaySua;
-
+    @Transient
+    Long CountProduct;
     @OneToOne
     @JoinColumn(name = "nguoi_tao")
     User nguoiTao;

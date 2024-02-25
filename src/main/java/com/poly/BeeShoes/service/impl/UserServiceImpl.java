@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
+import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.User;
 import com.poly.BeeShoes.repository.UserRepository;
 import com.poly.BeeShoes.service.UserService;
@@ -28,5 +29,21 @@ public class UserServiceImpl implements UserService {
     public User createNewUser(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public User findByKhachHang_Id(Long id) {
+        return userRepository.findByKhachHang_Id(id);
+    }
+
+    @Override
+    public User findByNhanVien_Id(Long id) {
+        return userRepository.findByNhanVien_Id(id);
+    }
+
+    @Override
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
 
 }

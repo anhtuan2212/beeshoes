@@ -1,3 +1,4 @@
+
 function Toast(status, message) {
     const Toast = Swal.mixin({
         toast: true,
@@ -154,6 +155,9 @@ $(document).on('ready', function () {
                     if (id == 'kichCo') {
                         html = `<option value="${data.ten}" selected>${data.ten}</option>`;
                     }
+                    if (id == 'sanPham') {
+                        $('#sanPham_input').val(data.ten);
+                    }
                     $('#' + id).append(html);
                     Toast('success', 'Thêm Thành Công !');
                     $('#product-name-modal').val('');
@@ -191,10 +195,10 @@ $(document).on('ready', function () {
         let mausac = $('#mauSac').val();
         mausac.forEach((mau) => {
             let tenmau = $('option[value="' + mau + '"]').attr('data-name');
-            let ele = $('#selectedColor').find('li.select2-selection__choice[title="'+tenmau+'"]');
+            let ele = $('#selectedColor').find('li.select2-selection__choice[title="' + tenmau + '"]');
             let span = $(ele[0]).find('span:not(.select2-selection__choice__remove)').eq(0);
             $(span[0]).text(tenmau);
-            $(ele[0]).css('background-color', mau).css('color', '#FFFFFF').css('border','solid 1px').css('border-color','#f9dbdb');
+            $(ele[0]).css('background-color', mau).css('color', '#FFFFFF').css('border', 'solid 1px').css('border-color', '#f9dbdb');
         });
     }
 

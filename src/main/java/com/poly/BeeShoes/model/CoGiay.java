@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CoGiay {
     @Id

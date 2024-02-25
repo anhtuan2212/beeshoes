@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service;
 
+import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.User;
 
 public interface UserService {
@@ -10,4 +11,9 @@ public interface UserService {
 
     User createNewUser(User user);
 
+    User findByKhachHang_Id(Long id);
+
+    User findByNhanVien_Id(Long id);
+
+    User update(User user);
 }

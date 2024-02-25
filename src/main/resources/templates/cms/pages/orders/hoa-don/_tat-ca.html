@@ -62,7 +62,7 @@
                                     "placeholder": "Giá Trị",
                                     "searchInputPlaceholder": "Tìm giá trị"
                                     }'>
-                        <option value="all" selected>Giá Trị</option>
+                        <option value="0-999999999" selected>Giá Trị</option>
                         <option value="0-999999">Nhỏ hơn 1 triệu</option>
                         <option value="1000000-4999999">Từ 1 triệu đến 5 triệu</option>
                         <option value="5000000-9999999">Từ 5 triệu đến 10 triệu</option>
@@ -92,9 +92,6 @@
                         <span id="datatableCounter">0</span>
                         đơn được chọn
                       </span>
-                            <button class="btn btn-sm btn-outline-danger mr-3 huyFromCheckBox">
-                                <i class="tio-delete-outlined"></i> Hủy
-                            </button>
                             <button class="btn btn-sm btn-outline-success xacNhanFromCheckBox">
                                 <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                             </button>
@@ -302,7 +299,7 @@
                                 <button class="btn btn-sm btn-outline-success xacNhanFromAction">
                                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận</button>
                             </li>
-                            <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
+                            <li th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}">
                                 <button class="btn btn-sm btn-outline-danger huyFromAction">
                                     <i class="tio-delete-outlined"></i> Hủy</button>
                             </li>

@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +45,24 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
     @Override
     public SanPham getById(Long id) {
-        Optional<SanPham> optionalSanPham = sanPhamRepository.findById(id);
+        Optional<SanPham> optionalSanPham = sanPhamRepository.getByIdClient(id);
         if (optionalSanPham.isPresent()) {
             SanPham sanPham = optionalSanPham.get();
+            List<ChiTietSanPham> ctsp = sanPham.getChiTietSanPham();
+            int num = 0;
+            BigDecimal gn =null;
+            List<MauSac> lst = new ArrayList<>();
+            for (int j = 0; j < ctsp.size(); j++) {
+                ChiTietSanPham ct = ctsp.get(j);
+                num += ct.getSoLuongTon();
+                gn=ct.getGiaBan();
+                if (!lst.contains(ct.getMauSac())){
+                    lst.add(ct.getMauSac());
+                }
+            }
+            sanPham.setMauSac(lst);
+            sanPham.setGiaBan(gn);
+            sanPham.setSoLuong(num);
             List<ChiTietSanPham> sortedChiTietSanPham = sanPham.getSortedChiTietSanPhamByMauSac();
             sanPham.setChiTietSanPham(sortedChiTietSanPham);
             return sanPham;
@@ -72,18 +90,28 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public Integer getCount() {
+        return sanPhamRepository.countByTrangThaiIsTrue();
+    }
+
+    @Override
     public SanPham getByTen(String name) {
         return sanPhamRepository.getFirstByTen(name);
     }
 
     @Override
     public boolean existsByTen(String name) {
-        return sanPhamRepository.existsByTen(name);
+        String tenChuanHoa = chuanHoaTen(name);
+        List<SanPham> danhSachCoGiay = sanPhamRepository.findAll();
+        List<SanPham> coGiayTrungTen = danhSachCoGiay.stream()
+                .filter(cg -> chuanHoaTen(cg.getTen()).equals(tenChuanHoa))
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 
     @Override
     public List<SanPham> getAll() {
-        List<SanPham> sp = sanPhamRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        List<SanPham> sp = sanPhamRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
         for (int i = 0; i < sp.size(); i++) {
             SanPham s = sp.get(i);
             List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
@@ -103,6 +131,12 @@ public class SanPhamServiceImpl implements SanPhamService {
             s.setSoLuong(num);
         }
         return sp;
+    }
+
+    @Override
+    public List<SanPham> getAllApi() {
+        List<SanPham> lst =sanPhamRepository.findAllWithChiTietSanPham(1);
+        return lst;
     }
 
     @Override
@@ -156,5 +190,15 @@ public class SanPhamServiceImpl implements SanPhamService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<SanPham> getSanPhamEmtyCTSP() {
+        return sanPhamRepository.findAllWithoutChiTietSanPham();
+    }
+
+    @Override
+    public List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai) {
+        return sanPhamRepository.findTop4ByTheLoaiOrderByNgayTaoDesc(theLoai);
     }
 }

@@ -8,6 +8,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,11 @@ public class KichCoServiceImpl implements KichCoService {
     }
 
     @Override
+    public List<KichCo> getAllClient() {
+        return kichCoRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         KichCo co = kichCoRepository.findById(id).get();
         if (co.getId()!=null){
@@ -43,7 +51,17 @@ public class KichCoServiceImpl implements KichCoService {
     }
 
     @Override
-    public boolean exitsByTen(String ten) {
-        return kichCoRepository.existsByTen(ten);
+    public boolean existsByTen(String ten, Long id) {
+        String tenChuanHoa = chuanHoaTen(ten);
+        List<KichCo> danhSachCoGiay = kichCoRepository.findAll();
+        List<KichCo> coGiayTrungTen = danhSachCoGiay.stream()
+                .filter(cg -> {
+                    if (chuanHoaTen(cg.getTen()).equals(tenChuanHoa) && !cg.getId().equals(id)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 }

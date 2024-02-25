@@ -45,15 +45,11 @@ public class ThuongHieuApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
         if (id != null) {
-             th = thuongHieuService.getByTen(ten);
-            System.out.println(ten);
-            if (th != null) {
-                if (th.getId() != id){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-                }
+            if (thuongHieuService.existsByTen(ten,id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (thuongHieuService.existsByTen(ten)) {
+            if (thuongHieuService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }

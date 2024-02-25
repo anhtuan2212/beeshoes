@@ -11,5 +11,5 @@ public interface ChatLieuService {
     List<ChatLieu> getAll();
     boolean delete(Long id);
 
-    boolean existsByTen(String ten);
+    boolean existsByTen(String ten,Long id);
 }

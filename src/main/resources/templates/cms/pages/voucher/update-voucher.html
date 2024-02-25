@@ -125,6 +125,7 @@
                                 <input type="number" name="giaTriToiThieu" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')}"
                                        placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" >
                             </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu phải lớn hơn 0</i>
+
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày bắt đầu</label>
@@ -633,24 +634,18 @@
         }else{
             document.getElementById("soluong_emty").style.display="block";
             result=false;
+
         }
         if($('#loai').val()=='$'){
-            if (tienmat.length === 0 && parseFloat(tienmat) > 0) {
-                document.getElementById("tienmat_emty").style.display = "none";
-            } else {
-                // Chuyển đổi chuỗi thành số kiểu double
-                let tienmatValue = parseFloat(tienmat);
-
-                // Kiểm tra nếu giá trị là số và lớn hơn 0
-                if (!isNaN(tienmatValue) && tienmatValue > 0) {
-                    document.getElementById("tienmat_emty").style.display = "none";
-                } else {
-                    document.getElementById("tienmat_emty").style.display = "block";
-                    result = false;
-                }
+            if(tienmat.length == 0){
+                document.getElementById("tienmat_emty").style.display="block";
+                result=false;
+            }else{
+                document.getElementById("tienmat_emty").style.display="none";
             }
         }else{
-            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 ) {
+            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 && tienmat.length == 0) {
+
                 document.getElementById("phantram1_emty").style.display = "none"
             } else {
                 document.getElementById("phantram1_emty").style.display = "block";
@@ -658,6 +653,7 @@
                 ;
             }
         }
+
         if (toithieu.length === 0 && parseFloat(toithieu) > 0) {
             document.getElementById("toithieu_emty").style.display = "none";
         } else {
@@ -671,6 +667,7 @@
                 document.getElementById("toithieu_emty").style.display = "block";
                 result = false;
             }
+
         }
         if(batdau.length == 0){
             document.getElementById("batdau_emty").style.display="block";

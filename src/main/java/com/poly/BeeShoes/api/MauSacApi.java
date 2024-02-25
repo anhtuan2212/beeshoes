@@ -45,14 +45,11 @@ public class MauSacApi {
         }
 
         if (id != null) {
-            th = mauSacService.getByTen(ten);
-            if (th != null) {
-                if (th.getId() != id) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
-                }
+            if (mauSacService.existsByTen(ten,id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (mauSacService.existsByTen(ten)) {
+            if (mauSacService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }

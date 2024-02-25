@@ -172,7 +172,7 @@ $(document).ready(function () {
                                 </th>
                                 <th class="table-column-pr-0 pl-lg-7 " data-colum-index="7">
                                     <div class="btn-group" role="group" aria-label="Edit group">
-                                        <a class="btn btn-white remove-item" data-id="${data.id}" data-color-code-remove="${data.maMauSac}" href="javascript:;">
+                                        <a class="btn btn-white remove-item" data-id="${data.id}" data-color-code-remove="${data.maMauSac}" data-size-remove="${data.kichCo}" href="javascript:;">
                                             <i class="tio-delete-outlined"></i>
                                         </a>
                                     </div>
@@ -182,10 +182,15 @@ $(document).ready(function () {
     });
     datatable.rows.add(dataArray).draw();
     $('#sanPham').on('change', function () {
+        let selectedText = $(this).find('option:selected').text();
+        console.log(selectedText);
+        $('#sanPham_input').val(selectedText)
         $('#kichCo').val(null).trigger('change');
         $('#mauSac').val(null).trigger('change');
         datatable.clear().draw();
     })
+    let selectedText = $('#sanPham').find('option:selected').text();
+    $('#sanPham_input').val(selectedText)
 
     function getArrIndex() {
         let arrIndexRow = [];
@@ -223,8 +228,8 @@ $(document).ready(function () {
         }
     });
     setIMG();
+
     function setIMG() {
-        console.log("load")
         let mauSac = null;
         let arr = [];
         let oj = {};
@@ -259,15 +264,16 @@ $(document).ready(function () {
             $(element).remove();
         });
     }
+
     function resetRowData() {
-        let data =datatable.data();
+        let data = datatable.data();
         datatable.clear().draw();
         datatable.rows.add(data).draw();
         setIMG();
     }
+
     datatable.on('draw.dt', function () {
         setIMG();
-        console.log("draw in d")
     });
 
 
@@ -342,6 +348,10 @@ $(document).ready(function () {
         console.log("draw in add")
     });
 
+    function containsAlphabetic(str) {
+        return /[a-zA-Z]/.test(str);
+    }
+
 
     $(document).on('click', '.remove-item', async function () {
         Swal.fire({
@@ -356,6 +366,9 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 let id = $(this).data('id');
+                let dtColor = $(this).data('color-code-remove');
+                let dtSize = $(this).data('size-remove');
+                console.log(this)
                 let mau = $(this).data('color-code-remove');
                 let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
                 if (size > 1) {
@@ -384,18 +397,18 @@ $(document).ready(function () {
                     datatable.row(rowIndex).remove().draw();
                     $(this).closest('tr').remove();
                 }
-                DeleteCTSP(id)
+                DeleteCTSP(id, dtColor, dtSize)
                 resetRowData()
             }
         });
     });
 
-    function DeleteCTSP(id) {
+    function DeleteCTSP(id, color, size) {
         $.ajax({
             url: "/api/xoa-chi-tiet-san-pham",
             type: "DELETE",
             data: {
-                id: id
+                id: id, color: color, size: size
             },
             success: function () {
                 ToastSuccess("Xóa thành công.")
@@ -480,169 +493,220 @@ $(document).ready(function () {
         return /[a-zA-Z]/.test(str);
     }
 
-    $('#save-product-detail').on('click', function () {
-        let sanPham = $('#sanPham').val();
-        let theLoai = $('#theLoai').val();
-        let thuongHieu = $('#thuongHieu').val();
-        let chatLieu = $('#chatLieu').val();
-        let deGiay = $('#deGiay').val();
-        let coGiay = $('#coGiay').val();
-        let muiGiay = $('#muiGiay').val();
-        let giaGoc = $('#giaGoc').val();
-        let sales = $('#sales').is(":checked");
-        let trangThai = $('#status').is(":checked");
-        let mota = $('.ql-editor').html();
-        let product_details = datatable.rows().data().toArray();
-        if (isEmpty(sanPham)) {
-            ToastError("Vui lòng chọn Sản Phẩm !")
-            $('#sanPham').focus();
-            return;
+    function checkString(str) {
+        let firstChar = str.charAt(0);
+        let check = false;
+        if (firstChar !== '#' && !/^[a-zA-Z0-9]+$/.test(firstChar)) {
+            check = true;
         }
-        if (isEmpty(theLoai)) {
-            ToastError("Vui lòng chọn Thể Loại !")
-            $('#theLoai').focus();
-            return;
-        }
-        if (isEmpty(thuongHieu)) {
-            ToastError("Vui lòng chọn Thể Loại !")
-            $('#thuongHieu').focus();
-            return;
-        }
-        if (isEmpty(chatLieu)) {
-            ToastError("Vui lòng chọn Chất Liệu !")
-            $('#chatLieu').focus();
-            return;
-        }
-        if (isEmpty(deGiay)) {
-            ToastError("Vui lòng chọn Đế Giày !")
-            $('#deGiay').focus();
-            return;
-        }
-        if (isEmpty(coGiay)) {
-            ToastError("Vui lòng chọn Cổ Giày !")
-            $('#coGiay').focus();
-            return;
-        }
-        if (isEmpty(muiGiay)) {
-            ToastError("Vui lòng nhập Mũi Giày !")
-            $('#muiGiay').focus();
-            return;
-        }
-        if (Number($('#soLuong').val()) <= 0) {
-            ToastError("Vui lòng nhập Số Lượng !")
-            console.log($('#soLuong').val())
-            $('#soLuong').focus();
-            return;
-        }
-        if (isEmpty(mota) || mota == '<p><br></p>') {
-            ToastError("Vui lòng nhập Giới Thiệu Sản Phẩm !")
-            return;
-        }
-        if (product_details.length === 0) {
-            ToastError('Vui lòng chọn các option sản phẩm');
-            return;
-        }
-        let message = '';
-        let check = true;
-        for (let i = 0; i < product_details.length; i++) {
-            if (containsLetter(product_details[i].id)) {
-                product_details[i].id = 0;
-            }
-            if (product_details[i].img == '/assets/cms/img/400x400/img2.jpg') {
-                product_details[i].img = null;
-                message = "Vui lòng chọn ảnh !";
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].kichCo)) {
-                message = "Vui lòng nhập Size !";
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].maMauSac)) {
-                message = "Vui lòng chọn Màu Sắc !";
-                check = false;
-                break;
-            }
-            if (convertToNumber(product_details[i].giaBan) < 0) {
-                message = "Vui lòng nhập của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
-                check = false;
-                break;
-            }
-            if (convertToNumber(product_details[i].giaGoc) < 0) {
-                message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
-                check = false;
-                break;
-            }
-            if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
-                message = "Vui lòng Số Lượng !";
-                check = false;
-                break;
-            }
-        }
-        if (check) {
-            // post data lên thôi
-            $.ajax({
-                type: "POST",
-                url: "/api/chi-tiet-san-pham",
-                data: {
-                    sanPham: sanPham,
-                    theLoai: theLoai,
-                    thuongHieu: thuongHieu,
-                    chatLieu: chatLieu,
-                    deGiay: deGiay,
-                    coGiay: coGiay,
-                    moTa: mota,
-                    muiGiay: muiGiay,
-                    giaNhap: 100,
-                    giaGoc: giaGoc,
-                    sales: sales,
-                    trangThai: trangThai,
-                    product_details: JSON.stringify(product_details)
-                }, success: (data, status, xhr) => {
-                    ToastSuccess('Lưu Thành Công !')
-                    fileInStorages = fileInStorages.filter((storage) => {
-                        return !product_details.some((pro) => pro.img === storage.url);
-                    });
-                    let arr = fileInStorages.concat(fileImgCurent);
-                    ClearMultipleImages(arr).then(r => {
-                        console.log(r)
-                    });
-                }, error: (e) => {
-                    switch (e.getResponseHeader('error')) {
-                        case "GiaBanNull":
-                            ToastError('Giá bán không được để trống.')
-                            break;
-                        case "GiaGocNull":
-                            ToastError('Giá gốc không được để trống.')
-                            break;
-                        case "QuantityNull":
-                            ToastError('Số lượng không được để trống.')
-                            break;
-                        case "OptionNull":
-                            ToastError('Vui lòng chọn phiên bản.')
-                            break;
-                        case "SizeNull":
-                            ToastError('Kích cỡ không được để trống.')
-                            break;
-                        case "IMGNull":
-                            ToastError('Màu sắc không được để trống.')
-                            break;
-                        case "ColorNull":
-                            ToastError('Màu sắc không được để trống.')
-                            break;
-                        case "MaxLenghtMota":
-                            ToastError('Màu sắc không được để trống.')
-                            break;
-                        default:
-                            ToastError('Lỗi !')
-                    }
 
+        let restOfString = str.slice(1);
+        if (str.includes(" ")) {
+            check = true;
+        }
+        let specialChars = /[^A-Za-z0-9]/;
+        if (specialChars.test(restOfString)) {
+            check = true;
+        }
+        return check;
+    }
+    function redirectToProductPage() {
+        setTimeout(() => {
+            window.location.href = "/cms/product";
+        }, 3000);
+    }
+
+    $('#save-product-detail').on('click', function () {
+        Swal.fire({
+            title: "Bạn chắc chứ?",
+            text: "Các thay đổi sẽ được áp dụng !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Hủy",
+            confirmButtonText: "Xác Nhận"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let sanPham = $('#sanPham').val();
+                let tenSanPham = $('#sanPham_input').val();
+                let theLoai = $('#theLoai').val();
+                let thuongHieu = $('#thuongHieu').val();
+                let chatLieu = $('#chatLieu').val();
+                let deGiay = $('#deGiay').val();
+                let coGiay = $('#coGiay').val();
+                let muiGiay = $('#muiGiay').val();
+                let giaGoc = $('#giaGoc').val();
+                let mota = $('.ql-editor').html();
+                let tags = $('#lstTags').find('option:selected').map(function () {
+                    return $(this).text();
+                }).get();
+                let product_details = datatable.rows().data().toArray();
+                if (isEmpty(sanPham)) {
+                    ToastError("Vui lòng chọn Sản Phẩm !")
+                    $('#sanPham').focus();
+                    return;
                 }
-            })
-        } else (
-            ToastError(message)
-        )
+                if (isEmpty(tenSanPham)) {
+                    ToastError("Vui lòng nhập tên sản phẩm !")
+                    $('#sanPham_input').focus();
+                    return;
+                }
+                if (isEmpty(theLoai)) {
+                    ToastError("Vui lòng chọn Thể Loại !")
+                    $('#theLoai').focus();
+                    return;
+                }
+                if (isEmpty(thuongHieu)) {
+                    ToastError("Vui lòng chọn Thể Loại !")
+                    $('#thuongHieu').focus();
+                    return;
+                }
+                if (isEmpty(chatLieu)) {
+                    ToastError("Vui lòng chọn Chất Liệu !")
+                    $('#chatLieu').focus();
+                    return;
+                }
+                if (isEmpty(deGiay)) {
+                    ToastError("Vui lòng chọn Đế Giày !")
+                    $('#deGiay').focus();
+                    return;
+                }
+                if (isEmpty(coGiay)) {
+                    ToastError("Vui lòng chọn Cổ Giày !")
+                    $('#coGiay').focus();
+                    return;
+                }
+                if (isEmpty(muiGiay)) {
+                    ToastError("Vui lòng nhập Mũi Giày !")
+                    $('#muiGiay').focus();
+                    return;
+                }
+                if (Number($('#soLuong').val()) <= 0) {
+                    ToastError("Vui lòng nhập Số Lượng !")
+                    console.log($('#soLuong').val())
+                    $('#soLuong').focus();
+                    return;
+                }
+                if (isEmpty(mota) || mota == '<p><br></p>') {
+                    ToastError("Vui lòng nhập Giới Thiệu Sản Phẩm !")
+                    return;
+                }
+                if (product_details.length === 0) {
+                    ToastError('Vui lòng chọn các option sản phẩm');
+                    return;
+                }
+                for (let i = 0; i < tags.length; i++) {
+                    if (checkString(tags[i])) {
+                        ToastError('Tags "' + tags[i] + '" không hợp lệ !')
+                        return;
+                    }
+                }
+                let message = '';
+                let check = true;
+                for (let i = 0; i < product_details.length; i++) {
+                    if (containsLetter(product_details[i].id)) {
+                        product_details[i].id = 0;
+                    }
+                    if (product_details[i].img == '/assets/cms/img/400x400/img2.jpg') {
+                        product_details[i].img = null;
+                        message = "Vui lòng chọn ảnh !";
+                        check = false;
+                        break;
+                    }
+                    if (isEmpty(product_details[i].kichCo)) {
+                        message = "Vui lòng nhập Size !";
+                        check = false;
+                        break;
+                    }
+                    if (isEmpty(product_details[i].maMauSac)) {
+                        message = "Vui lòng chọn Màu Sắc !";
+                        check = false;
+                        break;
+                    }
+                    if (convertToNumber(product_details[i].giaBan) < 0) {
+                        message = "Vui lòng nhập của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        check = false;
+                        break;
+                    }
+                    if (convertToNumber(product_details[i].giaGoc) < 0) {
+                        message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        check = false;
+                        break;
+                    }
+                    if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
+                        message = "Vui lòng nhập Số Lượng !";
+                        check = false;
+                        break;
+                    }
+                }
+                if (check) {
+                    // post data lên thôi
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/chi-tiet-san-pham",
+                        data: {
+                            sanPham: sanPham,
+                            tenSanPham: tenSanPham,
+                            theLoai: theLoai,
+                            thuongHieu: thuongHieu,
+                            chatLieu: chatLieu,
+                            deGiay: deGiay,
+                            coGiay: coGiay,
+                            moTa: mota,
+                            muiGiay: muiGiay,
+                            giaNhap: 100,
+                            giaGoc: giaGoc,
+                            tags: tags,
+                            product_details: JSON.stringify(product_details)
+                        }, success: (data, status, xhr) => {
+                            ToastSuccess('Lưu Thành Công !')
+                            fileInStorages = fileInStorages.filter((storage) => {
+                                return !product_details.some((pro) => pro.img === storage.url);
+                            });
+                            let arr = fileInStorages.concat(fileImgCurent);
+                            ClearMultipleImages(arr).then(r => {
+                                redirectToProductPage()
+                            });
+
+                        }, error: (e) => {
+                            console.log(e.getResponseHeader('error'))
+                            switch (e.getResponseHeader('error')) {
+                                case "GiaBanNull":
+                                    ToastError('Giá bán không được để trống.')
+                                    break;
+                                case "GiaGocNull":
+                                    ToastError('Giá gốc không được để trống.')
+                                    break;
+                                case "QuantityNull":
+                                    ToastError('Số lượng không được để trống.')
+                                    break;
+                                case "OptionNull":
+                                    ToastError('Vui lòng chọn phiên bản.')
+                                    break;
+                                case "SizeNull":
+                                    ToastError('Kích cỡ không được để trống.')
+                                    break;
+                                case "IMGNull":
+                                    ToastError('Màu sắc không được để trống.')
+                                    break;
+                                case "ColorNull":
+                                    ToastError('Màu sắc không được để trống.')
+                                    break;
+                                case "MaxLenghtMota":
+                                    ToastError('Màu sắc không được để trống.')
+                                    break;
+                                default:
+                                    ToastError('Lỗi !')
+                            }
+
+                        }
+                    })
+                } else (
+                    ToastError(message)
+                )
+            }
+        });
     })
 
 

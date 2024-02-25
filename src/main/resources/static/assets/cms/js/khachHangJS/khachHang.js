@@ -26,22 +26,38 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
-
+function isEmpty(str) {
+    return (!str || str.length === 0 );
+}
+function isValidEmail(email) {
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
 function formvalidate(e) {
     if (confirm('Bạn có muốn cập nhật không?')) {
         var result = true;
-        var hoTen = document.getElementById("hoTen").value;
+        var hoTen = $('#firstNameLabel').val();
+        var email = $('#email').val();
         var sdt = document.getElementById("sdt").value;
         var ngaySinh = document.getElementById("ngaySinh").value;
-        var soNha = document.getElementById("soNha").value;
-        var phuongXa = document.getElementById("phuongXa").value;
-        var quanHuyen = document.getElementById("quanHuyen").value;
-        var tinhTP = document.getElementById("tinhTP").value;
-        if (hoTen.length == 0) {
+
+        if (isEmpty(hoTen)) {
             document.getElementById("hoTen_emty").style.display = "block";
             result = false;
         } else {
             document.getElementById("hoTen_emty").style.display = "none";
+        }
+        if (isEmpty(email)) {
+            document.getElementById("email_emty").style.display = "block";
+            result = false;
+        } else {
+            document.getElementById("email_emty").style.display = "none";
+        }
+        if (!isValidEmail(email)) {
+            document.getElementById("email_eror_").style.display = "block";
+            result = false;
+        } else {
+            document.getElementById("email_eror_").style.display = "none";
         }
         if (sdt.length == 0) {
             document.getElementById("sdt_emty").style.display = "block";
@@ -61,31 +77,11 @@ function formvalidate(e) {
         } else {
             document.getElementById("ngaySinh_emty").style.display = "none";
         }
-        if (soNha.length == 0) {
-            document.getElementById("soNha_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("soNha_emty").style.display = "none";
-        }
-        if (quanHuyen.length == "") {
-            document.getElementById("quanHuyen_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("quanHuyen_emty").style.display = "none";
-        }
-        if (phuongXa.length == "") {
-            document.getElementById("phuongXa_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("phuongXa_emty").style.display = "none";
-        }
-        if (tinhTP.length == "") {
-            document.getElementById("tinhTP_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("tinhTP_emty").style.display = "none";
-        }
         ToastSuccess("Thành công")
+        if (result==false){
+            ToastError("Thất bại")
+            e.preventDefault();
+        }
         return result;
     }
     ToastError("Thất bại")
@@ -201,6 +197,8 @@ fetch('/assets/cms/json/TinhTP.json')
     .catch(error => console.error('Error:', error));
 
 $(document).on('ready', function () {
+
+
     $('.btn_save_address').on('click', function () {
         let id = $(this).data('id-address');
         let soNha = $(this).closest('.form-address').find('.soNha').val();
@@ -340,10 +338,10 @@ $(document).on('ready', function () {
                                                         </div>
                                                         </div>`;
                 $('#listAddress').append(html);
-                $('#soNhaMoi').val(0);
-                $('#phuongXaMoi').val(0);
-                $('#quanHuyenMoi').val(0);
-                $('#tinhTPMoi').val(0);
+                $('#soNhaMoi').val('');
+                $('#tinhTPMoi').val('');
+                $('#quanHuyenMoi').val('');
+                $('#phuongXaMoi').val('');
                 switch (xhr.getResponseHeader('status')) {
                     case "oke":
                         ToastSuccess("Lưu thành công")
@@ -408,6 +406,9 @@ $(document).on('ready', function () {
         $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
     });
 
+    $('.js-masked-input').each(function () {
+        var mask = $.HSCore.components.HSMask.init($(this));
+    });
 
     // INITIALIZATION OF MEGA MENU
     // =======================================================

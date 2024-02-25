@@ -8,11 +8,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
 public class TheLoaiServiceImpl implements TheLoaiService {
     private final TheLoaiRepository theLoaiRepository;
+
     @Override
     public TheLoai save(TheLoai theLoai) {
         return theLoaiRepository.save(theLoai);
@@ -29,8 +33,18 @@ public class TheLoaiServiceImpl implements TheLoaiService {
     }
 
     @Override
-    public boolean existsByTen(String ten) {
-        return theLoaiRepository.existsByTen(ten);
+    public boolean existsByTen(String ten, Long id) {
+        String tenChuanHoa = chuanHoaTen(ten);
+        List<TheLoai> danhSachCoGiay = theLoaiRepository.findAll();
+        List<TheLoai> coGiayTrungTen = danhSachCoGiay.stream()
+                .filter(cg -> {
+                    if (chuanHoaTen(cg.getTen()).equals(tenChuanHoa) && !cg.getId().equals(id)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+        return !coGiayTrungTen.isEmpty();
     }
 
 
@@ -42,10 +56,19 @@ public class TheLoaiServiceImpl implements TheLoaiService {
     @Override
     public boolean delete(Long id) {
         TheLoai theLoai = theLoaiRepository.findById(id).get();
-        if (theLoai.getId()!=null){
+        if (theLoai.getId() != null) {
             theLoaiRepository.deleteById(theLoai.getId());
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<TheLoai> getAllClient() {
+        List<TheLoai> lst = theLoaiRepository.findAllByTrangThaiIsTrue();
+        for (int i = 0; i < lst.size(); i++) {
+            lst.get(i).setCountProduct(theLoaiRepository.countSanPhamByTheLoaiIdAndTrangThai(lst.get(i).getId()));
+        }
+        return lst;
     }
 }

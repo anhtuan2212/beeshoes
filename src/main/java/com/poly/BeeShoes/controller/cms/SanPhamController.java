@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class SanPhamController {
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
+    private final TagsService tagsService;
 
     @GetMapping("/product")
     public String product(Model model) {
@@ -45,10 +47,12 @@ public class SanPhamController {
         model.addAttribute("lstthuonghieu", thuongHieuService.getAll());
         model.addAttribute("lstmausac", mauSacService.getAll());
         model.addAttribute("lstdegiay", deGiayService.getAll());
+        model.addAttribute("lsttags", tagsService.getAll());
         model.addAttribute("lstmuigiay", muiGiayService.getAll());
         model.addAttribute("lstcogiay", coGiayService.getAll());
         model.addAttribute("lstsanpham", sanPhamService.getAll());
         model.addAttribute("lstkichco", kichCoService.getAll());
+        model.addAttribute("editproduct",1);
         if (id != null) {
             SanPham sp = sanPhamService.getById(id);
             List<String> lst = sanPhamService.getListKichCo(id);
@@ -65,6 +69,7 @@ public class SanPhamController {
 
     @GetMapping("/add-product")
     public String addProduct(Model model) {
+        model.addAttribute("lsttags", tagsService.getAll());
         model.addAttribute("lsttheloai", theLoaiService.getAll());
         model.addAttribute("lstchatlieu", chatLieuService.getAll());
         model.addAttribute("lstthuonghieu", thuongHieuService.getAll());
@@ -72,7 +77,7 @@ public class SanPhamController {
         model.addAttribute("lstdegiay", deGiayService.getAll());
         model.addAttribute("lstmuigiay", muiGiayService.getAll());
         model.addAttribute("lstcogiay", coGiayService.getAll());
-        model.addAttribute("lstsanpham", sanPhamService.getAll());
+        model.addAttribute("lstsanpham", sanPhamService.getSanPhamEmtyCTSP());
         model.addAttribute("lstkichco", kichCoService.getAll());
         return "cms/pages/products/add-product";
     }

@@ -16,11 +16,12 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <link rel="stylesheet" href="/assets/cms/css/custom.css">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/cms/css/sweetalert2.min.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
+
 </head>
-<body class="   footer-offset">
+<body class="footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 <!-- ONLY DEV -->
 <!-- ========== HEADER ========== -->
@@ -67,7 +68,7 @@
                     <div class="card-body">
                         <!-- Form Group -->
                         <div class="row">
-                            <div class="form-group col-10 col-sm-10 col-md-11 ">
+                            <div id="showSelectedProduct" class="form-group col-10 col-sm-10 col-md-11">
                                 <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
                                 <select class="js-select2-custom custom-select" name="sanPham" id="sanPham" size="1"
                                         style="opacity: 0;"
@@ -81,7 +82,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-1 col-md-1 col-sm-1 col-sm-auto p-0">
+                            <div id="btn_add_new_product" class="col-1 col-md-1 col-sm-1 col-sm-auto p-0">
                                 <button class="m-0 p-0 border-0 mt-5" type="button" data-toggle="tooltip"
                                         data-placement="top"
                                         title="Thêm Sản Phẩm.">
@@ -90,6 +91,10 @@
                                         <i class="tio-add-circle"></i>
                                     </a>
                                 </button>
+                            </div>
+                            <div id="showInputProduct" class="form-group col-12 col-sm-12 col-md-12 d-none">
+                                <label for="sanPham" class="input-label">Tên Sản Phẩm</label>
+                                <input class="form-control" name="sanPham" id="sanPham_input" th:value="${sanPham == null ?'':sanPham.getTen()}">
                             </div>
                         </div>
                         <!-- End Form Group -->
@@ -307,41 +312,36 @@
                 <div class="card mb-3 mb-lg-5">
                     <!-- Header -->
                     <div class="card-header">
-                        <h4 class="card-header-title">Trạng Thái</h4>
+                        <h4 class="card-header-title">Thẻ Tags</h4>
                     </div>
                     <!-- End Header -->
 
                     <!-- Body -->
                     <div class="card-body">
-                        <!-- Toggle Switch -->
-                        <label class="row toggle-switch" for="sales">
-                            <span class="col-8 col-sm-9 toggle-switch-content">
-                                <span class="text-dark">Sales</span>
-                            </span>
-                            <span class="col-4 col-sm-3">
-                                <input type="checkbox" class="toggle-switch-input" id="sales"
-                                       th:checked="${sanPham != null and sanPham.isSale()}">
-                                <span class="toggle-switch-label ml-auto">
-                                    <span class="toggle-switch-indicator"></span>
-                                </span>
-                            </span>
-                        </label>
-                        <hr class="my-4">
-
-                        <!-- Toggle Switch -->
-                        <label class="row toggle-switch" for="status">
-                            <span class="col-8 col-sm-9 toggle-switch-content">
-                                <span class="text-dark">Bán Hàng</span>
-                            </span>
-                            <span class="col-4 col-sm-3">
-                                <input type="checkbox" class="toggle-switch-input" id="status"
-                                       th:checked="${sanPham  != null ? sanPham.isTrangThai() : 'checked'}">
-                                <span class="toggle-switch-label ml-auto">
-                                    <span class="toggle-switch-indicator"></span>
-                                </span>
-                            </span>
-                        </label>
-                        <!-- End Toggle Switch -->
+                        <div class="form-group" id="tags">
+                            <div class="d-flex justify-content-between">
+                                <label for="mauSac" class="input-label">Tags <i class="tio-help-outlined text-body ml-1"
+                                                                                data-toggle="tooltip" data-placement="top"
+                                                                                title="" data-original-title="Lưu ý: Thẻ Tags phải viết liền, không dấu và không chứa Ký tự đặc biệt "></i></label>
+                                <a class="text-primary" href="javascript:;">
+                                </a>
+                            </div>
+                            <select class="js-select2-custom custom-select" name="tags" id="lstTags" multiple
+                                    size="1"
+                                    style="opacity: 0;"
+                                    data-hs-select2-options='{
+                                    "tags": true,
+                                    "minimumResultsForSearch": "Infinity",
+                                    "placeholder":"Chọn Tags"
+                                    }'>
+                                <option th:each="th : ${lsttags}"
+                                        th:value="${th.getId()}"
+                                        th:text="${th.getTen()}"
+                                        th:selected="${sanPham!=null and sanPham.getTags()!=null and sanPham.getTags().contains(th)}">
+                                </option>
+                            </select>
+                            <!-- End Select2 -->
+                        </div>
                     </div>
                     <!-- Body -->
                 </div>
@@ -387,7 +387,7 @@
                         <!-- End Form Group -->
 
                         <!-- Form Group -->
-                        <div class="form-group">
+                        <div id="wraperKichCo" class="form-group">
                             <div class="d-flex justify-content-between">
                                 <label for="kichCo" class="input-label">Kích Cỡ</label>
                                 <a class="text-primary" href="javascript:;"
@@ -670,7 +670,14 @@
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+<script src="/assets/cms/js/sweetalert2.all.min.js"></script>
+<th:block th:if="${editproduct!=null and editproduct==1}">
+    <script>
+        $('#showSelectedProduct').addClass('d-none');
+        $('#btn_add_new_product').addClass('d-none');
+        $('#showInputProduct').removeClass('d-none');
+    </script>
+</th:block>
 <script>
     $(document).ready(function () {
         $(document).on('click', '.js-plus, .js-minus', function () {
@@ -685,10 +692,10 @@
         });
 
         $(document).on('input', '.money-input-mask', function () {
-            $(this).mask('#.###đ', {reverse: true});
+            $(this).mask('#.###.###.###đ', {reverse: true});
         });
         $(document).on('input', '.money-input-mask-num', function () {
-            $(this).mask('#.###', {reverse: true});
+            $(this).mask('#.###.###.###', {reverse: true});
         });
     });
 </script>
