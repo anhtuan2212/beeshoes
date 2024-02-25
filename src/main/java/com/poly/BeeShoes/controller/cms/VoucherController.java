@@ -110,8 +110,16 @@ public class VoucherController {
                       @RequestParam(name =
                               "page", defaultValue = "1") Integer page)throws ParseException {
         List<Voucher> list=voucherService.getAll();
-        voucher.setNgayBatDau(Timestamp.valueOf(voucher.getStartDate1()));
-        voucher.setNgayKetThuc(Timestamp.valueOf(voucher.getEndDate1()));
+        Timestamp ngayBatDauTimestamp = null;
+        Timestamp ngayKetThucTimestamp = null;
+        if (voucher.getStartDate1() != null && voucher.getEndDate1() != null) {
+            ngayBatDauTimestamp = Timestamp.valueOf(voucher.getStartDate1());
+            ngayKetThucTimestamp = Timestamp.valueOf(voucher.getEndDate1());
+        }
+
+        voucher.setNgayBatDau(ngayBatDauTimestamp);
+        voucher.setNgayKetThuc(ngayKetThucTimestamp);
+
         long count = voucherResponsitory.count();
 
         int numberOfDigits = (int) Math.log10(count + 1) + 1;
@@ -146,8 +154,6 @@ public class VoucherController {
     public String detail(@PathVariable Long id, Model model) {
         Voucher voucher1 = voucherService.detail(id);
         List<Voucher> options=voucherService.getAll();
-        voucher1.setStartDate1(voucher1.getNgayBatDau().toLocalDateTime());
-        voucher1.setStartDate1(voucher1.getNgayKetThuc().toLocalDateTime());
         model.addAttribute("Listvv", voucher1);
         List<Voucher> uniqueOptions = options.stream()
                 .collect(Collectors.toMap(Voucher::getLoaiVoucher, Function.identity(), (existing, replacement) -> existing))

@@ -15,10 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- CSS Implementing Plugins -->
-    <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
-    <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
-
-
+<!--    <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">-->
+<!--    <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">-->
+    <link rel="stylesheet" href="/assets/cms/css/sweetalert2.min.css">
 
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
@@ -89,7 +88,7 @@
                                 <input type="number" class="form-control money-input-mask" th:name="giaTriTienMat"
                                        placeholder="Vui lòng nhập giá trị tiền mặt." aria-label=""  id="tienmat">
 
-                            </div> <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt</i>
+                            </div> <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label id="pt" class="input-label">Giá trị phần trăm</label>
@@ -105,7 +104,7 @@
                                 <input type="number" class="form-control money-input-mask" th:name="soLuong"
                                        placeholder="Vui lòng nhập số lượng." aria-label=""  id="soluong">
 
-                            </div><i id="soluong_emty" style="color: red;display: none">Vui lòng nhập vào số lượng</i>
+                            </div><i id="soluong_emty" style="color: red;display: none">Vui lòng nhập vào số lượng phải lớn hơn 0</i>
                         </div>
                     </div>
                     <div  class="col-lg-5 mx-5">
@@ -113,17 +112,17 @@
                             <label class="input-label">Giá trị tối thiểu</label>
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:name="giaTriToiThieu"
-                                       placeholder="Vui lòng nhập điều kiện." aria-label=""  id="dieukien">
+                                       placeholder="Vui lòng nhập điều kiện." aria-label=""  id="toithieu">
 
-                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu</i>
+                            </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Giá trị tối đa </label>
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:name="giaTriToiDa"
-                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu">
+                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="dieukien">
 
-                            </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa</i>
+                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày bắt đầu</label>
@@ -611,11 +610,40 @@
 <!-- End Product Filter Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 <!-- JS Implementing Plugins -->
-<script src="/assets/cms/js/vendor.min.js"></script>
+<!--<script src="/assets/cms/js/vendor.min.js"></script>-->
+<script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
+    function Toast(status, message) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+            customClass: {
+                popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
+            }
+        });
+        Toast.fire({
+            icon: status,
+            title: message
+        });
+    }
+
+    function ToastSuccess(message) {
+        Toast('success', message)
+    }
+
+    function ToastError(message) {
+        Toast('error', message)
+    }
     function formvalidate(){
         var result=true;
         var ten = document.getElementById("ten").value;
@@ -633,29 +661,49 @@
         }else{
             document.getElementById("ten_emty").style.display="none";
         }
-        if(soluong.length == 0){
+        if(soluong.length != 0 && parseInt(soluong)>0){
+            document.getElementById("soluong_emty").style.display="none";
+
+        }else{
             document.getElementById("soluong_emty").style.display="block";
             result=false;
-        }else{
-            document.getElementById("soluong_emty").style.display="none";
-        } if(tienmat.length == 0){
-            document.getElementById("tienmat_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("tienmat_emty").style.display="none";
         }
-        if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100) {
-            document.getElementById("phantram1_emty").style.display = "none"
+
+        if (tienmat.length === 0 && parseFloat(tienmat) > 0) {
+            document.getElementById("tienmat_emty").style.display = "none";
         } else {
-            document.getElementById("phantram1_emty").style.display = "block";
-            result = false;
-            ;
+            // Chuyển đổi chuỗi thành số kiểu double
+            let tienmatValue = parseFloat(tienmat);
+
+            // Kiểm tra nếu giá trị là số và lớn hơn 0
+            if (!isNaN(tienmatValue) && tienmatValue >= 0) {
+                document.getElementById("tienmat_emty").style.display = "none";
+            } else {
+                document.getElementById("tienmat_emty").style.display = "block";
+                result = false;
+            }
         }
-        if(toithieu.length == 0){
-            document.getElementById("toithieu_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("toithieu_emty").style.display="none";
+            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 ) {
+                document.getElementById("phantram1_emty").style.display = "none"
+            } else {
+                document.getElementById("phantram1_emty").style.display = "block";
+                result = false;
+                ;
+            }
+
+        if (toithieu.length === 0 && parseFloat(toithieu) > 0) {
+            document.getElementById("toithieu_emty").style.display = "none";
+        } else {
+            // Chuyển đổi chuỗi thành số kiểu double
+            let toithieuValue = parseFloat(toithieu);
+
+            // Kiểm tra nếu giá trị là số và lớn hơn 0
+            if (!isNaN(toithieuValue) && toithieuValue > 0) {
+                document.getElementById("toithieu_emty").style.display = "none";
+            } else {
+                document.getElementById("toithieu_emty").style.display = "block";
+                result = false;
+            }
         }
         if(batdau.length == 0){
             document.getElementById("batdau_emty").style.display="block";
@@ -674,11 +722,19 @@
         }else{
             document.getElementById("ketthuc1_emty").style.display="none";
         }
-        if(dieukien.length == 0){
-            document.getElementById("dieukien_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("dieukien_emty").style.display="none";
+        if (dieukien.length === 0 && parseFloat(dieukien) > 0) {
+            document.getElementById("dieukien_emty").style.display = "none";
+        } else {
+            // Chuyển đổi chuỗi thành số kiểu double
+            let dieukienValue = parseFloat(dieukien);
+
+            // Kiểm tra nếu giá trị là số và lớn hơn 0
+            if (!isNaN(dieukienValue) && dieukienValue > 0) {
+                document.getElementById("dieukien_emty").style.display = "none";
+            } else {
+                document.getElementById("dieukien_emty").style.display = "block";
+                result = false;
+            }
         }
         if(loai.length == ""){
             document.getElementById("loai_emty").style.display="block";
@@ -687,7 +743,15 @@
             document.getElementById("loai_emty").style.display="none";
         }
         return result;
+        ToastSuccess("Lưu hành công")
+        if (result==false){
+            ToastError("Thất bại")
+            e.preventDefault();
+            return result;
+        }
+
     }
+
     document.getElementById("loai").addEventListener("change", function() {
         var selectedOption = this.value;
 
@@ -718,6 +782,8 @@
             document.getElementById("tienmat").value = 0;
         }
     });
+
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
@@ -805,90 +871,6 @@
 
         // INITIALIZATION OF DATATABLES
         // =======================================================
-        var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
-            select: {
-                style: 'multi',
-                selector: 'td:first-child input[type="checkbox"]',
-                classMap: {
-                    checkAll: '#datatableCheckAll',
-                    counter: '#datatableCounter',
-                    counterInfo: '#datatableCounterInfo'
-                }
-            },
-            language: {
-                zeroRecords: '<div class="text-center p-4">' +
-                    '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
-                    '<p class="mb-0">No data to show</p>' +
-                    '</div>'
-            }
-        });
-
-        $('.js-datatable-filter').on('change', function() {
-            var $this = $(this),
-                elVal = $this.val(),
-                targetColumnIndex = $this.data('target-column-index');
-
-            datatable.column(targetColumnIndex).search(elVal).draw();
-        });
-
-        $('#datatableSearch').on('mouseup', function (e) {
-            var $input = $(this),
-                oldValue = $input.val();
-
-            if (oldValue == "") return;
-
-            setTimeout(function(){
-                var newValue = $input.val();
-
-                if (newValue == ""){
-                    // Gotcha
-                    datatable.search('').draw();
-                }
-            }, 1);
-        });
-
-        $('#toggleColumn_product').change(function (e) {
-            datatable.columns(1).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_type').change(function (e) {
-            datatable.columns(2).visible(e.target.checked)
-        })
-
-        datatable.columns(3).visible(false)
-
-        $('#toggleColumn_vendor').change(function (e) {
-            datatable.columns(3).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_stocks').change(function (e) {
-            datatable.columns(4).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_sku').change(function (e) {
-            datatable.columns(5).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_price').change(function (e) {
-            datatable.columns(6).visible(e.target.checked)
-        })
-
-        datatable.columns(7).visible(false)
-
-        $('#toggleColumn_quantity').change(function (e) {
-            datatable.columns(7).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_variants').change(function (e) {
-            datatable.columns(8).visible(e.target.checked)
-        })
-
-
-        // INITIALIZATION OF TAGIFY
-        // =======================================================
-        $('.js-tagify').each(function () {
-            var tagify = $.HSCore.components.HSTagify.init($(this));
-        });
     });
 </script>
 <div th:replace="/cms/pages/_IE-suport.html"></div>

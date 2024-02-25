@@ -90,7 +90,7 @@
                                 <input  id="tienmat" type="number" name="giaTriTienMat" class="form-control money-input-mask" th:value="*{#numbers.formatDecimal(giaTriTienMat, 1, 'DEFAULT', 0, 'DEFAULT')}"
                                         placeholder="Vui lòng nhập giá trị tiền mặt." aria-label="">
                             </div>
-                            <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt</i>
+                            <i id="tienmat_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tiền mặt phải lớn hơn 0</i>
                         </div>
 
 
@@ -108,7 +108,7 @@
                             <div class="input-group">
                                 <input type="number" class="form-control money-input-mask" th:field="*{soLuong}"
                                        placeholder="Vui lòng nhập số lượng." aria-label="" id="soluong">
-                            </div><i id="soluong_emty" style="color: red;display: none">Vui lòng nhập vào số lượng</i>
+                            </div><i id="soluong_emty" style="color: red;display: none">Vui lòng nhập vào số lượng phải lớn hơn 0</i>
                         </div>
                     </div>
                     <div  class="col-lg-5 mx-5">
@@ -117,14 +117,14 @@
                             <div class="input-group">
                                 <input type="number" name="giaTriToiDa" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')}"
                                        placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu" >
-                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa</i>
+                            </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Giá trị tối thiểu</label>
                             <div class="input-group">
                                 <input type="number" name="giaTriToiThieu" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')}"
                                        placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" >
-                            </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu</i>
+                            </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày bắt đầu</label>
@@ -627,21 +627,30 @@
         }else{
             document.getElementById("ten_emty").style.display="none";
         }
-        if(soluong.length == 0){
+        if(soluong.length != 0 && parseInt(soluong)>0){
+            document.getElementById("soluong_emty").style.display="none";
+
+        }else{
             document.getElementById("soluong_emty").style.display="block";
             result=false;
-        }else{
-            document.getElementById("soluong_emty").style.display="none";
         }
         if($('#loai').val()=='$'){
-            if(tienmat.length == 0){
-                document.getElementById("tienmat_emty").style.display="block";
-                result=false;
-            }else{
-                document.getElementById("tienmat_emty").style.display="none";
+            if (tienmat.length === 0 && parseFloat(tienmat) > 0) {
+                document.getElementById("tienmat_emty").style.display = "none";
+            } else {
+                // Chuyển đổi chuỗi thành số kiểu double
+                let tienmatValue = parseFloat(tienmat);
+
+                // Kiểm tra nếu giá trị là số và lớn hơn 0
+                if (!isNaN(tienmatValue) && tienmatValue > 0) {
+                    document.getElementById("tienmat_emty").style.display = "none";
+                } else {
+                    document.getElementById("tienmat_emty").style.display = "block";
+                    result = false;
+                }
             }
         }else{
-            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 && tienmat.length == 0) {
+            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 ) {
                 document.getElementById("phantram1_emty").style.display = "none"
             } else {
                 document.getElementById("phantram1_emty").style.display = "block";
@@ -649,11 +658,19 @@
                 ;
             }
         }
-        if(toithieu.length == 0){
-            document.getElementById("toithieu_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("toithieu_emty").style.display="none";
+        if (toithieu.length === 0 && parseFloat(toithieu) > 0) {
+            document.getElementById("toithieu_emty").style.display = "none";
+        } else {
+            // Chuyển đổi chuỗi thành số kiểu double
+            let toithieuValue = parseFloat(toithieu);
+
+            // Kiểm tra nếu giá trị là số và lớn hơn 0
+            if (!isNaN(toithieuValue) && toithieuValue > 0) {
+                document.getElementById("toithieu_emty").style.display = "none";
+            } else {
+                document.getElementById("toithieu_emty").style.display = "block";
+                result = false;
+            }
         }
         if(batdau.length == 0){
             document.getElementById("batdau_emty").style.display="block";
@@ -672,11 +689,19 @@
         }else{
             document.getElementById("ketthuc1_emty").style.display="none";
         }
-        if(dieukien.length == 0){
-            document.getElementById("dieukien_emty").style.display="block";
-            result=false;
-        }else{
-            document.getElementById("dieukien_emty").style.display="none";
+        if (dieukien.length === 0 && parseFloat(dieukien) > 0) {
+            document.getElementById("dieukien_emty").style.display = "none";
+        } else {
+            // Chuyển đổi chuỗi thành số kiểu double
+            let dieukienValue = parseFloat(dieukien);
+
+            // Kiểm tra nếu giá trị là số và lớn hơn 0
+            if (!isNaN(dieukienValue) && dieukienValue > 0) {
+                document.getElementById("dieukien_emty").style.display = "none";
+            } else {
+                document.getElementById("dieukien_emty").style.display = "block";
+                result = false;
+            }
         }
         if(loai.length == ""){
             document.getElementById("loai_emty").style.display="block";
