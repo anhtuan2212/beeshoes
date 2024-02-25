@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.KhachHang;
+import com.poly.BeeShoes.model.KichCo;
 import com.poly.BeeShoes.repository.KhachHangRepository;
 import com.poly.BeeShoes.request.KhachHangRequest;
 import com.poly.BeeShoes.service.KhachHangService;
@@ -9,6 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +55,11 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public boolean existByMa(String ma) {
         return khachHangRepository.existsByMaKhachHang(ma);
+    }
+
+    @Override
+    public boolean existsBySdt(String sdt) {
+        return khachHangRepository.existsBySdt(sdt);
     }
 
     @Override
