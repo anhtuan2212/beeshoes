@@ -83,7 +83,7 @@ function printAllData() {
             if (product.sale){
                 sales ='<span class="label">SALE</span>'
             }
-            let html = `<div class="col-lg-4 col-md-6 col-sm-6">
+            let html = `<div class="col-lg-4 col-md-6 col-sm-6 d-none ">
                         <div class="product__item sale" data-product-id="1">
                                 <div class="product__item__pic set-bg susor-pointer" data-setbg="${url}" data-href="/shop-details?product=${product.id}" style="background-image: url('${url}');">
                                     ${sales}

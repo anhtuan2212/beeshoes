@@ -158,6 +158,8 @@ $(document).on('ready', function () {
                     if (id == 'sanPham') {
                         $('#sanPham_input').val(data.ten);
                     }
+                    console.log($('#sanPham_input').val())
+                    console.log(id)
                     $('#' + id).append(html);
                     Toast('success', 'Thêm Thành Công !');
                     $('#product-name-modal').val('');

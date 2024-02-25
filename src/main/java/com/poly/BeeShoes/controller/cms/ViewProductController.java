@@ -51,8 +51,7 @@ public class ViewProductController {
         model.addAttribute("lstsanpham", sanPhamService.getAll());
         model.addAttribute("lstkichco", kichCoService.getAll());
         if (id != null) {
-            SanPham sp = sanPhamService.getById(id);
-//            System.out.println(Arrays.toString(sp.getAnh().toArray()));
+            SanPham sp = sanPhamService.getByIdcms(id);
             List<String> lst = sanPhamService.getListKichCo(id);
             if (sp == null) {
                 return "redirect:cms/product";
