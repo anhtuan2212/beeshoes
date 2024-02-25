@@ -110,8 +110,16 @@ public class VoucherController {
                       @RequestParam(name =
                               "page", defaultValue = "1") Integer page)throws ParseException {
         List<Voucher> list=voucherService.getAll();
-        voucher.setNgayBatDau(Timestamp.valueOf(voucher.getStartDate1()));
-        voucher.setNgayKetThuc(Timestamp.valueOf(voucher.getEndDate1()));
+        Timestamp ngayBatDauTimestamp = null;
+        Timestamp ngayKetThucTimestamp = null;
+        if (voucher.getStartDate1() != null && voucher.getEndDate1() != null) {
+            ngayBatDauTimestamp = Timestamp.valueOf(voucher.getStartDate1());
+            ngayKetThucTimestamp = Timestamp.valueOf(voucher.getEndDate1());
+        }
+
+        voucher.setNgayBatDau(ngayBatDauTimestamp);
+        voucher.setNgayKetThuc(ngayKetThucTimestamp);
+
         long count = voucherResponsitory.count();
 
         int numberOfDigits = (int) Math.log10(count + 1) + 1;
