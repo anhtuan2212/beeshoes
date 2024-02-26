@@ -131,20 +131,19 @@
 
                                     <!-- Form Group -->
                                     <div class="form-group">
-                                        <label for="sdt" class="js-masked-input col col-form-label input-label">Số
-                                            điện thoại</label>
+                                        <label for="sdt" class="col col-form-label input-label">Số điện thoại</label>
 
                                         <div class="col">
                                             <div class="input-group input-group-sm-down-break align-items-center">
                                                 <input type="text" class="js-masked-input form-control" name="phone"
-                                                       id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx"
-                                                       data-hs-mask-options='{
+                                                       id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx" data-hs-mask-options='{
                                      "template": "0000000000"
                                    }' th:field="*{sdt}">
                                             </div>
-                                            <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
-                                            <i id="thongbao" style="color: red;display: none">Số điện thoại đã tồn tại</i>
                                         </div>
+                                        <i id="sdt_emty" style="color: red;"></i>
+<!--                                        <i th:if="${errorSdt!=null}" style="color: red;" th:text="${errorSdt}"></i>-->
+<!--                                        <i th:if="${messageSdt!=null}" style="color: red;" th:text="${messageSdt}"></i>-->
                                     </div>
 
                                     <!-- Form Group -->
@@ -156,20 +155,6 @@
                                                 <option th:each="cv:${listCV}" th:value="${cv.getId()}"
                                                         th:selected="${nhanVien.getIdCV() == cv.getId()}"
                                                         th:text="${cv.getTen()}"></option>
-                                            </select>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="form-group">
-                                        <label class="col col-form-label input-label">Trạng thái</label>
-                                        <!-- Select -->
-                                        <div class="col">
-                                            <select class="js-select2-custom custom-select form-control" th:field="*{trangThai}">
-                                                <option value="true" selected="">Hoạt động</option>
-                                                <option value="false">Đã nghỉ</option>
                                             </select>
                                             <!-- End Select -->
                                         </div>
@@ -261,6 +246,50 @@
                                         <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
                                     </div>
 
+<!--                                    <div class="form-address">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label th:for="'phuongXa'+${nhanVien.getId()}" class="col col-form-label input-label">Phường-->
+<!--                                                xã</label>-->
+
+<!--                                            <div class="col">-->
+<!--                                                <select id="phuongXa" name="phuong_xa" class="js-select2-custom custom-select phuong_xa"-->
+<!--                                                        data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",-->
+<!--                                                                               "searchInputPlaceholder": "Tìm Phường Xã..."}'>-->
+<!--                                                    <option value="">Chọn Phường Xã</option>-->
+<!--                                                </select>-->
+<!--                                                <input type="text" th:id="'phuongXa'+${nhanVien.getId()}" th:value="${nhanVien.getPhuongXa()}" hidden>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+
+<!--                                        <div class="form-group">-->
+<!--                                            <label th:for="'quanHuyen'+${nhanVien.getId()}" class="col col-form-label input-label">Quận-->
+<!--                                                huyện</label>-->
+
+<!--                                            <div class="col">-->
+<!--                                                <select id="quanHuyen" name="quanHuyen" class="js-select2-custom custom-select quanHuyen"-->
+<!--                                                        data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",-->
+<!--                                                                                "searchInputPlaceholder": "Tìm Quận Huyện..."}'>-->
+<!--                                                    <option value="">Chọn Quận Huyện</option>-->
+<!--                                                </select>-->
+<!--                                                <input type="text" th:id="'quanHuyen'+${nhanVien.getId()}" th:value="${nhanVien.getQuanHuyen()}" hidden>-->
+<!--                                            </div>-->
+
+<!--                                        </div>-->
+
+<!--                                        <div class="form-group">-->
+<!--                                            <label th:for="'tinhTP'+${nhanVien.getId()}" class="col col-form-label input-label">Tỉnh thành-->
+<!--                                                phố</label>-->
+
+<!--                                            <div class="col">-->
+<!--                                                <select id="tinhTP" name="tinhTP" class="js-select2-custom custom-select tinhTP"-->
+<!--                                                        data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",-->
+<!--                                                                                "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>-->
+<!--                                                    <option value="">Chọn Tỉnh Thành</option>-->
+<!--                                                </select>-->
+<!--                                                <input type="text" th:id="'tinhTP'+${nhanVien.getId()}" th:value="${nhanVien.getTinhThanhPho()}" hidden>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                     <div class="form-group">
                                         <label for="phuongxa" class="col col-form-label input-label">Phường
                                             xã</label>

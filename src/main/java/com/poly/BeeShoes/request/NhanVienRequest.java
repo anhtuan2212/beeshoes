@@ -20,7 +20,7 @@ public class NhanVienRequest {
     private boolean gioiTinh;
     private Date ngaySinh;
     private String sdt;
-    private boolean trangThai;
+    private boolean trangThai=true;
     private Long idCV;
     String soNha;
     String phuongXa;

@@ -34,6 +34,11 @@ function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
+function isValidPhoneNumber(phoneNumber) {
+    let phone = /^(0\d{9,10})$/;
+    // Kiểm tra xem số điện thoại có bắt đầu bằng số 0 và có đúng 10 số không
+    return phone.test(phoneNumber);
+}
 
 function validate() {
     let input = document.getElementById('avatarUploader');
@@ -69,6 +74,9 @@ function validate() {
     if (isEmpty(sdt)) {
         ToastError("Số điện thoại không được để trống.");
         return false;
+    }else if (!isValidPhoneNumber(sdt)) {
+        ToastError("Sdt không đúng định dạng(0359xxxxxx)");
+        return  false;
     }
 
     if (isEmpty(cccd)) {
@@ -76,7 +84,14 @@ function validate() {
         return false;
     }
 
-    if (isEmpty(ngaySinh)) {
+    // Kiểm tra ngày sinh phải trước ngày hiện tại
+    var ngaySinhDate = new Date(ngaySinh);
+    var ngayHienTai = new Date();
+    if (ngaySinhDate >= ngayHienTai) {
+        ToastError("Ngày sinh phải trước ngày hiện tại.");
+        return false;
+    }
+    else if (isEmpty(ngaySinh)) {
         ToastError("Ngày sinh không được để trống.");
         return false;
     }
@@ -103,16 +118,24 @@ function validate() {
     return true;
 }
 
-function checkSDT() {
+function checkDuplicate() {
     return new Promise(function(resolve, reject) {
+        let email = $('#email').val();
         let phone = $('#sdt').val();
+        let cccd = $('#cccd').val();
         $.ajax({
-            url: '/cms/nhan-vien/check-duplicate-phone-number',
+            url: '/cms/nhan-vien/check-duplicate',
             type: 'POST',
-            data: {phoneNumber: phone},
+            data: {email: email, phoneNumber: phone, cccd: cccd},
             success: function(response) {
-                if (response) {
-                    ToastError('Số điện thoại đã tồn tại.')
+                if (response.email) {
+                    ToastError('Email đã tồn tại.');
+                }
+                if (response.phoneNumber) {
+                    ToastError('Số điện thoại đã tồn tại.');
+                }
+                if (response.cccd) {
+                    ToastError('Số cccd đã tồn tại.');
                 }
                 resolve(response);
             },

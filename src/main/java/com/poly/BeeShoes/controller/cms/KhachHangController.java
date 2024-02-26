@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -50,7 +52,9 @@ public class KhachHangController {
 
     @GetMapping("/deleteKH/{id}")
     public String deleteKH(@PathVariable Long id) {
-        khachHangService.delete(id);
+        KhachHang khachHang = khachHangService.detail(id);
+        khachHang.setTrangThai(false);
+        khachHangService.update(khachHang, id);
         return "redirect:/cms/khach-hang";
     }
 
@@ -123,7 +127,6 @@ public class KhachHangController {
         kh = khachHangService.add(kh);
         User user = new User();
         user.setEmail(khachHang.getEmail());
-        user.setAvatar(khachHang.getAvatar());
         user.setRole(Role.CUSTOMER);
         String password = LibService.generateRandomString(10);
         user.setPassword(passwordEncoder.encode(password));
@@ -143,7 +146,6 @@ public class KhachHangController {
         User user = userService.findByKhachHang_Id(khachHang.getId());
         KhachHangRequest kh = new KhachHangRequest();
         kh.setId(khachHang.getId());
-        kh.setAvatar(user.getAvatar());
         kh.setEmail(user.getEmail());
         kh.setMaKhachHang(khachHang.getMaKhachHang());
         kh.setSdt(khachHang.getSdt());
@@ -246,7 +248,6 @@ public class KhachHangController {
         updateKhachHang.setTrangThai(khachHang.isTrangThai());
 //        updateKhachHang.setDiaChiMacDinh(diaChiService.getById(khachHang.getIdDiaChi()));
         user.setEmail(khachHang.getEmail());
-        user.setAvatar(khachHang.getAvatar());
         user.setKhachHang(updateKhachHang);
         khachHangService.update(updateKhachHang, id);
         userService.update(user);
@@ -254,4 +255,16 @@ public class KhachHangController {
         return "redirect:/cms/khach-hang";
     }
 
+    @PostMapping("/check-duplicate")
+    @ResponseBody
+    public Map<String, Boolean> checkDuplicate(@RequestParam("email") String email,
+                                               @RequestParam("phoneNumber") String phoneNumber) {
+        boolean emailExists = userService.existsByEmail(email);
+        boolean phoneNumberExists = khachHangService.existsBySdt(phoneNumber);
+
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("email", emailExists);
+        result.put("phoneNumber", phoneNumberExists);
+        return result;
+    }
 }

@@ -28,4 +28,7 @@ public interface NhanVienService {
     boolean existsByChucVu(ChucVu cv);
 
     boolean existsBySdt(String sdt);
+
+    boolean existsByCccd(String cccd);
+
 }
