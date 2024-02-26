@@ -29,30 +29,14 @@ function ToastError(message) {
 function isEmpty(str) {
     return (!str || str.length === 0 );
 }
+
 function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
 
-function checkDuplicatePhoneNumber(sdt) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: '/cms/nhan-vien/check-duplicate-phone-number', // Đường dẫn mới đã được định nghĩa trong controller
-            type: 'POST',
-            data: { sdt: sdt },
-            dataType: 'json',
-            success: function(response) {
-                resolve(response); // Trả về kết quả kiểm tra
-                console.log(response)
-            },
-            error: function(xhr, status, error) {
-                reject(error); // Xử lý lỗi nếu có
-            }
-        });
-    });
-}
-
 function validate() {
+    let input = document.getElementById('avatarUploader');
     var hoTen = $('#hoTen').val();
     var email = $('#email').val();
     var sdt = $('#sdt').val();
@@ -62,7 +46,13 @@ function validate() {
     var phuongXa = $('#phuongXa').val();
     var quanHuyen = $('#quanHuyen').val();
     var tinhTP = $('#tinhTP').val();
-
+    if (input.files.length === 0) {
+        let url = $('#url-avatar-user').val()
+        if (url===undefined){
+            ToastError("Vui lòng chọn ảnh.");
+            return false;
+        }
+    }
     if (isEmpty(hoTen)) {
         ToastError("Họ tên không được để trống.");
         return false;
@@ -110,33 +100,28 @@ function validate() {
         ToastError("Tỉnh/thành phố không được để trống.");
         return false;
     }
-    ToastSuccess("Lưu hành công")
-    if (result==false){
-        ToastError("Thất bại")
-        e.preventDefault();
-        return result;
-    }
-
-    // Kiểm tra trùng số điện thoại
-    checkDuplicatePhoneNumber(sdt)
-        .then(function(exists) {
-            if (exists) {
-                ToastError("Số điện thoại đã tồn tại.");
-                return false;
-            } else {
-                // Nếu không có trùng số điện thoại, có thể tiếp tục thực hiện các hành động khác ở đây, hoặc submit form.
-                // Ví dụ: $('#yourFormId').submit();
-                ToastSuccess("Lưu thành công.");
-                return true;
-            }
-        })
-        .catch(function(error) {
-            console.error("Đã xảy ra lỗi: " + error);
-            ToastError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
-            return false;
-        });
+    return true;
 }
 
+function checkSDT() {
+    return new Promise(function(resolve, reject) {
+        let phone = $('#sdt').val();
+        $.ajax({
+            url: '/cms/nhan-vien/check-duplicate-phone-number',
+            type: 'POST',
+            data: {phoneNumber: phone},
+            success: function(response) {
+                if (response) {
+                    ToastError('Số điện thoại đã tồn tại.')
+                }
+                resolve(response);
+            },
+            error: function(xhr, status, error) {
+                reject(error);
+            }
+        });
+    });
+}
 //================================
 //quét QR
 $('#form-qr-code').on('shown.bs.modal', function () {

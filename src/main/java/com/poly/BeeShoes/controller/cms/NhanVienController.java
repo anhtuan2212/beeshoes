@@ -54,6 +54,7 @@ public class NhanVienController {
                         @RequestParam("sdt") String sdt,
                         @RequestParam("email") String email) {
         boolean check = false;
+        System.out.println(nhanVien.toString());
         if(nhanVien.getHoTen().isBlank()){
             model.addAttribute("errorHoTen", "Họ tên không được để trống");
             check=true;
@@ -183,7 +184,9 @@ public class NhanVienController {
     @PostMapping("/check-duplicate-phone-number")
     @ResponseBody
     public boolean checkDuplicatePhoneNumber(@RequestParam("phoneNumber") String sdt) {
-        // Thực hiện kiểm tra số điện thoại trùng lặp ở đây
-        return nhanVienService.existsBySdt(sdt);
+        boolean st =nhanVienService.existsBySdt(sdt);
+        System.out.println(sdt);
+        System.out.println(st);
+        return st;
     }
 }

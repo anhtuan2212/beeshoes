@@ -36,8 +36,7 @@ function isValidEmail(email) {
     return emailPattern.test(email);
 }
 
-function formValidate(e) {
-    if (confirm('Bạn có muốn cập nhật không?')) {
+function formValidate() {
         var hoTen = $('#hoTen').val();
         var email = $('#email').val();
         var sdt = $('#sdt').val();
@@ -95,22 +94,11 @@ function formValidate(e) {
             ToastError("Tỉnh/thành phố không được để trống.");
             return false;
         }
-        ToastSuccess("Thành công")
-        if (result == false) {
-            ToastError("Thất bại")
-            e.preventDefault();
-        }
-        return result;
-    }
-    ToastError("Thất bại")
-    e.preventDefault();
+        return true;
 }
 
 //==============
 $(document).on('ready', function () {
-    // ONLY DEV
-    // =======================================================
-
     if (window.localStorage.getItem('hs-builder-popover') === null) {
         $('#builderPopover').popover('show')
             .on('shown.bs.popover', function () {
