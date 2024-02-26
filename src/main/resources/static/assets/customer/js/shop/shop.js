@@ -15,6 +15,18 @@ window.onload = function () {
     })
 };
 
+function addCommasToNumber(number) {
+    let numberStr = number.toString().replace(/[^\d]/g, '');
+    let parts = [];
+    for (let i = numberStr.length, j = 0; i >= 0; i--, j++) {
+        parts.unshift(numberStr[i]);
+        if (j > 0 && j % 3 === 0 && i > 0) {
+            console.log(j)
+            parts.unshift('.');
+        }
+    }
+    return parts.join('');
+}
 function printAllData() {
     let arr = [];
     $('.product__item').each((index, element) => {
@@ -36,7 +48,6 @@ function printAllData() {
                     break;
                 }
             }
-            console.log(product)
             let min_price = 0;
             let max_price =0;
             for (let i = 0; i < product.chiTietSanPham.length; i++) {
@@ -52,6 +63,8 @@ function printAllData() {
                     }
                 }
             }
+            min_price = addCommasToNumber(min_price);
+            max_price = addCommasToNumber(max_price);
             let color ='';
             for (let i = 0; i < product.maMauSac.length; i++) {
                 color+=`<label style="background-color:${product.maMauSac[i]}">
@@ -60,18 +73,19 @@ function printAllData() {
             }
             let size = '';
             for (let i = 0; i < product.kichCo.length; i++) {
-                size +=`<label class="label_select_size" for="size_id_42_1">
+                size +=`<label class="label_select_size" for="size_id_${product.kichCo[i].id+'_'+product.id}">
                              ${product.kichCo[i].ten}
-                           <input class="size_selected" name="kichthuoc1" type="radio" id="size_id_${product.kichCo[i].id+'_'+product.id}" value="33" data-id-size="4">
+                           <input class="size_selected" name="kichthuoc1" type="radio" id="size_id_${product.kichCo[i].id+'_'+product.id}" value="${product.id}" data-id-size="${product.id}">
                         </label>`
             }
+            console.log(size)
             let sales = '';
             if (product.sale){
                 sales ='<span class="label">SALE</span>'
             }
-            let html = `<div class="col-lg-4 col-md-6 col-sm-6 d-none">
+            let html = `<div class="col-lg-4 col-md-6 col-sm-6 d-none ">
                         <div class="product__item sale" data-product-id="1">
-                                <div class="product__item__pic set-bg susor-pointer" data-setbg="" data-href="/shop-details?product=${product.id}" style="background-image: url("");">
+                                <div class="product__item__pic set-bg susor-pointer" data-setbg="${url}" data-href="/shop-details?product=${product.id}" style="background-image: url('${url}');">
                                     ${sales}
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
@@ -84,9 +98,9 @@ function printAllData() {
                                 <h6 class="product_name">${product.ten}</h6>
                                 <a href="/shop-detail?product=${product.id}" class="add-cart">Xem Sản Phẩm</a>
                                     <div class="rating">
-                                        <h6 class="giaGoc">${max_price}</h6>
+                                        <h6 class="giaGoc">${max_price}đ</h6>
                                     </div>
-                                    <h5>${min_price}</h5>
+                                    <h5>${min_price}đ</h5>
                                 <div class="product__option__size">
                                         ${size}
                                 </div>
@@ -95,8 +109,7 @@ function printAllData() {
                                 </div>
                             </div>
                         </div>
-                    </div>`
-            console.log(html)
+                    </div>`;
             $('#list_product_items').append(html);
         }
     })

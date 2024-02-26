@@ -189,7 +189,7 @@
                             <td th:text="${iter.index+1}"></td>
                             <td th:text="${kh.getMaKhachHang()}"></td>
                             <td class="table-column-pl-0">
-                                <a class="media align-items-center" th:href="@{/cms/khach-hang/{id}(id=${kh.id})}">
+                                <a class="media align-items-center" th:href="@{/cms/khach-hang/detail/{id}(id=${kh.id})}">
                                     <div class="media-body">
                                         <h5 class="text-hover-primary mb-0"
                                             th:text="${kh.getHoTen()}"></h5>

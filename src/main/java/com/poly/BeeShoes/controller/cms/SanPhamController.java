@@ -54,7 +54,7 @@ public class SanPhamController {
         model.addAttribute("lstkichco", kichCoService.getAll());
         model.addAttribute("editproduct",1);
         if (id != null) {
-            SanPham sp = sanPhamService.getById(id);
+            SanPham sp = sanPhamService.getByIdcms(id);
             List<String> lst = sanPhamService.getListKichCo(id);
             if (sp==null){
                 model.addAttribute("errorSP", 1);

@@ -26,181 +26,86 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
+
 function isEmpty(str) {
-    return (!str || str.length === 0 );
+    return (!str || str.length === 0);
 }
 
 function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
-
-function validate() {
-    let input = document.getElementById('avatarUploader');
+function formvalidate(e) {
+    var result = true;
     var hoTen = $('#hoTen').val();
     var email = $('#email').val();
-    var sdt = $('#sdt').val();
-    var cccd = $('#cccd').val();
-    var ngaySinh = $('#ngaySinh').val();
-    var soNha = $('#soNha').val();
-    var phuongXa = $('#phuongXa').val();
-    var quanHuyen = $('#quanHuyen').val();
-    var tinhTP = $('#tinhTP').val();
-    if (input.files.length === 0) {
-        let url = $('#url-avatar-user').val()
-        if (url===undefined){
-            ToastError("Vui lòng chọn ảnh.");
-            return false;
-        }
-    }
+    var sdt = document.getElementById("sdt").value;
+    var ngaySinh = document.getElementById("ngaySinh").value;
+    var soNha = document.getElementById("soNha").value;
+    var phuongXa = document.getElementById("phuongXa").value;
+    var quanHuyen = document.getElementById("quanHuyen").value;
+    var tinhTP = document.getElementById("tinhTP").value;
     if (isEmpty(hoTen)) {
-        ToastError("Họ tên không được để trống.");
-        return false;
+        document.getElementById("hoTen_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("hoTen_emty").style.display = "none";
     }
-
     if (isEmpty(email)) {
-        ToastError("Email không được để trống.");
-        return false;
+        document.getElementById("email_emty").innerText = "Vui lòng nhập Email";
+        result = false;
     } else if (!isValidEmail(email)) {
-        ToastError("Email không đúng định dạng.");
-        return false;
+        document.getElementById("email_emty").innerText = "Email không đúng định dạng";
+        result = false;
+    }else {
+        document.getElementById("email_emty").style.display = "none";
     }
-
-    if (isEmpty(sdt)) {
-        ToastError("Số điện thoại không được để trống.");
-        return false;
+    if (sdt.length == 0) {
+        document.getElementById("sdt_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("sdt_emty").style.display = "none";
     }
-
-    if (isEmpty(cccd)) {
-        ToastError("CCCD không được để trống.");
-        return false;
-    }
-
     if (isEmpty(ngaySinh)) {
-        ToastError("Ngày sinh không được để trống.");
-        return false;
+        document.getElementById("ngaySinh_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("ngaySinh_emty").style.display = "none";
+    }
+    if (soNha.length == 0) {
+        document.getElementById("soNha_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("soNha_emty").style.display = "none";
+    }
+    if (quanHuyen.length == "") {
+        document.getElementById("quanHuyen_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("quanHuyen_emty").style.display = "none";
+    }
+    if (phuongXa.length == "") {
+        document.getElementById("phuongXa_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("phuongXa_emty").style.display = "none";
+    }
+    if (tinhTP.length == "") {
+        document.getElementById("tinhTP_emty").style.display = "block";
+        result = false;
+    } else {
+        document.getElementById("tinhTP_emty").style.display = "none";
+    }
+    return result;
+    ToastSuccess("Lưu hành công")
+    if (result==false){
+        ToastError("Thất bại")
+        e.preventDefault();
+
     }
 
-    if (isEmpty(soNha)) {
-        ToastError("Số nhà không được để trống.");
-        return false;
-    }
-
-    if (isEmpty(quanHuyen)) {
-        ToastError("Quận/huyện không được để trống.");
-        return false;
-    }
-
-    if (isEmpty(phuongXa)) {
-        ToastError("Phường/xã không được để trống.");
-        return false;
-    }
-
-    if (isEmpty(tinhTP)) {
-        ToastError("Tỉnh/thành phố không được để trống.");
-        return false;
-    }
-    return true;
 }
 
-function checkSDT() {
-    return new Promise(function(resolve, reject) {
-        let phone = $('#sdt').val();
-        $.ajax({
-            url: '/cms/nhan-vien/check-duplicate-phone-number',
-            type: 'POST',
-            data: {phoneNumber: phone},
-            success: function(response) {
-                if (response) {
-                    ToastError('Số điện thoại đã tồn tại.')
-                }
-                resolve(response);
-            },
-            error: function(xhr, status, error) {
-                reject(error);
-            }
-        });
-    });
-}
-//================================
-//quét QR
-$('#form-qr-code').on('shown.bs.modal', function () {
-    startQRCodeScanner();
-});
-
-function startQRCodeScanner() {
-    let video = document.getElementById("video_show_camera");
-    let canvas = document.getElementById("canvas_context");
-    let context = canvas.getContext("2d");
-    let beepAudio = document.getElementById("sound_beep");
-
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices
-            .getUserMedia({video: true})
-            .then(function (stream) {
-                video.srcObject = stream;
-                setTimeout(() => {
-                    requestAnimationFrame(tick);
-                }, 500);
-            })
-            .catch(function (error) {
-                console.log("Something went wrong");
-            });
-    }
-
-    function playBeepSound() {
-        // Phát âm thanh beep
-        beepAudio.play();
-    }
-
-    $('#form-qr-code').on('hidden.bs.modal', function () {
-        closeCamera();
-    });
-
-    function closeCamera() {
-        // Dừng camera
-        var tracks = video.srcObject.getTracks();
-        tracks.forEach(track => track.stop());
-    }
-
-    function tick() {
-        if (video.readyState === video.HAVE_ENOUGH_DATA) {
-            canvas.hidden = false;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var imageData = context.getImageData(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-            var code = jsQR(imageData.data, imageData.width, imageData.height, {
-                inversionAttempts: "dontInvert",
-            });
-            if (code) {
-                var data = code.data;
-                result = data.split("|");
-                console.log(result);
-                playBeepSound();
-                closeCamera();
-                $('#hoTen').val(result[2])
-                $('#cccd').val(result[0]);
-                //nếu là nam thì Set the value of the radio button with id="maleRadio" to "male"
-                if (result[4] == 'Nam') {
-                    $('#gioi_tinh_nam').prop('checked', true)
-                } else {
-                    $('#gioi_tinh_nu').prop('checked', true)
-                }
-                let str = result[3];
-                let formattedDate = str.substring(4) + '-' + str.substring(2, 4) + '-' + str.substring(0, 2);
-                $('#ngaySinh').val(formattedDate);
-                $('#form-qr-code').modal('hide');
-            }
-        }
-        requestAnimationFrame(tick);
-    }
-}
-
-//==================
 //api địa chỉ
 const provice_url = "https://api.npoint.io/ac646cb54b295b9555be";
 const district_url = "https://api.npoint.io/34608ea16bebc5cffd42";
@@ -209,9 +114,6 @@ const ward_url = "https://api.npoint.io/dd278dc276e65c68cdf5";
 var province_list = [];
 var district_list = [];
 var ward_list = [];
-
-
-//===========================
 $(document).on('ready', function () {
     // Hàm để gọi API và xử lý dữ liệu trả về
     function fetchData(url, successCallback) {
@@ -262,7 +164,6 @@ $(document).on('ready', function () {
         handleData(ward_list.filter(ward => ward.DistrictId === parseInt(id)), war, 'Id', 'Name');
     });
 
-
     // ONLY DEV
     // =======================================================
 
@@ -290,10 +191,6 @@ $(document).on('ready', function () {
     // =======================================================
     $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
         $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-    });
-
-    $('.js-masked-input').each(function () {
-        var mask = $.HSCore.components.HSMask.init($(this));
     });
 
 

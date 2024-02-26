@@ -39,7 +39,8 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form id="form-data-cus" th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}" onsubmit="return formvalidate(event)"
+        <form id="form-data-cus" th:action="@{/cms/khach-hang/update/{id}(id=${khachHang.id})}" method="post" th:object="${khachHang}"
+              onsubmit="return formvalidate(event)"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
