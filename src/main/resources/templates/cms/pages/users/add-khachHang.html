@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Title -->
     <title>LightBee | Thêm khách hàng</title>
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="favicon.ico">
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
@@ -76,44 +74,6 @@
                         <div id="addUserStepProfile" class="card card-lg active">
                             <!-- Body -->
                             <div class="card-body">
-                                <!-- Form Group -->
-                                                <div class="row form-group">
-                                                  <label class="col-sm-3 col-form-label input-label">Avatar</label>
-
-                                                  <div class="col-sm-9">
-                                                    <div class="d-flex align-items-center">
-                                                      <!-- Avatar -->
-                                                      <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
-                                                             for="avatarUploader">
-                                                        <img id="avatarImg" class="avatar-img"
-                                                             src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">
-
-                                                        <input type="file" class="js-file-attach avatar-uploader-input"
-                                                               id="avatarUploader" data-hs-file-attach-options='{
-                                                                      "textTarget": "#avatarImg",
-                                                                      "mode": "image",
-                                                                      "targetAttr": "src",
-                                                                      "resetTarget": ".js-file-attach-reset-img",
-                                                                      "resetImg": "/assets/img/160x160/img1.jpg",
-                                                                      "allowTypes": [".png", ".jpeg", ".jpg"]
-                                                                   }'>
-
-                                                          <input type="text" id="urlImgAvatar" name="avatar" th:field="*{avatar}" value="/assets/cms/img/160x160/img1.jpg" hidden>
-
-                                                        <span class="avatar-uploader-trigger">
-                                                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
-                                                            </span>
-                                                      </label>
-                                                      <!-- End Avatar -->
-
-                                                      <button type="button" class="js-file-attach-reset-img btn btn-white">
-                                                        Delete
-                                                      </button>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                <!-- End Form Group -->
-
                                 <!-- Form Group -->
                                 <div class="row form-group">
                                     <label for="hoTen" class="col-sm-3 col-form-label input-label">Họ tên
@@ -211,20 +171,6 @@
                                             </div>
                                             <!-- End Custom Radio -->
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group mt-5">
-                                    <label class="col-sm-3 col-form-label input-label">Trạng thái</label>
-                                    <!-- Select -->
-                                    <div class="col-sm-9">
-                                        <select class="js-select2-custom custom-select form-control" th:field="*{trangThai}">
-                                            <option value="true">Hoạt động</option>
-                                            <option value="false">Đã nghỉ</option>
-                                        </select>
-                                        <!-- End Select -->
                                     </div>
                                 </div>
                                 <!-- End Form Group -->

@@ -106,6 +106,32 @@ function formvalidate(e) {
 
 }
 
+//check trùng sdt,email
+function checkDuplicate() {
+    return new Promise(function(resolve, reject) {
+        let email = $('#email').val();
+        let phone = $('#sdt').val();
+        $.ajax({
+            url: '/cms/khach-hang/check-duplicate',
+            type: 'POST',
+            data: {email: email, phoneNumber: phone},
+            success: function(response) {
+                if (response.email) {
+                    ToastError('Email đã tồn tại.');
+                }
+                if (response.phoneNumber) {
+                    ToastError('Số điện thoại đã tồn tại.');
+                }
+                resolve(response);
+            },
+            error: function(xhr, status, error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+
 //api địa chỉ
 const provice_url = "https://api.npoint.io/ac646cb54b295b9555be";
 const district_url = "https://api.npoint.io/34608ea16bebc5cffd42";

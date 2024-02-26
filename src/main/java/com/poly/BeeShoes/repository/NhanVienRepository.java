@@ -17,4 +17,6 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
     boolean existsByChucVu(ChucVu cv);
 
     boolean existsBySdt(String sdt);
+
+    boolean existsByCccd(String cccd);
 }

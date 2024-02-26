@@ -41,7 +41,7 @@ $(document).ready(function () {
     $('#submitBtn').on('click', async function () { // Sử dụng async function để sử dụng await
         let check = true;
         if (validate()) {
-            check = await checkSDT();
+            check = await checkDuplicate();
         }else{
             return;
         }
