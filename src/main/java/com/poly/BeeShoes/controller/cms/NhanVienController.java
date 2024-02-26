@@ -155,6 +155,7 @@ public class NhanVienController {
     @PostMapping("/update/{id}")
     public String updateNV(@PathVariable Long id, Model model,
                            @ModelAttribute("nhanVien") NhanVienRequest nhanVien){
+        System.out.println(nhanVien.toString());
         NhanVien updatedNhanVien = nhanVienService.detail(id);
         User user = userService.findByNhanVien_Id(nhanVien.getId());
         updatedNhanVien.setId(nhanVien.getId());

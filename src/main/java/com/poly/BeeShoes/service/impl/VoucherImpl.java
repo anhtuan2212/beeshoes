@@ -57,10 +57,7 @@ public class VoucherImpl implements VoucherService {
     public Voucher delete(Long id) {
         Optional<Voucher> optional = voucherResponsitory.findById(id);
         return optional.map(o -> {
-
             o.setTrangThai(3);  // Đặt trạng thái của đối tượng thành 3
-
-
             return voucherResponsitory.save(o);  // Lưu và trả về đối tượng đã được thay đổi
         }).orElse(null);
     }
