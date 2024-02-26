@@ -17,7 +17,7 @@
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
-
+    <link rel="stylesheet" href="/assets/cms/css/sweetalert2.min.css">
 
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
@@ -105,18 +105,18 @@
                             <div class="col-md-4">
                                 <div style="margin-left: 10px;margin-top: 40px;margin-right: 20px ">
                                     <div class="form-check form-check-inline">
-                                        <label style="width: 250px;margin-right: 20px  " class="form-check-label">Ngày
+                                        <label style="width: 150px;margin-right: 20px  " class="form-check-label">Ngày
                                             bắt đầu</label>
-                                        <input style="margin-right: 20px " name="startDate" type="datetime-local"
+                                        <input style="margin-left: 20px " name="startDate" type="datetime-local"
 
                                                class="form-control money-input-mask"
                                                placeholder="Vui lòng nhập ngày bắt đầu." aria-label="">
                                     </div>
                                     <div style="margin-right: 20px " class="form-check form-check-inline">
 
-                                        <label style="width: 250px; margin-right: 20px " class="form-check-label">Ngày
+                                        <label style="width: 150px; margin-right: 20px " class="form-check-label">Ngày
                                             kết thúc</label>
-                                        <input style="margin-right: 10px;margin-top:20px  " type="datetime-local"
+                                        <input style="margin-left: 20px ;margin-top:20px  " type="datetime-local"
                                                class="form-control money-input-mask" name="endDate"
                                                placeholder="Vui lòng nhập ngày bắt đầu." aria-label="">
                                     </div>
@@ -461,7 +461,7 @@
                                         <i class="tio-edit"></i>
                                     </a>
 
-                                            <a class="dropdown-item"
+                                            <a class="dropdown-item" onclick="deleteVoucher(event,this)"
                                                th:href="@{/cms/delete-voucher/{id}(id=${voucher.id})}" >
                                                 <i class="tio-delete-outlined dropdown-item-icon"></i>
                                             </a>
@@ -1062,28 +1062,34 @@
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
+<script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <!-- JS Plugins Init. -->
 <script>
+     function deleteVoucher(event,ele){
+         event.preventDefault();
+         Swal.fire({
+             title: "Xác nhận kết thúc?",
+             text: "Bạn muốn kết thúc voucher này ?",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#3085d6",
+             cancelButtonColor: "#d33",
+             cancelButtonText: "không",
+             confirmButtonText: "Xác Nhận"
+         }).then((result) => {
+             if (result.isConfirmed) {
+               let href = $(ele).attr('href');
+               window.location.href=href;
+             }
+         })
+     }
 
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
 
-        if (window.localStorage.getItem('hs-builder-popover') === null) {
-            $('#builderPopover').popover('show')
-                .on('shown.bs.popover', function () {
-                    $('.popover').last().addClass('popover-dark')
-                });
 
-            $(document).on('click', '#closeBuilderPopover', function () {
-                window.localStorage.setItem('hs-builder-popover', true);
-                $('#builderPopover').popover('dispose');
-            });
-        } else {
-            $('#builderPopover').on('show.bs.popover', function () {
-                return false
-            });
-        }
+        
 
         // END ONLY DEV
         // =======================================================
@@ -1151,83 +1157,11 @@
 
         // INITIALIZATION OF DATATABLES
         // =======================================================
-        var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
-            select: {
-                style: 'multi',
-                selector: 'td:first-child input[type="checkbox"]',
-                classMap: {
-                    checkAll: '#datatableCheckAll',
-                    counter: '#datatableCounter',
-                    counterInfo: '#datatableCounterInfo'
-                }
-            },
-            language: {
-                zeroRecords: '<div class="text-center p-4">' +
-                    '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
-                    '<p class="mb-0">No data to show</p>' +
-                    '</div>'
-            }
-        });
 
-        $('.js-datatable-filter').on('change', function () {
-            var $this = $(this),
-                elVal = $this.val(),
-                targetColumnIndex = $this.data('target-column-index');
 
-            datatable.column(targetColumnIndex).search(elVal).draw();
-        });
 
-        $('#datatableSearch').on('mouseup', function (e) {
-            var $input = $(this),
-                oldValue = $input.val();
 
-            if (oldValue == "") return;
 
-            setTimeout(function () {
-                var newValue = $input.val();
-
-                if (newValue == "") {
-                    // Gotcha
-                    datatable.search('').draw();
-                }
-            }, 1);
-        });
-
-        $('#toggleColumn_product').change(function (e) {
-            datatable.columns(1).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_type').change(function (e) {
-            datatable.columns(2).visible(e.target.checked)
-        })
-
-        datatable.columns(3).visible(false)
-
-        $('#toggleColumn_vendor').change(function (e) {
-            datatable.columns(3).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_stocks').change(function (e) {
-            datatable.columns(4).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_sku').change(function (e) {
-            datatable.columns(5).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_price').change(function (e) {
-            datatable.columns(6).visible(e.target.checked)
-        })
-
-        datatable.columns(7).visible(false)
-
-        $('#toggleColumn_quantity').change(function (e) {
-            datatable.columns(7).visible(e.target.checked)
-        })
-
-        $('#toggleColumn_variants').change(function (e) {
-            datatable.columns(8).visible(e.target.checked)
-        })
 
 
         // INITIALIZATION OF TAGIFY
