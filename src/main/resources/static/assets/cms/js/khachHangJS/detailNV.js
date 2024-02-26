@@ -85,8 +85,7 @@ function formValidate() {
     if (ngaySinhDate >= ngayHienTai) {
         ToastError("Ngày sinh phải trước ngày hiện tại.");
         return false;
-    }
-    else if (isEmpty(ngaySinh)) {
+    } else if (isEmpty(ngaySinh)) {
         ToastError("Ngày sinh không được để trống.");
         return false;
     }
@@ -126,98 +125,87 @@ function formValidate() {
     return true;
 }
 
-//=============api diaCHi
-// let province_list = [];
-// let district_list = [];
-// let ward_list = [];
-// let quan_huyen = $('.quanHuyen').closest("div");
-// let tinh_TP = $('.tinhTP').closest("div");
-// let phuong_xa = $('.phuong_xa').closest("div");
-//
-// function handleData(data, dropdown, idKey, valueKey) {
-//     dropdown.empty().append(`<option value="">Vui lòng chọn</option>`);
-//     data.forEach(item => {
-//         dropdown.append(`<option data-id="${item[idKey]}" value="${item[valueKey]}">${item[valueKey]}</option>`);
-//     });
-// }
-//
-// function fillAllTinh() {
-//     return new Promise((resolve, reject) => {
-//         tinh_TP.each((index, element) => {
-//             let select = $(element).find('select');
-//             let tinh = $(element).find('input[type="text"]').val();
-//             select.append(`<option value="" >Chọn Tỉnh</option>`);
-//             province_list.forEach(data => {
-//                 select.append(`<option value="${data.Id}" ${tinh === data.Name ? 'selected' : ''}>${data.Name}</option>`);
-//             });
-//         });
-//         resolve();
-//     });
-// }
-//
-// function fillAllHuyen() {
-//     return new Promise((resolve, reject) => {
-//         quan_huyen.each((index, element) => {
-//             let select = $(element).find('select');
-//             select.html('');
-//             let name = $(element).find('input[type="text"]').val();
-//             let idTinh = $(element).closest('.form-address').find('.tinhTP').val();
-//             select.append(`<option value="" >Chọn huyện</option>`);
-//             district_list.forEach(data => {
-//                 if (data.ProvinceId == idTinh) {
-//                     select.append(`<option value="${data.Id}" ${name === data.Name ? 'selected' : ''}>${data.Name}</option>`);
-//                 }
-//             });
-//         });
-//         resolve();
-//     });
-// }
-//
-// function fillAllXa() {
-//     return new Promise((resolve, reject) => {
-//         phuong_xa.each((index, element) => {
-//             let select = $(element).find('select');
-//             select.html('');
-//             let name = $(element).find('input[type="text"]').val();
-//             let idHuyen = $(element).closest('.form-address').find('select.quanHuyen').val();
-//             select.append(`<option value="" >Chọn xã</option>`);
-//             ward_list.forEach(data => {
-//                 if (data.DistrictId == idHuyen) {
-//                     let selected = data.Name == name ? 'selected' : '';
-//                     select.append(`<option value="${data.Id}" ${selected}>${data.Name}</option>`);
-//                 }
-//             });
-//         });
-//         resolve();
-//     });
-// }
-//
-// fetch('/assets/cms/json/TinhTP.json')
-//     .then(response => response.json())
-//     .then(data => {
-//         province_list = data;
-//         handleData(province_list, $('.tinhTP'), 'Id', 'Name');
-//         return fillAllTinh();
-//     })
-//     .then(() => {
-//         return fetch('/assets/cms/json/QuanHuyen.json')
-//             .then(response => response.json())
-//             .then(data => {
-//                 district_list = data;
-//                 return fillAllHuyen();
-//             });
-//     })
-//     .then(() => {
-//         return fetch('/assets/cms/json/PhuongXa.json')
-//             .then(response => response.json())
-//             .then(data => {
-//                 ward_list = data;
-//                 return fillAllXa();
-//             });
-//     })
-//     .catch(error => console.error('Error:', error));
+// =============api diaCHi
+let province_list = [];
+let district_list = [];
+let ward_list = [];
+let quan_huyen = $('#quanHuyen');
+let tinh_TP = $('#tinhTP');
+let phuong_xa = $('#phuongXa');
+tinh_TP.on('change',async function () {
+   await fillAllHuyen();
+})
+quan_huyen.on('change',async function () {
+    await fillAllXa();
+})
 
-//==============
+function fillAllTinh() {
+    return new Promise((resolve, reject) => {
+        let element = tinh_TP;
+        let select = $('#tinhTP_input').val();
+        province_list.forEach(data => {
+            element.append(`<option data-value="${data.Id}" value="${data.Name}" ${select === data.Name ? 'selected' : ''}>${data.Name}</option>`);
+        });
+        resolve();
+    });
+}
+
+function fillAllHuyen() {
+    return new Promise((resolve, reject) => {
+        let element = quan_huyen;
+        let select = $('#quanHuyen_input').val();
+        let idTinh = $('#tinhTP option:selected').data('value');
+        console.log(idTinh)
+        district_list.forEach(data => {
+            if (data.ProvinceId == idTinh) {
+                console.log(data)
+                element.append(`<option data-value="${data.Id}" value="${data.Name}" ${select === data.Name ? 'selected' : ''}>${data.Name}</option>`);
+            }
+        });
+        resolve();
+    });
+}
+function fillAllXa() {
+    return new Promise((resolve, reject) => {
+        let element = phuong_xa;
+        let select = $('#phuongXa_input').val();
+        let idPhuong = $('#quanHuyen option:selected').data('value');
+        console.log(idPhuong)
+        ward_list.forEach(data => {
+            if (data.DistrictId == idPhuong) {
+                console.log(data)
+                element.append(`<option value="${data.Name}" ${select === data.Name ? 'selected' : ''}>${data.Name}</option>`);
+            }
+        });
+        resolve();
+    });
+}
+fetch('/assets/cms/json/TinhTP.json')
+    .then(response => response.json())
+    .then(data => {
+        province_list = data;
+        console.log(province_list)
+        return fillAllTinh();
+    })
+    .then(() => {
+        return fetch('/assets/cms/json/QuanHuyen.json')
+            .then(response => response.json())
+            .then(data => {
+                district_list = data;
+                return fillAllHuyen();
+            });
+    })
+    .then(() => {
+        return fetch('/assets/cms/json/PhuongXa.json')
+            .then(response => response.json())
+            .then(data => {
+                ward_list = data;
+                return fillAllXa();
+            });
+    })
+    .catch(error => console.error('Error:', error));
+
+
 $(document).on('ready', function () {
     if (window.localStorage.getItem('hs-builder-popover') === null) {
         $('#builderPopover').popover('show')
@@ -245,11 +233,6 @@ $(document).on('ready', function () {
     //     return fillAllXa();
     // })
 
-    // BUILDER TOGGLE INVOKER
-    // =======================================================
-    $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-        $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-    });
 
     $('.js-masked-input').each(function () {
         var mask = $.HSCore.components.HSMask.init($(this));
