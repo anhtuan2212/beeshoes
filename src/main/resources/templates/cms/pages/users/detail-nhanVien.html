@@ -39,9 +39,8 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form id="btn-submit-nhan-vien" th:action="@{/cms/nhan-vien/update/{id}(id=${nhanVien.id})}" method="post"
-              th:object="${nhanVien}"
-              onsubmit="return formValidate(event)"
+        <form th:action="@{/cms/nhan-vien/update/{id}(id=${nhanVien.id})}" method="post"
+              th:object="${nhanVien}" id="btn-update-nhan-vien"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -233,7 +232,7 @@
 
                                         <div class="col">
                                             <input type="date" class="form-control" name="ngaySinh"
-                                                   id="ngaySinh"
+                                                   id="ngaySinh" pattern="\d{2}-\d{2}-\d{4}\"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
                                         </div>
                                         <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày
@@ -305,41 +304,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--                                    <div class="form-group">-->
-                                    <!--                                        <label for="phuongxa" class="col col-form-label input-label">Phường-->
-                                    <!--                                            xã</label>-->
-
-                                    <!--                                        <div class="col">-->
-                                    <!--                                            <input type="text" class="form-control" name="phuongXa"-->
-                                    <!--                                                   id="phuongXa" placeholder="Phường xã"-->
-                                    <!--                                                   aria-label="Phường xã" th:field="*{phuongXa}">-->
-                                    <!--                                        </div>-->
-                                    <!--                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>-->
-                                    <!--                                    </div>-->
-
-                                    <!--                                    <div class="form-group">-->
-                                    <!--                                        <label for="quanHuyen" class="col col-form-label input-label">Quận-->
-                                    <!--                                            huyện</label>-->
-
-                                    <!--                                        <div class="col">-->
-                                    <!--                                            <input type="text" class="form-control" name="quanHuyen"-->
-                                    <!--                                                   id="quanHuyen" placeholder="Quận huyện"-->
-                                    <!--                                                   aria-label="Quận huyện" th:field="*{quanHuyen}">-->
-                                    <!--                                        </div>-->
-                                    <!--                                        <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>-->
-                                    <!--                                    </div>-->
-
-                                    <!--                                    <div class="form-group">-->
-                                    <!--                                        <label for="tinhTP" class="col col-form-label input-label">Tỉnh thành-->
-                                    <!--                                            phố</label>-->
-
-                                    <!--                                        <div class="col">-->
-                                    <!--                                            <input type="text" class="form-control" name="tinhTP"-->
-                                    <!--                                                   id="tinhTP" placeholder="Tỉnh thành phố"-->
-                                    <!--                                                   aria-label="Tỉnh thành phố" th:field="*{tinhThanhPho}">-->
-                                    <!--                                        </div>-->
-                                    <!--                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>-->
-                                    <!--                                    </div>-->
                                 </div>
                                 <!-- End Form Group -->
                             </div>

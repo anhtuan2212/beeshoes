@@ -39,6 +39,11 @@ function isValidPhoneNumber(phoneNumber) {
     // Kiểm tra xem số điện thoại có bắt đầu bằng số 0 và có đúng 10 số không
     return phone.test(phoneNumber);
 }
+function isValidCccd(id) {
+    let idPattern = /^[0-9]{12}$/;
+    // Kiểm tra xem số căn cước có đúng 12 chữ số không
+    return idPattern.test(id);
+}
 
 function validate() {
     let input = document.getElementById('avatarUploader');
@@ -81,6 +86,9 @@ function validate() {
 
     if (isEmpty(cccd)) {
         ToastError("CCCD không được để trống.");
+        return false;
+    }else if(!isValidCccd(cccd)){
+        ToastError("CCCD không đúng định dang(đúng 12 số)");
         return false;
     }
 

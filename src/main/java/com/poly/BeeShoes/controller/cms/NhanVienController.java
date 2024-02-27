@@ -199,7 +199,6 @@ public class NhanVienController {
         result.put("email", emailExists);
         result.put("phoneNumber", phoneNumberExists);
         result.put("cccd", cccdExists);
-
         return result;
     }
 }

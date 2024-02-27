@@ -41,6 +41,11 @@ function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
+function isValidCccd(id) {
+    let idPattern = /^[0-9]{12}$/;
+    // Kiểm tra xem số căn cước có đúng 12 chữ số không
+    return idPattern.test(id);
+}
 
 function formValidate() {
     var hoTen = $('#hoTen').val();
@@ -77,6 +82,9 @@ function formValidate() {
     if (isEmpty(cccd)) {
         ToastError("CCCD không được để trống.");
         return false;
+    }else if(!isValidCccd(cccd)){
+        ToastError("CCCD không đúng định dang(đúng 12 số)");
+        return false;
     }
 
     // Kiểm tra ngày sinh phải trước ngày hiện tại
@@ -107,22 +115,35 @@ function formValidate() {
         ToastError('Vui lòng chọn phường xã.')
         return false;
     }
-
-    // if (isEmpty(quanHuyen)) {
-    //     ToastError("Quận/huyện không được để trống.");
-    //     return false;
-    // }
-    //
-    // if (isEmpty(phuongXa)) {
-    //     ToastError("Phường/xã không được để trống.");
-    //     return false;
-    // }
-    //
-    // if (isEmpty(tinhTP)) {
-    //     ToastError("Tỉnh/thành phố không được để trống.");
-    //     return false;
-    // }
     return true;
+}
+
+function checkDuplicate1() {
+    return new Promise(function(resolve, reject) {
+        let email = $('#email').val();
+        let phone = $('#sdt').val();
+        let cccd = $('#cccd').val();
+        $.ajax({
+            url: '/cms/nhan-vien/check-duplicate',
+            type: 'POST',
+            data: {email: email, phoneNumber: phone, cccd: cccd},
+            success: function(response) {
+                if (response.email) {
+                    ToastError('Email đã tồn tại.');
+                }
+                if (response.phoneNumber) {
+                    ToastError('Số điện thoại đã tồn tại.');
+                }
+                if (response.cccd) {
+                    ToastError('Số cccd đã tồn tại.');
+                }
+                resolve(response);
+            },
+            error: function(xhr, status, error) {
+                reject(error);
+            }
+        });
+    });
 }
 
 // =============api diaCHi
