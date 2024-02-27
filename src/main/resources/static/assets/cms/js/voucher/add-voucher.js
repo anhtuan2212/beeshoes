@@ -126,6 +126,7 @@ function formvalidate() {
     } else {
         document.getElementById("loai_emty").style.display = "none";
     }
+    ToastSuccess("Thêm thành công")
     if (result === false) {
         ToastError("Thất bại")
         return result;
