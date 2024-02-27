@@ -33,50 +33,77 @@ function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
+function isValidPhoneNumber(phoneNumber) {
+    let phone = /^(0\d{9,10})$/;
+    // Kiểm tra xem số điện thoại có bắt đầu bằng số 0 và có đúng 10 số không
+    return phone.test(phoneNumber);
+}
 
-function formvalidate(e) {
-    if (confirm('Bạn có muốn cập nhật không?')) {
-        var result = true;
-        var hoTen = $('#firstNameLabel').val();
-        var email = $('#email').val();
-        var sdt = document.getElementById("sdt").value;
-        var ngaySinh = document.getElementById("ngaySinh").value;
-        if (isEmpty(hoTen)) {
-            document.getElementById("hoTen_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("hoTen_emty").style.display = "none";
-        }
-        if (isEmpty(email)) {
-            document.getElementById("email_emty").innerText = "Vui lòng nhập email";
-            result = false;
-        } else if (!isValidEmail(email)) {
-            document.getElementById("email_emty").innerText = "Email sai định dạng";
-            result = false;
-        } else {
-            document.getElementById("email_emty").style.display = "none";
-        }
-        if (sdt.length == 0) {
-            document.getElementById("sdt_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("sdt_emty").style.display = "none";
-        }
-        if (ngaySinh.length == 0) {
-            document.getElementById("ngaySinh_emty").style.display = "block";
-            result = false;
-        } else {
-            document.getElementById("ngaySinh_emty").style.display = "none";
-        }
-        ToastSuccess("Thành công")
-        if (result==false){
-            ToastError("Thất bại")
-            e.preventDefault();
-        }
-        return result;
+function formvalidate() {
+    var hoTen = $('#hoTen').val();
+    var email = $('#email').val();
+    var sdt = $('#sdt').val();
+    var ngaySinh = $('#ngaySinh').val();
+
+    if (isEmpty(hoTen)) {
+        ToastError("Họ tên không được để trống.");
+        return false;
     }
-    ToastError("Thất bại")
-    e.preventDefault();
+
+    if (isEmpty(email)) {
+        ToastError("Email không được để trống.");
+        return false;
+    } else if (!isValidEmail(email)) {
+        ToastError("Email không đúng định dạng.");
+        return false;
+    }
+
+    if (isEmpty(sdt)) {
+        ToastError("Số điện thoại không được để trống.");
+        return false;
+    }else if (!isValidPhoneNumber(sdt)) {
+        ToastError("Sdt không đúng định dạng(0359xxxxxx)");
+        return  false;
+    }
+
+    // Kiểm tra ngày sinh phải trước ngày hiện tại
+    var ngaySinhDate = new Date(ngaySinh);
+    var ngayHienTai = new Date();
+    if (ngaySinhDate >= ngayHienTai) {
+        ToastError("Ngày sinh phải trước ngày hiện tại.");
+        return false;
+    }
+    else if (isEmpty(ngaySinh)) {
+        ToastError("Ngày sinh không được để trống.");
+        return false;
+    }
+    return true;
+    ToastSuccess("Cập nhật thành công!")
+}
+
+//check trùng sdt,email
+function checkDuplicateKH1() {
+    return new Promise(function (resolve, reject) {
+        let email = $('#email').val();
+        let phone = $('#sdt').val();
+        $.ajax({
+            url: '/cms/khach-hang/check-duplicate',
+            type: 'POST',
+            data: {email: email, phoneNumber: phone},
+            success: function (response) {
+                if (response.email) {
+                    ToastError('Email đã tồn tại.');
+                }
+                if (response.phoneNumber) {
+                    ToastError('Số điện thoại đã tồn tại.');
+                }
+                resolve(response);
+            },
+            error: function (xhr, status, error) {
+                reject(error);
+            }
+        });
+    });
 }
 
 $(document).on('change', 'input.addressDefaultSwitch[name="addressDefault"]', function () {
@@ -188,7 +215,25 @@ fetch('/assets/cms/json/TinhTP.json')
     .catch(error => console.error('Error:', error));
 
 $(document).on('ready', function () {
+    $('#btn-submit').on('click', async function () { // Sử dụng async function để sử dụng await
+        let check = true;
+        if (formvalidate()) {
+            check = await checkDuplicateKH1();
+        } else {
+            return;
+        }
+        if (check.email) {
+            console.log(check)
+            return;
+        }
+        if (check.sdt) {
+            console.log(check)
+            return;
+        }
+        let form = $('#form-data-cus');
+        form.submit();
 
+    })
 
     $('.btn_save_address').on('click', function () {
         let id = $(this).data('id-address');

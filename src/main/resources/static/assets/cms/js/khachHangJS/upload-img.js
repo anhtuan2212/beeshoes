@@ -37,19 +37,93 @@ function renameFile(file) {
     return new File([file], newName, {type: file.type});
 }
 
+let urlDelete = '';
+
+async function deleteImageFromFirebaseStorage() {
+    try {
+        const fileName = urlDelete.substring(urlDelete.lastIndexOf('/') + 1, urlDelete.indexOf('?'));
+        const correctedFileName = fileName.replace(/%2F/g, '/');
+        console.log(correctedFileName);
+        const imageRef = ref(storage, correctedFileName);
+        await deleteObject(imageRef);
+        ToastSuccess("Xóa thành công.")
+        $('#btn-submit-nhan-vien').submit();
+    } catch (error) {
+        $('#btn-submit-nhan-vien').submit();
+        console.error("Error deleting image from Firebase Storage:", error);
+    }
+}
+
+function showLoader() {
+    Swal.fire({
+        title: 'Đang xử lý...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
+
+function hideLoader() {
+    Swal.close();
+}
+
 $(document).ready(function () {
     $('#submitBtn').on('click', async function () { // Sử dụng async function để sử dụng await
+        //     let check = true;
+        //     if (validate()) {
+        //         check = await checkDuplicate();
+        //     }else{
+        //         return;
+        //     }
+        //     if (check) {
+        //         console.log(check)
+        //         return;
+        //     }
+        //     let urlImg = $('#url-avatar-user').val();
+        //     let form = $('#btn-submit-nhan-vien');
+        //     if (urlImg === undefined) {
+        //         let input = document.getElementById('avatarUploader');
+        //         let img = $('#avatarImg');
+        //         const file = renameFile(input.files[0]);
+        //         console.log(file)
+        //         const storageRef = ref(storage, `avatars/${file.name}`);
+        //         try {
+        //             const snapshot = await uploadBytes(storageRef, file);
+        //             console.log(snapshot)
+        //             const url = await getDownloadURL(snapshot.ref);
+        //             img.attr('src', url);
+        //             form.append(`<input id="url-avatar-user" type="hidden" name="avatar" value="${url}">`);
+        //             form.submit();
+        //         } catch (error) {
+        //             console.error(error);
+        //         }
+        //     } else {
+        //         form.submit();
+        //     }
+        // })
+
         let check = true;
         if (validate()) {
             check = await checkDuplicate();
-        }else{
+        } else {
             return;
         }
-        if (check) {
+        if (check.email) {
             console.log(check)
             return;
         }
-        let urlImg = $('#url-avatar-user').val();
+        if (check.sdt) {
+            console.log(check)
+            return;
+        }
+        if (check.cccd) {
+            console.log(check)
+            return;
+        }
+        showLoader();
+        let urlImg = $('#urlImgAvatar').val();
         let form = $('#btn-submit-nhan-vien');
         if (urlImg === undefined) {
             let input = document.getElementById('avatarUploader');
@@ -62,14 +136,14 @@ $(document).ready(function () {
                 console.log(snapshot)
                 const url = await getDownloadURL(snapshot.ref);
                 img.attr('src', url);
-                form.append(`<input id="url-avatar-user" type="hidden" name="avatar" value="${url}">`);
-                form.submit();
+                form.append(`<input id="urlImgAvatar" type="hidden" name="avatar" value="${url}">`);
             } catch (error) {
                 console.error(error);
             }
+            await deleteImageFromFirebaseStorage();
         } else {
             form.submit();
         }
+        closeLoader();
     })
 })
-
