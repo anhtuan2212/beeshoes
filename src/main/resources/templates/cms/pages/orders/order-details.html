@@ -108,6 +108,9 @@
                 </button>
             </div>
             <div class="col-6 d-flex justify-content-end">
+                <button class="btn btn-sm btn-outline-dark mr-1" id="printOrder">
+                    <i class="tio-print"></i> In hóa đơn
+                </button>
                 <button class="btn btn-sm btn-outline-dark mr-1" data-toggle="modal" data-target="#history">
                     <i class="tio-timer"></i> Lịch Sử
                 </button>
@@ -175,7 +178,7 @@
                                     <dt class="col-sm-6">Tổng tiền:</dt>
                                     <dd class="col-sm-6"
                                         th:text="${#numbers.formatInteger(tongTien.intValue(), 0, 'COMMA')}"></dd>
-                                    <dt class="col-sm-6">Phí ship:</dt>
+                                    <dt class="col-sm-6">Phí ship: </dt>
                                     <dd class="col-sm-6"
                                         th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue(), 0, 'COMMA')}"></dd>
                                     <dt class="col-sm-6">Thực thu:</dt>
@@ -810,6 +813,7 @@
         </div>
     </div>
 </div>
+<iframe id="myPrintInvoice" class="d-none"></iframe>
 <!-- End Export Orders Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
@@ -938,7 +942,6 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">${status}</h4>
-                                <p><small class="text-muted"><i class="tio-timer"></i> 11 hours ago </small></p>
                             </div>
                         </div>`;
             li.innerHTML = html;
@@ -1000,16 +1003,19 @@
                                 typeOfColor = 'danger';
                                 $('#xacNhanFromDetail').hide();
                                 $('#huyFromDetail').hide();
+                                $('#printOrder').removeClass('d-none');
                             } else if (status == 'ChoXacNhan') {
                                 typeOfColor = 'danger';
                             } else if (status == 'ChoGiao') {
                                 typeOfColor = 'warning';
                                 $('#huyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').removeClass('d-none');
+                                $('#printOrder').removeClass('d-none');
                             } else if (status == 'ThanhCong') {
                                 $('#xacNhanFromDetail').hide();
                                 $('#huyFromDetail').hide();
                                 $('#hoanTacFromDetail').hide();
+                                $('#printOrder').removeClass('d-none');
                             }
                             printStatusHeader(typeOfColor, status);
                             printTimeline(status, type);
@@ -1103,6 +1109,111 @@
                 }
             });
         })
+
+        $('#printOrder').on('click', function () {
+            $.ajax({
+                type: "POST",
+                url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+                contentType: "application/json",
+                headers: {
+                    "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                },
+                data: JSON.stringify(
+                    {
+                        shop_id: "190713",
+                        from_name: "Tấn Tảo Lù",
+                        from_phone: "0866755653",
+                        from_address: "Hà Nội",
+                        from_ward_name: "Phường Xuân Phương",
+                        from_district_name: "Nam Từ Liêm",
+                        from_province_name: "Hà Nội",
+                        to_name: "Test",
+                        to_phone: "0359966461",
+                        to_address: "Nam Định",
+                        to_ward_code: "250318",
+                        to_district_id: 3323,
+                        service_id: 0,
+                        service_type_id: 2,
+                        payment_type_id: 2,
+                        required_note: "CHOTHUHANG",
+                        items: [
+                            {
+                                name: "Áo Polo",
+                                code: "Polo123",
+                                quantity: 1,
+                                price: 200000,
+                                length: 12,
+                                width: 12,
+                                height: 12,
+                                weight: 1200,
+                                category: {
+                                    level1: "Áo"
+                                }
+                            }
+                        ],
+                        weight: 2000,
+                        length: 1,
+                        width: 19,
+                        height: 10
+                    }
+                ),
+                success: function (responseFirst) {
+                    console.log(responseFirst);
+                    $.ajax({
+                        type: "POST",
+                        url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/a5/gen-token",
+                        contentType: "application/json",
+                        headers: {
+                            "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                        },
+                        data: JSON.stringify(
+                            {
+                                "order_codes": [responseFirst.data.order_code]
+                            }
+                        ),
+                        success: function (responseSecond) {
+
+                            console.log(responseSecond);
+                            var token = responseSecond.data.token;
+                            $.ajax({
+                                type: "GET",
+                                url: "/api/hoa-don/printOrder?token=" + token,
+                                contentType: "application/json",
+                                success: function (responseThird) {
+                                    console.log(responseThird);
+                                    printHTML(responseThird);
+                                },
+                                error: function (error) {
+                                    console.error('Xảy ra lỗi: ', error);
+                                }
+                            })
+                        },
+                        error: function (error) {
+                            console.error('Xảy ra lỗi: ', error);
+                        }
+                    })
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error);
+                }
+            })
+        })
+
+        function printHTML(htmlContent) {
+            // Tạo một cửa sổ mới hoặc một tab mới
+            var newWindow = window.open("", "_blank");
+
+            // Kiểm tra xem cửa sổ đã được tạo thành công chưa
+            if (newWindow) {
+                // Chèn nội dung HTML vào cửa sổ mới
+                newWindow.document.write(htmlContent);
+                // Đóng luôn trong trường hợp nội dung rỗng
+                newWindow.document.close();
+            } else {
+                // Nếu không tạo được cửa sổ mới, thông báo lỗi
+                alert("Không thể mở cửa sổ mới.");
+            }
+        }
 
     });
 </script>

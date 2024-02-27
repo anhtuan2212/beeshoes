@@ -16,7 +16,7 @@ CREATE TABLE san_pham
     nguoi_tao bigint,
     nguoi_sua bigint,
     trang_thai bit default 1,
-    mo_ta nvarchar(999),
+    mo_ta nvarchar(3000),
     primary key(id)
 )engine=INNODB;
 

@@ -63,8 +63,45 @@ public class KhachHangController {
     }
 
     @PostMapping("/add")
-    public String addKH(@ModelAttribute("khachHang") KhachHangRequest khachHang, Model model) {
-        model.addAttribute("khachHang", khachHang);
+    public String addKH(@ModelAttribute("khachHang") KhachHangRequest khachHang, Model model,
+                        @RequestParam("sdt") String sdt,
+                        @RequestParam("email") String email) {
+        boolean check = false;
+        if(khachHang.getHoTen().isBlank()){
+            model.addAttribute("errorHoTen", "Họ tên không được để trống");
+            check=true;
+        }if(khachHang.getSdt().isBlank()){
+            model.addAttribute("errorSdt", "Sdt không được để trống");
+            check=true;
+        }
+        if(khachHangService.existsBySdt(sdt)){
+            model.addAttribute("trungSdt", "Số điện thoại đã tồn tại");
+            check=true;
+        }
+        if(khachHang.getEmail().isBlank()){
+            model.addAttribute("errorEmail", "Email không được để trống");
+            check=true;
+        }
+        if(userService.existsByEmail(email)){
+            model.addAttribute("trungEmail", "Email đã tồn tại");
+            check=true;
+        }if(khachHang.getSoNha().isBlank()){
+            model.addAttribute("errorSoNha", "Số nhà không được để trống");
+            check=true;
+        }if(khachHang.getPhuongXa().isBlank()){
+            model.addAttribute("errorPhuongXa", "Phường xã không được để trống");
+            check=true;
+        }if(khachHang.getQuanHuyen().isBlank()){
+            model.addAttribute("errorQuanHuyen", "Quận huyện không được để trống");
+            check=true;
+        }if(khachHang.getTinhThanhPho().isBlank()){
+            model.addAttribute("errorTinhTP", "Tỉnh tp không được để trống");
+            check=true;
+        }
+        if(check){
+            model.addAttribute("khachHang", khachHang);
+            return "redirect:/cms/khach-hang/view-addKH";
+        }
         KhachHang kh1 = new KhachHang();
         kh1.setHoTen(khachHang.getHoTen());
         kh1.setGioiTinh(khachHang.isGioiTinh());

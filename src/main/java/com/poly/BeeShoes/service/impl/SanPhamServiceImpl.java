@@ -70,6 +70,35 @@ public class SanPhamServiceImpl implements SanPhamService {
             return null;
         }
     }
+
+    @Override
+    public SanPham getByIdcms(Long id) {
+        Optional<SanPham> optionalSanPham = sanPhamRepository.findById(id);
+        if (optionalSanPham.isPresent()) {
+            SanPham sanPham = optionalSanPham.get();
+            List<ChiTietSanPham> ctsp = sanPham.getChiTietSanPham();
+            int num = 0;
+            BigDecimal gn =null;
+            List<MauSac> lst = new ArrayList<>();
+            for (int j = 0; j < ctsp.size(); j++) {
+                ChiTietSanPham ct = ctsp.get(j);
+                num += ct.getSoLuongTon();
+                gn=ct.getGiaBan();
+                if (!lst.contains(ct.getMauSac())){
+                    lst.add(ct.getMauSac());
+                }
+            }
+            sanPham.setMauSac(lst);
+            sanPham.setGiaBan(gn);
+            sanPham.setSoLuong(num);
+            List<ChiTietSanPham> sortedChiTietSanPham = sanPham.getSortedChiTietSanPhamByMauSac();
+            sanPham.setChiTietSanPham(sortedChiTietSanPham);
+            return sanPham;
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public Map<String, Map<String, Long>> getKichCoCountByMauSac(Long sanPhamId) {
         SanPham sanPham = getById(sanPhamId);

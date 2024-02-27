@@ -19,5 +19,7 @@ public interface KhachHangService {
 
     boolean existByMa(String ma);
 
+    boolean existsBySdt(String sdt);
+
     String generateCustomerCode();
 }

@@ -3,6 +3,8 @@ package com.poly.BeeShoes.service;
 import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.User;
 
+import java.util.List;
+
 public interface UserService {
 
     User getByUsername(String email);
@@ -16,4 +18,6 @@ public interface UserService {
     User findByNhanVien_Id(Long id);
 
     User update(User user);
+
+    boolean existsByEmail(String email);
 }
