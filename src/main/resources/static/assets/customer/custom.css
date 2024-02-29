@@ -113,6 +113,7 @@
     width: 80px;
     height: 80px;
     object-fit: cover;
+    background-color: #f3f2ee;
 }
 .cart_product_item .thumb{
     padding:0;
@@ -291,6 +292,26 @@
     color: #ffffff;
     border-color: #111111;
 }
+
+
 .mr-3p{
     margin-right: 3px !important;
+}
+.text-hien-thi{
+    font-size: 15px;
+}
+.height-mid{
+    height: 23px;
+}
+#quantity__item_carts{
+    position: absolute !important;
+    top: -10px !important;
+    right: -5px;
+    background-color: #c19e9e;
+    padding: 3px;
+    border-radius: 111px;
+    height: 21px;
+    width: 21px;
+    display: flex;
+    justify-content: center;
 }

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/shop.css" type="text/css">
 </head>
 
 <body>
@@ -89,7 +90,7 @@
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
                         <form action="javascript:;">
-                            <input type="text" placeholder="Search...">
+                            <input id="form-search-product" type="text" placeholder="Search...">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
                     </div>
@@ -99,7 +100,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseOne">Thể Loại</a>
                                 </div>
-                                <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseOne" class="collapse show" data-parent="#collapseOne">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
@@ -117,7 +118,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseTwo">Thương Hiệu</a>
                                 </div>
-                                <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseTwo" class="collapse show" data-parent="#collapseTwo">
                                     <div class="card-body">
                                         <div class="shop__sidebar__brand">
                                             <ul>
@@ -133,7 +134,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseThree">Khoảng Giá</a>
                                 </div>
-                                <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseThree" class="collapse show" data-parent="#collapseThree">
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
@@ -150,13 +151,13 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseFour">Kích Cỡ</a>
                                 </div>
-                                <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseFour" class="collapse show" data-parent="#collapseFour">
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             <th:block th:each="size:${lstkichco}">
                                                 <label class="selected_size" th:attr="data-id=${size.getTen()}" th:for="'size'+${size.getId()}">
                                                     <th:block th:text="${size.getTen()}"></th:block>
-                                                    <input type="radio" name="selected_size"  th:id="'size'+${size.getId()}">
+<!--                                                    <input class="d-none" type="radio" name="selected_size"  th:id="'size'+${size.getId()}">-->
                                                 </label>
                                             </th:block>
                                         </div>
@@ -167,7 +168,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseFive">Màu Sắc</a>
                                 </div>
-                                <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseFive" class="collapse show" data-parent="#collapseFive">
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             <th:block th:each="color:${lstmausac}">
@@ -185,7 +186,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
                                 </div>
-                                <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseSix" class="collapse show" data-parent="#collapseSix">
                                     <div class="card-body">
                                         <div class="shop__sidebar__tags">
                                             <th:block th:each="tag:${lsttags}">
@@ -204,12 +205,11 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>Hiển Thị 1–
-                                    <th:block th:text="${#lists.size(lstsanpham.getContent())}"></th:block>
+                                <label class="text-hien-thi">Hiển Thị 1 –> <label class="text-hien-thi" id="total-num-show" th:text="${#lists.size(lstsanpham.getContent())}"></label>
                                     Trong Tổng Số
                                     <th:block th:text="${totalsize}"></th:block>
                                     Kết Quả
-                                </p>
+                                </label>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -224,12 +224,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" id="list_product_items">
+                <div class="row mixitup-transitions-enabled" id="list_product_items">
                     <div class="col-lg-4 col-md-6 col-sm-6 product_wraper" th:each="sp:${lstsanpham.getContent()}">
                         <div class="product__item sale" th:attr="data-product-id=${sp.getId()}">
                             <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <div class="product__item__pic set-bg susor-pointer"
                                      th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-details(product=${sp.getId()})}">
+                                    <img class="img-main-product" th:src="${anh.getUrl()}" alt="" >
                                     <span class="label" th:if="${sp.isSale()}">SALE</span>
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
@@ -280,7 +281,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <button id="btn-load-more-product" class="primary-btn" type="button">Load More</button>
+                            <button id="btn-load-more-product" class="primary-btn" type="button">Xem Thêm</button>
                         </div>
                     </div>
                 </div>
