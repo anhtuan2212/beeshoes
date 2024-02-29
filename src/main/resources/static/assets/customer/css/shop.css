@@ -1,0 +1,56 @@
+/*
+=========================================================
+* Tẩn Láo Lù
+=========================================================
+
+* Code version: 1.0
+* Copyright 2024 anhtuanlc (https://anhtuanlc.online)
+* Licensed under MIT (https://anhtuanlc.online)
+* Coded by anhtuanlc
+
+=========================================================
+ */
+/* Định nghĩa animation cho hiệu ứng xuất hiện */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0); /* Phóng to dần từ kích thước 80% */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Hiển thị với kích thước ban đầu */
+    }
+}
+
+/* Định nghĩa animation cho hiệu ứng biến mất */
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1); /* Kích thước ban đầu */
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0); /* Thu nhỏ dần đến 80% */
+    }
+}
+
+/* CSS cho phần tử được filter */
+.mix {
+    display: none; /* Ẩn phần tử mặc định */
+}
+
+/* CSS cho phần tử xuất hiện */
+.mix.fadeIn {
+    display: block; /* Hiển thị phần tử */
+    animation: fadeIn 0.7s ease-in-out; /* Sử dụng animation fadeIn */
+}
+
+/* CSS cho phần tử biến mất */
+.mix.fadeOut {
+    animation: fadeOut 0.7s ease-in-out; /* Sử dụng animation fadeOut */
+}
+
+/* CSS cho hiệu ứng chuyển động */
+.mixitup-transitions-enabled .mix {
+    transition: opacity 0.7s ease-in-out; /* Hiệu ứng chuyển động */
+}

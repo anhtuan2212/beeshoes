@@ -1,13 +1,71 @@
 /*  ---------------------------------------------------
-    Template Name: Male Fashion
-    Description: Male Fashion - ecommerce teplate
-    Author: Colorib
-    Author URI: https://www.colorib.com/
+    Name: LightBee
+    Description: LightBee - ecommerce shop
+    Author: anhtuan
+    Author URI: https://anhtuanlc.online/
     Version: 1.0
-    Created: Colorib
+    Created: anhtuan
 ---------------------------------------------------------  */
 
 'use strict';
+
+
+setCarts();
+function setCarts(){
+    let datas = JSON.parse(localStorage.getItem('shopping_carts'));
+    if (datas==null){
+        return;
+    }
+    let total = 0;
+    let html ='';
+    datas.forEach((data) => {
+        html += `
+    <div class="cart_product_item row" data-id-product="${data.pro.id}">
+        <div class="thumb col-3">
+            <img src="${data.pro.product_img}" alt="product img">
+        </div>
+        <div class="cart_content col-9 ">
+            <h5 class="title col-12 w_100">${data.pro.name}</h5>
+            <div class="product_quantity col-12 w_100 mt-1 " >
+                <label class="mb-0" id="quantyti_${data.pro.id}" >SL:${data.quantity}</label>
+            </div>
+            <div class="col-12 height-mid">
+                <label class="small mb-0">MS:${data.pro.color_name}</label>
+                <label class="small mb-0">KT:${data.pro.size}</label>
+            </div>
+            <h6 class="product_price col-sm-12 w_100">${data.pro.gia_ban}đ</h6>
+            <a class="cart_trash" data-id-delete="${data.pro.id}"><i class="fa fa-trash"></i></a>
+        </div>
+    </div>
+    `;
+        total += extractNumberFromString(data.pro.gia_ban) * data.quantity;
+    })
+    $('#list_product_items_cart').append(html);
+    total = addCommasToNumber(total);
+
+    $('#total-money-cart').text(total);
+    $('#quantity__item_carts').text(datas.length);
+}
+function extractNumberFromString(str) {
+    let numberStr = str.replace(/\D/g, '');
+    let number = parseInt(numberStr);
+    return number;
+}
+
+function addCommasToNumber(number) {
+    let numberStr = number.toString().replace(/[^\d]/g, '');
+    let parts = [];
+    for (let i = numberStr.length, j = 0; i >= 0; i--, j++) {
+        parts.unshift(numberStr[i]);
+        if (j > 0 && j % 3 === 0 && i > 0) {
+            console.log(j)
+            parts.unshift('.');
+        }
+    }
+    return parts.join('');
+}
+
+
 
 (function ($) {
 
@@ -16,7 +74,7 @@
     --------------------*/
     $(window).on('load', function () {
         $(".loader").fadeOut();
-        $("#preloder").delay(200).fadeOut("slow");
+        $("#preloder").delay(100).fadeOut("slow");
 
         /*------------------
             Gallery filter
@@ -170,19 +228,17 @@
     proQty.append('<span class="fa fa-angle-down inc qtybtn"></span>');
     proQty.on('click', '.qtybtn', function () {
         var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
+        var oldValue = parseFloat($button.parent().find('input').val());
+        var newVal;
         if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) - 1;
+            newVal = oldValue - 1;
         } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) + 1;
-            } else {
-                newVal = 0;
-            }
+            newVal = oldValue + 1;
         }
+        newVal = Math.max(newVal, 0);
         $button.parent().find('input').val(newVal);
     });
+
 
     var proQty = $('.pro-qty-2');
     proQty.prepend('<span class="fa fa-angle-left dec qtybtn"></span>');
