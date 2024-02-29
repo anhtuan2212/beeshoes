@@ -167,12 +167,18 @@
                             <h5><span>Các Hình Thức Thanh Toán</span></h5>
                             <img src="/assets/customer/img/shop-details/details-payment.png" alt="">
                             <ul>
-                                <li id="product-sku"><span>SKU:</span> 3812912</li>
+                                <li id="product-sku"></li>
                                 <li><span>Thể Loại :</span>
                                     <th:block th:text="${sanPham.getTheLoai().getTen()}"></th:block>
                                 </li>
                                 <li><span>Thương Hiệu :</span>
                                     <th:block th:text="${sanPham.getThuongHieu().getTen()}"></th:block>
+                                </li>
+                                <li><span>Loại Đế Giày :</span>
+                                    <th:block th:text="${sanPham.getChiTietSanPham().get(0).getDeGiay().getTen()}"></th:block>
+                                </li>
+                                <li><span>Loại Cổ Giày :</span>
+                                    <th:block th:text="${sanPham.getChiTietSanPham().get(0).getCoGiay().getTen()}"></th:block>
                                 </li>
                                 <li th:if="${#lists.size(sanPham.getTags())>0}"><span>Tag:</span>
                                     <th:block th:each="tag,iter:${sanPham.getTags()}">

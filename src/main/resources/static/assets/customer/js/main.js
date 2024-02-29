@@ -10,6 +10,48 @@
 'use strict';
 
 
+function Toast(status, message) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+        customClass: {
+            popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
+        }
+    });
+    Toast.fire({
+        icon: status,
+        title: message
+    });
+}
+
+function ToastSuccess(message) {
+    Toast('success', message)
+}
+function showLoader() {
+    $('#preloder').css('display', 'block').find('.loader').css('display', 'block');
+}
+
+function closeLoader() {
+    $('#preloder').css('display', 'none').find('.loader').css('display', 'none');
+}
+
+
+function ToastError(message) {
+    Toast('error', message)
+}
+function getProductInCart() {
+    return JSON.parse(localStorage.getItem('shopping_carts'));
+}
+function saveProductToCart(data) {
+    localStorage.setItem('shopping_carts', JSON.stringify(data));
+}
 setCarts();
 function setCarts(){
     let datas = JSON.parse(localStorage.getItem('shopping_carts'));
@@ -46,6 +88,24 @@ function setCarts(){
     $('#total-money-cart').text(total);
     $('#quantity__item_carts').text(datas.length);
 }
+$(document).on('click','.cart_trash',function () {
+    let id = $(this).data('id-delete');
+    if (id ===undefined){
+        return;
+    }
+    let data_in_cart = getProductInCart();
+    if(data_in_cart === null){
+        return;
+    }
+    for (let i = 0; i < data_in_cart.length; i++) {
+        if (data_in_cart[i].pro.id === `${id}`) {
+            data_in_cart.splice(i, 1);
+            saveProductToCart(data_in_cart);
+            break;
+        }
+    }
+    $(`.cart_product_item[data-id-product="${id}"]`).remove();
+})
 function extractNumberFromString(str) {
     let numberStr = str.replace(/\D/g, '');
     let number = parseInt(numberStr);
@@ -58,7 +118,6 @@ function addCommasToNumber(number) {
     for (let i = numberStr.length, j = 0; i >= 0; i--, j++) {
         parts.unshift(numberStr[i]);
         if (j > 0 && j % 3 === 0 && i > 0) {
-            console.log(j)
             parts.unshift('.');
         }
     }

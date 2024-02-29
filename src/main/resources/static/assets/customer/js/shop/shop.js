@@ -46,18 +46,20 @@ function printAllData() {
         let min_price = 0;
         let max_price = 0;
         for (let i = 0; i < product.chiTietSanPham.length; i++) {
+            let ctsp = product.chiTietSanPham[i];
             if (i === 0) {
-                min_price = product.chiTietSanPham[i].giaBan;
-                max_price = product.chiTietSanPham[i].giaGoc;
+                min_price = ctsp.giaBan;
+                max_price = ctsp.giaGoc;
             } else {
-                if (min_price > product.chiTietSanPham[i].giaBan) {
-                    min_price = product.chiTietSanPham[i].giaBan;
+                if (min_price > ctsp.giaBan) {
+                    min_price = ctsp.giaBan;
                 }
-                if (max_price < product.chiTietSanPham[i].giaGoc) {
-                    max_price = product.chiTietSanPham[i].giaGoc;
+                if (max_price < ctsp.giaGoc) {
+                    max_price = ctsp.giaGoc;
                 }
             }
         }
+
         product.max_price = max_price;
         product.min_price = min_price;
         if (bool) {
@@ -117,43 +119,6 @@ function printAllData() {
             $('#list_product_items').append(html);
         }
     })
-}
-
-function Toast(status, message) {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        },
-        customClass: {
-            popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
-        }
-    });
-    Toast.fire({
-        icon: status,
-        title: message
-    });
-}
-
-function ToastSuccess(message) {
-    Toast('success', message)
-}
-
-function ToastError(message) {
-    Toast('error', message)
-}
-
-function showLoader() {
-    $('#preloder').css('display', 'block').find('.loader').css('display', 'block');
-}
-
-function closeLoader() {
-    $('#preloder').css('display', 'none').find('.loader').css('display', 'none');
 }
 
 function convertToLowerCase(inputString) {
