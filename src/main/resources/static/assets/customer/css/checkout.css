@@ -1,0 +1,89 @@
+.form-group {
+    margin-bottom: 6px;
+}
+
+.form-group .form-control {
+    width: 100%;
+    border-radius: 0;
+    height: 50px;
+    border: 1px solid #e1e1e1;
+    font-size: 14px;
+    color: #b7b7b7;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+}
+
+
+.checkout__delivery__method {
+    border-top: 1px solid #d7d7d7;
+    padding: 15px 0;
+}
+
+.checkout__delivery__method li {
+    list-style: none;
+    font-size: 16px;
+    color: #111111;
+    line-height: 40px;
+    overflow: hidden;
+}
+
+.checkout__delivery__method li span {
+    color: #e53637;
+    font-weight: 700;
+    float: right;
+}
+
+/* Ẩn radio button mặc định */
+input[type="radio"] {
+    display: none;
+}
+
+/* Tạo hình dạng vuông giống như ô checkbox */
+input[type="radio"] + label {
+    position: relative;
+    padding-left: 15px; /* Kích thước của ô vuông */
+    cursor: pointer;
+    display: inline-block;
+    line-height: 15px; /* Kích thước của ô vuông */
+}
+
+/* Tạo hình dạng dấu tích */
+input[type="radio"] + label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 14px; /* Kích thước của ô vuông */
+    height: 14px; /* Kích thước của ô vuông */
+    border: 1.5px solid #d7d7d7; /* Màu viền của ô vuông */
+    border-radius: 2px;
+    transition: background 0.3s;
+}
+
+/* Tạo trạng thái checked cho ô vuông */
+input[type="radio"]:checked + label:before {
+    border-color: #e53637; /* Màu viền khi ô được chọn */
+}
+
+/* Tạo hình dạng dấu tích màu đỏ */
+input[type="radio"]:checked + label:after {
+    content: "\2713"; /* Dấu tích Unicode */
+    position: absolute;
+    left: 1px; /* Độ lệch của dấu tích từ mép trái */
+    top: -1px; /* Độ lệch của dấu tích từ phía trên */
+    width: 15px; /* Kích thước của dấu tích */
+    height: 15px; /* Kích thước của dấu tích */
+    font-size: 18px; /* Kích thước của dấu tích */
+    color: #e53637; /* Màu của dấu tích */
+}
+
+input[type="radio"] + label {
+    padding-left: 20px;
+}
+
+.deliveryMethodLabel {
+    font-size: 15px;
+    font-family: "Nunito Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
