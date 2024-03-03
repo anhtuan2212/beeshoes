@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/assets/customer/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/fancybox.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
@@ -61,7 +62,7 @@
 <!-- Offcanvas Menu End -->
 
 <!-- Header Section Begin -->
-<div th:replace="/customer/pages/_header.html"></div>
+<div th:replace="~{/customer/pages/_header.html}"></div>
 <!-- Header Section End -->
 
 <!-- Shop Details Section Begin -->
@@ -81,8 +82,8 @@
                 <div class="col-lg-3 col-md-3">
                     <ul class="nav nav-tabs mini_img " role="tablist">
                         <th:block th:each="img:${sanPham.getAnh()}">
-                            <li class="nav-item">
-                                <a th:attr="class='nav-link '+${img.getId()==sanPham.getMainImage().getId()?'active':''} "
+                            <li class="nav-item open-fancybox">
+                                <a th:attr="class='nav-link '+${img.getId()==sanPham.getMainImage().getId()?'active':''} ,data-caption='#product img '+${img.getId()}"
                                    data-toggle="tab" th:href="'#tabs-'+${img.getId()}" role="tab">
                                     <div class="product__thumb__pic set-bg" th:attr="data-setbg=${img.getUrl()}">
                                     </div>
@@ -105,6 +106,9 @@
                 </div>
             </div>
         </div>
+        <div class="position-absolute btn-fullscreen">
+            <i id="openFancybox" class="fa fa-arrows-alt" aria-hidden="true"></i>
+        </div>
     </div>
     <div class="product__details__content">
         <div class="container">
@@ -113,7 +117,8 @@
                     <div class="product__details__text">
                         <h4 th:text="${sanPham.getTen()}">Product Name</h4>
                         <div class="rating">
-                            <span >Tổng số lượng : <th:block th:text="${sanPham.getSoLuong()}"></th:block></span> |<span id="total-num-product"></span>
+                            <span>Tổng số lượng : <th:block th:text="${sanPham.getSoLuong()}"></th:block></span> |<span
+                                id="total-num-product"></span>
                         </div>
                         <h3 id="show-price">
                             <th:block
@@ -135,7 +140,8 @@
                                     <label th:for="'size_id_'+${kichCo.getId()}">
                                         <th:block th:text="${kichCo.getTen()}"></th:block>
                                         <input class="size_selected" name="kichthuoc" type="radio"
-                                               th:id="'size_id_'+${kichCo.getId()}" th:value="${kichCo.getTen()}" th:attr="data-id-size=${kichCo.getId()}">
+                                               th:id="'size_id_'+${kichCo.getId()}" th:value="${kichCo.getTen()}"
+                                               th:attr="data-id-size=${kichCo.getId()}">
                                     </label>
                                 </th:block>
                             </div>
@@ -145,7 +151,8 @@
                                     <label class="label_select_color"
                                            th:style="'background-color: ' + ${color.getMaMauSac()}"
                                            th:for="'color_id_'+${color.getId()}">
-                                        <input class="select_color" type="radio" th:id="'color_id_'+${color.getId()}" th:value="${color.getMaMauSac()}"
+                                        <input class="select_color" type="radio" th:id="'color_id_'+${color.getId()}"
+                                               th:value="${color.getMaMauSac()}"
                                                name="color" th:attr="data-id-color=${color.getId()}"/>
                                     </label>
                                 </th:block>
@@ -161,7 +168,8 @@
                         </div>
                         <div class="product__details__btns__option">
                             <a href="javascript:;"><i class="fa fa-heart"></i> Thêm Vào Yêu Thích</a>
-                            <a href="javascript:;" id="add-to-cart"><i class="fa fa-shopping-cart"></i> Thêm Vào Giỏ Hàng</a>
+                            <a href="javascript:;" id="add-to-cart"><i class="fa fa-shopping-cart"></i> Thêm Vào Giỏ
+                                Hàng</a>
                         </div>
                         <div class="product__details__last__option">
                             <h5><span>Các Hình Thức Thanh Toán</span></h5>
@@ -175,10 +183,12 @@
                                     <th:block th:text="${sanPham.getThuongHieu().getTen()}"></th:block>
                                 </li>
                                 <li><span>Loại Đế Giày :</span>
-                                    <th:block th:text="${sanPham.getChiTietSanPham().get(0).getDeGiay().getTen()}"></th:block>
+                                    <th:block
+                                            th:text="${sanPham.getChiTietSanPham().get(0).getDeGiay().getTen()}"></th:block>
                                 </li>
                                 <li><span>Loại Cổ Giày :</span>
-                                    <th:block th:text="${sanPham.getChiTietSanPham().get(0).getCoGiay().getTen()}"></th:block>
+                                    <th:block
+                                            th:text="${sanPham.getChiTietSanPham().get(0).getCoGiay().getTen()}"></th:block>
                                 </li>
                                 <li th:if="${#lists.size(sanPham.getTags())>0}"><span>Tag:</span>
                                     <th:block th:each="tag,iter:${sanPham.getTags()}">
@@ -335,7 +345,7 @@
     </tr>
 </table>
 <!-- Footer Section Begin -->
-<div th:replace="/customer/pages/_footer.html"></div>
+<div th:replace="~{/customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
 
 
@@ -344,7 +354,7 @@
     <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch">+</div>
         <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
+            <input type="text" id="search-input" placeholder="Search here.....">v
         </form>
     </div>
 </div>
@@ -353,6 +363,7 @@
 
 <!-- Js Plugins -->
 <script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/customer/js/fancybox.min.js"></script>
 <script src="/assets/customer/js/bootstrap.min.js"></script>
 <script src="/assets/customer/js/jquery.nice-select.min.js"></script>
 <script src="/assets/customer/js/jquery.nicescroll.min.js"></script>

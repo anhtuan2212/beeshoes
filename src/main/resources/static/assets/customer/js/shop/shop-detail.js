@@ -1,19 +1,50 @@
-
 $(document).ready(function () {
     $('.select_color').on('change', function () {
         $('.select_color').closest('.label_select_color').removeClass('activeSelected')
         $(this).closest('.label_select_color').addClass('activeSelected');
     })
 })
+$(document).ready(function () {
+    // Khi click vào ảnh
+    $('#openFancybox').click(function () {
+        // Lấy danh sách ảnh từ tất cả các phần tử có thuộc tính data-setbg
+        var imageList = $('.product__thumb__pic').map(function() {
+            return {
+                src: $(this).data('setbg'),
+                opts: {
+                    caption: $(this).parent().attr('data-caption') // Lấy chú thích nếu có
+                }
+            };
+        }).get();
+        // Hiển thị danh sách ảnh trong Fancybox
+        $.fancybox.open(imageList, {
+            // Các tùy chọn của Fancybox ở đây
+            buttons: [
+                'close',
+                'zoom'
+            ],
+            wheel: false,
+            transitionEffect: "slide",
+            thumbs: false,
+            // hash: false,
+            loop: true,
+            // keyboard: true,
+            toolbar: false,
+            // animationEffect: false,
+            arrows: true,
+            clickContent: false
+        });
+    });
+});
 
-function addItemToCart(product, quantity, totalMoney) {
+function printHtmlToCart(product, quantity, totalMoney) {
     console.log(product)
     let element = $('#list_product_items_cart').find(`div.cart_product_item[data-id-product="${product.id}"]`);
     if (element.length === 1) {
         let num = element.find(`#quantyti_${product.id}`).text().replace('SL:', '')
-        let allNum = Number(num)+Number(quantity);
+        let allNum = Number(num) + Number(quantity);
         console.log(allNum)
-        element.find(`#quantyti_${product.id}`).text('SL:'+allNum)
+        element.find(`#quantyti_${product.id}`).text('SL:' + allNum)
     } else {
         let html = `
     <div class="cart_product_item row" data-id-product="${product.id}">
@@ -53,15 +84,15 @@ $(document).ready(function () {
     });
     console.log(data_product_details)
 
-    let getItems = getProductInCart();
+    let getItems = getProductInLocalStorage();
     let data_cart = [];
-    if (getItems !== null){
+    if (getItems !== null) {
         data_cart = getItems;
     }
 
-    function addDataCart(data) {
-        data_cart = getProductInCart();
-        if (data_cart.length > 0) {
+    function pushDataToArray(data) {
+        data_cart = getProductInLocalStorage();
+        if (data_cart !== null && Array.isArray(data_cart)) {
             let found = false;
             for (let i = 0; i < data_cart.length; i++) {
                 if (data_cart[i].pro.id === data.pro.id) {
@@ -71,11 +102,13 @@ $(document).ready(function () {
                 }
             }
             if (!found) {
-                saveProductToCart(data_cart.push(data));
+                data_cart.push(data);
             }
         } else {
-            saveProductToCart(data_cart.push(data));
+            data_cart = []
+            data_cart.push(data);
         }
+        saveProductTolocalStorage(data_cart);
     }
 
     $('input[name="kichthuoc"], input[name="color"]').on('change', function () {
@@ -113,19 +146,24 @@ $(document).ready(function () {
         }
         for (let i = 0; i < data_product_details.length; i++) {
             let product = data_product_details[i];
-            if (product.size == kichThuoc && product.color_code == color){
-                addDataCart({pro: product, quantity: quantity})
-                let total = 0;
-                data_cart.forEach((data) => {
-                    total += extractNumberFromString(data.pro.gia_ban) * data.quantity;
-                    console.log(total)
-                })
-                total = addCommasToNumber(total);
-                ToastSuccess('Thêm thành công.')
-                addItemToCart(product, quantity, total + 'đ')
-                localStorage.setItem('shopping_carts',JSON.stringify(data_cart));
-                $('#quantity__item_carts').text(data_cart.length);
-                return;
+            if (product.size == kichThuoc && product.color_code == color) {
+                if (username === undefined) {
+                    pushDataToArray({pro: product, quantity: quantity})
+                    let total = 0;
+                    data_cart.forEach((data) => {
+                        total += extractNumberFromString(data.pro.gia_ban) * data.quantity;
+                    })
+                    total = addCommasToNumber(total);
+                    ToastSuccess('Thêm thành công.');
+                    printHtmlToCart(product, quantity, total + 'đ')
+                    localStorage.setItem('shopping_carts', JSON.stringify(data_cart));
+                    $('#quantity__item_carts').text(data_cart.length);
+                    return;
+                } else {
+                    ToastSuccess('Thêm thành công.');
+                    dataShopingCart = saveProductToServer(product.id, quantity)
+                }
+
             }
         }
     });

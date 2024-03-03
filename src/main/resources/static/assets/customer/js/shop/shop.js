@@ -1,35 +1,7 @@
-var dataShop = null;
+
 var displayNumShow = 9;
 var NumAddShowDisplay = 6;
 
-
-window.onload = function () {
-    // ToastSuccess('Tải hoàn tất !')
-    $.ajax({
-        url: '/api/get-all-san-pham',
-        type: 'GET',
-        success: function (data) {
-            dataShop = data;
-            console.log(dataShop)
-            printAllData()
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Lỗi khi gọi API: " + textStatus, errorThrown);
-        }
-    })
-};
-
-function addCommasToNumber(number) {
-    let numberStr = number.toString().replace(/[^\d]/g, '');
-    let parts = [];
-    for (let i = numberStr.length, j = 0; i >= 0; i--, j++) {
-        parts.unshift(numberStr[i]);
-        if (j > 0 && j % 3 === 0 && i > 0) {
-            parts.unshift('.');
-        }
-    }
-    return parts.join('');
-}
 
 function printAllData() {
     let arr = [];
@@ -75,14 +47,14 @@ function printAllData() {
             let color = '';
             for (let i = 0; i < product.maMauSac.length; i++) {
                 color += `<label style="background-color:${product.maMauSac[i]}">
-                             <input type="radio" id="" value="1">
+                             <input type="radio" id="" value="${product.maMauSac[i]}">
                         </label>`;
             }
             let size = '';
             for (let i = 0; i < product.kichCo.length; i++) {
                 size += `<label class="label_select_size mr-3p" for="size_id_${product.kichCo[i].id + '_' + product.id}">
                              ${product.kichCo[i].ten}
-                           <input class="size_selected" name="kichthuoc1" type="radio" id="size_id_${product.kichCo[i].id + '_' + product.id}" value="${product.id}" data-id-size="${product.id}">
+                           <input class="size_selected" name="kichthuoc1" value="${product.kichCo[i].ten}" type="radio" id="size_id_${product.kichCo[i].id + '_' + product.id}" value="${product.id}" data-id-size="${product.id}">
                         </label>`
             }
             let sales = '';
@@ -96,7 +68,7 @@ function printAllData() {
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
                                         </li>
-                                        <li><a href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a></li>
+                                        <li><a class="btn-add-to-cart" href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a></li>
                                         <li><a href="/shop-detail?product=${product.id}"><img src="/assets/customer/img/icon/eye.svg" alt=""></a></li>
                                     </ul>
                                 </div>
