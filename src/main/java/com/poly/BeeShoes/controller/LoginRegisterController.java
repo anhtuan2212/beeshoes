@@ -75,7 +75,7 @@ public class LoginRegisterController {
             securityContext.setAuthentication(authentication);
             session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
-            return "redirect:/light-bee/";
+            return "redirect:/";
         } catch (AuthenticationException ex) {
             ex.printStackTrace();
             model.addAttribute("message", "Sai email hoặc mật khẩu !");

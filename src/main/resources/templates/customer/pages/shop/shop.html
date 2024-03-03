@@ -61,7 +61,7 @@
 <!-- Offcanvas Menu End -->
 
 <!-- Header Section Begin -->
-<div th:replace="/customer/pages/_header.html"></div>
+<div th:replace="~{/customer/pages/_header.html}"></div>
 <!-- Header Section End -->
 
 <!-- Breadcrumb Section Begin -->
@@ -230,19 +230,20 @@
                             <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <div class="product__item__pic set-bg susor-pointer"
                                      th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-details(product=${sp.getId()})}">
-                                    <img class="img-main-product" th:src="${anh.getUrl()}" alt="" >
+                                    <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="" >
                                     <span class="label" th:if="${sp.isSale()}">SALE</span>
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
                                         </li>
-                                        <li><a href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg"
-                                                             alt=""></a></li>
+                                        <li>
+                                            <a class="btn-add-to-cart" href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a>
+                                        </li>
                                         <li><a th:href="@{/shop-detail(product=${sp.getId()})}"><img
                                                 src="/assets/customer/img/icon/eye.svg" alt=""></a></li>
                                     </ul>
                                 </div>
                             </th:block>
-                            <div class="product__item__text">
+                            <div class="product__item__text ">
                                 <h6 class="product_name" th:text="${sp.getTen()}"></h6>
                                 <a th:href="@{/shop-detail(product=${sp.getId()})}" class="add-cart">Xem Sản Phẩm</a>
                                 <th:block th:each="ctsp,iter:${sp.getChiTietSanPham()}">
@@ -260,16 +261,16 @@
                                 </th:block>
                                 <div class="product__option__size">
                                     <th:block th:each="size:${sp.getDistinctKichCoList()}">
-                                        <label class="label_select_size" th:for="'size_id_4'+${size.getId()}+'_'+${sp.getId()}">
+                                        <label class="label_select_size" th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
                                             <th:block th:text="${size.getTen()}"></th:block>
-                                            <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}" type="radio" th:id="'size_id_4'+${size.getId()}+'_'+${sp.getId()}" value="33" data-id-size="4">
+                                            <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}" type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}" th:value="${size.getTen()}" data-id-size="4">
                                         </label>
                                     </th:block>
                                 </div>
                                 <div class="product__color__select">
                                     <th:block th:each="ms:${sp.getMauSac()}">
                                         <label th:style="'background-color:' + ${ms.getMaMauSac()}">
-                                            <input type="radio" id="" th:value="${ms.getId()}">
+                                            <input type="radio" th:value="${ms.getMaMauSac()}">
                                         </label>
                                     </th:block>
                                 </div>
@@ -292,7 +293,7 @@
 <!-- Shop Section End -->
 
 <!-- Footer Section Begin -->
-<div th:replace="/customer/pages/_footer.html"></div>
+<div th:replace="~{/customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
 
 

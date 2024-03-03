@@ -21,6 +21,8 @@ public class chiTietSanPhamApiRquest {
     Long id;
     String maSanPham;
     String mauSac;
+    String ten;
+    String tenMau;
     String KichCo;
     String anh;
     Integer giaGoc;
