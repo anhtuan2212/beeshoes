@@ -217,7 +217,7 @@ function addCommasToNumber(number) {
     /*--------------------------
         Select
     ----------------------------*/
-    $("select").niceSelect();
+    // $("select").niceSelect();
 
     /*-------------------
 		Radio Btn
