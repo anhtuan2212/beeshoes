@@ -74,7 +74,7 @@ function printAllData() {
                                 </div>
                             <div class="product__item__text">
                                 <h6 class="product_name">${product.ten}</h6>
-                                <a href="/shop-detail?product=${product.id}" class="add-cart">Xem Sản Phẩm</a>
+                                <a href="/shop-detail?product=${product.id}" class="add-cart">Mua Ngay</a>
                                     <div class="rating">
                                         <h6 class="giaGoc">${max_price}đ</h6>
                                     </div>

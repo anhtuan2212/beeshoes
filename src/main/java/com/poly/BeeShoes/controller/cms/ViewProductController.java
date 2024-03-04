@@ -67,7 +67,7 @@ public class ViewProductController {
     @PostMapping("/upload-img")
     public ResponseEntity upload(@RequestParam("data")String data,@RequestParam("id")Long id){
         Type listType = new TypeToken<List<UploadImgRequest>>() {}.getType();
-        SanPham sp = sanPhamService.getById(id);
+        SanPham sp = sanPhamService.getByIdcms(id);
         Anh anhMain = sp.getMainImage();
         List<UploadImgRequest> lst = gs.fromJson(data, listType);
         System.out.println(Arrays.toString(lst.toArray()));
@@ -127,7 +127,7 @@ public class ViewProductController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "MaxLenghtMota").body(null);
             }
         }
-        SanPham sp = sanPhamService.getById(ctspRequest.getSanPham());
+        SanPham sp = sanPhamService.getByIdcms(ctspRequest.getSanPham());
         ChatLieu cl = chatLieuService.getById(ctspRequest.getChatLieu());
         ThuongHieu th = thuongHieuService.getById(ctspRequest.getThuongHieu());
         TheLoai tl = theLoaiService.getById(ctspRequest.getTheLoai());
