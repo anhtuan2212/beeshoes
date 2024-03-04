@@ -245,7 +245,7 @@
                             </th:block>
                             <div class="product__item__text ">
                                 <h6 class="product_name" th:text="${sp.getTen()}"></h6>
-                                <a th:href="@{/shop-detail(product=${sp.getId()})}" class="add-cart">Xem Sản Phẩm</a>
+                                <a th:href="@{/shop-detail(product=${sp.getId()})}" class="add-cart">Mua Ngay</a>
                                 <th:block th:each="ctsp,iter:${sp.getChiTietSanPham()}">
                                     <th:block th:if="${iter.index == 0}">
                                         <div class="rating">
