@@ -39,7 +39,7 @@ public class CheckOutController {
 
         model.addAttribute("paymentError", "Thanh toán thất bại, vui lòng thử lại!");
 
-        return paymentStatus == 1 ? "payment/vnpay/order-success" : "customer/pages/shop/checkout";
+        return paymentStatus == 1 ? "payment/vnpay/order-success" : "payment/vnpay/order-failed";
     }
 
 }
