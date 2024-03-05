@@ -138,8 +138,8 @@ ol {
 }
 
 .spad {
-	padding-top: 100px;
-	padding-bottom: 100px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 .text-white h1,
@@ -1209,7 +1209,7 @@ ol {
 .product__item__text .product__color__select label:after {
 	position: absolute;
 	left: -2px;
-	top: -2.5px;
+	top: -2.1px;
 	height: 18px;
 	width: 19px;
 	border: 1.8px solid #000000;
@@ -2642,7 +2642,8 @@ ol {
 	border: 1px solid #e1e1e1;
 	font-size: 14px;
 	color: #b7b7b7;
-	padding-left: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
 	margin-bottom: 20px;
 }
 
@@ -3926,4 +3927,31 @@ ol {
 	.categories__text:before {
 		height: 250px;
 	}
+}
+.btn-custom-black{
+	display: inline-block !important;
+	font-size: 13px !important;
+	font-weight: 700 !important;
+	text-transform: uppercase !important;
+	padding: 12px 30px !important;
+	color: #ffffff !important;
+	background: #000000 !important;
+	letter-spacing: 4px !important;
+	border-radius: 0 !important;
+}
+.btn-custom-info{
+	color: #000000  !important;
+	background-color: #f3f2ee !important;
+	border-color: #17a2b8 !important;
+	border-radius: 0 !important;
+	text-transform: uppercase !important;
+}
+.swal2-modal{
+	border-radius: 0 !important;
+}
+.custom-toast-class{
+	border-radius: 0;
+}
+.swal2-timer-progress-bar-container{
+	border-radius: 0;
 }

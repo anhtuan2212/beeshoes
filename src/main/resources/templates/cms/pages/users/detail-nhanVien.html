@@ -7,7 +7,7 @@
     <!-- Title -->
     <title>LightBee | Thông tin nhân viên</title>
     <!-- Favicon -->
-<!--    <link rel="shortcut icon" href="favicon.ico">-->
+    <!--    <link rel="shortcut icon" href="favicon.ico">-->
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
@@ -15,10 +15,10 @@
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
-<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+    <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 
-<!--    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet"/>-->
-<!--    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>-->
+    <!--    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet"/>-->
+    <!--    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>-->
 
     <link rel="stylesheet" href="/assets/cms/css/sweetalert2.min.css">
 </head>
@@ -39,8 +39,8 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form id="btn-submit-nhan-vien" th:action="@{/cms/nhan-vien/update/{id}(id=${nhanVien.id})}" method="post" th:object="${nhanVien}"
-              onsubmit="return formValidate(event)"
+        <form th:action="@{/cms/nhan-vien/update/{id}(id=${nhanVien.id})}" method="post"
+              th:object="${nhanVien}" id="btn-update-nhan-vien"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -82,7 +82,8 @@
                                                 <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
                                                        for="avatarUploader">
                                                     <img id="avatarImg" class="avatar-img"
-                                                         th:src="${nhanVien.getAvatar()==''?'/assets/cms/img/160x160/img1.jpg':nhanVien.getAvatar()}" alt="Image Description">
+                                                         th:src="${nhanVien.getAvatar()==''?'/assets/cms/img/160x160/img1.jpg':nhanVien.getAvatar()}"
+                                                         alt="Image Description">
 
                                                     <input type="file" class="js-file-attach avatar-uploader-input"
                                                            id="avatarUploader" data-hs-file-attach-options='{
@@ -94,7 +95,8 @@
                                                                               "allowTypes": [".png", ".jpeg", ".jpg"]
                                                                            }'>
                                                     <th:block th:if="${nhanVien.getAvatar()!=null}">
-                                                        <input id="urlImgAvatar" type="hidden" name="avatar" th:value="${nhanVien.getAvatar()}" hidden>
+                                                        <input id="urlImgAvatar" type="hidden" name="avatar"
+                                                               th:value="${nhanVien.getAvatar()}" hidden>
                                                     </th:block>
                                                     <span class="avatar-uploader-trigger">
                                                                       <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
@@ -131,8 +133,7 @@
 
                                     <!-- Form Group -->
                                     <div class="form-group">
-                                        <label for="sdt" class="js-masked-input col col-form-label input-label">Số
-                                            điện thoại</label>
+                                        <label for="sdt" class="col col-form-label input-label">Số điện thoại</label>
 
                                         <div class="col">
                                             <div class="input-group input-group-sm-down-break align-items-center">
@@ -142,9 +143,10 @@
                                      "template": "0000000000"
                                    }' th:field="*{sdt}">
                                             </div>
-                                            <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
-                                            <i id="thongbao" style="color: red;display: none">Số điện thoại đã tồn tại</i>
                                         </div>
+                                        <i id="sdt_emty" style="color: red;"></i>
+                                        <!--                                        <i th:if="${errorSdt!=null}" style="color: red;" th:text="${errorSdt}"></i>-->
+                                        <!--                                        <i th:if="${messageSdt!=null}" style="color: red;" th:text="${messageSdt}"></i>-->
                                     </div>
 
                                     <!-- Form Group -->
@@ -152,24 +154,11 @@
                                         <label class="col col-form-label input-label">Chức vụ</label>
                                         <!-- Select -->
                                         <div class="col">
-                                            <select class="js-select2-custom custom-select form-control" th:field="*{idCV}">
+                                            <select class="js-select2-custom custom-select form-control"
+                                                    th:field="*{idCV}">
                                                 <option th:each="cv:${listCV}" th:value="${cv.getId()}"
                                                         th:selected="${nhanVien.getIdCV() == cv.getId()}"
                                                         th:text="${cv.getTen()}"></option>
-                                            </select>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
-
-                                    <!-- Form Group -->
-                                    <div class="form-group">
-                                        <label class="col col-form-label input-label">Trạng thái</label>
-                                        <!-- Select -->
-                                        <div class="col">
-                                            <select class="js-select2-custom custom-select form-control" th:field="*{trangThai}">
-                                                <option value="true" selected="">Hoạt động</option>
-                                                <option value="false">Đã nghỉ</option>
                                             </select>
                                             <!-- End Select -->
                                         </div>
@@ -243,10 +232,11 @@
 
                                         <div class="col">
                                             <input type="date" class="form-control" name="ngaySinh"
-                                                   id="ngaySinh"
+                                                   id="ngaySinh" pattern="\d{2}-\d{2}-\d{4}\"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
                                         </div>
-                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
+                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày
+                                            sinh</i>
                                     </div>
                                     <!-- End Form Group -->
 
@@ -261,40 +251,58 @@
                                         <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="phuongxa" class="col col-form-label input-label">Phường
-                                            xã</label>
+                                    <div class="form-address">
+                                        <div class="form-group">
+                                            <label th:for="'phuongXa'+${nhanVien.getId()}"
+                                                   class="col col-form-label input-label">Phường
+                                                xã</label>
 
-                                        <div class="col">
-                                            <input type="text" class="form-control" name="phuongXa"
-                                                   id="phuongXa" placeholder="Phường xã"
-                                                   aria-label="Phường xã" th:field="*{phuongXa}">
+                                            <div class="col">
+                                                <select id="phuongXa" name="phuongXa"
+                                                        class="js-select2-custom custom-select phuong_xa"
+                                                        data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
+                                                                               "searchInputPlaceholder": "Tìm Phường Xã..."}'>
+                                                    <option value="">Chọn Phường Xã</option>
+                                                </select>
+                                                <input type="text" id="phuongXa_input"
+                                                       th:value="${nhanVien.getPhuongXa()}" hidden>
+                                            </div>
                                         </div>
-                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label for="quanHuyen" class="col col-form-label input-label">Quận
-                                            huyện</label>
+                                        <div class="form-group">
+                                            <label th:for="'quanHuyen'+${nhanVien.getId()}"
+                                                   class="col col-form-label input-label">Quận
+                                                huyện</label>
 
-                                        <div class="col">
-                                            <input type="text" class="form-control" name="quanHuyen"
-                                                   id="quanHuyen" placeholder="Quận huyện"
-                                                   aria-label="Quận huyện" th:field="*{quanHuyen}">
+                                            <div class="col">
+                                                <select id="quanHuyen" name="quanHuyen"
+                                                        class="js-select2-custom custom-select quanHuyen"
+                                                        data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
+                                                                                "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
+                                                    <option value="">Chọn Quận Huyện</option>
+                                                </select>
+                                                <input type="text" id="quanHuyen_input"
+                                                       th:value="${nhanVien.getQuanHuyen()}" hidden>
+                                            </div>
+
                                         </div>
-                                        <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label for="tinhTP" class="col col-form-label input-label">Tỉnh thành
-                                            phố</label>
+                                        <div class="form-group">
+                                            <label th:for="'tinhTP'+${nhanVien.getId()}"
+                                                   class="col col-form-label input-label">Tỉnh thành
+                                                phố</label>
 
-                                        <div class="col">
-                                            <input type="text" class="form-control" name="tinhTP"
-                                                   id="tinhTP" placeholder="Tỉnh thành phố"
-                                                   aria-label="Tỉnh thành phố" th:field="*{tinhThanhPho}">
+                                            <div class="col">
+                                                <select id="tinhTP" name="tinhThanhPho"
+                                                        class="js-select2-custom custom-select tinhTP"
+                                                        data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
+                                                                                "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>
+                                                    <option value="">Chọn Tỉnh Thành</option>
+                                                </select>
+                                                <input type="text" id="tinhTP_input"
+                                                       th:value="${nhanVien.getTinhThanhPho()}" hidden>
+                                            </div>
                                         </div>
-                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
                                     </div>
                                 </div>
                                 <!-- End Form Group -->
@@ -372,307 +380,6 @@
 <script src="/assets/cms/js/khachHangJS/update-img.js" type="module"></script>
 <script src="/assets/cms/js/khachHangJS/detailNV.js"></script>
 <script src="/assets/cms/js/sweetalert2.all.min.js"></script>
-<script>
-    function formvalidate(e) {
-        if (confirm('Bạn có muốn cập nhật không?')) {
-            var result = true;
-            var hoTen = document.getElementById("hoTen").value;
-            var sdt = document.getElementById("sdt").value;
-            var cccd = document.getElementById("cccd").value;
-            var ngaySinh = document.getElementById("ngaySinh").value;
-            var soNha = document.getElementById("soNha").value;
-            var phuongXa = document.getElementById("phuongXa").value;
-            var quanHuyen = document.getElementById("quanHuyen").value;
-            var tinhTP = document.getElementById("tinhTP").value;
-            if (hoTen.length == 0) {
-                document.getElementById("hoTen_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("hoTen_emty").style.display = "none";
-            }
-            if (sdt.length == 0) {
-                document.getElementById("sdt_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("sdt_emty").style.display = "none";
-            }
-            if (cccd.length == 0) {
-                document.getElementById("cccd_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("cccd_emty").style.display = "none";
-            }
-            if (ngaySinh.length == 0) {
-                document.getElementById("ngaySinh_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("ngaySinh_emty").style.display = "none";
-            }
-            if (soNha.length == 0) {
-                document.getElementById("soNha_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("soNha_emty").style.display = "none";
-            }
-            if (District.length == "") {
-                document.getElementById("quanHuyen_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("quanHuyen_emty").style.display = "none";
-            }
-            if (Ward.length == "") {
-                document.getElementById("phuongXa_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("phuongXa_emty").style.display = "none";
-            }
-            if (Province.length == "") {
-                document.getElementById("tinhTP_emty").style.display = "block";
-                result = false;
-            } else {
-                document.getElementById("tinhTP_emty").style.display = "none";
-            }
-            return result;
-        } else {
-            e.preventDefault();
-        }
-    }
-
-    //==================
-    //api địa chỉ
-    const provice_url = "https://api.npoint.io/ac646cb54b295b9555be";
-    const district_url = "https://api.npoint.io/34608ea16bebc5cffd42";
-    const ward_url = "https://api.npoint.io/dd278dc276e65c68cdf5";
-
-    var province_list = [];
-    var district_list = [];
-    var ward_list = [];
-
-    var singleSelectDropdown = function (id, placeholder, data, selectItem) {
-        setTimeout(function () {
-            $("#" + id).select2({
-                placeholder: placeholder,
-                data: data.map(function (item) {
-                    return {
-                        id: item.Id,
-                        text: item.Name,
-                    };
-                }),
-                allowClear: true,
-            });
-        }, 200);
-
-        if (selectItem !== null) {
-            setTimeout(function () {
-                $("#" + id)
-                    .val(selectItem)
-                    .trigger("change");
-            }, 200);
-        }
-    };
-
-    var getProviceData = function (callback) {
-        $.getJSON(provice_url, function (list) {
-            callback(list);
-        });
-    };
-
-    var getDistrictData = function (callback) {
-        $.getJSON(district_url, function (list) {
-            callback(list);
-        });
-    };
-
-    var getWardData = function (callback) {
-        $.getJSON(ward_url, function (list) {
-            callback(list);
-        });
-    };
-
-    var hanldeOnchangeProvice = function () {
-        $("#Province").on("change", function () {
-            var id = $(this).val();
-            if (id) {
-
-                $("#District").empty();
-
-                var data_filter = district_list.filter(
-                    (entry) => entry.ProvinceId === parseInt(id)
-                );
-
-                singleSelectDropdown("District", "Chọn Quận/Huyện", data_filter);
-            }
-        });
-    };
-
-    var hanldeOnchangeDistrict = function () {
-        $("#District").on("change", function () {
-            var id = $(this).val();
-            if (id) {
-
-                $("#Ward").empty();
-
-                var data_filter = ward_list.filter(
-                    (entry) => entry.DistrictId === parseInt(id)
-                );
-
-                singleSelectDropdown("Ward", "Chọn Xã/Phường", data_filter);
-            }
-        });
-    };
-
-    var initProviceDropdown = function () {
-        var interval = setInterval(function () {
-            if (province_list.length > 0) {
-                singleSelectDropdown("Province", "Chọn Tỉnh/Thành Phố", province_list);
-                clearInterval(interval);
-            }
-        }, 100);
-    };
-
-    var getAllDataForDropdown = function () {
-        getProviceData(function (list) {
-            province_list = list;
-        });
-
-        getDistrictData(function (list) {
-            district_list = list;
-        });
-
-        getWardData(function (list) {
-            ward_list = list;
-        });
-    };
-
-    $(document).ready(function () {
-        getAllDataForDropdown();
-        initProviceDropdown();
-        hanldeOnchangeProvice();
-        hanldeOnchangeDistrict();
-    });
-
-    //==============
-    $(document).on('ready', function () {
-        // ONLY DEV
-        // =======================================================
-
-        if (window.localStorage.getItem('hs-builder-popover') === null) {
-            $('#builderPopover').popover('show')
-                .on('shown.bs.popover', function () {
-                    $('.popover').last().addClass('popover-dark')
-                });
-
-            $(document).on('click', '#closeBuilderPopover', function () {
-                window.localStorage.setItem('hs-builder-popover', true);
-                $('#builderPopover').popover('dispose');
-            });
-        } else {
-            $('#builderPopover').on('show.bs.popover', function () {
-                return false
-            });
-        }
-
-        // END ONLY DEV
-        // =======================================================
-
-
-        // BUILDER TOGGLE INVOKER
-        // =======================================================
-        $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
-            $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
-        });
-
-        $('.js-masked-input').each(function () {
-            var mask = $.HSCore.components.HSMask.init($(this));
-        });
-
-
-        // INITIALIZATION OF MEGA MENU
-        // =======================================================
-        var megaMenu = new HSMegaMenu($('.js-mega-menu'), {
-            desktop: {
-                position: 'left'
-            }
-        }).init();
-
-
-        // INITIALIZATION OF NAVBAR VERTICAL NAVIGATION
-        // =======================================================
-        var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
-
-
-        // INITIALIZATION OF TOOLTIP IN NAVBAR VERTICAL MENU
-        // =======================================================
-        $('.js-nav-tooltip-link').tooltip({boundary: 'window'})
-
-        $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
-            if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
-                return false;
-            }
-        });
-
-
-        // INITIALIZATION OF UNFOLD
-        // =======================================================
-        $('.js-hs-unfold-invoker').each(function () {
-            var unfold = new HSUnfold($(this)).init();
-        });
-
-
-        // INITIALIZATION OF FORM SEARCH
-        // =======================================================
-        $('.js-form-search').each(function () {
-            new HSFormSearch($(this)).init()
-        });
-
-
-        // INITIALIZATION OF FILE ATTACH
-        // =======================================================
-        $('.js-file-attach').each(function () {
-            var customFile = new HSFileAttach($(this)).init();
-        });
-
-
-        // INITIALIZATION OF STEP FORM
-        // =======================================================
-        $('.js-step-form').each(function () {
-            var stepForm = new HSStepForm($(this), {
-                finish: function () {
-                    $("#addUserStepFormProgress").hide();
-                    $("#addUserStepFormContent").hide();
-                    $("#successMessageContent").show();
-                }
-            }).init();
-        });
-
-
-        // INITIALIZATION OF MASKED INPUT
-        // =======================================================
-        $('.js-masked-input').each(function () {
-            var mask = $.HSCore.components.HSMask.init($(this));
-        });
-
-
-        // INITIALIZATION OF SELECT2
-        // =======================================================
-        $('.js-select2-custom').each(function () {
-            var select2 = $.HSCore.components.HSSelect2.init($(this));
-        });
-
-
-        // INITIALIZATION OF ADD INPUT FILED
-        // =======================================================
-        $('.js-add-field').each(function () {
-            new HSAddField($(this), {
-                addedField: function () {
-                    $('.js-add-field .js-select2-custom-dynamic').each(function () {
-                        var select2dynamic = $.HSCore.components.HSSelect2.init($(this));
-                    });
-                }
-            }).init();
-        });
-    });
-</script>
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

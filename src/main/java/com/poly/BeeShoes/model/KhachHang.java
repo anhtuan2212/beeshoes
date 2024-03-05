@@ -16,7 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "khach_hang")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString
 public class KhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

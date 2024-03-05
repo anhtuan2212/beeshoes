@@ -98,8 +98,7 @@
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}" class="btn btn-sm btn-outline-danger mr-1"
-                        id="huyFromDetail">
+                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}" id="getAttrToHuyFromDetail" type="button" class="btn btn-sm btn-outline-danger mr-1" data-toggle="modal" data-target="#modalCancelReasons">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
                 <button class="btn btn-sm btn-outline-primary d-none"
@@ -108,7 +107,7 @@
                 </button>
             </div>
             <div class="col-6 d-flex justify-content-end">
-                <button class="btn btn-sm btn-outline-dark mr-1" id="printOrder">
+                <button th:class="'btn btn-sm btn-outline-dark mr-1 ' + ${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'Huy' ? 'd-none' : ''}" id="printOrder">
                     <i class="tio-print"></i> In hóa đơn
                 </button>
                 <button class="btn btn-sm btn-outline-dark mr-1" data-toggle="modal" data-target="#history">
@@ -133,7 +132,7 @@
                     <!-- Body -->
                     <div class="card-body">
                         <!-- Media -->
-                        <div class="media mb-1" th:each="hdct : ${hoaDonChiTietList}">
+                        <div class="media mb-1 product" th:each="hdct, productInfo : ${hoaDonChiTietList}" th:data-productId="${productInfo.index}">
                             <div class="avatar avatar-xl mr-3">
                                 <img class="img-fluid" src="/assets/cms/img/400x400/img26.jpg" alt="Image Description">
                             </div>
@@ -141,26 +140,26 @@
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-md-6 mb-3 mb-md-0">
-                                        <a class="h5 d-block" href="/cms/product-detail"
+                                        <a class="h5 d-block productName" th:href="@{|/cms/view-product?id=${hdct.chiTietSanPham.sanPham.id}|}"
                                            th:text="${hdct.chiTietSanPham.sanPham.ten}"></a>
                                         <div class="font-size-sm text-body">
                                             <span>Color:</span>
-                                            <span class="font-weight-bold"
+                                            <span class="font-weight-bold productColor"
                                                   th:text="${hdct.chiTietSanPham.mauSac.ten}"></span>
                                         </div>
                                         <div class="font-size-sm text-body">
                                             <span>Size:</span>
-                                            <span class="font-weight-bold"
+                                            <span class="font-weight-bold productSize"
                                                   th:text="${hdct.chiTietSanPham.kichCo.ten}"></span>
                                         </div>
                                     </div>
 
                                     <div class="col col-md-2 align-self-center">
-                                        <h6 th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue(), 0, 'COMMA')}"></h6>
+                                        <h6 class="productPrice" th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue(), 0, 'COMMA')}"></h6>
                                     </div>
 
                                     <div class="col col-md-2 align-self-center">
-                                        <h6 th:text="${hdct.getSoLuong()}"></h6>
+                                        <h6 class="productQuantity" th:text="${hdct.getSoLuong()}"></h6>
                                     </div>
 
                                     <div class="col col-md-2 align-self-center text-right">
@@ -172,8 +171,12 @@
                         <!-- End Media -->
                         <hr>
 
-                        <div class="row justify-content-md-end mb-3">
-                            <div class="col-md-8 col-lg-7">
+                        <div class="row mb-3">
+                            <div class="col-md-4 col-lg-5 justify-content-md-start">
+                                <h5>Đơn vị vận chuyển</h5>
+                                <img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png" alt="">
+                            </div>
+                            <div class="col-md-8 justify-content-md-end col-lg-7">
                                 <dl class="row text-sm-right">
                                     <dt class="col-sm-6">Tổng tiền:</dt>
                                     <dd class="col-sm-6"
@@ -237,6 +240,31 @@
                     </div>
                 </div>
                 <!-- End Modal History -->
+
+                <!-- Modal Cancel Invoice-->
+                <div class="modal fade" id="modalCancelReasons" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">Lý do hủy đơn hàng</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="inputReason">
+                                <textarea id="dataInputReason" style="border: 1px solid #e1e1e1;" rows="5" cols="44"></textarea>
+                                <span id="notiInputReason" class="text-danger d-none">Không được để trống!</span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                                <button id="huyFromDetail" type="button" class="btn btn-sm btn-danger d-none" data-dismiss="modal">
+                                    <i class="tio-delete-outlined"></i> Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal Cancel Invoice -->
             </div>
 
             <div class="col-lg-4">
@@ -256,7 +284,7 @@
                                 <img class="avatar-img" src="/assets/cms/img/160x160/img10.jpg" alt="Image Description">
                             </div>
                             <div class="media-body">
-                                <span class="text-body text-hover-primary" th:text="${hoaDon.khachHang.hoTen}"></span>
+                                <span id="customerName" class="text-body text-hover-primary" th:text="${hoaDon.khachHang.hoTen}"></span>
                             </div>
                             <div class="media-body text-right">
                                 <i class="tio-chevron-right text-body"></i>
@@ -286,7 +314,7 @@
                         </div>
 
                         <ul class="list-unstyled list-unstyled-py-2">
-                            <li th:text="${hoaDon.khachHang.sdt}">
+                            <li id="customerPhone" th:text="${hoaDon.khachHang.sdt}">
                                 <i class="tio-online mr-2"></i>
                             </li>
                         </ul>
@@ -298,10 +326,10 @@
                             <a class="link" href="javascript:;">Chỉnh sửa</a>
                         </div>
 
-                        <span class="d-block"
-                              th:utext="${hoaDon.khachHang.diaChiMacDinh.soNha} + '<br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.phuongXa} + '<br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.quanHuyen} + '<br>' +
+                        <span id="customerAddress" class="d-block"
+                              th:utext="${hoaDon.khachHang.diaChiMacDinh.soNha} + ', <br>' +
+                      ${hoaDon.khachHang.diaChiMacDinh.phuongXa} + ', <br>' +
+                      ${hoaDon.khachHang.diaChiMacDinh.quanHuyen} + ', <br>' +
                       ${hoaDon.khachHang.diaChiMacDinh.tinhThanhPho}">
                    <img class="avatar avatar-xss avatar-circle ml-1"
                         src="/assets/cms/vendor/flag-icon-css/flags/1x1/gb.svg" alt="Great Britain Flag">
@@ -998,22 +1026,27 @@
                             let type = 'success';
                             let status = response.trangThaiSauUpdate;
                             let typeOfColor = 'success';
+                            if(status != 'ChoXacNhan' && status != 'Huy') {
+                                $('printOrder').removeClass('d-none');
+                            } else {
+                                $('printOrder').addClass('d-none');
+                            }
                             if (status == 'Huy') {
                                 type = 'danger';
                                 typeOfColor = 'danger';
                                 $('#xacNhanFromDetail').hide();
-                                $('#huyFromDetail').hide();
+                                $('#getAttrToHuyFromDetail').hide();
                                 $('#printOrder').removeClass('d-none');
                             } else if (status == 'ChoXacNhan') {
                                 typeOfColor = 'danger';
                             } else if (status == 'ChoGiao') {
                                 typeOfColor = 'warning';
-                                $('#huyFromDetail').addClass('d-none');
+                                $('#getAttrToHuyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').removeClass('d-none');
                                 $('#printOrder').removeClass('d-none');
                             } else if (status == 'ThanhCong') {
                                 $('#xacNhanFromDetail').hide();
-                                $('#huyFromDetail').hide();
+                                $('#getAttrToHuyFromDetail').hide();
                                 $('#hoanTacFromDetail').hide();
                                 $('#printOrder').removeClass('d-none');
                             }
@@ -1031,42 +1064,40 @@
             });
         });
 
+        $('#dataInputReason').on('input', function () {
+            var dataInput = $(this).val().trim();
+            if(dataInput == '') {
+                $('#notiInputReason').removeClass('d-none');
+                $('#huyFromDetail').addClass('d-none');
+            } else {
+                $('#notiInputReason').addClass('d-none');
+                $('#huyFromDetail').removeClass('d-none');
+            }
+        })
+
         $('#huyFromDetail').on('click', function () {
-            var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
-            Swal.fire({
-                title: "Bạn chắc chứ?",
-                text: "Sau khi hủy sẽ không thể khôi phục lại!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                cancelButtonText: "Hủy",
-                confirmButtonText: "Xác Nhận"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/api/hoa-don/huy-detail",
-                        contentType: "application/json",
-                        data: JSON.stringify(idHoaDon),
-                        success: function (response) {
-                            ToastSuccess('Hủy đơn hàng thành công');
-                            let type = 'danger';
-                            let status = 'Hủy';
-                            let nguoiThucHien = response.nguoiThucHien;
-                            let thoiGian = response.thoiGian;
-                            let hanhDong = response.hanhDong;
-                            $('#xacNhanFromDetail').hide();
-                            $('#huyFromDetail').hide();
-                            printStatusHeader(type, status);
-                            printTimeline(status, type);
-                            printHistory(thoiGian, nguoiThucHien, hanhDong);
-                        },
-                        error: function (error) {
-                            ToastError('Xảy ra lỗi khi hủy đơn hàng, vui lòng thử lại!')
-                            console.error('Xảy ra lỗi: ', error);
-                        }
-                    });
+            var idHoaDon = String($('#getAttrToHuyFromDetail').closest("div").attr("id-hoa-don"));
+            $.ajax({
+                type: "POST",
+                url: "/api/hoa-don/huy-detail",
+                contentType: "application/json",
+                data: JSON.stringify(idHoaDon),
+                success: function (response) {
+                    ToastSuccess('Hủy đơn hàng thành công');
+                    let type = 'danger';
+                    let status = 'Hủy';
+                    let nguoiThucHien = response.nguoiThucHien;
+                    let thoiGian = response.thoiGian;
+                    let hanhDong = response.hanhDong;
+                    $('#xacNhanFromDetail').hide();
+                    $('#getAttrToHuyFromDetail').hide();
+                    printStatusHeader(type, status);
+                    printTimeline(status, type);
+                    printHistory(thoiGian, nguoiThucHien, hanhDong);
+                },
+                error: function (error) {
+                    ToastError('Xảy ra lỗi khi hủy đơn hàng, vui lòng thử lại!')
+                    console.error('Xảy ra lỗi: ', error);
                 }
             });
         })
@@ -1092,10 +1123,11 @@
                         data: JSON.stringify(idHoaDon),
                         success: function (response) {
                             ToastSuccess('Hoàn tác đơn hàng thành công');
-                            $('#huyFromDetail').removeClass('d-none');
+                            $('#getAttrToHuyFromDetail').removeClass('d-none');
                             let type = 'success';
                             let status = response.trangThaiSauUpdate;
                             $('#hoanTacFromDetail').hide();
+                            $('#printOrder').hide();
                             printStatusHeader(type, status);
                             printTimeline(status, type);
                             printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
@@ -1111,6 +1143,40 @@
         })
 
         $('#printOrder').on('click', function () {
+            var items = [];
+            var codAmount = 0;
+            var customerName = document.querySelector('#customerName').textContent;
+            var customerPhone = document.querySelector('#customerPhone').textContent;
+            var customerAddress = document.querySelector('#customerAddress').textContent;
+            console.log(customerName + " - " + customerPhone + " - " + customerAddress);
+            var productElements = document.querySelectorAll('.product');
+            productElements.forEach(function (productElement) {
+                var productName = productElement.querySelector('.productName').textContent;
+                var productColor = productElement.querySelector('.productColor').textContent;
+                var productSize = productElement.querySelector('.productSize').textContent;
+                var productPrice = productElement.querySelector('.productPrice').textContent.replace(/[,.]/g, '');
+                var productQuantity = productElement.querySelector('.productQuantity').textContent;
+
+                codAmount += (parseFloat(productPrice) * productQuantity);
+                productName = productName + ", " + productColor + ", size " + productSize;
+
+                var gItem = {
+                    name: productName,
+                    code: "Giày",
+                    quantity: parseInt(productQuantity),
+                    price: parseInt(productPrice),
+                    length: 12,
+                    width: 12,
+                    height: 12,
+                    weight: 1200,
+                    category: {
+                        level2: "Giày"
+                    }
+                }
+                items.push(gItem);
+            })
+            console.log(codAmount);
+
             $.ajax({
                 type: "POST",
                 url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
@@ -1121,36 +1187,23 @@
                 data: JSON.stringify(
                     {
                         shop_id: "190713",
-                        from_name: "Tấn Tảo Lù",
-                        from_phone: "0866755653",
-                        from_address: "Hà Nội",
+                        from_name: "LightBee Shop",
+                        from_phone: "0359966461",
+                        from_address: "Trường Cao Đẳng FPT Polytechnic",
                         from_ward_name: "Phường Xuân Phương",
                         from_district_name: "Nam Từ Liêm",
                         from_province_name: "Hà Nội",
-                        to_name: "Test",
-                        to_phone: "0359966461",
-                        to_address: "Nam Định",
+                        to_name: customerName,
+                        to_phone: customerPhone,
+                        to_address: customerAddress,
                         to_ward_code: "250318",
                         to_district_id: 3323,
-                        service_id: 0,
+                        service_id: 5,
                         service_type_id: 2,
                         payment_type_id: 2,
-                        required_note: "CHOTHUHANG",
-                        items: [
-                            {
-                                name: "Áo Polo",
-                                code: "Polo123",
-                                quantity: 1,
-                                price: 200000,
-                                length: 12,
-                                width: 12,
-                                height: 12,
-                                weight: 1200,
-                                category: {
-                                    level1: "Áo"
-                                }
-                            }
-                        ],
+                        cod_amount: parseInt(codAmount),
+                        required_note: "CHOXEMHANGKHONGTHU",
+                        items: items,
                         weight: 2000,
                         length: 1,
                         width: 19,

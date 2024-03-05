@@ -167,20 +167,6 @@
                                     </div>
                                     <!-- End Form Group -->
 
-                                    <!-- Form Group -->
-                                    <div class="form-group">
-                                        <label class="col col-form-label input-label">Trạng thái</label>
-                                        <!-- Select -->
-                                        <div class="col">
-                                            <select class="js-select2-custom custom-select form-control" th:field="*{trangThai}">
-                                                <option value="true">Hoạt động</option>
-                                                <option value="false">Đã nghỉ</option>
-                                            </select>
-                                            <!-- End Select -->
-                                        </div>
-                                    </div>
-                                    <!-- End Form Group -->
-
                                     <div class="form-group">
                                         <label for="cccd" class="col col-form-label input-label">CCCD</label>
 
@@ -251,7 +237,7 @@
 
                                         <div class="col">
                                             <input type="date" class="form-control" name="ngaySinh"
-                                                   id="ngaySinh"
+                                                   id="ngaySinh" pattern="\d{2}-\d{2}-\d{4}\"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
                                         </div>
                                         <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
@@ -777,7 +763,6 @@
 <!-- JS Plugins Init. -->
 <script src="/assets/cms/js/khachHangJS/upload-img.js" type="module"></script>
 <script src="/assets/cms/js/khachHangJS/nhanVien.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

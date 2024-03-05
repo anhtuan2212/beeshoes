@@ -189,7 +189,7 @@ public class HoaDonRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Token", "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551");
         HttpEntity entity = new HttpEntity<>(headers);
-        String apiUrl = "https://dev-online-gateway.ghn.vn/a5/public-api/print80x80?token=" + token;
+        String apiUrl = "https://dev-online-gateway.ghn.vn/a5/public-api/printA5?token=" + token;
 
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);

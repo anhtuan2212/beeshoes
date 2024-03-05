@@ -25,13 +25,5 @@ public class GioHangChiTiet {
     ChiTietSanPham chiTietSanPham;
 
     Integer soLuong;
-
-    @OneToOne
-    @JoinColumn(name = "nguoi_tao")
-    User nguoiTao;
-
-    @OneToOne
-    @JoinColumn(name = "nguoi_sua")
-    User nguoiSua;
     boolean trangThai;
 }

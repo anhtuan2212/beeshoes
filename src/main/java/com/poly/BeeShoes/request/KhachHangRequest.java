@@ -14,11 +14,10 @@ public class KhachHangRequest {
     private String maKhachHang;
     private String hoTen;
     private String email;
-    private String avatar;
     private boolean gioiTinh;
     private Date ngaySinh;
     private String sdt;
-    private boolean trangThai;
+    private boolean trangThai=true;
     Long idDiaChi;
     String soNha;
     String phuongXa;

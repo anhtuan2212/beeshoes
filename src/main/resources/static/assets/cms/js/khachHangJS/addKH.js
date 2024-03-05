@@ -31,80 +31,107 @@ function isEmpty(str) {
     return (!str || str.length === 0);
 }
 
+function isValidPhoneNumber(phoneNumber) {
+    let phone = /^(0\d{9,10})$/;
+    // Kiểm tra xem số điện thoại có bắt đầu bằng số 0 và có đúng 10 số không
+    return phone.test(phoneNumber);
+}
+
 function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
-function formvalidate(e) {
-    var result = true;
+
+function formvalidate() {
     var hoTen = $('#hoTen').val();
     var email = $('#email').val();
-    var sdt = document.getElementById("sdt").value;
-    var ngaySinh = document.getElementById("ngaySinh").value;
-    var soNha = document.getElementById("soNha").value;
-    var phuongXa = document.getElementById("phuongXa").value;
-    var quanHuyen = document.getElementById("quanHuyen").value;
-    var tinhTP = document.getElementById("tinhTP").value;
+    var sdt = $('#sdt').val();
+    var ngaySinh = $('#ngaySinh').val();
+    var soNha = $('#soNha').val();
+    var phuongXa = $('#phuongXa').val();
+    var quanHuyen = $('#quanHuyen').val();
+    var tinhTP = $('#tinhTP').val();
+
     if (isEmpty(hoTen)) {
-        document.getElementById("hoTen_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("hoTen_emty").style.display = "none";
+        ToastError("Họ tên không được để trống.");
+        return false;
     }
+
     if (isEmpty(email)) {
-        document.getElementById("email_emty").innerText = "Vui lòng nhập Email";
-        result = false;
+        ToastError("Email không được để trống.");
+        return false;
     } else if (!isValidEmail(email)) {
-        document.getElementById("email_emty").innerText = "Email không đúng định dạng";
-        result = false;
-    }else {
-        document.getElementById("email_emty").style.display = "none";
+        ToastError("Email không đúng định dạng.");
+        return false;
     }
-    if (sdt.length == 0) {
-        document.getElementById("sdt_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("sdt_emty").style.display = "none";
+
+    if (isEmpty(sdt)) {
+        ToastError("Số điện thoại không được để trống.");
+        return false;
+    } else if (!isValidPhoneNumber(sdt)) {
+        ToastError("Sdt không đúng định dạng(0359xxxxxx)");
+        return false;
     }
-    if (isEmpty(ngaySinh)) {
-        document.getElementById("ngaySinh_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("ngaySinh_emty").style.display = "none";
+
+    // Kiểm tra ngày sinh phải trước ngày hiện tại
+    var ngaySinhDate = new Date(ngaySinh);
+    var ngayHienTai = new Date();
+    if (ngaySinhDate >= ngayHienTai) {
+        ToastError("Ngày sinh phải trước ngày hiện tại.");
+        return false;
+    } else if (isEmpty(ngaySinh)) {
+        ToastError("Ngày sinh không được để trống.");
+        return false;
     }
-    if (soNha.length == 0) {
-        document.getElementById("soNha_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("soNha_emty").style.display = "none";
+
+    if (isEmpty(soNha)) {
+        ToastError("Số nhà không được để trống.");
+        return false;
     }
-    if (quanHuyen.length == "") {
-        document.getElementById("quanHuyen_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("quanHuyen_emty").style.display = "none";
+
+    if (isEmpty(quanHuyen)) {
+        ToastError("Quận/huyện không được để trống.");
+        return false;
     }
-    if (phuongXa.length == "") {
-        document.getElementById("phuongXa_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("phuongXa_emty").style.display = "none";
+
+    if (isEmpty(phuongXa)) {
+        ToastError("Phường/xã không được để trống.");
+        return false;
     }
-    if (tinhTP.length == "") {
-        document.getElementById("tinhTP_emty").style.display = "block";
-        result = false;
-    } else {
-        document.getElementById("tinhTP_emty").style.display = "none";
+
+    if (isEmpty(tinhTP)) {
+        ToastError("Tỉnh/thành phố không được để trống.");
+        return false;
     }
-    return result;
+    return true;
     ToastSuccess("Lưu hành công")
-    if (result==false){
-        ToastError("Thất bại")
-        e.preventDefault();
-
-    }
-
 }
+
+//check trùng sdt,email
+function checkDuplicateKH() {
+    return new Promise(function (resolve, reject) {
+        let email = $('#email').val();
+        let phone = $('#sdt').val();
+        $.ajax({
+            url: '/cms/khach-hang/check-duplicate',
+            type: 'POST',
+            data: {email: email, phoneNumber: phone},
+            success: function (response) {
+                if (response.email) {
+                    ToastError('Email đã tồn tại.');
+                }
+                if (response.phoneNumber) {
+                    ToastError('Số điện thoại đã tồn tại.');
+                }
+                resolve(response);
+            },
+            error: function (xhr, status, error) {
+                reject(error);
+            }
+        });
+    });
+}
+
 
 //api địa chỉ
 const provice_url = "https://api.npoint.io/ac646cb54b295b9555be";
@@ -115,6 +142,26 @@ var province_list = [];
 var district_list = [];
 var ward_list = [];
 $(document).on('ready', function () {
+    $('#submitBtn').on('click', async function () { // Sử dụng async function để sử dụng await
+        let check = true;
+        if (formvalidate()) {
+            check = await checkDuplicateKH();
+        } else {
+            return;
+        }
+        if (check.email) {
+            console.log(check)
+            return;
+        }
+        if (check.sdt) {
+            console.log(check)
+            return;
+        }
+        let form = $('#btn-submit-khach-hang');
+        form.submit();
+    })
+
+
     // Hàm để gọi API và xử lý dữ liệu trả về
     function fetchData(url, successCallback) {
         $.ajax({

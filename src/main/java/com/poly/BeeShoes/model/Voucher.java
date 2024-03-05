@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Setter
 @Getter
-@Table(name = "voucher")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

@@ -274,6 +274,8 @@ public class Product {
                 chiTietSanPhamApiRquest ctspRq = new chiTietSanPhamApiRquest();
                 ctspRq.setMaSanPham(ctsp.getMaSanPham());
                 ctspRq.setAnh(ctsp.getAnh().getUrl());
+                ctspRq.setTen(sp.getTen());
+                ctspRq.setTenMau(ctsp.getMauSac().getTen());
                 ctspRq.setId(ctsp.getId());
                 ctspRq.setKichCo(ctsp.getKichCo().getTen());
                 ctspRq.setMauSac(ctsp.getMauSac().getMaMauSac());

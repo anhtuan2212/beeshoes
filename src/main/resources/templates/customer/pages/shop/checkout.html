@@ -16,11 +16,12 @@
     <link rel="stylesheet" href="/assets/customer/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">
+<!--    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">-->
     <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/checkout.css" type="text/css">
 </head>
 
 <body>
@@ -60,7 +61,7 @@
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
-    <div th:replace="/customer/pages/_header.html"></div>
+    <div th:replace="~{/customer/pages/_header.html}"></div>
     <!-- Header Section End -->
 
     <!-- Breadcrumb Section Begin -->
@@ -82,139 +83,147 @@
     </section>
     <!-- Breadcrumb Section End -->
 
+    <div th:if="${paymentError != null}" class="container-fluid d-flex justify-content-center align-items-center">
+        <div class="col-7 text-center pt-5">
+            <span class="text-danger h4" th:text="${paymentError}"></span>
+        </div>
+    </div>
+
     <!-- Checkout Section Begin -->
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="#">
+                <div>
                     <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Có phiếu giảm giá? <a href="#">Nhấp chuột
-                                đây</a> để nhập mã số của bạn</h6>
-                            <h6 class="checkout__title">Chi tiết thanh toán</h6>
+
+                        <div class="col-lg-7 col-md-6">
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
+                            here</a> to enter your code</h6>
+                            <h6 class="checkout__title">Thông tin người nhận</h6>
+
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="checkout__input">
-                                        <p>Tên<span>*</span></p>
-                                        <input type="text">
+
+                                        <p>Tên người nhận<span>*</span></p>
+                                        <input type="text" id="customerName" placeholder="Ngô Trung Tuyến">
+
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Họ<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Quốc gia<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Địa chỉ<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add">
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Thị trấn/Thành phố<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Quốc gia liên bang<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input">
-                                <p>Mã bưu / Zip<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Số điện thoại<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input type="text">
+                                        <input type="text" id="customerEmail" placeholder="example@gmail.com">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="checkout__input">
+                                        <p>Số điện thoại<span>*</span></p>
+                                        <input type="text" id="customerPhone" placeholder="035xxxxxxx">
                                     </div>
                                 </div>
                             </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc">
-                                    Tạo một tài khoản?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <p>Tạo một tài khoản bằng cách nhập thông tin dưới đây. Nếu bạn là khách hàng cũ
-                                    Xin hãy đăng nhập ở phía trên cùng của trang</p>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input form-group">
+                                        <p>Tỉnh/Thành Phố<span>*</span></p>
+                                        <select class="form-control" id="tinhThanhPho">
+                                            <option value="" selected>Tỉnh/Thành Phố</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input form-group">
+                                        <p>Quận/Huyện<span>*</span></p>
+                                        <select class="form-control" id="quanHuyen">
+                                            <option>Quận/Huyện</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input form-group">
+                                        <p>Phường/Xã<span>*</span></p>
+                                        <select class="form-control" id="phuongXa">
+                                            <option>Phường/Xã</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Số Nhà<span>*</span></p>
+                                        <input type="text" id="customerHouseNumber">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="checkout__input">
-                                <p>Mật khẩu tài khoản<span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="diff-acc">
-                                    Lưu ý về đơn đặt hàng của bạn, ví dụ: thông báo đặc biệt về giao hàng
-                                    <input type="checkbox" id="diff-acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input">
-                                <p>Ghi chú đặt hàng<span>*</span></p>
-                                <input type="text"
-                                placeholder="Ghi chú về đơn đặt hàng của bạn, ví dụ: ghi chú đặc biệt để giao hàng.">
+                      <div class="checkout__input">
+                                <p>Order notes<span>*</span></p>
+                                <input id="orderNotes" type="text"
+                                placeholder="Notes about your order, e.g. special notes for delivery.">
+
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-5 col-md-6">
                             <div class="checkout__order">
+
                                 <h4 class="order__title">Đơn hàng của bạn</h4>
                                 <div class="checkout__order__products">Sản phẩm <span>Tổng cộng</span></div>
+
                                 <ul class="checkout__total__products">
                                     <li>01. Vanilla salted caramel <span>$ 300.0</span></li>
                                     <li>02. German chocolate <span>$ 170.0</span></li>
                                     <li>03. Sweet autumn <span>$ 170.0</span></li>
                                     <li>04. Cluten free mini dozen <span>$ 110.0</span></li>
                                 </ul>
+                                <ul class="checkout__delivery__method">
+                                    <li>Phương thức vận chuyển <span><img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
+                                    <li>
+                                        <input type="radio" id="deliveryNhanh" name="deliveryMethod" checked>
+                                        <label for="deliveryNhanh" class="deliveryMethodLabel">Nhanh</label>
+                                        <span>Free</span>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="deliveryThuong" name="deliveryMethod">
+                                        <label for="deliveryThuong" class="deliveryMethodLabel">Thường</label>
+                                        <span>Free</span>
+                                    </li>
+                                </ul>
                                 <ul class="checkout__total__all">
                                     <li>Subtotal <span>$750.99</span></li>
-                                    <li>Total <span>$750.99</span></li>
+                                    <li>Shipping Fee <span id="shippingFee">Free</span></li>
+                                    <li>Total <span id="totalAmount">5.555.555</span></li>
                                 </ul>
-                                <div class="checkout__input__checkbox">
-                                    <label for="acc-or">
-                                        Tạo một tài khoản?
-                                        <input type="checkbox" id="acc-or">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <p>Lưu ý về đơn đặt hàng của bạn, ví dụ: thông báo đặc biệt về giao hàng</p>
+
+                                <p>Hình thức thanh toán</p>
+
                                 <div class="checkout__input__checkbox">
                                     <label for="payment">
-                                        Check Payment
+                                        Thanh toán khi nhận hàng
                                         <input type="checkbox" id="payment">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
                                     <label for="paypal">
-                                        Paypal
+                                        Thanh toán online
                                         <input type="checkbox" id="paypal">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <button type="submit" class="site-btn">ĐẶT HÀNG</button>
+
+                                <button id="placeOrder" class="site-btn">Đặt Hàng</button>
+
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </section>
     <!-- Checkout Section End -->
 
     <!-- Footer Section Begin -->
-    <div th:replace="/customer/pages/_footer.html"></div>
+    <div th:replace="~{/customer/pages/_footer.html}"></div>
     <!-- Footer Section End -->
 
 
@@ -232,7 +241,7 @@
     <!-- Js Plugins -->
     <script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
     <script src="/assets/customer/js/bootstrap.min.js"></script>
-    <script src="/assets/customer/js/jquery.nice-select.min.js"></script>
+<!--    <script src="/assets/customer/js/jquery.nice-select.min.js"></script>-->
     <script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
     <script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
     <script src="/assets/customer/js/jquery.countdown.min.js"></script>
@@ -240,9 +249,7 @@
     <script src="/assets/customer/js/mixitup.min.js"></script>
     <script src="/assets/customer/js/owl.carousel.min.js"></script>
     <script src="/assets/customer/js/main.js"></script>
-    <script>
-        setTabsHeader('shop');
-    </script>
+    <script src="/assets/customer/js/checkout/checkout.js"></script>
 </body>
 
 </html>

@@ -99,24 +99,24 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
     }
 
-    @Override
-    public Map<String, Map<String, Long>> getKichCoCountByMauSac(Long sanPhamId) {
-        SanPham sanPham = getById(sanPhamId);
-        Map<String, Map<String, Long>> result = new HashMap<>();
-
-        if (sanPham != null && sanPham.getChiTietSanPham() != null) {
-            for (ChiTietSanPham chiTietSanPham : sanPham.getChiTietSanPham()) {
-                if (chiTietSanPham.getMauSac() != null && chiTietSanPham.getKichCo() != null) {
-                    String mauSac = chiTietSanPham.getMauSac().getMaMauSac();
-                    String kichCo = chiTietSanPham.getKichCo().getTen();
-                    result.computeIfAbsent(mauSac, k -> new HashMap<>());
-                    result.get(mauSac).merge(kichCo, 1L, Long::sum);
-                }
-            }
-        }
-
-        return result;
-    }
+//    @Override
+//    public Map<String, Map<String, Long>> getKichCoCountByMauSac(Long sanPhamId) {
+//        SanPham sanPham = getById(sanPhamId);
+//        Map<String, Map<String, Long>> result = new HashMap<>();
+//
+//        if (sanPham != null && sanPham.getChiTietSanPham() != null) {
+//            for (ChiTietSanPham chiTietSanPham : sanPham.getChiTietSanPham()) {
+//                if (chiTietSanPham.getMauSac() != null && chiTietSanPham.getKichCo() != null) {
+//                    String mauSac = chiTietSanPham.getMauSac().getMaMauSac();
+//                    String kichCo = chiTietSanPham.getKichCo().getTen();
+//                    result.computeIfAbsent(mauSac, k -> new HashMap<>());
+//                    result.get(mauSac).merge(kichCo, 1L, Long::sum);
+//                }
+//            }
+//        }
+//
+//        return result;
+//    }
 
     @Override
     public Integer getCount() {

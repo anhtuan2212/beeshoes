@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Title -->
     <title>LightBee | Thêm khách hàng</title>
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="favicon.ico">
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="/assets/cms/css/vendor.min.css">
     <link rel="stylesheet" href="/assets/cms/vendor/icon-set/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="/assets/cms/css/theme.min.css?v=1.0">
 </head>
@@ -33,7 +32,8 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
-        <form th:action="@{/cms/khach-hang/add}" method="post" th:object="${khachHang}" onsubmit="return formvalidate(event)"
+        <form th:action="@{/cms/khach-hang/add}" method="post" th:object="${khachHang}"
+              id="btn-submit-khach-hang"
               class="js-step-form py-md-1"
               data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
@@ -41,149 +41,115 @@
                 "endSelector": "#addUserFinishBtn",
                 "isValidate": false
               }'>
-            <div class="row justify-content-lg-center">
-                <div class="col-lg-8">
-                    <!-- Step -->
-                    <ul id="addUserStepFormProgress"
-                        class="js-step-progress step step-sm step-icon-sm step step-inline step-item-between mb-3 mb-md-5">
-                        <li class="step-item">
-                            <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
+            <div class="col">
+                <!-- Step -->
+                <ul id="addUserStepFormProgress"
+                    class="js-step-progress step step-sm step-icon-sm step step-inline step-item-between mb-3 mb-md-5">
+                    <li class="step-item">
+                        <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
                       "targetSelector": "#addUserStepProfile"
                     }'>
-                                <span class="step-icon step-icon-soft-dark">1</span>
-                                <div class="step-content">
-                                    <span class="step-title">Thông tin</span>
-                                </div>
-                            </a>
-                        </li>
+                            <div class="step-content">
+                                <span class="step-title">Thông tin</span>
+                            </div>
+                        </a>
+                    </li>
 
-                        <li class="step-item">
-                            <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
-                      "targetSelector": "#addUserStepBillingAddress"
-                    }'>
-                                <span class="step-icon step-icon-soft-dark">2</span>
-                                <div class="step-content">
-                                    <span class="step-title">Địa chỉ</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- End Step -->
+                    <!--                        <li class="step-item">-->
+                    <!--                            <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{-->
+                    <!--                      "targetSelector": "#addUserStepBillingAddress"-->
+                    <!--                    }'>-->
+                    <!--                                <span class="step-icon step-icon-soft-dark">2</span>-->
+                    <!--                                <div class="step-content">-->
+                    <!--                                    <span class="step-title">Địa chỉ</span>-->
+                    <!--                                </div>-->
+                    <!--                            </a>-->
+                    <!--                        </li>-->
+                </ul>
+                <!-- End Step -->
 
-                    <!-- Content Step Form -->
-                    <div id="addUserStepFormContent">
-                        <!-- Card -->
-                        <div id="addUserStepProfile" class="card card-lg active">
-                            <!-- Body -->
-                            <div class="card-body">
+                <!-- Content Step Form -->
+                <div id="addUserStepFormContent">
+                    <!-- Card -->
+                    <div id="addUserStepProfile" class="card card-lg active">
+                        <!-- Body -->
+                        <div class="card-body row">
+                            <div class="col-sm-6">
                                 <!-- Form Group -->
-                                                <div class="row form-group">
-                                                  <label class="col-sm-3 col-form-label input-label">Avatar</label>
-
-                                                  <div class="col-sm-9">
-                                                    <div class="d-flex align-items-center">
-                                                      <!-- Avatar -->
-                                                      <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
-                                                             for="avatarUploader">
-                                                        <img id="avatarImg" class="avatar-img"
-                                                             src="/assets/cms/img/160x160/img1.jpg" alt="Image Description">
-
-                                                        <input type="file" class="js-file-attach avatar-uploader-input"
-                                                               id="avatarUploader" data-hs-file-attach-options='{
-                                                                      "textTarget": "#avatarImg",
-                                                                      "mode": "image",
-                                                                      "targetAttr": "src",
-                                                                      "resetTarget": ".js-file-attach-reset-img",
-                                                                      "resetImg": "/assets/img/160x160/img1.jpg",
-                                                                      "allowTypes": [".png", ".jpeg", ".jpg"]
-                                                                   }'>
-
-                                                          <input type="text" id="urlImgAvatar" name="avatar" th:field="*{avatar}" value="/assets/cms/img/160x160/img1.jpg" hidden>
-
-                                                        <span class="avatar-uploader-trigger">
-                                                              <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
-                                                            </span>
-                                                      </label>
-                                                      <!-- End Avatar -->
-
-                                                      <button type="button" class="js-file-attach-reset-img btn btn-white">
-                                                        Delete
-                                                      </button>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="hoTen" class="col-sm-3 col-form-label input-label">Họ tên
+                                <div class="form-group">
+                                    <label for="hoTen" class="col- col-form-label input-label">Họ tên
                                         <i
                                                 class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="Displayed on public forums, such as Front."></i></label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <div class="input-group input-group-sm-down-break">
                                             <input type="text" class="form-control" name="hoTen"
                                                    id="hoTen"
-                                                   placeholder="Vui lòng nhập Họ tên" aria-label="Nguyễn" th:field="*{hoTen}">
+                                                   placeholder="Vui lòng nhập Họ tên" aria-label="Nguyễn"
+                                                   th:field="*{hoTen}">
                                         </div>
                                         <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập tên</i>
-                                        <i th:if="${errorHoTen!=null}" style="color: red;" th:text="${errorHoTen}"></i>
+                                        <i th:if="${errorHoTen!=null}" style="color: red;"
+                                           th:text="${errorHoTen}"></i>
                                     </div>
                                 </div>
                                 <!-- End Form Group -->
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="sdt" class="col-sm-3 col-form-label input-label">Số điện
+                                <div class="form-group">
+                                    <label for="sdt" class="col col-form-label input-label">Số điện
                                         thoại</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <div class="input-group input-group-sm-down-break align-items-center">
                                             <input type="text" class="js-masked-input form-control" name="phone"
                                                    id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx"
-                                                   data-hs-mask-options='{"template": "0000000000"}' th:field="*{sdt}">
+                                                   data-hs-mask-options='{"template": "0000000000"}'
+                                                   th:field="*{sdt}">
                                         </div>
-                                        <i id="sdt_emty" style="color: red;display: none">Vui lòng nhập vào sdt</i>
+                                        <i id="sdt_emty" style="color: red;"></i>
                                         <i th:if="${errorSdt!=null}" style="color: red;" th:text="${errorSdt}"></i>
                                         <i th:if="${trungSdt!=null}" style="color: red;" th:text="${trungSdt}"></i>
                                     </div>
                                 </div>
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="email" class="col-sm-3 col-form-label input-label">Email</label>
+                                <div class="form-group">
+                                    <label for="email" class="col col-form-label input-label">Email</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <div class="input-group input-group-sm-down-break align-items-center">
                                             <input type="email" class="js-masked-input form-control" name="email"
                                                    id="email" placeholder="Vui lòng nhập Email" th:field="*{email}">
                                         </div>
                                         <i id="email_emty" style="color: red;"></i>
-                                        <i th:if="${errorEmail!=null}" style="color: red;" th:text="${errorEmail}"></i>
-                                        <i th:if="${trungEmail!=null}" style="color: red;" th:text="${trungEmail}"></i>
+                                        <i th:if="${errorEmail!=null}" style="color: red;"
+                                           th:text="${errorEmail}"></i>
+                                        <i th:if="${trungEmail!=null}" style="color: red;"
+                                           th:text="${trungEmail}"></i>
                                     </div>
                                 </div>
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="ngaySinh" class="col-sm-3 col-form-label input-label">Ngày
+                                <div class="form-group">
+                                    <label for="ngaySinh" class="col col-form-label input-label">Ngày
                                         sinh</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <input type="date" class="form-control" name="ngaySinh"
-                                               id="ngaySinh"
+                                               id="ngaySinh" pattern="\d{2}-\d{2}-\d{4}\"
                                                aria-label="Htmlstream" th:field="*{ngaySinh}">
-                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng chọn ngày sinh</i>
+                                        <i id="ngaySinh_emty" style="color: red;"></i>
                                     </div>
                                 </div>
                                 <!-- End Form Group -->
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label class="col-sm-3 col-form-label input-label">Giới tính</label>
-                                    <div class="col-sm-9">
+                                <div class="form-group">
+                                    <label class="col- col-form-label input-label">Giới tính</label>
+                                    <div class="col">
                                         <div class="input-group input-group-sm-down-break">
                                             <!-- Custom Radio -->
                                             <div class="form-control">
@@ -214,43 +180,30 @@
                                     </div>
                                 </div>
                                 <!-- End Form Group -->
-
-                                <!-- Form Group -->
-                                <div class="row form-group mt-5">
-                                    <label class="col-sm-3 col-form-label input-label">Trạng thái</label>
-                                    <!-- Select -->
-                                    <div class="col-sm-9">
-                                        <select class="js-select2-custom custom-select form-control" th:field="*{trangThai}">
-                                            <option value="true">Hoạt động</option>
-                                            <option value="false">Đã nghỉ</option>
-                                        </select>
-                                        <!-- End Select -->
-                                    </div>
-                                </div>
-                                <!-- End Form Group -->
-
                             </div>
                             <!-- End Body -->
 
                             <!-- Footer -->
-                            <div class="card-footer d-flex justify-content-end align-items-center">
-                                <button class="btn btn-primary" data-hs-step-form-next-options='{
-                              "targetSelector": "#addUserStepBillingAddress"
-                            }'>
-                                    Next <i class="tio-chevron-right"></i>
-                                </button>
-                            </div>
+                            <!--                            <div class="card-footer d-flex justify-content-end align-items-center">-->
+                            <!--                                <button class="btn btn-primary" data-hs-step-form-next-options='{-->
+                            <!--                              "targetSelector": "#addUserStepBillingAddress"-->
+                            <!--                            }'>-->
+                            <!--                                    Next <i class="tio-chevron-right"></i>-->
+                            <!--                                </button>-->
+                            <!--                            </div>-->
                             <!-- End Footer -->
-                        </div>
-                        <!-- End Card -->
-                        <div id="addUserStepBillingAddress" class="card card-lg" style="display: none;">
-                            <!-- Body -->
-                            <div class="card-body">
-                                <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="soNha" class="col-sm-3 col-form-label input-label">Số nhà</label>
+                            <!--                        </div>-->
+                            <!--                        &lt;!&ndash; End Card &ndash;&gt;-->
+                            <!--                        <div id="addUserStepBillingAddress" class="card card-lg" style="display: none;">-->
+                            <!--                            &lt;!&ndash; Body &ndash;&gt;-->
+                            <!--                            <div class="card-body">-->
 
-                                    <div class="col-sm-9">
+                            <div class="col-sm-6">
+                                <!-- Form Group -->
+                                <div class="form-group">
+                                    <label for="soNha" class="col col-form-label input-label">Số nhà</label>
+
+                                    <div class="col">
                                         <input type="text" class="form-control" name="soNha"
                                                id="soNha" placeholder="Your address"
                                                aria-label="Your address" th:field="*{soNha}">
@@ -261,28 +214,31 @@
                                 <!-- End Form Group -->
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
-                                    <label for="tinhTP" class="col-sm-3 col-form-label input-label">Tỉnh/Thành phố</label>
+                                <div class="form-group">
+                                    <label for="tinhTP" class="col col-form-label input-label">Tỉnh/Thành
+                                        phố</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <select id="tinhTP" class="js-select2-custom custom-select"
                                                 data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
                                                                                 "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'
-                                        th:field="*{tinhThanhPho}">
+                                                th:field="*{tinhThanhPho}">
                                             <option value="">Chọn Tỉnh Thành</option>
                                         </select>
                                     </div>
-                                    <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
-                                    <i th:if="${errorTinhTP!=null}" style="color: red;" th:text="${errorTinhTP}"></i>
+                                    <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh
+                                        thành phố</i>
+                                    <i th:if="${errorTinhTP!=null}" style="color: red;"
+                                       th:text="${errorTinhTP}"></i>
                                 </div>
                                 <!-- End Form Group -->
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
+                                <div class="form-group">
                                     <label for="quanHuyen"
-                                           class="col-sm-3 col-form-label input-label">Quận/Huyện</label>
+                                           class="col col-form-label input-label">Quận/Huyện</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <select id="quanHuyen" class="js-select2-custom custom-select"
                                                 data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
                                                                                 "searchInputPlaceholder": "Tìm Quận Huyện..."}'
@@ -290,17 +246,19 @@
                                             <option value="">Chọn Quận Huyện</option>
                                         </select>
                                     </div>
-                                    <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
-                                    <i th:if="${errorQuanHuyen!=null}" style="color: red;" th:text="${errorQuanHuyen}"></i>
+                                    <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận
+                                        huyện</i>
+                                    <i th:if="${errorQuanHuyen!=null}" style="color: red;"
+                                       th:text="${errorQuanHuyen}"></i>
                                 </div>
                                 <!-- End Form Group -->
 
                                 <!-- Form Group -->
-                                <div class="row form-group">
+                                <div class="form-group">
                                     <label for="phuongXa"
-                                           class="col-sm-3 col-form-label input-label">Phường/Xã</label>
+                                           class="col col-form-label input-label">Phường/Xã</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col">
                                         <select id="phuongXa" class="js-select2-custom custom-select"
                                                 data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
                                                                                "searchInputPlaceholder": "Tìm Phường Xã..."}'
@@ -308,33 +266,36 @@
                                             <option value="">Chọn Phường Xã</option>
                                         </select>
                                     </div>
-                                    <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
-                                    <i th:if="${errorPhuongXa!=null}" style="color: red;" th:text="${errorPhuongXa}"></i>
+                                    <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường
+                                        xã</i>
+                                    <i th:if="${errorPhuongXa!=null}" style="color: red;"
+                                       th:text="${errorPhuongXa}"></i>
                                 </div>
                                 <!-- End Form Group -->
                             </div>
                             <!-- End Body -->
 
                             <!-- Footer -->
-                            <div class="card-footer d-flex align-items-center">
-                                <button type="button" class="btn btn-ghost-secondary" data-hs-step-form-prev-options='{
-                         "targetSelector": "#addUserStepProfile"
-                       }'>
-                                    <i class="tio-chevron-left"></i> Previous step
-                                </button>
-                            </div>
+                            <!--                            <div class="card-footer d-flex align-items-center">-->
+                            <!--                                <button type="button" class="btn btn-ghost-secondary" data-hs-step-form-prev-options='{-->
+                            <!--                         "targetSelector": "#addUserStepProfile"-->
+                            <!--                       }'>-->
+                            <!--                                    <i class="tio-chevron-left"></i> Previous step-->
+                            <!--                                </button>-->
+                            <!--                            </div>-->
                             <!-- End Footer -->
-                        </div>
-                        <!-- End Content Step Form -->
+                            <!-- End Content Step Form -->
 
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="card-footer d-sm-flex align-items-sm-center">
+                                <button id="submitBtn" type="button" class="btn btn-primary">Thêm khách hàng</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- End Row -->
-            <div class="ml-auto">
-                <button type="submit" class="btn btn-primary">
-                    <i class="tio-user-add mr-1"></i>Thêm khách hàng</button>
-            </div>
         </form>
         <!-- End Step Form -->
     </div>
@@ -750,6 +711,7 @@
 </div>
 <!-- End Keyboard Shortcuts -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
+<script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <!-- JS Implementing Plugins -->
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->

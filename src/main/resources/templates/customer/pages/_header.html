@@ -1,11 +1,12 @@
 <link rel="stylesheet" href="/assets/cms/css/sweetalert2.min.css">
 <header class="header">
-    <div class="container" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <div class="container" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-<!--                    <a href="/" ><h1 class="logo">LightBee</h1></a>-->
+                <a href="/" ><h1 class="logo">LightBee</h1></a>-->
                     <a href="/"><img src="/assets/customer/img/Logo 2.png" alt="" style="width: 74%"></a>
+
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 p-0">
@@ -47,20 +48,26 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
+                            <a href="/shopping-cart"><img src="/assets/customer/img/icon/cart.png" alt=""> <span id="quantity__item_carts">0</span></a>
                             <ul class="cart-dropdown" id="cart-dropdown-items">
                                 <li class="list_product_items" id="list_product_items_cart">
-<!--                                    <div class="cart_product_item row">-->
-<!--                                        <div class="thumb col-sm-3">-->
-<!--                                            <img src="/assets/customer/img/product/product-1.jpg" alt="product img">-->
-<!--                                        </div>-->
-<!--                                        <div class="cart_content col-sm-9 ">-->
-<!--                                            <h5 class="title col-sm-12 w_100">Tên Sản Phẩm Tên Sản Phẩm </h5>-->
-<!--                                            <h6 class="product_quantity col-sm-12 w_100 mt-2" >x1</h6>-->
-<!--                                            <h6 class="product_price col-sm-12 w_100 mt-2">100,000đ</h6>-->
-<!--                                            <a class="cart_trash"><i class="fa fa-trash"></i></a>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <!--                                    <div class="cart_product_item row">-->
+                                    <!--                                        <div class="thumb col-sm-3">-->
+                                    <!--                                            <img src="/assets/customer/img/product/product-1.jpg" alt="product img">-->
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="cart_content col-sm-9 ">-->
+                                    <!--                                            <h5 class="title col-11 w_100">Tên Sản Phẩm Tên Sản Phẩm </h5>-->
+                                    <!--                                            <div class="product_quantity col-12 w_100 mt-1 " >-->
+                                    <!--                                                <label class="mb-0">SL:1</label>-->
+                                    <!--                                            </div>-->
+                                    <!--                                            <div class="col-12 height-mid">-->
+                                    <!--                                                <label class="small">MS:Màu Đen</label>-->
+                                    <!--                                                <label class="small">KT:34</label>-->
+                                    <!--                                            </div>-->
+                                    <!--                                            <h6 class="product_price col-sm-12 w_100">100,000đ</h6>-->
+                                    <!--                                            <a class="cart_trash"><i class="fa fa-trash"></i></a>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
                                 </li>
                                 <li class="cart-total mt-3  w_100 ">
                                     <h5>Tổng Tiền : <span id="total-money-cart">0đ</span></h5>
@@ -76,5 +83,6 @@
             </div>
         </div>
         <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        <input id="authentication_username" type="text" hidden="hidden" sec:authorize="isAuthenticated()" th:value="${#authentication.principal.username}" />
     </div>
 </header>

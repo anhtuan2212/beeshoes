@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -153,6 +155,7 @@ public class NhanVienController {
     @PostMapping("/update/{id}")
     public String updateNV(@PathVariable Long id, Model model,
                            @ModelAttribute("nhanVien") NhanVienRequest nhanVien){
+        System.out.println(nhanVien.toString());
         NhanVien updatedNhanVien = nhanVienService.detail(id);
         User user = userService.findByNhanVien_Id(nhanVien.getId());
         updatedNhanVien.setId(nhanVien.getId());
@@ -177,16 +180,25 @@ public class NhanVienController {
 
     @GetMapping("/delete/{id}")
     public String deleteNV(@PathVariable Long id, Model model) {
-        nhanVienService.delete(id);
+        NhanVien nhanVien = nhanVienService.detail(id);
+        nhanVien.setTrangThai(false);
+        nhanVienService.update(nhanVien, id);
         return "redirect:/cms/nhan-vien";
     }
 
-    @PostMapping("/check-duplicate-phone-number")
+    @PostMapping("/check-duplicate")
     @ResponseBody
-    public boolean checkDuplicatePhoneNumber(@RequestParam("phoneNumber") String sdt) {
-        boolean st =nhanVienService.existsBySdt(sdt);
-        System.out.println(sdt);
-        System.out.println(st);
-        return st;
+    public Map<String, Boolean> checkDuplicate(@RequestParam("email") String email,
+                                               @RequestParam("phoneNumber") String phoneNumber,
+                                               @RequestParam("cccd") String cccd) {
+        boolean emailExists = userService.existsByEmail(email);
+        boolean phoneNumberExists = nhanVienService.existsBySdt(phoneNumber);
+        boolean cccdExists = nhanVienService.existsByCccd(cccd);
+
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("email", emailExists);
+        result.put("phoneNumber", phoneNumberExists);
+        result.put("cccd", cccdExists);
+        return result;
     }
 }

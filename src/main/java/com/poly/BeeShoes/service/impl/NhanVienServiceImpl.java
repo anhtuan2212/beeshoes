@@ -83,4 +83,9 @@ public class NhanVienServiceImpl implements NhanVienService {
     public boolean existsBySdt(String sdt) {
         return nhanVienRepository.existsBySdt(sdt);
     }
+
+    @Override
+    public boolean existsByCccd(String cccd) {
+        return nhanVienRepository.existsByCccd(cccd);
+    }
 }
