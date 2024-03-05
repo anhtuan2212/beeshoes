@@ -29,4 +29,9 @@ public class GioHangChiTietServiceImpl implements GioHangChiTietService {
     public GioHangChiTiet getByCTSP(ChiTietSanPham chiTietSanPham) {
         return gioHangChiTietRepository.findByChiTietSanPham(chiTietSanPham);
     }
+
+    @Override
+    public GioHangChiTiet getById(Long id) {
+        return gioHangChiTietRepository.findById(id).orElse(null);
+    }
 }

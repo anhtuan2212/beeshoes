@@ -8,4 +8,5 @@ public interface GioHangChiTietService {
     boolean delete(Long id);
 
     GioHangChiTiet getByCTSP(ChiTietSanPham ctsp);
+    GioHangChiTiet getById(Long id);
 }
