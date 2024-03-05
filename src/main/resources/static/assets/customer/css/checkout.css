@@ -87,3 +87,8 @@ input[type="radio"] + label {
     font-family: "Nunito Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
 }
+
+.btn-outline-dark {
+    border-radius: 0;
+    border: 1px solid #e1e1e1;
+}
