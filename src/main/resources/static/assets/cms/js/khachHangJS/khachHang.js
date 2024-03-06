@@ -86,10 +86,11 @@ function checkDuplicateKH1() {
     return new Promise(function (resolve, reject) {
         let email = $('#email').val();
         let phone = $('#sdt').val();
+        let id = $('#idKhachHang').val();
         $.ajax({
             url: '/cms/khach-hang/check-duplicate',
             type: 'POST',
-            data: {email: email, phoneNumber: phone},
+            data: {email: email, phoneNumber: phone, id: id},
             success: function (response) {
                 if (response.email) {
                     ToastError('Email đã tồn tại.');

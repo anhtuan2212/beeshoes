@@ -123,10 +123,11 @@ function checkDuplicate1() {
         let email = $('#email').val();
         let phone = $('#sdt').val();
         let cccd = $('#cccd').val();
+        let id = $('#idNhanVien').val();
         $.ajax({
             url: '/cms/nhan-vien/check-duplicate',
             type: 'POST',
-            data: {email: email, phoneNumber: phone, cccd: cccd},
+            data: {email: email, phoneNumber: phone, cccd: cccd, id: id},
             success: function(response) {
                 if (response.email) {
                     ToastError('Email đã tồn tại.');
