@@ -17,7 +17,6 @@ public class VoucherScheduler {
     private final VoucherResponsitory voucherRepository;
     @Scheduled(fixedRate = 30000) // Chạy mỗi phút
     public void updateVoucherStatus() {
-        System.out.println("RUN SET STT VOUCHER");
         List<Integer> trangThaiList = Arrays.asList(1, 2);
         List<Voucher> vouchers = voucherRepository.findAllByTrangThaiInOrderByNgayBatDauAsc(trangThaiList);
         voucherService.updateVoucherStatus(vouchers);

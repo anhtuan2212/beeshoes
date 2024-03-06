@@ -1,3 +1,5 @@
+let ShopingCart = [];
+localStorage.removeItem('checkout_data');
 $(document).ready(async function () {
     let NumDataLength = 0;
     if (username === undefined) {
@@ -9,7 +11,31 @@ $(document).ready(async function () {
             .then(function (data) {
                 printAllProductInServer(data);
                 NumDataLength = data.length;
-                console.log(data);
+                if (NumDataLength > 0 && Array.isArray(data)) {
+                    data.forEach((product) => {
+                        let oj = {
+                            quantity: product.soLuong,
+                            id_cart: product.id,
+                            pro: {
+                                chat_lieu: '',
+                                co_giay: '',
+                                color_code: '',
+                                color_name: product.chitietSanPham.mauSac,
+                                de_giay: '',
+                                detail_code: product.chitietSanPham.maSanPham,
+                                gia_ban: addCommasToNumber(product.chitietSanPham.giaBan),
+                                gia_goc: addCommasToNumber(product.chitietSanPham.giaGoc),
+                                id: product.chitietSanPham.id,
+                                name: product.chitietSanPham.ten,
+                                product_img: product.chitietSanPham.anh,
+                                size: product.chitietSanPham.kichCo,
+                                so_luong_ton: product.chitietSanPham.soLuongTon,
+                            }
+                        }
+                        ShopingCart.push(oj);
+                    })
+                }
+                console.log(ShopingCart);
             })
             .catch(function (error) {
                 console.log('Có lỗi xảy ra khi lấy dữ liệu giỏ hàng từ máy chủ.');
@@ -25,8 +51,8 @@ $(document).ready(async function () {
             // Giảm giá trị đi 1 nếu giá trị hiện tại lớn hơn 1
             if (value > 1) {
                 $(this).siblings('input').val(value - 1);
+                addQuantityProduct(id, -1)
             }
-            addQuantityProduct(id, -1)
             if (value === 1) {
                 let element = $(this).closest('tr');
                 deleteProductInCheckoutAndLocal(id, element)
@@ -43,7 +69,12 @@ $(document).ready(async function () {
         deleteProductInCheckoutAndLocal(id, $(this.closest('tr')))
     })
     $(document).on('change', '#selected_all_product', function () {
-        let data = getProductInLocalStorage();
+        let data = [];
+        if (username === undefined) {
+            data = getProductInLocalStorage();
+        } else {
+            data = ShopingCart;
+        }
         let checked = $(this).is(':checked');
         if (checked) {
             if (Array.isArray(data)) {
@@ -146,7 +177,12 @@ $(document).ready(async function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 deleteByIdSelectedCheckout(id);
-                deleteByIdLocal(id);
+                if (username === undefined) {
+                    deleteByIdLocal(id);
+                    printProductwithStartup()
+                } else {
+                    deleteGHCT($(`#product_${id}`).data('cart-id'));
+                }
                 datatable.row(datatable.row(element).index()).remove().draw();
                 ToastSuccess('Xóa thành công.')
             }
@@ -181,19 +217,48 @@ $(document).ready(async function () {
     }
 
     function addQuantityProduct(id, num) {
-        let dataLocal = getProductInLocalStorage();
-        let dataCheckout = getCheckoutDataLocalStorage();
+        if (username === undefined) {
+            let dataLocal = getProductInLocalStorage();
+            let dataCheckout = getCheckoutDataLocalStorage();
 
-        updateProductQuantity(id, num, dataLocal);
-        updateProductQuantity(id, num, dataCheckout);
+            updateProductQuantity(id, num, dataLocal);
+            updateProductQuantity(id, num, dataCheckout);
 
-        saveCheckoutDatalocalStorage(dataCheckout);
-        saveProductTolocalStorage(dataLocal);
+            saveCheckoutDatalocalStorage(dataCheckout);
+            saveProductTolocalStorage(dataLocal);
+        } else {
+            let dataCheckout = getCheckoutDataLocalStorage();
+            updateProductQuantity(id, num, dataCheckout);
+            saveCheckoutDatalocalStorage(dataCheckout);
+            let id_cart = $(`#product_${id}`).data('cart-id');
+            if (id_cart !== undefined) {
+                $.ajax({
+                    url: '/api/update-shopping-cart-quantity',
+                    type: 'POST',
+                    data: {
+                        id: id_cart,
+                        calcul: Number(num) > 0 ? 'plus' : 'minus',
+                    },
+                    success: function () {
+                        updateProductQuantity(id, num, ShopingCart);
+                        ToastSuccess("Lưu thành công.")
+                    }, error: function (e) {
+                        ToastError("Lỗi.");
+                        console.log(e)
+                    }
+                })
+            }
+        }
     }
 
 
     function addDataSelectedCheckout(id) {
-        let data = getProductInLocalStorage();
+        let data = [];
+        if (username === undefined) {
+            data = getProductInLocalStorage();
+        } else {
+            data = ShopingCart;
+        }
         if (Array.isArray(data)) {
             let product = data.find(item => item.pro.id == id);
             let checkoutData = getCheckoutDataLocalStorage();
@@ -280,7 +345,7 @@ $(document).ready(async function () {
                             <td>
                                 <div class="checkbox-wrapper-30 mr-2">
                                    <span class="checkbox">
-                                     <input class="selected_product" type="checkbox" id="product_${product.id}" data-id="${product.id}"/>
+                                     <input class="selected_product" type="checkbox" data-cart-id="${product.id}" id="product_${product.chitietSanPham.id}" data-id="${product.chitietSanPham.id}"/>
                                      <svg>
                                        <use xlink:href="#checkbox-30" class="checkbox"></use>
                                      </svg>
@@ -304,7 +369,7 @@ $(document).ready(async function () {
                             </td>
                             <td class="quantity__item">
                                 <div class="quantity">
-                                    <div class="pro-qty-2" data-id="${product.id}">
+                                    <div class="pro-qty-2" data-id="${product.chitietSanPham.id}">
                                     <span class="fa fa-angle-left dec qtybtn"></span>
                                         <input type="text" value="${product.soLuong}" readonly>
                                     <span class="fa fa-angle-right inc qtybtn"></span>
@@ -312,7 +377,7 @@ $(document).ready(async function () {
                                 </div>
                             </td>
                             <td class="cart__price">${addCommasToNumber(product.chitietSanPham.giaBan * Number(product.soLuong))}đ</td>
-                            <td class="cart__close" data-id="${product.id}"><i class="fa fa-close"></i></td>
+                            <td class="cart__close" data-id="${product.chitietSanPham.id}"><i class="fa fa-close"></i></td>
                         </tr>
                         `;
             })

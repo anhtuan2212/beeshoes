@@ -127,11 +127,29 @@ public class ShopAPI {
         }
 
     }
+
     @DeleteMapping("/del-shopping-cart-detail")
-    public ResponseEntity deleteProduct(@RequestParam("id")Long id){
-        if(gioHangChiTietService.delete(id)){
+    public ResponseEntity deleteProduct(@RequestParam("id") Long id) {
+        if (gioHangChiTietService.delete(id)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/update-shopping-cart-quantity")
+    public ResponseEntity updateQuantity(@RequestParam("id") Long id, @RequestParam("calcul") String cal) {
+        GioHangChiTiet ghct = gioHangChiTietService.getById(id);
+        if (ghct != null) {
+            if (cal.equalsIgnoreCase("plus")) {
+                ghct.setSoLuong(ghct.getSoLuong() + 1);
+            }
+            if (!cal.equalsIgnoreCase("plus") && ghct.getSoLuong() > 1) {
+                ghct.setSoLuong(ghct.getSoLuong() - 1);
+            }
+            gioHangChiTietService.save(ghct);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }
