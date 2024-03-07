@@ -1,0 +1,273 @@
+[33mcommit e13db92102775aedf3e52a69cd0336602b10c83a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 31df1c8 d90925b
+Author: tuyennt173 <151807645+tuyennt173@users.noreply.github.com>
+Date:   Thu Mar 7 15:38:12 2024 +0700
+
+    Merge pull request #80 from anhtuan2212/hoa-don
+    
+    json address
+
+[33mcommit d90925bebddfca965fcf77a9c230d1d995f0419a[m[33m ([m[1;31morigin/hoa-don[m[33m)[m
+Author: tuyennt173 <tuyennt173@gmail.com>
+Date:   Thu Mar 7 15:36:47 2024 +0700
+
+    json address
+
+[33mcommit 31df1c8f11c63c96d927ba2cf9a280959812368c[m
+Merge: 464a9fa 104cfbc
+Author: thuymeo12333 <127287775+thuymeo12333@users.noreply.github.com>
+Date:   Thu Mar 7 14:08:19 2024 +0700
+
+    Merge pull request #79 from anhtuan2212/voucher
+    
+    Sua voucher search
+
+[33mcommit 104cfbcb8d13e5d8b2fd3b864621f4c74a2ee6ba[m[33m ([m[1;31morigin/voucher[m[33m)[m
+Author: THUYMEO\HP <trinhthuy051222@gmail.com>
+Date:   Thu Mar 7 14:07:06 2024 +0700
+
+    Sua voucher search
+
+[33mcommit 464a9fa937dab105401a8c441512366faaf20cb2[m
+Merge: 83db23c 0be541e
+Author: tuyennt173 <151807645+tuyennt173@users.noreply.github.com>
+Date:   Thu Mar 7 11:52:22 2024 +0700
+
+    Merge pull request #78 from anhtuan2212/hoa-don
+    
+    50% checkout
+
+[33mcommit 0be541e6872d909384dd19374c4c02e3a421d63d[m
+Author: tuyennt173 <tuyennt173@gmail.com>
+Date:   Thu Mar 7 11:50:57 2024 +0700
+
+    50% checkout
+
+[33mcommit 83db23c12a9d06245f698c97af26eedd75b4ca14[m
+Merge: 064fb2c ddc6019
+Author: pilz03 <108680659+pilz03@users.noreply.github.com>
+Date:   Wed Mar 6 20:38:37 2024 +0700
+
+    Merge pull request #77 from anhtuan2212/nhan_vien
+    
+    nhan_vien
+
+[33mcommit ddc60198c968b8ca9fbea1997bfda72cc2952524[m[33m ([m[1;31morigin/nhan_vien[m[33m)[m
+Merge: c031014 064fb2c
+Author: pilz03 <108680659+pilz03@users.noreply.github.com>
+Date:   Wed Mar 6 20:38:30 2024 +0700
+
+    Merge branch 'main' into nhan_vien
+
+[33mcommit c03101458f1be12422e8cbc767e30213de330b34[m
+Author: ngadtq <ngadtqph28985@fpt.edu.vn>
+Date:   Wed Mar 6 20:34:36 2024 +0700
+
+    nhan_vien
+
+[33mcommit 064fb2c191893b844dc279fd1eba49f458a54317[m
+Merge: a6950c4 2f27112
+Author: thuymeo12333 <127287775+thuymeo12333@users.noreply.github.com>
+Date:   Wed Mar 6 15:08:31 2024 +0700
+
+    Merge pull request #76 from anhtuan2212/voucher
+    
+    Tieng viet hoan thien
+
+[33mcommit 2f27112207a68bd4babb2ad90ccdb9e9ba60a080[m
+Author: THUYMEO\HP <trinhthuy051222@gmail.com>
+Date:   Wed Mar 6 15:07:48 2024 +0700
+
+    Tieng viet hoan thien
+
+[33mcommit a6950c4b26d412b91b07b00ade986e22fa84a818[m
+Merge: 40ec08a ee8fecd
+Author: thuymeo12333 <127287775+thuymeo12333@users.noreply.github.com>
+Date:   Wed Mar 6 13:54:43 2024 +0700
+
+    Merge pull request #75 from anhtuan2212/voucher
+    
+    Update laitieng viet
+
+[33mcommit ee8fecdb6de62497cbce44a5da861867b6913184[m
+Author: THUYMEO\HP <trinhthuy051222@gmail.com>
+Date:   Wed Mar 6 13:53:58 2024 +0700
+
+    Update laitieng viet
+
+[33mcommit 40ec08a4626ebb1261c70112b1530d1efc9d4a21[m
+Merge: 7fd22da f988461
+Author: thuymeo12333 <127287775+thuymeo12333@users.noreply.github.com>
+Date:   Wed Mar 6 03:13:51 2024 +0700
+
+    Merge pull request #74 from anhtuan2212/voucher
+    
+    Update tieng viet
+
+[33mcommit f9884611f37db3479b54bdd236bec818c58deac3[m
+Merge: 8f8adda 7fd22da
+Author: thuymeo12333 <127287775+thuymeo12333@users.noreply.github.com>
+Date:   Wed Mar 6 03:13:40 2024 +0700
+
+    Merge branch 'main' into voucher
+
+[33mcommit 8f8adda8230e20e836387cec5be02a1e4f851af9[m
+Author: THUYMEO\HP <trinhthuy051222@gmail.com>
+Date:   Wed Mar 6 02:49:53 2024 +0700
+
+    Update tieng viet
+
+[33mcommit 7fd22da9590f8238279e7054c23f63d91cf80495[m
+Merge: 1872d5b ae480fa
+Author: Tẩn Láo Lù <101502154+anhtuan2212@users.noreply.github.com>
+Date:   Tue Mar 5 14:30:14 2024 +0700
+
+    Merge pull request #73 from anhtuan2212/san_pham
+    
+    code shopping cart if auth
+
+[33mcommit ae480fad2d206a92a76256f582b82ee1d53dcc23[m[33m ([m[1;31morigin/san_pham[m[33m)[m
+Author: anhtuan2212 <lutan2212@gmail.com>
+Date:   Tue Mar 5 14:29:48 2024 +0700
+
+    code shopping cart if auth
+
+[33mcommit 1872d5bc219476dc6de8138941ddf874ff640f40[m
+Merge: 2e026b6 d755b34
+Author: tuyennt173 <151807645+tuyennt173@users.noreply.github.com>
+Date:   Tue Mar 5 09:07:30 2024 +0700
+
+    Merge pull request #72 from anhtuan2212/hoa-don
+    
+    vnpay
+
+[33mcommit d755b34964f031f61d3c1c7fb08685c41072279c[m
+Author: tuyennt173 <tuyennt173@gmail.com>
+Date:   Tue Mar 5 09:05:58 2024 +0700
+
+    vnpay
+
+[33mcommit 2e026b6a215a012d73f11114dc42e2acd514c940[m
+Merge: fc85f62 bfc959e
+Author: Tẩn Láo Lù <101502154+anhtuan2212@users.noreply.github.com>
+Date:   Mon Mar 4 22:46:12 2024 +0700
+
+    Merge pull request #71 from anhtuan2212/san_pham
+    
+    code shopping cart
+
+[33mcommit bfc959e12597f0e9bb900f3904f25c2d9c173023[m
+Author: anhtuan2212 <lutan2212@gmail.com>
+Date:   Mon Mar 4 22:44:03 2024 +0700
+
+    code shopping cart
+
+[33mcommit fc85f6263bd2b834c813ca0419eb77eeee05bd35[m
+Merge: 94a0996 523afc3
+Author: Tẩn Láo Lù <101502154+anhtuan2212@users.noreply.github.com>
+Date:   Sun Mar 3 21:53:10 2024 +0700
+
+    Merge pull request #70 from anhtuan2212/san_pham
+    
+    code shopping cart
+
+[33mcommit 523afc36f6170089837a66be74be992c4844b094[m
+Author: anhtuan2212 <lutan2212@gmail.com>
+Date:   Sun Mar 3 21:51:46 2024 +0700
+
+    code shopping cart
+
+[33mcommit 94a0996ab07461cf516ea9379a224c0c46587090[m
+Merge: b9fef47 0ff3041
+Author: tuyennt173 <151807645+tuyennt173@users.noreply.github.com>
+Date:   Sun Mar 3 21:48:12 2024 +0700
+
+    Merge pull request #69 from anhtuan2212/hoa-don
+    
+    vnpay
+
+[33mcommit 0ff3041c50cd3c7c8fee682c346288b834ec1402[m
+Author: tuyennt173 <tuyennt173@gmail.com>
+Date:   Sun Mar 3 21:44:20 2024 +0700
+
+    vnpay
+
+[33mcommit b9fef471c1ec898161ec8df0ccc3096ecffdbfd6[m
+Merge: 0c75bba eb0029b
+Author: Tẩn Láo Lù <101502154+anhtuan2212@users.noreply.github.com>
+Date:   Thu Feb 29 22:21:18 2024 +0700
+
+    Merge pull request #68 from anhtuan2212/san_pham
+    
+    update shop and cart 2
+
+[33mcommit eb0029b440d63d8dd66562c0c7060c58add5d30f[m
+Author: anhtuan2212 <lutan2212@gmail.com>
+Date:   Thu Feb 29 22:20:46 2024 +0700
+
+    update shop and cart 2
+
+[33mcommit 0c75bba0f9e78fef71c89e687628ffcdbcfe73a3[m
+Merge: 65b1fd9 189a943
+Author: Tẩn Láo Lù <101502154+anhtuan2212@users.noreply.github.com>
+Date:   Thu Feb 29 17:09:45 2024 +0700
+
+    Merge pull request #67 from anhtuan2212/san_pham
+    
+    update shop and cart
+
+[33mcommit 189a943ed0de9427be51c918f1ed95038a979240[m
+Author: anhtuan2212 <lutan2212@gmail.com>
+Date:   Thu Feb 29 17:08:49 2024 +0700
+
+    update shop and cart
+
+[33mcommit 65b1fd94a6d554acf96cec745f3deacf43f7aa10[m
+Merge: 1135988 e1f4948
+Author: pilz03 <108680659+pilz03@users.noreply.github.com>
+Date:   Tue Feb 27 21:42:27 2024 +0700
+
+    Merge pull request #66 from anhtuan2212/nhan_vien
+    
+    update user
+
+[33mcommit e1f49486cdf4ab4a78b6261610165c1643ac12a6[m
+Author: ngadtq <ngadtqph28985@fpt.edu.vn>
+Date:   Tue Feb 27 21:41:08 2024 +0700
+
+    update user
+
+[33mcommit 1135988d7bd8f23c2b53a5a79bda49691449f4ac[m
+Merge: 49481c5 c1aa908
+Author: thuymeo12333 <127287775+thuymeo12333@users.noreply.github.com>
+Date:   Tue Feb 27 12:35:32 2024 +0700
+
+    Merge pull request #65 from anhtuan2212/voucher
+    
+    Voucher
+
+[33mcommit c1aa908b1208b80db50a52748ba36279f4d88b35[m
+Merge: d5b9a50 1230491
+Author: THUYMEO\HP <trinhthuy051222@gmail.com>
+Date:   Tue Feb 27 12:31:17 2024 +0700
+
+    Merge branch 'voucher' of https://github.com/anhtuan2212/beeshoes into voucher
+
+[33mcommit d5b9a50bb4381c5d149a99ea255ec1b3d53af589[m
+Author: THUYMEO\HP <trinhthuy051222@gmail.com>
+Date:   Tue Feb 27 12:30:34 2024 +0700
+
+    hoan thanh voucher
+
+[33mcommit 49481c58fd19748f0fd416d3a828c769f751d293[m
+Merge: 119b6c2 77648ed
+Author: Tẩn Láo Lù <101502154+anhtuan2212@users.noreply.github.com>
+Date:   Mon Feb 26 21:52:08 2024 +0700
+
+    Merge pull request #64 from anhtuan2212/san_pham
+    
+     update form user
+
+[33mcommit 77648eda35eeaa2e556fa592f9d3e2df1e627e08[m
+Author: anhtuan2212 <lutan2212@gmail.com>
+Date:   Mon 

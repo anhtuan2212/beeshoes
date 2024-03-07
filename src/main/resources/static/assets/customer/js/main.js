@@ -51,7 +51,20 @@ function getAllProductPrintToCart() {
         }
     })
 }
-
+function formatNumberMoney(input) {
+    let number = parseInt(input);
+    if (number >= 1000 && number <= 999999) {
+        let rounded = Math.ceil(number / 1000) * 1000;
+        return Math.floor(rounded / 1000) + "K";
+    }
+    else if (number >= 1000000 && number <= 999999999) {
+        let rounded = Math.ceil(number / 1000000) * 1000000;
+        return Math.floor(rounded / 1000000) + "M";
+    }
+    else {
+        return number;
+    }
+}
 function pushDataToArray(data) {
     let data_cart = getProductInLocalStorage();
     if (data_cart !== null && Array.isArray(data_cart)) {
@@ -112,7 +125,34 @@ function startUp() {
             });
         }
     } else {
-        printProductwithStartup();
+        let data = getProductInLocalStorage();
+        if (data !== null && Array.isArray(data)) {
+            let promises = data.map(product => {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: '/api/update-product-cart',
+                        type: 'POST',
+                        data: {
+                            id: product.pro.id,
+                        },
+                        success: function (data) {
+                            product.pro.gia_ban = addCommasToNumber(data);
+                            resolve();
+                        },
+                        error: function (xhr) {
+                            console.log(xhr);
+                            reject(xhr);
+                        }
+                    });
+                });
+            });
+            Promise.all(promises).then(() => {
+                saveProductTolocalStorage(data);
+                printProductwithStartup();
+            }).catch(error => {
+                console.error('Có lỗi xảy ra khi cập nhật dữ liệu sản phẩm:', error);
+            });
+        }
     }
 }
 
