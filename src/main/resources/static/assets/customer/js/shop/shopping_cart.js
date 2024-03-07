@@ -66,12 +66,12 @@ $(document).ready(async function () {
     $('#btn-add-code-voucher').on('click', function () {
         let data = ListVoucher;
         let products = getCheckoutDataLocalStorage();
-        if (products===null){
+        if (products === null) {
             ToastError('Vui lòng chọn sản phẩm.')
             return;
         }
         let value = $('#input_voucher').val();
-        if (value.length===0){
+        if (value.length === 0) {
             ToastError('Vui lòng nhập mã.')
             return;
         }
@@ -91,7 +91,7 @@ $(document).ready(async function () {
                     $(`#voucher_${voucher.id}`).addClass('active');
                     updateTotalMoney();
                     ToastSuccess('Áp dụng thành công.')
-                }else{
+                } else {
                     ToastError('Mã không đủ điều kiện áp dụng.');
                 }
             }
@@ -201,7 +201,7 @@ $(document).ready(async function () {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'maGiamGia',
-                value: SelectedVoucher.ma
+                value: SelectedVoucher === null ?'':SelectedVoucher.ma
             }).appendTo(form);
             form.appendTo('body');
             form.submit();
@@ -272,9 +272,9 @@ $(document).ready(async function () {
                     if (totalMoney > Number(voucher.giaTriToiThieu)) {
                         if (ele.length === 0) {
                             let showPr = '';
-                            if (voucher.loaiVoucher === '$'){
-                                showPr=`<h3 class="col-6 tienmat">${formatNumberMoney(voucher.giaTriToiDa)}</h3>`;
-                            }else{
+                            if (voucher.loaiVoucher === '$') {
+                                showPr = `<h3 class="col-6 tienmat">${formatNumberMoney(voucher.giaTriToiDa)}</h3>`;
+                            } else {
                                 showPr = `<h3 class="col-6 phantram">${voucher.giaTriPhanTram}%</h3>`
                             }
                             html += `
@@ -295,7 +295,7 @@ $(document).ready(async function () {
                         </li>`;
                         }
                     } else {
-                        SelectedVoucher=null;
+                        SelectedVoucher = null;
                         if (ele.length !== 0) {
                             ele.remove();
                         }
@@ -304,15 +304,25 @@ $(document).ready(async function () {
                 let voucher = $('#list-voucher');
                 voucher.append(html);
             }
-            let totalPayment = 0;
+            let discountAmount;
             if (SelectedVoucher !== null) {
                 $('#discount_element').removeClass('d-none');
                 $('#discount_money').text(addCommasToNumber(SelectedVoucher.giaTriToiDa) + 'đ')
-                totalPayment = Number(totalMoney) - Number(SelectedVoucher.giaTriToiDa);
+                if (SelectedVoucher.loaiVoucher==='%'){
+                    if (Number(SelectedVoucher.giaTriToiDa) < totalMoney * (Number(SelectedVoucher.giaTriPhanTram)/100)) {
+                        discountAmount = Number(SelectedVoucher.giaTriToiDa);
+                    } else {
+                        discountAmount = totalMoney * (Number(SelectedVoucher.giaTriPhanTram)/100);
+                    }
+                }else{
+                    discountAmount = SelectedVoucher.giaTriTienMat;
+                }
             } else {
-                totalPayment = totalMoney;
+                discountAmount = 0;
                 $('#discount_element').addClass('d-none');
             }
+            let totalPayment = totalMoney - discountAmount;
+            totalPayment = Math.ceil(totalPayment / 1000) * 1000;
             $('#sub-total').text(addCommasToNumber(totalMoney) + 'đ');
             $('#total-money').text(addCommasToNumber(totalPayment) + 'đ');
         }
