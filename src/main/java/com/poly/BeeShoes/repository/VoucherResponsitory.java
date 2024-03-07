@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface VoucherResponsitory extends JpaRepository<Voucher,Long> {
+  Voucher findByMa(String ma);
   @Query("select c  from Voucher c  where c.ma  like %?1% or c.ten like %?1%" +
           "or c.loaiVoucher like %?1%")
     List<Voucher> searchVC(String key);
