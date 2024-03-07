@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -83,12 +83,6 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <div th:if="${paymentError != null}" class="container-fluid d-flex justify-content-center align-items-center">
-        <div class="col-7 text-center pt-5">
-            <span class="text-danger h4" th:text="${paymentError}"></span>
-        </div>
-    </div>
-
     <!-- Checkout Section Begin -->
     <section class="checkout spad">
         <div class="container">
@@ -170,10 +164,16 @@
                                 <div class="checkout__order__products">Sản phẩm <span>Tổng cộng</span></div>
 
                                 <ul class="checkout__total__products">
-                                    <li>01. Vanilla salted caramel <span>$ 300.0</span></li>
-                                    <li>02. German chocolate <span>$ 170.0</span></li>
-                                    <li>03. Sweet autumn <span>$ 170.0</span></li>
-                                    <li>04. Cluten free mini dozen <span>$ 110.0</span></li>
+                                    <li class="myLiCheckOut" th:each="entry, iter : ${productDetailMap}">
+                                        <div class="row">
+                                            <div class="col-7 justify-content-start">
+                                                <p class="nameProduct" th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' x ' + ${entry.value}"></p>
+                                            </div>
+                                            <div class="col-5 justify-content-end">
+                                                <span class="quantityProduct" th:text="${#numbers.formatDecimal(entry.key.giaBan * entry.value, 1, 'DEFAULT', 0, 'POINT')}"></span>
+                                            </div>
+                                        </div>
+                                    </li>
                                 </ul>
                                 <ul class="checkout__delivery__method">
                                     <li>Phương thức vận chuyển <span><img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
@@ -191,7 +191,7 @@
                                 <ul class="checkout__total__all">
                                     <li>Subtotal <span>$750.99</span></li>
                                     <li>Shipping Fee <span id="shippingFee">Free</span></li>
-                                    <li>Total <span id="totalAmount">5.555.555</span></li>
+                                    <li>Total <span id="totalAmount" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'POINT')}"></span></li>
                                 </ul>
 
                                 <p>Hình thức thanh toán</p>

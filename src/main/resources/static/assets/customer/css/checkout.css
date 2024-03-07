@@ -92,3 +92,20 @@ input[type="radio"] + label {
     border-radius: 0;
     border: 1px solid #e1e1e1;
 }
+
+.myLiCheckOut {
+    list-style: none;
+    font-size: 16px;
+    color: #111111;
+    line-height: 40px;
+}
+
+.myLiCheckOut .nameProduct {
+    margin: 0 !important;
+}
+
+.myLiCheckOut .quantityProduct {
+    color: #e53637 !important;
+    font-weight: 700;
+    float: right;
+}
