@@ -147,7 +147,7 @@ $(document).ready(async function () {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'maGiamGia',
-                value: 'VLXX'
+                value: 'VC00001'
             }).appendTo(form);
             form.appendTo('body');
             form.submit();

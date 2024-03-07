@@ -8,6 +8,7 @@ import com.poly.BeeShoes.payment.vnpay.VNPayService;
 import com.poly.BeeShoes.request.ProductCheckoutRequest;
 import com.poly.BeeShoes.request.ProductDetailVersion;
 import com.poly.BeeShoes.service.ChiTietSanPhamService;
+import com.poly.BeeShoes.service.VoucherService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,15 @@ public class CheckOutController {
 
     private final VNPayService vnPayService;
     private final ChiTietSanPhamService chiTietSanPhamService;
+    private final VoucherService voucherService;
 
     Gson gson = new Gson();
     @PostMapping("/checkout")
-    public String getCheckout (@RequestParam("maGiamGia")String ma,@RequestParam("listData")String list, Model model){
+    public String getCheckout (
+            @RequestParam("maGiamGia")String ma,
+            @RequestParam("listData")String list,
+            Model model
+    ){
         Type listType = new TypeToken<List<ProductCheckoutRequest>>() {
         }.getType();
         List<ProductCheckoutRequest> listData = gson.fromJson(list, listType);
@@ -46,6 +52,9 @@ public class CheckOutController {
         for(Map.Entry<ChiTietSanPham, Integer> entry : productDetailMap.entrySet()) {
             total += (entry.getKey().getGiaBan().doubleValue() * entry.getValue());
         }
+        Voucher voucher = voucherService.getByMa(ma);
+        System.out.println(voucher.getTen());
+        model.addAttribute("voucher", voucher);
         model.addAttribute("productDetailMap", productDetailMap);
         model.addAttribute("total", total);
         return "customer/pages/shop/checkout";

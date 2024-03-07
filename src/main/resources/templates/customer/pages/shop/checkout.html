@@ -91,12 +91,11 @@
                     <div class="row">
 
                         <div class="col-lg-7 col-md-6">
-                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
-                            here</a> to enter your code</h6>
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span><span th:text="'Mã giảm giá: ' + ${voucher.ten}"></span></h6>
                             <h6 class="checkout__title">Thông tin người nhận</h6>
 
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <div class="checkout__input">
 
                                         <p>Tên người nhận<span>*</span></p>
@@ -104,13 +103,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input type="text" id="customerEmail" placeholder="example@gmail.com">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Số điện thoại<span>*</span></p>
                                         <input type="text" id="customerPhone" placeholder="035xxxxxxx">
@@ -167,10 +160,10 @@
                                     <li class="myLiCheckOut" th:each="entry, iter : ${productDetailMap}">
                                         <div class="row">
                                             <div class="col-7 justify-content-start">
-                                                <p class="nameProduct" th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' x ' + ${entry.value}"></p>
+                                                <p class="nameProduct" th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' (x' + ${entry.value} + ')'"></p>
                                             </div>
                                             <div class="col-5 justify-content-end">
-                                                <span class="quantityProduct" th:text="${#numbers.formatDecimal(entry.key.giaBan * entry.value, 1, 'DEFAULT', 0, 'POINT')}"></span>
+                                                <span class="quantityProduct" th:text="${#numbers.formatDecimal(entry.key.giaBan * entry.value, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -180,18 +173,18 @@
                                     <li>
                                         <input type="radio" id="deliveryNhanh" name="deliveryMethod" checked>
                                         <label for="deliveryNhanh" class="deliveryMethodLabel">Nhanh</label>
-                                        <span>Free</span>
+                                        <span>0</span>
                                     </li>
                                     <li>
                                         <input type="radio" id="deliveryThuong" name="deliveryMethod">
                                         <label for="deliveryThuong" class="deliveryMethodLabel">Thường</label>
-                                        <span>Free</span>
+                                        <span>0</span>
                                     </li>
                                 </ul>
                                 <ul class="checkout__total__all">
                                     <li>Subtotal <span>$750.99</span></li>
                                     <li>Shipping Fee <span id="shippingFee">Free</span></li>
-                                    <li>Total <span id="totalAmount" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'POINT')}"></span></li>
+                                    <li>Total <span id="totalAmount" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
                                 </ul>
 
                                 <p>Hình thức thanh toán</p>
