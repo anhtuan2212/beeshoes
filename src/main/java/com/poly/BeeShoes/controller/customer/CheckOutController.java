@@ -44,6 +44,8 @@ public class CheckOutController {
         Type listType = new TypeToken<List<ProductCheckoutRequest>>() {
         }.getType();
         List<ProductCheckoutRequest> listData = gson.fromJson(list, listType);
+        System.out.println(Arrays.toString(listData.toArray()));
+        System.out.println(ma);
         Map<ChiTietSanPham, Integer> productDetailMap = new HashMap<>();
         double total = 0;
         listData.forEach(data ->
@@ -53,7 +55,6 @@ public class CheckOutController {
             total += (entry.getKey().getGiaBan().doubleValue() * entry.getValue());
         }
         Voucher voucher = voucherService.getByMa(ma);
-        System.out.println(voucher.getTen());
         model.addAttribute("voucher", voucher);
         model.addAttribute("productDetailMap", productDetailMap);
         model.addAttribute("total", total);

@@ -17,6 +17,7 @@ public interface VoucherResponsitory extends JpaRepository<Voucher,Long> {
   @Query("select c  from Voucher c  where c.ma  like %?1% or c.ten like %?1%" +
           "or c.loaiVoucher like %?1%")
     List<Voucher> searchVC(String key);
+    List<Voucher> findAllByTrangThai(Integer trangThai);
 //  @Query("select t from Voucher t where t.loaiVoucher = :loai")
 //  List<Voucher> searchloai(String loai);
 //  Optional<Voucher> findByMavoucher(String maVoucher);
@@ -33,4 +34,5 @@ List<Voucher> findByNgayBatDauBetweenAndNgayKetThuc(LocalDateTime startDate, Loc
   @Query("select c from Voucher c where c.giaTriPhanTram BETWEEN :phantram1 and :phantram2")
   List<Voucher> findByGiaTriPhanTramBetweenAndGiaTriPhanTram(Integer  phantram1, Integer  phantram2);
   Page<Voucher> findAllByTrangThaiNot(Integer trangThai, Pageable pageable);
+
 }

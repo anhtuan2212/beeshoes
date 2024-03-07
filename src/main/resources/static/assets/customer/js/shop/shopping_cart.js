@@ -1,4 +1,7 @@
+setTabsHeader('shop');
 let ShopingCart = [];
+let ListVoucher = []
+let SelectedVoucher = null;
 localStorage.removeItem('checkout_data');
 $(document).ready(async function () {
     let NumDataLength = 0;
@@ -42,6 +45,57 @@ $(document).ready(async function () {
                 console.log(error);
             });
     }
+    let datatable = $('#datatable').DataTable({
+        searching: false,
+        lengthChange: false,
+        info: false,
+        pageLength: 6,
+        paging: NumDataLength > 6,
+        ordering: false,
+        pagingType: 'full_numbers',
+        language: {
+            paginate: {
+                first: '<i class="fa fa-angle-double-left"></i>',
+                previous: '<i class="fa fa-angle-left"></i>',
+                next: '<i class="fa fa-angle-right"></i>',
+                last: '<i class="fa fa-angle-double-right"></i>'
+            },
+            "sEmptyTable": '<div class="text-center p-4"><img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;"><p class="mb-0">Bạn chưa thêm sản phẩm vào giỏ hàng !</p></div>'
+        }
+    });
+    $('#btn-add-code-voucher').on('click', function () {
+        let data = ListVoucher;
+        let products = getCheckoutDataLocalStorage();
+        if (products===null){
+            ToastError('Vui lòng chọn sản phẩm.')
+            return;
+        }
+        let value = $('#input_voucher').val();
+        if (value.length===0){
+            ToastError('Vui lòng nhập mã.')
+            return;
+        }
+        if (data !== null && Array.isArray(data)) {
+            let voucher = data.find(item => item.ma === value.toUpperCase());
+            console.log(voucher)
+            if (voucher === undefined) {
+                ToastError('Mã không tồn tại.');
+            } else {
+                let totalMoney = 0;
+                products.forEach((data) => {
+                    totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
+                });
+                if (totalMoney>=voucher.giaTriToiThieu){
+                    SelectedVoucher=voucher;
+                    updateTotalMoney();
+                    ToastSuccess('Áp dụng thành công.')
+                }else{
+                    ToastError('Mã không đủ điều kiện áp dụng.');
+                }
+            }
+        }
+    })
+
     $(document).on('click', '.dec, .inc', function () {
         let id = $(this).parent().data('id');
         // Lấy giá trị hiện tại của input
@@ -97,24 +151,6 @@ $(document).ready(async function () {
         }
     })
 
-    let datatable = $('#datatable').DataTable({
-        searching: false,
-        lengthChange: false,
-        info: false,
-        pageLength: 6,
-        paging: NumDataLength > 6,
-        ordering: false,
-        pagingType: 'full_numbers',
-        language: {
-            paginate: {
-                first: '<i class="fa fa-angle-double-left"></i>',
-                previous: '<i class="fa fa-angle-left"></i>',
-                next: '<i class="fa fa-angle-right"></i>',
-                last: '<i class="fa fa-angle-double-right"></i>'
-            },
-            "sEmptyTable": '<div class="text-center p-4"><img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;"><p class="mb-0">Bạn chưa thêm sản phẩm vào giỏ hàng !</p></div>'
-        }
-    });
     $(document).on('change', '.selected_product', function () {
         let id = $(this).data('id');
         if ($(this).is(':checked')) {
@@ -123,6 +159,22 @@ $(document).ready(async function () {
             deleteByIdSelectedCheckout(id);
         }
     });
+
+    $(document).on('click', '.wraper_voucher', function () {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $('#input_voucher').val('');
+            SelectedVoucher = null;
+            updateTotalMoney();
+        } else {
+            $('.wraper_voucher').removeClass('active');
+            $(this).addClass('active');
+            $('#input_voucher').val($(this).find('.voucher_code').text())
+            let id = $(this).data('id');
+            setDiscount(id, updateTotalMoney);
+        }
+    });
+
     $(document).on('click', '#btn-checkout', function () {
         let data = getCheckoutDataLocalStorage();
         if (data !== null && Array.isArray(data) && data.length > 0) {
@@ -147,7 +199,7 @@ $(document).ready(async function () {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'maGiamGia',
-                value: 'VC00001'
+                value: SelectedVoucher.ma
             }).appendTo(form);
             form.appendTo('body');
             form.submit();
@@ -189,15 +241,78 @@ $(document).ready(async function () {
         });
     }
 
+    function setDiscount(id, callback) {
+        let data = ListVoucher;
+        if (data !== null && Array.isArray(data)) {
+            let voucher = data.find(item => item.id === Number(id));
+            if (voucher !== null) {
+                SelectedVoucher = voucher;
+            } else {
+                SelectedVoucher = null;
+            }
+        } else {
+            SelectedVoucher = null;
+        }
+        callback();
+    }
+
     function updateTotalMoney() {
-        let datas = getCheckoutDataLocalStorage();
-        if (Array.isArray(datas)) {
+        let data = getCheckoutDataLocalStorage();
+        if (Array.isArray(data)) {
             let totalMoney = 0;
-            datas.forEach((data) => {
+            data.forEach((data) => {
                 totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
             });
+            if (ListVoucher !== null && Array.isArray(ListVoucher)) {
+                let html = '';
+                ListVoucher.forEach((voucher) => {
+                    let ele = $(`#voucher_${voucher.id}`)
+                    if (totalMoney > Number(voucher.giaTriToiThieu)) {
+                        if (ele.length === 0) {
+                            let showPr = '';
+                            if (voucher.loaiVoucher === '$'){
+                                showPr=`<h3 class="col-6 tienmat">${formatNumberMoney(voucher.giaTriToiDa)}</h3>`;
+                            }else{
+                                showPr = `<h3 class="col-6 phantram">${voucher.giaTriPhanTram}%</h3>`
+                            }
+                            html += `
+                        <li class="mb-2">
+                            <div data-id="${voucher.id}" id="voucher_${voucher.id}" class="wraper_voucher row m-0">
+                                <div class="col-9 contents p-2">
+                                    <h5 class="text-center voucher_code">${voucher.ma}</h5>
+                                    <label class="express_date">Hạn Đến: ${voucher.ngayKetThuc}</label>
+                                    <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(voucher.giaTriToiThieu) + 'đ'}</label>
+                                    <label class="express_date">Tối Đa:${addCommasToNumber(voucher.giaTriToiDa) + 'đ'}/Khách Hàng</label>
+                                    <label class="express_date w-100">Số Lượng : ${voucher.soLuong}</label>
+                                </div>
+                                <div class="col-3 p-2 row m-0 card__discount position-relative">
+                                    <label class="col-4">Mã Giảm Giá</label>
+                                    ${showPr}
+                                </div>
+                            </div>
+                        </li>`;
+                        }
+                    } else {
+                        SelectedVoucher=null;
+                        if (ele.length !== 0) {
+                            ele.remove();
+                        }
+                    }
+                })
+                let voucher = $('#list-voucher');
+                voucher.append(html);
+            }
+            let totalPayment = 0;
+            if (SelectedVoucher !== null) {
+                $('#discount_element').removeClass('d-none');
+                $('#discount_money').text(addCommasToNumber(SelectedVoucher.giaTriToiDa) + 'đ')
+                totalPayment = Number(totalMoney) - Number(SelectedVoucher.giaTriToiDa);
+            } else {
+                totalPayment = totalMoney;
+                $('#discount_element').addClass('d-none');
+            }
             $('#sub-total').text(addCommasToNumber(totalMoney) + 'đ');
-            $('#total-money').text(addCommasToNumber(totalMoney) + 'đ');
+            $('#total-money').text(addCommasToNumber(totalPayment) + 'đ');
         }
     }
 
@@ -359,11 +474,12 @@ $(document).ready(async function () {
                                 </div>
                             </td>
                             <td class="product__cart__item">
-                                <div class="product__cart__item__pic">
+                                <div class="product__cart__item__pic mr-0">
                                     <img width="90" height="90" src="${product.chitietSanPham.anh}" alt="product_img">
                                 </div>
-                                <div class="product__cart__item__text">
-                                    <h6>${product.chitietSanPham.ten}</h6>
+                                <div class="product__cart__item__text pt-0">
+                                    <h6 class="mb-0">${product.chitietSanPham.ten}</h6>
+                                     <label class="small mb-0">MS:${product.chitietSanPham.mauSac}, KT:${product.chitietSanPham.kichCo}</label>
                                     <h5>${addCommasToNumber(product.chitietSanPham.giaBan)}đ</h5>
                                 </div>
                             </td>
@@ -386,7 +502,6 @@ $(document).ready(async function () {
             $('#show-data').empty().html(html);
         }
     }
-
 
     function printAllProductInLocal() {
         let data = getProductInLocalStorage();
@@ -413,11 +528,12 @@ $(document).ready(async function () {
                         </div>
                     </td>
                     <td class="product__cart__item">
-                        <div class="product__cart__item__pic">
+                        <div class="product__cart__item__pic mr-0">
                             <img width="90" height="90" src="${product.pro.product_img}" alt="product_img">
                         </div>
-                        <div class="product__cart__item__text">
-                            <h6>${product.pro.name}</h6>
+                        <div class="product__cart__item__text pt-0">
+                            <h6 class="mb-0">${product.pro.name}</h6>
+                            <label class="small mb-0">MS:${product.pro.color_name}, KT:${product.pro.size}</label>
                             <h5>${product.pro.gia_ban}đ</h5>
                         </div>
                     </td>
@@ -438,5 +554,28 @@ $(document).ready(async function () {
             $('#show-data').empty().html(html);
         }
     }
-})
 
+    try {
+        let data = await getAllVoucher();
+        ListVoucher = data;
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
+
+    function getAllVoucher() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/api/get-all-voucher',
+                type: 'GET',
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (xhr) {
+                    reject(xhr);
+                }
+            });
+        });
+    }
+
+})

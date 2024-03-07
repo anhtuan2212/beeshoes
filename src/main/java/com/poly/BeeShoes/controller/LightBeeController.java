@@ -9,6 +9,6 @@ public class LightBeeController {
 
     @GetMapping({"/checkout","/checkout/"})
     public String checkout(){
-        return "customer/pages/shop/checkout";
+        return "redirect:/shopping-cart";
     }
 }
