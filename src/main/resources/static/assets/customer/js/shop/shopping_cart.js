@@ -87,6 +87,8 @@ $(document).ready(async function () {
                 });
                 if (totalMoney>=voucher.giaTriToiThieu){
                     SelectedVoucher=voucher;
+                    $('.wraper_voucher').removeClass('active');
+                    $(`#voucher_${voucher.id}`).addClass('active');
                     updateTotalMoney();
                     ToastSuccess('Áp dụng thành công.')
                 }else{
