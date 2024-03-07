@@ -103,6 +103,10 @@ input[type="radio"] + label {
 .myLiCheckOut .nameProduct {
     margin: 0 !important;
 }
+.text-small{
+    font-size: 14px;
+    margin-bottom: 0;
+}
 
 .myLiCheckOut .quantityProduct {
     color: #e53637 !important;

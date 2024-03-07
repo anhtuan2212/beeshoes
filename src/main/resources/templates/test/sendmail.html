@@ -20,37 +20,45 @@
     <button id="addressJson">Download Json Data</button>
 </div>
 <script>
-    var allData = [];
-    $('#addressJson').on('click', function () {
-        $.ajax({
-            type: "GET",
-            url: "/assets/address-json/district.json",
-            contentType: "application/json",
-            success: function (response) {
-                console.log('district ok')
-                response.forEach((item) => {
-                    $.ajax({
-                        type: "GET",
-                        url: "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=" + item.DistrictID,
-                        contentType: "application/json",
-                        headers: {
-                            "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-                        },
-                        success: function (response) {
-                            allData.push(response.data);
-                        },
-                        error: function (error) {
-                            console.error('Xảy ra lỗi: ', error);
-                        }
-                    });
-                })
-            },
-            error: function (error) {
-                console.error('Xảy ra lỗi: ', error);
-            }
-        });
-        console.log(allData);
-    })
+    // var allData = [];
+    // $('#addressJson').on('click', function () {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/assets/address-json/district.json",
+    //         contentType: "application/json",
+    //         success: function (response) {
+    //             console.log('district ok')
+    //             response.forEach((item) => {
+    //                 $.ajax({
+    //                     type: "GET",
+    //                     url: "/api/hoa-don/getWard?district_id=" + item.DistrictID,
+    //                     contentType: "application/json",
+    //                     success: function (response) {
+    //                         allData.push(response.data);
+    //                     },
+    //                     error: function (error) {
+    //                         console.error('Xảy ra lỗi: ', error);
+    //                     }
+    //                 });
+    //             })
+    //                 // $.ajax({
+    //                 //     type: "GET",
+    //                 //     url: "/api/hoa-don/getWard?district_id=" + 3323,
+    //                 //     contentType: "application/json",
+    //                 //     success: function (response) {
+    //                 //         allData.push(response.data);
+    //                 //     },
+    //                 //     error: function (error) {
+    //                 //         console.error('Xảy ra lỗi: ', error);
+    //                 //     }
+    //                 // });
+    //         },
+    //         error: function (error) {
+    //             console.error('Xảy ra lỗi: ', error);
+    //         }
+    //     });
+    //     console.log(allData);
+    // })
 
 </script>
 </body>
