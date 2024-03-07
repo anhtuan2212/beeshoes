@@ -53,18 +53,20 @@ function getAllProductPrintToCart() {
 }
 function formatNumberMoney(input) {
     let number = parseInt(input);
-    if (number >= 1000 && number <= 999999) {
-        let rounded = Math.ceil(number / 1000) * 1000;
-        return Math.floor(rounded / 1000) + "K";
+    if (number >= 1000 && number < 1000000) {
+        let rounded = Math.ceil(number / 1000);
+        return rounded >= 1000 ? (Math.floor(rounded / 1000) + "M") : (rounded + "K");
     }
-    else if (number >= 1000000 && number <= 999999999) {
-        let rounded = Math.ceil(number / 1000000) * 1000000;
-        return Math.floor(rounded / 1000000) + "M";
+    else if (number >= 1000000) {
+        let rounded = Math.floor(number / 100000) / 10;
+        return rounded + "M";
     }
     else {
         return number;
     }
 }
+
+
 function pushDataToArray(data) {
     let data_cart = getProductInLocalStorage();
     if (data_cart !== null && Array.isArray(data_cart)) {

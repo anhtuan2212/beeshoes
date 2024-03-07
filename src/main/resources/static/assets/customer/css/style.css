@@ -1040,8 +1040,12 @@ ol {
 	opacity: 1;
 	right: 0;
 	visibility: visible;
+	max-height: 52px;
+	overflow: auto;
 }
-
+.product__option__size::-webkit-scrollbar {
+	display: none;
+}
 .product__item:hover .product__item__text h6 {
 	opacity: 0;
 }
