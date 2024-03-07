@@ -687,38 +687,46 @@
 
         }
         if($('#loai').val()=='$'){
-            if(tienmat.length == 0){
-                document.getElementById("tienmat_emty").style.display="block";
-                result=false;
-            }else{
-                document.getElementById("tienmat_emty").style.display="none";
-            }
-        }else{
-            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100 && tienmat.length == 0) {
+            if (tienmat.length === 0 && parseFloat(tienmat) > 0) {
+                document.getElementById("tienmat_emty").style.display = "none";
+            } else {
+                // Chuyển đổi chuỗi thành số kiểu double
+                let tienmatValue = parseFloat(tienmat);
 
+                // Kiểm tra nếu giá trị là số và lớn hơn 0
+                if (!isNaN(tienmatValue) && tienmatValue >= 0) {
+                    document.getElementById("tienmat_emty").style.display = "none";
+                } else {
+                    document.getElementById("tienmat_emty").style.display = "block";
+                    result = false;
+                }
+            }
+            if (parseInt(phantram) >= 0 && parseInt(phantram) <= 100) {
                 document.getElementById("phantram1_emty").style.display = "none"
             } else {
                 document.getElementById("phantram1_emty").style.display = "block";
                 result = false;
                 ;
             }
-        }
 
-        if (toithieu.length === 0 && parseFloat(toithieu) > 0) {
-            document.getElementById("toithieu_emty").style.display = "none";
-        } else {
-            // Chuyển đổi chuỗi thành số kiểu double
-            let toithieuValue = parseFloat(toithieu);
-
-            // Kiểm tra nếu giá trị là số và lớn hơn 0
-            if (!isNaN(toithieuValue) && toithieuValue > 0) {
+            if (toithieu.length === 0 && parseFloat(toithieu) > 0) {
                 document.getElementById("toithieu_emty").style.display = "none";
             } else {
-                document.getElementById("toithieu_emty").style.display = "block";
-                result = false;
-            }
+                // Chuyển đổi chuỗi thành số kiểu double
+                let toithieuValue = parseFloat(toithieu);
 
+                // Kiểm tra nếu giá trị là số và lớn hơn 0
+                if (!isNaN(toithieuValue) && toithieuValue > 0) {
+                    document.getElementById("toithieu_emty").style.display = "none";
+                } else {
+                    document.getElementById("toithieu_emty").style.display = "block";
+                    result = false;
+                }
+            }
         }
+
+
+        
         if(batdau.length == 0){
             document.getElementById("batdau_emty").style.display="block";
             result=false;
