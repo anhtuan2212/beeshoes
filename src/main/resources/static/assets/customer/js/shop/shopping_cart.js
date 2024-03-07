@@ -85,8 +85,10 @@ $(document).ready(async function () {
                 products.forEach((data) => {
                     totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
                 });
-                if (totalMoney >= voucher.giaTriToiThieu) {
-                    SelectedVoucher = voucher;
+                if (totalMoney>=voucher.giaTriToiThieu){
+                    SelectedVoucher=voucher;
+                    $('.wraper_voucher').removeClass('active');
+                    $(`#voucher_${voucher.id}`).addClass('active');
                     updateTotalMoney();
                     ToastSuccess('Áp dụng thành công.')
                 } else {
