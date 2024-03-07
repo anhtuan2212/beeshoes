@@ -163,7 +163,7 @@
                                                 <p class="nameProduct" th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' (x' + ${entry.value} + ')'"></p>
                                             </div>
                                             <div class="col-5 justify-content-end">
-                                                <span class="quantityProduct" th:text="${#numbers.formatDecimal(entry.key.giaBan * entry.value, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>
+                                                <span class="quantityProduct" th:text="${#numbers.formatDecimal (entry.key.giaBan * entry.value, 0, 'DEFAULT', 0, 'DEFAULT')}"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -172,13 +172,13 @@
                                     <li>Phương thức vận chuyển <span><img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
                                     <li>
                                         <input type="radio" id="deliveryNhanh" name="deliveryMethod" checked>
-                                        <label for="deliveryNhanh" class="deliveryMethodLabel">Nhanh</label>
-                                        <span>0</span>
+                                        <label id="labelNhanh" for="deliveryNhanh" class="deliveryMethodLabel">Nhanh</label>
+                                        <span id="typeNhanh">0</span>
                                     </li>
                                     <li>
                                         <input type="radio" id="deliveryThuong" name="deliveryMethod">
-                                        <label for="deliveryThuong" class="deliveryMethodLabel">Thường</label>
-                                        <span>0</span>
+                                        <label id="labelThuong" for="deliveryThuong" class="deliveryMethodLabel">Thường</label>
+                                        <span id="typeThuong">0</span>
                                     </li>
                                 </ul>
                                 <ul class="checkout__total__all">

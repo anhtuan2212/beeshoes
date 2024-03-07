@@ -1,6 +1,9 @@
 package com.poly.BeeShoes.api;
 
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.poly.BeeShoes.dto.LichSuHoaDonDto;
+import com.poly.BeeShoes.dto.WardDto;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.HoaDon;
 import com.poly.BeeShoes.model.LichSuHoaDon;
@@ -14,7 +17,11 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +36,7 @@ public class HoaDonRestController {
     private final LichSuHoaDonService lichSuHoaDonService;
     private final UserService userService;
     private final RestTemplate restTemplate;
+    Gson gson = new Gson();
 
     @PostMapping("/xac-nhan")
     public ResponseEntity<String> xacNhanDon(
@@ -194,4 +202,34 @@ public class HoaDonRestController {
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
+
+//    @GetMapping("/getWard")
+//    public ResponseEntity callWardGHN(
+//            @RequestParam("district_id") int districtID
+//    ) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Token", "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551");
+//        HttpEntity entity = new HttpEntity<>(headers);
+//        String apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=" + districtID;
+//
+//        String stringResponse = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class).getBody();
+//        JsonObject jsonObject = JsonParser.parseString(stringResponse).getAsJsonObject();
+//        if(!jsonObject.get("data").isJsonNull()) {
+//            JsonArray arrayData = jsonObject.getAsJsonArray("data");
+//            if (arrayData != null) {
+//                for (JsonElement e : arrayData) {
+//                    JsonObject ward = new JsonObject();
+//                    ward.addProperty("Code", e.getAsJsonObject().get("WardCode").getAsString());
+//                    ward.addProperty("Name", e.getAsJsonObject().get("WardName").getAsString());
+//                    ward.addProperty("DistrictID", e.getAsJsonObject().get("DistrictID").getAsInt());
+//                    try (BufferedWriter writer = new BufferedWriter(new FileWriter("F:/lightbee/beeshoes/src/main/resources/static/assets/address-json/ward.json", true))) {
+//                        writer.write(ward + ",");
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
+//        return new ResponseEntity<>(stringResponse, HttpStatus.OK);
+//    }
 }
