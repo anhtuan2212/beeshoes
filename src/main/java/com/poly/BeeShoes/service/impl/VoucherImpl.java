@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
+import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.model.ThuongHieu;
 import com.poly.BeeShoes.model.Voucher;
 import com.poly.BeeShoes.repository.ThuongHieuRepository;
@@ -19,6 +20,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.poly.BeeShoes.library.LibService.chuanHoaTen;
 
 @Service
 @RequiredArgsConstructor
@@ -189,6 +193,16 @@ public class VoucherImpl implements VoucherService {
             }
 
         }}
+    }
+
+    @Override
+    public boolean existsByTen(String name) {
+        String tenChuanHoa = chuanHoaTen(name);
+        List<Voucher> vc = voucherResponsitory.findAll();
+        List<Voucher> tenvc = vc.stream()
+                .filter(cg -> chuanHoaTen(cg.getTen()).equals(tenChuanHoa))
+                .collect(Collectors.toList());
+        return !tenvc.isEmpty();
     }
 
 }

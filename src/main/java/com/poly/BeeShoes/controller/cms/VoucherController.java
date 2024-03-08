@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -107,9 +108,20 @@ public class VoucherController {
 
     @PostMapping("/add-voucher")
     public String add(@ModelAttribute Voucher voucher,
-                      @RequestParam(name =
-                              "page", defaultValue = "1") Integer page)throws ParseException {
+                      @RequestParam("ten") String ten, Model model)throws ParseException {
+        boolean check = false;
         List<Voucher> list=voucherService.getAll();
+        if (ten.isEmpty()) {
+            model.addAttribute("status","Tên không null ");
+            check=true;
+        }
+        if (voucherService.existsByTen(ten)) {
+            model.addAttribute("status","Tên này đã có, Vui lòng nhập tên khác ");
+            check=true;
+        }
+        if(check){
+            return "cms/pages/voucher/add.html";
+        }
         Timestamp ngayBatDauTimestamp = null;
         Timestamp ngayKetThucTimestamp = null;
         if (voucher.getStartDate1() != null && voucher.getEndDate1() != null) {
