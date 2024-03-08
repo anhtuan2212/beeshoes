@@ -290,4 +290,13 @@ public class Product {
         }
         return lst;
     }
+
+    @PostMapping("/update-product-cart")
+    public ResponseEntity getPrice(@RequestParam("id") Long id) {
+        ChiTietSanPham ctsp = chiTietSanPhamService.getById(id);
+        if (ctsp == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(ctsp.getGiaBan().intValue());
+    }
 }

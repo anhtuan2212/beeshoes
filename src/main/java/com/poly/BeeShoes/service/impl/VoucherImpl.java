@@ -41,6 +41,16 @@ public class VoucherImpl implements VoucherService {
     }
 
     @Override
+    public List<Voucher> getAllByTrangThai(Integer trangthai) {
+        return voucherResponsitory.findAllByTrangThai(trangthai);
+    }
+
+    @Override
+    public Voucher getByMa(String ma) {
+        return voucherResponsitory.findByMa(ma);
+    }
+
+    @Override
     public Voucher detail(Long id) {
         Voucher voucher = voucherResponsitory.findById(id).get();
         return voucher;

@@ -190,10 +190,23 @@ public class NhanVienController {
     @ResponseBody
     public Map<String, Boolean> checkDuplicate(@RequestParam("email") String email,
                                                @RequestParam("phoneNumber") String phoneNumber,
-                                               @RequestParam("cccd") String cccd) {
+                                               @RequestParam("cccd") String cccd,
+                                               @RequestParam("id") Long id) {
+        NhanVien nhanVien = nhanVienService.detail(id);
+        User user = userService.findByNhanVien_Id(id);
+
         boolean emailExists = userService.existsByEmail(email);
         boolean phoneNumberExists = nhanVienService.existsBySdt(phoneNumber);
         boolean cccdExists = nhanVienService.existsByCccd(cccd);
+        if(user.getEmail().equalsIgnoreCase(email)){
+            emailExists = false;
+        }
+        if(nhanVien.getSdt().equalsIgnoreCase(phoneNumber)){
+            phoneNumberExists = false;
+        }
+        if(nhanVien.getCccd().equalsIgnoreCase(cccd)){
+            cccdExists = false;
+        }
 
         Map<String, Boolean> result = new HashMap<>();
         result.put("email", emailExists);

@@ -63,7 +63,7 @@
 <!-- Offcanvas Menu End -->
 
 <!-- Header Section Begin -->
-<div th:replace="/customer/pages/_header.html"></div>
+<div th:replace="~{/customer/pages/_header.html}"></div>
 <!-- Header Section End -->
 
 
@@ -75,9 +75,9 @@
                 <div class="breadcrumb__text">
                     <h4>Shopping Cart</h4>
                     <div class="breadcrumb__links">
-                        <a href="/index">Home</a>
-                        <a href="/shop">Shop</a>
-                        <span>Shopping Cart</span>
+                        <a href="/index">Trang Chủ</a>
+                        <a href="/shop">Cửa Hàng</a>
+                        <span>Giỏ Hàng</span>
 
                     </div>
                 </div>
@@ -144,7 +144,6 @@
                     <div id="datatablePagination">
 
 
-
                     </div>
                 </div>
                 <div class="row">
@@ -164,18 +163,37 @@
                 <div class="cart__discount">
                     <h6>Mã Giảm Giá</h6>
                     <form action="#">
-                        <input type="text" placeholder="Mã giảm giá">
-                        <button type="submit">Áp Dụng</button>
+                         <input id="input_voucher" type="text" placeholder="Mã giảm giá">
+                        <button id="btn-add-code-voucher" type="button">Áp Dụng</button>
                     </form>
+                </div>
+                <div class="list_voucher">
+                    <ul id="list-voucher">
+                        <!--                        <li class="mb-2">-->
+                        <!--                            <div id="voucher_1" class="wraper_voucher row m-0">-->
+                        <!--                                <div class="col-9 contents p-2">-->
+                        <!--                                    <h5 class="text-center">VLXXXX</h5>-->
+                        <!--                                    <label class="express_date">Hạn Đến: 23H59 22/12/2024</label>-->
+                        <!--                                    <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ 1.000.000đ</label>-->
+                        <!--                                    <label class="express_date">Tối Đa: Mã giảm tối đa 100.000đ</label>-->
+                        <!--                                    <label class="express_date w-100">Số Lượng : 10</label>-->
+                        <!--                                </div>-->
+                        <!--                                <div class="col-3 p-2 row m-0 card__discount position-relative">-->
+                        <!--                                    <label class="col-4">Mã Giảm Giá</label>-->
+                        <!--                                    <h3 class="col-6">100K</h3>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </li>-->
+                    </ul>
                 </div>
                 <div class="cart__total">
                     <h6>Tổng Giỏ Hàng</h6>
                     <ul>
-                        <li>Tổng Tiền <span id="sub-total"></span></li>
-                        <li>Tổng Thanh Toán <span id="total-money"></span></li>
+                        <li>Tổng Tiền <span id="sub-total">0đ</span></li>
+                        <li id="discount_element" class="d-none">Giảm Giá<span id="discount_money">0đ</span></li>
+                        <li>Tổng Thanh Toán <span id="total-money">0đ</span></li>
                     </ul>
-                    <a href="javascript:;" id="btn-checkout"  class="primary-btn">Thanh Toán</a>
-
+                    <a href="javascript:;" id="btn-checkout" class="primary-btn">Thanh Toán</a>
                 </div>
             </div>
         </div>
@@ -184,9 +202,8 @@
 <!-- Shopping Cart Section End -->
 
 <!-- Footer Section Begin -->
-<div th:replace="/customer/pages/_footer.html"></div>
+<div th:replace="~{/customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
-
 
 
 <!-- Search Begin -->
@@ -214,10 +231,6 @@
 <script src="/assets/customer/js/dataTables.min.js"></script>
 <script src="/assets/customer/js/main.js"></script>
 <script src="/assets/customer/js/shop/shopping_cart.js"></script>
-<script>
-    setTabsHeader('shop');
-</script>
-
 </body>
 
 </html>

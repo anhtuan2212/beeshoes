@@ -153,12 +153,13 @@ public class KhachHangController {
         kh.setNgaySinh(khachHang.getNgaySinh());
         kh.setGioiTinh(khachHang.isGioiTinh());
         kh.setTrangThai(khachHang.isTrangThai());
-        kh.setIdDiaChi(khachHang.getDiaChiMacDinh().getId());
+        if(khachHang.getDiaChiMacDinh() != null){
+            kh.setIdDiaChi(khachHang.getDiaChiMacDinh().getId());
+        }
 
-        List<DiaChi> diaChiOfKH = diaChiService.getByIdKhachHang(khachHang.getId());
 
         model.addAttribute("khachHang", kh);
-        model.addAttribute("listDC", diaChiOfKH);
+        model.addAttribute("listDC", khachHang.getDiaChi());
         return "cms/pages/users/detail-khachHang";
     }
 
@@ -258,9 +259,19 @@ public class KhachHangController {
     @PostMapping("/check-duplicate")
     @ResponseBody
     public Map<String, Boolean> checkDuplicate(@RequestParam("email") String email,
-                                               @RequestParam("phoneNumber") String phoneNumber) {
+                                               @RequestParam("phoneNumber") String phoneNumber,
+                                               @RequestParam("id") Long id) {
+        User user = userService.findByKhachHang_Id(id);
+        KhachHang khachHang = khachHangService.detail(id);
         boolean emailExists = userService.existsByEmail(email);
         boolean phoneNumberExists = khachHangService.existsBySdt(phoneNumber);
+
+        if(user.getEmail().equalsIgnoreCase(email)){
+            emailExists = false;
+        }
+        if(khachHang.getSdt().equalsIgnoreCase(phoneNumber)){
+            phoneNumberExists = false;
+        }
 
         Map<String, Boolean> result = new HashMap<>();
         result.put("email", emailExists);

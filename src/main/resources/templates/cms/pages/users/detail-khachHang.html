@@ -287,8 +287,8 @@
                                                 </a>
 
                                                 <ul id="listAddress"
-                                                    class="js-navbar-vertical-aside-submenu nav nav-sub">
-                                                    <div class="card-body form-address row position-relative" th:each="dc,iter:${listDC}">
+                                                    class="js-navbar-vertical-aside-submenu nav nav-sub" style="min-width: 720px;">
+                                                    <div class="card-body form-address row position-relative" th:if="${#lists.size(listDC) > 0}" th:each="dc,iter:${listDC}">
                                                         <button type="button" th:attr="data-id-address=${dc.getId()}" class="btn btn-primary position-absolute btn_save_address d-none"><i class="tio-save"></i></button>
                                                         <div class="col-sm-6">
                                                             <!-- Form Group -->
@@ -302,11 +302,8 @@
                                                                            name="addressLine1"
                                                                            th:id="'soNha'+${dc.getId()}" placeholder="Your address"
                                                                            aria-label="Your address"
-                                                                           th:value="${dc.getSoNha()}">
+                                                                           th:value="${dc.getSoNha() == null ?'':dc.getSoNha()}">
                                                                 </div>
-<!--                                                                <i id="soNha_emty" style="color: red;display: none">Vui-->
-<!--                                                                    lòng-->
-<!--                                                                    nhập vào số nhà</i>-->
                                                                 <!-- End Form Group -->
                                                             </div>
                                                             <!-- Form Group -->

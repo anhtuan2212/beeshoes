@@ -79,41 +79,7 @@ $(document).ready(function () {
         }
     })
 // ONLY DEV
-// =======================================================
-//     $('#btnupdate').on('click', async function () {
-//         let check = true;
-//         if (formValidate()) {
-//             check = await checkDuplicate1();
-//         }else{
-//             return;
-//         }
-//         if (check) {
-//             console.log(check)
-//             return;
-//         }
-//         let urlImg = $('#urlImgAvatar').val();
-//         let form = $('#btn-update-nhan-vien');
-//         if (urlImg === undefined) {
-//             let input = document.getElementById('avatarUploader');
-//             let img = $('#avatarImg');
-//             const file = renameFile(input.files[0]);
-//             console.log(file)
-//             const storageRef = ref(storage, `avatars/${file.name}`);
-//             try {
-//                 const snapshot = await uploadBytes(storageRef, file);
-//                 console.log(snapshot)
-//                 const url = await getDownloadURL(snapshot.ref);
-//                 img.attr('src', url);
-//                 form.append(`<input id="urlImgAvatar" type="hidden" name="avatar" value="${url}">`);
-//             } catch (error) {
-//                 console.error(error);
-//             }
-//             await deleteImageFromFirebaseStorage();
-//         } else {
-//             form.submit();
-//         }
-//     })
-
+// ======================================================
     $('#btnupdate').on('click', async function () {
         let check = true;
         if (formValidate()) {

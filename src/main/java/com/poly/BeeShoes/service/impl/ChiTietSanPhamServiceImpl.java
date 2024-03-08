@@ -19,7 +19,7 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
 
     @Override
     public ChiTietSanPham getById(Long id) {
-        return ctspRepository.findById(id).get();
+        return ctspRepository.findById(id).orElse(null);
     }
 
     @Override

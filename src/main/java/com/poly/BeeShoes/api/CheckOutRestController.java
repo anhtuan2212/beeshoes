@@ -22,7 +22,7 @@ public class CheckOutRestController {
             HttpServletRequest request
     ) {
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
-        String vnpUrl = vnPayService.createOrder(paymentDto.getTotal(), paymentDto.getNotes(), baseUrl);
+        String vnpUrl = vnPayService.createOrder("HD00001", paymentDto.getTotal(), paymentDto.getNotes(), baseUrl);
         return new ResponseEntity<>(vnpUrl, HttpStatus.OK);
     }
 
