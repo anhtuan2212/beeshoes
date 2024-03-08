@@ -30,6 +30,7 @@
 #btn-submit {
     color: #FFFFFF;
 }
+
 .quantity {
     user-select: none;
 }
@@ -367,25 +368,29 @@
     right: 52px;
     cursor: pointer;
 }
+
 .checkbox-wrapper-30 .checkbox {
     --bg: #fff;
     --brdr: #d1d6ee;
     --brdr-actv: #1e2235;
     --brdr-hovr: #bbc1e1;
-    --dur: calc((var(--size, 2)/2) * 0.6s);
+    --dur: calc((var(--size, 2) / 2) * 0.6s);
     display: inline-block;
     width: calc(var(--size, 1) * 22px);
     position: relative;
 }
+
 .checkbox-wrapper-30 .checkbox:after {
     content: "";
     width: 100%;
     padding-top: 100%;
     display: block;
 }
+
 .checkbox-wrapper-30 .checkbox > * {
     position: absolute;
 }
+
 .checkbox-wrapper-30 .checkbox input {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -400,21 +405,26 @@
     padding: 0;
     transition: all calc(var(--dur) / 3) linear;
 }
+
 .checkbox-wrapper-30 .checkbox input:hover,
 .checkbox-wrapper-30 .checkbox input:checked {
     --newBrdr: calc(var(--size, 1) * 2);
 }
+
 .checkbox-wrapper-30 .checkbox input:hover {
     --newBrdrClr: var(--brdr-hovr);
 }
+
 .checkbox-wrapper-30 .checkbox input:checked {
     --newBrdrClr: var(--brdr-actv);
-    transition-delay: calc(var(--dur) /1.3);
+    transition-delay: calc(var(--dur) / 1.3);
 }
+
 .checkbox-wrapper-30 .checkbox input:checked + svg {
     --dashArray: 16 93;
     --dashOffset: 109;
 }
+
 .checkbox-wrapper-30 .checkbox svg {
     fill: none;
     left: 0;
@@ -428,19 +438,65 @@
     top: 0;
     transition: stroke-dasharray var(--dur), stroke-dashoffset var(--dur);
 }
+
 .checkbox-wrapper-30 .checkbox svg,
 .checkbox-wrapper-30 .checkbox input {
     display: block;
     height: 100%;
     width: 100%;
 }
+
 .cart__close i {
     cursor: pointer;
 }
-.paging_full_numbers .dt-paging-button{
+
+.paging_full_numbers .dt-paging-button {
 
 }
-.paging_full_numbers .dt-paging-button:hover{
+
+.paging_full_numbers .dt-paging-button:hover {
     background-color: black;
     color: white;
+}
+
+.nav-link.active {
+    color: #fff;
+    background-color: #000000 !important;
+    border-radius: 0;
+}
+
+.nav-link {
+    color: #000000;
+    border-radius: 0;
+    border: 2px solid transparent;
+}
+
+.nav-link:hover {
+    border-radius: 0;
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.wraper_user {
+    display: inline-flex;
+    justify-content: center;
+    position: relative;
+}
+.wraper_user label{
+    width: 30px;
+    height: 30px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: -6px;
+    right: 81px;
+    border-radius: 25px;
+}
+
+.img_avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
 }

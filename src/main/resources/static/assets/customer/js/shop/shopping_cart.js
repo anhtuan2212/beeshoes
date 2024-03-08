@@ -3,6 +3,14 @@ let ShopingCart = [];
 let ListVoucher = []
 let SelectedVoucher = null;
 localStorage.removeItem('checkout_data');
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        location.reload()
+    }
+});
+window.addEventListener('popstate', function(event) {
+    location.reload()
+});
 $(document).ready(async function () {
     let NumDataLength = 0;
     if (username === undefined) {
@@ -85,8 +93,8 @@ $(document).ready(async function () {
                 products.forEach((data) => {
                     totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
                 });
-                if (totalMoney>=voucher.giaTriToiThieu){
-                    SelectedVoucher=voucher;
+                if (totalMoney >= voucher.giaTriToiThieu) {
+                    SelectedVoucher = voucher;
                     $('.wraper_voucher').removeClass('active');
                     $(`#voucher_${voucher.id}`).addClass('active');
                     updateTotalMoney();
@@ -153,6 +161,14 @@ $(document).ready(async function () {
         }
     })
 
+    function check_checkAll() {
+        $('.selected_product').prop('checked', false);
+        $('#input_voucher').val('');
+        SelectedVoucher = null;
+        $('#selected_all_product').prop('checked', false);
+    }
+
+
     $(document).on('change', '.selected_product', function () {
         let id = $(this).data('id');
         if ($(this).is(':checked')) {
@@ -201,10 +217,11 @@ $(document).ready(async function () {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'maGiamGia',
-                value: SelectedVoucher === null ?'':SelectedVoucher.ma
+                value: SelectedVoucher === null ? '' : SelectedVoucher.ma
             }).appendTo(form);
             form.appendTo('body');
             form.submit();
+            check_checkAll()
         } else {
             ToastError('Vui lòng chọn sản phẩm.')
         }
@@ -257,6 +274,7 @@ $(document).ready(async function () {
         }
         callback();
     }
+
     function formatDate(dateTimeString) {
         let dateTime = new Date(dateTimeString);
 
@@ -274,6 +292,7 @@ $(document).ready(async function () {
 
         return formattedDateTime;
     }
+
     function updateTotalMoney() {
         let data = getCheckoutDataLocalStorage();
         if (Array.isArray(data)) {
@@ -318,7 +337,7 @@ $(document).ready(async function () {
                     } else {
                         if (ele.length !== 0) {
                             ele.parent().addClass('scaleOut');
-                            ele.parent().on('animationend', function() {
+                            ele.parent().on('animationend', function () {
                                 ele.parent().remove();
                             });
                         }
@@ -331,13 +350,13 @@ $(document).ready(async function () {
             if (SelectedVoucher !== null) {
                 $('#discount_element').removeClass('d-none');
                 $('#discount_money').text(addCommasToNumber(SelectedVoucher.giaTriToiDa) + 'đ')
-                if (SelectedVoucher.loaiVoucher==='%'){
-                    if (Number(SelectedVoucher.giaTriToiDa) < totalMoney * (Number(SelectedVoucher.giaTriPhanTram)/100)) {
+                if (SelectedVoucher.loaiVoucher === '%') {
+                    if (Number(SelectedVoucher.giaTriToiDa) < totalMoney * (Number(SelectedVoucher.giaTriPhanTram) / 100)) {
                         discountAmount = Number(SelectedVoucher.giaTriToiDa);
                     } else {
-                        discountAmount = totalMoney * (Number(SelectedVoucher.giaTriPhanTram)/100);
+                        discountAmount = totalMoney * (Number(SelectedVoucher.giaTriPhanTram) / 100);
                     }
-                }else{
+                } else {
                     discountAmount = SelectedVoucher.giaTriTienMat;
                 }
             } else {
@@ -443,14 +462,13 @@ $(document).ready(async function () {
         let data = getProductInLocalStorage();
         if (Array.isArray(data)) {
             let ind = null;
-            let totalMoney = 0;
             for (let i = 0; i < data.length; i++) {
                 if (data[i].pro.id == id) {
                     ind = i;
-                } else {
-                    totalMoney += extractNumberFromString(data[i].pro.gia_ban) * Number(data[i].quantity);
+                    break;
                 }
             }
+            console.log('vào')
             data.splice(ind, 1);
             saveProductTolocalStorage(data);
             updateTotalMoney();

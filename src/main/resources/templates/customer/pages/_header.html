@@ -63,14 +63,19 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="/user-profile">
-                                <th:block sec:authorize="!isAuthenticated()">
-                                    <img src="/assets/customer/img/icon/padlock.png" width="21" height="22" alt="">
-                                </th:block>
-                                <th:block sec:authorize="isAuthenticated()">
-                                    <img th:src="${#authentication.getPrincipal().avatar == null ?'/assets/customer/img/icon/user.png':#authentication.getPrincipal().avatar}" width="28" height="28" alt="">
-                                </th:block>
-                            </a>
+
+                            <th:block sec:authorize="!isAuthenticated()">
+                                <a href="javascript:;">
+                                <img src="/assets/customer/img/icon/padlock.png" width="21" height="22" alt="">
+                                </a>
+                            </th:block>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <a href="/user-profile">
+                                    <img th:src="${#authentication.getPrincipal().avatar == null ?'/assets/customer/img/icon/user.png':#authentication.getPrincipal().avatar}"
+                                         width="28" height="28" alt="">
+                                </a>
+                            </th:block>
+
                             <ul class="dropdown boxshadow_drop" style="margin-right: 0px">
                                 <th:block sec:authorize="!isAuthenticated()">
                                     <li>

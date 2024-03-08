@@ -2626,6 +2626,11 @@ ol {
 .list_voucher ul li .wraper_voucher .card__discount .phantram {
 	top: 64px;
 }
+.cart__user{
+	background: #f3f2ee;
+	padding: 35px 40px 40px;
+	width: 100%;
+}
 .cart__total {
 	background: #f3f2ee;
 	padding: 35px 40px 40px;
