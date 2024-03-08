@@ -91,7 +91,10 @@
                     <div class="row">
 
                         <div class="col-lg-7 col-md-6">
-                            <h6 class="coupon__code"><span class="icon_tag_alt"></span><span th:text="'Mã giảm giá: ' + ${voucher.ten}"></span></h6>
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span>
+                                <a th:if="${voucher == null}" th:href="@{shopping-cart/}">Chọn mã giảm giá</a>
+                                <span th:if="${voucher != null}" id="voucherCode" th:attr="voucher-code=${voucher.ma}" th:text="'Mã giảm giá: ' + ${voucher.ten}"></span>
+                            </h6>
                             <h6 class="checkout__title">Thông tin người nhận</h6>
 
                             <div class="row">
@@ -158,11 +161,13 @@
 
                                 <ul class="checkout__total__products">
                                     <li class="myLiCheckOut" th:each="entry, iter : ${productDetailMap}">
-                                        <div class="row">
+                                        <div class="row productsInCart">
                                             <div class="col-7 justify-content-start">
+                                                <p th:text="${entry.key.id}" class="productDetailId d-none"></p>
                                                 <p class="nameProduct" th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' (x' + ${entry.value} + ')'"></p>
                                             </div>
                                             <div class="col-5 justify-content-end">
+                                                <p th:text="${entry.value}" class="quantityProduct d-none"></p>
                                                 <span class="quantityProduct" th:text="${#numbers.formatDecimal (entry.key.giaBan * entry.value, 0, 'DEFAULT', 0, 'DEFAULT')}"></span>
                                             </div>
                                         </div>
@@ -182,26 +187,22 @@
                                     </li>
                                 </ul>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span>$750.99</span></li>
-                                    <li>Shipping Fee <span id="shippingFee">Free</span></li>
-                                    <li>Total <span id="totalAmount" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
+                                    <li>Tổng tiền <span id="total" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
+                                    <li>Phí vận chuyển <span id="shippingFee">0</span></li>
+                                    <li th:if="${voucher != null}">Mã giảm giá <span id="voucherValue" th:text="${#numbers.formatDecimal(voucherValue, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
+                                    <li>Tổng thu <span id="totalAmount" th:text="${#numbers.formatDecimal(totalAmount, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
                                 </ul>
 
-                                <p>Hình thức thanh toán</p>
-
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Thanh toán khi nhận hàng
-                                        <input type="checkbox" id="payment">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Thanh toán online
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                <div class="pb-3">
+                                    <p>Hình thức thanh toán</p>
+                                    <div class="mb-2">
+                                        <input type="radio" value="whenReceive" id="whenReceive" name="paymentMethod" checked>
+                                        <label id="labelWhenReceive" for="whenReceive" class="deliveryMethodLabel">Thanh toán khi nhận hàng</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" value="online" id="online" name="paymentMethod">
+                                        <label id="labelOnline" for="online" class="deliveryMethodLabel">Thanh toán online</label>
+                                    </div>
                                 </div>
 
                                 <button id="placeOrder" class="site-btn">Đặt Hàng</button>

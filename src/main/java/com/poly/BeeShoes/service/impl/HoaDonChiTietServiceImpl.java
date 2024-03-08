@@ -18,4 +18,9 @@ public class HoaDonChiTietServiceImpl implements HoaDonChiTietService {
     public List<HoaDonChiTiet> getHoaDonChiTietCuaHoaDonById(Long id) {
         return hoaDonChiTietRepository.findByHoaDon_Id(id);
     }
+
+    @Override
+    public HoaDonChiTiet save(HoaDonChiTiet hoaDonChiTiet) {
+        return hoaDonChiTietRepository.save(hoaDonChiTiet);
+    }
 }

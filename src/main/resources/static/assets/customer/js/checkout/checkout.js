@@ -200,29 +200,63 @@ $(document).ready(function () {
     })
 
     $('#placeOrder').on('click', function () {
+        var typeOfPayment = $('input[name=paymentMethod]:checked').val();
+        console.log(typeOfPayment);
+        var voucherCode = $('#voucherCode').attr('voucher-code');
         var orderNotes = $('#orderNotes').val();
-        var totalAmount = parseInt($('#totalAmount').text().replace(/\./g, ''));
+        var totalAmount = parseInt(document.getElementById('totalAmount').textContent.replace(/[,.]/g, ''));
+        console.log(totalAmount);
+        var productDetailList = [];
+        var products = document.querySelectorAll('.productsInCart');
+        products.forEach((product) => {
+            var productDetailId = product.querySelector('.productDetailId').textContent;
+            var quantity = product.querySelector('.quantityProduct').textContent;
+            var productDetail = {
+                productDetailId: productDetailId,
+                quantity: quantity
+            }
+            productDetailList.push(productDetail);
+        })
         console.log(orderNotes + "-" + totalAmount);
+
         var paymentDto = {
             notes: orderNotes,
-            total: totalAmount
+            total: totalAmount,
+            productDetail: productDetailList,
+            voucher: voucherCode
         }
-
         console.log(paymentDto);
 
-        $.ajax({
-            type: "POST",
-            url: "/check-out/placeOrder",
-            contentType: "application/json",
-            data: JSON.stringify(paymentDto),
-            success: function (response) {
-                console.log(response);
-                window.location.href = response;
-            },
-            error: function (error) {
-                console.error('Xảy ra lỗi: ', error);
-            }
-        })
+        if(typeOfPayment == 'whenReceive') {
+            $.ajax({
+                type: "POST",
+                url: "/check-out/placeOrder-whenReceive",
+                contentType: "application/json",
+                data: JSON.stringify(paymentDto),
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = response;
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error);
+                }
+            })
+        }
+        if(typeOfPayment == 'online') {
+            $.ajax({
+                type: "POST",
+                url: "/check-out/placeOrder-online",
+                contentType: "application/json",
+                data: JSON.stringify(paymentDto),
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = response;
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error);
+                }
+            })
+        }
     })
 
 })
