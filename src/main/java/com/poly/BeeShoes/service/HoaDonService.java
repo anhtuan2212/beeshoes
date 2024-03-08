@@ -28,4 +28,6 @@ public interface HoaDonService {
     HoaDon getHoaDonByMa(String ma);
 
     HoaDon save(HoaDon hoaDon);
+
+    String generateInvoiceCode();
 }

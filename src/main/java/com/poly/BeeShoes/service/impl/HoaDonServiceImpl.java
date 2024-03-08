@@ -90,4 +90,18 @@ public class HoaDonServiceImpl implements HoaDonService {
     public HoaDon save(HoaDon hoaDon) {
         return hoaDonRepository.save(hoaDon);
     }
+
+    @Override
+    public String generateInvoiceCode() {
+        long count = hoaDonRepository.count();
+        int numberOfDigits = (int) Math.log10(count + 1) + 1;
+        int numberOfZeros = Math.max(0, 5 - numberOfDigits);
+        String invoiceCode;
+        do {
+            invoiceCode = String.format("HD%0" + (numberOfDigits + numberOfZeros) + "d", count + 1);
+            count++;
+        } while (hoaDonRepository.existsByMaHoaDon(invoiceCode));
+
+        return invoiceCode;
+    }
 }

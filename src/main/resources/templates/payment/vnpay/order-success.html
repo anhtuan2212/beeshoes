@@ -94,7 +94,8 @@
         </div>
         <div class="text-center">
             <h3>Thanh toán đơn hàng thành công!</h3>
-            <p>Cảm ơn bạn đã tin tưởng sử dụng sản phẩm của chúng mình!</p>
+            <p th:text="'Bạn đã thanh toán thành công đơn hàng có mã ' + ${invoiceCode} + ' trị giá ' + ${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')} + ' VNĐ!'"></p>
+            <p>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của <a href="/shop">LightBee Shop!</a></p>
             <a th:href="@{|/|}" class="btn btn-outline-dark">Xem chi tiết đơn hàng</a>
         </div>
     </div>
@@ -116,7 +117,11 @@
     </div>
 </div>
 <!-- Search End -->
-
+<script>
+    $(document).on('ready', function () {
+        localStorage.removeItem('checkout_data');
+    })
+</script>
 <!-- Js Plugins -->
 <script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
 <script src="/assets/customer/js/bootstrap.min.js"></script>
@@ -127,7 +132,6 @@
 <script src="/assets/customer/js/mixitup.min.js"></script>
 <script src="/assets/customer/js/owl.carousel.min.js"></script>
 <script src="/assets/customer/js/main.js"></script>
-<script src="/assets/customer/js/checkout/checkout.js"></script>
 </body>
 
 </html>
