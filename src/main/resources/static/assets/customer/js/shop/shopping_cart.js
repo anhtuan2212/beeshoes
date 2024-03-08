@@ -257,7 +257,23 @@ $(document).ready(async function () {
         }
         callback();
     }
+    function formatDate(dateTimeString) {
+        let dateTime = new Date(dateTimeString);
 
+        // Lấy các thành phần của ngày và giờ
+        let day = dateTime.getDate();
+        let month = dateTime.getMonth() + 1;
+        let year = dateTime.getFullYear();
+        let hours = dateTime.getHours();
+        let minutes = dateTime.getMinutes();
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        let formattedDateTime = hours + 'H' + minutes + ' Ngày ' + day + '/' + month + '/' + year;
+
+        return formattedDateTime;
+    }
     function updateTotalMoney() {
         let data = getCheckoutDataLocalStorage();
         if (Array.isArray(data)) {
@@ -265,6 +281,11 @@ $(document).ready(async function () {
             data.forEach((data) => {
                 totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
             });
+            if (SelectedVoucher !== null) {
+                if (totalMoney < Number(SelectedVoucher.giaTriToiThieu)) {
+                    SelectedVoucher = null;
+                }
+            }
             if (ListVoucher !== null && Array.isArray(ListVoucher)) {
                 let html = '';
                 ListVoucher.forEach((voucher) => {
@@ -278,11 +299,11 @@ $(document).ready(async function () {
                                 showPr = `<h3 class="col-6 phantram">${voucher.giaTriPhanTram}%</h3>`
                             }
                             html += `
-                        <li class="mb-2">
+                        <li class="wraper_li scaleIn">
                             <div data-id="${voucher.id}" id="voucher_${voucher.id}" class="wraper_voucher row m-0">
                                 <div class="col-9 contents p-2">
                                     <h5 class="text-center voucher_code">${voucher.ma}</h5>
-                                    <label class="express_date">Hạn Đến: ${voucher.ngayKetThuc}</label>
+                                    <label class="express_date">Hạn Đến: ${formatDate(voucher.endDate1)}</label>
                                     <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(voucher.giaTriToiThieu) + 'đ'}</label>
                                     <label class="express_date">Tối Đa:${addCommasToNumber(voucher.giaTriToiDa) + 'đ'}/Khách Hàng</label>
                                     <label class="express_date w-100">Số Lượng : ${voucher.soLuong}</label>
@@ -295,9 +316,11 @@ $(document).ready(async function () {
                         </li>`;
                         }
                     } else {
-                        SelectedVoucher = null;
                         if (ele.length !== 0) {
-                            ele.remove();
+                            ele.parent().addClass('scaleOut');
+                            ele.parent().on('animationend', function() {
+                                ele.parent().remove();
+                            });
                         }
                     }
                 })
@@ -486,7 +509,7 @@ $(document).ready(async function () {
                                 </div>
                             </td>
                             <td class="product__cart__item">
-                                <div class="product__cart__item__pic mr-0">
+                                <div class="product__cart__item__pic mr-1">
                                     <img width="90" height="90" src="${product.chitietSanPham.anh}" alt="product_img">
                                 </div>
                                 <div class="product__cart__item__text pt-0">
@@ -540,7 +563,7 @@ $(document).ready(async function () {
                         </div>
                     </td>
                     <td class="product__cart__item">
-                        <div class="product__cart__item__pic mr-0">
+                        <div class="product__cart__item__pic mr-1">
                             <img width="90" height="90" src="${product.pro.product_img}" alt="product_img">
                         </div>
                         <div class="product__cart__item__text pt-0">
