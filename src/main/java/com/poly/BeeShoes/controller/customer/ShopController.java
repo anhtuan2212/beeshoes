@@ -27,14 +27,9 @@ public class ShopController {
     private final MauSacService mauSacService;
     private final KichCoService kichCoService;
     private final TagsService tagsService;
-    public Authentication getUserAuth(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication;
-    }
+
     @GetMapping({"/shop","/shop/"})
     public String shop(Model model){
-        Authentication auth = getUserAuth();
-        System.out.println(auth.toString());
         Pageable pageable = PageRequest.of(0,9);
         Page<SanPham> spx = sanPhamService.getAllShop(pageable);
         model.addAttribute("lstkichco",kichCoService.getAllClient());

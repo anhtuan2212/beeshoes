@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LightBee | Trang Cá Nhân</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/assets/customer/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
+</head>
+
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__option">
+        <div class="offcanvas__links">
+            <a href="#">Sign in</a>
+            <a href="#">FAQs</a>
+        </div>
+        <div class="offcanvas__top__hover">
+            <span>Usd <i class="arrow_carrot-down"></i></span>
+            <ul>
+                <li>USD</li>
+                <li>EUR</li>
+                <li>USD</li>
+            </ul>
+        </div>
+    </div>
+    <div class="offcanvas__nav__option">
+        <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
+        <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+        <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
+        <div class="price">$0.00</div>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__text">
+        <p>Free shipping, 30-day return or refund guarantee.</p>
+    </div>
+</div>
+<!-- Offcanvas Menu End -->
+<!-- Header Section Begin -->
+<div th:replace="~{/customer/pages/_header.html}"></div>
+<!-- Header Section End -->
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Trang Cá Nhân</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/">Trang Chủ</a>
+                        <span>Trang Cá Nhân</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="cart__user mb-3">
+                    <div class="w-100 wraper_user">
+                        <img id="avatar_preview" class="rounded-circle img_avatar" src="/assets/customer/img/about/ludeptrai.jpg"
+                             width="150" height="150">
+                        <label class="btn" for="input_avatar">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <input id="input_avatar" type="file" accept="image/*" hidden="hidden">
+                        </label>
+                    </div>
+                </div>
+                <div class="w-100">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link mb-1 active" id="v-pills-profile-tab" data-toggle="pill"
+                           href="#v-pills-profile"
+                           role="tab" aria-controls="v-pills-profile" aria-selected="false">Cá Nhân</a>
+                        <a class="nav-link mb-1" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages"
+                           role="tab" aria-controls="v-pills-messages" aria-selected="false">Quản Lý Đơn Hàng</a>
+                        <a class="nav-link mb-1" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings"
+                           role="tab" aria-controls="v-pills-settings" aria-selected="false">Chỉnh Sửa</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                         aria-labelledby="v-pills-profile-tab">
+                        Profile
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+                         aria-labelledby="v-pills-messages-tab">
+                        Đơn Hàng
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
+                         aria-labelledby="v-pills-settings-tab">
+                        Cài Đặt
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shopping Cart Section End -->
+
+<!-- Footer Section Begin -->
+<div th:replace="~{/customer/pages/_footer.html}"></div>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/customer/js/bootstrap.min.js"></script>
+<script src="/assets/customer/js/jquery.nice-select.min.js"></script>
+<script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
+<script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
+<script src="/assets/customer/js/jquery.countdown.min.js"></script>
+<script src="/assets/customer/js/jquery.slicknav.js"></script>
+<script src="/assets/customer/js/mixitup.min.js"></script>
+<script src="/assets/customer/js/owl.carousel.min.js"></script>
+<script src="/assets/customer/js/main.js"></script>
+<script src="/assets/customer/js/profile/profile.js"></script>
+</body>
+
+</html>

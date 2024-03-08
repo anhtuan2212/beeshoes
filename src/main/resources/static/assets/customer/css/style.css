@@ -1059,7 +1059,7 @@ ol {
 	height: 260px;
 	position: relative;
 	background-position: center center;
-	background-color: #afdbd3;
+	background-color: #f3f2ee;
 }
 
 .product__item__pic .label {
@@ -2421,6 +2421,7 @@ ol {
 .shopping__cart__table table tbody tr td.product__cart__item .product__cart__item__pic {
 	float: left;
 	margin-right: 30px;
+	background-color: #f3f2ee;
 }
 
 .shopping__cart__table table tbody tr td.product__cart__item .product__cart__item__text {
@@ -2624,6 +2625,11 @@ ol {
 }
 .list_voucher ul li .wraper_voucher .card__discount .phantram {
 	top: 64px;
+}
+.cart__user{
+	background: #f3f2ee;
+	padding: 35px 40px 40px;
+	width: 100%;
 }
 .cart__total {
 	background: #f3f2ee;
@@ -4136,3 +4142,40 @@ ol {
 .swal2-timer-progress-bar-container {
 	border-radius: 0;
 }
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0.5);
+		height: 0;
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+		height: 127px;
+	}
+}
+@keyframes scaleOut {
+	from {
+		opacity: 1;
+		transform: scale(1);
+		height: 127px;
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.5);
+		height: 0;
+	}
+}
+.wraper_li {
+	animation-duration: 0.5s;
+	animation-timing-function: ease-in-out;
+}
+.wraper_li.scaleIn {
+	animation-name: scaleIn;
+	margin-bottom: 0.5rem !important;
+}
+.wraper_li.scaleOut {
+	animation-name: scaleOut;
+	margin-bottom: 0!important;
+}
+
