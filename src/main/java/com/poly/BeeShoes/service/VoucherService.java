@@ -24,6 +24,7 @@ public interface VoucherService {
     Page <Voucher> findBytienmat(BigDecimal TienMat1, BigDecimal  TienMat2, Integer page);
     Page <Voucher> findByphantram(Integer  phantram1, Integer  phantram2, Integer page);
     void updateVoucherStatus(List<Voucher> voucher);
+    boolean existsByTen(String name);
 //    String generateVoucherCode();
 //    Voucher getByMa(String ma);
 }

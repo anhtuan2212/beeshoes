@@ -71,6 +71,7 @@
 
 
                             </div> <i id="ten_emty" style="color: red;display: none">Vui lòng nhập vào tên</i>
+                            <i th:if="${status!=null}" style="color: red;" th:text="${status}"></i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Loại Voucher</label>

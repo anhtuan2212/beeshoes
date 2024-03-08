@@ -32,4 +32,5 @@ List<Voucher> findByNgayBatDauBetweenAndNgayKetThuc(LocalDateTime startDate, Loc
   @Query("select c from Voucher c where c.giaTriPhanTram BETWEEN :phantram1 and :phantram2")
   List<Voucher> findByGiaTriPhanTramBetweenAndGiaTriPhanTram(Integer  phantram1, Integer  phantram2);
   Page<Voucher> findAllByTrangThaiNot(Integer trangThai, Pageable pageable);
+  boolean existsByTen(String ten);
 }
