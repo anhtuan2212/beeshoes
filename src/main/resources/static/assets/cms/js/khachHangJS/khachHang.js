@@ -190,15 +190,15 @@ function fillAllXa() {
     });
 }
 
-fetch('/assets/cms/json/TinhTP.json')
+fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
         province_list = data;
-        handleData(province_list, $('#tinhTPMoi'), 'Id', 'Name');
+        handleData(province_list, $('#tinhTPMoi'), 'ProvinceID', 'ProvinceName');
         return fillAllTinh();
     })
     .then(() => {
-        return fetch('/assets/cms/json/QuanHuyen.json')
+        return fetch('/assets/address-json/district.json')
             .then(response => response.json())
             .then(data => {
                 district_list = data;
@@ -206,7 +206,7 @@ fetch('/assets/cms/json/TinhTP.json')
             });
     })
     .then(() => {
-        return fetch('/assets/cms/json/PhuongXa.json')
+        return fetch('/assets/address-json/ward.json')
             .then(response => response.json())
             .then(data => {
                 ward_list = data;
@@ -295,14 +295,14 @@ $(document).on('ready', function () {
         let id = $(this).find('option:selected').data('id');
         let dis = $('#quanHuyenMoi');
         $('#phuongXaMoi').html('')
-        handleData(district_list.filter(district => district.ProvinceId === parseInt(id)), dis, 'Id', 'Name');
+        handleData(district_list.filter(district => district.ProvinceID === parseInt(id)), dis, 'DistrictID', 'DistrictName');
     });
 
     // Xử lý sự kiện khi thay đổi quận/huyện
     $('#quanHuyenMoi').on('change', function () {
         let id = $(this).find('option:selected').data('id');
         let war = $('#phuongXaMoi');
-        handleData(ward_list.filter(ward => ward.DistrictId === parseInt(id)), war, 'Id', 'Name');
+        handleData(ward_list.filter(ward => ward.DistrictID === parseInt(id)), war, 'Code', 'Name');
     });
 
 

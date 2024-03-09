@@ -100,18 +100,23 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
-
                                         <p>Tên người nhận<span>*</span></p>
-                                        <input type="text" id="customerName" placeholder="Ngô Trung Tuyến">
-
+                                        <input type="text" id="customerName" th:value="${userLogged.khachHang.hoTen}" placeholder="Ngô Trung Tuyến">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Số điện thoại<span>*</span></p>
-                                        <input type="text" id="customerPhone" placeholder="035xxxxxxx">
+                                        <input type="text" id="customerPhone" th:value="${userLogged.khachHang.sdt}" placeholder="035xxxxxxx">
                                     </div>
                                 </div>
+                            </div>
+
+                            <div th:if="${userLogged.khachHang.diaChiMacDinh != null}" class="d-none">
+                                <span id="houseNumber" th:text="${userLogged.khachHang.diaChiMacDinh.soNha}"></span>
+                                <span id="ward" th:text="${userLogged.khachHang.diaChiMacDinh.phuongXa}"></span>
+                                <span id="district" th:text="${userLogged.khachHang.diaChiMacDinh.quanHuyen}"></span>
+                                <span id="province" th:text="${userLogged.khachHang.diaChiMacDinh.tinhThanhPho}"></span>
                             </div>
 
                             <div class="row">
@@ -119,7 +124,7 @@
                                     <div class="checkout__input form-group">
                                         <p>Tỉnh/Thành Phố<span>*</span></p>
                                         <select class="form-control" id="tinhThanhPho">
-                                            <option value="" selected>Tỉnh/Thành Phố</option>
+                                            <option id="provinceSelected" value="" selected>Tỉnh/Thành Phố</option>
                                         </select>
                                     </div>
                                 </div>
@@ -127,7 +132,7 @@
                                     <div class="checkout__input form-group">
                                         <p>Quận/Huyện<span>*</span></p>
                                         <select class="form-control" id="quanHuyen">
-                                            <option>Quận/Huyện</option>
+                                            <option id="districtSelected" value="" selected>Quận/Huyện</option>
                                         </select>
                                     </div>
                                 </div>
@@ -135,7 +140,7 @@
                                     <div class="checkout__input form-group">
                                         <p>Phường/Xã<span>*</span></p>
                                         <select class="form-control" id="phuongXa">
-                                            <option>Phường/Xã</option>
+                                            <option id="wardSelected" value="" selected>Phường/Xã</option>
                                         </select>
                                     </div>
                                 </div>
@@ -174,21 +179,11 @@
                                     </li>
                                 </ul>
                                 <ul class="checkout__delivery__method">
-                                    <li>Phương thức vận chuyển <span><img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
-                                    <li>
-                                        <input type="radio" id="deliveryNhanh" name="deliveryMethod" checked>
-                                        <label id="labelNhanh" for="deliveryNhanh" class="deliveryMethodLabel">Nhanh</label>
-                                        <span id="typeNhanh">0</span>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="deliveryThuong" name="deliveryMethod">
-                                        <label id="labelThuong" for="deliveryThuong" class="deliveryMethodLabel">Thường</label>
-                                        <span id="typeThuong">0</span>
-                                    </li>
+                                    <li>Đơn vị vận chuyển <span><img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
+                                    <li>Phí vận chuyển <span id="shippingFee">0</span></li>
                                 </ul>
                                 <ul class="checkout__total__all">
                                     <li>Tổng tiền <span id="total" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
-                                    <li>Phí vận chuyển <span id="shippingFee">0</span></li>
                                     <li th:if="${voucher != null}">Mã giảm giá <span id="voucherValue" th:text="${#numbers.formatDecimal(voucherValue, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
                                     <li>Tổng thu <span id="totalAmount" th:text="${#numbers.formatDecimal(totalAmount, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
                                 </ul>

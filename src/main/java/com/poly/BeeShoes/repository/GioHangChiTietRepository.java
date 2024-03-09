@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet,Long> {
     GioHangChiTiet findByChiTietSanPham(ChiTietSanPham chiTietSanPham);
+    void deleteByGioHang_Id(Long id);
 }

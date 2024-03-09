@@ -9,4 +9,6 @@ public interface GioHangChiTietService {
 
     GioHangChiTiet getByCTSP(ChiTietSanPham ctsp);
     GioHangChiTiet getById(Long id);
+
+    void deleteByGioHangId(Long id);
 }

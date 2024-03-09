@@ -34,4 +34,9 @@ public class GioHangChiTietServiceImpl implements GioHangChiTietService {
     public GioHangChiTiet getById(Long id) {
         return gioHangChiTietRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void deleteByGioHangId(Long id) {
+        gioHangChiTietRepository.deleteByGioHang_Id(id);
+    }
 }
