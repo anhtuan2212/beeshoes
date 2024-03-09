@@ -7,6 +7,8 @@ import com.poly.BeeShoes.service.GioHangService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class GioHangServiceImpl implements GioHangService {
@@ -28,6 +30,11 @@ public class GioHangServiceImpl implements GioHangService {
     @Override
     public GioHang getByKhachHang(KhachHang khachHang) {
         return gioHangRepository.getFirstByKhachHang(khachHang);
+    }
+
+    @Override
+    public List<GioHang> findByCustomerId(Long id) {
+        return gioHangRepository.findGioHangsByKhachHang_Id(id);
     }
 
     @Override

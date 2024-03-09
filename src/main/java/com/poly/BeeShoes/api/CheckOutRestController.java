@@ -45,19 +45,34 @@ public class CheckOutRestController {
         JsonObject jsonObject = JsonParser.parseString(paymentDto).getAsJsonObject();
         String notes = jsonObject.get("notes").getAsString();
         int total = jsonObject.get("total").getAsInt();
-        String voucherCode = jsonObject.get("voucher").getAsString();
+        int shippingFee = jsonObject.get("shippingFee").getAsInt();
+        int totalAmount = jsonObject.get("totalAmount").getAsInt();
+        String voucherCode = null;
+        if(jsonObject.get("voucher") != null) {
+            voucherCode = jsonObject.get("voucher").getAsString();
+        }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
+        String customerName = jsonObject.get("customerName").getAsString();
+        String customerPhone = jsonObject.get("customerPhone").getAsString();
+        String addressReceive = jsonObject.get("addressReceive").getAsString();
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
-        hoaDon.setThucThu(BigDecimal.valueOf(total));
+        hoaDon.setTongTien(BigDecimal.valueOf(total));
+        hoaDon.setThucThu(BigDecimal.valueOf(totalAmount));
+        hoaDon.setPhiShip(BigDecimal.valueOf(shippingFee));
+        hoaDon.setSdtNhan(customerPhone);
+        hoaDon.setTenNguoiNhan(customerName);
+        hoaDon.setDiaChiNhan(addressReceive);
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
-        voucher.setSoLuong(voucher.getSoLuong() - 1);
-        voucherService.save(voucher);
+        if(voucher != null) {
+            voucher.setSoLuong(voucher.getSoLuong() - 1);
+            voucherService.save(voucher);
+        }
         for(JsonElement e : jsonArray) {
             Long idPDetail = e.getAsJsonObject().get("productDetailId").getAsLong();
             int quantity = e.getAsJsonObject().get("quantity").getAsInt();
@@ -72,7 +87,7 @@ public class CheckOutRestController {
 
             System.out.println(e.getAsJsonObject().get("productDetailId").getAsInt());
             System.out.println(e.getAsJsonObject().get("quantity").getAsInt());
-            System.out.println(notes + " " + total + " " + voucherCode);
+            System.out.println(notes + " " + totalAmount + " " + voucherCode);
         }
 
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
@@ -88,19 +103,34 @@ public class CheckOutRestController {
         JsonObject jsonObject = JsonParser.parseString(paymentDto).getAsJsonObject();
         String notes = jsonObject.get("notes").getAsString();
         int total = jsonObject.get("total").getAsInt();
-        String voucherCode = jsonObject.get("voucher").getAsString();
+        int shippingFee = jsonObject.get("shippingFee").getAsInt();
+        int totalAmount = jsonObject.get("totalAmount").getAsInt();
+        String voucherCode = null;
+        if(jsonObject.get("voucher") != null) {
+            voucherCode = jsonObject.get("voucher").getAsString();
+        }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
+        String customerName = jsonObject.get("customerName").getAsString();
+        String customerPhone = jsonObject.get("customerPhone").getAsString();
+        String addressReceive = jsonObject.get("addressReceive").getAsString();
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
-        hoaDon.setThucThu(BigDecimal.valueOf(total));
+        hoaDon.setTongTien(BigDecimal.valueOf(total));
+        hoaDon.setThucThu(BigDecimal.valueOf(totalAmount));
+        hoaDon.setPhiShip(BigDecimal.valueOf(shippingFee));
+        hoaDon.setSdtNhan(customerPhone);
+        hoaDon.setTenNguoiNhan(customerName);
+        hoaDon.setDiaChiNhan(addressReceive);
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
-        voucher.setSoLuong(voucher.getSoLuong() - 1);
-        voucherService.save(voucher);
+        if(voucher != null) {
+            voucher.setSoLuong(voucher.getSoLuong() - 1);
+            voucherService.save(voucher);
+        }
         for(JsonElement e : jsonArray) {
             Long idPDetail = e.getAsJsonObject().get("productDetailId").getAsLong();
             int quantity = e.getAsJsonObject().get("quantity").getAsInt();
@@ -115,9 +145,9 @@ public class CheckOutRestController {
 
             System.out.println(e.getAsJsonObject().get("productDetailId").getAsInt());
             System.out.println(e.getAsJsonObject().get("quantity").getAsInt());
-            System.out.println(notes + " " + total + " " + voucherCode);
+            System.out.println(notes + " " + totalAmount + " " + voucherCode);
         }
-        String urlRedirect = "/orderSuccess?invoiceCode=" + savedHoaDon.getMaHoaDon() + "&total=" + savedHoaDon.getThucThu();
+        String urlRedirect = "/orderSuccess?invoiceCode=" + savedHoaDon.getMaHoaDon() + "&totalAmount=" + savedHoaDon.getThucThu();
         return new ResponseEntity<>(urlRedirect, HttpStatus.OK);
     }
 
