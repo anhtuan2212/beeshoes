@@ -25,6 +25,8 @@ public interface SanPhamService {
     boolean delete(Long id);
     List<SanPham> getSanPhamEmtyCTSP();
     List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
+    List<SanPham> findTop4OrderByNgayTaoDesc();
+    List<SanPham> findTop4GiamGia();
 //    Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
     Integer getCount();
 }

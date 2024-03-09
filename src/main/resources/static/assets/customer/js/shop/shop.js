@@ -1,4 +1,3 @@
-
 var displayNumShow = 9;
 var NumAddShowDisplay = 6;
 
@@ -247,11 +246,16 @@ $(document).ready(function () {
             if (!$productWrapper.hasClass('mix')) {
                 $productWrapper.addClass('mix');
             }
+
             if (shouldDisplay) {
                 if (showNum < displayNumShow) {
-                    const ishave = $productWrapper.hasClass('fadeIn')
-                    if (!ishave) {
-                        $productWrapper.removeClass('fadeOut').addClass('fadeIn');
+                    const ishave = $productWrapper.hasClass('fadeOut')
+                    if (ishave) {
+                    $productWrapper.removeClass('fadeOut col-lg-4 col-md-6 col-sm-6').addClass('fadeIn');
+                    $($productWrapper).on('animationend', function () {
+                        $(this).removeClass('fadeIn')
+                        $(this).addClass('col-lg-4 col-md-6 col-sm-6')
+                    })
                     }
                     showNum++;
                 } else {
@@ -260,15 +264,17 @@ $(document).ready(function () {
             } else {
                 const ishave = $productWrapper.hasClass('fadeOut')
                 if (!ishave) {
-                    $productWrapper.removeClass('fadeOut').addClass('fadeIn');
+                    $productWrapper.removeClass('mix col-lg-4 col-md-6 col-sm-6').addClass('fadeOut');
+                    $($productWrapper).on('animationend', function () {
+                        $(this).addClass('mix col-lg-4 col-md-6 col-sm-6');
+                    })
                 }
-                $productWrapper.removeClass('fadeIn').addClass('fadeOut');
             }
         });
         $('#total-num-show').text(showNum);
-        if (showNum < displayNumShow){
+        if (showNum < displayNumShow) {
             $('#btn-load-more-product').addClass('d-none')
-        }else{
+        } else {
             $('#btn-load-more-product').removeClass('d-none')
         }
         console.log('=======================')
