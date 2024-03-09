@@ -6,6 +6,9 @@
     <meta name="description" content="Male_Fashion Template">
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LightBee | Trang Cá Nhân</title>
 
@@ -21,8 +24,9 @@
     <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/style.css?v=1.0" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/custom.css?v=1.0" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/profile.css?v=1.0" type="text/css">
 </head>
 
 <body>
@@ -83,44 +87,201 @@
 
 <!-- Shopping Cart Section Begin -->
 <section class="shopping-cart spad">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="cart__user mb-3">
                     <div class="w-100 wraper_user">
-                        <img id="avatar_preview" class="rounded-circle img_avatar" src="/assets/customer/img/about/ludeptrai.jpg"
+                        <img id="avatar_preview" class="rounded-circle img_avatar"
+                             src="/assets/customer/img/about/ludeptrai.jpg"
                              width="150" height="150">
                         <label class="btn" for="input_avatar">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                             <input id="input_avatar" type="file" accept="image/*" hidden="hidden">
                         </label>
                     </div>
+                    <div class="info text-center mt-2">
+                        <h3 class="font-weight-bold user_name">Đặng Anh Tuấn</h3>
+                        <label class="w-100 email">lutan2212@gmail.com</label>
+                        <label class="w-100 phone">0866755653</label>
+                        <label class="w-100 gender">Nam <i class="fa fa-mars" aria-hidden="true"></i></label>
+                        <!--                        <i class="fa fa-venus" aria-hidden="true"></i>-->
+                        <label class="w-100 birthdate">22/12/2001</label>
+                        <label class="w-100 address">Tân Quang, Trịnh Tường, Bát Xát, Lào Cai</label>
+                    </div>
                 </div>
                 <div class="w-100">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link mb-1 active" id="v-pills-profile-tab" data-toggle="pill"
-                           href="#v-pills-profile"
-                           role="tab" aria-controls="v-pills-profile" aria-selected="false">Cá Nhân</a>
-                        <a class="nav-link mb-1" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages"
-                           role="tab" aria-controls="v-pills-messages" aria-selected="false">Quản Lý Đơn Hàng</a>
+                        <a class="nav-link mb-1" id="v-pills-profile-tab" data-toggle="pill" href="#pills-profile"
+                           role="tab" aria-controls="v-pills-profile" aria-selected="false">Tài Khoản</a>
+                        <a class="nav-link mb-1 active" id="pill-list-oder-tab" data-toggle="pill"
+                           href="#pill-list-oder"
+                           role="tab" aria-controls="v-pills-messages" aria-selected="true">Đơn Mua</a>
                         <a class="nav-link mb-1" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings"
-                           role="tab" aria-controls="v-pills-settings" aria-selected="false">Chỉnh Sửa</a>
+                           role="tab" aria-controls="v-pills-settings" aria-selected="false">Mã Giảm Giá</a>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                          aria-labelledby="v-pills-profile-tab">
                         Profile
                     </div>
-                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-                         aria-labelledby="v-pills-messages-tab">
-                        Đơn Hàng
+                    <div class="tab-pane fade show active oder__list" id="pill-list-oder" role="tabpanel"
+                         aria-labelledby="pill-list-oder-tab">
+                        <div class="mb-3 d-flex justify-content-between">
+                            <h3 class="title_card">Danh Sách Đơn Hàng</h3>
+                            <div class="form_filter">
+                                <select class="select_status" type="text">
+                                    <option value="">Chờ Xác Nhận</option>
+                                    <option value="">Chờ Giao Hàng</option>
+                                    <option value="">Đang Vận Chuyển</option>
+                                    <option value="">Đã Hủy</option>
+                                    <option value="">Đã Giao Hàng</option>
+                                    <option value="">Thành Công</option>
+                                </select>
+                                <input class="search_input" type="text" placeholder="Tìm kiếm mã hóa đơn.">
+                            </div>
+                        </div>
+                        <div class="card w-100 mb-3">
+                            <div class="card-header d-flex justify-content-between mr-1 ml-1">
+                                <div class="oder_code_wrapper">
+                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"> HD0001</a>
+                                </div>
+                                <div class="status">
+                                    <label>Chờ Xác nhận</label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card_content ">
+                                    <ul class="w-100">
+                                        <li class="row">
+                                            <div class="col-2 p-0">
+                                                <img class="product_img" src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
+                                            </div>
+                                            <div class="col-7 p-0">
+                                                <div>
+                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
+                                                    <div class="w-100">
+                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
+                                                    </div>
+                                                    <label>Số Lượng : 1</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex align-items-center">
+                                                <h5 class="product_price_cu">10.000.000đ</h5>
+                                                <h5 class="product_price">9.000.000đ</h5>
+                                            </div>
+                                        </li>
+                                        <li class="row">
+                                            <div class="col-2 p-0">
+                                                <img class="product_img" src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
+                                            </div>
+                                            <div class="col-7 p-0">
+                                                <div>
+                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
+                                                    <div class="w-100">
+                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
+                                                    </div>
+                                                    <label>Số Lượng : 1</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex align-items-center">
+                                                <h5 class="product_price_cu">10.000.000đ</h5>
+                                                <h5 class="product_price">9.000.000đ</h5>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-footer pt-0">
+                                <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
+                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        Đơn hàng được hủy bởi bạn.
+                                    </div>
+                                    <div class="card-btn-group">
+                                        <button class="primary-btn" type="button">Mua Lại</button>
+                                        <button class="info-btn" type="button">Xem Chi Tiết</button>
+                                        <button class="info-btn" type="button">Hủy Đơn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card w-100 mb-3">
+                            <div class="card-header d-flex justify-content-between mr-1 ml-1">
+                                <div class="oder_code_wrapper">
+                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"> HD0002</a>
+                                </div>
+                                <div class="status">
+                                    <label>Chờ Xác nhận</label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card_content ">
+                                    <ul class="w-100">
+                                        <li class="row">
+                                            <div class="col-2 p-0">
+                                                <img class="product_img" src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
+                                            </div>
+                                            <div class="col-7 p-0">
+                                                <div>
+                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
+                                                    <div class="w-100">
+                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
+                                                    </div>
+                                                    <label>Số Lượng : 1</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex align-items-center">
+                                                <h5 class="product_price_cu">10.000.000đ</h5>
+                                                <h5 class="product_price">9.000.000đ</h5>
+                                            </div>
+                                        </li>
+                                        <li class="row">
+                                            <div class="col-2 p-0">
+                                                <img class="product_img" src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
+                                            </div>
+                                            <div class="col-7 p-0">
+                                                <div>
+                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
+                                                    <div class="w-100">
+                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
+                                                    </div>
+                                                    <label>Số Lượng : 1</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 d-flex align-items-center">
+                                                <h5 class="product_price_cu">10.000.000đ</h5>
+                                                <h5 class="product_price">9.000.000đ</h5>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-footer pt-0">
+                                <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
+                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        Đơn hàng được hủy bởi bạn.
+                                    </div>
+                                    <div class="card-btn-group">
+                                        <button class="primary-btn" type="button">Mua Lại</button>
+                                        <button class="info-btn" type="button">Xem Chi Tiết</button>
+                                        <button class="info-btn" type="button">Hủy Đơn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                          aria-labelledby="v-pills-settings-tab">
-                        Cài Đặt
+                        Mã Giảm Giá
                     </div>
                 </div>
             </div>

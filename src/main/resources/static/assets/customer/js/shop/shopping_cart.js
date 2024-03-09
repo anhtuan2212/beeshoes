@@ -351,10 +351,10 @@ $(document).ready(async function () {
                 $('#discount_element').removeClass('d-none');
                 $('#discount_money').text(addCommasToNumber(SelectedVoucher.giaTriToiDa) + 'đ')
                 if (SelectedVoucher.loaiVoucher === '%') {
-                    if (Number(SelectedVoucher.giaTriToiDa) < totalMoney * (Number(SelectedVoucher.giaTriPhanTram) / 100)) {
+                    if (Number(SelectedVoucher.giaTriToiDa) < Number(totalMoney) * (Number(SelectedVoucher.giaTriPhanTram) / 100)) {
                         discountAmount = Number(SelectedVoucher.giaTriToiDa);
                     } else {
-                        discountAmount = totalMoney * (Number(SelectedVoucher.giaTriPhanTram) / 100);
+                        discountAmount = Number(totalMoney) * (Number(SelectedVoucher.giaTriPhanTram) / 100);
                     }
                 } else {
                     discountAmount = SelectedVoucher.giaTriTienMat;
@@ -363,7 +363,7 @@ $(document).ready(async function () {
                 discountAmount = 0;
                 $('#discount_element').addClass('d-none');
             }
-            let totalPayment = totalMoney - discountAmount;
+            let totalPayment = Number(totalMoney) - Number(discountAmount);
             totalPayment = Math.ceil(totalPayment / 1000) * 1000;
             $('#sub-total').text(addCommasToNumber(totalMoney) + 'đ');
             $('#total-money').text(addCommasToNumber(totalPayment) + 'đ');

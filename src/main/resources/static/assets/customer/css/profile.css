@@ -1,0 +1,142 @@
+/*
+=========================================================
+* Tẩn Láo Lù
+=========================================================
+
+* Code version: 1.0
+* Copyright 2024 anhtuanlc (https://anhtuanlc.online)
+* Licensed under MIT (https://anhtuanlc.online)
+* Coded by anhtuanlc
+
+=========================================================
+ */
+.container-fluid {
+    width: 90%;
+}
+
+.info-btn {
+    color: #111111;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid #e1e1e1;
+    padding: 14px 35px;
+    display: inline-block;
+}
+
+.info-btn:hover {
+    border: 1px solid #000000;
+}
+
+.card-btn-group .primary-btn {
+    padding-top: 13px;
+    padding-bottom: 13px;
+}
+
+.card-btn-group .primary-btn:active {
+    border: 1px solid #FFFFFF;
+}
+
+.oder__list .card {
+    border: none;
+    background-color: #f3f2ee;
+}
+
+.oder__list .card .card-footer .wrapper_money h4 {
+    font-weight: 700;
+    color: #000000;
+    margin-left: 10px;
+}
+
+.oder__list .card .card-header, .card-footer {
+    background-color: #f3f2ee;
+}
+
+.oder__list .card .card-header .oder_code_wrapper a {
+    font-size: 17px;
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+.oder__list .card .card-header .oder_code_wrapper a:hover {
+    color: #0054c5 !important;
+}
+
+.oder__list .card .card-header .status label {
+    font-size: 17px;
+    color: #9f0c0c;
+    margin-bottom: 0;
+}
+
+.title_card {
+    font-weight: 600;
+}
+
+.product_img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    border: 1px solid #e1e1e1;
+}
+
+.product_name {
+    color: #111111;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.card_content ul li {
+    /*border-top: 1px solid rgba(0, 0, 0, .125);*/
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+    padding: 10px 0 10px 0;
+}
+
+.card-header {
+    /*border-bottom: none;*/
+}
+
+.card-footer {
+    border-top: none;
+}
+
+.card-body {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.product_price_cu {
+    color: #000;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: line-through;
+    margin-right: 10px;
+    opacity: .26;
+}
+
+.product_price {
+    color: #0d0d0d;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.search_input {
+    font-size: 14px;
+    color: #b7b7b7;
+    height: 42px;
+    width: 200px;
+    border: 1px solid #e1e1e1;
+    padding-left: 15px;
+    margin-left: 10px;
+}
+.select_status{
+    width: 200px !important;
+    border-radius: 0;
+}
+.form_filter {
+    display: flex;
+    flex-direction: row;
+}
