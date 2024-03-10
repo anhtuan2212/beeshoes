@@ -108,7 +108,7 @@ function formvalidate() {
 }
 
 //check trùng sdt,email
-function checkDuplicateKH() {
+async function checkDuplicateKH() {
     return new Promise(function (resolve, reject) {
         let email = $('#email').val();
         let phone = $('#sdt').val();
@@ -132,11 +132,6 @@ function checkDuplicateKH() {
     });
 }
 
-
-//api địa chỉ
-const provice_url = "https://api.npoint.io/ac646cb54b295b9555be";
-const district_url = "https://api.npoint.io/34608ea16bebc5cffd42";
-const ward_url = "https://api.npoint.io/dd278dc276e65c68cdf5";
 
 var province_list = [];
 var district_list = [];
@@ -181,19 +176,25 @@ $(document).on('ready', function () {
     }
 
     // Gọi API và xử lý dữ liệu cho các tỉnh/thành phố
-    fetchData(provice_url, function (data) {
+    fetchData('/assets/address-json/province.json', function (data) {
         province_list = data;
-        handleData(data, $('#tinhTP'), 'Id', 'Name');
+        handleData(data, $('#tinhTP'), 'ProvinceID', 'ProvinceName');
+        console.log('Tỉnh')
+        console.log(data)
     });
 
     // Gọi API và xử lý dữ liệu cho các quận/huyện
-    fetchData(district_url, function (data) {
+    fetchData('/assets/address-json/district.json', function (data) {
         district_list = data;
+        console.log('Huyện')
+        console.log(data)
     });
 
     // Gọi API và xử lý dữ liệu cho các phường/xã
-    fetchData(ward_url, function (data) {
+    fetchData('/assets/address-json/ward.json', function (data) {
         ward_list = data;
+        console.log('Xã')
+        console.log(data)
     });
 
     // Xử lý sự kiện khi thay đổi tỉnh/thành phố
@@ -201,14 +202,14 @@ $(document).on('ready', function () {
         let id = $(this).find('option:selected').data('id');
         let dis = $('#quanHuyen');
         $('#phuongXa').html('')
-        handleData(district_list.filter(district => district.ProvinceId === parseInt(id)), dis, 'Id', 'Name');
+        handleData(district_list.filter(district => district.ProvinceID === parseInt(id)), dis, 'DistrictID', 'DistrictName');
     });
 
     // Xử lý sự kiện khi thay đổi quận/huyện
     $('#quanHuyen').on('change', function () {
         let id = $(this).find('option:selected').data('id');
         let war = $('#phuongXa');
-        handleData(ward_list.filter(ward => ward.DistrictId === parseInt(id)), war, 'Id', 'Name');
+        handleData(ward_list.filter(ward => ward.DistrictID === parseInt(id)), war, 'DistrictID', 'Name');
     });
 
     // ONLY DEV
