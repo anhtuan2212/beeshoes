@@ -459,23 +459,7 @@
     color: white;
 }
 
-.nav-link.active {
-    color: #fff;
-    background-color: #000000 !important;
-    border-radius: 0;
-}
 
-.nav-link {
-    color: #000000;
-    border-radius: 0;
-    border: 2px solid transparent;
-}
-
-.nav-link:hover {
-    border-radius: 0;
-    color: #000000;
-    border: 2px solid #000000;
-}
 
 .wraper_user {
     display: inline-flex;
