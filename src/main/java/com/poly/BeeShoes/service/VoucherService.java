@@ -12,6 +12,8 @@ import java.util.List;
 public interface VoucherService {
     Voucher save(Voucher voucher);
     List<Voucher> getAll();
+    List<Voucher> getAllByTrangThai(Integer trangthai);
+    Voucher getByMa(String ma);
      Voucher detail(Long id);
     Voucher update(Long id, Voucher voucher);
     Voucher delete(Long id);

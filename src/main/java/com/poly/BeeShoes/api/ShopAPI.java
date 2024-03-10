@@ -7,6 +7,7 @@ import com.poly.BeeShoes.request.chiTietSanPhamApiRquest;
 import com.poly.BeeShoes.service.ChiTietSanPhamService;
 import com.poly.BeeShoes.service.GioHangChiTietService;
 import com.poly.BeeShoes.service.GioHangService;
+import com.poly.BeeShoes.service.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class ShopAPI {
     private final ChiTietSanPhamService chiTietSanPhamService;
     private final GioHangService gioHangService;
     private final GioHangChiTietService gioHangChiTietService;
+    private final VoucherService voucherService;
+
 
     public Authentication getUserAuth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -94,6 +97,16 @@ public class ShopAPI {
         }
     }
 
+    @GetMapping("/get-all-voucher")
+    public ResponseEntity<List<Voucher>> getAllVoucher(){
+        List<Voucher> lst = voucherService.getAllByTrangThai(2);
+        for (Voucher vc :lst) {
+            vc.setNguoiSua(null);
+            vc.setNguoiTao(null);
+            vc.setEndDate1(vc.getNgayKetThuc().toLocalDateTime());
+        }
+        return ResponseEntity.ok().body(lst);
+    }
     @GetMapping("/get-product-in-cart")
     public ResponseEntity<List<GioHangRequest>> getAll() {
         Authentication auth = getUserAuth();

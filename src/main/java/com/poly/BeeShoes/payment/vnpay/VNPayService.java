@@ -12,10 +12,10 @@ import java.util.*;
 @Service
 public class VNPayService {
 
-    public String createOrder(int total, String orderInfo, String urlReturn) {
+    public String createOrder(String invoiceCode, int total, String orderInfo, String urlReturn) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
-        String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
+        String vnp_TxnRef = VNPayConfig.getRandomNumber(invoiceCode, 8);
         String vnp_IpAddr = "127.0.0.1";
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
         String orderType = "order-type";
