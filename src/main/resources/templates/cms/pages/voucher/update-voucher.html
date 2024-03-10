@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
-    <title>LigthBee |Add Voucher</title>
+    <title>LigthBee |Sửa khuyến mãi</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico">
@@ -52,10 +52,10 @@
                         <ol class="breadcrumb breadcrumb-no-gutter">
                             <li  class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/voucher">Voucher</a>
                             </li>
-                            <li  class="breadcrumb-item active" aria-current="page">Sửa Voucher</li>
+                            <li  class="breadcrumb-item active" aria-current="page">Sửa Khuyến Mãi</li>
                         </ol>
                     </nav>
-                    <h1 class="page-header-title"  >Sửa Voucher</h1>
+                    <h1 class="page-header-title"  >Sửa Khuyến Mãi</h1>
                 </div>
             </div>
             <form th:action="@{/cms/update-voucher/{id}(id=${Listvv.id})}" method="post" th:object="${Listvv}" onsubmit="return formvalidate()" >        <!-- End Row -->
@@ -115,17 +115,17 @@
                         <div class="form-group">
                             <label class="input-label">Giá trị tối đa </label>
                             <div class="input-group">
-                                <input type="number" name="giaTriToiDa" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')}"
-                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu" >
+                                <input type="text" name="giaTriToiDa" class="form-control money-input-mask"
+                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu"  th:value="*{#numbers.formatDecimal(giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')} ">
                             </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Giá trị tối thiểu</label>
                             <div class="input-group">
-                                <input type="number" name="giaTriToiThieu" class="form-control money-input-mask"   th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')}"
-                                       placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" >
+                                <input type="text" name="giaTriToiThieu" class="form-control money-input-mask"
+                                       placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')} " >
                             </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu phải lớn hơn 0</i>
-
+<!--                            th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')}"-->
                         </div>
                         <div class="form-group">
                             <label class="input-label">Ngày bắt đầu</label>
@@ -692,7 +692,6 @@
             } else {
                 // Chuyển đổi chuỗi thành số kiểu double
                 let tienmatValue = parseFloat(tienmat);
-
                 // Kiểm tra nếu giá trị là số và lớn hơn 0
                 if (!isNaN(tienmatValue) && tienmatValue >= 0) {
                     document.getElementById("tienmat_emty").style.display = "none";
@@ -713,8 +712,8 @@
                 document.getElementById("toithieu_emty").style.display = "none";
             } else {
                 // Chuyển đổi chuỗi thành số kiểu double
-                let toithieuValue = parseFloat(toithieu);
 
+                let toithieuValue = parseFloat(toithieu);
                 // Kiểm tra nếu giá trị là số và lớn hơn 0
                 if (!isNaN(toithieuValue) && toithieuValue > 0) {
                     document.getElementById("toithieu_emty").style.display = "none";
