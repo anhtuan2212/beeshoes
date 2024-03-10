@@ -144,9 +144,10 @@ function fillAllTinh() {
         tinh_TP.each((index, element) => {
             let select = $(element).find('select');
             let tinh = $(element).find('input[type="text"]').val();
+            console.log(tinh)
             select.append(`<option value="" >Chọn Tỉnh</option>`);
             province_list.forEach(data => {
-                select.append(`<option value="${data.Id}" ${tinh === data.Name ? 'selected' : ''}>${data.Name}</option>`);
+                select.append(`<option value="${data.ProvinceID}" ${tinh === data.ProvinceName ? 'selected' : ''}>${data.ProvinceName}</option>`);
             });
         });
         resolve();
@@ -162,8 +163,8 @@ function fillAllHuyen() {
             let idTinh = $(element).closest('.form-address').find('.tinhTP').val();
             select.append(`<option value="" >Chọn huyện</option>`);
             district_list.forEach(data => {
-                if (data.ProvinceId == idTinh) {
-                    select.append(`<option value="${data.Id}" ${name === data.Name ? 'selected' : ''}>${data.Name}</option>`);
+                if (data.ProvinceID == idTinh) {
+                    select.append(`<option value="${data.DistrictID}" ${name === data.DistrictName ? 'selected' : ''}>${data.DistrictName}</option>`);
                 }
             });
         });
@@ -180,9 +181,9 @@ function fillAllXa() {
             let idHuyen = $(element).closest('.form-address').find('select.quanHuyen').val();
             select.append(`<option value="" >Chọn xã</option>`);
             ward_list.forEach(data => {
-                if (data.DistrictId == idHuyen) {
+                if (data.DistrictID == idHuyen) {
                     let selected = data.Name == name ? 'selected' : '';
-                    select.append(`<option value="${data.Id}" ${selected}>${data.Name}</option>`);
+                    select.append(`<option value="${data.DistrictID}" ${selected}>${data.Name}</option>`);
                 }
             });
         });
@@ -194,6 +195,7 @@ fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
         province_list = data;
+        console.log(data)
         handleData(province_list, $('#tinhTPMoi'), 'ProvinceID', 'ProvinceName');
         return fillAllTinh();
     })

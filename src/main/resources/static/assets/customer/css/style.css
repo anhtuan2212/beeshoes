@@ -2584,6 +2584,23 @@ ol {
     line-height: 1.2;
 }
 
+.user-avatar img {
+    border-radius: 25px;
+}
+
+.header__nav__option ul li {
+    position: relative;
+}
+
+.header__nav__option ul li .user-name {
+    position: absolute;
+    width: 170px;
+    left: 31px;
+    top: 4px;
+    display: flex;
+    justify-content: flex-start;
+}
+
 .list_voucher ul li .wraper_voucher {
     border: 2px solid transparent;
     transition: border-color 0.3s ease;

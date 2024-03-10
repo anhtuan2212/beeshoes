@@ -262,7 +262,7 @@
                     <span th:if="${hoaDon.khachHang == null}">N/A</span>
                 </td>
                 <td>
-                    <span th:text="${hoaDon.khachHang.sdt}"></span>
+                    <span th:text="${hoaDon.khachHang == null or hoaDon.khachHang.sdt ==null ? 'N/A' : hoaDon.khachHang.sdt}"></span>
                 </td>
                 <td>
                     <span th:text="${#numbers.formatDecimal(hoaDon.thucThu, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>

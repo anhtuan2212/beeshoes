@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.HoaDon;
+import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.User;
 import com.poly.BeeShoes.repository.HoaDonRepository;
@@ -22,6 +23,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     @Override
     public List<HoaDon> getAllHoaDon() {
         return hoaDonRepository.findAll();
+    }
+
+    @Override
+    public List<HoaDon> getByKhachHang(KhachHang khachHang) {
+        return hoaDonRepository.findAllByKhachHang(khachHang);
     }
 
     @Override

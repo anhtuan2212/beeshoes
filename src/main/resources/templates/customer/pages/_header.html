@@ -70,10 +70,16 @@
                                 </a>
                             </th:block>
                             <th:block sec:authorize="isAuthenticated()">
-                                <a href="/user-profile">
+                                <a class="user-avatar" href="/user-profile">
                                     <img th:src="${#authentication.getPrincipal().avatar == null ?'/assets/customer/img/icon/user.png':#authentication.getPrincipal().avatar}"
                                          width="28" height="28" alt="">
                                 </a>
+                                <label class="user-name mb-0"
+                                       th:if="${#authentication.getPrincipal().khachHang!= null and #authentication.getPrincipal().khachHang.hoTen!=null}"
+                                       th:text="${#authentication.getPrincipal().khachHang.hoTen}"></label>
+                                <label class="user-name mb-0"
+                                       th:if="${#authentication.getPrincipal().nhanVien!= null and #authentication.getPrincipal().nhanVien.hoTen!=null}"
+                                       th:text="${#authentication.getPrincipal().nhanVien.hoTen}"></label>
                             </th:block>
 
                             <ul class="dropdown boxshadow_drop" style="margin-right: 0px">

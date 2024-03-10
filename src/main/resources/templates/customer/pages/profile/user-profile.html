@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -93,7 +93,7 @@
                 <div class="cart__user mb-3">
                     <div class="w-100 wraper_user">
                         <img id="avatar_preview" class="rounded-circle img_avatar"
-                             src="/assets/customer/img/about/ludeptrai.jpg"
+                             th:src="${user.getAvatar()==null?'/assets/customer/img/about/ludeptrai.jpg':user.getAvatar()}"
                              width="150" height="150">
                         <label class="btn" for="input_avatar">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -101,13 +101,27 @@
                         </label>
                     </div>
                     <div class="info text-center mt-2">
-                        <h3 class="font-weight-bold user_name">Đặng Anh Tuấn</h3>
-                        <label class="w-100 email">lutan2212@gmail.com</label>
-                        <label class="w-100 phone">0866755653</label>
-                        <label class="w-100 gender">Nam <i class="fa fa-mars" aria-hidden="true"></i></label>
-                        <!--                        <i class="fa fa-venus" aria-hidden="true"></i>-->
-                        <label class="w-100 birthdate">22/12/2001</label>
-                        <label class="w-100 address">Tân Quang, Trịnh Tường, Bát Xát, Lào Cai</label>
+                        <h3 class="font-weight-bold user_name"
+                            th:text="${user.getKhachHang()==null or user.getKhachHang().getHoTen()==null?'N/A':user.getKhachHang().getHoTen()}">
+                            Đặng Anh Tuấn</h3>
+                        <label class="w-100 email" th:text="${user.getKhachHang()==null?'N/A':user.getEmail()}">lutan2212@gmail.com</label>
+                        <label class="w-100 phone"
+                               th:text="${user.getKhachHang()==null or user.getKhachHang().getSdt()==null?'N/A':user.getKhachHang().getSdt()}">0866755653</label>
+                        <th:block
+                                th:if="${user.getKhachHang()!=null and user.getKhachHang().isGioiTinh()!=null and user.getKhachHang().isGioiTinh()==true}">
+                            <label class="w-100 gender">Nam <i class="fa fa-mars" aria-hidden="true"></i></label>
+                        </th:block>
+                        <th:block
+                                th:if="${user.getKhachHang()!=null and user.getKhachHang().isGioiTinh()!=null and user.getKhachHang().isGioiTinh()==false}">
+                            <label class="w-100 gender">Nữ <i class="fa fa-venus" aria-hidden="true"></i></label>
+                        </th:block>
+                        <label class="w-100 birthdate"
+                               th:text="${#dates.format(user.getKhachHang().getNgaySinh(), 'dd/MM/yyyy')}">22/12/2001</label>
+                        <th:block th:if="${user.getKhachHang() != null and user.getKhachHang().getDiaChiMacDinh() != null}">
+
+                            <label class="w-100 address"
+                                   th:text="${user.getKhachHang().getDiaChiMacDinh().getSoNha()+', '+user.getKhachHang().getDiaChiMacDinh().getPhuongXa()+', '+user.getKhachHang().getDiaChiMacDinh().getQuanHuyen()+', '+user.getKhachHang().getDiaChiMacDinh().getTinhThanhPho()}"></label>
+                        </th:block>
                     </div>
                 </div>
                 <div class="w-100">
@@ -144,54 +158,104 @@
                                 <input class="search_input" type="text" placeholder="Tìm kiếm mã hóa đơn.">
                             </div>
                         </div>
-                        <div class="card w-100 mb-3">
+<!--                        <div class="card w-100 mb-3">-->
+<!--                            <div class="card-header d-flex justify-content-between mr-1 ml-1">-->
+<!--                                <div class="oder_code_wrapper">-->
+<!--                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"> HD0001</a>-->
+<!--                                </div>-->
+<!--                                <div class="status">-->
+<!--                                    <label>Chờ Xác nhận</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="card_content ">-->
+<!--                                    <ul class="w-100">-->
+<!--                                        <li class="row">-->
+<!--                                            <div class="col-2 p-0">-->
+<!--                                                <img class="product_img"-->
+<!--                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">-->
+<!--                                            </div>-->
+<!--                                            <div class="col-7 p-0">-->
+<!--                                                <div>-->
+<!--                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>-->
+<!--                                                    <div class="w-100">-->
+<!--                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>-->
+<!--                                                    </div>-->
+<!--                                                    <label>Số Lượng : 1</label>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-3 d-flex align-items-center">-->
+<!--                                                <h5 class="product_price_cu">10.000.000đ</h5>-->
+<!--                                                <h5 class="product_price">9.000.000đ</h5>-->
+<!--                                            </div>-->
+<!--                                        </li>-->
+<!--                                        <li class="row">-->
+<!--                                            <div class="col-2 p-0">-->
+<!--                                                <img class="product_img"-->
+<!--                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">-->
+<!--                                            </div>-->
+<!--                                            <div class="col-7 p-0">-->
+<!--                                                <div>-->
+<!--                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>-->
+<!--                                                    <div class="w-100">-->
+<!--                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>-->
+<!--                                                    </div>-->
+<!--                                                    <label>Số Lượng : 1</label>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-3 d-flex align-items-center">-->
+<!--                                                <h5 class="product_price_cu">10.000.000đ</h5>-->
+<!--                                                <h5 class="product_price">9.000.000đ</h5>-->
+<!--                                            </div>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="card-footer pt-0">-->
+<!--                                <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">-->
+<!--                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>-->
+<!--                                </div>-->
+<!--                                <div class="d-flex justify-content-between align-items-center">-->
+<!--                                    <div>-->
+<!--                                        Đơn hàng được hủy bởi bạn.-->
+<!--                                    </div>-->
+<!--                                    <div class="card-btn-group">-->
+<!--                                        <button class="primary-btn" type="button">Mua Lại</button>-->
+<!--                                        <button class="info-btn" type="button">Xem Chi Tiết</button>-->
+<!--                                        <button class="info-btn" type="button">Hủy Đơn</button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="card w-100 mb-3" th:each="hoadon:${lsthoadon}">
                             <div class="card-header d-flex justify-content-between mr-1 ml-1">
                                 <div class="oder_code_wrapper">
-                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"> HD0001</a>
+                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;" th:text="${hoadon.getMaHoaDon()}"></a>
                                 </div>
                                 <div class="status">
-                                    <label>Chờ Xác nhận</label>
+                                    <label th:text="${hoadon.getTrangThai().name()}"></label>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="card_content ">
                                     <ul class="w-100">
-                                        <li class="row">
+                                        <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}">
                                             <div class="col-2 p-0">
                                                 <img class="product_img"
-                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
+                                                     th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
                                             </div>
                                             <div class="col-7 p-0">
                                                 <div>
-                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
+                                                    <h6 class="product_name mb-2" th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
                                                     <div class="w-100">
-                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
+                                                        Màu :<label th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}">Màu Trắng</label>, Kích Cỡ :<label th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}">32</label>
                                                     </div>
-                                                    <label>Số Lượng : 1</label>
+                                                    <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                                 </div>
                                             </div>
                                             <div class="col-3 d-flex align-items-center">
-                                                <h5 class="product_price_cu">10.000.000đ</h5>
-                                                <h5 class="product_price">9.000.000đ</h5>
-                                            </div>
-                                        </li>
-                                        <li class="row">
-                                            <div class="col-2 p-0">
-                                                <img class="product_img"
-                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
-                                            </div>
-                                            <div class="col-7 p-0">
-                                                <div>
-                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
-                                                    <div class="w-100">
-                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
-                                                    </div>
-                                                    <label>Số Lượng : 1</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-3 d-flex align-items-center">
-                                                <h5 class="product_price_cu">10.000.000đ</h5>
-                                                <h5 class="product_price">9.000.000đ</h5>
+                                                <h5 class="product_price_cu" th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                <h5 class="product_price" th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                             </div>
                                         </li>
                                     </ul>
@@ -199,80 +263,11 @@
                             </div>
                             <div class="card-footer pt-0">
                                 <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
-                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>
+                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money" th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        Đơn hàng được hủy bởi bạn.
-                                    </div>
-                                    <div class="card-btn-group">
-                                        <button class="primary-btn" type="button">Mua Lại</button>
-                                        <button class="info-btn" type="button">Xem Chi Tiết</button>
-                                        <button class="info-btn" type="button">Hủy Đơn</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card w-100 mb-3">
-                            <div class="card-header d-flex justify-content-between mr-1 ml-1">
-                                <div class="oder_code_wrapper">
-                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"> HD0002</a>
-                                </div>
-                                <div class="status">
-                                    <label>Chờ Xác nhận</label>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="card_content ">
-                                    <ul class="w-100">
-                                        <li class="row">
-                                            <div class="col-2 p-0">
-                                                <img class="product_img"
-                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
-                                            </div>
-                                            <div class="col-7 p-0">
-                                                <div>
-                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
-                                                    <div class="w-100">
-                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
-                                                    </div>
-                                                    <label>Số Lượng : 1</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-3 d-flex align-items-center">
-                                                <h5 class="product_price_cu">10.000.000đ</h5>
-                                                <h5 class="product_price">9.000.000đ</h5>
-                                            </div>
-                                        </li>
-                                        <li class="row">
-                                            <div class="col-2 p-0">
-                                                <img class="product_img"
-                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">
-                                            </div>
-                                            <div class="col-7 p-0">
-                                                <div>
-                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>
-                                                    <div class="w-100">
-                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>
-                                                    </div>
-                                                    <label>Số Lượng : 1</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-3 d-flex align-items-center">
-                                                <h5 class="product_price_cu">10.000.000đ</h5>
-                                                <h5 class="product_price">9.000.000đ</h5>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-footer pt-0">
-                                <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
-                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        Đơn hàng được hủy bởi bạn.
+                                        Đơn hàng được tạo bởi bạn.
                                     </div>
                                     <div class="card-btn-group">
                                         <button class="primary-btn" type="button">Mua Lại</button>
@@ -304,7 +299,8 @@
                                             <div class="col-9 contents p-2">
                                                 <h5 class="text-center voucher_code">VC00003</h5>
                                                 <label class="express_date">Hạn Đến: 16H28 Ngày 14/03/2024</label>
-                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ 500.000đ</label>
+                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ
+                                                    500.000đ</label>
                                                 <label class="express_date">Tối Đa:200.000đ/Khách Hàng</label>
                                                 <label class="express_date w-100">Số Lượng : 20</label>
                                             </div>
@@ -319,7 +315,8 @@
                                             <div class="col-9 contents p-2">
                                                 <h5 class="text-center voucher_code">VC00004</h5>
                                                 <label class="express_date">Hạn Đến: 15H17 Ngày 31/03/2024</label>
-                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ 1.000.000đ</label>
+                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ
+                                                    1.000.000đ</label>
                                                 <label class="express_date">Tối Đa:150.000đ/Khách Hàng</label>
                                                 <label class="express_date w-100">Số Lượng : 100</label>
                                             </div>
@@ -334,7 +331,8 @@
                                             <div class="col-9 contents p-2">
                                                 <h5 class="text-center voucher_code">VC00005</h5>
                                                 <label class="express_date">Hạn Đến: 22H13 Ngày 07/04/2024</label>
-                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ 10.000.000đ</label>
+                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ
+                                                    10.000.000đ</label>
                                                 <label class="express_date">Tối Đa:1.200.000đ/Khách Hàng</label>
                                                 <label class="express_date w-100">Số Lượng : 100</label>
                                             </div>
@@ -343,7 +341,8 @@
                                                 <h3 class="col-6 tienmat">1.2M</h3>
                                             </div>
                                         </div>
-                                    </li></ul>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
