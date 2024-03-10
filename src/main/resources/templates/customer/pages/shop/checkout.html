@@ -103,24 +103,17 @@
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Tên người nhận<span>*</span></p>
-                                    <input type="text" id="customerName" th:value="${userLogged.khachHang.hoTen}"
+                                    <input type="text" id="customerName" th:value="${userLogged != null ? userLogged.khachHang.hoTen : ''}"
                                            placeholder="Ngô Trung Tuyến">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Số điện thoại<span>*</span></p>
-                                    <input type="text" id="customerPhone" th:value="${userLogged.khachHang.sdt}"
+                                    <input type="text" id="customerPhone" th:value="${userLogged != null ? userLogged.khachHang.sdt : ''}"
                                            placeholder="035xxxxxxx">
                                 </div>
                             </div>
-                        </div>
-
-                        <div th:if="${userLogged.khachHang.diaChiMacDinh != null}" class="d-none">
-                            <span id="houseNumber" th:text="${userLogged.khachHang.diaChiMacDinh.soNha}"></span>
-                            <span id="ward" th:text="${userLogged.khachHang.diaChiMacDinh.phuongXa}"></span>
-                            <span id="district" th:text="${userLogged.khachHang.diaChiMacDinh.quanHuyen}"></span>
-                            <span id="province" th:text="${userLogged.khachHang.diaChiMacDinh.tinhThanhPho}"></span>
                         </div>
                         <th:block sec:authorize="!isAuthenticated()">
                             <div class="row">
@@ -158,8 +151,9 @@
                         </th:block>
                         <th:block sec:authorize="isAuthenticated()">
                             <div class="wrapper_address">
+                                <p>Địa chỉ nhận hàng</p>
                                 <div class="item_address mb-1" th:each="adr:${userLogged.getKhachHang().getDiaChi()}">
-                                    <div class="content_dress row m-0">
+                                    <div class="content_dress row m-0 customerAddress">
                                         <div class="checkbox-wrapper-30 col-1">
                                    <span class="checkbox">
                                      <input class="selected_product" type="radio" name="address" data-cart-id=""
@@ -178,14 +172,14 @@
                                         </div>
                                         <div class="col-11 d-flex justify-content-between">
                                             <div class="pt-3">
-                                                <label class="w-100 txt_address mb-0">Địa Chỉ: <label class="mb-0"
+                                                <label class="w-100 txt_address mb-0">Địa Chỉ: <label class="mb-0 customerHouseNumber"
                                                                                                       th:text="${adr.getSoNha()}"></label></label>
                                                 <div class="d-flex flex-row">
-                                                    <label class="txt_address"
-                                                           th:text="${adr.getPhuongXa()}+', '"></label>
-                                                    <label class="txt_address"
-                                                           th:text="${adr.getQuanHuyen()}+', '"></label>
-                                                    <label class="txt_address"
+                                                    <label class="txt_address customerWard"
+                                                           th:text="${adr.getPhuongXa()}+','"></label>
+                                                    <label class="txt_address customerDistrict"
+                                                           th:text="${adr.getQuanHuyen()}+','"></label>
+                                                    <label class="txt_address customerProvince"
                                                            th:text="${adr.getTinhThanhPho()}"></label>
                                                 </div>
                                                 <div>

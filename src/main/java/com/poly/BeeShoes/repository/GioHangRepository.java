@@ -11,5 +11,5 @@ import java.util.List;
 public interface GioHangRepository extends JpaRepository<GioHang,Long> {
     GioHang getFirstByKhachHang(KhachHang khachHang);
 
-    List<GioHang> findGioHangsByKhachHang_Id(Long id);
+    GioHang findGioHangsByKhachHang_Id(Long id);
 }

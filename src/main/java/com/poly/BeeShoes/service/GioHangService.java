@@ -10,6 +10,6 @@ public interface GioHangService {
     boolean delete(Long id);
     GioHang getByKhachHang(KhachHang khachHang);
 
-    List<GioHang> findByCustomerId(Long id);
+    GioHang findByCustomerId(Long id);
     GioHang getById(Long id);
 }

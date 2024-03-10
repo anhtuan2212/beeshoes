@@ -33,7 +33,7 @@ public class GioHangServiceImpl implements GioHangService {
     }
 
     @Override
-    public List<GioHang> findByCustomerId(Long id) {
+    public GioHang findByCustomerId(Long id) {
         return gioHangRepository.findGioHangsByKhachHang_Id(id);
     }
 

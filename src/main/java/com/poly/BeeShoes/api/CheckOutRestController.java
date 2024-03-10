@@ -7,10 +7,7 @@ import com.google.gson.JsonParser;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.payment.vnpay.VNPayService;
-import com.poly.BeeShoes.service.ChiTietSanPhamService;
-import com.poly.BeeShoes.service.HoaDonChiTietService;
-import com.poly.BeeShoes.service.HoaDonService;
-import com.poly.BeeShoes.service.VoucherService;
+import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,12 @@ public class CheckOutRestController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private ChiTietSanPhamService chiTietSanPhamService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private KhachHangService khachHangService;
+    @Autowired
+    private NhanVienService nhanVienService;
 
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
@@ -56,6 +59,13 @@ public class CheckOutRestController {
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         HoaDon hoaDon = new HoaDon();
+        if(request.getUserPrincipal().getName() != null) {
+            User user = userService.getByUsername(request.getUserPrincipal().getName());
+            if(user.getNhanVien() == null) {
+                KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
+                hoaDon.setKhachHang(khachHang);
+            }
+        }
         hoaDon.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
@@ -98,6 +108,7 @@ public class CheckOutRestController {
     @PostMapping("/placeOrder-whenReceive")
     public ResponseEntity<String> createOrderWhenReceive(
             @RequestBody String paymentDto,
+            HttpServletRequest request,
             Model model
     ) {
         JsonObject jsonObject = JsonParser.parseString(paymentDto).getAsJsonObject();
@@ -114,6 +125,13 @@ public class CheckOutRestController {
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         HoaDon hoaDon = new HoaDon();
+        if(request.getUserPrincipal().getName() != null) {
+            User user = userService.getByUsername(request.getUserPrincipal().getName());
+            if(user.getNhanVien() == null) {
+                KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
+                hoaDon.setKhachHang(khachHang);
+            }
+        }
         hoaDon.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));

@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
+import com.poly.BeeShoes.model.ChiTietSanPham;
 import com.poly.BeeShoes.model.HoaDonChiTiet;
 import com.poly.BeeShoes.repository.HoaDonChiTietRepository;
 import com.poly.BeeShoes.service.HoaDonChiTietService;
@@ -16,6 +17,11 @@ public class HoaDonChiTietServiceImpl implements HoaDonChiTietService {
 
     @Override
     public List<HoaDonChiTiet> getHoaDonChiTietCuaHoaDonById(Long id) {
+        return hoaDonChiTietRepository.findByHoaDon_Id(id);
+    }
+
+    @Override
+    public List<HoaDonChiTiet> getChiTietSanPhamCuaHoaDonByIdHoaDon(Long id) {
         return hoaDonChiTietRepository.findByHoaDon_Id(id);
     }
 
