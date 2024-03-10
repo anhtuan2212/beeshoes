@@ -14,6 +14,7 @@ $(document).ready(function () {
     var ward;
     var district;
     var province;
+    var houseNumber;
 
     $.ajax({
         type: "GET",
@@ -56,34 +57,6 @@ $(document).ready(function () {
             console.error('Xảy ra lỗi: ', error);
         }
     })
-
-    var houseNumberOfCustomer = $('#houseNumber').text();
-    $('#customerHouseNumber').val(houseNumberOfCustomer);
-    var wardCodeOfCustomer = $('#ward').text();
-    var districtOfCustomer = $('#district').text();
-    var provinceOfCustomer = $('#province').text();
-    console.log(houseNumberOfCustomer + ',' + wardCodeOfCustomer + ',' + districtOfCustomer + ',' + provinceOfCustomer);
-    if(wardCodeOfCustomer != null &&
-        districtOfCustomer != null &&
-        provinceOfCustomer != null) {
-        provinceArr.forEach(pro => {
-            if(pro.ProvinceName == provinceOfCustomer) {
-                tinhThanhPho.append(`<option value="${pro.provinceID}" selected>${pro.ProvinceName}</option>`);
-            }
-        })
-
-        districtArr.forEach(dis => {
-            if(dis.DistrictName == districtOfCustomer) {
-                quanHuyen.append(`<option value="${dis.DistrictID}" selected>${dis.DistrictName}</option>`);
-            }
-        })
-
-        wardArr.forEach(ward => {
-            if(ward.Name == wardCodeOfCustomer) {
-                phuongXa.append(`<option value="${ward.Code}" selected>${ward.Name}</option>`);
-            }
-        })
-    }
 
     tinhThanhPho.on('change', function () {
         tinhThanhPhoSelected = tinhThanhPho.val();
@@ -174,10 +147,129 @@ $(document).ready(function () {
         })
     })
 
+    var defaultCheckedValue = $(".selected_product:checked").closest('.customerAddress');
+    if(defaultCheckedValue != null) {
+        callApiShippingFee();
+    }
+
+    function callApiShippingFee() {
+        var defaultHouseNumber = defaultCheckedValue.find('.customerHouseNumber').text().replace(/[,.]/g, '');
+        var defaultCustomerWardName = defaultCheckedValue.find('.customerWard').text().replace(/[,.]/g, '');
+        var defaultCustomerDistrictName = defaultCheckedValue.find('.customerDistrict').text().replace(/[,.]/g, '');
+        var defaultCustomerProvinceName = defaultCheckedValue.find('.customerProvince').text().replace(/[,.]/g, '');
+        var defaultWard, defaultDistrict, defaultProvince;
+        console.log(defaultCustomerWardName + ',' + defaultCustomerDistrictName + ',' + defaultCustomerProvinceName);
+        console.log(wardArr);
+        console.log(districtArr);
+        console.log(provinceArr)
+        wardArr.forEach((item) => {
+            if(item.Name == defaultCustomerWardName) {
+                console.log(item.Name)
+                defaultWard = item.Code;
+            }
+        })
+        districtArr.forEach((item) => {
+            if(item.DistrictName == defaultCustomerDistrictName) {
+                console.log(item.DistrictName)
+                defaultDistrict = item.DistrictID;
+            }
+        })
+        provinceArr.forEach((item) => {
+            if(item.ProvinceName == defaultCustomerProvinceName) {
+                console.log(item.ProvinceName)
+                defaultProvince = item.ProvinceID;
+            }
+        })
+
+        console.log(defaultWard + ',' + defaultDistrict + ',' + defaultProvince);
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+        //     contentType: "application/json",
+        //     headers: {
+        //         "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+        //     },
+        //     data: JSON.stringify(
+        //         {
+        //             shop_id: "190713",
+        //             from_name: "LightBee Shop",
+        //             from_phone: "0359966461",
+        //             from_address: "Trường Cao Đẳng FPT Polytechnic",
+        //             from_ward_name: "Phường Xuân Phương",
+        //             from_district_name: "Nam Từ Liêm",
+        //             from_province_name: "Hà Nội",
+        //             to_name: "test",
+        //             to_phone: "0359966461",
+        //             to_address: "Nam Đinh",
+        //             to_ward_code: defaultWard,
+        //             to_district_id: defaultDistrict,
+        //             service_id: 55320,
+        //             service_type_id: 2,
+        //             payment_type_id: 2,
+        //             cod_amount: parseInt(200000),
+        //             required_note: "CHOXEMHANGKHONGTHU",
+        //             items: [
+        //                 {
+        //                     name:"Áo Polo",
+        //                     code:"Polo123",
+        //                     quantity: 1,
+        //                     price: 200000,
+        //                     length: 12,
+        //                     width: 12,
+        //                     height: 12,
+        //                     weight: 1200,
+        //                     category:
+        //                         {
+        //                             level1:"Áo"
+        //                         }
+        //                 }
+        //             ],
+        //             weight: 2000,
+        //             length: 1,
+        //             width: 19,
+        //             height: 10
+        //         }
+        //     ),
+        //     success: function (response) {
+        //         $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+        //         $('#totalAmount').text(parseFloat(parseInt(total) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+        //     },
+        //     error: function (error) {
+        //         console.error('Xảy ra lỗi: ', error)
+        //     }
+        // })
+    }
+
+    $('.selected_product').on('change', function () {
+        var customerAddress = $(this).closest('.customerAddress')
+        houseNumber = customerAddress.find('.customerHouseNumber').text().replace(/[,.]/g, '');
+        var customerWardName = customerAddress.find('.customerWard').text().replace(/[,.]/g, '');
+        var customerDistrictName = customerAddress.find('.customerDistrict').text().replace(/[,.]/g, '');
+        var customerProvinceName = customerAddress.find('.customerProvince').text().replace(/[,.]/g, '');
+        wardArr.forEach((item) => {
+            if(item.Name == customerWardName) {
+                ward = item.Code;
+            }
+        })
+        districtArr.forEach((item) => {
+            if(item.DistrictName == customerDistrictName) {
+                district = item.DistrictID;
+            }
+        })
+        provinceArr.forEach((item) => {
+            if(item.ProvinceName == customerProvinceName) {
+                province = item.ProvinceID;
+            }
+        })
+    })
+
     $('#placeOrder').on('click', function () {
         var total = parseInt($('#total').text().replace(/[,.]/g, ''));
         var shippingFee = parseInt($('#shippingFee').text().replace(/[,.]/g, ''));
-        var houseNumber = $('#customerHouseNumber').val();
+        if($('#customerHouseNumber').val() == null || $('#customerHouseNumber').val() === undefined) {
+            houseNumber = $('#customerHouseNumber').val();
+        }
         console.log(houseNumber + ',' + ward + ',' + district + ',' + province);
         var customerPhone = $('#customerPhone').val();
         var customerName = $('#customerName').val();

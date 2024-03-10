@@ -2,10 +2,7 @@ package com.poly.BeeShoes.controller.customer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.poly.BeeShoes.model.ChiTietSanPham;
-import com.poly.BeeShoes.model.GioHang;
-import com.poly.BeeShoes.model.User;
-import com.poly.BeeShoes.model.Voucher;
+import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.payment.vnpay.VNPayService;
 import com.poly.BeeShoes.request.ProductCheckoutRequest;
 import com.poly.BeeShoes.request.ProductDetailVersion;
@@ -42,19 +39,21 @@ public class CheckOutController {
     private final UserService userService;
     private final GioHangService gioHangService;
     private final GioHangChiTietService gioHangChiTietService;
+    private final HoaDonService hoaDonService;
+    private final HoaDonChiTietService hoaDonChiTietService;
 
     Gson gson = new Gson();
     @PostMapping("/checkout")
     public String getCheckout (
             @RequestParam("maGiamGia")String ma,
             @RequestParam("listData")String list,
+            HttpServletRequest request,
             Model model
     ){
         User user = new User();
-        if(SecurityContextHolder.getContext().getAuthentication() != null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            user = userService.getByUsername(auth.getName());
-            System.out.println(auth.getName());
+        if(request.getUserPrincipal() != null) {
+            user = userService.getByUsername(request.getUserPrincipal().getName());
+            System.out.println(request.getUserPrincipal().getName());
             model.addAttribute("userLogged", user);
         }
         float totalAmount = 0;
@@ -81,9 +80,18 @@ public class CheckOutController {
                 }
                 totalAmount = total - maxValueOfVoucher;
                 model.addAttribute("voucherValue", maxValueOfVoucher);
+            } else if(voucher != null && voucher.getLoaiVoucher().equals("%")) {
+                float percentOfVoucher = voucher.getGiaTriPhanTram();
+                float maxValueOfVoucher = total / 100 * percentOfVoucher;
+                if(maxValueOfVoucher > voucher.getGiaTriToiDa().floatValue()) {
+                    maxValueOfVoucher = voucher.getGiaTriToiDa().floatValue();
+                }
+                totalAmount = total - maxValueOfVoucher;
+                model.addAttribute("voucherValue", maxValueOfVoucher);
+            } else {
+                totalAmount = total;
             }
             model.addAttribute("voucher", voucher);
-            totalAmount = total;
         }
         model.addAttribute("productDetailMap", productDetailMap);
         model.addAttribute("total", total);
@@ -100,13 +108,14 @@ public class CheckOutController {
         model.addAttribute("invoiceCode", invoiceCode[0]);
         if(paymentStatus == 1) {
             User user = new User();
-            if(SecurityContextHolder.getContext().getAuthentication() != null) {
-                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                user = userService.getByUsername(auth.getName());
-                System.out.println(auth.getName());
-                List<GioHang> gioHangList = gioHangService.findByCustomerId(user.getKhachHang().getId());
-                if(gioHangList != null) {
-                    gioHangList.forEach(gioHang -> gioHangChiTietService.deleteByGioHangId(gioHang.getId()));
+            if(request.getUserPrincipal() != null) {
+                user = userService.getByUsername(request.getUserPrincipal().getName());
+                System.out.println(request.getUserPrincipal().getName());
+                GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
+                Long idHoaDon = hoaDonService.getHoaDonByMa(invoiceCode[0]).getId();
+                List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
+                if(gioHang != null) {
+                    hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
                 }
             }
             return "payment/vnpay/order-success";
@@ -119,15 +128,19 @@ public class CheckOutController {
     public String orderSuccess(
             @RequestParam("invoiceCode") String invoiceCode,
             @RequestParam("totalAmount") int totalAmount,
+            HttpServletRequest request,
             Model model
     ) {
         User user = new User();
-        if(SecurityContextHolder.getContext().getAuthentication() != null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            user = userService.getByUsername(auth.getName());
-            System.out.println(auth.getName());
-            List<GioHang> gioHangList = gioHangService.findByCustomerId(user.getKhachHang().getId());
-            gioHangList.forEach(gioHang -> gioHangChiTietService.deleteByGioHangId(gioHang.getId()));
+        if(request.getUserPrincipal().getName() != null) {
+            user = userService.getByUsername(request.getUserPrincipal().getName());
+            System.out.println(request.getUserPrincipal().getName());
+            GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
+            Long idHoaDon = hoaDonService.getHoaDonByMa(invoiceCode).getId();
+            List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
+            if(gioHang != null) {
+                hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
+            }
         }
         model.addAttribute("invoiceCode", invoiceCode);
         model.addAttribute("total", totalAmount);
