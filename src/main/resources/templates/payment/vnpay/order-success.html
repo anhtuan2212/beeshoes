@@ -94,7 +94,7 @@
         </div>
         <div class="text-center">
             <h3>Đặt hàng thành công!</h3>
-            <p th:text="'Bạn đã thanh toán thành công đơn hàng có mã ' + ${invoiceCode} + ' trị giá ' + ${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')} + ' VNĐ!'"></p>
+            <p th:text="'Bạn đã đặt hàng thành công đơn hàng có mã ' + ${invoiceCode} + ' trị giá ' + ${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')} + ' VNĐ!'"></p>
             <p>Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của <a href="/shop">LightBee Shop!</a></p>
             <a th:href="@{|/|}" class="btn btn-outline-dark">Xem chi tiết đơn hàng</a>
         </div>
