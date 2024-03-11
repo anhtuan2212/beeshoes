@@ -125,7 +125,7 @@ public class CheckOutRestController {
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         HoaDon hoaDon = new HoaDon();
-        if(request.getUserPrincipal().getName() != null) {
+        if(request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
             if(user.getNhanVien() == null) {
                 KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
