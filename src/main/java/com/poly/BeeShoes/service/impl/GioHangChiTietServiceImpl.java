@@ -7,6 +7,8 @@ import com.poly.BeeShoes.service.GioHangChiTietService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class GioHangChiTietServiceImpl implements GioHangChiTietService {
@@ -34,4 +36,16 @@ public class GioHangChiTietServiceImpl implements GioHangChiTietService {
     public GioHangChiTiet getById(Long id) {
         return gioHangChiTietRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void deleteByGioHangId(Long id) {
+        gioHangChiTietRepository.deleteByGioHang_Id(id);
+    }
+
+    @Override
+    public void deleteByGioHangIdAndChiTietSanPhamId(Long idGioHang, Long idChiTietSanPham) {
+        gioHangChiTietRepository.deleteGioHangChiTietsByGioHang_IdAndAndChiTietSanPham_Id(idGioHang, idChiTietSanPham);
+    }
+
+
 }

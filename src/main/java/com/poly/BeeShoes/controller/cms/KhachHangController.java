@@ -260,7 +260,7 @@ public class KhachHangController {
     @ResponseBody
     public Map<String, Boolean> checkDuplicate(@RequestParam("email") String email,
                                                @RequestParam("phoneNumber") String phoneNumber,
-                                               @RequestParam("id") Long id) {
+                                               @RequestParam(name = "id",required = false) Long id) {
         User user = userService.findByKhachHang_Id(id);
         KhachHang khachHang = khachHangService.detail(id);
         boolean emailExists = userService.existsByEmail(email);

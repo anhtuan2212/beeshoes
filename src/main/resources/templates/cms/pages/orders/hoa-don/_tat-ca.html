@@ -249,8 +249,8 @@
             <tr>
                 <th >STT</th>
                 <th >Mã Hóa Đơn</th>
-                <th>Tên Khách Hàng</th>
-                <th>SĐT Khách Hàng</th>
+                <th>Tên Người Nhận</th>
+                <th>SĐT Nhận</th>
                 <th>Tổng Tiền</th>
                 <th>Loại Hóa Đơn</th>
                 <th>Trạng Thái</th>
@@ -265,12 +265,10 @@
                 </td>
                 <td ><a th:href="@{|/cms/hoa-don/${hoaDon.id}/chi-tiet|}" th:text="${hoaDon.maHoaDon}"></a></td>
                 <td>
-                    <a class="text-body" th:if="${hoaDon.khachHang != null}" th:href="@{|/cms/customer/${hoaDon.khachHang.id}|}"
-                       th:text="${hoaDon.khachHang.hoTen}"></a>
-                    <span th:if="${hoaDon.khachHang == null}">N/A</span>
+                    <span th:text="${hoaDon.tenNguoiNhan}"></span>
                 </td>
                 <td>
-                    <span th:text="${hoaDon.khachHang.sdt}"></span>
+                    <span th:text="${hoaDon.sdtNhan}"></span>
                 </td>
                 <td>
                     <span th:text="${#numbers.formatDecimal(hoaDon.thucThu, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>

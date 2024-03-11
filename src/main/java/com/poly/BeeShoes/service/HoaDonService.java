@@ -1,9 +1,6 @@
 package com.poly.BeeShoes.service;
 
-import com.poly.BeeShoes.model.HoaDon;
-import com.poly.BeeShoes.model.NhanVien;
-import com.poly.BeeShoes.model.TrangThaiHoaDon;
-import com.poly.BeeShoes.model.User;
+import com.poly.BeeShoes.model.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +8,7 @@ import java.util.Optional;
 public interface HoaDonService {
 
     List<HoaDon> getAllHoaDon();
+    List<HoaDon> getByKhachHang(KhachHang khachHang);
 
     List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon);
 
@@ -28,4 +26,6 @@ public interface HoaDonService {
     HoaDon getHoaDonByMa(String ma);
 
     HoaDon save(HoaDon hoaDon);
+
+    String generateInvoiceCode();
 }

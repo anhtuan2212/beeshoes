@@ -6,7 +6,9 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,6 +45,7 @@ public class HoaDon {
 
     String diaChiNhan;
     String sdtNhan;
+    String tenNguoiNhan;
 
     BigDecimal tongTien;
     BigDecimal thucThu;
@@ -52,6 +55,12 @@ public class HoaDon {
     Date ngayNhan;
     Timestamp ngayTao;
     Timestamp ngaySua;
+
+    @OneToMany(mappedBy = "hoaDon")
+    private List<HoaDonChiTiet> hoaDonChiTiets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hoaDon")
+    private List<LichSuHoaDon> lichSuHoaDons = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "nguoi_tao")

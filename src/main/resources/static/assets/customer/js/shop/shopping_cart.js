@@ -3,6 +3,14 @@ let ShopingCart = [];
 let ListVoucher = []
 let SelectedVoucher = null;
 localStorage.removeItem('checkout_data');
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        location.reload()
+    }
+});
+window.addEventListener('popstate', function(event) {
+    location.reload()
+});
 $(document).ready(async function () {
     let NumDataLength = 0;
     if (username === undefined) {
@@ -85,8 +93,8 @@ $(document).ready(async function () {
                 products.forEach((data) => {
                     totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
                 });
-                if (totalMoney>=voucher.giaTriToiThieu){
-                    SelectedVoucher=voucher;
+                if (totalMoney >= voucher.giaTriToiThieu) {
+                    SelectedVoucher = voucher;
                     $('.wraper_voucher').removeClass('active');
                     $(`#voucher_${voucher.id}`).addClass('active');
                     updateTotalMoney();
@@ -153,6 +161,14 @@ $(document).ready(async function () {
         }
     })
 
+    function check_checkAll() {
+        $('.selected_product').prop('checked', false);
+        $('#input_voucher').val('');
+        SelectedVoucher = null;
+        $('#selected_all_product').prop('checked', false);
+    }
+
+
     $(document).on('change', '.selected_product', function () {
         let id = $(this).data('id');
         if ($(this).is(':checked')) {
@@ -201,10 +217,11 @@ $(document).ready(async function () {
             $('<input>').attr({
                 type: 'hidden',
                 name: 'maGiamGia',
-                value: SelectedVoucher === null ?'':SelectedVoucher.ma
+                value: SelectedVoucher === null ? '' : SelectedVoucher.ma
             }).appendTo(form);
             form.appendTo('body');
             form.submit();
+            check_checkAll()
         } else {
             ToastError('Vui lòng chọn sản phẩm.')
         }
@@ -258,6 +275,24 @@ $(document).ready(async function () {
         callback();
     }
 
+    function formatDate(dateTimeString) {
+        let dateTime = new Date(dateTimeString);
+
+        // Lấy các thành phần của ngày và giờ
+        let day = dateTime.getDate();
+        let month = dateTime.getMonth() + 1;
+        let year = dateTime.getFullYear();
+        let hours = dateTime.getHours();
+        let minutes = dateTime.getMinutes();
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        let formattedDateTime = hours + 'H' + minutes + ' Ngày ' + day + '/' + month + '/' + year;
+
+        return formattedDateTime;
+    }
+
     function updateTotalMoney() {
         let data = getCheckoutDataLocalStorage();
         if (Array.isArray(data)) {
@@ -265,6 +300,11 @@ $(document).ready(async function () {
             data.forEach((data) => {
                 totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
             });
+            if (SelectedVoucher !== null) {
+                if (totalMoney < Number(SelectedVoucher.giaTriToiThieu)) {
+                    SelectedVoucher = null;
+                }
+            }
             if (ListVoucher !== null && Array.isArray(ListVoucher)) {
                 let html = '';
                 ListVoucher.forEach((voucher) => {
@@ -278,11 +318,11 @@ $(document).ready(async function () {
                                 showPr = `<h3 class="col-6 phantram">${voucher.giaTriPhanTram}%</h3>`
                             }
                             html += `
-                        <li class="mb-2">
+                        <li class="wraper_li scaleIn">
                             <div data-id="${voucher.id}" id="voucher_${voucher.id}" class="wraper_voucher row m-0">
                                 <div class="col-9 contents p-2">
                                     <h5 class="text-center voucher_code">${voucher.ma}</h5>
-                                    <label class="express_date">Hạn Đến: ${voucher.ngayKetThuc}</label>
+                                    <label class="express_date">Hạn Đến: ${formatDate(voucher.endDate1)}</label>
                                     <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(voucher.giaTriToiThieu) + 'đ'}</label>
                                     <label class="express_date">Tối Đa:${addCommasToNumber(voucher.giaTriToiDa) + 'đ'}/Khách Hàng</label>
                                     <label class="express_date w-100">Số Lượng : ${voucher.soLuong}</label>
@@ -295,9 +335,11 @@ $(document).ready(async function () {
                         </li>`;
                         }
                     } else {
-                        SelectedVoucher = null;
                         if (ele.length !== 0) {
-                            ele.remove();
+                            ele.parent().addClass('scaleOut');
+                            ele.parent().on('animationend', function () {
+                                ele.parent().remove();
+                            });
                         }
                     }
                 })
@@ -308,20 +350,20 @@ $(document).ready(async function () {
             if (SelectedVoucher !== null) {
                 $('#discount_element').removeClass('d-none');
                 $('#discount_money').text(addCommasToNumber(SelectedVoucher.giaTriToiDa) + 'đ')
-                if (SelectedVoucher.loaiVoucher==='%'){
-                    if (Number(SelectedVoucher.giaTriToiDa) < totalMoney * (Number(SelectedVoucher.giaTriPhanTram)/100)) {
+                if (SelectedVoucher.loaiVoucher === '%') {
+                    if (Number(SelectedVoucher.giaTriToiDa) < Number(totalMoney) * (Number(SelectedVoucher.giaTriPhanTram) / 100)) {
                         discountAmount = Number(SelectedVoucher.giaTriToiDa);
                     } else {
-                        discountAmount = totalMoney * (Number(SelectedVoucher.giaTriPhanTram)/100);
+                        discountAmount = Number(totalMoney) * (Number(SelectedVoucher.giaTriPhanTram) / 100);
                     }
-                }else{
+                } else {
                     discountAmount = SelectedVoucher.giaTriTienMat;
                 }
             } else {
                 discountAmount = 0;
                 $('#discount_element').addClass('d-none');
             }
-            let totalPayment = totalMoney - discountAmount;
+            let totalPayment = Number(totalMoney) - Number(discountAmount);
             totalPayment = Math.ceil(totalPayment / 1000) * 1000;
             $('#sub-total').text(addCommasToNumber(totalMoney) + 'đ');
             $('#total-money').text(addCommasToNumber(totalPayment) + 'đ');
@@ -420,14 +462,13 @@ $(document).ready(async function () {
         let data = getProductInLocalStorage();
         if (Array.isArray(data)) {
             let ind = null;
-            let totalMoney = 0;
             for (let i = 0; i < data.length; i++) {
                 if (data[i].pro.id == id) {
                     ind = i;
-                } else {
-                    totalMoney += extractNumberFromString(data[i].pro.gia_ban) * Number(data[i].quantity);
+                    break;
                 }
             }
+            console.log('vào')
             data.splice(ind, 1);
             saveProductTolocalStorage(data);
             updateTotalMoney();
@@ -486,7 +527,7 @@ $(document).ready(async function () {
                                 </div>
                             </td>
                             <td class="product__cart__item">
-                                <div class="product__cart__item__pic mr-0">
+                                <div class="product__cart__item__pic mr-1">
                                     <img width="90" height="90" src="${product.chitietSanPham.anh}" alt="product_img">
                                 </div>
                                 <div class="product__cart__item__text pt-0">
@@ -540,7 +581,7 @@ $(document).ready(async function () {
                         </div>
                     </td>
                     <td class="product__cart__item">
-                        <div class="product__cart__item__pic mr-0">
+                        <div class="product__cart__item__pic mr-1">
                             <img width="90" height="90" src="${product.pro.product_img}" alt="product_img">
                         </div>
                         <div class="product__cart__item__text pt-0">

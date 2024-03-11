@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,15 +100,16 @@ public class ShopAPI {
     }
 
     @GetMapping("/get-all-voucher")
-    public ResponseEntity<List<Voucher>> getAllVoucher(){
+    public ResponseEntity<List<Voucher>> getAllVoucher() {
         List<Voucher> lst = voucherService.getAllByTrangThai(2);
-        for (Voucher vc :lst) {
+        for (Voucher vc : lst) {
             vc.setNguoiSua(null);
             vc.setNguoiTao(null);
             vc.setEndDate1(vc.getNgayKetThuc().toLocalDateTime());
         }
         return ResponseEntity.ok().body(lst);
     }
+
     @GetMapping("/get-product-in-cart")
     public ResponseEntity<List<GioHangRequest>> getAll() {
         Authentication auth = getUserAuth();
@@ -115,26 +118,34 @@ public class ShopAPI {
             User user = (User) principal;
             KhachHang khachHang = user.getKhachHang();
             GioHang gh = gioHangService.getByKhachHang(khachHang);
-            List<GioHangChiTiet> lst_ghct = gh.getGioHangChiTiets();
-            List<GioHangRequest> lst = new ArrayList<>();
-            for (int i = 0; i < lst_ghct.size(); i++) {
-                GioHangRequest ghResponse = new GioHangRequest();
-                ghResponse.setSoLuong(lst_ghct.get(i).getSoLuong());
-                ghResponse.setId(lst_ghct.get(i).getId());
-                chiTietSanPhamApiRquest ctsp = new chiTietSanPhamApiRquest();
-                ctsp.setId(lst_ghct.get(i).getChiTietSanPham().getId());
-                ctsp.setTen(lst_ghct.get(i).getChiTietSanPham().getSanPham().getTen());
-                ctsp.setAnh(lst_ghct.get(i).getChiTietSanPham().getAnh().getUrl());
-                ctsp.setKichCo(lst_ghct.get(i).getChiTietSanPham().getKichCo().getTen());
-                ctsp.setMauSac(lst_ghct.get(i).getChiTietSanPham().getMauSac().getTen());
-                ctsp.setMaSanPham(lst_ghct.get(i).getChiTietSanPham().getMaSanPham());
-                ctsp.setSoLuongTon(lst_ghct.get(i).getChiTietSanPham().getSoLuongTon());
-                ctsp.setGiaBan(lst_ghct.get(i).getChiTietSanPham().getGiaBan().intValue());
-                ctsp.setGiaGoc(lst_ghct.get(i).getChiTietSanPham().getGiaGoc().intValue());
-                ghResponse.setChitietSanPham(ctsp);
-                lst.add(ghResponse);
+            if (gh == null) {
+                gh = new GioHang();
+                gh.setKhachHang(khachHang);
+                gh.setNgayTao(Timestamp.from(Instant.now()));
+                gioHangService.save(gh);
+            } else {
+                List<GioHangChiTiet> lst_ghct = gh.getGioHangChiTiets();
+                List<GioHangRequest> lst = new ArrayList<>();
+                for (int i = 0; i < lst_ghct.size(); i++) {
+                    GioHangRequest ghResponse = new GioHangRequest();
+                    ghResponse.setSoLuong(lst_ghct.get(i).getSoLuong());
+                    ghResponse.setId(lst_ghct.get(i).getId());
+                    chiTietSanPhamApiRquest ctsp = new chiTietSanPhamApiRquest();
+                    ctsp.setId(lst_ghct.get(i).getChiTietSanPham().getId());
+                    ctsp.setTen(lst_ghct.get(i).getChiTietSanPham().getSanPham().getTen());
+                    ctsp.setAnh(lst_ghct.get(i).getChiTietSanPham().getAnh().getUrl());
+                    ctsp.setKichCo(lst_ghct.get(i).getChiTietSanPham().getKichCo().getTen());
+                    ctsp.setMauSac(lst_ghct.get(i).getChiTietSanPham().getMauSac().getTen());
+                    ctsp.setMaSanPham(lst_ghct.get(i).getChiTietSanPham().getMaSanPham());
+                    ctsp.setSoLuongTon(lst_ghct.get(i).getChiTietSanPham().getSoLuongTon());
+                    ctsp.setGiaBan(lst_ghct.get(i).getChiTietSanPham().getGiaBan().intValue());
+                    ctsp.setGiaGoc(lst_ghct.get(i).getChiTietSanPham().getGiaGoc().intValue());
+                    ghResponse.setChitietSanPham(ctsp);
+                    lst.add(ghResponse);
+                }
+                return ResponseEntity.ok().body(lst);
             }
-            return ResponseEntity.ok().body(lst);
+            return ResponseEntity.ok().body(null);
         } else {
             return ResponseEntity.ok().body(null);
         }

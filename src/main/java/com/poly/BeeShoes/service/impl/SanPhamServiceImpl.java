@@ -228,6 +228,16 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai) {
-        return sanPhamRepository.findTop4ByTheLoaiOrderByNgayTaoDesc(theLoai);
+        return sanPhamRepository.findTop4ByTheLoaiAndTrangThaiIsTrueOrderByNgayTaoDesc(theLoai);
+    }
+
+    @Override
+    public List<SanPham> findTop4OrderByNgayTaoDesc() {
+        return sanPhamRepository.findFirst4ByTrangThaiTrueOrderByNgayTaoDesc();
+    }
+
+    @Override
+    public List<SanPham> findTop4GiamGia() {
+        return sanPhamRepository.findTop4ByGiaGocMinusGiaBanOrderByGiaGocMinusGiaBanDesc();
     }
 }

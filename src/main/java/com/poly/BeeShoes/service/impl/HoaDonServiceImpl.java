@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.HoaDon;
+import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.User;
 import com.poly.BeeShoes.repository.HoaDonRepository;
@@ -22,6 +23,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     @Override
     public List<HoaDon> getAllHoaDon() {
         return hoaDonRepository.findAll();
+    }
+
+    @Override
+    public List<HoaDon> getByKhachHang(KhachHang khachHang) {
+        return hoaDonRepository.findAllByKhachHang(khachHang);
     }
 
     @Override
@@ -89,5 +95,19 @@ public class HoaDonServiceImpl implements HoaDonService {
     @Override
     public HoaDon save(HoaDon hoaDon) {
         return hoaDonRepository.save(hoaDon);
+    }
+
+    @Override
+    public String generateInvoiceCode() {
+        long count = hoaDonRepository.count();
+        int numberOfDigits = (int) Math.log10(count + 1) + 1;
+        int numberOfZeros = Math.max(0, 5 - numberOfDigits);
+        String invoiceCode;
+        do {
+            invoiceCode = String.format("HD%0" + (numberOfDigits + numberOfZeros) + "d", count + 1);
+            count++;
+        } while (hoaDonRepository.existsByMaHoaDon(invoiceCode));
+
+        return invoiceCode;
     }
 }

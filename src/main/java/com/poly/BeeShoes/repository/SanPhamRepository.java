@@ -32,6 +32,13 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     boolean existsByTheLoai(TheLoai theLoai);
     boolean existsByThuongHieu(ThuongHieu thuongHieu);
     boolean existsByTen(String ten);
-    List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
+
+    List<SanPham> findTop4ByTheLoaiAndTrangThaiIsTrueOrderByNgayTaoDesc(TheLoai theLoai);
+    @Query("SELECT DISTINCT sp FROM SanPham sp " +
+            "JOIN FETCH sp.chiTietSanPham cts " +
+            "WHERE cts.giaGoc > cts.giaBan AND sp.trangThai = true " +
+            "ORDER BY (cts.giaGoc - cts.giaBan) DESC")
+    List<SanPham> findTop4ByGiaGocMinusGiaBanOrderByGiaGocMinusGiaBanDesc();
+    List<SanPham> findFirst4ByTrangThaiTrueOrderByNgayTaoDesc();
     Integer countByTrangThaiIsTrue();
 }

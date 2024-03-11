@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
     <meta charset="UTF-8">
@@ -9,14 +10,14 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-    rel="stylesheet">
+          rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/assets/customer/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/magnific-popup.css" type="text/css">
-<!--    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">-->
+    <!--    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">-->
     <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
@@ -25,98 +26,102 @@
 </head>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
 
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__option">
-            <div class="offcanvas__links">
-                <a href="#">Đăng nhập</a>
-                <a href="#">FAQs</a>
-            </div>
-            <div class="offcanvas__top__hover">
-                <span>Usd <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>USD</li>
-                    <li>EUR</li>
-                    <li>USD</li>
-                </ul>
-            </div>
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__option">
+        <div class="offcanvas__links">
+            <a href="#">Đăng nhập</a>
+            <a href="#">FAQs</a>
         </div>
-        <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
-            <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
-            <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__text">
-            <p>Miễn phí vận chuyển, đảm bảo hoàn trả hoặc hoàn tiền trong 30 ngày.</p>
+        <div class="offcanvas__top__hover">
+            <span>Usd <i class="arrow_carrot-down"></i></span>
+            <ul>
+                <li>USD</li>
+                <li>EUR</li>
+                <li>USD</li>
+            </ul>
         </div>
     </div>
-    <!-- Offcanvas Menu End -->
+    <div class="offcanvas__nav__option">
+        <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
+        <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+        <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
+        <div class="price">$0.00</div>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__text">
+        <p>Miễn phí vận chuyển, đảm bảo hoàn trả hoặc hoàn tiền trong 30 ngày.</p>
+    </div>
+</div>
+<!-- Offcanvas Menu End -->
 
-    <!-- Header Section Begin -->
-    <div th:replace="~{/customer/pages/_header.html}"></div>
-    <!-- Header Section End -->
+<!-- Header Section Begin -->
+<div th:replace="~{/customer/pages/_header.html}"></div>
+<!-- Header Section End -->
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__text">
-                        <h4>Thủ tục thanh toán</h4>
-                        <div class="breadcrumb__links">
-                            <a href="/index">Trang chủ</a>
-                            <a href="/shop">Cửa hàng</a>
-                            <span>Thủ tục thanh toán</span>
-                        </div>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Thủ tục thanh toán</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/index">Trang chủ</a>
+                        <a href="/shop">Cửa hàng</a>
+                        <span>Thủ tục thanh toán</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
 
-    <!-- Checkout Section Begin -->
-    <section class="checkout spad">
-        <div class="container">
-            <div class="checkout__form">
-                <div>
-                    <div class="row">
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <div>
+                <div class="row">
 
-                        <div class="col-lg-7 col-md-6">
-                            <h6 class="coupon__code"><span class="icon_tag_alt"></span><span th:text="'Mã giảm giá: ' + ${voucher.ten}"></span></h6>
-                            <h6 class="checkout__title">Thông tin người nhận</h6>
+                    <div class="col-lg-7 col-md-6">
+                        <h6 class="coupon__code"><span class="icon_tag_alt"></span>
+                            <a th:if="${voucher == null}" th:href="@{shopping-cart/}">Chọn mã giảm giá</a>
+                            <span th:if="${voucher != null}" id="voucherCode" th:attr="voucher-code=${voucher.ma}"
+                                  th:text="'Mã giảm giá: ' + ${voucher.ten}"></span>
+                        </h6>
+                        <h6 class="checkout__title">Thông tin người nhận</h6>
 
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-
-                                        <p>Tên người nhận<span>*</span></p>
-                                        <input type="text" id="customerName" placeholder="Ngô Trung Tuyến">
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Số điện thoại<span>*</span></p>
-                                        <input type="text" id="customerPhone" placeholder="035xxxxxxx">
-                                    </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Tên người nhận<span>*</span></p>
+                                    <input type="text" id="customerName" th:value="${userLogged != null ? userLogged.khachHang.hoTen : ''}"
+                                           placeholder="Ngô Trung Tuyến">
                                 </div>
                             </div>
-
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Số điện thoại<span>*</span></p>
+                                    <input type="text" id="customerPhone" th:value="${userLogged != null ? userLogged.khachHang.sdt : ''}"
+                                           placeholder="035xxxxxxx">
+                                </div>
+                            </div>
+                        </div>
+                        <th:block sec:authorize="!isAuthenticated()">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input form-group">
                                         <p>Tỉnh/Thành Phố<span>*</span></p>
                                         <select class="form-control" id="tinhThanhPho">
-                                            <option value="" selected>Tỉnh/Thành Phố</option>
+                                            <option id="provinceSelected" value="" selected>Tỉnh/Thành Phố</option>
                                         </select>
                                     </div>
                                 </div>
@@ -124,7 +129,7 @@
                                     <div class="checkout__input form-group">
                                         <p>Quận/Huyện<span>*</span></p>
                                         <select class="form-control" id="quanHuyen">
-                                            <option>Quận/Huyện</option>
+                                            <option id="districtSelected" value="" selected>Quận/Huyện</option>
                                         </select>
                                     </div>
                                 </div>
@@ -132,7 +137,7 @@
                                     <div class="checkout__input form-group">
                                         <p>Phường/Xã<span>*</span></p>
                                         <select class="form-control" id="phuongXa">
-                                            <option>Phường/Xã</option>
+                                            <option id="wardSelected" value="" selected>Phường/Xã</option>
                                         </select>
                                     </div>
                                 </div>
@@ -143,106 +148,164 @@
                                     </div>
                                 </div>
                             </div>
-                      <div class="checkout__input">
-                                <p>Order notes<span>*</span></p>
-                                <input id="orderNotes" type="text"
-                                placeholder="Notes about your order, e.g. special notes for delivery.">
-
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-md-6">
-                            <div class="checkout__order">
-
-                                <h4 class="order__title">Đơn hàng của bạn</h4>
-                                <div class="checkout__order__products">Sản phẩm <span>Tổng cộng</span></div>
-
-                                <ul class="checkout__total__products">
-                                    <li class="myLiCheckOut" th:each="entry, iter : ${productDetailMap}">
-                                        <div class="row">
-                                            <div class="col-7 justify-content-start">
-                                                <p class="nameProduct" th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' (x' + ${entry.value} + ')'"></p>
+                        </th:block>
+                        <th:block sec:authorize="isAuthenticated()">
+                            <div class="wrapper_address">
+                                <p>Địa chỉ nhận hàng</p>
+                                <div class="item_address mb-1" th:each="adr:${userLogged.getKhachHang().getDiaChi()}">
+                                    <div class="content_dress row m-0 customerAddress">
+                                        <div class="checkbox-wrapper-30 col-1">
+                                   <span class="checkbox">
+                                     <input class="selected_product" type="radio" name="address" data-cart-id=""
+                                            th:checked="${userLogged.getKhachHang().getDiaChiMacDinh()!= null and adr.getId()==userLogged.getKhachHang().getDiaChiMacDinh().getId()}"
+                                            th:id="'product_'+${adr.getId()}"/>
+                                     <svg>
+                                       <use xlink:href="#checkbox-30" class="checkbox"></use>
+                                     </svg>
+                                   </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+                                                <symbol id="checkbox-30" viewBox="0 0 22 22">
+                                                    <path fill="none" stroke="currentColor"
+                                                          d="M5.5,11.3L9,14.8L20.2,3.3l0,0c-0.5-1-1.5-1.8-2.7-1.8h-13c-1.7,0-3,1.3-3,3v13c0,1.7,1.3,3,3,3h13 c1.7,0,3-1.3,3-3v-13c0-0.4-0.1-0.8-0.3-1.2"/>
+                                                </symbol>
+                                            </svg>
+                                        </div>
+                                        <div class="col-11 d-flex justify-content-between">
+                                            <div class="pt-3">
+                                                <label class="w-100 txt_address mb-0">Địa Chỉ: <label class="mb-0 customerHouseNumber"
+                                                                                                      th:text="${adr.getSoNha()}"></label></label>
+                                                <div class="d-flex flex-row">
+                                                    <label class="txt_address customerWard"
+                                                           th:text="${adr.getPhuongXa()}+','"></label>
+                                                    <label class="txt_address customerDistrict"
+                                                           th:text="${adr.getQuanHuyen()}+','"></label>
+                                                    <label class="txt_address customerProvince"
+                                                           th:text="${adr.getTinhThanhPho()}"></label>
+                                                </div>
+                                                <div>
+                                                    <th:block
+                                                            th:if="${userLogged.getKhachHang().getDiaChiMacDinh()!= null and adr.getId()==userLogged.getKhachHang().getDiaChiMacDinh().getId()}">
+                                                        <span class="address_default">Mặc Định</span>
+                                                    </th:block>
+                                                </div>
                                             </div>
-                                            <div class="col-5 justify-content-end">
-                                                <span class="quantityProduct" th:text="${#numbers.formatDecimal (entry.key.giaBan * entry.value, 0, 'DEFAULT', 0, 'DEFAULT')}"></span>
+                                            <div class="btn-action-address">
+                                                <div class="d-flex justify-content-center">
+                                                    <a class="mr-2" href="javascript:;">Cập Nhật</a>
+                                                    <a href="javascript:;">Xóa</a>
+                                                </div>
+                                                <button th:if="${userLogged.getKhachHang().getDiaChiMacDinh()== null or adr.getId() != userLogged.getKhachHang().getDiaChiMacDinh().getId()}"
+                                                        type="button" class="info-btn">Đặt Mặc Định
+                                                </button>
+                                                <button th:if="${userLogged.getKhachHang().getDiaChiMacDinh()!= null and adr.getId() == userLogged.getKhachHang().getDiaChiMacDinh().getId()}"
+                                                        type="button" class="info-btn disabled">Đặt Mặc Định</button>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
-                                <ul class="checkout__delivery__method">
-                                    <li>Phương thức vận chuyển <span><img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
-                                    <li>
-                                        <input type="radio" id="deliveryNhanh" name="deliveryMethod" checked>
-                                        <label id="labelNhanh" for="deliveryNhanh" class="deliveryMethodLabel">Nhanh</label>
-                                        <span id="typeNhanh">0</span>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="deliveryThuong" name="deliveryMethod">
-                                        <label id="labelThuong" for="deliveryThuong" class="deliveryMethodLabel">Thường</label>
-                                        <span id="typeThuong">0</span>
-                                    </li>
-                                </ul>
-                                <ul class="checkout__total__all">
-                                    <li>Subtotal <span>$750.99</span></li>
-                                    <li>Shipping Fee <span id="shippingFee">Free</span></li>
-                                    <li>Total <span id="totalAmount" th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')}"></span></li>
-                                </ul>
 
-                                <p>Hình thức thanh toán</p>
-
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        Thanh toán khi nhận hàng
-                                        <input type="checkbox" id="payment">
-                                        <span class="checkmark"></span>
-                                    </label>
+                                    </div>
                                 </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Thanh toán online
-                                        <input type="checkbox" id="paypal">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-
-                                <button id="placeOrder" class="site-btn">Đặt Hàng</button>
-
                             </div>
+                        </th:block>
+                        <div class="checkout__input">
+                            <p>Order notes<span>*</span></p>
+                            <input id="orderNotes" type="text"
+                                   placeholder="Notes about your order, e.g. special notes for delivery.">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6">
+                        <div class="checkout__order">
+
+                            <h4 class="order__title">Đơn hàng của bạn</h4>
+                            <div class="checkout__order__products">Sản phẩm <span>Tổng cộng</span></div>
+
+                            <ul class="checkout__total__products">
+                                <li class="myLiCheckOut" th:each="entry, iter : ${productDetailMap}">
+                                    <div class="row productsInCart">
+                                        <div class="col-7 justify-content-start">
+                                            <p th:text="${entry.key.id}" class="productDetailId d-none"></p>
+                                            <p class="nameProduct"
+                                               th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' (x' + ${entry.value} + ')'"></p>
+                                        </div>
+                                        <div class="col-5 justify-content-end">
+                                            <p th:text="${entry.value}" class="quantityProduct d-none"></p>
+                                            <span class="quantityProduct"
+                                                  th:text="${#numbers.formatDecimal (entry.key.giaBan * entry.value, 0, 'DEFAULT', 0, 'DEFAULT')}"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="checkout__delivery__method">
+                                <li>Đơn vị vận chuyển <span><img
+                                        src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png"></span></li>
+                                <li>Phí vận chuyển <span id="shippingFee">0</span></li>
+                            </ul>
+                            <ul class="checkout__total__all">
+                                <li>Tổng tiền <span id="total"
+                                                    th:text="${#numbers.formatDecimal(total, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>
+                                </li>
+                                <li th:if="${voucher != null}">Mã giảm giá <span id="voucherValue"
+                                                                                 th:text="${#numbers.formatDecimal(voucherValue, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>
+                                </li>
+                                <li>Tổng thu <span id="totalAmount"
+                                                   th:text="${#numbers.formatDecimal(totalAmount, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>
+                                </li>
+                            </ul>
+
+                            <div class="pb-3">
+                                <p>Hình thức thanh toán</p>
+                                <div class="mb-2">
+                                    <input type="radio" value="whenReceive" id="whenReceive" name="paymentMethod"
+                                           checked>
+                                    <label id="labelWhenReceive" for="whenReceive" class="deliveryMethodLabel">Thanh
+                                        toán khi nhận hàng</label>
+                                </div>
+                                <div>
+                                    <input type="radio" value="online" id="online" name="paymentMethod">
+                                    <label id="labelOnline" for="online" class="deliveryMethodLabel">Thanh toán
+                                        online</label>
+                                </div>
+                            </div>
+
+                            <button id="placeOrder" class="site-btn">Đặt Hàng</button>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Checkout Section End -->
-
-    <!-- Footer Section Begin -->
-    <div th:replace="~{/customer/pages/_footer.html}"></div>
-    <!-- Footer Section End -->
-
-
-    <!-- Search Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Tìm kiếm ở đây.....">
-            </form>
-        </div>
     </div>
-    <!-- Search End -->
+</section>
+<!-- Checkout Section End -->
 
-    <!-- Js Plugins -->
-    <script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
-    <script src="/assets/customer/js/bootstrap.min.js"></script>
+<!-- Footer Section Begin -->
+<div th:replace="~{/customer/pages/_footer.html}"></div>
+<!-- Footer Section End -->
+
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Tìm kiếm ở đây.....">
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/customer/js/bootstrap.min.js"></script>
 <!--    <script src="/assets/customer/js/jquery.nice-select.min.js"></script>-->
-    <script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
-    <script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
-    <script src="/assets/customer/js/jquery.countdown.min.js"></script>
-    <script src="/assets/customer/js/jquery.slicknav.js"></script>
-    <script src="/assets/customer/js/mixitup.min.js"></script>
-    <script src="/assets/customer/js/owl.carousel.min.js"></script>
-    <script src="/assets/customer/js/main.js"></script>
-    <script src="/assets/customer/js/checkout/checkout.js"></script>
+<script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
+<script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
+<script src="/assets/customer/js/jquery.countdown.min.js"></script>
+<script src="/assets/customer/js/jquery.slicknav.js"></script>
+<script src="/assets/customer/js/mixitup.min.js"></script>
+<script src="/assets/customer/js/owl.carousel.min.js"></script>
+<script src="/assets/customer/js/main.js"></script>
+<script src="/assets/customer/js/checkout/checkout.js"></script>
 </body>
 
 </html>
