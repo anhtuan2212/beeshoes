@@ -95,10 +95,10 @@
                         <img id="avatar_preview" class="rounded-circle img_avatar"
                              th:src="${user.getAvatar()==null?'/assets/customer/img/about/ludeptrai.jpg':user.getAvatar()}"
                              width="150" height="150">
-                        <label class="btn" for="input_avatar">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                            <input id="input_avatar" type="file" accept="image/*" hidden="hidden">
-                        </label>
+                        <!--                        <label class="btn" for="input_avatar">-->
+                        <!--                            <i class="fa fa-pencil" aria-hidden="true"></i>-->
+                        <!--                            <input id="input_avatar" type="file" accept="image/*" hidden="hidden">-->
+                        <!--                        </label>-->
                     </div>
                     <div class="info text-center mt-2">
                         <h3 class="font-weight-bold user_name"
@@ -117,7 +117,8 @@
                         </th:block>
                         <label class="w-100 birthdate"
                                th:text="${#dates.format(user.getKhachHang().getNgaySinh(), 'dd/MM/yyyy')}">22/12/2001</label>
-                        <th:block th:if="${user.getKhachHang() != null and user.getKhachHang().getDiaChiMacDinh() != null}">
+                        <th:block
+                                th:if="${user.getKhachHang() != null and user.getKhachHang().getDiaChiMacDinh() != null}">
 
                             <label class="w-100 address"
                                    th:text="${user.getKhachHang().getDiaChiMacDinh().getSoNha()+', '+user.getKhachHang().getDiaChiMacDinh().getPhuongXa()+', '+user.getKhachHang().getDiaChiMacDinh().getQuanHuyen()+', '+user.getKhachHang().getDiaChiMacDinh().getTinhThanhPho()}"></label>
@@ -126,9 +127,10 @@
                 </div>
                 <div class="w-100">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link mb-1" id="v-pills-profile-tab" data-toggle="pill" href="#pills-profile"
-                           role="tab" aria-controls="v-pills-profile" aria-selected="false">Tài Khoản</a>
-                        <a class="nav-link mb-1 active" id="pill-list-oder-tab" data-toggle="pill"
+                        <a class="nav-link mb-1 active" id="v-pills-profile-tab" data-toggle="pill"
+                           href="#pills-profile"
+                           role="tab" aria-controls="v-pills-profile" aria-selected="false">Hồ Sơ</a>
+                        <a class="nav-link mb-1" id="pill-list-oder-tab" data-toggle="pill"
                            href="#pill-list-oder"
                            role="tab" aria-controls="v-pills-messages" aria-selected="true">Đơn Mua</a>
                         <a class="nav-link mb-1" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings"
@@ -138,11 +140,137 @@
             </div>
             <div class="col-lg-9">
                 <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel"
+                    <div class="tab-pane fade show active" id="pills-profile" role="tabpanel"
                          aria-labelledby="v-pills-profile-tab">
-                        Profile
+                        <h3 class="title_card w-100 border-bottom pb-2">Hồ Sơ Của Tôi</h3>
+                        <div class="wraper_profile row mt-3 p-0 pb-3 ml-0 mr-0">
+                            <div class="col-8 mt-3 border-right infomation">
+                                <div class="row">
+                                    <div class="col-4 form_label">
+                                        <label for="hoTen">Họ Tên</label>
+                                    </div>
+                                    <div class="col-8 form_data">
+                                        <label class="">Tẩn Láo Lù<a class="ml-2" onclick="activeEdit('hoTen')">Thay
+                                            Đổi</a></label>
+                                        <input id="hoTen" class="d-none form-input" type="text" value="Tẩn Láo Lù">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form_label">
+                                        <label for="email">Email</label>
+                                    </div>
+                                    <div class="col-8 form_data">
+                                        <label class="">lutan2212@gmail.com <a class="ml-2"
+                                                                               onclick="activeEdit('email')">Thay
+                                            Đổi</a></label>
+                                        <input id="email" class="d-none form-input" type="text"
+                                               value="lutan2212@gmail.com">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form_label">
+                                        <label for="soDienThoai">Số Điện Thoại</label>
+                                    </div>
+                                    <div class="col-8 form_data">
+                                        <label class="">0866755653 <a class="ml-2" onclick="activeEdit('soDienThoai')">Thay
+                                            Đổi</a></label>
+                                        <input id="soDienThoai" class="d-none form-input" type="text"
+                                               value="0866755653">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form_label">
+                                        <label for="gioiTinh">Giới Tính</label>
+                                    </div>
+                                    <div class="col-8 form_data">
+                                        <div class="showGender">
+                                            <input id="gioiTinh" type="radio" value="Nam" name="gioiTinh">
+                                            <label class="mb-0" for="gioiTinh">Nam</label>
+                                            <input id="gioiTinhN" class="ml-3" type="radio" value="Nữ" name="gioiTinh">
+                                            <label class="mb-0" for="gioiTinhN">Nữ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 form_label">
+                                        <label for="ngaySinh">Ngày Sinh</label>
+                                    </div>
+                                    <div class="col-8 form_data">
+                                        <label class="">22/12/2001 <a class="ml-2" onclick="activeEdit('ngaySinh')">Thay
+                                            Đổi</a></label>
+                                        <input id="ngaySinh" class="d-none form-input" type="date" value="2001-12-22">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 wraper_img pt-3">
+                                <img id="show_avatar_slected" class="rounded-circle img_avatar"
+                                     src="/assets/customer/img/about/ludeptrai.jpg"
+                                     width="150" height="150">
+                                <label for="avatar_selected" class="select-img-btn mt-2"> Chọn Ảnh
+                                    <input id="avatar_selected" type="file" accept="image/*" hidden="hidden">
+                                </label>
+                            </div>
+                            <div id="btn-save" class="d-none col-12">
+                                <div class="w-100 d-flex justify-content-center pb-3 pt-3">
+                                    <button class="primary-btn" type="button">Lưu</button>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="title_card w-100 border-bottom pb-1 mt-4">Địa Chỉ Giao Hàng</h5>
+                        <div class="wrapper_address row mt-3">
+                            <div class="item_address mb-1 col-6">
+                                <div class="content_dress row m-0 customerAddress">
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <div class="pt-3">
+                                            <label class="w-100 txt_address mb-0">Địa Chỉ: <label
+                                                    class="mb-0 customerHouseNumber">abc</label></label>
+                                            <div class="d-flex flex-row">
+                                                <label class="txt_address customerWard">Xã Trịnh Tường,</label>
+                                                <label class="txt_address customerDistrict">Huyện Bát Xát,</label>
+                                                <label class="txt_address customerProvince">Lào Cai</label>
+                                            </div>
+                                            <div>
+                                                <span class="address_default">Mặc Định</span>
+                                            </div>
+                                        </div>
+                                        <div class="btn-action-address">
+                                            <div class="d-flex justify-content-center">
+                                                <a class="mr-2" href="javascript:;">Cập Nhật</a>
+                                                <a href="javascript:;">Xóa</a>
+                                            </div>
+                                            <button type="button" class="select-img-btn disabled">Đặt Mặc Định</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item_address mb-1 col-6">
+                                <div class="content_dress row m-0 customerAddress">
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <div class="pt-3">
+                                            <label class="w-100 txt_address mb-0">Địa Chỉ: <label
+                                                    class="mb-0 customerHouseNumber">abc</label></label>
+                                            <div class="d-flex flex-row">
+                                                <label class="txt_address customerWard">Xã Trịnh Tường,</label>
+                                                <label class="txt_address customerDistrict">Huyện Bát Xát,</label>
+                                                <label class="txt_address customerProvince">Lào Cai</label>
+                                            </div>
+                                            <div>
+                                                <span class="address_default">Mặc Định</span>
+                                            </div>
+                                        </div>
+                                        <div class="btn-action-address">
+                                            <div class="d-flex justify-content-center">
+                                                <a class="mr-2" href="javascript:;">Cập Nhật</a>
+                                                <a href="javascript:;">Xóa</a>
+                                            </div>
+                                            <button type="button" class="select-img-btn disabled">Đặt Mặc Định</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tab-pane fade show active oder__list" id="pill-list-oder" role="tabpanel"
+                    <div class="tab-pane fade oder__list" id="pill-list-oder" role="tabpanel"
                          aria-labelledby="pill-list-oder-tab">
                         <div class="mb-3 d-flex justify-content-between">
                             <h3 class="title_card">Danh Sách Đơn Hàng</h3>
@@ -158,79 +286,11 @@
                                 <input class="search_input" type="text" placeholder="Tìm kiếm mã hóa đơn.">
                             </div>
                         </div>
-<!--                        <div class="card w-100 mb-3">-->
-<!--                            <div class="card-header d-flex justify-content-between mr-1 ml-1">-->
-<!--                                <div class="oder_code_wrapper">-->
-<!--                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"> HD0001</a>-->
-<!--                                </div>-->
-<!--                                <div class="status">-->
-<!--                                    <label>Chờ Xác nhận</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="card-body">-->
-<!--                                <div class="card_content ">-->
-<!--                                    <ul class="w-100">-->
-<!--                                        <li class="row">-->
-<!--                                            <div class="col-2 p-0">-->
-<!--                                                <img class="product_img"-->
-<!--                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">-->
-<!--                                            </div>-->
-<!--                                            <div class="col-7 p-0">-->
-<!--                                                <div>-->
-<!--                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>-->
-<!--                                                    <div class="w-100">-->
-<!--                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>-->
-<!--                                                    </div>-->
-<!--                                                    <label>Số Lượng : 1</label>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="col-3 d-flex align-items-center">-->
-<!--                                                <h5 class="product_price_cu">10.000.000đ</h5>-->
-<!--                                                <h5 class="product_price">9.000.000đ</h5>-->
-<!--                                            </div>-->
-<!--                                        </li>-->
-<!--                                        <li class="row">-->
-<!--                                            <div class="col-2 p-0">-->
-<!--                                                <img class="product_img"-->
-<!--                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F3gVCCKnBoL.png?alt=media&token=27e45ff7-6948-44d2-9e79-7af40bc586cc">-->
-<!--                                            </div>-->
-<!--                                            <div class="col-7 p-0">-->
-<!--                                                <div>-->
-<!--                                                    <h6 class="product_name mb-2">Jordan Max Aura 5</h6>-->
-<!--                                                    <div class="w-100">-->
-<!--                                                        Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>32</label>-->
-<!--                                                    </div>-->
-<!--                                                    <label>Số Lượng : 1</label>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="col-3 d-flex align-items-center">-->
-<!--                                                <h5 class="product_price_cu">10.000.000đ</h5>-->
-<!--                                                <h5 class="product_price">9.000.000đ</h5>-->
-<!--                                            </div>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="card-footer pt-0">-->
-<!--                                <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">-->
-<!--                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>-->
-<!--                                </div>-->
-<!--                                <div class="d-flex justify-content-between align-items-center">-->
-<!--                                    <div>-->
-<!--                                        Đơn hàng được hủy bởi bạn.-->
-<!--                                    </div>-->
-<!--                                    <div class="card-btn-group">-->
-<!--                                        <button class="primary-btn" type="button">Mua Lại</button>-->
-<!--                                        <button class="info-btn" type="button">Xem Chi Tiết</button>-->
-<!--                                        <button class="info-btn" type="button">Hủy Đơn</button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
                         <div class="card w-100 mb-3" th:each="hoadon:${lsthoadon}">
                             <div class="card-header d-flex justify-content-between mr-1 ml-1">
                                 <div class="oder_code_wrapper">
-                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;" th:text="${hoadon.getMaHoaDon()}"></a>
+                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"
+                                                   th:text="${hoadon.getMaHoaDon()}"></a>
                                 </div>
                                 <div class="status">
                                     <label th:text="${hoadon.getTrangThai().name()}"></label>
@@ -246,16 +306,22 @@
                                             </div>
                                             <div class="col-7 p-0">
                                                 <div>
-                                                    <h6 class="product_name mb-2" th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
+                                                    <h6 class="product_name mb-2"
+                                                        th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
                                                     <div class="w-100">
-                                                        Màu :<label th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}">Màu Trắng</label>, Kích Cỡ :<label th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}">32</label>
+                                                        Màu :<label
+                                                            th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}">Màu
+                                                        Trắng</label>, Kích Cỡ :<label
+                                                            th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}">32</label>
                                                     </div>
                                                     <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                                 </div>
                                             </div>
                                             <div class="col-3 d-flex align-items-center">
-                                                <h5 class="product_price_cu" th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
-                                                <h5 class="product_price" th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                <h5 class="product_price_cu"
+                                                    th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                <h5 class="product_price"
+                                                    th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                             </div>
                                         </li>
                                     </ul>
@@ -263,7 +329,8 @@
                             </div>
                             <div class="card-footer pt-0">
                                 <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
-                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money" th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
+                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money"
+                                                                                th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
@@ -272,7 +339,9 @@
                                     <div class="card-btn-group">
                                         <button class="primary-btn" type="button">Mua Lại</button>
                                         <button class="info-btn" type="button">Xem Chi Tiết</button>
-                                        <button class="info-btn" type="button">Hủy Đơn</button>
+                                        <button th:if="${hoadon.getTrangThai().name() == 'ChoXacNhan'}" class="info-btn"
+                                                type="button">Hủy Đơn
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -295,37 +364,28 @@
                             <div class="list_voucher">
                                 <ul id="w-100 list-voucher row">
                                     <li class="wraper_li col-4 p-0" th:each="voucher :${lstvouchers}">
-                                        <div data-id="4" th:id="'voucher_'+${voucher.getId()}" class="wraper_voucher row m-0">
+                                        <div data-id="4" th:id="'voucher_'+${voucher.getId()}"
+                                             class="wraper_voucher row m-0">
                                             <div class="col-9 contents p-2">
                                                 <h5 class="text-center voucher_code" th:text="${voucher.getMa()}"></h5>
-                                                <label class="express_date" th:text="'Hạn Đến:'+${#dates.format(voucher.getNgayKetThuc(),'HH:mm | dd/MM/yyyy')}"></label>
-                                                <label class="express_date"th:text="'Điều Kiện: Áp dụng cho đơn hàng từ '+${#numbers.formatDecimal(voucher.getGiaTriToiThieu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></label>
-                                                <label class="express_date" th:text="'Tối Đa:'+${#numbers.formatDecimal(voucher.getGiaTriToiDa(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ/Khách Hàng'"></label>
-                                                <label class="express_date w-100" th:text="'Số lượng :'+${voucher.getSoLuong()}"></label>
+                                                <label class="express_date"
+                                                       th:text="'Hạn Đến:'+${#dates.format(voucher.getNgayKetThuc(),'HH:mm | dd/MM/yyyy')}"></label>
+                                                <label class="express_date"
+                                                       th:text="'Điều Kiện: Áp dụng cho đơn hàng từ '+${#numbers.formatDecimal(voucher.getGiaTriToiThieu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></label>
+                                                <label class="express_date"
+                                                       th:text="'Tối Đa:'+${#numbers.formatDecimal(voucher.getGiaTriToiDa(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ/Khách Hàng'"></label>
+                                                <label class="express_date w-100"
+                                                       th:text="'Số lượng :'+${voucher.getSoLuong()}"></label>
                                             </div>
                                             <div class="col-3 p-2 row m-0 card__discount position-relative">
                                                 <label class="col-4">Mã Giảm Giá</label>
-                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}" class="col-6 tienmat" th:text="${#strings.substring(voucher.getGiaTriTienMat().intValue(), 0, #strings.length(voucher.getGiaTriTienMat().intValue()) - 3) + 'K'}"></h3>
-                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}" class="col-6 phantram" th:text="${voucher.getGiaTriPhanTram()}+'%'"></h3>
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}" class="col-6 tienmat"
+                                                    th:text="${#strings.substring(voucher.getGiaTriTienMat().intValue(), 0, #strings.length(voucher.getGiaTriTienMat().intValue()) - 3) + 'K'}"></h3>
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}" class="col-6 phantram"
+                                                    th:text="${voucher.getGiaTriPhanTram()}+'%'"></h3>
                                             </div>
                                         </div>
                                     </li>
-<!--                                    <li class="wraper_li col-4 p-0">-->
-<!--                                        <div data-id="6" id="voucher_6" class="wraper_voucher row m-0">-->
-<!--                                            <div class="col-9 contents p-2">-->
-<!--                                                <h5 class="text-center voucher_code">VC00005</h5>-->
-<!--                                                <label class="express_date">Hạn Đến: 22H13 Ngày 07/04/2024</label>-->
-<!--                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ-->
-<!--                                                    10.000.000đ</label>-->
-<!--                                                <label class="express_date">Tối Đa:1.200.000đ/Khách Hàng</label>-->
-<!--                                                <label class="express_date w-100">Số Lượng : 100</label>-->
-<!--                                            </div>-->
-<!--                                            <div class="col-3 p-2 row m-0 card__discount position-relative">-->
-<!--                                                <label class="col-4">Mã Giảm Giá</label>-->
-<!--                                                <h3 class="col-6 tienmat">1.2M</h3>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </li>-->
                                 </ul>
                             </div>
                         </div>

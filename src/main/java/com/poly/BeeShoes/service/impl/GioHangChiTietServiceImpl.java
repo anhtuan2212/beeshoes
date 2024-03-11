@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.ChiTietSanPham;
+import com.poly.BeeShoes.model.GioHang;
 import com.poly.BeeShoes.model.GioHangChiTiet;
 import com.poly.BeeShoes.repository.GioHangChiTietRepository;
 import com.poly.BeeShoes.service.GioHangChiTietService;
@@ -28,8 +29,8 @@ public class GioHangChiTietServiceImpl implements GioHangChiTietService {
     }
 
     @Override
-    public GioHangChiTiet getByCTSP(ChiTietSanPham chiTietSanPham) {
-        return gioHangChiTietRepository.findByChiTietSanPham(chiTietSanPham);
+    public GioHangChiTiet getByCTSP(ChiTietSanPham chiTietSanPham, GioHang gioHang) {
+        return gioHangChiTietRepository.findByChiTietSanPhamAndGioHang(chiTietSanPham,gioHang);
     }
 
     @Override

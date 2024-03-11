@@ -298,7 +298,7 @@ $(document).ready(async function () {
         if (Array.isArray(data)) {
             let totalMoney = 0;
             data.forEach((data) => {
-                totalMoney += extractNumberFromString(data.pro.gia_ban) * Number(data.quantity);
+                totalMoney += Number(extractNumberFromString(data.pro.gia_ban)) * Number(data.quantity);
             });
             if (SelectedVoucher !== null) {
                 if (totalMoney < Number(SelectedVoucher.giaTriToiThieu)) {

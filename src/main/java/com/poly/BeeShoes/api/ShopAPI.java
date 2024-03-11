@@ -4,10 +4,7 @@ import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.request.AddToCartRquest;
 import com.poly.BeeShoes.request.GioHangRequest;
 import com.poly.BeeShoes.request.chiTietSanPhamApiRquest;
-import com.poly.BeeShoes.service.ChiTietSanPhamService;
-import com.poly.BeeShoes.service.GioHangChiTietService;
-import com.poly.BeeShoes.service.GioHangService;
-import com.poly.BeeShoes.service.VoucherService;
+import com.poly.BeeShoes.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,8 @@ public class ShopAPI {
     private final GioHangService gioHangService;
     private final GioHangChiTietService gioHangChiTietService;
     private final VoucherService voucherService;
+    private final HoaDonService hoaDonService;
+    private final UserService userService;
 
 
     public Authentication getUserAuth() {
@@ -41,6 +40,8 @@ public class ShopAPI {
             return ResponseEntity.badRequest().header("status", "Invalid request").build();
         }
         ChiTietSanPham ctsp = chiTietSanPhamService.getById(request.getProduct());
+        System.out.println(ctsp.getMaSanPham());
+        System.out.println(ctsp.getKichCo().getTen());
         if (ctsp == null) {
             return ResponseEntity.notFound().header("status", "Product not found").build();
         }
@@ -54,14 +55,15 @@ public class ShopAPI {
                 gh.setKhachHang(user.getKhachHang());
                 gh = gioHangService.save(gh);
             }
-
-            GioHangChiTiet ghct = gioHangChiTietService.getByCTSP(ctsp);
+            GioHangChiTiet ghct = gioHangChiTietService.getByCTSP(ctsp, gh);
             if (ghct == null) {
+                System.out.println("Null");
                 ghct = new GioHangChiTiet();
                 ghct.setChiTietSanPham(ctsp);
                 ghct.setSoLuong(request.getQuantity());
                 ghct.setGioHang(gh);
             } else {
+                System.out.println("NotNull");
                 if (request.isUpdate()) {
                     ghct.setSoLuong(request.getQuantity());
                 } else {
@@ -73,7 +75,6 @@ public class ShopAPI {
             lst.add(ghct);
             gh.setGioHangChiTiets(lst);
             gh = gioHangService.save(gh);
-
             List<GioHangChiTiet> lst_ghct = gh.getGioHangChiTiets();
             List<GioHangRequest> lst_res = new ArrayList<>();
             for (int i = 0; i < lst_ghct.size(); i++) {
@@ -101,7 +102,20 @@ public class ShopAPI {
 
     @GetMapping("/get-all-voucher")
     public ResponseEntity<List<Voucher>> getAllVoucher() {
+        Authentication auth = getUserAuth();
+        Object principal = auth.getPrincipal();
+        List<HoaDon> lstHD = new ArrayList<>();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            user = userService.getByUsername(user.getEmail());
+            if (user.getKhachHang() != null) {
+                lstHD = hoaDonService.getByKhachHang(user.getKhachHang());
+            }
+        }
         List<Voucher> lst = voucherService.getAllByTrangThai(2);
+        lstHD.forEach((hoaDon -> {
+            lst.removeIf(v -> v.equals(hoaDon.getVoucher()));
+        }));
         for (Voucher vc : lst) {
             vc.setNguoiSua(null);
             vc.setNguoiTao(null);
