@@ -267,7 +267,7 @@ $(document).ready(function () {
     $('#placeOrder').on('click', function () {
         var total = parseInt($('#total').text().replace(/[,.]/g, ''));
         var shippingFee = parseInt($('#shippingFee').text().replace(/[,.]/g, ''));
-        if($('#customerHouseNumber').val() == null || $('#customerHouseNumber').val() === undefined) {
+        if($('#customerHouseNumber').val() != null || $('#customerHouseNumber').val() != undefined) {
             houseNumber = $('#customerHouseNumber').val();
         }
         console.log(houseNumber + ',' + ward + ',' + district + ',' + province);
