@@ -20,8 +20,8 @@ fetch('/assets/address-json/province.json')
             .then(response => response.json())
             .then(data => {
                 wardArr = data;
-                let defaultCheckedValue = $(".selected_product:checked").closest('.customerAddress');
-                if (defaultCheckedValue != null) {
+                console.log(data);
+                if (username !== undefined) {
                     callApiShippingFee();
                 }
             });

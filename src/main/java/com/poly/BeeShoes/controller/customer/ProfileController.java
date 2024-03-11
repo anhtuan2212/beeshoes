@@ -41,7 +41,18 @@ public class ProfileController {
             System.out.println("User is authenticated. Email: " + user.getEmail());
             return "customer/pages/profile/user-profile";
         } else {
-            return "redirect:/";
+            User user = userService.getByUsername("lutan2212@gmail.com");
+            List<HoaDon> hd = hoaDonService.getByKhachHang(user.getKhachHang());
+            List<Voucher> vouchers = voucherService.getAllByTrangThai(2);
+            hd.forEach((hoaDon -> {
+                vouchers.removeIf(v -> v.equals(hoaDon.getVoucher()));
+            }));
+            model.addAttribute("user",user);
+            model.addAttribute("lsthoadon",hd);
+            model.addAttribute("lstvouchers",vouchers);
+            System.out.println("User is authenticated. Email: " + user.getEmail());
+            return "customer/pages/profile/user-profile";
+//            return "redirect:/";
         }
     }
 }
