@@ -119,8 +119,9 @@ public class CheckOutController {
                 }
             }
             return "payment/vnpay/order-success";
+        } else {
+            return "payment/vnpay/order-failed";
         }
-        return "payment/vnpay/order-failed";
     }
 
     @GetMapping("/orderSuccess")
@@ -132,7 +133,7 @@ public class CheckOutController {
             Model model
     ) {
         User user = new User();
-        if(request.getUserPrincipal().getName() != null) {
+        if(request.getUserPrincipal() != null) {
             user = userService.getByUsername(request.getUserPrincipal().getName());
             System.out.println(request.getUserPrincipal().getName());
             GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
