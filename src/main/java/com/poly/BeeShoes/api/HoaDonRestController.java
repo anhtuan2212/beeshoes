@@ -135,7 +135,7 @@ public class HoaDonRestController {
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         lshdDto.setThoiGian(lshd.getThoiGian());
         if(lshd.getNguoiThucHien() != null) {
-            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien() != null ? lshd.getNguoiThucHien().getNhanVien().getHoTen() : "Anonymous");
         } else {
             lshdDto.setNguoiThucHien("Anoynomous");
         }
@@ -178,7 +178,7 @@ public class HoaDonRestController {
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         lshdDto.setThoiGian(lshd.getThoiGian());
         if(lshd.getNguoiThucHien() != null) {
-            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien() != null ? lshd.getNguoiThucHien().getNhanVien().getHoTen() : "Anonymous");
         } else {
             lshdDto.setNguoiThucHien("Anoynomous");
         }
@@ -210,7 +210,7 @@ public class HoaDonRestController {
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setThoiGian(lshd.getThoiGian());
         if(lshd.getNguoiThucHien() != null) {
-            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien() != null ? lshd.getNguoiThucHien().getNhanVien().getHoTen() : "Anonymous");
         } else {
             lshdDto.setNguoiThucHien("Anoynomous");
         }
