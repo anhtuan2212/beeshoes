@@ -541,10 +541,12 @@ ol {
 .header__nav__option ul li:last-child {
     margin-right: 0;
 }
-
+body{
+    overflow-x: hidden !important;
+}
 .header__nav__option ul li .dropdown {
     position: absolute;
-    left: 0;
+    right: 0;
     top: 56px;
     width: 150px;
     background: #FFFFFF;

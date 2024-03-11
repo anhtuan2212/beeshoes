@@ -8,6 +8,7 @@ import com.poly.BeeShoes.repository.HoaDonRepository;
 import com.poly.BeeShoes.service.HoaDonService;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,7 +28,8 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     public List<HoaDon> getByKhachHang(KhachHang khachHang) {
-        return hoaDonRepository.findAllByKhachHang(khachHang);
+        Sort sort = Sort.by(Sort.Direction.DESC, "ngayTao");
+        return hoaDonRepository.findAllByKhachHang(khachHang,sort);
     }
 
     @Override
