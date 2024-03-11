@@ -294,54 +294,38 @@
                             </div>
                             <div class="list_voucher">
                                 <ul id="w-100 list-voucher row">
-                                    <li class="wraper_li col-4 p-0">
-                                        <div data-id="4" id="voucher_4" class="wraper_voucher row m-0">
+                                    <li class="wraper_li col-4 p-0" th:each="voucher :${lstvouchers}">
+                                        <div data-id="4" th:id="'voucher_'+${voucher.getId()}" class="wraper_voucher row m-0">
                                             <div class="col-9 contents p-2">
-                                                <h5 class="text-center voucher_code">VC00003</h5>
-                                                <label class="express_date">Hạn Đến: 16H28 Ngày 14/03/2024</label>
-                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ
-                                                    500.000đ</label>
-                                                <label class="express_date">Tối Đa:200.000đ/Khách Hàng</label>
-                                                <label class="express_date w-100">Số Lượng : 20</label>
+                                                <h5 class="text-center voucher_code" th:text="${voucher.getMa()}"></h5>
+                                                <label class="express_date" th:text="'Hạn Đến:'+${#dates.format(voucher.getNgayKetThuc(),'HH:mm | dd/MM/yyyy')}"></label>
+                                                <label class="express_date"th:text="'Điều Kiện: Áp dụng cho đơn hàng từ '+${#numbers.formatDecimal(voucher.getGiaTriToiThieu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></label>
+                                                <label class="express_date" th:text="'Tối Đa:'+${#numbers.formatDecimal(voucher.getGiaTriToiDa(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ/Khách Hàng'"></label>
+                                                <label class="express_date w-100" th:text="'Số lượng :'+${voucher.getSoLuong()}"></label>
                                             </div>
                                             <div class="col-3 p-2 row m-0 card__discount position-relative">
                                                 <label class="col-4">Mã Giảm Giá</label>
-                                                <h3 class="col-6 tienmat">200K</h3>
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}" class="col-6 tienmat" th:text="${#strings.substring(voucher.getGiaTriTienMat().intValue(), 0, #strings.length(voucher.getGiaTriTienMat().intValue()) - 3) + 'K'}"></h3>
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}" class="col-6 phantram" th:text="${voucher.getGiaTriPhanTram()}+'%'"></h3>
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="wraper_li col-4 p-0">
-                                        <div data-id="5" id="voucher_5" class="wraper_voucher row m-0">
-                                            <div class="col-9 contents p-2">
-                                                <h5 class="text-center voucher_code">VC00004</h5>
-                                                <label class="express_date">Hạn Đến: 15H17 Ngày 31/03/2024</label>
-                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ
-                                                    1.000.000đ</label>
-                                                <label class="express_date">Tối Đa:150.000đ/Khách Hàng</label>
-                                                <label class="express_date w-100">Số Lượng : 100</label>
-                                            </div>
-                                            <div class="col-3 p-2 row m-0 card__discount position-relative">
-                                                <label class="col-4">Mã Giảm Giá</label>
-                                                <h3 class="col-6 phantram">20%</h3>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="wraper_li col-4 p-0">
-                                        <div data-id="6" id="voucher_6" class="wraper_voucher row m-0">
-                                            <div class="col-9 contents p-2">
-                                                <h5 class="text-center voucher_code">VC00005</h5>
-                                                <label class="express_date">Hạn Đến: 22H13 Ngày 07/04/2024</label>
-                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ
-                                                    10.000.000đ</label>
-                                                <label class="express_date">Tối Đa:1.200.000đ/Khách Hàng</label>
-                                                <label class="express_date w-100">Số Lượng : 100</label>
-                                            </div>
-                                            <div class="col-3 p-2 row m-0 card__discount position-relative">
-                                                <label class="col-4">Mã Giảm Giá</label>
-                                                <h3 class="col-6 tienmat">1.2M</h3>
-                                            </div>
-                                        </div>
-                                    </li>
+<!--                                    <li class="wraper_li col-4 p-0">-->
+<!--                                        <div data-id="6" id="voucher_6" class="wraper_voucher row m-0">-->
+<!--                                            <div class="col-9 contents p-2">-->
+<!--                                                <h5 class="text-center voucher_code">VC00005</h5>-->
+<!--                                                <label class="express_date">Hạn Đến: 22H13 Ngày 07/04/2024</label>-->
+<!--                                                <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ-->
+<!--                                                    10.000.000đ</label>-->
+<!--                                                <label class="express_date">Tối Đa:1.200.000đ/Khách Hàng</label>-->
+<!--                                                <label class="express_date w-100">Số Lượng : 100</label>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-3 p-2 row m-0 card__discount position-relative">-->
+<!--                                                <label class="col-4">Mã Giảm Giá</label>-->
+<!--                                                <h3 class="col-6 tienmat">1.2M</h3>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </li>-->
                                 </ul>
                             </div>
                         </div>
