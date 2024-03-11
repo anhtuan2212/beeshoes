@@ -255,7 +255,7 @@
                 <td class="table-column-pl-0">
                     <span th:text="${hoaDonDangGiaoList.indexOf(hoaDon) + 1}"></span>
                 </td>
-                <td ><a th:href="@{|/cms/hoa-don/${hoaDon.id}/chi-tiet|}" th:text="${hoaDon.maHoaDon}"></a></td>
+                <td ><a th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}" th:text="${hoaDon.maHoaDon}"></a></td>
                 <td>
                     <span th:text="${hoaDon.tenNguoiNhan}"></span>
                 </td>
@@ -286,7 +286,7 @@
                                     <i class="tio-visible-outlined"></i> Chi tiết</a>
                             </li>
                             <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
-                                <button class="btn btn-sm btn-outline-success" id="xacNhanFromActionDG">
+                                <button class="btn btn-sm btn-outline-success xacNhanFromActionDG">
                                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận</button>
                             </li>
                         </ul>

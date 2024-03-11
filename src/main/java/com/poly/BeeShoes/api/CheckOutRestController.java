@@ -39,6 +39,8 @@ public class CheckOutRestController {
     private KhachHangService khachHangService;
     @Autowired
     private NhanVienService nhanVienService;
+    @Autowired
+    private LichSuHoaDonService lichSuHoaDonService;
 
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
@@ -59,7 +61,7 @@ public class CheckOutRestController {
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         HoaDon hoaDon = new HoaDon();
-        if(request.getUserPrincipal().getName() != null) {
+        if(request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
             if(user.getNhanVien() == null) {
                 KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
@@ -79,6 +81,12 @@ public class CheckOutRestController {
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
+        lichSuHoaDon.setHoaDon(savedHoaDon);
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setHanhDong("Đặt đơn hàng");
+        lichSuHoaDonService.save(lichSuHoaDon);
         if(voucher != null) {
             voucher.setSoLuong(voucher.getSoLuong() - 1);
             voucherService.save(voucher);
@@ -145,6 +153,12 @@ public class CheckOutRestController {
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
+        lichSuHoaDon.setHoaDon(savedHoaDon);
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setHanhDong("Đặt đơn hàng");
+        lichSuHoaDonService.save(lichSuHoaDon);
         if(voucher != null) {
             voucher.setSoLuong(voucher.getSoLuong() - 1);
             voucherService.save(voucher);

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
-    <title>LigthBee |Sửa khuyến mãi</title>
+    <title>LigthBee |Sửa Mã Giảm Giá</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico">
@@ -52,12 +52,14 @@
                         <ol class="breadcrumb breadcrumb-no-gutter">
                             <li  class="breadcrumb-item"><a class="breadcrumb-link" href="/cms/voucher">Voucher</a>
                             </li>
-                            <li  class="breadcrumb-item active" aria-current="page">Sửa Khuyến Mãi</li>
+                            <li  class="breadcrumb-item active" aria-current="page">Sửa Mã</li>
                         </ol>
                     </nav>
-                    <h1 class="page-header-title"  >Sửa Khuyến Mãi</h1>
+                    <h1 class="page-header-title"  >Sửa Mã Giảm Giá</h1>
                 </div>
             </div>
+            <br>
+            <br>
             <form th:action="@{/cms/update-voucher/{id}(id=${Listvv.id})}" method="post" th:object="${Listvv}" onsubmit="return formvalidate()" >        <!-- End Row -->
                 <!-- End Toggle Switch -->
 
@@ -116,14 +118,14 @@
                             <label class="input-label">Giá trị tối đa </label>
                             <div class="input-group">
                                 <input type="text" name="giaTriToiDa" class="form-control money-input-mask"
-                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu"  th:value="*{#numbers.formatDecimal(giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')} ">
+                                       placeholder="Vui lòng nhập giá trị tối đa." aria-label=""  id="toithieu"   th:field="*{giaTriToiDa}">
                             </div><i id="toithieu_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối đa phải lớn hơn 0</i>
                         </div>
                         <div class="form-group">
                             <label class="input-label">Giá trị tối thiểu</label>
                             <div class="input-group">
                                 <input type="text" name="giaTriToiThieu" class="form-control money-input-mask"
-                                       placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')} " >
+                                       placeholder="Vui lòng nhập giá trị tối thiểu." aria-label="" id="dieukien" th:field="*{giaTriToiThieu} ">
                             </div><i id="dieukien_emty" style="color: red;display: none">Vui lòng nhập vào giá trị tối thiểu phải lớn hơn 0</i>
 <!--                            th:value="*{#numbers.formatDecimal(giaTriToiThieu, 1, 'DEFAULT', 0, 'DEFAULT')}"-->
                         </div>

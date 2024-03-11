@@ -224,7 +224,7 @@
                                                     <a class="text-dark" href="#" th:text="${lshd.hanhDong}"></a>
                                                 </h5>
 
-                                                <p class="font-size-sm mb-0" th:utext="'Thực hiện bởi: <h6>' + ${lshd.nguoiThucHien.nhanVien.hoTen} +
+                                                <p class="font-size-sm mb-0" th:utext="'Thực hiện bởi: <h6>' + ${lshd.nguoiThucHien != null ? lshd.nguoiThucHien.nhanVien.hoTen : 'Anonymous'} +
                                                 '</h6> Thời gian thực hiện: <h6>' + ${lshd.thoiGian} + '</h6>'"></p>
                                             </div>
                                         </div>
@@ -269,7 +269,7 @@
 
             <div class="col-lg-4">
                 <!-- Card -->
-                <div class="card">
+                <div th:if="${hoaDon.khachHang != null}" class="card">
                     <!-- Header -->
                     <div class="card-header">
                         <h4 class="card-header-title">Khách hàng</h4>
@@ -284,7 +284,7 @@
                                 <img class="avatar-img" src="/assets/cms/img/160x160/img10.jpg" alt="Image Description">
                             </div>
                             <div class="media-body">
-                                <span id="customerName" class="text-body text-hover-primary" th:text="${hoaDon.khachHang.hoTen}"></span>
+                                <span id="" class="customerName text-body d-inline-block text-hover-primary" th:text="${hoaDon.khachHang.hoTen}"></span>
                             </div>
                             <div class="media-body text-right">
                                 <i class="tio-chevron-right text-body"></i>
@@ -314,7 +314,7 @@
                         </div>
 
                         <ul class="list-unstyled list-unstyled-py-2">
-                            <li id="customerPhone" th:text="${hoaDon.khachHang.sdt}">
+                            <li class="customerPhone" th:text="${hoaDon.khachHang.sdt}">
                                 <i class="tio-online mr-2"></i>
                             </li>
                         </ul>
@@ -326,7 +326,7 @@
                             <a class="link" href="javascript:;">Chỉnh sửa</a>
                         </div>
 
-                        <span id="customerAddress" class="d-block"
+                        <span th:if="${hoaDon.khachHang!= null && hoaDon.khachHang.diaChiMacDinh != null}" class="customerAddress d-block"
                               th:utext="${hoaDon.khachHang.diaChiMacDinh.soNha} + ', <br>' +
                       ${hoaDon.khachHang.diaChiMacDinh.phuongXa} + ', <br>' +
                       ${hoaDon.khachHang.diaChiMacDinh.quanHuyen} + ', <br>' +
@@ -343,15 +343,28 @@
                         </div>
 
                         <span class="d-block"
-                              th:utext="${hoaDon.khachHang.diaChiMacDinh.soNha} + '<br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.phuongXa} + '<br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.quanHuyen} + '<br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.tinhThanhPho}">
+                              th:utext="${hoaDon.diaChiNhan != null ? hoaDon.diaChiNhan : ''}">
                    <img class="avatar avatar-xss avatar-circle ml-1"
                         src="/assets/cms/vendor/flag-icon-css/flags/1x1/gb.svg" alt="Great Britain Flag">
                 </span>
                     </div>
                     <!-- End Body -->
+                </div>
+                <div th:if="${hoaDon.khachHang == null}" class="card">
+                    <div class="card-header">
+                        <h4>Thông tin người nhận</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="">
+                            <p>Tên: <span class="customerName" th:text="${hoaDon.tenNguoiNhan}"></span></p>
+                        </div>
+                        <div class="">
+                            <p>Sdt: <span class="customerPhone" th:text="${hoaDon.sdtNhan}"></span></p>
+                        </div>
+                        <div class="">
+                            <p>Địa chỉ: <span class="customerAddress" th:text="${hoaDon.diaChiNhan}"></span></p>
+                        </div>
+                    </div>
                 </div>
                 <!-- End Card -->
             </div>
@@ -1005,6 +1018,7 @@
         // handle timeline
         $('#xacNhanFromDetail').on('click', function () {
             var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
+            console.log(idHoaDon);
             Swal.fire({
                 title: "Bạn chắc chứ?",
                 text: "Bạn đang xác nhận đơn hàng!",
@@ -1022,6 +1036,7 @@
                         contentType: "application/json",
                         data: JSON.stringify(idHoaDon),
                         success: function (response) {
+                            console.log(response);
                             ToastSuccess('Xác nhận đơn hàng thành công');
                             let type = 'success';
                             let status = response.trangThaiSauUpdate;
@@ -1083,6 +1098,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(idHoaDon),
                 success: function (response) {
+                    console.log(response);
                     ToastSuccess('Hủy đơn hàng thành công');
                     let type = 'danger';
                     let status = 'Hủy';
@@ -1122,6 +1138,7 @@
                         contentType: "application/json",
                         data: JSON.stringify(idHoaDon),
                         success: function (response) {
+                            console.log(response);
                             ToastSuccess('Hoàn tác đơn hàng thành công');
                             $('#getAttrToHuyFromDetail').removeClass('d-none');
                             let type = 'success';
@@ -1145,9 +1162,9 @@
         $('#printOrder').on('click', function () {
             var items = [];
             var codAmount = 0;
-            var customerName = document.querySelector('#customerName').textContent;
-            var customerPhone = document.querySelector('#customerPhone').textContent;
-            var customerAddress = document.querySelector('#customerAddress').textContent;
+            var customerName = document.querySelector('.customerName').textContent;
+            var customerPhone = document.querySelector('.customerPhone').textContent;
+            var customerAddress = document.querySelector('.customerAddress').textContent;
             console.log(customerName + " - " + customerPhone + " - " + customerAddress);
             var productElements = document.querySelectorAll('.product');
             productElements.forEach(function (productElement) {

@@ -44,17 +44,19 @@ public class HoaDonController {
         return "cms/pages/orders/orders";
     }
 
-    @GetMapping("/hoa-don/{idHoaDon}/chi-tiet")
+    @GetMapping("/hoa-don/{maHoaDon}/chi-tiet")
     public String hoaDonChiTietPage(
-            @PathVariable("idHoaDon") Long id,
+            @PathVariable("maHoaDon") String maHoaDon,
             Model model
     ) {
+        HoaDon hoaDon = hoaDonService.getHoaDonByMa(maHoaDon);
+        List<LichSuHoaDon> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDonByIdHoaDon(hoaDon.getId());
 
-        List<LichSuHoaDon> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDonByIdHoaDon(id);
-        HoaDon hoaDon = hoaDonService.getHoaDonById(id).get();
-        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(id);
-        Long countHoaDonCuaKhachHang = hoaDonService.countHoaDonCuaKhachHang(hoaDon.getKhachHang().getId());
-
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(hoaDon.getId());
+        if(hoaDon.getKhachHang() != null) {
+            Long countHoaDonCuaKhachHang = hoaDonService.countHoaDonCuaKhachHang(hoaDon.getKhachHang().getId());
+            model.addAttribute("countHoaDonCuaKhachHang", countHoaDonCuaKhachHang);
+        }
         double tongTien = 0;
         for(HoaDonChiTiet hdct : hoaDonChiTietList) {
             tongTien = (hdct.getChiTietSanPham().getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
@@ -63,7 +65,6 @@ public class HoaDonController {
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("tongTien", tongTien);
-        model.addAttribute("countHoaDonCuaKhachHang", countHoaDonCuaKhachHang);
         return "cms/pages/orders/order-details";
     }
 

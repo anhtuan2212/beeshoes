@@ -119,8 +119,9 @@ public class CheckOutController {
                 }
             }
             return "payment/vnpay/order-success";
+        } else {
+            return "payment/vnpay/order-failed";
         }
-        return "payment/vnpay/order-failed";
     }
 
     @GetMapping("/orderSuccess")

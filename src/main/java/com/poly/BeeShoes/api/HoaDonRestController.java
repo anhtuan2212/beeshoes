@@ -5,13 +5,10 @@ import com.google.gson.reflect.TypeToken;
 import com.poly.BeeShoes.dto.LichSuHoaDonDto;
 import com.poly.BeeShoes.dto.WardDto;
 import com.poly.BeeShoes.library.LibService;
-import com.poly.BeeShoes.model.HoaDon;
-import com.poly.BeeShoes.model.LichSuHoaDon;
-import com.poly.BeeShoes.model.TrangThaiHoaDon;
-import com.poly.BeeShoes.service.HoaDonService;
-import com.poly.BeeShoes.service.LichSuHoaDonService;
-import com.poly.BeeShoes.service.UserService;
+import com.poly.BeeShoes.model.*;
+import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/hoa-don")
@@ -36,6 +35,8 @@ public class HoaDonRestController {
     private final LichSuHoaDonService lichSuHoaDonService;
     private final UserService userService;
     private final RestTemplate restTemplate;
+    private final VoucherService voucherService;
+    private final ChiTietSanPhamService chiTietSanPhamService;
     Gson gson = new Gson();
 
     @PostMapping("/xac-nhan")
@@ -78,6 +79,16 @@ public class HoaDonRestController {
             String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
             hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
             HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
+            if(updatedHoaDon.getVoucher() != null) {
+                Voucher voucher = voucherService.getByMa(updatedHoaDon.getVoucher().getMa());
+                voucher.setSoLuong(voucher.getSoLuong() + 1);
+                voucherService.save(voucher);
+            }
+            updatedHoaDon.getHoaDonChiTiets().forEach(hdct -> {
+                ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getById(hdct.getChiTietSanPham().getId());
+                chiTietSanPham.setSoLuongTon(chiTietSanPham.getSoLuongTon() + hdct.getSoLuong());
+                chiTietSanPhamService.save(chiTietSanPham);
+            });
             LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
             lichSuHoaDon.setHoaDon(updatedHoaDon);
             lichSuHoaDon.setHanhDong("Thay đổi trạng thái từ: " + trangThaiBeforeUpdate + " -> " + updatedHoaDon.getTrangThai().name());
@@ -94,10 +105,11 @@ public class HoaDonRestController {
 
     @PostMapping("/xac-nhan-detail")
     public ResponseEntity xacNhanDonDetail(
-            @RequestBody Long id
+            @RequestBody Long idHoaDon,
+            HttpServletRequest request
     ) {
-        System.out.println(id);
-        HoaDon hoaDon = hoaDonService.getHoaDonById(id).get();
+        System.out.println(idHoaDon);
+        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
         if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChoXacNhan) {
             hoaDon.setTrangThai(TrangThaiHoaDon.ChoGiao);
@@ -110,7 +122,9 @@ public class HoaDonRestController {
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
         lichSuHoaDon.setHanhDong("Thay đổi trạng thái từ: " + trangThaiBeforeUpdate + " -> " + updatedHoaDon.getTrangThai().name());
-        lichSuHoaDon.setNguoiThucHien(userService.getByUsername("tuyen"));
+        if(request.getUserPrincipal() != null) {
+            lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
+        }
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setTrangThaiSauUpdate(updatedHoaDon.getTrangThai().name());
         LichSuHoaDon lshd = lichSuHoaDonService.save(lichSuHoaDon);
@@ -120,7 +134,11 @@ public class HoaDonRestController {
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         lshdDto.setThoiGian(lshd.getThoiGian());
-        lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+        if(lshd.getNguoiThucHien() != null) {
+            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+        } else {
+            lshdDto.setNguoiThucHien("Anoynomous");
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(lshdDto);
@@ -128,15 +146,28 @@ public class HoaDonRestController {
 
     @PostMapping("/huy-detail")
     public ResponseEntity<LichSuHoaDonDto> huyDonDetail(
-            @RequestBody Long idHoaDon
+            @RequestBody Long idHoaDon,
+            HttpServletRequest request
     ) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
+        if(updatedHoaDon.getVoucher() != null) {
+            Voucher voucher = voucherService.getByMa(updatedHoaDon.getVoucher().getMa());
+            voucher.setSoLuong(voucher.getSoLuong() + 1);
+            voucherService.save(voucher);
+        }
+        updatedHoaDon.getHoaDonChiTiets().forEach(hdct -> {
+            ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getById(hdct.getChiTietSanPham().getId());
+            chiTietSanPham.setSoLuongTon(chiTietSanPham.getSoLuongTon() + hdct.getSoLuong());
+            chiTietSanPhamService.save(chiTietSanPham);
+        });
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
         lichSuHoaDon.setHanhDong("Hủy hóa đơn");
-        lichSuHoaDon.setNguoiThucHien(userService.getByUsername("tuyen"));
+        if(request.getUserPrincipal() != null) {
+            lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
+        }
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setTrangThaiSauUpdate(updatedHoaDon.getTrangThai().name());
         LichSuHoaDon lshd = lichSuHoaDonService.save(lichSuHoaDon);
@@ -146,21 +177,30 @@ public class HoaDonRestController {
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         lshdDto.setThoiGian(lshd.getThoiGian());
-        lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+        if(lshd.getNguoiThucHien() != null) {
+            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+        } else {
+            lshdDto.setNguoiThucHien("Anoynomous");
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(lshdDto);
     }
 
     @PostMapping("/hoan-tac-detail")
-    public ResponseEntity<LichSuHoaDonDto> hoanTacDetail(@RequestBody Long idHoaDon) {
+    public ResponseEntity<LichSuHoaDonDto> hoanTacDetail(
+            @RequestBody Long idHoaDon,
+            HttpServletRequest request
+    ) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
         lichSuHoaDon.setHanhDong("Hoàn tác trạng thái về: " + updatedHoaDon.getTrangThai().name());
-        lichSuHoaDon.setNguoiThucHien(userService.getByUsername("tuyen"));
+        if(request.getUserPrincipal() != null) {
+            lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
+        }
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setTrangThaiSauUpdate(updatedHoaDon.getTrangThai().name());
         LichSuHoaDon lshd = lichSuHoaDonService.save(lichSuHoaDon);
@@ -169,7 +209,11 @@ public class HoaDonRestController {
         lshdDto.setIdHoaDon(lshd.getHoaDon().getId());
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setThoiGian(lshd.getThoiGian());
-        lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+        if(lshd.getNguoiThucHien() != null) {
+            lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien().getHoTen());
+        } else {
+            lshdDto.setNguoiThucHien("Anoynomous");
+        }
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         return ResponseEntity
                 .status(HttpStatus.OK)
