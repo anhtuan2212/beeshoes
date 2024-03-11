@@ -28,7 +28,9 @@
 .info-btn:hover {
     border: 1px solid #000000;
 }
-
+.list_voucher ul li .wraper_voucher .card__discount .tienmat {
+    top: 80px;
+}
 .card-btn-group .primary-btn {
     padding-top: 13px;
     padding-bottom: 13px;
