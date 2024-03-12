@@ -222,7 +222,9 @@ function printDataInServerResponse(datas) {
     $('#total-money-cart').text(total);
     $('#quantity__item_carts').text(datas.length);
 }
-
+function ToastSuccess(message) {
+    Toast('success', message)
+}
 function Toast(status, message) {
     const Toast = Swal.mixin({
         toast: true,
@@ -244,10 +246,6 @@ function Toast(status, message) {
     });
 }
 
-function ToastSuccess(message) {
-    Toast('success', message)
-}
-
 function showLoader() {
     $('#preloder').css('display', 'block').find('.loader').css('display', 'block');
 }
@@ -256,7 +254,20 @@ function closeLoader() {
     $('#preloder').css('display', 'none').find('.loader').css('display', 'none');
 }
 
+function showLoading() {
+    Swal.fire({
+        title: 'Đang xử lý...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
 
+function hideLoading() {
+    Swal.close();
+}
 function ToastError(message) {
     Toast('error', message)
 }

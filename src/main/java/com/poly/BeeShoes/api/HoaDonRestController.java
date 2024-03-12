@@ -146,7 +146,8 @@ public class HoaDonRestController {
 
     @PostMapping("/huy-detail")
     public ResponseEntity<LichSuHoaDonDto> huyDonDetail(
-            @RequestBody Long idHoaDon,
+            @RequestParam("id") Long idHoaDon,
+            @RequestParam("lydo") String lydo,
             HttpServletRequest request
     ) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
@@ -164,7 +165,7 @@ public class HoaDonRestController {
         });
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
-        lichSuHoaDon.setHanhDong("Hủy hóa đơn");
+        lichSuHoaDon.setHanhDong("Lý Do: "+lydo);
         if(request.getUserPrincipal() != null) {
             lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
         }

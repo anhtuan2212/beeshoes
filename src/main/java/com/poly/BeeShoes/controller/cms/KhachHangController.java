@@ -54,7 +54,7 @@ public class KhachHangController {
     public String deleteKH(@PathVariable Long id) {
         KhachHang khachHang = khachHangService.detail(id);
         khachHang.setTrangThai(false);
-        khachHangService.update(khachHang, id);
+        khachHangService.update(khachHang);
         return "redirect:/cms/khach-hang";
     }
 
@@ -230,7 +230,9 @@ public class KhachHangController {
         DiaChi diaChi = diaChiService.detail(idDiaChi);
         KhachHang khachHang = khachHangService.detail(idKhachHang);
         khachHang.setDiaChiMacDinh(diaChi);
-        khachHangService.add(khachHang);
+        System.out.println(idKhachHang);
+        System.out.println(idDiaChi);
+        khachHangService.update(khachHang);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -250,9 +252,8 @@ public class KhachHangController {
 //        updateKhachHang.setDiaChiMacDinh(diaChiService.getById(khachHang.getIdDiaChi()));
         user.setEmail(khachHang.getEmail());
         user.setKhachHang(updateKhachHang);
-        khachHangService.update(updateKhachHang, id);
+        khachHangService.update(updateKhachHang);
         userService.update(user);
-
         return "redirect:/cms/khach-hang";
     }
 

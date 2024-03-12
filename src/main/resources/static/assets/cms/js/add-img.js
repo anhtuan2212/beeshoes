@@ -218,7 +218,7 @@ async function deleteImageFromFirebaseStorage(imageUrl) {
         await deleteObject(imageRef);
         ToastSuccess("Xóa thành công.")
     } catch (error) {
-        ToastError("Lỗi khi xóa trên Cloud !")
+        ToastError("Ảnh không tồn tại trên Cloud !")
         console.error("Error deleting image from Firebase Storage:", error);
     }
 }
