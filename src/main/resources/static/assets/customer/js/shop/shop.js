@@ -277,14 +277,14 @@ $(document).ready(function () {
         } else {
             $('#btn-load-more-product').removeClass('d-none')
         }
-        console.log('=======================')
-        console.log(selected_color)
-        console.log(selected_price)
-        console.log(selected_cate)
-        console.log(selected_size)
-        console.log(selected_brand)
-        console.log(selected_tags)
-        console.log(fillter_price)
+        // console.log('=======================')
+        // console.log(selected_color)
+        // console.log(selected_price)
+        // console.log(selected_cate)
+        // console.log(selected_size)
+        // console.log(selected_brand)
+        // console.log(selected_tags)
+        // console.log(fillter_price)
     }
 
     $('#btn-load-more-product').on('click', function () {

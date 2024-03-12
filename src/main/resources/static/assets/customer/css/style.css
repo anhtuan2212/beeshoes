@@ -2588,6 +2588,7 @@ body{
 
 .user-avatar img {
     border-radius: 25px;
+    object-fit: cover;
 }
 
 .header__nav__option ul li {
@@ -4199,7 +4200,7 @@ body{
 }
 
 .swal2-timer-progress-bar-container {
-    border-radius: 0;
+    border-radius: 0 !important;
 }
 
 @keyframes scaleIn {

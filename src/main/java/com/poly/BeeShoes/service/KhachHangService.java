@@ -14,7 +14,7 @@ public interface KhachHangService {
 
     KhachHang add(KhachHang khachHang);
 
-    KhachHang update(KhachHang khachHang, Long id);
+    KhachHang update(KhachHang khachHang);
     KhachHang getByMa(String ma);
 
     boolean existByMa(String ma);

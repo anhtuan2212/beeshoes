@@ -320,11 +320,61 @@
     to {
         opacity: 1;
         transform: scale(1);
-        height:82px;
+        height: 82px;
     }
+}
+
+@keyframes showForm {
+    from {
+        opacity: 0;
+        transform: scale(0);
+        height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+        height: 53px;
+    }
+}
+
+
+@keyframes hideForm {
+    from {
+        opacity: 1;
+        transform: scale(1);
+        height: 53px;
+    }
+    to {
+        opacity: 0;
+        transform: scale(0);
+        height: 0;
+    }
+}
+
+#lydo_cancel {
+    animation-name: showForm;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }
 
 #btn-save {
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
+}
+
+.txt_address {
+    margin-bottom: 0 !important;
+}
+
+.img_avatar {
+    border: 1px solid #f7aaaa;
+}
+
+.select-img-btn.disabled {
+    opacity: .36;
+    cursor: unset;
+}
+
+.select-img-btn.disabled:hover {
+    border: 1px solid transparent;
 }
