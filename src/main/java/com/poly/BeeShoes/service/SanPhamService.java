@@ -29,4 +29,6 @@ public interface SanPhamService {
     List<SanPham> findTop4GiamGia();
 //    Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
     Integer getCount();
+
+    List<SanPham> findByTrangThaiEquals(Boolean trangThai);
 }

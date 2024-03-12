@@ -124,6 +124,11 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    public List<SanPham> findByTrangThaiEquals(Boolean trangThai) {
+        return sanPhamRepository.findByTrangThaiEquals(trangThai);
+    }
+
+    @Override
     public SanPham getByTen(String name) {
         return sanPhamRepository.getFirstByTen(name);
     }

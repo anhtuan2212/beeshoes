@@ -41,4 +41,6 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     List<SanPham> findTop4ByGiaGocMinusGiaBanOrderByGiaGocMinusGiaBanDesc();
     List<SanPham> findFirst4ByTrangThaiTrueOrderByNgayTaoDesc();
     Integer countByTrangThaiIsTrue();
+
+    List<SanPham> findByTrangThaiEquals(Boolean trangThai);
 }

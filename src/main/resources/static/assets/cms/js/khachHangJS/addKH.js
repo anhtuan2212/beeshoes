@@ -113,7 +113,7 @@ async function checkDuplicateKH() {
         let email = $('#email').val();
         let phone = $('#sdt').val();
         $.ajax({
-            url: '/cms/khach-hang/check-duplicate',
+            url: '/cms/khach-hang/check-duplicateAdd',
             type: 'POST',
             data: {email: email, phoneNumber: phone},
             success: function (response) {

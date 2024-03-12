@@ -2,6 +2,7 @@ package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.ChucVu;
 import com.poly.BeeShoes.model.NhanVien;
+import com.poly.BeeShoes.model.Voucher;
 import com.poly.BeeShoes.repository.NhanVienRepository;
 import com.poly.BeeShoes.service.NhanVienService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +48,12 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public NhanVien update(NhanVien nhanVien, Long id) {
-        return nhanVienRepository.save(nhanVien);
+        Optional<NhanVien> optional = nhanVienRepository.findById(id);
+        return optional.map(o ->
+        {
+            nhanVienRepository.save(nhanVien);
+            return o;
+        }).orElse(null);
     }
 
     @Override

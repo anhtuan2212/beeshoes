@@ -279,4 +279,17 @@ public class KhachHangController {
         result.put("phoneNumber", phoneNumberExists);
         return result;
     }
+
+    @PostMapping("/check-duplicateAdd")
+    @ResponseBody
+    public Map<String, Boolean> checkDuplicateAdd(@RequestParam("email") String email,
+                                               @RequestParam("phoneNumber") String phoneNumber) {
+        boolean emailExists = userService.existsByEmail(email);
+        boolean phoneNumberExists = khachHangService.existsBySdt(phoneNumber);
+
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("email", emailExists);
+        result.put("phoneNumber", phoneNumberExists);
+        return result;
+    }
 }

@@ -214,4 +214,20 @@ public class NhanVienController {
         result.put("cccd", cccdExists);
         return result;
     }
+
+    @PostMapping("/check-duplicateAddNV")
+    @ResponseBody
+    public Map<String, Boolean> checkDuplicateAddNV(@RequestParam("email") String email,
+                                               @RequestParam("phoneNumber") String phoneNumber,
+                                               @RequestParam("cccd") String cccd) {
+        boolean emailExists = userService.existsByEmail(email);
+        boolean phoneNumberExists = nhanVienService.existsBySdt(phoneNumber);
+        boolean cccdExists = nhanVienService.existsByCccd(cccd);
+
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("email", emailExists);
+        result.put("phoneNumber", phoneNumberExists);
+        result.put("cccd", cccdExists);
+        return result;
+    }
 }
