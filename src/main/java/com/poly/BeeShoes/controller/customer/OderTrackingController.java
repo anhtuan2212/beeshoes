@@ -22,11 +22,10 @@ public class OderTrackingController {
 
     @GetMapping("/oder-tracking")
     public String tracking(@RequestParam(name = "oder", required = false) String code, Model model) {
-        model.addAttribute("show", 0);
+        model.addAttribute("show", code);
         if (code != null) {
             HoaDon hd = hoaDonService.getHoaDonByMa(code);
             model.addAttribute("hoadon", hd);
-            model.addAttribute("show", 1);
         }
         return "customer/pages/oder-tracking/oder-tracking";
     }

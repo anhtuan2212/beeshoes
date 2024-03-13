@@ -19,6 +19,7 @@
 .wraper-tracking form {
     max-width: 100vh;
 }
+
 .wraper-search {
     display: flex;
     justify-content: center;
@@ -28,9 +29,11 @@
 .wraper-search form {
     max-width: 100vh;
 }
-.wrapper-form{
+
+.wrapper-form {
     background-color: #f3f2ee;
 }
+
 .wraper-tracking img {
     width: 50%;
 }
@@ -49,4 +52,198 @@
     padding-left: 15px;
     padding-right: 15px;
     border: 1px solid #e1e1e1;
+}
+
+
+.card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.10rem
+}
+
+.card-header:first-child {
+    border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0
+}
+
+.card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+.track {
+    position: relative;
+    background-color: #ddd;
+    height: 7px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 60px;
+    margin-top: 50px
+}
+
+.track .step {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    width: 25%;
+    margin-top: -18px;
+    text-align: center;
+    position: relative
+}
+
+.track .step.active:before {
+    background: #FF5722
+}
+
+.track .step::before {
+    height: 7px;
+    position: absolute;
+    content: "";
+    width: 100%;
+    left: 0;
+    top: 18px
+}
+
+.track .step.active .icon {
+    background: #ee5435;
+    color: #fff
+}
+
+.track .icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    border-radius: 100%;
+    background: #ddd
+}
+
+.track .step.active .text {
+    font-weight: 400;
+    color: #000
+}
+
+.track .text {
+    display: block;
+    margin-top: 7px
+}
+
+.itemside {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%
+}
+
+.itemside .aside {
+    position: relative;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+.img-sm {
+    width: 80px;
+    height: 80px;
+    padding: 7px
+}
+
+ul.row, ul.row-sm {
+    list-style: none;
+    padding: 0
+}
+
+.itemside .info {
+    padding-left: 15px;
+    padding-right: 7px
+}
+
+.itemside .title {
+    display: block;
+    margin-bottom: 5px;
+    color: #212529
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem
+}
+
+a:hover {
+    color: black;
+}
+
+.card {
+    background-color: #f3f2ee;
+}
+
+.primary-btn:hover {
+    color: #FFFFFF;
+}
+
+.show_discount_money {
+    line-height: inherit;
+}
+
+.show_total_money {
+    margin-left: 10px;
+    font-weight: 700;
+}
+
+.thanh-tien label {
+    font-weight: 600;
+}
+
+.btn-delete {
+    border: none;
+    background: #f3f2ee;
+}
+
+.btn-delete i {
+    font-size: 18px;
+    color: #111111;
+    height: 40px;
+    width: 40px;
+    background: #7b7b7b;
+    border-radius: 28px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.card_content {
+    position: relative;
+}
+
+#btn-add-product {
+    position: absolute;
+    left: 25px;
+    margin-top: 10px;
+    border-radius: 35px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #7b7b7b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.img-product-preview{
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    margin-top: 25px;
 }
