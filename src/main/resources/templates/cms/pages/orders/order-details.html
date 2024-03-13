@@ -134,7 +134,7 @@
                         <!-- Media -->
                         <div class="media mb-1 product" th:each="hdct, productInfo : ${hoaDonChiTietList}" th:data-productId="${productInfo.index}">
                             <div class="avatar avatar-xl mr-3">
-                                <img class="img-fluid" src="/assets/cms/img/400x400/img26.jpg" alt="Image Description">
+                                <img class="img-fluid" th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
                             </div>
 
                             <div class="media-body">

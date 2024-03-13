@@ -125,6 +125,7 @@ function callApiShippingFee() {
             console.log(response);
             $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
             $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+            $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
         },
         error: function (error) {
             console.error('Xảy ra lỗi: ', error)
@@ -213,11 +214,8 @@ $(document).ready(function () {
     phuongXa.on('change', function () {
         phuongXaSelected = phuongXa.val();
         wardName = phuongXa.find("option:selected").text();
-        var totalAmount = document.getElementById("totalAmount").textContent.replace(/[.,]/g, '');
+        var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
         var shippingFee = document.getElementById("totalAmount").textContent.replace(/[.,]/g, '');
-        if(shippingFee != null || shippingFee != undefined) {
-            totalAmount = parseInt(totalAmount) - (shippingFee);
-        }
         $.ajax({
             type: "POST",
             url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
@@ -269,6 +267,7 @@ $(document).ready(function () {
             success: function (response) {
                 $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
                 $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
             },
             error: function (error) {
                 console.error('Xảy ra lỗi: ', error)
@@ -354,7 +353,8 @@ $(document).ready(function () {
                 console.log(response);
                 $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
                 $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
-            },
+                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
+                },
             error: function (error) {
                 console.error('Xảy ra lỗi: ', error)
             }
