@@ -40,7 +40,7 @@
     <div class="content container-fluid">
         <!-- Step Form -->
         <form th:action="@{/cms/quan-tri/update}" method="post"
-                th:object="${quanTri}"
+              th:object="${quanTri}"
               class="js-step-form py-md-1" data-hs-step-form-options='{
                 "progressSelector": "#addUserStepFormProgress",
                 "stepsSelector": "#addUserStepFormContent",
@@ -247,7 +247,7 @@
                                     <!-- Form Group -->
                                     <div class="form-group">
                                         <label
-                                               class="col-sm-4 col-form-label input-label">Sản phẩm 1
+                                                class="col-sm-4 col-form-label input-label">Sản phẩm 1
                                             <i
                                                     class="tio-help-outlined text-body ml-1"
                                                     data-toggle="tooltip"
@@ -287,7 +287,7 @@
                                     <!-- Form Group -->
                                     <div class="form-group">
                                         <label
-                                               class="col-sm-4 col-form-label input-label">Sản phẩm 2
+                                                class="col-sm-4 col-form-label input-label">Sản phẩm 2
                                             <i
                                                     class="tio-help-outlined text-body ml-1"
                                                     data-toggle="tooltip"
@@ -327,7 +327,7 @@
                                     <!-- Form Group -->
                                     <div class="form-group">
                                         <label
-                                               class="col-sm-4 col-form-label input-label">Sản phẩm 3
+                                                class="col-sm-4 col-form-label input-label">Sản phẩm 3
                                             <i
                                                     class="tio-help-outlined text-body ml-1"
                                                     data-toggle="tooltip"
@@ -367,7 +367,7 @@
                                     <!-- Form Group -->
                                     <div class="form-group">
                                         <label
-                                               class="col-sm-4 col-form-label input-label">Sản phẩm sale
+                                                class="col-sm-4 col-form-label input-label">Sản phẩm sale
                                             <i
                                                     class="tio-help-outlined text-body ml-1"
                                                     data-toggle="tooltip"
@@ -411,7 +411,7 @@
                                                 <input type="datetime-local" class="form-control money-input-mask"
                                                        name="thoi_gian_sale"
                                                        id="thoi_gian_sale"
-                                                       th:field="*{thoi_gian_sale}">
+                                                       th:value="*{thoi_gian}">
                                             </div>
                                         </div>
                                     </div>

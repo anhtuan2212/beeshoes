@@ -45,6 +45,7 @@ public class QuanTri {
     SanPham san_pham_sale;
     String title_sp_sale;
 
-//    Timestamp thoi_gian_sale;
     LocalDateTime thoi_gian_sale;
+    @Transient
+    Timestamp thoi_gian;
 }

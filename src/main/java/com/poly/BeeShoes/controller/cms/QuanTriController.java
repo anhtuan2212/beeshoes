@@ -23,6 +23,7 @@ public class QuanTriController {
     @GetMapping("")
     public String quanTri(Model model) {
         QuanTri qtri = quanTriService.getById(1L);
+        qtri.setThoi_gian(Timestamp.valueOf(qtri.getThoi_gian_sale()));
         model.addAttribute("quanTri", qtri);
         model.addAttribute("listSP", sanPhamService.findByTrangThaiEquals(true));
         return "cms/pages/quantri/quan-tri";
