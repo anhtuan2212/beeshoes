@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LightBee | Tra Cứu Đơn Hàng</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/assets/customer/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/tracking.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/profile.css?v=2.0" type="text/css">
+</head>
+
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__option">
+        <div class="offcanvas__links">
+            <a href="#">Đăng nhập</a>
+            <a href="#">FAQs</a>
+        </div>
+        <div class="offcanvas__top__hover">
+            <span>Usd <i class="arrow_carrot-down"></i></span>
+            <ul>
+                <li>USD</li>
+                <li>EUR</li>
+                <li>USD</li>
+            </ul>
+        </div>
+    </div>
+    <div class="offcanvas__nav__option">
+        <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
+        <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+        <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
+        <div class="price">$0.00</div>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__text">
+        <p>Miễn phí vận chuyển, đảm bảo hoàn trả hoặc hoàn tiền trong 30 ngày.</p>
+    </div>
+</div>
+<!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
+<div th:replace="~{/customer/pages/_header.html}"></div>
+<!-- Header Section End -->
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Tra Cứu Đơn Hàng</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/index">Trang chủ</a>
+                        <span>Tra Cứu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- About Section Begin -->
+<section class="oder-tracking spad">
+    <th:block th:if="${show==0}">
+        <div class="container">
+            <div class="wraper-tracking">
+                <form action="/oder-tracking" method="get">
+                    <div class="row w-100-vh">
+                        <div class="row w-100 p-4 wrapper-form">
+                            <div class="col-9 p-0">
+                                <input class="w-100 form-seacrh" name="oder" placeholder="Nhập mã hóa đơn cần tra cứu">
+                            </div>
+                            <div class="col-3 p-0 pl-1">
+                                <button class="primary-btn" type="submit">Tra Cứu</button>
+                            </div>
+                        </div>
+                        <div class="w-100 mt-3 d-flex justify-content-center">
+                            <img src="/assets/customer/img/tracking/giao-hang.png" alt="Giao Hàng">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </th:block>
+    <th:block th:if="${show==1}">
+        <div class="container">
+            <div class="wraper-search">
+                <form action="/oder-tracking" method="get">
+                    <div class="row w-100-vh">
+                        <div class="row w-100 p-4 wrapper-form">
+                            <div class="col-9 p-0">
+                                <input class="w-100 form-seacrh" name="oder" placeholder="Nhập mã hóa đơn cần tra cứu">
+                            </div>
+                            <div class="col-3 p-0 pl-1">
+                                <button class="primary-btn" type="submit">Tra Cứu</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <article class="card">
+                <header class="card-header">Mã Hóa Đơn:<strong id="oder-code">HD0001</strong></header>
+                <div class="card-body">
+                    <article class="card">
+                        <div class="card-body row">
+                            <div class="col"><strong>Ngày Giao Dự Kiến:</strong> <br>29/12/2024</div>
+                            <div class="col"><strong>Đơn Vị:</strong> <br>Giao Hàng Nhanh</div>
+                            <div class="col"><strong>Trạng Thái:</strong> <br>Chờ Xác Nhận</div>
+                            <div class="col"><strong>Mã Vận Chuyển:</strong> <br>VNE0123908172</div>
+                        </div>
+                    </article>
+                    <div class="track">
+                        <div class="step active"><span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                class="text">Order confirmed</span>
+                        </div>
+                        <div class="step active"><span class="icon"> <i class="fa fa-user"></i> </span> <span
+                                class="text"> Picked by courier</span>
+                        </div>
+                        <div class="step"><span class="icon"> <i class="fa fa-truck"></i> </span> <span
+                                class="text"> On the way </span></div>
+                        <div class="step"><span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">Ready for pickup</span>
+                        </div>
+                    </div>
+                    <hr class="mb-0">
+                    <div class="card-body mt-0">
+                        <div class="card_content ">
+                            <ul class="w-100">
+                                <li class="row">
+                                    <div class="col-2 p-0">
+                                        <img class="product_img"
+                                             src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2FTwLcfL9tlB.png?alt=media&amp;token=31847236-aad8-4aaf-8960-396f56798c80">
+                                    </div>
+                                    <div class="col-7 p-0">
+                                        <div>
+                                            <h6 class="product_name mb-2">Giày Sneaker Trẻ Em Nike Revolution 7</h6>
+                                            <div class="w-100">
+                                                Màu :<label>Xanh Dương</label>, Kích Cỡ :<label>40</label>
+                                            </div>
+                                            <label>Số Lượng :1</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 d-flex align-items-center">
+                                        <h5 class="product_price_cu">1.860.000đ</h5>
+                                        <h5 class="product_price">1.599.000đ</h5>
+                                    </div>
+                                </li>
+                                <li class="row">
+                                    <div class="col-2 p-0">
+                                        <img class="product_img"
+                                             src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F95CjnghQ9H.png?alt=media&amp;token=e01d0dd5-6ff1-40be-bca5-81d03750de90">
+                                    </div>
+                                    <div class="col-7 p-0">
+                                        <div>
+                                            <h6 class="product_name mb-2">Giày Sneaker Nữ Nike Gamma Force</h6>
+                                            <div class="w-100">
+                                                Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>41</label>
+                                            </div>
+                                            <label>Số Lượng :1</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 d-flex align-items-center">
+                                        <h5 class="product_price_cu">1.500.000đ</h5>
+                                        <h5 class="product_price">700.000đ</h5>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Trang
+                        Chủ</a>
+                </div>
+            </article>
+        </div>
+    </th:block>
+</section>
+<!-- About Section End -->
+
+
+<!-- Footer Section Begin -->
+<div th:replace="~{/customer/pages/_footer.html}"></div>
+<!-- Footer Section End -->
+
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Tìm kiếm ở đây.....">
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
+<script src="/assets/customer/js/bootstrap.min.js"></script>
+<script src="/assets/customer/js/jquery.nice-select.min.js"></script>
+<script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
+<script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
+<script src="/assets/customer/js/jquery.countdown.min.js"></script>
+<script src="/assets/customer/js/jquery.slicknav.js"></script>
+<script src="/assets/customer/js/mixitup.min.js"></script>
+<script src="/assets/customer/js/owl.carousel.min.js"></script>
+<script src="/assets/customer/js/main.js"></script>
+<script>
+    setTabsHeader('about');
+</script>
+</body>
+
+</html>

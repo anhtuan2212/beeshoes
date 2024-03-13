@@ -39,8 +39,95 @@ function renameFile(file) {
     return new File([file], newName, {type: file.type});
 }
 
+let provinceArr = [];
+let districtArr = [];
+let wardArr = [];
+let tinh = $('#tinhTP');
+let quanHuyen = $('#quanHuyen');
+let phuongXa = $('#phuongXa')
+let tinh_selected;
+let huyen_selected;
+fetch('/assets/address-json/province.json')
+    .then(response => response.json())
+    .then(data => {
+        provinceArr = data;
+        console.log(data)
+        return fillAllTinh(data);
+    })
+    .then(() => {
+        return fetch('/assets/address-json/district.json')
+            .then(response => response.json())
+            .then(data => {
+                districtArr = data;
+                console.log(data)
+            });
+    })
+    .then(() => {
+        return fetch('/assets/address-json/ward.json')
+            .then(response => response.json())
+            .then(data => {
+                wardArr = data;
+                console.log(data)
+            });
+    })
+    .catch(error => console.error('Error:', error));
+
+function fillAllTinh(data) {
+    $.each(data, function (index, item) {
+        let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
+        tinh.append(html);
+    });
+    $(tinh).niceSelect('update');
+}
+
+tinh.on('change', function () {
+    tinh_selected = tinh.val();
+    quanHuyen.html('<option value="">Quận/Huyện</option>');
+    phuongXa.html('<option value="">Phường/Xã</option>');
+    if (tinh_selected) {
+        districtArr.forEach(function (item) {
+            if (item.ProvinceID == tinh_selected) {
+                let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                quanHuyen.append(html);
+            }
+        })
+        $(quanHuyen).niceSelect('update');
+    }
+})
+
+quanHuyen.on('change', function () {
+    huyen_selected = quanHuyen.val();
+    phuongXa.html('<option value="">Phường/Xã</option>');
+    wardArr.forEach((item) => {
+        if (item.DistrictID == huyen_selected) {
+            let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+            phuongXa.append(html);
+        }
+    })
+    $(phuongXa).niceSelect('update');
+})
 
 $(document).ready(function () {
+    $(document).on('click', '.btn-delete-address', function () {
+        let id = $(this).data('id');
+        Swal.fire({
+            title: "Bạn chắc chứ?",
+            text: "Thay đổi sẽ không thể hoàn tác !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Hủy",
+            confirmButtonText: "Xác Nhận",
+            customClass: {
+                confirmButton: 'btn-custom-black',
+                cancelButton: 'btn-custom-info'
+            },
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+            }
+        })
+    })
     $('#avatar_selected').change(function () {
         if (this.files && this.files[0]) {
             let reader = new FileReader();
@@ -55,6 +142,9 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.btn-set-address', function () {
+        if ($(this).hasClass('disabled')){
+            return;
+        }
         let id_customer = $(this).data('customer-id');
         let id_address = $(this).data('id');
         let element = $(this);
@@ -67,8 +157,8 @@ $(document).ready(function () {
             },
             success: function () {
                 ToastSuccess("Thành công");
-                $('.btn-set-address').removeClass('disabled');
-                element.removeClass('btn-set-address').addClass('disabled')
+                $('.btn-set-address').removeClass('disabled')
+                element.addClass('disabled')
             },
             error: function (xhr) {
                 ToastError("Thất bại")
@@ -94,30 +184,96 @@ $(document).ready(function () {
         $('#id_oders_cancel').val(id);
         $('#staticBackdrop').modal('show');
     })
-    $(document).on('click','.update-address',function () {
-        $('#updateAddress').modal('show')
-    })
-    $(document).on('click','#btn-huy',function () {
-        let id = $('#id_oders_cancel').val();
-        let lydo = $('[name="cancel"]:checked').val();
-        if (lydo=='#'){
-            lydo = $('#lydo_cancel').text();
+    $(document).on('click', '.update-address', function () {
+        $('#updateAddress').modal('show');
+        let id = $(this).data('id');
+        $('#id_address').val(id);
+        let element = $(`#customer_address_${id}`)
+        let ele_tinh = $('#tinhTP');
+        let ele_quanHuyen = $('#quanHuyen');
+        let ele_phuongXa = $('#phuongXa')
+        let soNha = element.find('label.customerHouseNumber').text();
+        let phuongXa = element.find('label.customerWard').data('address');
+        let quanHuyen = element.find('label.customerDistrict').data('address');
+        let tinhTP = element.find('label.customerProvince').data('address');
+        $('#soNha').val(soNha)
+        ele_quanHuyen.empty()
+        ele_phuongXa.empty()
+        for (let i = 0; i < provinceArr.length; i++) {
+            let item = provinceArr[i];
+            if (item.ProvinceName == tinhTP) {
+                ele_tinh.val(item.ProvinceID);
+                districtArr.forEach(function (dis) {
+                    if (dis.ProvinceID == item.ProvinceID) {
+                        let html = `<option value="${dis.DistrictID}" ${dis.DistrictName == quanHuyen ? 'selected' : ''}>${String(dis.DistrictName)}</option>`;
+                        ele_quanHuyen.append(html);
+                        if (dis.DistrictName == quanHuyen) {
+                            wardArr.forEach((ward) => {
+                                if (ward.DistrictID == dis.DistrictID) {
+                                    let prin = `<option value="${ward.Code}" ${phuongXa==ward.Name?'selected':''}>${String(ward.Name)}</option>`;
+                                    ele_phuongXa.append(prin);
+                                }
+                            })
+                        }
+                    }
+                })
+                $(ele_quanHuyen).niceSelect('update');
+                $(ele_phuongXa).niceSelect('update');
+                break;
+            }
         }
+    })
+    $(document).on('click','#btn-update',function () {
+        let id = $('#id_address').val();
+        let soNha = $('#soNha').val();
+        let phuongXa = $('#phuongXa').find('option:selected').text();
+        let quanHuyen = $('#quanHuyen').find('option:selected').text();
+        let tinhTP = $('#tinhTP').find('option:selected').text();
         $.ajax({
-            url:'/api/hoa-don/huy-detail',
+            url:'/cms/khach-hang/update/update-diachi',
             type:'POST',
             data:{
                 id:id,
-                lydo:lydo
+                soNhaDto:soNha,
+                phuongXaDto:phuongXa,
+                quanHuyenDto:quanHuyen,
+                tinhThanhPhoDto:tinhTP
             },
-            success:function () {
+            success: ()=> {
+                ToastSuccess('Cập nhật thành công.');
+                let element = $(`#customer_address_${id}`);
+                element.find('label.customerHouseNumber').text(soNha);
+                element.find('label.customerWard').text(phuongXa + ', ')
+                element.find('label.customerDistrict').text(quanHuyen + ', ')
+                element.find('label.customerProvince').text(tinhTP)
+            },
+            error:function (e) {
+                console.log(e.getResponseHeader('status'))
+            }
+        })
+        console.log(id,soNha,phuongXa,quanHuyen,tinhTP);
+    })
+    $(document).on('click', '#btn-huy', function () {
+        let id = $('#id_oders_cancel').val();
+        let lydo = $('[name="cancel"]:checked').val();
+        if (lydo == '#') {
+            lydo = $('#lydo_cancel').text();
+        }
+        $.ajax({
+            url: '/api/hoa-don/huy-detail',
+            type: 'POST',
+            data: {
+                id: id,
+                lydo: lydo
+            },
+            success: function () {
                 ToastSuccess('Thành công.')
                 $(`#trangthai_${id}`).text('Đã Hủy');
                 $(`#btn-cancel-${id}`).remove();
-                $(`#lydo_${id}`).text('Lý Do: '+lydo);
+                $(`#lydo_${id}`).text('Lý Do: ' + lydo);
                 $('#staticBackdrop').modal('hide');
             },
-            error:function (e){
+            error: function (e) {
                 console.log(e)
                 $('#staticBackdrop').modal('hide');
             }

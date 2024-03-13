@@ -4,7 +4,7 @@
   Author: Colorib
   Author URI: https://www.colorib.com/
   Version: 1.0
-  Created: Colorib 
+  Created: Colorib
 ******************************************************************/
 
 /*------------------------------------------------------------------
@@ -541,9 +541,11 @@ ol {
 .header__nav__option ul li:last-child {
     margin-right: 0;
 }
-body{
+
+body {
     overflow-x: hidden !important;
 }
+
 .header__nav__option ul li .dropdown {
     position: absolute;
     right: 0;
@@ -4251,4 +4253,28 @@ body{
 
 .cart__user div.info label {
     font-size: 16px;
+}
+
+.form-input-custom {
+    background-color: #fff;
+    -webkit-tap-highlight-color: transparent;
+    border: solid 1px #e8e8e8;
+    border-radius: 5px;
+    clear: both;
+    box-sizing: border-box;
+    display: block;
+    cursor: pointer;
+    font-family: inherit;
+    float: left;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 40px;
+    height: 42px;
+    padding-left: 18px;
+    outline: none;
+    padding-right: 30px;
+    position: relative;
+    text-align: left !important;
+    white-space: nowrap;
+    width: auto;
 }
