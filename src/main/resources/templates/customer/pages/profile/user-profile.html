@@ -343,7 +343,7 @@
                                     </div>
                                     <div class="card-btn-group">
                                         <button th:if="${hoadon.getTrangThai().name() == 'Huy' or hoadon.getTrangThai().name() == 'ThanhCong' or  hoadon.getTrangThai().name() == 'HoanTra'}" class="primary-btn" type="button">Mua Lại</button>
-                                        <button class="info-btn" type="button">Xem Chi Tiết</button>
+                                        <a th:href="'/oder-tracking?oder='+${hoadon.getMaHoaDon()}" class="info-btn">Xem Chi Tiết</a>
                                         <button th:id="'btn-cancel-'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name() == 'ChoXacNhan'}"
                                                 th:attr="data-id=${hoadon.getId()}" class="info-btn btn-cancel-oders"
                                                 type="button">Hủy Đơn

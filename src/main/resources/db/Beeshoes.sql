@@ -591,3 +591,5 @@ ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 -- Giỏ Hàng Chi Tiết (id_gio_hang, id_chi_tiet_san_pham)
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_gio_hang) REFERENCES gio_hang(id);
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_chi_tiet_san_pham) REFERENCES chi_tiet_san_pham(id);
+ALTER TABLE hoa_don ADD COLUMN ma_van_chuyen varchar(256);
+ALTER TABLE chi_tiet_san_pham DROP COLUMN ma_van_chuyen varchar(256);

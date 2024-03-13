@@ -28,7 +28,10 @@ public class HoaDon {
     @OneToOne
     @JoinColumn(name = "id_khach_hang")
     KhachHang khachHang;
+
     String maHoaDon;
+
+    String maVanChuyen;
     boolean loaiHoaDon;
 
     @OneToOne

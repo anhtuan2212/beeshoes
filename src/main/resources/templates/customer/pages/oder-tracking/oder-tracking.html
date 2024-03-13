@@ -85,7 +85,7 @@
 
 <!-- About Section Begin -->
 <section class="oder-tracking spad">
-    <th:block th:if="${show==0}">
+    <th:block th:if="${show=='' or show==null}">
         <div class="container">
             <div class="wraper-tracking">
                 <form action="/oder-tracking" method="get">
@@ -106,14 +106,15 @@
             </div>
         </div>
     </th:block>
-    <th:block th:if="${show==1}">
+    <th:block th:if="${show!=null or show!= ''}">
         <div class="container">
             <div class="wraper-search">
                 <form action="/oder-tracking" method="get">
                     <div class="row w-100-vh">
                         <div class="row w-100 p-4 wrapper-form">
                             <div class="col-9 p-0">
-                                <input class="w-100 form-seacrh" name="oder" placeholder="Nhập mã hóa đơn cần tra cứu">
+                                <input class="w-100 form-seacrh" th:value="${show}" name="oder"
+                                       placeholder="Nhập mã hóa đơn cần tra cứu">
                             </div>
                             <div class="col-3 p-0 pl-1">
                                 <button class="primary-btn" type="submit">Tra Cứu</button>
@@ -130,31 +131,40 @@
                             <div class="col"><strong>Ngày Giao Dự Kiến:</strong> <br>29/12/2024</div>
                             <div class="col"><strong>Đơn Vị:</strong> <br>Giao Hàng Nhanh</div>
                             <div class="col"><strong>Trạng Thái:</strong> <br>Chờ Xác Nhận</div>
-                            <div class="col"><strong>Mã Vận Chuyển:</strong> <br>VNE0123908172</div>
+                            <div class="col"><strong>Mã Vận Chuyển:</strong> <br> <a target="_blank"
+                                                                                     href="https://donhang.ghn.vn/?order_code=VNE0123908172">VNE0123908172</a>
+                            </div>
                         </div>
                     </article>
                     <div class="track">
                         <div class="step active"><span class="icon"> <i class="fa fa-check"></i> </span> <span
-                                class="text">Order confirmed</span>
+                                class="text">Chờ Xác Nhận</span>
                         </div>
-                        <div class="step active"><span class="icon"> <i class="fa fa-user"></i> </span> <span
-                                class="text"> Picked by courier</span>
+                        <div class="step"><span class="icon"> <i class="fa fa-user"></i> </span> <span
+                                class="text">Chuẩn Bị Hàng</span>
                         </div>
+                        <div class="step"><span class="icon"> <i class="fa fa-ambulance" aria-hidden="true"></i> </span>
+                            <span
+                                    class="text">Chờ Giao</span></div>
                         <div class="step"><span class="icon"> <i class="fa fa-truck"></i> </span> <span
-                                class="text"> On the way </span></div>
-                        <div class="step"><span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">Ready for pickup</span>
+                                class="text">Đang Giao</span></div>
+                        <div class="step"><span class="icon"> <i class="fa fa-archive"></i> </span>
+                            <span class="text">Thành Công</span>
+                        </div>
+                        <div class="step"><span class="icon"> <i class="fa fa-times" aria-hidden="true"></i> </span>
+                            <span class="text">Thất Bại</span>
                         </div>
                     </div>
                     <hr class="mb-0">
                     <div class="card-body mt-0">
-                        <div class="card_content ">
+                        <div class="card_content">
                             <ul class="w-100">
                                 <li class="row">
                                     <div class="col-2 p-0">
                                         <img class="product_img"
                                              src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2FTwLcfL9tlB.png?alt=media&amp;token=31847236-aad8-4aaf-8960-396f56798c80">
                                     </div>
-                                    <div class="col-7 p-0">
+                                    <div class="col-7 content_product p-0">
                                         <div>
                                             <h6 class="product_name mb-2">Giày Sneaker Trẻ Em Nike Revolution 7</h6>
                                             <div class="w-100">
@@ -167,31 +177,61 @@
                                         <h5 class="product_price_cu">1.860.000đ</h5>
                                         <h5 class="product_price">1.599.000đ</h5>
                                     </div>
+                                    <div class="col-1 d-none align-items-center btn-del-group">
+                                        <button class="btn-delete">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                    </div>
                                 </li>
                                 <li class="row">
                                     <div class="col-2 p-0">
                                         <img class="product_img"
-                                             src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2F95CjnghQ9H.png?alt=media&amp;token=e01d0dd5-6ff1-40be-bca5-81d03750de90">
+                                             src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2FTwLcfL9tlB.png?alt=media&amp;token=31847236-aad8-4aaf-8960-396f56798c80">
                                     </div>
-                                    <div class="col-7 p-0">
+                                    <div class="col-7 content_product p-0">
                                         <div>
-                                            <h6 class="product_name mb-2">Giày Sneaker Nữ Nike Gamma Force</h6>
+                                            <h6 class="product_name mb-2">Giày Sneaker Trẻ Em Nike Revolution 7</h6>
                                             <div class="w-100">
-                                                Màu :<label>Màu Trắng</label>, Kích Cỡ :<label>41</label>
+                                                Màu :<label>Xanh Dương</label>, Kích Cỡ :<label>40</label>
                                             </div>
                                             <label>Số Lượng :1</label>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
-                                        <h5 class="product_price_cu">1.500.000đ</h5>
-                                        <h5 class="product_price">700.000đ</h5>
+                                        <h5 class="product_price_cu">1.860.000đ</h5>
+                                        <h5 class="product_price">1.599.000đ</h5>
+                                    </div>
+                                    <div class="col-1 d-none  align-items-center btn-del-group">
+                                        <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm">
+                                            <i class="fa fa-close"></i>
+                                        </button>
                                     </div>
                                 </li>
                             </ul>
+                            <button data-toggle="modal" data-target="#select_product" id="btn-add-product"
+                                    class="d-none"><i
+                                    class="fa fa-plus" aria-hidden="true"></i></button>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Trang
-                        Chủ</a>
+                    <div class="w-100 d-flex justify-content-end mt-3 pr-3">
+                        <label class="">Tổng :</label><h5 class="show_discount_money ml-2 mb-0">9.200.000đ</h5>
+                    </div>
+                    <div class="w-100 d-flex justify-content-end mt-1 pr-3">
+                        <label class="">Giảm Giá :</label><h6 class="show_discount_money ml-2 mb-0">200.000đ</h6>
+                    </div>
+                    <div class="w-100 thanh-tien d-flex justify-content-end align-items-center mt-1 mb-3 pr-3">
+                        <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a href="/" class="primary-btn" data-abc="true"> <i class="fa fa-chevron-left"></i> Trang
+                                Chủ</a>
+                        </div>
+                        <div>
+                            <a id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
+                            <a href="/" class="info-btn">Hủy Đơn</a>
+                        </div>
+                    </div>
                 </div>
             </article>
         </div>
@@ -203,7 +243,44 @@
 <!-- Footer Section Begin -->
 <div th:replace="~{/customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
+<div class="modal fade" id="select_product" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="select_productLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="select_productLabel">Chọn Sản Phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
+            </div>
+            <div class="modal-body p-4">
+                <div class="w-100">
+                    <label for="tenSanPham" class="pointer mb-0 w-100">Sản Phẩm :</label>
+                    <select class="w-100 mb-3" type="text" id="tenSanPham"></select>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <img id="preview-img" class="img-product-preview" width="200" height="200" src="/assets/customer/img/about/ludeptrai.jpg" alt="">
+                    </div>
+                    <div class="col-6">
+                        <label for="mauSac" class="pointer mb-0 w-100">Màu Sắc :</label>
+                        <select class="w-100 mb-3" type="text" id="mauSac"></select>
+                        <label for="kichCo" class="pointer mb-0 w-100">Kích Cỡ:</label>
+                        <select class="w-100 mb-3" type="text" id="kichCo"></select>
+                        <label for="soLuong" class="pointer mb-0 w-100">Số Lượng:</label>
+                        <input class="w-100  form-input-custom" type="text" id="soLuong">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
+                <button id="btn-select" type="button" class="btn primary-btn">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Search Begin -->
 <div class="search-model">
@@ -227,6 +304,7 @@
 <script src="/assets/customer/js/mixitup.min.js"></script>
 <script src="/assets/customer/js/owl.carousel.min.js"></script>
 <script src="/assets/customer/js/main.js"></script>
+<script src="/assets/customer/js/tracking/tracking.js"></script>
 <script>
     setTabsHeader('about');
 </script>
