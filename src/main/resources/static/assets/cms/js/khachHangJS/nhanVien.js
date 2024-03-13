@@ -132,7 +132,7 @@ function checkDuplicate() {
         let phone = $('#sdt').val();
         let cccd = $('#cccd').val();
         $.ajax({
-            url: '/cms/nhan-vien/check-duplicate',
+            url: '/cms/nhan-vien/check-duplicateAddNV',
             type: 'POST',
             data: {email: email, phoneNumber: phone, cccd: cccd},
             success: function(response) {
