@@ -163,65 +163,6 @@
     "UpdatedDate": "2024-03-02T15:15:05.556Z"
   },
   {
-    "DistrictID": 3451,
-    "ProvinceID": 268,
-    "DistrictName": "Quận Đặc Biệt",
-    "Code": "9505",
-    "Type": 1,
-    "SupportType": 0,
-    "IsEnable": 1,
-    "UpdatedBy": 1718600,
-    "CreatedAt": "2019-12-05 15:53:32.43142 +0700 +07 m=+0.015365672",
-    "UpdatedAt": "2020-09-29 13:42:41.252523 +0700 +07 m=+13.754966576",
-    "CanUpdateCOD": false,
-    "Status": 2,
-    "PickType": 0,
-    "DeliverType": 0,
-    "WhiteListClient": {
-      "From": [
-        3293726,
-        3412311,
-        3530513,
-        3532470,
-        3532879,
-        2939302,
-        3511191,
-        3395220
-      ],
-      "To": [
-        3293726,
-        3412311,
-        3530513,
-        3532470,
-        3532879,
-        2939302,
-        3511191,
-        3395220
-      ],
-      "Return": [
-        3293726,
-        3412311,
-        3530513,
-        3532470,
-        3532879,
-        2939302,
-        3511191,
-        3395220
-      ]
-    },
-    "WhiteListDistrict": {
-      "From": null,
-      "To": null
-    },
-    "ReasonCode": "",
-    "ReasonMessage": "",
-    "OnDates": null,
-    "UpdatedIP": "203.205.29.215",
-    "UpdatedEmployee": 1005,
-    "UpdatedSource": "internal",
-    "UpdatedDate": "2022-12-09T08:39:09.451Z"
-  },
-  {
     "DistrictID": 3446,
     "ProvinceID": 259,
     "DistrictName": "Huyện Ia H Drai",

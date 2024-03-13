@@ -227,20 +227,20 @@
                             </div>
                         </div>
                         <h5 class="title_card w-100 border-bottom pb-1 mt-4">Địa Chỉ Giao Hàng</h5>
-                        <div class="wrapper_address row mt-3">
-                            <div class="item_address mb-1 col-6" th:each="diachi:${user.getKhachHang().getDiaChi()}">
-                                <div class="content_dress row m-0 customerAddress">
+                        <div class="wrapper_address row mt-3 ">
+                            <div class="item_address mb-1 col-12 col-lg-6" th:each="diachi:${user.getKhachHang().getDiaChi()}">
+                                <div th:id="'customer_address_'+${diachi.getId()}" class="content_dress row m-0 customerAddress">
                                     <div class="col-12 d-flex justify-content-between">
                                         <div class="pt-3">
                                             <label class="w-100 txt_address mb-0">Địa Chỉ: <label
                                                     class="mb-0 customerHouseNumber"
                                                     th:text="${diachi.getSoNha()}"></label></label>
                                             <div class="d-flex flex-row">
-                                                <label class="txt_address customerWard"
+                                                <label class="txt_address customerWard" th:attr="data-address=${diachi.getPhuongXa()}"
                                                        th:text="${diachi.getPhuongXa()}+', '"></label>
-                                                <label class="txt_address customerDistrict"
+                                                <label class="txt_address customerDistrict" th:attr="data-address=${diachi.getQuanHuyen()}"
                                                        th:text="${diachi.getQuanHuyen()}+', '"></label>
-                                                <label class="txt_address customerProvince"
+                                                <label class="txt_address customerProvince" th:attr="data-address=${diachi.getTinhThanhPho()}"
                                                        th:text="${diachi.getTinhThanhPho()}"></label>
                                             </div>
                                             <div>
@@ -250,8 +250,8 @@
                                         </div>
                                         <div class="btn-action-address">
                                             <div class="d-flex justify-content-center">
-                                                <a class="mr-2 update-address" href="javascript:;">Cập Nhật</a>
-                                                <a href="javascript:;">Xóa</a>
+                                                <a class="mr-2 update-address" th:attr="data-id=${diachi.getId()}" href="javascript:;">Cập Nhật</a>
+                                                <a class="btn-delete-address" th:attr="data-id=${diachi.getId()}"  href="javascript:;">Xóa</a>
                                             </div>
                                             <button type="button"
                                                     th:attr="data-customer-id=${user.getKhachHang().getId()},data-id=${diachi.getId()}"
@@ -459,23 +459,24 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+
             </div>
             <div class="modal-body p-4">
-                <input type="text" hidden="hidden" id="id_customer">
+                <input type="text" hidden="hidden" id="id_address">
                 <div class="w-100">
-                    <label for="soNha" class="pointer w-100">Số Nhà:</label>
-                    <input class="w-100 mb-3" type="text" id="soNha">
-                    <label for="tinhTP" class="pointer w-100">Tỉnh/TP:</label>
+                    <label for="soNha" class="pointer mb-0 w-100">Số Nhà:</label>
+                    <input class="w-100 mb-3 form-input-custom" type="text" id="soNha">
+                    <label for="tinhTP" class="pointer mb-0 w-100">Tỉnh/TP:</label>
                     <select class="w-100 mb-3" type="text" id="tinhTP"></select>
-                    <label for="quanHuyen" class="pointer w-100">Quận Huyện:</label>
+                    <label for="quanHuyen" class="pointer mb-0 w-100">Quận Huyện:</label>
                     <select class="w-100 mb-3" type="text" id="quanHuyen"></select>
-                    <label for="phuongXa" class="pointer w-100">Phường Xã:</label>
+                    <label for="phuongXa" class="pointer mb-0 w-100">Phường Xã:</label>
                     <select class="w-100" type="text" id="phuongXa"></select>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
-                <button id="btn-huy" type="button" class="btn primary-btn">Cập Nhật</button>
+                <button id="btn-update" type="button" class="btn primary-btn">Cập Nhật</button>
             </div>
         </div>
     </div>

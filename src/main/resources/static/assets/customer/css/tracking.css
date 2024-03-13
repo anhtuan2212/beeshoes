@@ -1,0 +1,52 @@
+/*
+=========================================================
+* Tẩn Láo Lù
+=========================================================
+
+* Code version: 1.0
+* Copyright 2024 anhtuanlc (https://anhtuanlc.online)
+* Licensed under MIT (https://anhtuanlc.online)
+* Coded by anhtuanlc
+
+=========================================================
+ */
+.wraper-tracking {
+    min-height: 55vh;
+    display: flex;
+    justify-content: center;
+}
+
+.wraper-tracking form {
+    max-width: 100vh;
+}
+.wraper-search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.wraper-search form {
+    max-width: 100vh;
+}
+.wrapper-form{
+    background-color: #f3f2ee;
+}
+.wraper-tracking img {
+    width: 50%;
+}
+
+.w-100-vh {
+    width: 100vh;
+}
+
+.primary-btn {
+    white-space: nowrap;
+    height: 50px;
+}
+
+.form-seacrh {
+    height: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: 1px solid #e1e1e1;
+}
