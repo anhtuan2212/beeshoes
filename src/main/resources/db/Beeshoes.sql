@@ -70,10 +70,7 @@ CREATE TABLE tags_san_pham
     id_san_pham bigint,
     primary key(id)
 )engine=INNODB;
--- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
--- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
-ALTER TABLE san_pham ADD FOREIGN KEY(id_san_pham) REFERENCES san_pham(id);
-ALTER TABLE tags ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
+
 -- Đế Giày (nguoi_tao, nguoi_sua) //done
 CREATE TABLE de_giay
 (
@@ -596,3 +593,6 @@ ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 -- Giỏ Hàng Chi Tiết (id_gio_hang, id_chi_tiet_san_pham)
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_gio_hang) REFERENCES gio_hang(id);
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_chi_tiet_san_pham) REFERENCES chi_tiet_san_pham(id);
+
+ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_san_pham) REFERENCES san_pham(id);
+ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
