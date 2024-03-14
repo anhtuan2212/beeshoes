@@ -182,7 +182,6 @@ CREATE TABLE chi_tiet_san_pham
     id_anh bigint,
     id_mui_giay bigint,
     ma_san_pham varchar(256),
-    ma_van_chuyen varchar(256),
     gia_nhap decimal(11, 2),
     gia_goc decimal(11, 2),
     gia_ban decimal(11, 2),
@@ -359,12 +358,15 @@ CREATE TABLE hoa_don -- bỏ field deleted
 (
     id bigint auto_increment,
     ma_hoa_don varchar(256),
+    ten_nguoi_nhan varchar(256),
+    ma_van_chuyen varchar(256),
     loai_hoa_don bit,
     id_nhan_vien bigint,
     id_khach_hang bigint,
     id_voucher bigint,
     id_don_vi_van_chuyen bigint,
     tong_tien decimal(11, 2),
+    giam_gia  decimal(11, 2),
     thuc_thu decimal(11, 2),
     phi_ship decimal(11, 2),
     ngay_xac_nhan timestamp,
@@ -387,6 +389,8 @@ CREATE TABLE hoa_don_chi_tiet
     id bigint auto_increment,
     id_hoa_don bigint,
     id_chi_tiet_san_pham bigint,
+    gia_goc decimal(11, 2),
+    gia_ban decimal(11, 2),
     so_luong int,
     primary key(id)
 )engine=INNODB;
@@ -399,6 +403,7 @@ CREATE TABLE lich_su_hoa_don
     hanh_dong nvarchar(256),
     thoi_gian timestamp,
     nguoi_thuc_hien bigint,
+    trang_thai_sau_update nvarchar(256),
     primary key(id)
 )engine=INNODB;
 
@@ -591,5 +596,3 @@ ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 -- Giỏ Hàng Chi Tiết (id_gio_hang, id_chi_tiet_san_pham)
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_gio_hang) REFERENCES gio_hang(id);
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_chi_tiet_san_pham) REFERENCES chi_tiet_san_pham(id);
-ALTER TABLE hoa_don ADD COLUMN ma_van_chuyen varchar(256);
-ALTER TABLE chi_tiet_san_pham DROP COLUMN ma_van_chuyen varchar(256);

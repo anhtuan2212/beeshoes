@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
     <meta charset="UTF-8">
@@ -85,7 +86,7 @@
 
 <!-- About Section Begin -->
 <section class="oder-tracking spad">
-    <th:block th:if="${show=='' or show==null}">
+    <th:block th:if="${show==null}">
         <div class="container">
             <div class="wraper-tracking">
                 <form action="/oder-tracking" method="get">
@@ -106,7 +107,7 @@
             </div>
         </div>
     </th:block>
-    <th:block th:if="${show!=null or show!= ''}">
+    <th:block th:if="${show!=null}">
         <div class="container">
             <div class="wraper-search">
                 <form action="/oder-tracking" method="get">
@@ -123,86 +124,104 @@
                     </div>
                 </form>
             </div>
-            <article class="card">
-                <header class="card-header">Mã Hóa Đơn:<strong id="oder-code">HD0001</strong></header>
+            <div th:if="${hoadon==null}">
+                <div class="w-100 d-flex flex-column align-items-center">
+                    <img width="300" height="350" src="/assets/cms/svg/illustrations/think.svg" alt="">
+                    <h4 class="text-error">Mã Hóa Đơn Không Đúng !</h4>
+                    <div>Chúng tôi không tìm thấy mã hóa đơn của bạn trong hệ thống.</div>
+                    <div>Vui lòng kiểm tra lại mã hóa đơn.</div>
+                </div>
+
+            </div>
+            <article class="card" th:if="${hoadon!=null}">
+                <header class="card-header">Mã Hóa Đơn:<strong id="oder-code" th:text="${hoadon.getMaHoaDon()}"></strong></header>
                 <div class="card-body">
                     <article class="card">
                         <div class="card-body row">
                             <div class="col"><strong>Ngày Giao Dự Kiến:</strong> <br>29/12/2024</div>
                             <div class="col"><strong>Đơn Vị:</strong> <br>Giao Hàng Nhanh</div>
-                            <div class="col"><strong>Trạng Thái:</strong> <br>Chờ Xác Nhận</div>
+                            <div class="col"><strong>Trạng Thái:</strong> <br>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='Huy'}">Đã Hủy</th:block>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXuLy'}">Chờ Xử Lý</th:block>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXacNhan'}">Chờ Xác Nhận</th:block>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoGiao'}">Chờ Giao</th:block>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='DangGiao'}">Đang Giao</th:block>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='HoanTra'}">Hoàn Trả</th:block>
+                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ThanhCong'}">Thành Công</th:block>
+                            </div>
                             <div class="col"><strong>Mã Vận Chuyển:</strong> <br> <a target="_blank"
-                                                                                     href="https://donhang.ghn.vn/?order_code=VNE0123908172">VNE0123908172</a>
+                                                                                     th:href="'https://donhang.ghn.vn/?order_code='+${hoadon.getMaVanChuyen()}" th:text="${hoadon.getMaVanChuyen()}"></a>
                             </div>
                         </div>
                     </article>
                     <div class="track">
-                        <div class="step active"><span class="icon"> <i class="fa fa-check"></i> </span> <span
-                                class="text">Chờ Xác Nhận</span>
+
+                        <div class="step active">
+                            <span class="icon">
+                                <i class="fa fa-check"></i> </span>
+                            <span class="text">Chờ Xác Nhận</span>
                         </div>
-                        <div class="step"><span class="icon"> <i class="fa fa-user"></i> </span> <span
-                                class="text">Chuẩn Bị Hàng</span>
+
+                        <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <span class="text">Chuẩn Bị Hàng</span>
                         </div>
-                        <div class="step"><span class="icon"> <i class="fa fa-ambulance" aria-hidden="true"></i> </span>
-                            <span
-                                    class="text">Chờ Giao</span></div>
-                        <div class="step"><span class="icon"> <i class="fa fa-truck"></i> </span> <span
-                                class="text">Đang Giao</span></div>
-                        <div class="step"><span class="icon"> <i class="fa fa-archive"></i> </span>
+
+                        <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-ambulance" aria-hidden="true"></i>
+                            </span>
+                            <span class="text">Chờ Giao</span>
+                        </div>
+
+                        <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-truck"></i>
+                            </span>
+                            <span class="text">Đang Giao</span>
+                        </div>
+
+                        <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-archive"></i>
+                            </span>
                             <span class="text">Thành Công</span>
                         </div>
-                        <div class="step"><span class="icon"> <i class="fa fa-times" aria-hidden="true"></i> </span>
+
+                        <div class="step d-none">
+                            <span class="icon">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </span>
                             <span class="text">Thất Bại</span>
                         </div>
+
                     </div>
                     <hr class="mb-0">
                     <div class="card-body mt-0">
                         <div class="card_content">
                             <ul class="w-100">
-                                <li class="row">
+                                <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}">
                                     <div class="col-2 p-0">
                                         <img class="product_img"
-                                             src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2FTwLcfL9tlB.png?alt=media&amp;token=31847236-aad8-4aaf-8960-396f56798c80">
+                                             th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
                                     </div>
                                     <div class="col-7 content_product p-0">
                                         <div>
-                                            <h6 class="product_name mb-2">Giày Sneaker Trẻ Em Nike Revolution 7</h6>
+                                            <h6 class="product_name mb-2" th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
                                             <div class="w-100">
-                                                Màu :<label>Xanh Dương</label>, Kích Cỡ :<label>40</label>
+                                                Màu :<label th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}"></label>, Kích Cỡ :<label th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}"></label>
                                             </div>
-                                            <label>Số Lượng :1</label>
+                                            <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
-                                        <h5 class="product_price_cu">1.860.000đ</h5>
-                                        <h5 class="product_price">1.599.000đ</h5>
-                                    </div>
-                                    <div class="col-1 d-none align-items-center btn-del-group">
-                                        <button class="btn-delete">
-                                            <i class="fa fa-close"></i>
-                                        </button>
-                                    </div>
-                                </li>
-                                <li class="row">
-                                    <div class="col-2 p-0">
-                                        <img class="product_img"
-                                             src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2FTwLcfL9tlB.png?alt=media&amp;token=31847236-aad8-4aaf-8960-396f56798c80">
-                                    </div>
-                                    <div class="col-7 content_product p-0">
-                                        <div>
-                                            <h6 class="product_name mb-2">Giày Sneaker Trẻ Em Nike Revolution 7</h6>
-                                            <div class="w-100">
-                                                Màu :<label>Xanh Dương</label>, Kích Cỡ :<label>40</label>
-                                            </div>
-                                            <label>Số Lượng :1</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 d-flex align-items-center">
-                                        <h5 class="product_price_cu">1.860.000đ</h5>
-                                        <h5 class="product_price">1.599.000đ</h5>
+                                        <h5 class="product_price_cu" th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                        <h5 class="product_price"  th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                     </div>
                                     <div class="col-1 d-none  align-items-center btn-del-group">
-                                        <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm">
+                                        <button class="btn-delete" th:attr="data-id-ctsp=${sanpham.getChiTietSanPham().getId()}" data-toggle="tooltip" title="Xóa Sản Phẩm">
                                             <i class="fa fa-close"></i>
                                         </button>
                                     </div>
@@ -214,26 +233,41 @@
                         </div>
                     </div>
                     <div class="w-100 d-flex justify-content-end mt-3 pr-3">
-                        <label class="">Tổng :</label><h5 class="show_discount_money ml-2 mb-0">9.200.000đ</h5>
+                        <label class="">Tổng :</label><h5 class="show_discount_money ml-2 mb-0"  th:text="${#numbers.formatDecimal(hoadon.getTongTien(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                     </div>
                     <div class="w-100 d-flex justify-content-end mt-1 pr-3">
-                        <label class="">Giảm Giá :</label><h6 class="show_discount_money ml-2 mb-0">200.000đ</h6>
+                        <label class="">Giảm Giá :</label><h6 class="show_discount_money ml-2 mb-0" th:text="${#numbers.formatDecimal(hoadon.getTongTien()-hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'" ></h6>
                     </div>
                     <div class="w-100 thanh-tien d-flex justify-content-end align-items-center mt-1 mb-3 pr-3">
-                        <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money">9.000.000đ</h4>
+                        <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money" th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">9.000.000đ</h4>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>
                             <a href="/" class="primary-btn" data-abc="true"> <i class="fa fa-chevron-left"></i> Trang
                                 Chủ</a>
                         </div>
-                        <div>
-                            <a id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
-                            <a href="/" class="info-btn">Hủy Đơn</a>
-                        </div>
+                        <th:block th:if="${user != null}">
+                            <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
+                                <a id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
+                                <a href="/" class="info-btn">Hủy Đơn</a>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
             </article>
+            <div class="card w-100 mt-4" th:if="${hoadon!=null}">
+                <h4 class="text-center mb-2 mt-2">Lịch Sử Đơn Hàng</h4>
+                <hr>
+                <div class="w-100 row justify-content-center">
+                    <div class="col-3 times">
+                       22/12/2025 15:25:00
+                    </div>
+                    <div class="col-9 actions">
+                        Đã tạo đơn hàng
+                    </div>
+                </div>
+                <hr>
+            </div>
         </div>
     </th:block>
 </section>
@@ -261,7 +295,8 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <img id="preview-img" class="img-product-preview" width="200" height="200" src="/assets/customer/img/about/ludeptrai.jpg" alt="">
+                        <img id="preview-img" class="img-product-preview" width="200" height="200"
+                             src="/assets/customer/img/about/ludeptrai.jpg" alt="">
                     </div>
                     <div class="col-6">
                         <label for="mauSac" class="pointer mb-0 w-100">Màu Sắc :</label>
