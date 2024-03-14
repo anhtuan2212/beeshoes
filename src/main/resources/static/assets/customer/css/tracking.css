@@ -25,7 +25,9 @@
     justify-content: center;
     margin-bottom: 20px;
 }
-
+.text-error{
+    font-weight: 700;
+}
 .wraper-search form {
     max-width: 100vh;
 }
@@ -103,8 +105,11 @@
     text-align: center;
     position: relative
 }
+.product_name {
+    max-width: 500px !important;
+}
 
-.track .step.active:before {
+    .track .step.active:before {
     background: #FF5722
 }
 
@@ -246,4 +251,16 @@ a:hover {
     width: 200px;
     object-fit: cover;
     margin-top: 25px;
+}
+.times{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-weight: 600;
+    color: royalblue;
+}
+.actions{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
