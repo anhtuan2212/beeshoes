@@ -27,10 +27,10 @@ public class ChiTietSanPhamServiceImpl implements ChiTietSanPhamService {
         return ctspRepository.getFirstByMauSacAndKichCoAndSanPham(mauSac,kichCo,sanPham);
     }
 
-    @Override
-    public ChiTietSanPham getBySizeAndColor(KichCo kichCo, MauSac mauSac) {
-        return ctspRepository.getFirstByMauSacAndKichCo(mauSac ,kichCo);
-    }
+//    @Override
+//    public ChiTietSanPham getBySizeAndColor(KichCo kichCo, MauSac mauSac) {
+//        return ctspRepository.getFirstByMauSacAndKichCo(mauSac ,kichCo);
+//    }
 
     @Override
     public List<ChiTietSanPham> getAllBySanPham(SanPham samPham) {

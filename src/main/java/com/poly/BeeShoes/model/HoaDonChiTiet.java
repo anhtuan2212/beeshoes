@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +24,7 @@ public class HoaDonChiTiet {
     @OneToOne
     @JoinColumn(name = "id_chi_tiet_san_pham")
     ChiTietSanPham chiTietSanPham;
-
+    BigDecimal giaGoc;
+    BigDecimal giaBan;
     int soLuong;
 }

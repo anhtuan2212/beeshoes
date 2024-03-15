@@ -8,7 +8,7 @@ public interface ChiTietSanPhamService {
     ChiTietSanPham save(ChiTietSanPham chiTietSanPham);
     ChiTietSanPham getById(Long id);
     ChiTietSanPham getBySizeAndColorAndProduct(KichCo kichCo, MauSac mauSac, SanPham sanPham);
-    ChiTietSanPham getBySizeAndColor(KichCo kichCo, MauSac mauSac);
+//    ChiTietSanPham getBySizeAndColor(KichCo kichCo, MauSac mauSac);
     List<ChiTietSanPham> getAllBySanPham(SanPham samPham);
     boolean delete(Long id);
     boolean existsByChatLieu(ChatLieu chatLieu);

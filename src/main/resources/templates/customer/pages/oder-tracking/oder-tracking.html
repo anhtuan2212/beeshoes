@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/custom.css" type="text/css">
-    <link rel="stylesheet" href="/assets/customer/css/tracking.css" type="text/css">
+    <link rel="stylesheet" href="/assets/customer/css/tracking.css?v=1.0" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/profile.css?v=2.0" type="text/css">
 </head>
 
@@ -89,11 +89,11 @@
     <th:block th:if="${show==null}">
         <div class="container">
             <div class="wraper-tracking">
-                <form action="/oder-tracking" method="get">
+                <form id="form-tracking-1" action="/oder-tracking" method="get">
                     <div class="row w-100-vh">
                         <div class="row w-100 p-4 wrapper-form">
                             <div class="col-9 p-0">
-                                <input class="w-100 form-seacrh" name="oder" placeholder="Nhập mã hóa đơn cần tra cứu">
+                                <input id="form-value-1" class="w-100 form-search" name="oder" placeholder="Nhập mã hóa đơn cần tra cứu">
                             </div>
                             <div class="col-3 p-0 pl-1">
                                 <button class="primary-btn" type="submit">Tra Cứu</button>
@@ -110,11 +110,11 @@
     <th:block th:if="${show!=null}">
         <div class="container">
             <div class="wraper-search">
-                <form action="/oder-tracking" method="get">
+                <form id="form-tracking-2" action="/oder-tracking" method="get">
                     <div class="row w-100-vh">
                         <div class="row w-100 p-4 wrapper-form">
                             <div class="col-9 p-0">
-                                <input class="w-100 form-seacrh" th:value="${show}" name="oder"
+                                <input id="form-value-2" class="w-100 form-search" th:value="${show}" name="oder"
                                        placeholder="Nhập mã hóa đơn cần tra cứu">
                             </div>
                             <div class="col-3 p-0 pl-1">
@@ -134,23 +134,45 @@
 
             </div>
             <article class="card" th:if="${hoadon!=null}">
-                <header class="card-header">Mã Hóa Đơn:<strong id="oder-code" th:text="${hoadon.getMaHoaDon()}"></strong></header>
+                <header class="card-header">Mã Hóa Đơn:<strong id="oder-code"
+                                                               th:text="${hoadon.getMaHoaDon()}"></strong></header>
                 <div class="card-body">
                     <article class="card">
                         <div class="card-body row">
                             <div class="col"><strong>Ngày Giao Dự Kiến:</strong> <br>29/12/2024</div>
                             <div class="col"><strong>Đơn Vị:</strong> <br>Giao Hàng Nhanh</div>
                             <div class="col"><strong>Trạng Thái:</strong> <br>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='Huy'}">Đã Hủy</th:block>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXuLy'}">Chờ Xử Lý</th:block>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXacNhan'}">Chờ Xác Nhận</th:block>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoGiao'}">Chờ Giao</th:block>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='DangGiao'}">Đang Giao</th:block>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='HoanTra'}">Hoàn Trả</th:block>
-                                <th:block th:if="${hoadon != null and hoadon.getTrangThai().name()=='ThanhCong'}">Thành Công</th:block>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='Huy'}">Đã Hủy
+                                </p>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXuLy'}">Chờ Xử
+                                    Lý
+                                </p>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXacNhan'}">Chờ
+                                    Xác Nhận
+                                </p>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoGiao'}">Chờ
+                                    Giao
+                                </p>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='DangGiao'}">Đang
+                                    Giao
+                                </p>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='HoanTra'}">Hoàn
+                                    Trả
+                                </p>
+                                <p class="show_trang_thai"
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ThanhCong'}">Thành
+                                    Công
+                                </p>
                             </div>
                             <div class="col"><strong>Mã Vận Chuyển:</strong> <br> <a target="_blank"
-                                                                                     th:href="'https://donhang.ghn.vn/?order_code='+${hoadon.getMaVanChuyen()}" th:text="${hoadon.getMaVanChuyen()}"></a>
+                                                                                     th:href="'https://donhang.ghn.vn/?order_code='+${hoadon.getMaVanChuyen()}"
+                                                                                     th:text="${hoadon.getMaVanChuyen()}"></a>
                             </div>
                         </div>
                     </article>
@@ -201,7 +223,7 @@
                     <hr class="mb-0">
                     <div class="card-body mt-0">
                         <div class="card_content">
-                            <ul class="w-100">
+                            <ul class="w-100" id="show-all-product">
                                 <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}">
                                     <div class="col-2 p-0">
                                         <img class="product_img"
@@ -209,19 +231,27 @@
                                     </div>
                                     <div class="col-7 content_product p-0">
                                         <div>
-                                            <h6 class="product_name mb-2" th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
+                                            <h6 class="product_name mb-2"
+                                                th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
                                             <div class="w-100">
-                                                Màu :<label th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}"></label>, Kích Cỡ :<label th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}"></label>
+                                                Màu :<label
+                                                    th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}"></label>,
+                                                Kích Cỡ :<label
+                                                    th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}"></label>
                                             </div>
                                             <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
-                                        <h5 class="product_price_cu" th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
-                                        <h5 class="product_price"  th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                        <h5 class="product_price_cu"
+                                            th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                        <h5 class="product_price"
+                                            th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                     </div>
                                     <div class="col-1 d-none  align-items-center btn-del-group">
-                                        <button class="btn-delete" th:attr="data-id-ctsp=${sanpham.getChiTietSanPham().getId()}" data-toggle="tooltip" title="Xóa Sản Phẩm">
+                                        <button class="btn-delete"
+                                                th:attr="data-id-ctsp=${sanpham.getChiTietSanPham().getId()}"
+                                                data-toggle="tooltip" title="Xóa Sản Phẩm">
                                             <i class="fa fa-close"></i>
                                         </button>
                                     </div>
@@ -233,40 +263,46 @@
                         </div>
                     </div>
                     <div class="w-100 d-flex justify-content-end mt-3 pr-3">
-                        <label class="">Tổng :</label><h5 class="show_discount_money ml-2 mb-0"  th:text="${#numbers.formatDecimal(hoadon.getTongTien(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                        <label class="">Tổng :</label><h5 id="total-money" class="show_discount_money ml-2 mb-0"
+                                                          th:text="${#numbers.formatDecimal(hoadon.getTongTien(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                     </div>
                     <div class="w-100 d-flex justify-content-end mt-1 pr-3">
-                        <label class="">Giảm Giá :</label><h6 class="show_discount_money ml-2 mb-0" th:text="${#numbers.formatDecimal(hoadon.getTongTien()-hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'" ></h6>
+                        <label class="">Giảm Giá :</label><h6 id="discount-money" class="show_discount_money ml-2 mb-0"
+                                                              th:text="${#numbers.formatDecimal(hoadon.getTongTien()-hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h6>
                     </div>
                     <div class="w-100 thanh-tien d-flex justify-content-end align-items-center mt-1 mb-3 pr-3">
-                        <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money" th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">9.000.000đ</h4>
+                        <label class="mb-0">Thành Tiền: </label><h4 id="payment-money" class="show_total_money"
+                                                                    th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>
                             <a href="/" class="primary-btn" data-abc="true"> <i class="fa fa-chevron-left"></i> Trang
                                 Chủ</a>
                         </div>
-                        <th:block th:if="${user != null}">
-                            <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
-                                <a id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
-                                <a href="/" class="info-btn">Hủy Đơn</a>
-                            </div>
-                        </th:block>
+                        <!--                    <th:block th:if="${user != null}">-->
+                        <!--                        <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">-->
+                        <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}" th:attr="data-id=${hoadon.getId()}"
+                           id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
+                        <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}" th:attr="data-id=${hoadon.getId()}"
+                           class="info-btn btn-cancel-oders">Hủy Đơn</a>
+                        <!--                        </div>-->
+                        <!--                    </th:block>-->
                     </div>
                 </div>
             </article>
             <div class="card w-100 mt-4" th:if="${hoadon!=null}">
                 <h4 class="text-center mb-2 mt-2">Lịch Sử Đơn Hàng</h4>
                 <hr>
-                <div class="w-100 row justify-content-center">
-                    <div class="col-3 times">
-                       22/12/2025 15:25:00
-                    </div>
-                    <div class="col-9 actions">
-                        Đã tạo đơn hàng
-                    </div>
+                <div id="history-oder" class="w-100 pb-4">
+                    <th:block th:each="lshd:${lstLSHD}">
+                        <div class="w-100 row justify-content-center">
+                            <div class="col-3 times"
+                                 th:text="${#dates.format(lshd.getThoiGian(),'dd/MM/yyyy HH:mm:ss')}"></div>
+                            <div class="col-9 actions" th:text="${lshd.getHanhDong()}"></div>
+                        </div>
+                        <hr>
+                    </th:block>
                 </div>
-                <hr>
             </div>
         </div>
     </th:block>
@@ -290,6 +326,7 @@
             </div>
             <div class="modal-body p-4">
                 <div class="w-100">
+                    <input id="oder-id-update" type="text" hidden="hidden">
                     <label for="tenSanPham" class="pointer mb-0 w-100">Sản Phẩm :</label>
                     <select class="w-100 mb-3" type="text" id="tenSanPham"></select>
                 </div>
@@ -300,9 +337,9 @@
                     </div>
                     <div class="col-6">
                         <label for="mauSac" class="pointer mb-0 w-100">Màu Sắc :</label>
-                        <select class="w-100 mb-3" type="text" id="mauSac"></select>
+                        <select class="w-100 mb-3" id="mauSac"></select>
                         <label for="kichCo" class="pointer mb-0 w-100">Kích Cỡ:</label>
-                        <select class="w-100 mb-3" type="text" id="kichCo"></select>
+                        <select class="w-100 mb-3" id="kichCo"></select>
                         <label for="soLuong" class="pointer mb-0 w-100">Số Lượng:</label>
                         <input class="w-100  form-input-custom" type="text" id="soLuong">
                     </div>
@@ -316,7 +353,50 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 420px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Lý Do Hủy Đơn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pl-5">
+                <input type="text" hidden="hidden" id="id_oders_cancel">
+                <div class="w-100">
+                    <input id="lg1" type="radio" name="cancel" value="Tôi muốn cập nhật địa chỉ/sđt nhận hàng.">
+                    <label class="pointer" for="lg1">Tôi muốn cập nhật địa chỉ/sđt nhận hàng.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg2" type="radio" name="cancel" value="Tôi muốn thêm/thay đổi Mã giảm giá.">
+                    <label class="pointer" for="lg2">Tôi muốn thêm/thay đổi Mã giảm giá.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg3" type="radio" name="cancel" value="Tôi muốn thay đổi sản phẩm.">
+                    <label class="pointer" for="lg3">Tôi muốn thay đổi sản phẩm.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg4" type="radio" name="cancel" value="Tôi không có nhu cầu mua nữa.">
+                    <label class="pointer" for="lg4">Tôi không có nhu cầu mua nữa.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg5" type="radio" name="cancel" value="#">
+                    <label class="pointer" for="lg5">Khác</label>
+                </div>
+                <div class="w-100">
+                    <textarea class="w-75 d-none " id="lydo_cancel" rows="2"></textarea>
+                </div>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
+                <button id="btn-huy" type="button" class="btn primary-btn">Hủy Đơn</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Search Begin -->
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
@@ -339,10 +419,7 @@
 <script src="/assets/customer/js/mixitup.min.js"></script>
 <script src="/assets/customer/js/owl.carousel.min.js"></script>
 <script src="/assets/customer/js/main.js"></script>
-<script src="/assets/customer/js/tracking/tracking.js"></script>
-<script>
-    setTabsHeader('about');
-</script>
+<script src="/assets/customer/js/tracking/tracking.js?v=1.0"></script>
 </body>
 
 </html>

@@ -244,7 +244,7 @@
                                                        th:text="${diachi.getTinhThanhPho()}"></label>
                                             </div>
                                             <div>
-                                                <span th:if="${user.getKhachHang().getDiaChiMacDinh().getId()==diachi.getId()}"
+                                                <span th:if="${user.getKhachHang().getDiaChiMacDinh() != null and user.getKhachHang().getDiaChiMacDinh().getId()==diachi.getId()}"
                                                       class="address_default">Mặc Định</span>
                                             </div>
                                         </div>
@@ -255,12 +255,12 @@
                                             </div>
                                             <button type="button"
                                                     th:attr="data-customer-id=${user.getKhachHang().getId()},data-id=${diachi.getId()}"
-                                                    th:if="${user.getKhachHang().getDiaChiMacDinh().getId()==diachi.getId()}"
+                                                    th:if="${user.getKhachHang().getDiaChiMacDinh() != null and user.getKhachHang().getDiaChiMacDinh().getId()==diachi.getId()}"
                                                     class="select-img-btn btn-set-address disabled">Đặt Mặc Định
                                             </button>
                                             <button type="button"
                                                     th:attr="data-customer-id=${user.getKhachHang().getId()},data-id=${diachi.getId()}"
-                                                    th:if="${user.getKhachHang().getDiaChiMacDinh().getId()!=diachi.getId()}"
+                                                    th:if="${user.getKhachHang().getDiaChiMacDinh() == null or user.getKhachHang().getDiaChiMacDinh().getId()!=diachi.getId()}"
                                                     class="select-img-btn btn-set-address">Đặt Mặc Định
                                             </button>
                                         </div>
