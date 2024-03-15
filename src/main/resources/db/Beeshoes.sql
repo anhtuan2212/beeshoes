@@ -320,7 +320,7 @@ CREATE TABLE voucher -- bỏ field loai_voucher
     gia_tri_phan_tram int,
     gia_tri_toi_da decimal(11, 2),
     id_hang_khach_hang bigint,
-    dieu_kien nvarchar(256),
+    gia_tri_toi_thieu nvarchar(256),
     so_luong int,
     loai_voucher varchar(256),
     ngay_bat_dau timestamp,
@@ -597,3 +597,4 @@ ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
 -- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
+
