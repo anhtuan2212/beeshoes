@@ -320,7 +320,7 @@ CREATE TABLE voucher -- bỏ field loai_voucher
     gia_tri_phan_tram int,
     gia_tri_toi_da decimal(11, 2),
     id_hang_khach_hang bigint,
-    dieu_kien nvarchar(256),
+    gia_tri_toi_thieu decimal(11, 2),
     so_luong int,
     loai_voucher varchar(256),
     ngay_bat_dau timestamp,
@@ -329,7 +329,7 @@ CREATE TABLE voucher -- bỏ field loai_voucher
     ngay_sua timestamp,
     nguoi_tao bigint,
     nguoi_sua bigint,
-    trang_thai bit default 1,
+    trang_thai int default 1,
     mo_ta nvarchar(256),
     primary key(id)
 )engine=INNODB;
