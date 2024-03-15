@@ -59,9 +59,6 @@ CREATE TABLE tags
     trang_thai bit default 1,
     primary key(id)
 )engine=INNODB;
--- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
-ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
-ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 CREATE TABLE tags_san_pham
 (
@@ -71,9 +68,7 @@ CREATE TABLE tags_san_pham
     primary key(id)
 )engine=INNODB;
 -- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
--- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
-ALTER TABLE san_pham ADD FOREIGN KEY(id_san_pham) REFERENCES san_pham(id);
-ALTER TABLE tags ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
+
 -- Đế Giày (nguoi_tao, nguoi_sua) //done
 CREATE TABLE de_giay
 (
@@ -316,7 +311,7 @@ CREATE TABLE don_vi_van_chuyen
 )engine=INNODB;
 
 -- Voucher (id_hang_khach_hang, nguoi_tao, nguoi_sua) //done
-CREATE TABLE vouchers -- bỏ field loai_voucher
+CREATE TABLE voucher -- bỏ field loai_voucher
 (
     id bigint auto_increment,
     ma varchar(256),
@@ -551,20 +546,20 @@ ALTER TABLE don_vi_van_chuyen ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE don_vi_van_chuyen ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Voucher (id_hang_khach_hang, nguoi_tao, nguoi_sua)
-ALTER TABLE vouchers ADD FOREIGN KEY(id_hang_khach_hang) REFERENCES nhan_vien(id);
-ALTER TABLE vouchers ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
-ALTER TABLE vouchers ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
+ALTER TABLE voucher ADD FOREIGN KEY(id_hang_khach_hang) REFERENCES nhan_vien(id);
+ALTER TABLE voucher ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE voucher ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Vouchers cho khách hàng (id_khach_hang, id_vou_cher, nguoi_tao, nguoi_sua)
 ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
-ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(id_voucher) REFERENCES vouchers(id);
+ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(id_voucher) REFERENCES voucher(id);
 ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE voucher_khach_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
 -- Hóa Đơn (id_nhan_vien, id_khach_hang, id_voucher, id_don_vi_van_chuyen, id_thanh_toan, nguoi_tao, nguoi_sua)
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_nhan_vien) REFERENCES nhan_vien(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
-ALTER TABLE hoa_don ADD FOREIGN KEY(id_voucher) REFERENCES vouchers(id);
+ALTER TABLE hoa_don ADD FOREIGN KEY(id_voucher) REFERENCES voucher(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_don_vi_van_chuyen) REFERENCES don_vi_van_chuyen(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_thanh_toan) REFERENCES thanh_toan(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
@@ -596,3 +591,10 @@ ALTER TABLE gio_hang ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 -- Giỏ Hàng Chi Tiết (id_gio_hang, id_chi_tiet_san_pham)
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_gio_hang) REFERENCES gio_hang(id);
 ALTER TABLE gio_hang_chi_tiet ADD FOREIGN KEY(id_chi_tiet_san_pham) REFERENCES chi_tiet_san_pham(id);
+
+ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_san_pham) REFERENCES san_pham(id);
+ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
+-- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
+ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
+ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
+
