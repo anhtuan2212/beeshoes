@@ -251,7 +251,7 @@ INSERT INTO `thuong_hieu` (`id`, `ten`, `ngay_tao`, `ngay_sua`, `nguoi_tao`, `ng
 	(4, 'Vans', '2024-02-14 07:53:29', '2024-02-14 07:53:29', NULL, NULL, b'1'),
 	(5, 'Adidas', '2024-02-22 14:53:20', '2024-02-22 14:53:20', NULL, NULL, b'1');
 
-INSERT INTO `voucher` (`id`, `ma`, `ten`, `gia_tri_tien_mat`, `gia_tri_phan_tram`, `gia_tri_toi_da`, `id_hang_khach_hang`, `dieu_kien`, `so_luong`, `loai_voucher`, `ngay_bat_dau`, `ngay_ket_thuc`, `ngay_tao`, `ngay_sua`, `nguoi_tao`, `nguoi_sua`, `trang_thai`, `mo_ta`) VALUES
+INSERT INTO `voucher` (`id`, `ma`, `ten`, `gia_tri_tien_mat`, `gia_tri_phan_tram`, `gia_tri_toi_da`, `id_hang_khach_hang`, `gia_tri_toi_thieu`, `so_luong`, `loai_voucher`, `ngay_bat_dau`, `ngay_ket_thuc`, `ngay_tao`, `ngay_sua`, `nguoi_tao`, `nguoi_sua`, `trang_thai`, `mo_ta`) VALUES
 	(2, 'VC00001', 'Quan Hung Yen', 0.00, 10, 100000.00, NULL, 100000.00, 100, '%', '2024-02-26 14:01:00', '2024-03-01 14:01:00', NULL, NULL, NULL, NULL, 3, NULL),
 	(3, 'VC00002', 'Quan Hung Yen', 10000.00, 0, 100000.00, NULL, 100000.00, 10, '$', '2024-03-05 06:11:00', '2024-03-05 14:14:00', NULL, NULL, NULL, NULL, 3, NULL),
 	(4, 'VC00003', 'ccc', 200000.00, 0, 200000.00, NULL, 500000.00, 6, '$', '2024-03-06 09:28:00', '2024-04-14 09:28:00', NULL, NULL, NULL, NULL, 2, NULL),
