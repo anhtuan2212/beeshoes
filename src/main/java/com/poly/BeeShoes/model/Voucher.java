@@ -50,6 +50,4 @@ public class Voucher {
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
     Integer trangThai;
-
-
 }

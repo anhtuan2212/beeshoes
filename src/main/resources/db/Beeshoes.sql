@@ -329,7 +329,7 @@ CREATE TABLE voucher -- bỏ field loai_voucher
     ngay_sua timestamp,
     nguoi_tao bigint,
     nguoi_sua bigint,
-    trang_thai bit default 1,
+    trang_thai int default 1,
     mo_ta nvarchar(256),
     primary key(id)
 )engine=INNODB;
