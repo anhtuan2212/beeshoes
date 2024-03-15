@@ -597,4 +597,3 @@ ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
 -- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
-
