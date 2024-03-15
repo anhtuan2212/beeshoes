@@ -374,7 +374,7 @@ CREATE TABLE hoa_don -- bỏ field deleted
     ngay_sua timestamp,
     nguoi_tao bigint,
     nguoi_sua bigint,
-    trang_thai bit default 1,
+    trang_thai varchar(50),
     primary key(id)
 )engine=INNODB;
 
