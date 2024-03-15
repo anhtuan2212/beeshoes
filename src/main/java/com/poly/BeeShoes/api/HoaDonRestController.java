@@ -6,6 +6,9 @@ import com.poly.BeeShoes.dto.LichSuHoaDonDto;
 import com.poly.BeeShoes.dto.WardDto;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
+import com.poly.BeeShoes.request.AddProductOderRequest;
+import com.poly.BeeShoes.request.UpdateProductRquest;
+import com.poly.BeeShoes.request.chiTietSanPhamApiRquest;
 import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -33,10 +37,14 @@ public class HoaDonRestController {
 
     private final HoaDonService hoaDonService;
     private final LichSuHoaDonService lichSuHoaDonService;
+    private final HoaDonChiTietService hoaDonChiTietService;
     private final UserService userService;
     private final RestTemplate restTemplate;
     private final VoucherService voucherService;
     private final ChiTietSanPhamService chiTietSanPhamService;
+    private final MauSacService mauSacService;
+    private final KichCoService kichCoService;
+    private final SanPhamService sanPhamService;
     Gson gson = new Gson();
 
     @PostMapping("/xac-nhan")
@@ -79,7 +87,7 @@ public class HoaDonRestController {
             String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
             hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
             HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
-            if(updatedHoaDon.getVoucher() != null) {
+            if (updatedHoaDon.getVoucher() != null) {
                 Voucher voucher = voucherService.getByMa(updatedHoaDon.getVoucher().getMa());
                 voucher.setSoLuong(voucher.getSoLuong() + 1);
                 voucherService.save(voucher);
@@ -122,7 +130,7 @@ public class HoaDonRestController {
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
         lichSuHoaDon.setHanhDong("Thay đổi trạng thái từ: " + trangThaiBeforeUpdate + " -> " + updatedHoaDon.getTrangThai().name());
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
         }
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
@@ -134,7 +142,7 @@ public class HoaDonRestController {
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         lshdDto.setThoiGian(lshd.getThoiGian());
-        if(lshd.getNguoiThucHien() != null) {
+        if (lshd.getNguoiThucHien() != null) {
             lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien() != null ? lshd.getNguoiThucHien().getNhanVien().getHoTen() : "Anonymous");
         } else {
             lshdDto.setNguoiThucHien("Anoynomous");
@@ -142,6 +150,93 @@ public class HoaDonRestController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(lshdDto);
+    }
+
+    @PostMapping("/add-product")
+    public ResponseEntity themsanPham(@ModelAttribute AddProductOderRequest dt, HttpServletRequest request
+    ) {
+        HoaDon hoaDon = hoaDonService.getHoaDonById(dt.getId()).orElse(null);
+        if (hoaDon == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "HoaDonNull").build();
+        }
+        System.out.println("Hoá Đơn Null");
+        MauSac mauSac = mauSacService.getMauSacByMa(dt.getMauSac());
+        KichCo kichCo = kichCoService.getById(dt.getKichCo());
+        SanPham sanPham = sanPhamService.getById(dt.getSanPham());
+        ChiTietSanPham ctsp = chiTietSanPhamService.getBySizeAndColorAndProduct(kichCo, mauSac, sanPham);
+        if (ctsp == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "CTSPNull").build();
+        }
+        System.out.println("CTSP Null");
+        List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
+        List<HoaDonChiTiet> lstNew = lst.stream()
+                .filter(hoaDonChiTiet -> hoaDonChiTiet.getChiTietSanPham().getId().equals(ctsp.getId()))
+                .collect(Collectors.toList());
+        HoaDonChiTiet hdct = null;
+        for (HoaDonChiTiet hoaDonChiTiet : lstNew) {
+            if (hoaDonChiTiet.getChiTietSanPham().getGiaBan().equals(ctsp.getGiaBan())) {
+                hdct = hoaDonChiTiet;
+                break;
+            }
+        }
+        boolean isNew = true;
+        if (hdct != null) {
+            hdct.setSoLuong(hdct.getSoLuong() + dt.getSoLuong());
+            isNew = false;
+        } else {
+            hdct = new HoaDonChiTiet();
+            hdct.setHoaDon(hoaDon);
+            hdct.setChiTietSanPham(ctsp);
+            hdct.setSoLuong(dt.getSoLuong());
+            hdct.setGiaGoc(ctsp.getGiaGoc());
+            hdct.setGiaBan(ctsp.getGiaBan());
+            isNew = true;
+        }
+        hdct = hoaDonChiTietService.save(hdct);
+        lst.add(hdct);
+        hoaDon.setHoaDonChiTiets(lst);
+        hoaDon = hoaDonService.save(hoaDon);
+        BigDecimal total = BigDecimal.ZERO;
+        for (HoaDonChiTiet hdctt : hoaDon.getHoaDonChiTiets()) {
+            total = total.add(hdctt.getChiTietSanPham().getGiaBan());
+        }
+        hoaDon.setTongTien(total);
+        BigDecimal thucThu = BigDecimal.ZERO;
+        if (hoaDon.getGiamGia() != null) {
+            thucThu = total.subtract(hoaDon.getGiamGia());
+        } else {
+            thucThu = total;
+        }
+        hoaDon.setThucThu(thucThu);
+        hoaDonService.save(hoaDon);
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setHoaDon(hoaDon);
+        lichSuHoaDon.setHanhDong("Thêm sản phẩm '" + ctsp.getMaSanPham() + "' vào hóa đơn.");
+        if (request.getUserPrincipal() != null) {
+            lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
+        }
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setTrangThaiSauUpdate(hoaDon.getTrangThai().name());
+        lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
+        UpdateProductRquest rs = new UpdateProductRquest();
+        rs.setSoLuong(hdct.getSoLuong());
+        rs.setId(ctsp.getId());
+        rs.setMaSanPham(ctsp.getMaSanPham());
+        rs.setGiaGoc(ctsp.getGiaGoc().intValue());
+        rs.setGiaBan(ctsp.getGiaBan().intValue());
+        rs.setTen(ctsp.getSanPham().getTen());
+        rs.setSale(isNew);
+        rs.setAnh(ctsp.getAnh().getUrl());
+        rs.setKichCo(ctsp.getKichCo().getTen());
+        rs.setMauSac(ctsp.getMauSac().getTen());
+        rs.setSoLuongTon(ctsp.getSoLuongTon());
+        rs.setTimes(lichSuHoaDon.getThoiGian());
+        rs.setMessage(lichSuHoaDon.getHanhDong());
+        rs.setTongTien(hoaDon.getTongTien());
+        rs.setThucThu(hoaDon.getThucThu());
+        rs.setGiamGia(hoaDon.getGiamGia());
+        System.out.println(rs);
+        return ResponseEntity.status(HttpStatus.OK).body(rs);
     }
 
     @PostMapping("/huy-detail")
@@ -153,7 +248,7 @@ public class HoaDonRestController {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
-        if(updatedHoaDon.getVoucher() != null) {
+        if (updatedHoaDon.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(updatedHoaDon.getVoucher().getMa());
             voucher.setSoLuong(voucher.getSoLuong() + 1);
             voucherService.save(voucher);
@@ -165,8 +260,8 @@ public class HoaDonRestController {
         });
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
-        lichSuHoaDon.setHanhDong("Lý Do: "+lydo);
-        if(request.getUserPrincipal() != null) {
+        lichSuHoaDon.setHanhDong("Lý Do: " + lydo);
+        if (request.getUserPrincipal() != null) {
             lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
         }
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
@@ -178,7 +273,7 @@ public class HoaDonRestController {
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setTrangThaiSauUpdate(lshd.getTrangThaiSauUpdate());
         lshdDto.setThoiGian(lshd.getThoiGian());
-        if(lshd.getNguoiThucHien() != null) {
+        if (lshd.getNguoiThucHien() != null) {
             lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien() != null ? lshd.getNguoiThucHien().getNhanVien().getHoTen() : "Anonymous");
         } else {
             lshdDto.setNguoiThucHien("Anoynomous");
@@ -199,7 +294,7 @@ public class HoaDonRestController {
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
         lichSuHoaDon.setHanhDong("Hoàn tác trạng thái về: " + updatedHoaDon.getTrangThai().name());
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
         }
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
@@ -210,7 +305,7 @@ public class HoaDonRestController {
         lshdDto.setIdHoaDon(lshd.getHoaDon().getId());
         lshdDto.setHanhDong(lshd.getHanhDong());
         lshdDto.setThoiGian(lshd.getThoiGian());
-        if(lshd.getNguoiThucHien() != null) {
+        if (lshd.getNguoiThucHien() != null) {
             lshdDto.setNguoiThucHien(lshd.getNguoiThucHien().getNhanVien() != null ? lshd.getNguoiThucHien().getNhanVien().getHoTen() : "Anonymous");
         } else {
             lshdDto.setNguoiThucHien("Anoynomous");
@@ -237,7 +332,7 @@ public class HoaDonRestController {
 
     @GetMapping("/printOrder")
     public ResponseEntity<String> callApiGHN(
-        @RequestParam("token") String token
+            @RequestParam("token") String token
     ) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Token", "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551");

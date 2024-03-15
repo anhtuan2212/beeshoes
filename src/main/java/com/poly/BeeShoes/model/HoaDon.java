@@ -51,6 +51,7 @@ public class HoaDon {
     String tenNguoiNhan;
 
     BigDecimal tongTien;
+    BigDecimal giamGia;
     BigDecimal thucThu;
     BigDecimal phiShip;
     Date ngayXacNhan;

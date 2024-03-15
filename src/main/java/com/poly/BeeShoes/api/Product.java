@@ -189,18 +189,21 @@ public class Product {
     }
 
     @DeleteMapping("/xoa-chi-tiet-san-pham")
-    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("id") String id, @RequestParam("color") String color, @RequestParam("size") String size) {
+    public ResponseEntity<SanPham> DeleteCtsp(@RequestParam("sanPham") Long sp,
+                                              @RequestParam("id") String id,
+                                              @RequestParam("color") String color,
+                                              @RequestParam("size") String size) {
         if (id.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
         }
         ChiTietSanPham chiTietSanPham = null;
         if (!LibService.containsAlphabetic(id)) {
             chiTietSanPham = chiTietSanPhamService.getById(Long.parseLong(id));
-        }
-        if (LibService.containsAlphabetic(id)) {
+        } else {
             MauSac mauSac = mauSacService.getMauSacByMa(color);
             KichCo kichCo = kichCoService.getByTen(size);
-            chiTietSanPham = chiTietSanPhamService.getBySizeAndColor(kichCo, mauSac);
+            SanPham sanPham = sanPhamService.getById(sp);
+            chiTietSanPham = chiTietSanPhamService.getBySizeAndColorAndProduct(kichCo, mauSac, sanPham);
             if (chiTietSanPham == null) {
                 return ResponseEntity.status(HttpStatus.OK).body(null);
             }

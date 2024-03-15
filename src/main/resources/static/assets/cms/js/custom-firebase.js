@@ -404,11 +404,15 @@ $(document).ready(function () {
     });
 
     function DeleteCTSP(id, color, size) {
+        let id_sp = $('#sanPham').val();
         $.ajax({
             url: "/api/xoa-chi-tiet-san-pham",
             type: "DELETE",
             data: {
-                id: id, color: color, size: size
+                sanPham: id_sp,
+                id: id,
+                color: color,
+                size: size
             },
             success: function () {
                 ToastSuccess("Xóa thành công.")
@@ -510,6 +514,7 @@ $(document).ready(function () {
         }
         return check;
     }
+
     function redirectToProductPage() {
         setTimeout(() => {
             window.location.href = "/cms/product";
