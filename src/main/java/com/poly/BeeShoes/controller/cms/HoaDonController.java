@@ -27,7 +27,6 @@ public class HoaDonController {
     private final HinhThucThanhToanService hinhThucThanhToanService;
     @GetMapping("/hoa-don")
     public String hoaDonPage(Model model) {
-        List<HinhThucThanhToan> hinhThucThanhToanList = hinhThucThanhToanService.getAll();
         List<HoaDon> hoaDonChoXacNhanList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoXacNhan);
         List<HoaDon> hoaDonChoGiaoList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoGiao);
         List<HoaDon> hoaDonDangGiaoList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.DangGiao);
@@ -39,7 +38,6 @@ public class HoaDonController {
         model.addAttribute("hoaDonChoGiaoList", hoaDonChoGiaoList);
         model.addAttribute("hoaDonDangGiaoList", hoaDonDangGiaoList);
         model.addAttribute("hoaDonThanhCongList", hoaDonThanhCongList);
-        model.addAttribute("hinhThucThanhToanList", hinhThucThanhToanList);
         model.addAttribute("count", count);
         return "cms/pages/orders/orders";
     }
@@ -59,7 +57,7 @@ public class HoaDonController {
         }
         double tongTien = 0;
         for(HoaDonChiTiet hdct : hoaDonChiTietList) {
-            tongTien = (hdct.getChiTietSanPham().getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
+            tongTien = (hdct.getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
         }
         model.addAttribute("lichSuHoaDonList", lichSuHoaDonList);
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);
