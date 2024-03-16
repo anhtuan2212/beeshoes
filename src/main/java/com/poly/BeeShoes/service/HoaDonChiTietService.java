@@ -13,5 +13,7 @@ public interface HoaDonChiTietService {
     List<HoaDonChiTiet> getChiTietSanPhamCuaHoaDonByIdHoaDon(Long id);
 
     HoaDonChiTiet save(HoaDonChiTiet hoaDonChiTiet);
+    HoaDonChiTiet getById(Long id);
+    boolean delete (Long id);
 
 }

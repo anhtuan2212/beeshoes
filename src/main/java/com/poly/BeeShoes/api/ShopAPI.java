@@ -36,14 +36,17 @@ public class ShopAPI {
 
     @PostMapping("/add-product-to-cart")
     public ResponseEntity<List<GioHangRequest>> addProductToCart(@ModelAttribute AddToCartRquest request) {
-        if (request.getProduct() == null || request.getQuantity() == null) {
-            return ResponseEntity.badRequest().header("status", "Invalid request").build();
+        if (request.getProduct() == null) {
+            return ResponseEntity.badRequest().header("status", "ProductNull").build();
         }
         ChiTietSanPham ctsp = chiTietSanPhamService.getById(request.getProduct());
         System.out.println(ctsp.getMaSanPham());
         System.out.println(ctsp.getKichCo().getTen());
+        if (request.getQuantity()<1){
+            return ResponseEntity.badRequest().header("status", "MinQuantity").build();
+        }
         if (ctsp == null) {
-            return ResponseEntity.notFound().header("status", "Product not found").build();
+            return ResponseEntity.notFound().header("status", "ProductDetailNull").build();
         }
         Authentication auth = getUserAuth();
         Object principal = auth.getPrincipal();
@@ -69,6 +72,9 @@ public class ShopAPI {
                 } else {
                     ghct.setSoLuong(ghct.getSoLuong() + request.getQuantity());
                 }
+            }
+            if (ghct.getSoLuong()> ctsp.getSoLuongTon()){
+                return ResponseEntity.badRequest().header("status", "MaxQuantity").build();
             }
             ghct = gioHangChiTietService.save(ghct);
             List<GioHangChiTiet> lst = gh.getGioHangChiTiets();

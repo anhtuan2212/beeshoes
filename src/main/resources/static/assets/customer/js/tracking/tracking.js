@@ -145,7 +145,62 @@ $(document).ready(function () {
         $(kichCo).niceSelect('update');
         $('#preview-img').attr('src', url);
     })
-    $('#form-tracking-1,#form-tracking-2').on('submit',function (e) {
+    $(document).on('click', '.btn-delete', function () {
+        let li = $(this).closest('li.row');
+        let id = $(this).data('id-hdct');
+        Swal.fire({
+            title: "Bạn chắc chứ?",
+            text: "Thay đổi sẽ không thể hoàn tác !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Hủy",
+            confirmButtonText: "Xác Nhận",
+            customClass: {
+                confirmButton: 'btn-custom-black',
+                cancelButton: 'btn-custom-info'
+            },
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/hoa-don/delete-product',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    }, success: function (data) {
+                        console.log(data);
+                        li.remove();
+                        let element = document.getElementById('history-oder');
+                        let firstChild = element.firstChild;
+                        let div = document.createElement('div');
+                        div.className = 'w-100 row justify-content-center';
+                        let ht = `
+                            <div class="col-3 times">
+                                ${formatServerTime(data.times)}
+                            </div>
+                            <div class="col-9 actions">
+                                ${data.message}
+                            </div>`;
+                        div.innerHTML = ht;
+                        element.insertBefore(div, firstChild);
+                        let hr = document.createElement('hr');
+                        div.insertAdjacentElement('afterend', hr);
+                        $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
+                        $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
+                        $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
+                        ToastSuccess('Thành công.')
+                    }, error: function (e, x, h) {
+                        console.log(e)
+                        console.log(x)
+                        console.log(h)
+                    }
+                })
+            }
+        })
+
+    })
+    $('#form-tracking-1,#form-tracking-2').on('submit', function (e) {
         let vl1 = $('#form-value-1').val();
         let vl2 = $('#form-value-2').val();
         if (vl1 !== undefined) {
@@ -185,12 +240,12 @@ $(document).ready(function () {
             data: {
                 id: id,
                 mauSac: mauSac,
-                sanPham:sanPham,
+                sanPham: sanPham,
                 kichCo: kicCo,
                 soLuong: soLuong
             }, success: function (data) {
                 console.log(data)
-                if (data.sale){
+                if (data.sale) {
                     let html = `
                     <li class="row">
                         <div class="col-2 p-0">
@@ -203,7 +258,7 @@ $(document).ready(function () {
                                     Màu :<label>${data.mauSac}</label>,
                                     Kích Cỡ :<label>${data.kichCo}</label>
                                 </div>
-                                <label>Số Lượng :${data.soLuong}</label>
+                                <label class="quantity-product">Số Lượng :${data.soLuong}</label>
                             </div>
                         </div>
                         <div class="col-3 d-flex align-items-center">
@@ -211,7 +266,7 @@ $(document).ready(function () {
                             <h5 class="product_price">${addCommasToNumber(data.giaBan)}đ</h5>
                         </div>
                         <div class="col-1 align-items-center btn-del-group d-flex">
-                            <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm" data-id-ctsp="${data.id}">
+                            <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm" data-id-hdct="${data.id_hdct}">
                                 <i class="fa fa-close"></i>
                             </button>
                         </div>
@@ -234,13 +289,32 @@ $(document).ready(function () {
                     element.insertBefore(div, firstChild);
                     let hr = document.createElement('hr');
                     div.insertAdjacentElement('afterend', hr);
-                    $('#total-money').text(addCommasToNumber(data.tongTien)+'đ')
-                    $('#discount-money').text(addCommasToNumber(data.giamGia==null?0:data.giamGia)+'đ')
-                    $('#payment-money').text(addCommasToNumber(data.thucThu)+'đ')
+                } else {
+                    $(`#product-detail-${data.id}`).find('.quantity-product').text('Số Lượng :' + data.soLuong)
                 }
+                $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
+                $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
+                $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
                 ToastSuccess('Chọn Thành Công.')
-            }, error: function (e) {
-                console.log(e)
+            }, error: function (e, x, h) {
+                switch (e.getResponseHeader('status')) {
+                    case 'HoaDonNull':
+                        ToastError('Hóa đơn không tồn tại.');
+                        break;
+                    case 'MaxQuantity':
+                        ToastError('Số lượng sản phẩm lớn hơn số lượng tồn.');
+                        break;
+                    case 'MinQuantity':
+                        ToastError('Số lượng sản phẩm phải lớn hơn 0.');
+                        break;
+                    case 'CTSPNull':
+                        ToastError('Sản phẩm không tồn tại.');
+                        break;
+                    default:
+                        ToastError('Lỗi.');
+                }
+                console.log(x)
+                console.log(h)
             }
         })
         console.log(mauSac, kicCo)

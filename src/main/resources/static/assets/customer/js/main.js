@@ -183,7 +183,17 @@ function saveProductToServer(product_id, quantity, update) {
             dataShopingCart = datas;
         },
         error: function (xhr) {
-            ToastError(xhr.getResponseHeader('status'))
+            switch (xhr.getResponseHeader('status')) {
+                case 'ProductNull':ToastError('Sản phẩm trống.');
+                break;
+                case 'MinQuantity':ToastError('Số lượng phải lớn hơn 0.');
+                    break;
+                case 'ProductDetailNull':ToastError('Phiên bản không tồn tại.');
+                    break;
+                case 'MaxQuantity':ToastError('Số lượng vượt quá Số lượng tồn.');
+                    break;
+                default:ToastError('Lỗi.');
+            }
         }
     })
     return data;

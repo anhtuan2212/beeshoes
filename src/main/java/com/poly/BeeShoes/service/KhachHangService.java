@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service;
 
+import com.poly.BeeShoes.model.DiaChi;
 import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.request.KhachHangRequest;
 
@@ -13,6 +14,7 @@ public interface KhachHangService {
     KhachHang detail(Long id);
 
     KhachHang add(KhachHang khachHang);
+    KhachHang getByDiaChiMacDinh(DiaChi diaChi);
 
     KhachHang update(KhachHang khachHang);
     KhachHang getByMa(String ma);

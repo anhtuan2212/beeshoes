@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.service.impl;
 
+import com.poly.BeeShoes.model.DiaChi;
 import com.poly.BeeShoes.model.KhachHang;
 import com.poly.BeeShoes.model.KichCo;
 import com.poly.BeeShoes.repository.KhachHangRepository;
@@ -39,6 +40,11 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang add(KhachHang khachHang) {
         return khachHangRepository.save(khachHang);
+    }
+
+    @Override
+    public KhachHang getByDiaChiMacDinh(DiaChi diaChi) {
+        return khachHangRepository.findFirstByDiaChiMacDinh(diaChi).orElse(null);
     }
 
     @Override

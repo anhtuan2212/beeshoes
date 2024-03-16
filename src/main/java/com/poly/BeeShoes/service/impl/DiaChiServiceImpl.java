@@ -20,7 +20,7 @@ public class DiaChiServiceImpl implements DiaChiService {
 
     @Override
     public DiaChi getById(Long id) {
-        return diaChiReponsitory.findById(id).get();
+        return diaChiReponsitory.findById(id).orElse(null);
     }
 
     @Override

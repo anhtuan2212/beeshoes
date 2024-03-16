@@ -74,7 +74,21 @@ public class OderTrackingController {
         }
         //------------------------------------------------------------------------------------------
 
-        System.out.println(code);
+        List<LichSuHoaDon> list = new ArrayList<>(lsHD); // Tạo một bản sao của lsHD
+        Collections.reverse(list);// Đảo ngược thứ tự của các phần tử trong list
+        int i = 0;
+        while (i < list.size() - 1) {
+            if (list.get(i).getTrangThaiSauUpdate().equals(list.get(i + 1).getTrangThaiSauUpdate())) {
+                list.remove(i + 1);
+            } else {
+                i++;
+            }
+        }
+        for (int j = 0; j < list.size(); j++) {
+            System.out.println(list.get(j).getThoiGian());
+            System.out.println(list.get(j).getTrangThaiSauUpdate());
+        }
+        model.addAttribute("strack", list);
         model.addAttribute("lstLSHD", lsHD);
         model.addAttribute("show", code);
         model.addAttribute("hoadon", hoaDon);

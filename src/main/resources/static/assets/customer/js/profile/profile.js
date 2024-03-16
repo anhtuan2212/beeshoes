@@ -125,6 +125,29 @@ $(document).ready(function () {
             },
         }).then(async (result) => {
             if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/dia-chi/delete',
+                    type: 'DELETE',
+                    data: {
+                        id: id
+                    },
+                    success: function () {
+                        $(`#customer_address_${id}`).closest('.item_address').remove();
+                        ToastSuccess('Thành công.')
+                    }, error: function (e, h, x) {
+                        switch (e.getResponseHeader('status')) {
+                            case 'isAddressDefault':
+                                ToastError('Không thể xóa địa chỉ mặc định.');
+                                break;
+                            case 'AddressNull':
+                                ToastError('Địa chỉ không tồn tại.');
+                                break;
+                            default:
+                                ToastError('Lỗi.');
+                        }
+                        console.log(h, x)
+                    }
+                })
             }
         })
     })
@@ -142,7 +165,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.btn-set-address', function () {
-        if ($(this).hasClass('disabled')){
+        if ($(this).hasClass('disabled')) {
             return;
         }
         let id_customer = $(this).data('customer-id');
@@ -210,7 +233,7 @@ $(document).ready(function () {
                         if (dis.DistrictName == quanHuyen) {
                             wardArr.forEach((ward) => {
                                 if (ward.DistrictID == dis.DistrictID) {
-                                    let prin = `<option value="${ward.Code}" ${phuongXa==ward.Name?'selected':''}>${String(ward.Name)}</option>`;
+                                    let prin = `<option value="${ward.Code}" ${phuongXa == ward.Name ? 'selected' : ''}>${String(ward.Name)}</option>`;
                                     ele_phuongXa.append(prin);
                                 }
                             })
@@ -223,23 +246,23 @@ $(document).ready(function () {
             }
         }
     })
-    $(document).on('click','#btn-update',function () {
+    $(document).on('click', '#btn-update', function () {
         let id = $('#id_address').val();
         let soNha = $('#soNha').val();
         let phuongXa = $('#phuongXa').find('option:selected').text();
         let quanHuyen = $('#quanHuyen').find('option:selected').text();
         let tinhTP = $('#tinhTP').find('option:selected').text();
         $.ajax({
-            url:'/cms/khach-hang/update/update-diachi',
-            type:'POST',
-            data:{
-                id:id,
-                soNhaDto:soNha,
-                phuongXaDto:phuongXa,
-                quanHuyenDto:quanHuyen,
-                tinhThanhPhoDto:tinhTP
+            url: '/cms/khach-hang/update/update-diachi',
+            type: 'POST',
+            data: {
+                id: id,
+                soNhaDto: soNha,
+                phuongXaDto: phuongXa,
+                quanHuyenDto: quanHuyen,
+                tinhThanhPhoDto: tinhTP
             },
-            success: ()=> {
+            success: () => {
                 ToastSuccess('Cập nhật thành công.');
                 let element = $(`#customer_address_${id}`);
                 element.find('label.customerHouseNumber').text(soNha);
@@ -247,11 +270,11 @@ $(document).ready(function () {
                 element.find('label.customerDistrict').text(quanHuyen + ', ')
                 element.find('label.customerProvince').text(tinhTP)
             },
-            error:function (e) {
+            error: function (e) {
                 console.log(e.getResponseHeader('status'))
             }
         })
-        console.log(id,soNha,phuongXa,quanHuyen,tinhTP);
+        console.log(id, soNha, phuongXa, quanHuyen, tinhTP);
     })
     $(document).on('click', '#btn-huy', function () {
         let id = $('#id_oders_cancel').val();

@@ -75,6 +75,7 @@
                                         data-hs-select2-options='{
                                             "placeholder": "Tìm sản phẩm...",
                                             "searchInputPlaceholder": "Tìm sản phẩm..."}'>
+                                    <option value="#" selected>Chọn Sản Phẩm</option>
                                     <option th:each="sp : ${lstsanpham}"
                                             th:value="${sp.getId()}"
                                             th:text="${sp.getTen()}"
@@ -111,7 +112,7 @@
                                             data-hs-select2-options='{
                                     "placeholder": "Tìm thể loại...",
                                     "searchInputPlaceholder": "Tìm thể loại..."
-                                    }'>
+                                    }'> <option value="#" selected>Chọn Thể Loại</option>
                                         <option th:each="th:${lsttheloai}"
                                                 th:value="${th.getId()}"
                                                 th:selected="${sanPham != null and sanPham.getTheLoai() != null and th.getId()==sanPham.getTheLoai().getId()}"
@@ -143,7 +144,7 @@
                                             data-hs-select2-options='{
                                     "placeholder": "Tìm thương hiệu...",
                                     "searchInputPlaceholder": "Tìm thương hiệu..."
-                                    }'>
+                                    }'> <option value="#" selected>Chọn Thương Hiệu</option>
                                         <option th:each="th:${lstthuonghieu}"
                                                 th:value="${th.getId()}"
                                                 th:selected="${sanPham != null and sanPham.getThuongHieu() != null and th.getId()==sanPham.getThuongHieu().getId()}"
@@ -174,7 +175,7 @@
                                             data-hs-select2-options='{
                                     "placeholder": "Tìm chất liệu...",
                                     "searchInputPlaceholder": "Tìm chất liệu..."
-                                    }'>
+                                    }'> <option value="#" selected>Chọn Chất Liệu</option>
                                         <option th:each="th : ${lstchatlieu}"
                                                 th:value="${th.getId()}"
                                                 th:selected="${sanPham != null and sanPham.getChiTietSanPham() != null and not sanPham.getChiTietSanPham().isEmpty() and th.getId() == sanPham.getChiTietSanPham().get(0).getChatLieu().getId()}"
@@ -204,7 +205,7 @@
                                             data-hs-select2-options='{
                                     "placeholder": "Tìm đế giày...",
                                     "searchInputPlaceholder": "Tìm đế giày..."
-                                    }'>
+                                    }'><option value="#" selected>Chọn Đế Giày</option>
                                         <option th:each="th : ${lstdegiay}"
                                                 th:value="${th.getId()}"
                                                 th:selected="${sanPham != null and sanPham.getChiTietSanPham() != null and not sanPham.getChiTietSanPham().isEmpty() and th.getId() == sanPham.getChiTietSanPham().get(0).getDeGiay().getId()}"
@@ -235,7 +236,7 @@
                                             data-hs-select2-options='{
                                     "placeholder": "Tìm cổ giày...",
                                     "searchInputPlaceholder": "Tìm cổ giày..."
-                                    }'>
+                                    }'><option value="#" selected>Chọn Cổ Giày</option>
                                         <option th:each="th : ${lstcogiay}"
                                                 th:value="${th.getId()}"
                                                 th:selected="${sanPham != null and sanPham.getChiTietSanPham() != null and not sanPham.getChiTietSanPham().isEmpty() and th.getId() == sanPham.getChiTietSanPham().get(0).getCoGiay().getId()}"
@@ -266,7 +267,7 @@
                                             data-hs-select2-options='{
                                     "placeholder": "Tìm mũi giày...",
                                     "searchInputPlaceholder": "Tìm mũi giày..."
-                                    }'>
+                                    }'><option value="#" selected>Chọn Mũi Giày</option>
                                         <option th:each="th : ${lstmuigiay}"
                                                 th:value="${th.getId()}"
                                                 th:text="${th.getTen()}"
@@ -503,7 +504,11 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                    <option value="6" selected>6</option>
+                                    <option th:if="${sanPham==null}" value="o">0</option>
+                                    <option th:if="${sanPham != null and #lists.size(sanPham.getChiTietSanPham()) < 6}"
+                                            th:value="${#lists.size(sanPham.getChiTietSanPham())}" selected
+                                            th:text="${#lists.size(sanPham.getChiTietSanPham())}"></option>
+                                    <option th:if="${sanPham != null and #lists.size(sanPham.getChiTietSanPham()) >= 6}" th:value="6" selected>6</option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="40">40</option>

@@ -8,7 +8,7 @@ $(document).ready(function () {
     // Khi click vào ảnh
     $('#openFancybox').click(function () {
         // Lấy danh sách ảnh từ tất cả các phần tử có thuộc tính data-setbg
-        var imageList = $('.product__thumb__pic').map(function() {
+        var imageList = $('.product__thumb__pic').map(function () {
             return {
                 src: $(this).data('setbg'),
                 opts: {
@@ -147,6 +147,10 @@ $(document).ready(function () {
         for (let i = 0; i < data_product_details.length; i++) {
             let product = data_product_details[i];
             if (product.size == kichThuoc && product.color_code == color) {
+                if (Number(quantity) > Number(product.so_luong_ton)) {
+                    ToastError('Số lượng vượt quá số lượng tồn.')
+                    return;
+                }
                 if (username === undefined) {
                     pushDataToArray({pro: product, quantity: quantity})
                     let total = 0;

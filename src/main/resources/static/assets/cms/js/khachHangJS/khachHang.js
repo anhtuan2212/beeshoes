@@ -26,13 +26,16 @@ function ToastSuccess(message) {
 function ToastError(message) {
     Toast('error', message)
 }
+
 function isEmpty(str) {
-    return (!str || str.length === 0 );
+    return (!str || str.length === 0);
 }
+
 function isValidEmail(email) {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
 }
+
 function isValidPhoneNumber(phoneNumber) {
     let phone = /^(0\d{9,10})$/;
     // Kiểm tra xem số điện thoại có bắt đầu bằng số 0 và có đúng 10 số không
@@ -61,9 +64,9 @@ function formvalidate() {
     if (isEmpty(sdt)) {
         ToastError("Số điện thoại không được để trống.");
         return false;
-    }else if (!isValidPhoneNumber(sdt)) {
+    } else if (!isValidPhoneNumber(sdt)) {
         ToastError("Sdt không đúng định dạng(0359xxxxxx)");
-        return  false;
+        return false;
     }
 
     // Kiểm tra ngày sinh phải trước ngày hiện tại
@@ -72,8 +75,7 @@ function formvalidate() {
     if (ngaySinhDate >= ngayHienTai) {
         ToastError("Ngày sinh phải trước ngày hiện tại.");
         return false;
-    }
-    else if (isEmpty(ngaySinh)) {
+    } else if (isEmpty(ngaySinh)) {
         ToastError("Ngày sinh không được để trống.");
         return false;
     }
@@ -133,7 +135,7 @@ let tinh_TP = $('.tinhTP').closest("div");
 let phuong_xa = $('.phuong_xa').closest("div");
 
 function handleData(data, dropdown, idKey, valueKey) {
-    dropdown.empty().append(`<option value="">Vui lòng chọn</option>`);
+    dropdown.empty().append(`<option value="" selected>Vui lòng chọn</option>`);
     data.forEach(item => {
         dropdown.append(`<option data-id="${item[idKey]}" value="${item[valueKey]}">${item[valueKey]}</option>`);
     });
@@ -314,6 +316,18 @@ $(document).on('ready', function () {
         let phuongXa = $('#phuongXaMoi').val();
         let quanHuyen = $('#quanHuyenMoi').val();
         let tinhTP = $('#tinhTPMoi').val();
+        if (tinhTP === '#') {
+            ToastError('Vui lòng chọn tỉnh.')
+            return;
+        }
+        if (quanHuyen === '#') {
+            ToastError('Vui lòng chọn quận/huyện.')
+            return;
+        }
+        if (phuongXa === '#') {
+            ToastError('Vui lòng chọn phường/xã.')
+            return;
+        }
         let idKhachHang = $('#idKhachHang').val();
         $.ajax({
             url: '/cms/khach-hang/update/add-diachi',
@@ -326,76 +340,101 @@ $(document).on('ready', function () {
                 tinhThanhPhoDto: tinhTP
             },
             success: function (data, status, xhr) {
-                let html = `<div class="card-body row">
-                                                        <div class="col-sm-6">
-                                                            <div class="row form-group">
-                                                                <label for="soNha" class="col-sm-5 col-form-label input-label">Số nhà</label>
-                                                                <div class="col-sm-7">
-                                                                    <input class="form-control" name="addressLine1" value="${data.soNha}" placeholder="Your address" aria-label="Your address" value="32A">
-                                                                </div>
-                                                                <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
-                                                            </div>
-                                                            <div class="row form-group">
-                                <label for="phuongXa" class="col-sm-5 col-form-label input-label">Phường/Xã</label>
-                                <div class="col-sm-7">
-                                    <select name="phuong_xa" class="js-select2-custom custom-select phuong_xa"
-                                        data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
-                                        "searchInputPlaceholder": "Tìm Phường Xã..."}'>
-                                        <option value="${data.phuongXa}">${data.phuongXa}</option>
-                                    </select>
-                                    <input type="text" id="phuongXa${data.id}" value="${data.phuongXa}" hidden>
-                                </div>
-                                <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="row form-group">
-                                <label for="quanHuyen" class="col-sm-5 col-form-label input-label">Quận/Huyện</label>
-                                <div class="col-sm-7">
-                                    <select name="quan_huyen" class="js-select2-custom custom-select quan_huyen"
-                                        data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
-                                        "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
-                                        <option value="${data.quanHuyen}">${data.quanHuyen}</option>
-                                    </select>
-                                    <input type="text" id="quanHuyen${data.id}" value="${data.quanHuyen}" hidden>
-                                </div>
-                                <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
-                            </div>
-                            <div class="row form-group">
-                                <label for="tinhTP" class="col-sm-5 col-form-label input-label">Tỉnh/Thành phố</label>
-                                <div class="col-sm-7">
-                                    <select name="tinh_tp" class="js-select2-custom custom-select tinh_tp"
-                                        data-hs-select2-options='{"placeholder": "Chọn Tỉnh/Thành phố...",
-                                        "searchInputPlaceholder": "Tìm Tỉnh/Thành phố..."}'>
-                                        <option value="${data.tinhThanhPho}">${data.tinhThanhPho}</option>
-                                    </select>
-                                    <input type="text" id="tinhTP${data.id}" value="${data.tinhThanhPho}" hidden>
-                                </div>
-                                <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
-                            </div>
-                        </div>
-                         <div class="col-sm-6">
-                            <div class="row form-group">
-                                <div class="d-flex justify-content-between">
-                                    <label class="toggle-switch toggle-switch col-sm-10" for="preferencesSwitch${data.id}">Địa chỉ mặc định
-                                        <span class="col-sm-2">
-                                                <input type="radio" name="addressDefault" 
-                                                class="toggle-switch-input addressDefaultSwitch" 
-                                                id="preferencesSwitch${data.id}" value="${data.id}">
-                                                <span class="toggle-switch-label ml-auto">
-                                                    <span class="toggle-switch-indicator"></span>
-                                                </span>
-                                            </span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                      </div>`;
+                console.log(data)
+                let html = `     <div class="card-body form-address row position-relative">
+                                          <button type="button" data-id-address="${data.id}" class="btn btn-primary position-absolute btn_save_address d-none"><i class="tio-save"></i></button>
+                                          <div class="col-sm-6">
+                                              <!-- Form Group -->
+                                              <div class="form-group">
+                                                  <label for="soNha${data.id}"
+                                                         class="col col-form-label input-label">Số nhà</label>
+                                                  <div class="col">
+                                                      <input data-attr-sonha="sonha" class="form-control soNha"
+                                                             name="addressLine1"
+                                                             id="soNha${data.id}" placeholder="Your address"
+                                                             aria-label="Your address"
+                                                             value="${data.soNha}">
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="phuongXa${data.id}"
+                                                         class="col col-form-label input-label">Phường/Xã</label>
+                                                  <div class="col">
+                                                      <select name="phuong_xa" class="js-select2-custom custom-select phuong_xa"
+                                                              data-hs-select2-options='{"placeholder": "Chọn Phường Xã...",
+                                                                 "searchInputPlaceholder": "Tìm Phường Xã..."}'>
+                                                          <option value="">Chọn Phường Xã</option>
+                                                      </select>
+                                                      <input type="text" id="phuongXa${data.id}" value="${data.phuongXa}" hidden>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-sm-6">
+                                              <div class="form-group">
+                                                  <label for="quanHuyen${data.id}"
+                                                         class="col col-form-label input-label">Quận/Huyện</label>
+                                                  <div class="col">
+                                                      <select name="quanHuyen" class="js-select2-custom custom-select quanHuyen"
+                                                              data-hs-select2-options='{"placeholder": "Chọn Quận Huyện...",
+                                                                  "searchInputPlaceholder": "Tìm Quận Huyện..."}'>
+                                                          <option value="">Chọn Quận Huyện</option>
+                                                      </select>
+                                                      <input type="text" id="quanHuyen${data.id}" value="${data.quanHuyen}" hidden>
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="tinhTP${data.id}"
+                                                         class="col col-form-label input-label">Tỉnh/Thành
+                                                      phố</label>
+                                                  <div class="col">
+                                                      <select name="tinhThanhPho" class="js-select2-custom custom-select tinhTP"
+                                                              data-hs-select2-options='{"placeholder": "Chọn Tỉnh Thành...",
+                                                                  "searchInputPlaceholder": "Tìm Tỉnh Thành..."}'>
+                                                          <option value="">Chọn Tỉnh Thành</option>
+                                                      </select>
+                                                      <input type="text" id="tinhTP${data.id}" value="${data.tinhThanhPho}" hidden>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-sm-6">
+                                              <div lass="row form-group">
+                                                  <div class="d-flex justify-content-between">
+                                                      <label class="toggle-switch toggle-switch col-sm-10"
+                                                             for="preferencesSwitch+${data.id}">Địa chỉ mặc định
+                                                          <span class="col-sm-2">
+                                                                  <input type="radio" name="addressDefault"
+                                                                         class="toggle-switch-input addressDefaultSwitch"
+                                                                         id="preferencesSwitch+${data.id}" value="${data.id}">
+                                                                  <span class="toggle-switch-label ml-auto">
+                                                                      <span class="toggle-switch-indicator"></span>
+                                                                  </span>
+                                                              </span>
+                                                      </label>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>`;
                 $('#listAddress').append(html);
                 $('#soNhaMoi').val('');
-                $('#tinhTPMoi').empty().append('<option value="">Chọn Tỉnh/Thành phố</option>');
-                $('#quanHuyenMoi').empty().append('<option value="">Chọn Quận/Huyện</option>');
-                $('#phuongXaMoi').empty().append('<option value="">Chọn Phường/Xã</option>');
+                let numT = $('#tinhTPMoi').find('option[value="#"]');
+                if (numT.length === 0) {
+                    $('#tinhTPMoi').append('<option value="#" selected>Chọn Tỉnh/TP</option>')
+                } else {
+                    $('#tinhTPMoi').val('#');
+                }
+                $('#quanHuyenMoi').empty().append('<option value="#">Chọn Quận/Huyện</option>');
+                $('#phuongXaMoi').empty().append('<option value="#">Chọn Phường/Xã</option>');
+                quan_huyen = $('.quanHuyen').closest("div");
+                tinh_TP = $('.tinhTP').closest("div");
+                phuong_xa = $('.phuong_xa').closest("div");
+                fillAllTinh().then(() => {
+                    return fillAllHuyen().then(() => {
+                        return fillAllXa();
+                    });
+                });
+                $('.js-select2-custom').each(function () {
+                    var select2 = $.HSCore.components.HSSelect2.init($(this));
+                });
                 switch (xhr.getResponseHeader('status')) {
                     case "oke":
                         ToastSuccess("Lưu thành công")
@@ -418,7 +457,7 @@ $(document).on('ready', function () {
                         ToastError("Phường xã không được Null")
                         break;
                     case "maxAddress":
-                        ToastError("Địa chỉ tối đã là 4")
+                        ToastError("Địa chỉ tối đã là 5")
                         break;
                     case "oke":
                         ToastSuccess("Lưu thành công")
