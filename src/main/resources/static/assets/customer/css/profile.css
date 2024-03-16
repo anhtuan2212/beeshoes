@@ -277,6 +277,10 @@
     background-color: #f3f2ee;
 }
 
+.item_address {
+    white-space: nowrap;
+}
+
 .btn-action-address {
     display: inline-flex;
     flex-direction: column;
@@ -379,6 +383,7 @@
 .select-img-btn.disabled:hover {
     border: 1px solid transparent;
 }
+
 .nice-select .list {
     max-height: 200px;
     width: 100%;

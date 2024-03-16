@@ -66,7 +66,15 @@ function formatNumberMoney(input) {
     }
 }
 
-
+// window.addEventListener('devtoolschange', function(event) {
+//     if (event.detail.isOpen) {
+//         // Xử lý khi DevTools được mở
+//         console.log('DevTools đã được mở.');
+//     } else {
+//         // Xử lý khi DevTools đã đóng
+//         console.log('DevTools đã được đóng.');
+//     }
+// });
 function pushDataToArray(data) {
     let data_cart = getProductInLocalStorage();
     if (data_cart !== null && Array.isArray(data_cart)) {
@@ -671,7 +679,10 @@ function addCommasToNumber(number) {
         } else {
             newVal = oldValue + 1;
         }
-        newVal = Math.max(newVal, 0);
+        newVal = Math.max(newVal, 1);
+        if (isNaN(newVal)){
+            newVal = 1;
+        }
         $button.parent().find('input').val(newVal);
     });
 

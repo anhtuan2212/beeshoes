@@ -2586,6 +2586,7 @@ body {
 .list_voucher ul li .wraper_voucher .contents {
     background-color: #f3f2ee;
     line-height: 1.2;
+    min-height: 120px;
 }
 
 .user-avatar img {
@@ -2655,6 +2656,7 @@ body {
     font-size: 10px;
     margin-bottom: 0;
     cursor: pointer;
+    width: 100%;
 }
 
 .list_voucher ul li .wraper_voucher .card__discount {
