@@ -67,6 +67,7 @@ public class HoaDonRestController {
             } else if (hoaDon.getTrangThai() == TrangThaiHoaDon.DangGiao) {
                 hoaDon.setTrangThai(TrangThaiHoaDon.ThanhCong);
             }
+            hoaDon.setNgayXacNhan(new Date());
             HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
             LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
             lichSuHoaDon.setHoaDon(updatedHoaDon);
@@ -91,6 +92,7 @@ public class HoaDonRestController {
             HoaDon hoaDon = hoaDonService.getHoaDonByMa(ma);
             String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
             hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
+            hoaDon.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
             HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
             if (updatedHoaDon.getVoucher() != null) {
                 Voucher voucher = voucherService.getByMa(updatedHoaDon.getVoucher().getMa());
@@ -130,6 +132,7 @@ public class HoaDonRestController {
         } else if (hoaDon.getTrangThai() == TrangThaiHoaDon.DangGiao) {
             hoaDon.setTrangThai(TrangThaiHoaDon.ThanhCong);
         }
+        hoaDon.setNgayXacNhan(new Date());
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);
@@ -333,6 +336,7 @@ public class HoaDonRestController {
     ) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
+        hoaDon.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
         if (updatedHoaDon.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(updatedHoaDon.getVoucher().getMa());
@@ -376,6 +380,7 @@ public class HoaDonRestController {
     ) {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
+        hoaDon.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(updatedHoaDon);

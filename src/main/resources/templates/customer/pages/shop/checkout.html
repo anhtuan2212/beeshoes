@@ -151,7 +151,7 @@
                         </th:block>
                         <th:block sec:authorize="isAuthenticated()">
                             <div class="wrapper_address">
-                                <p>Địa chỉ nhận hàng</p>
+                                <p>Địa chỉ nhận hàng <span class="ml-2 text-primary" id="addNewAddress">+Thêm địa chỉ nhận hàng mới</span></p>
                                 <div class="item_address mb-1" th:each="adr:${userLogged.getKhachHang().getDiaChi()}">
                                     <div class="content_dress row m-0 customerAddress">
                                         <div class="checkbox-wrapper-30 col-1">
