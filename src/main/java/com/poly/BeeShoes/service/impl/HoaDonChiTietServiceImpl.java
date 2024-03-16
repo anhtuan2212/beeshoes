@@ -29,4 +29,19 @@ public class HoaDonChiTietServiceImpl implements HoaDonChiTietService {
     public HoaDonChiTiet save(HoaDonChiTiet hoaDonChiTiet) {
         return hoaDonChiTietRepository.save(hoaDonChiTiet);
     }
+
+    @Override
+    public HoaDonChiTiet getById(Long id) {
+        return hoaDonChiTietRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        HoaDonChiTiet donChiTiet = hoaDonChiTietRepository.findById(id).orElse(null);
+        if (donChiTiet == null) {
+            return false;
+        }
+        hoaDonChiTietRepository.delete(donChiTiet);
+        return true;
+    }
 }

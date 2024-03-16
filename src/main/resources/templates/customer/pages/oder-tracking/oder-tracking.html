@@ -177,48 +177,118 @@
                         </div>
                     </article>
                     <div class="track">
-
-                        <div class="step active">
+                        <th:block th:each="st:${strack}">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='ChoXacNhan'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-check"></i> </span>
-                            <span class="text">Chờ Xác Nhận</span>
-                        </div>
-
-                        <div class="step">
+                                <span class="text">Chờ Xác Nhận</span>
+                            </div>
+                            <div th:if="${st.getTrangThaiSauUpdate()=='ChoXuLy'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-user"></i>
                             </span>
-                            <span class="text">Chuẩn Bị Hàng</span>
-                        </div>
+                                <span class="text">Chuẩn Bị Hàng</span>
+                            </div>
 
-                        <div class="step">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='ChoGiao'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-ambulance" aria-hidden="true"></i>
                             </span>
-                            <span class="text">Chờ Giao</span>
-                        </div>
+                                <span class="text">Chờ Giao</span>
+                            </div>
 
-                        <div class="step">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='DangGiao'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-truck"></i>
                             </span>
-                            <span class="text">Đang Giao</span>
-                        </div>
+                                <span class="text">Đang Giao</span>
+                            </div>
 
-                        <div class="step">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='ThanhCong'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-archive"></i>
                             </span>
-                            <span class="text">Thành Công</span>
-                        </div>
+                                <span class="text">Thành Công</span>
+                            </div>
 
-                        <div class="step d-none">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Huy'}" class="step d-none active">
                             <span class="icon">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </span>
-                            <span class="text">Thất Bại</span>
-                        </div>
+                                <span class="text">Thất Bại</span>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoXacNhan'}">
+                            <div class="step ">
+                            <span class="icon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                                <span class="text">Chuẩn Bị Hàng</span>
+                            </div>
 
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-ambulance" aria-hidden="true"></i>
+                            </span>
+                                <span class="text">Chờ Giao</span>
+                            </div>
+
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-truck"></i>
+                            </span>
+                                <span class="text">Đang Giao</span>
+                            </div>
+
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-archive"></i>
+                            </span>
+                                <span class="text">Thành Công</span>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoXuLy'}">
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-ambulance" aria-hidden="true"></i>
+                            </span>
+                                <span class="text">Chờ Giao</span>
+                            </div>
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-truck"></i>
+                            </span>
+                                <span class="text">Đang Giao</span>
+                            </div>
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-archive"></i>
+                            </span>
+                                <span class="text">Thành Công</span>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoGiao'}">
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-truck"></i>
+                            </span>
+                                <span class="text">Đang Giao</span>
+                            </div>
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-archive"></i>
+                            </span>
+                                <span class="text">Thành Công</span>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='DangGiao'}">
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-archive"></i>
+                            </span>
+                                <span class="text">Thành Công</span>
+                            </div>
+                        </th:block>
                     </div>
                     <hr class="mb-0">
                     <div class="card-body mt-0">
@@ -229,7 +299,7 @@
                                         <img class="product_img"
                                              th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
                                     </div>
-                                    <div class="col-7 content_product p-0">
+                                    <div th:id="'product-detail-'+${sanpham.getChiTietSanPham().getId()}" class="col-7 content_product p-0">
                                         <div>
                                             <h6 class="product_name mb-2"
                                                 th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
@@ -239,7 +309,7 @@
                                                 Kích Cỡ :<label
                                                     th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}"></label>
                                             </div>
-                                            <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
+                                            <label class="quantity-product" th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
@@ -250,7 +320,7 @@
                                     </div>
                                     <div class="col-1 d-none  align-items-center btn-del-group">
                                         <button class="btn-delete"
-                                                th:attr="data-id-ctsp=${sanpham.getChiTietSanPham().getId()}"
+                                                th:attr="data-id-hdct=${sanpham.getId()}"
                                                 data-toggle="tooltip" title="Xóa Sản Phẩm">
                                             <i class="fa fa-close"></i>
                                         </button>

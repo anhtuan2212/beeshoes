@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @ToString
 public class UpdateProductRquest {
     Long id;
+    Long id_hdct;
     String maSanPham;
     String mauSac;
     String ten;

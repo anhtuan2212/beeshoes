@@ -12,7 +12,9 @@
  */
 .select2-selection__choice span:not(.select2-selection__choice__remove) {
     mix-blend-mode: difference;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
+
 .img-product-files{
     height: 100px;
     object-fit: cover;
