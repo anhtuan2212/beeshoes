@@ -22,7 +22,6 @@ import java.util.Date;
 @RestController
 @RequestMapping("/check-out")
 public class CheckOutRestController {
-
     @Autowired
     private VNPayService vnPayService;
     @Autowired
@@ -53,8 +52,12 @@ public class CheckOutRestController {
         int shippingFee = jsonObject.get("shippingFee").getAsInt();
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
         String voucherCode = null;
+        BigDecimal voucherValue = new BigDecimal(0);
         if(jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
+        }
+        if(jsonObject.get("voucherValue") != null) {
+            voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
         }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
         String customerName = jsonObject.get("customerName").getAsString();
@@ -72,6 +75,8 @@ public class CheckOutRestController {
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
         hoaDon.setTongTien(BigDecimal.valueOf(total));
+        hoaDon.setSoTienDaThanhToan(BigDecimal.valueOf(totalAmount));
+        hoaDon.setGiamGia(voucherValue);
         hoaDon.setThucThu(BigDecimal.valueOf(totalAmount));
         hoaDon.setPhiShip(BigDecimal.valueOf(shippingFee));
         hoaDon.setSdtNhan(customerPhone);
@@ -80,6 +85,7 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
+        hoaDon.setHinhThucThanhToan(PaymentMethod.Online);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
@@ -97,6 +103,8 @@ public class CheckOutRestController {
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getById(idPDetail);
             hoaDonChiTiet.setChiTietSanPham(chiTietSanPham);
+            hoaDonChiTiet.setGiaGoc(chiTietSanPham.getGiaBan());
+            hoaDonChiTiet.setGiaBan(chiTietSanPham.getGiaBan());
             hoaDonChiTiet.setHoaDon(savedHoaDon);
             hoaDonChiTiet.setSoLuong(quantity);
             hoaDonChiTietService.save(hoaDonChiTiet);
@@ -125,8 +133,12 @@ public class CheckOutRestController {
         int shippingFee = jsonObject.get("shippingFee").getAsInt();
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
         String voucherCode = null;
+        BigDecimal voucherValue = new BigDecimal(0);
         if(jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
+        }
+        if(jsonObject.get("voucherValue") != null) {
+            voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
         }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
         String customerName = jsonObject.get("customerName").getAsString();
@@ -145,6 +157,8 @@ public class CheckOutRestController {
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
         hoaDon.setTongTien(BigDecimal.valueOf(total));
         hoaDon.setThucThu(BigDecimal.valueOf(totalAmount));
+        hoaDon.setSoTienDaThanhToan(BigDecimal.valueOf(totalAmount));
+        hoaDon.setGiamGia(voucherValue);
         hoaDon.setPhiShip(BigDecimal.valueOf(shippingFee));
         hoaDon.setSdtNhan(customerPhone);
         hoaDon.setTenNguoiNhan(customerName);
@@ -152,6 +166,7 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
+        hoaDon.setHinhThucThanhToan(PaymentMethod.KhiNhanHang);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
@@ -169,6 +184,8 @@ public class CheckOutRestController {
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
             ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getById(idPDetail);
             hoaDonChiTiet.setChiTietSanPham(chiTietSanPham);
+            hoaDonChiTiet.setGiaBan(chiTietSanPham.getGiaBan());
+            hoaDonChiTiet.setGiaGoc(chiTietSanPham.getGiaBan());
             hoaDonChiTiet.setHoaDon(savedHoaDon);
             hoaDonChiTiet.setSoLuong(quantity);
             hoaDonChiTietService.save(hoaDonChiTiet);
