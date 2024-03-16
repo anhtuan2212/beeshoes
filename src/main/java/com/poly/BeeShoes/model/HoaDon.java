@@ -54,8 +54,6 @@ public class HoaDon {
     BigDecimal giamGia;
     BigDecimal thucThu;
     BigDecimal phiShip;
-    BigDecimal soTienCanThanhToan;
-    BigDecimal soTienDaThanhToan;
     Date ngayXacNhan;
     Date ngayShip;
     Date ngayNhan;
@@ -78,7 +76,4 @@ public class HoaDon {
 
     @Enumerated(EnumType.STRING)
     TrangThaiHoaDon trangThai;
-
-    @Enumerated(EnumType.STRING)
-    PaymentMethod hinhThucThanhToan;
 }

@@ -363,7 +363,6 @@ $(document).ready(function () {
 
     $('#placeOrder').on('click', function () {
         var total = parseInt($('#total').text().replace(/[,.]/g, ''));
-        var voucherValue = parseInt($('#voucherValue').text().replace(/[,.]/g, ''));
         var shippingFee = parseInt($('#shippingFee').text().replace(/[,.]/g, ''));
         if($('#customerHouseNumber').val() != null || $('#customerHouseNumber').val() != undefined) {
             houseNumber = $('#customerHouseNumber').val();
@@ -400,7 +399,6 @@ $(document).ready(function () {
             totalAmount: totalAmount,
             productDetail: productDetailList,
             voucher: voucherCode,
-            voucherValue: voucherValue,
             customerPhone: customerPhone,
             customerName: customerName,
             addressReceive: houseNumber + "," + wardName + "," + districtName + "," + provinceName
