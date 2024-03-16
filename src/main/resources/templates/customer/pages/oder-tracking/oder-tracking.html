@@ -93,7 +93,8 @@
                     <div class="row w-100-vh">
                         <div class="row w-100 p-4 wrapper-form">
                             <div class="col-9 p-0">
-                                <input id="form-value-1" class="w-100 form-search" name="oder" placeholder="Nhập mã hóa đơn cần tra cứu">
+                                <input id="form-value-1" class="w-100 form-search" name="oder"
+                                       placeholder="Nhập mã hóa đơn cần tra cứu">
                             </div>
                             <div class="col-3 p-0 pl-1">
                                 <button class="primary-btn" type="submit">Tra Cứu</button>
@@ -299,7 +300,8 @@
                                         <img class="product_img"
                                              th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
                                     </div>
-                                    <div th:id="'product-detail-'+${sanpham.getChiTietSanPham().getId()}" class="col-7 content_product p-0">
+                                    <div th:id="'product-detail-'+${sanpham.getChiTietSanPham().getId()}"
+                                         class="col-7 content_product p-0">
                                         <div>
                                             <h6 class="product_name mb-2"
                                                 th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
@@ -309,7 +311,8 @@
                                                 Kích Cỡ :<label
                                                     th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}"></label>
                                             </div>
-                                            <label class="quantity-product" th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
+                                            <label class="quantity-product"
+                                                   th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
@@ -336,9 +339,13 @@
                         <label class="">Tổng :</label><h5 id="total-money" class="show_discount_money ml-2 mb-0"
                                                           th:text="${#numbers.formatDecimal(hoadon.getTongTien(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                     </div>
-                    <div class="w-100 d-flex justify-content-end mt-1 pr-3">
+                    <div th:if="${hoadon.getGiamGia()!=null}" class="w-100 d-flex justify-content-end mt-1 pr-3">
                         <label class="">Giảm Giá :</label><h6 id="discount-money" class="show_discount_money ml-2 mb-0"
-                                                              th:text="${#numbers.formatDecimal(hoadon.getTongTien()-hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h6>
+                                                              th:text="${#numbers.formatDecimal(hoadon.getGiamGia(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h6>
+                    </div>
+                    <div class="w-100 d-flex justify-content-end mt-1 pr-3">
+                        <label class="">Phí Ship :</label><h6 id="shipping-money" class="show_discount_money ml-2 mb-0"
+                                                              th:text="${#numbers.formatDecimal(hoadon.getPhiShip(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h6>
                     </div>
                     <div class="w-100 thanh-tien d-flex justify-content-end align-items-center mt-1 mb-3 pr-3">
                         <label class="mb-0">Thành Tiền: </label><h4 id="payment-money" class="show_total_money"
@@ -349,14 +356,16 @@
                             <a href="/" class="primary-btn" data-abc="true"> <i class="fa fa-chevron-left"></i> Trang
                                 Chủ</a>
                         </div>
-                        <!--                    <th:block th:if="${user != null}">-->
-                        <!--                        <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">-->
-                        <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}" th:attr="data-id=${hoadon.getId()}"
-                           id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
-                        <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}" th:attr="data-id=${hoadon.getId()}"
-                           class="info-btn btn-cancel-oders">Hủy Đơn</a>
-                        <!--                        </div>-->
-                        <!--                    </th:block>-->
+                        <th:block th:if="${user != null}">
+                            <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
+                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
+                                   th:attr="data-id=${hoadon.getId()}"
+                                   id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
+                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
+                                   th:attr="data-id=${hoadon.getId()}"
+                                   class="info-btn btn-cancel-oders">Hủy Đơn</a>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
             </article>

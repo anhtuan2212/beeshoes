@@ -5,6 +5,12 @@ $(document).ready(function () {
     })
 })
 $(document).ready(function () {
+    $('#quantity-selected').on('input', function() {
+        let value = parseInt($(this).val());
+        if (isNaN(value) || value < 0) {
+            $(this).val('');
+        }
+    });
     // Khi click vào ảnh
     $('#openFancybox').click(function () {
         // Lấy danh sách ảnh từ tất cả các phần tử có thuộc tính data-setbg
@@ -133,6 +139,7 @@ $(document).ready(function () {
     $('#add-to-cart').on('click', function () {
         data_cart = JSON.parse(localStorage.getItem('shopping_carts'));
         let quantity = $('#quantity-selected').val();
+
         if (quantity < 1) {
             ToastError('Vui lòng nhập số lượng !');
             $('#quantity-selected').focus();

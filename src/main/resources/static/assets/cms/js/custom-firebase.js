@@ -547,6 +547,47 @@ $(document).ready(function () {
                     return $(this).text();
                 }).get();
                 let product_details = datatable.rows().data().toArray();
+
+                if (sanPham==='#') {
+                    ToastError("Vui lòng chọn Sản Phẩm !")
+                    $('#sanPham').focus();
+                    return;
+                }
+                if (isEmpty(tenSanPham)) {
+                    ToastError("Vui lòng nhập tên sản phẩm !")
+                    $('#sanPham_input').focus();
+                    return;
+                }
+                if (theLoai==='#') {
+                    ToastError("Vui lòng chọn Thể Loại !")
+                    $('#theLoai').focus();
+                    return;
+                }
+                if (thuongHieu==='#') {
+                    ToastError("Vui lòng chọn Thương Hiệu !")
+                    $('#thuongHieu').focus();
+                    return;
+                }
+                if (chatLieu==='#') {
+                    ToastError("Vui lòng chọn Chất Liệu !")
+                    $('#chatLieu').focus();
+                    return;
+                }
+                if (deGiay==='#') {
+                    ToastError("Vui lòng chọn Đế Giày !")
+                    $('#deGiay').focus();
+                    return;
+                }
+                if (coGiay==='#') {
+                    ToastError("Vui lòng chọn Cổ Giày !")
+                    $('#coGiay').focus();
+                    return;
+                }
+                if (muiGiay==='#') {
+                    ToastError("Vui lòng nhập Mũi Giày !")
+                    $('#muiGiay').focus();
+                    return;
+                }
                 if (isEmpty(sanPham)) {
                     ToastError("Vui lòng chọn Sản Phẩm !")
                     $('#sanPham').focus();
@@ -563,7 +604,7 @@ $(document).ready(function () {
                     return;
                 }
                 if (isEmpty(thuongHieu)) {
-                    ToastError("Vui lòng chọn Thể Loại !")
+                    ToastError("Vui lòng chọn Thương Hiệu !")
                     $('#thuongHieu').focus();
                     return;
                 }

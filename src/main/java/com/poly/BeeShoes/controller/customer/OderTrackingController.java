@@ -41,10 +41,6 @@ public class OderTrackingController {
             user = userService.getByUsername(userDetails.getUsername());
             if (code != null) {
                 hoaDon = hoaDonService.getHoaDonByMa(code);
-                if (hoaDon != null) {
-                    lsHD = hoaDon.getLichSuHoaDons();
-                    Collections.sort(lsHD, (ls1, ls2) -> ls2.getThoiGian().compareTo(ls1.getThoiGian()));
-                }
                 if (hoaDon != null && hoaDon.getKhachHang() != null && user.getKhachHang() != null
                         && hoaDon.getKhachHang().getId().equals(user.getKhachHang().getId())) {
                 } else {
@@ -54,39 +50,25 @@ public class OderTrackingController {
         } else {
             if (code != null) {
                 hoaDon = hoaDonService.getHoaDonByMa(code);
-                if (hoaDon != null) {
-                    lsHD = hoaDon.getLichSuHoaDons();
-                    Collections.sort(lsHD, (ls1, ls2) -> ls2.getThoiGian().compareTo(ls1.getThoiGian()));
-                }
                 if (hoaDon != null && hoaDon.getKhachHang() != null) {
                     hoaDon = null;
                 }
             }
         }
-        // dùng cho mục đích dev
-        // sau khi dev xong thì xóa đi để hoạt động đúng
-        if (code != null) {
-            hoaDon = hoaDonService.getHoaDonByMa(code);
-        }
+        List<LichSuHoaDon> list = null;
         if (hoaDon != null) {
             lsHD = hoaDon.getLichSuHoaDons();
             Collections.sort(lsHD, (ls1, ls2) -> ls2.getThoiGian().compareTo(ls1.getThoiGian()));
-        }
-        //------------------------------------------------------------------------------------------
-
-        List<LichSuHoaDon> list = new ArrayList<>(lsHD); // Tạo một bản sao của lsHD
-        Collections.reverse(list);// Đảo ngược thứ tự của các phần tử trong list
-        int i = 0;
-        while (i < list.size() - 1) {
-            if (list.get(i).getTrangThaiSauUpdate().equals(list.get(i + 1).getTrangThaiSauUpdate())) {
-                list.remove(i + 1);
-            } else {
-                i++;
+            list = new ArrayList<>(lsHD); // Tạo một bản sao của lsHD
+            Collections.reverse(list);// Đảo ngược thứ tự của các phần tử trong list
+            int i = 0;
+            while (i < list.size() - 1) {
+                if (list.get(i).getTrangThaiSauUpdate().equals(list.get(i + 1).getTrangThaiSauUpdate())) {
+                    list.remove(i + 1);
+                } else {
+                    i++;
+                }
             }
-        }
-        for (int j = 0; j < list.size(); j++) {
-            System.out.println(list.get(j).getThoiGian());
-            System.out.println(list.get(j).getTrangThaiSauUpdate());
         }
         model.addAttribute("strack", list);
         model.addAttribute("lstLSHD", lsHD);

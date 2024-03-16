@@ -191,6 +191,11 @@ $(document).ready(function () {
                         $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
                         ToastSuccess('Thành công.')
                     }, error: function (e, x, h) {
+                        switch (e.getResponseHeader('status')) {
+                            case 'NotAuth':ToastError('Vui lòng đăng nhập.');
+                            break;
+                            default:ToastError('Lỗi.')
+                        }
                         console.log(e)
                         console.log(x)
                         console.log(h)

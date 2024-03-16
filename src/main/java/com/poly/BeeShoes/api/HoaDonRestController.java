@@ -11,9 +11,13 @@ import com.poly.BeeShoes.request.UpdateProductRquest;
 import com.poly.BeeShoes.request.chiTietSanPhamApiRquest;
 import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
+import com.poly.BeeShoes.utility.MailUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -45,6 +49,7 @@ public class HoaDonRestController {
     private final MauSacService mauSacService;
     private final KichCoService kichCoService;
     private final SanPhamService sanPhamService;
+    private final MailUtility mailUtility;
     Gson gson = new Gson();
 
     @PostMapping("/xac-nhan")
@@ -153,12 +158,19 @@ public class HoaDonRestController {
 
     @PostMapping("/delete-product")
     public ResponseEntity xoaSanPham(@RequestParam("id") Long id, HttpServletRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            user = userService.getByUsername(userDetails.getUsername());
+        } else {
+            return ResponseEntity.notFound().header("status", "NotAuth").build();
+        }
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
         System.out.println(id);
         if (hdct == null) {
             return ResponseEntity.notFound().build();
         }
-
         HoaDon hoaDon = hdct.getHoaDon();
         List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
         lst.remove(hdct);
@@ -167,7 +179,7 @@ public class HoaDonRestController {
         for (HoaDonChiTiet hdctt : hoaDon.getHoaDonChiTiets()) {
             total = total.add(hdctt.getChiTietSanPham().getGiaBan().multiply(BigDecimal.valueOf(hdctt.getSoLuong())));
         }
-        hoaDon.setTongTien(total.add(hoaDon.getPhiShip()));
+        hoaDon.setTongTien(total);
         if (hoaDon.getVoucher() != null) {
             Voucher vc = hoaDon.getVoucher();
             if (vc.getGiaTriToiThieu().compareTo(total) > 0) {
@@ -181,9 +193,9 @@ public class HoaDonRestController {
         } else {
             thucThu = total;
         }
-        hoaDon.setThucThu(thucThu);
+        hoaDon.setThucThu(thucThu.add(hoaDon.getPhiShip()));
         hoaDon = hoaDonService.save(hoaDon);
-        hoaDonChiTietService. delete(hdct.getId());
+        hoaDonChiTietService.delete(hdct.getId());
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(hoaDon);
         lichSuHoaDon.setHanhDong("Xóa sản phẩm '" + hdct.getChiTietSanPham().getMaSanPham() + "' khỏi hóa đơn.");
@@ -193,6 +205,11 @@ public class HoaDonRestController {
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setTrangThaiSauUpdate(hoaDon.getTrangThai().name());
         lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
+        if (user != null) {
+            String tb = "Xóa sản phẩm khỏi hóa đơn thành công!";
+            String body = "<h1>Bạn đã thực hiện xóa sản phẩm '"+hdct.getChiTietSanPham().getMaSanPham()+"' thành công!";
+            mailUtility.sendMail(user.getEmail(), tb, body);
+        }
         UpdateProductRquest rs = new UpdateProductRquest();
         rs.setId_hdct(hdct.getId());
         rs.setGiamGia(hoaDon.getGiamGia());
@@ -206,6 +223,14 @@ public class HoaDonRestController {
     @PostMapping("/add-product")
     public ResponseEntity themsanPham(@ModelAttribute AddProductOderRequest dt, HttpServletRequest request
     ) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            user = userService.getByUsername(userDetails.getUsername());
+        } else {
+            return ResponseEntity.notFound().header("status", "NotAuth").build();
+        }
         HoaDon hoaDon = hoaDonService.getHoaDonById(dt.getId()).orElse(null);
         if (hoaDon == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "HoaDonNull").build();
@@ -244,8 +269,8 @@ public class HoaDonRestController {
         if (hdct.getSoLuong() < 1) {
             return ResponseEntity.notFound().header("status", "MinQuantity").build();
         }
-        if (hdct.getSoLuong()>hdct.getChiTietSanPham().getSoLuongTon()){
-            return ResponseEntity.notFound().header("status","MaxQuantity").build();
+        if (hdct.getSoLuong() > hdct.getChiTietSanPham().getSoLuongTon()) {
+            return ResponseEntity.notFound().header("status", "MaxQuantity").build();
         }
         hdct = hoaDonChiTietService.save(hdct);
         lst.add(hdct);
@@ -255,14 +280,14 @@ public class HoaDonRestController {
         for (HoaDonChiTiet hdctt : hoaDon.getHoaDonChiTiets()) {
             total = total.add(hdctt.getChiTietSanPham().getGiaBan().multiply(BigDecimal.valueOf(hdctt.getSoLuong())));
         }
-        hoaDon.setTongTien(total.add(hoaDon.getPhiShip()));
+        hoaDon.setTongTien(total);
         BigDecimal thucThu = BigDecimal.ZERO;
         if (hoaDon.getGiamGia() != null) {
             thucThu = total.subtract(hoaDon.getGiamGia());
         } else {
             thucThu = total;
         }
-        hoaDon.setThucThu(thucThu);
+        hoaDon.setThucThu(thucThu.add(hoaDon.getPhiShip()));
         hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(hoaDon);
@@ -273,6 +298,11 @@ public class HoaDonRestController {
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setTrangThaiSauUpdate(hoaDon.getTrangThai().name());
         lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
+        if (user != null) {
+            String tb = "Thêm sản phẩm vào hóa đơn thành công.";
+            String body = "<h1>Bạn đã thực hiện xóa sản phẩm '"+hdct.getChiTietSanPham().getMaSanPham()+"' vào hóa đơn!";
+            mailUtility.sendMail(user.getEmail(), tb, body);
+        }
         UpdateProductRquest rs = new UpdateProductRquest();
         rs.setSoLuong(hdct.getSoLuong());
         rs.setId(ctsp.getId());
