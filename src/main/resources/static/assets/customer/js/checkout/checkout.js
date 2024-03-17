@@ -150,7 +150,7 @@ $(document).on('click', '#addNewAddress', function () {
     ele_phuongXa.empty()
     ele_tinh.on('change', function () {
         tinhTP = ele_tinh.val();
-        provinceName = tinhTP.find("option:selected").text();
+        provinceName = ele_tinh.find("option:selected").text();
         ele_quanHuyen.html('<option value="">Quận/Huyện</option>');
         ele_phuongXa.html('<option value="">Phường/Xã</option>');
         if (tinhTP) {
@@ -165,7 +165,7 @@ $(document).on('click', '#addNewAddress', function () {
 
     ele_quanHuyen.on('change', function () {
         quanHuyen = ele_quanHuyen.val();
-        districtName = quanHuyen.find("option:selected").text();
+        districtName = ele_quanHuyen.find("option:selected").text();
         phuongXa.html('<option value="">Phường/Xã</option>');
         wardArr.forEach((item) => {
             if (item.DistrictID == quanHuyen) {

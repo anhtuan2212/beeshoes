@@ -224,7 +224,7 @@
                                                     <a class="text-dark" href="#" th:text="${lshd.hanhDong}"></a>
                                                 </h5>
 
-                                                <p class="font-size-sm mb-0" th:utext="'Thực hiện bởi: <h6>' + ${lshd.nguoiThucHien != null ? lshd.nguoiThucHien.nhanVien.hoTen : 'Anonymous'} +
+                                                <p class="font-size-sm mb-0" th:utext="'Thực hiện bởi: <h6>' + ${lshd.nguoiThucHien != null ? (lshd.nguoiThucHien.nhanVien != null ? lshd.nguoiThucHien.nhanVien.hoTen : (lshd.nguoiThucHien.khachHang != null ? lshd.nguoiThucHien.khachHang.hoTen : 'Anonymous')) : 'Anonymous'} +
                                                 '</h6> Thời gian thực hiện: <h6>' + ${lshd.thoiGian} + '</h6>'"></p>
                                             </div>
                                         </div>
