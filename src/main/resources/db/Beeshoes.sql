@@ -407,7 +407,7 @@ CREATE TABLE hinh_thuc_thanh_toan
 (
     id bigint auto_increment,
     ma_giao_dich varchar(256),
-    hinh_thuc bit, -- 2 hinh thuc thanh toan khi nhan hang + thanh toan online (vnpay or momo)
+    hinh_thuc varchar(256), -- 2 hinh thuc thanh toan khi nhan hang + thanh toan online (vnpay or momo)
     mo_ta nvarchar(256),
     ngay_tao timestamp,
     ngay_sua timestamp,
@@ -597,3 +597,6 @@ ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
 -- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
+ALTER TABLE hoa_don add column so_tien_can_thanh_toan decimal(11, 2) default 0;
+ALTER TABLE hoa_don add column so_tien_da_thanh_toan decimal(11, 2);
+ALTER TABLE hoa_don add column hinh_thuc_thanh_toan nvarchar(256);

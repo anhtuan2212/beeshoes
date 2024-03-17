@@ -25,10 +25,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -178,26 +175,7 @@ public class HoaDonRestController {
         List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
         lst.remove(hdct);
         hoaDon.setHoaDonChiTiets(lst);
-        BigDecimal total = BigDecimal.ZERO;
-        for (HoaDonChiTiet hdctt : hoaDon.getHoaDonChiTiets()) {
-            total = total.add(hdctt.getChiTietSanPham().getGiaBan().multiply(BigDecimal.valueOf(hdctt.getSoLuong())));
-        }
-        hoaDon.setTongTien(total);
-        if (hoaDon.getVoucher() != null) {
-            Voucher vc = hoaDon.getVoucher();
-            if (vc.getGiaTriToiThieu().compareTo(total) > 0) {
-                hoaDon.setVoucher(null);
-                hoaDon.setGiamGia(BigDecimal.ZERO);
-            }
-        }
-        BigDecimal thucThu = BigDecimal.ZERO;
-        if (hoaDon.getGiamGia() != null) {
-            thucThu = total.subtract(hoaDon.getGiamGia());
-        } else {
-            thucThu = total;
-        }
-        hoaDon.setThucThu(thucThu.add(hoaDon.getPhiShip()));
-        hoaDon = hoaDonService.save(hoaDon);
+        hoaDon = tinhTien(hoaDon);
         hoaDonChiTietService.delete(hdct.getId());
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(hoaDon);
@@ -223,6 +201,33 @@ public class HoaDonRestController {
         return ResponseEntity.ok().body(rs);
     }
 
+    private HoaDon tinhTien(HoaDon hoaDon) {
+        List<HoaDonChiTiet> lstHDCT = new ArrayList<>(hoaDon.getHoaDonChiTiets());
+        Map<Long, HoaDonChiTiet> uniqueMap = new LinkedHashMap<>();
+        for (HoaDonChiTiet dct : lstHDCT) {
+            uniqueMap.putIfAbsent(dct.getId(), dct);
+        }
+        lstHDCT = new ArrayList<>(uniqueMap.values());
+        float total = lstHDCT.stream()
+                .map(dct -> dct.getGiaBan().floatValue() * dct.getSoLuong())
+                .reduce(0f, Float::sum);
+        System.out.println("Total: " + total);
+
+        hoaDon.setTongTien(BigDecimal.valueOf(total));
+
+        float thucThu = 0;
+
+        if (hoaDon.getGiamGia() != null) {
+            thucThu = total - hoaDon.getGiamGia().floatValue();
+        } else {
+            thucThu = total;
+        }
+        thucThu += hoaDon.getPhiShip().floatValue();
+        hoaDon.setThucThu(BigDecimal.valueOf(thucThu));
+        hoaDon = hoaDonService.save(hoaDon);
+        return hoaDon;
+    }
+
     @PostMapping("/add-product")
     public ResponseEntity themsanPham(@ModelAttribute AddProductOderRequest dt, HttpServletRequest request
     ) {
@@ -242,16 +247,19 @@ public class HoaDonRestController {
         KichCo kichCo = kichCoService.getById(dt.getKichCo());
         SanPham sanPham = sanPhamService.getById(dt.getSanPham());
         ChiTietSanPham ctsp = chiTietSanPhamService.getBySizeAndColorAndProduct(kichCo, mauSac, sanPham);
+
         if (ctsp == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "CTSPNull").build();
         }
+
         List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
         List<HoaDonChiTiet> lstNew = lst.stream()
                 .filter(hoaDonChiTiet -> hoaDonChiTiet.getChiTietSanPham().getId().equals(ctsp.getId()))
                 .collect(Collectors.toList());
+
         HoaDonChiTiet hdct = null;
         for (HoaDonChiTiet hoaDonChiTiet : lstNew) {
-            if (hoaDonChiTiet.getChiTietSanPham().getGiaBan().equals(ctsp.getGiaBan())) {
+            if (hoaDonChiTiet.getGiaBan().equals(ctsp.getGiaBan())) {
                 hdct = hoaDonChiTiet;
                 break;
             }
@@ -269,29 +277,19 @@ public class HoaDonRestController {
             hdct.setGiaBan(ctsp.getGiaBan());
             isNew = true;
         }
+
         if (hdct.getSoLuong() < 1) {
             return ResponseEntity.notFound().header("status", "MinQuantity").build();
         }
         if (hdct.getSoLuong() > hdct.getChiTietSanPham().getSoLuongTon()) {
             return ResponseEntity.notFound().header("status", "MaxQuantity").build();
         }
+
         hdct = hoaDonChiTietService.save(hdct);
         lst.add(hdct);
         hoaDon.setHoaDonChiTiets(lst);
         hoaDon = hoaDonService.save(hoaDon);
-        BigDecimal total = BigDecimal.ZERO;
-        for (HoaDonChiTiet hdctt : hoaDon.getHoaDonChiTiets()) {
-            total = total.add(hdctt.getChiTietSanPham().getGiaBan().multiply(BigDecimal.valueOf(hdctt.getSoLuong())));
-        }
-        hoaDon.setTongTien(total);
-        BigDecimal thucThu = BigDecimal.ZERO;
-        if (hoaDon.getGiamGia() != null) {
-            thucThu = total.subtract(hoaDon.getGiamGia());
-        } else {
-            thucThu = total;
-        }
-        hoaDon.setThucThu(thucThu.add(hoaDon.getPhiShip()));
-        hoaDonService.save(hoaDon);
+        hoaDon = tinhTien(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setHoaDon(hoaDon);
         lichSuHoaDon.setHanhDong("Thêm sản phẩm '" + ctsp.getMaSanPham() + "' vào hóa đơn.");

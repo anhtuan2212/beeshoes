@@ -300,7 +300,7 @@
                                         <img class="product_img"
                                              th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
                                     </div>
-                                    <div th:id="'product-detail-'+${sanpham.getChiTietSanPham().getId()}"
+                                    <div th:id="'product-detail-'+${sanpham.getId()}"
                                          class="col-7 content_product p-0">
                                         <div>
                                             <h6 class="product_name mb-2"
@@ -317,9 +317,9 @@
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
                                         <h5 class="product_price_cu"
-                                            th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                            th:text="${#numbers.formatDecimal(sanpham.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                         <h5 class="product_price"
-                                            th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                            th:text="${#numbers.formatDecimal(sanpham.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                     </div>
                                     <div class="col-1 d-none  align-items-center btn-del-group">
                                         <button class="btn-delete"
