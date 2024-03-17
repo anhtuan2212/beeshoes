@@ -228,7 +228,6 @@ $(document).ready(function () {
         }
     });
     setIMG();
-
     function setIMG() {
         let mauSac = null;
         let arr = [];
@@ -242,7 +241,6 @@ $(document).ready(function () {
                 let oj = {color: color, ele: img[i]};
                 arr.push(oj)
             } else if (color == mauSac) {
-                $(img[i]).css('opacity', 0);
                 $(img[i]).attr('status-remove', true);
             } else {
                 mauSac = color
@@ -250,21 +248,14 @@ $(document).ready(function () {
                 arr.push(oj)
             }
         }
-        let elements = [];
-        for (let i = 0; i < arr.length; i++) {
-            $("th.row-show-img[status-remove='true']").each(function (index, element) {
-                let mau = $(element).attr('data-color');
-                if (mau == arr[i].color) {
-                    elements.push(element)
-                }
-            });
-            $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length);
-        }
-        $.each(elements, function (index, element) {
-            $(element).remove();
+        $("th.row-show-img[status-remove='true']").each(function (index, element) {
+            $(element).addClass('d-none');
         });
+        img.removeAttr('status-remove');
+        for (let i = 0; i < arr.length; i++) {
+            $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length).removeClass('d-none');
+        }
     }
-
     function resetRowData() {
         let data = datatable.data();
         datatable.clear().draw();
