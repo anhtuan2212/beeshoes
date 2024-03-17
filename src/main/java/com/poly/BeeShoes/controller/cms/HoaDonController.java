@@ -28,6 +28,7 @@ public class HoaDonController {
     @GetMapping("/hoa-don")
     public String hoaDonPage(Model model) {
         List<HoaDon> hoaDonChoXacNhanList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoXacNhan);
+        List<HoaDon> hoaDonChuanBiHangList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChuanBiHang);
         List<HoaDon> hoaDonChoGiaoList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoGiao);
         List<HoaDon> hoaDonDangGiaoList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.DangGiao);
         List<HoaDon> hoaDonThanhCongList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ThanhCong);
@@ -35,6 +36,7 @@ public class HoaDonController {
         Long count = hoaDonService.count();
         model.addAttribute("hoaDonList", hoaDonList);
         model.addAttribute("hoaDonChoXacNhanList", hoaDonChoXacNhanList);
+        model.addAttribute("hoaDonChuanBiHangList", hoaDonChuanBiHangList);
         model.addAttribute("hoaDonChoGiaoList", hoaDonChoGiaoList);
         model.addAttribute("hoaDonDangGiaoList", hoaDonDangGiaoList);
         model.addAttribute("hoaDonThanhCongList", hoaDonThanhCongList);

@@ -89,6 +89,13 @@
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" id="chuanbihang-tab" data-toggle="tab" href="#chuanbihang">Chuẩn bị hàng
+                <th:block>
+                  <span th:if="${hoaDonChuanBiHangList.size() > 0}" class="badge badge-pill badge-danger position-absolute top-0 start-100 translate-middle" th:text="${hoaDonChuanBiHangList.size()}"></span>
+                </th:block>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" id="chogiao-tab" data-toggle="tab" href="#chogiao">Chờ giao
                 <th:block>
                   <span th:if="${hoaDonChoGiaoList.size() > 0}" class="badge badge-pill badge-danger position-absolute top-0 start-100 translate-middle" th:text="${hoaDonChoGiaoList.size()}"></span>
@@ -118,6 +125,9 @@
       </div>
       <div class="tab-pane fade" id="choxacnhan">
         <div th:insert="~{/cms/pages/orders/hoa-don/_cho-xac-nhan.html}"></div>
+      </div>
+      <div class="tab-pane fade" id="chuanbihang">
+        <div th:insert="~{/cms/pages/orders/hoa-don/_chuan-bi-hang.html}"></div>
       </div>
       <div class="tab-pane fade" id="chogiao">
         <div th:insert="~{/cms/pages/orders/hoa-don/_cho-giao.html}"></div>
@@ -953,6 +963,143 @@
 
     // INITIALIZATION OF DATATABLES
     // =======================================================
+    // Hóa đơn chờ xác nhận
+    var datatableCBH = $.HSCore.components.HSDatatables.init($('#datatableCBH'), {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'd-none'
+        },
+        {
+          extend: 'excel',
+          className: 'd-none'
+        },
+        {
+          extend: 'csv',
+          className: 'd-none'
+        },
+        {
+          extend: 'pdf',
+          className: 'd-none'
+        },
+        {
+          extend: 'print',
+          className: 'd-none'
+        },
+      ],
+      select: {
+        style: 'multi',
+        selector: 'td:first-child input[type="checkbox"]',
+        classMap: {
+          checkAll: '#datatableCheckAllCBH',
+          counter: '#datatableCounterCBH',
+          counterInfo: '#datatableCounterInfoCBH'
+        }
+      },
+      language: {
+        zeroRecords: '<div class="text-center p-4">' +
+                '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+                '<p class="mb-0">Không có dữ liệu</p>' +
+                '</div>'
+      }
+    });
+
+    $('#export-copy-cbh').click(function() {
+      datatableCBH.button('.buttons-copy').trigger()
+    });
+
+    $('#export-excel-cbh').click(function() {
+      datatableCBH.button('.buttons-excel').trigger()
+    });
+
+    $('#export-csv-cbh').click(function() {
+      datatableCBH.button('.buttons-csv').trigger()
+    });
+
+    $('#export-pdf-cbh').click(function() {
+      datatableCBH.button('.buttons-pdf').trigger()
+    });
+
+    $('#export-print-cbh').click(function() {
+      datatableCBH.button('.buttons-print').trigger()
+    });
+
+    $('#loaiHoaDonCBH').on('change', function () {
+      var loaiHoaDonValue = $('#loaiHoaDonCBH').val();
+      var loaiHoaDonFilter = (loaiHoaDonValue === 'all') ? '' : (loaiHoaDonValue === 'true' ? 'Bán Tại Quầy' : 'Bán Giao Hàng');
+      datatableCBH.columns(6).search(loaiHoaDonFilter).draw();
+    })
+
+    var tableCBH = $('#datatableCBH').DataTable();
+
+    $('#tongTienCBH').on('change', function () {
+      const tongTienCBH = $('#tongTienCBH');
+      console.log(123)
+      let priceRange = tongTienCXN.val().split("-");
+      minPrice = parseFloat(priceRange[0]);
+      maxPrice = parseFloat(priceRange[1]);
+      // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+      $.fn.dataTable.ext.search.pop();
+      // Thêm hàm lọc mới
+      $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        let price = parseFloat(data[5].replace(/,/g, '')) || 0; // Xóa dấu chấm và chuyển đổi thành số, cột 8 trong dữ liệu
+        return (price >= minPrice && price <= maxPrice);
+      });
+      tableCBH.draw();
+      // }
+    });
+
+    $('#datatableSearchCBH').on('mouseup', function (e) {
+      var $input = $(this),
+              oldValue = $input.val();
+
+      if (oldValue == "") return;
+
+      setTimeout(function(){
+        var newValue = $input.val();
+
+        if (newValue == ""){
+          // Gotcha
+          datatableCBH.search('').draw();
+        }
+      });
+    });
+
+    $('#toggleColumn_sttCBH').change(function (e) {
+      datatableCBH.columns(1).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_maHoaDonCBH').change(function (e) {
+      datatableCBH.columns(2).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_tenKhachHangCBH').change(function (e) {
+      datatableCBH.columns(3).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_sdtKhachHangCBH').change(function (e) {
+      datatableCBH.columns(4).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_tongTienCBH').change(function (e) {
+      datatableCBH.columns(5).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_loaiHoaDonCBH').change(function (e) {
+      datatableCBH.columns(6).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_trangThaiCBH').change(function (e) {
+      datatableCBH.columns(7).visible(e.target.checked)
+    })
+
+    $('#toggleColumn_hanhDongCBH').change(function (e) {
+      datatableCBH.columns(8).visible(e.target.checked)
+    })
+
+    // INITIALIZATION OF DATATABLES
+    // =======================================================
     // Hóa đơn chờ giao
     var datatableCG = $.HSCore.components.HSDatatables.init($('#datatableCG'), {
       dom: 'Bfrtip',
@@ -1622,6 +1769,155 @@
       });
     });
     //end chờ xác nhận
+
+    // Chuẩn bị hàng tab
+    $('#xacNhanFromCheckBoxCBH').on('click', function() {
+      var selectedValue = [];
+      $('#myBodyAllCBH').find('input[type=checkbox]:checked').each(function () {
+        var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cbh');
+        console.log(dataMaHoaDon);
+        selectedValue.push(String(dataMaHoaDon));
+      });
+      console.log(selectedValue);
+
+      Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Bạn đang xác nhận đơn hàng!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "/api/hoa-don/xac-nhan",
+            contentType: "application/json",
+            data: JSON.stringify(selectedValue),
+            success: function () {
+              ToastSuccess('Xác nhận thành công');
+              location.reload();
+            },
+            error: function (error) {
+              ToastError('Có lỗi xảy ra khi xác nhận đơn, vui lòng thử lại!');
+              console.error('Xảy ra lỗi: ', error);
+            }
+          });
+        }
+      });
+    });
+
+    $('.xacNhanFromActionCBH').on('click', function() {
+      var selectedValue = [];
+      var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cbh]").attr("data-ma-hoa-don-cbh");
+      selectedValue.push(String(maHoaDon));
+      console.log(selectedValue);
+
+      Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Bạn đang xác nhận đơn hàng!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "/api/hoa-don/xac-nhan",
+            contentType: "application/json",
+            data: JSON.stringify(selectedValue),
+            success: function () {
+              ToastSuccess('Xác nhận thành công');
+              location.reload();
+            },
+            error: function (error) {
+              ToastError('Xảy ra lỗi khi xác nhận đơn, vui lòng thử lại!');
+              console.error('Xảy ra lỗi: ', error);
+            }
+          });
+        }
+      });
+    });
+
+    $('#huyFromCheckBoxCBH').on('click', function() {
+      var selectedValue = [];
+      $('#myBodyAllCBH').find('input[type=checkbox]:checked').each(function () {
+        var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cbh');
+        console.log(dataMaHoaDon);
+        selectedValue.push(String(dataMaHoaDon));
+      });
+
+      console.log(selectedValue);
+
+      Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Bạn đang hủy đơn hàng!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "/api/hoa-don/huy",
+            contentType: "application/json",
+            data: JSON.stringify(selectedValue),
+            success: function () {
+              ToastSuccess('Hủy thành công!');
+              location.reload();
+            },
+            error: function (error) {
+              ToastError('Xảy ra lỗi khi hủy đơn, vui lòng thử lại!');
+              console.error('Xảy ra lỗi: ', error);
+            }
+          });
+        }
+      });
+    });
+
+    $('.huyFromActionCBH').on('click', function() {
+      var selectedValue = [];
+      var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cbh]").attr("data-ma-hoa-don-cbh");
+      selectedValue.push(String(maHoaDon));
+      console.log(selectedValue);
+
+      Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Bạn đang hủy đơn hàng!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "/api/hoa-don/huy",
+            contentType: "application/json",
+            data: JSON.stringify(selectedValue),
+            success: function () {
+              ToastSuccess('Hủy thành công');
+              location.reload();
+            },
+            error: function (error) {
+              ToastError('Xảy ra lỗi khi hủy đơn, vui lòng thử lại!');
+              console.error('Xảy ra lỗi: ', error);
+            }
+          });
+        }
+      });
+    });
+    //end chuẩn bị hàng
 
     // Chờ giao tab
     $('#xacNhanFromCheckBoxCG').on('click', function() {
