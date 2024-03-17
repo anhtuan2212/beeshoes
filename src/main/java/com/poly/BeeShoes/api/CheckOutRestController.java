@@ -160,7 +160,7 @@ public class CheckOutRestController {
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
         hoaDon.setTongTien(BigDecimal.valueOf(total));
         hoaDon.setThucThu(BigDecimal.valueOf(totalAmount));
-        hoaDon.setSoTienDaThanhToan(BigDecimal.valueOf(totalAmount));
+        hoaDon.setSoTienCanThanhToan(BigDecimal.valueOf(totalAmount));
         hoaDon.setGiamGia(voucherValue);
         hoaDon.setPhiShip(BigDecimal.valueOf(shippingFee));
         hoaDon.setSdtNhan(customerPhone);
