@@ -363,8 +363,12 @@ $(document).ready(function () {
 
     $('#placeOrder').on('click', function () {
         var total = parseInt($('#total').text().replace(/[,.]/g, ''));
-        var voucherValue = parseInt($('#voucherValue').text().replace(/[,.]/g, ''));
+        var voucherValue = 0;
+        if(!isNaN(parseInt($('#voucherValue').text().replace(/[,.]/g, '')))) {
+            voucherValue = parseInt($('#voucherValue').text().replace(/[,.]/g, ''));
+        }
         var shippingFee = parseInt($('#shippingFee').text().replace(/[,.]/g, ''));
+        console.log(voucherValue);
         if($('#customerHouseNumber').val() != null || $('#customerHouseNumber').val() != undefined) {
             houseNumber = $('#customerHouseNumber').val();
         }

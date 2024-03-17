@@ -2600,7 +2600,8 @@ body {
 
 .header__nav__option ul li .user-name {
     position: absolute;
-    width: 130px;
+    width: 100%;
+    white-space: nowrap;
     left: 31px;
     top: 4px;
     display: flex;

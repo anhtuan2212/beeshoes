@@ -324,9 +324,9 @@
                                             </div>
                                             <div class="col-3 d-flex align-items-center">
                                                 <h5 class="product_price_cu"
-                                                    th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                    th:text="${#numbers.formatDecimal(sanpham.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                                 <h5 class="product_price"
-                                                    th:text="${#numbers.formatDecimal(sanpham.getChiTietSanPham().getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                    th:text="${#numbers.formatDecimal(sanpham.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
                                             </div>
                                         </li>
                                     </ul>

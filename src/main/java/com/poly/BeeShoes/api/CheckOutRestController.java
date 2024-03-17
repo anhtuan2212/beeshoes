@@ -9,6 +9,7 @@ import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.payment.vnpay.VNPayService;
 import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
+import com.poly.BeeShoes.utility.MailUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,8 @@ public class CheckOutRestController {
     private NhanVienService nhanVienService;
     @Autowired
     private LichSuHoaDonService lichSuHoaDonService;
+    @Autowired
+    private MailUtility mailUtility;
 
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
@@ -137,7 +140,7 @@ public class CheckOutRestController {
         if(jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
         }
-        if(jsonObject.get("voucherValue") != null) {
+        if(jsonObject.get("voucherValue") != null || !jsonObject.get("voucherValue").isJsonNull()) {
             voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
         }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
@@ -195,6 +198,10 @@ public class CheckOutRestController {
             System.out.println(e.getAsJsonObject().get("productDetailId").getAsInt());
             System.out.println(e.getAsJsonObject().get("quantity").getAsInt());
             System.out.println(notes + " " + totalAmount + " " + voucherCode);
+        }
+        if(savedHoaDon.getKhachHang() != null) {
+            User user = userService.findByKhachHang_Id(savedHoaDon.getKhachHang().getId());
+            mailUtility.sendMail(user.getEmail(), "[LightBee - Đặt hàng thành công]", "Cảm ơn bạn :D");
         }
         String urlRedirect = "/orderSuccess?invoiceCode=" + savedHoaDon.getMaHoaDon() + "&totalAmount=" + savedHoaDon.getThucThu();
         return new ResponseEntity<>(urlRedirect, HttpStatus.OK);
