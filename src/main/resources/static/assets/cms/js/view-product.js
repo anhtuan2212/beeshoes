@@ -189,7 +189,7 @@ $(document).on('ready', function () {
                                         src="${data.img.length === 0 ? '/assets/cms/img/400x400/img2.jpg' : data.img}"
                                              alt="Image Description">
                                     </label>
-                                    <input class="formAddImg form-control" data-color-code-input="${data.maMauSac}" type="file" name="img" id="fileimgselected${data.id}" hidden="">
+                                    <input class="formAddImg form-control" data-color-code-input="${data.maMauSac}" type="file" name="img" id="fileimgselected${data.id}_" hidden="">
                                 </td>
                                 <td class="table-column-pl-0 width-100 " data-colum-index="2">
                                     <input type="text" class="form-control" name="mauSac" value="${data.maMauSac}" style="background-color:${data.maMauSac}" disabled>
@@ -254,22 +254,35 @@ $(document).on('ready', function () {
         let id = $(this).data('id');
         JsBarcode("#barcode" + id, code);
     })
+    console.log(datatable.data())
     $('#datatableSearch').on('mouseup', function (e) {
-        var $input = $(this),
+        let $input = $(this),
             oldValue = $input.val();
-
         if (oldValue == "") return;
-
         setTimeout(function () {
-            var newValue = $input.val();
-
+            let newValue = $input.val();
             if (newValue == "") {
                 // Gotcha
                 datatable.search('').draw();
             }
         }, 1);
     });
-
+    $('#kichCoFilter').on('change', function () {
+        let value = $(this).val();
+        if (value === 'all') {
+            datatable.columns(4).search('').draw();
+        } else {
+            datatable.columns(4).search(value).draw();
+        }
+    });
+    $('#mauSacFilter').on('change', function () {
+        let value = $(this).val();
+        if (value === 'all') {
+            datatable.columns(2).search('').draw();
+        } else {
+            datatable.columns(2).search(value).draw();
+        }
+    });
     function getArrIndex() {
         let arrIndexRow = [];
         $('.custom-control-input:checked').each(function () {

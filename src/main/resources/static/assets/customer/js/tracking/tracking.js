@@ -192,9 +192,11 @@ $(document).ready(function () {
                         ToastSuccess('Thành công.')
                     }, error: function (e, x, h) {
                         switch (e.getResponseHeader('status')) {
-                            case 'NotAuth':ToastError('Vui lòng đăng nhập.');
-                            break;
-                            default:ToastError('Lỗi.')
+                            case 'NotAuth':
+                                ToastError('Vui lòng đăng nhập.');
+                                break;
+                            default:
+                                ToastError('Lỗi.')
                         }
                         console.log(e)
                         console.log(x)
@@ -256,7 +258,7 @@ $(document).ready(function () {
                         <div class="col-2 p-0">
                             <img class="product_img" src="${data.anh}">
                         </div>
-                        <div class="content_product p-0 col-6">
+                        <div id="product-detail-${data.id_hdct}" class="content_product p-0 col-6">
                             <div>
                                 <h6 class="product_name mb-2">${data.ten}</h6>
                                 <div class="w-100">
@@ -295,7 +297,7 @@ $(document).ready(function () {
                     let hr = document.createElement('hr');
                     div.insertAdjacentElement('afterend', hr);
                 } else {
-                    $(`#product-detail-${data.id}`).find('.quantity-product').text('Số Lượng :' + data.soLuong)
+                    $(`#product-detail-${data.id_hdct}`).find('.quantity-product').text('Số Lượng :' + data.soLuong)
                 }
                 $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
                 $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
@@ -308,6 +310,9 @@ $(document).ready(function () {
                         break;
                     case 'MaxQuantity':
                         ToastError('Số lượng sản phẩm lớn hơn số lượng tồn.');
+                        break;
+                    case 'NotAuth':
+                        ToastError('Vui lòng đăng nhập.');
                         break;
                     case 'MinQuantity':
                         ToastError('Số lượng sản phẩm phải lớn hơn 0.');

@@ -27,4 +27,5 @@ public class HoaDonChiTiet {
     BigDecimal giaGoc;
     BigDecimal giaBan;
     int soLuong;
+
 }

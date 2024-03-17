@@ -314,6 +314,65 @@
         </div>
         <!-- End Row -->
     </div>
+
+    <div class="row gx-2 gx-lg-3 m-4">
+        <div class="col-sm-12 col-lg-12 mb-3 mb-lg-12">
+            <!-- Card -->
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2">Bộ Lọc</h6>
+                    <div class="row align-items-center gx-2">
+                        <div class="row align-items-center flex-grow-1">
+                            <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
+                                <form class="col-12 mb-3">
+                                    <!-- Search -->
+                                    <div class="input-group input-group-merge input-group-flush">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="tio-search"></i>
+                                            </div>
+                                        </div>
+                                        <input id="datatableSearch" type="search" class="form-control"
+                                               placeholder="Tìm kiếm." aria-label="Tìm sản phẩm" autofocus>
+                                    </div>
+                                    <!-- End Search -->
+                                </form>
+                            </div>
+                            <div class="hs-unfold form-group col-sm-6 col-md-4">
+                                <label>Kích Cỡ</label>
+                                <select class="js-select2-custom custom-select" name="kichCo"
+                                        id="kichCoFilter" size="1"
+                                        style="opacity: 0;"
+                                        data-hs-select2-options='{
+                                                                    "placeholder": "Chọn kích cỡ...",
+                                                                    "searchInputPlaceholder": "Tìm kích cỡ..."
+                                                                    }'>
+                                    <option value="all" selected>Tất Cả</option>
+                                    <option th:each="th:${sanPham.getDistinctKichCoList()}" th:value="${th.getTen()}"
+                                            th:text="${th.getTen()}"></option>
+                                </select>
+                            </div>
+
+                            <div class="hs-unfold form-group col-sm-6 col-md-4">
+                                <label>Màu Sắc</label>
+                                <select class="js-select2-custom custom-select" name="mauSac"
+                                        id="mauSacFilter" size="1" style="opacity: 0;"
+                                        data-hs-select2-options='{
+                                                                            "placeholder": "Chọn màu sắc...",
+                                                                            "searchInputPlaceholder": "Tìm màu sắc..."}'>
+                                    <option value="all" selected>Tất Cả</option>
+                                    <option th:each="th:${sanPham.getDistinctMauSacList()}" th:value="${th.getMaMauSac()}"
+                                            th:text="${th.getTen()}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Row -->
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
     <!-- Card -->
     <div class="card m-4">
         <div class="card-header">
