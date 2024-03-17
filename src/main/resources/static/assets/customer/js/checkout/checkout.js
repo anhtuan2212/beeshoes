@@ -13,6 +13,10 @@ fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
         provinceArr = data;
+        data.forEach((item) => {
+            let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
+            $('#newProvince').append(html);
+        })
         return fillAllTinh(data);
     })
     .then(() => {
@@ -129,9 +133,54 @@ function callApiShippingFee() {
         },
         error: function (error) {
             console.error('Xảy ra lỗi: ', error)
+            $('#shippingFee').text('Không hỗ trợ giao');
         }
     })
 }
+
+$(document).on('click', '#addNewAddress', function () {
+    $('#newAddress').modal('show');
+    let ele_tinh = $('#newProvince');
+    let ele_quanHuyen = $('#newDistrict');
+    let ele_phuongXa = $('#newWard')
+    let phuongXa;
+    let quanHuyen;
+    let tinhTP;
+    ele_quanHuyen.empty()
+    ele_phuongXa.empty()
+    ele_tinh.on('change', function () {
+        tinhTP = ele_tinh.val();
+        provinceName = tinhTP.find("option:selected").text();
+        ele_quanHuyen.html('<option value="">Quận/Huyện</option>');
+        ele_phuongXa.html('<option value="">Phường/Xã</option>');
+        if (tinhTP) {
+            districtArr.forEach(function (item) {
+                if (item.ProvinceID == tinhTP) {
+                    let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                    ele_quanHuyen.append(html);
+                }
+            })
+        }
+    })
+
+    ele_quanHuyen.on('change', function () {
+        quanHuyen = ele_quanHuyen.val();
+        districtName = quanHuyen.find("option:selected").text();
+        phuongXa.html('<option value="">Phường/Xã</option>');
+        wardArr.forEach((item) => {
+            if (item.DistrictID == quanHuyen) {
+                let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+                phuongXa.append(html);
+            }
+        })
+    })
+
+    ele_phuongXa.on('change', function () {
+        phuongXa = ele_phuongXa.val();
+        wardName = ele_phuongXa.find("option:selected").text();
+    })
+
+})
 
 $(document).ready(function () {
 
@@ -271,6 +320,7 @@ $(document).ready(function () {
             },
             error: function (error) {
                 console.error('Xảy ra lỗi: ', error)
+                $('#shippingFee').text('Không hỗ trợ giao');
             }
         })
     })
@@ -357,6 +407,7 @@ $(document).ready(function () {
                 },
             error: function (error) {
                 console.error('Xảy ra lỗi: ', error)
+                $('#shippingFee').text('Không hỗ trợ giao');
             }
         })
     })

@@ -283,7 +283,37 @@
 <div th:replace="~{/customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
 
+<div class="modal fade" id="newAddress" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="updateAddressLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 420px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm Địa Chỉ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
+            </div>
+            <div class="modal-body p-4">
+                <input type="text" hidden="hidden" id="id_address">
+                <div class="w-100">
+                    <label for="newHouseNumber" class="pointer mb-0 w-100">Số Nhà:</label>
+                    <input class="w-100 mb-3 form-input-custom" type="text" id="newHouseNumber">
+                    <label for="newProvince" class="pointer mb-0 w-100">Tỉnh/TP:</label>
+                    <select class="w-100 mb-3" type="text" id="newProvince"></select>
+                    <label for="newDistrict" class="pointer mb-0 w-100">Quận Huyện:</label>
+                    <select class="w-100 mb-3" type="text" id="newDistrict"></select>
+                    <label for="newWard" class="pointer mb-0 w-100">Phường Xã:</label>
+                    <select class="w-100" type="text" id="newWard"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
+                <button id="btn-update" type="button" class="btn primary-btn">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Search Begin -->
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">

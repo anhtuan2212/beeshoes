@@ -285,7 +285,7 @@
                             <span class="caret"></span></button>
                         <ul class="text-center dropdown-menu">
                             <li>
-                                <a class="btn btn-sm btn-outline-dark" th:href="@{|/cms/hoa-don/${hoaDon.id}/chi-tiet|}">
+                                <a class="btn btn-sm btn-outline-dark" th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}">
                                     <i class="tio-visible-outlined"></i> Chi tiết</a>
                             </li>
                             <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
