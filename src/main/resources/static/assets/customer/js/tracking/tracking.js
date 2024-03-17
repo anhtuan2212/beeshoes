@@ -1,3 +1,4 @@
+setTabsHeader('pages');
 $(document).ready(function () {
     $(document).on('click', '#btn-show-update', function () {
         if ($(this).data('update') == 0) {

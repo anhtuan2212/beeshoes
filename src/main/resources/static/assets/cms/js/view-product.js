@@ -400,6 +400,41 @@ $(document).on('ready', function () {
     })
     setIMG();
 
+    // function setIMG() {
+    //     let mauSac = null;
+    //     let arr = [];
+    //     let oj = {};
+    //     let img = $('.row-show-img');
+    //     for (let i = 0; i < img.length; i++) {
+    //         let color = $(img[i]).attr('data-color');
+    //         $(img[i]).closest('tr').attr('color-code', color);
+    //         if (mauSac == null) {
+    //             mauSac = color;
+    //             let oj = {color: color, ele: img[i]};
+    //             arr.push(oj)
+    //         } else if (color == mauSac) {
+    //             $(img[i]).css('opacity', 0);
+    //             $(img[i]).attr('status-remove', true);
+    //         } else {
+    //             mauSac = color
+    //             let oj = {color: color, ele: img[i]};
+    //             arr.push(oj)
+    //         }
+    //     }
+    //     let elements = [];
+    //     for (let i = 0; i < arr.length; i++) {
+    //         $("td.row-show-img[status-remove='true']").each(function (index, element) {
+    //             let mau = $(element).attr('data-color');
+    //             if (mau == arr[i].color) {
+    //                 elements.push(element)
+    //             }
+    //         });
+    //         $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length);
+    //     }
+    //     $.each(elements, function (index, element) {
+    //         $(element).remove();
+    //     });
+    // }
     function setIMG() {
         let mauSac = null;
         let arr = [];
@@ -413,7 +448,6 @@ $(document).on('ready', function () {
                 let oj = {color: color, ele: img[i]};
                 arr.push(oj)
             } else if (color == mauSac) {
-                $(img[i]).css('opacity', 0);
                 $(img[i]).attr('status-remove', true);
             } else {
                 mauSac = color
@@ -421,19 +455,14 @@ $(document).on('ready', function () {
                 arr.push(oj)
             }
         }
-        let elements = [];
-        for (let i = 0; i < arr.length; i++) {
-            $("td.row-show-img[status-remove='true']").each(function (index, element) {
-                let mau = $(element).attr('data-color');
-                if (mau == arr[i].color) {
-                    elements.push(element)
-                }
-            });
-            $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length);
-        }
-        $.each(elements, function (index, element) {
-            $(element).remove();
+        $("td.row-show-img[status-remove='true']").each(function (index, element) {
+                $(element).addClass('d-none');
+                console.log(element)
         });
+        img.removeAttr('status-remove');
+        for (let i = 0; i < arr.length; i++) {
+            $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length).removeClass('d-none');
+        }
     }
 
     datatable.on('draw.dt', function () {
