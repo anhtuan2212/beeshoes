@@ -212,7 +212,7 @@
                                 <span class="text">Thành Công</span>
                             </div>
 
-                            <div th:if="${st.getTrangThaiSauUpdate()=='Huy'}" class="step d-none active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Huy'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </span>
@@ -246,6 +246,12 @@
                                 <i class="fa fa-archive"></i>
                             </span>
                                 <span class="text">Thành Công</span>
+                            </div>
+                            <div class="step">
+                            <span class="icon">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </span>
+                                <span class="text">Thất Bại</span>
                             </div>
                         </th:block>
                         <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoXuLy'}">
