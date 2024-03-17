@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/assets/customer/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/magnific-popup.css" type="text/css">
-    <!--    <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">-->
+        <link rel="stylesheet" href="/assets/customer/css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/customer/css/style.css" type="text/css">
@@ -150,7 +150,7 @@
                             </div>
                         </th:block>
                         <th:block sec:authorize="isAuthenticated()">
-                            <div class="wrapper_address">
+                            <div class="wrapper_address" id="idCustomer" th:attr="idCustomer=${userLogged.getKhachHang().getId()}">
                                 <p>Địa chỉ nhận hàng <span class="ml-2 text-primary" id="addNewAddress">+Thêm địa chỉ nhận hàng mới</span></p>
                                 <div class="item_address mb-1" th:each="adr:${userLogged.getKhachHang().getDiaChi()}">
                                     <div class="content_dress row m-0 customerAddress">
@@ -309,7 +309,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
-                <button id="btn-update" type="button" class="btn primary-btn">Thêm mới</button>
+                <button id="btn-addAddress" type="button" class="btn primary-btn">Thêm mới</button>
             </div>
         </div>
     </div>
@@ -328,7 +328,7 @@
 <!-- Js Plugins -->
 <script src="/assets/customer/js/jquery-3.3.1.min.js"></script>
 <script src="/assets/customer/js/bootstrap.min.js"></script>
-<!--    <script src="/assets/customer/js/jquery.nice-select.min.js"></script>-->
+    <script src="/assets/customer/js/jquery.nice-select.min.js"></script>
 <script src="/assets/customer/js/jquery.nicescroll.min.js"></script>
 <script src="/assets/customer/js/jquery.magnific-popup.min.js"></script>
 <script src="/assets/customer/js/jquery.countdown.min.js"></script>

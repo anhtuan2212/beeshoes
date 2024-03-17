@@ -85,7 +85,11 @@ input[type="radio"] + label {
 input[type="text"] {
     color: #0b0b0b;
 }
-
+.nice-select .list {
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+}
 .deliveryMethodLabel {
     font-size: 15px;
     font-family: "Nunito Sans", sans-serif;

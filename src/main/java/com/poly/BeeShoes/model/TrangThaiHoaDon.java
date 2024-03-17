@@ -1,11 +1,12 @@
 package com.poly.BeeShoes.model;
 
 public enum TrangThaiHoaDon {
-    ChoXuLy,
     ChoXacNhan,
+    ChuanBiHang,
     ChoGiao,
     DangGiao,
-    Huy,
+    ThanhCong,
+    GiaoThatBai,
     HoanTra,
-    ThanhCong
+    Huy
 }
