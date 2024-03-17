@@ -58,6 +58,8 @@ public class HoaDonRestController {
             HoaDon hoaDon = hoaDonService.getHoaDonByMa(ma);
             String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
             if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChoXacNhan) {
+                hoaDon.setTrangThai(TrangThaiHoaDon.ChuanBiHang);
+            } else if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChuanBiHang) {
                 hoaDon.setTrangThai(TrangThaiHoaDon.ChoGiao);
             } else if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChoGiao) {
                 hoaDon.setTrangThai(TrangThaiHoaDon.DangGiao);
@@ -123,6 +125,8 @@ public class HoaDonRestController {
         HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
         String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
         if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChoXacNhan) {
+            hoaDon.setTrangThai(TrangThaiHoaDon.ChuanBiHang);
+        } else if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChuanBiHang) {
             hoaDon.setTrangThai(TrangThaiHoaDon.ChoGiao);
         } else if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChoGiao) {
             hoaDon.setTrangThai(TrangThaiHoaDon.DangGiao);
