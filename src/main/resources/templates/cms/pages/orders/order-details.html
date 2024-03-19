@@ -1096,7 +1096,10 @@
                 type: "POST",
                 url: "/api/hoa-don/huy-detail",
                 contentType: "application/json",
-                data: JSON.stringify(idHoaDon),
+                data: {
+                    id:idHoaDon,
+                    lydo:'Thích Thì Hủy'
+                },
                 success: function (response) {
                     console.log(response);
                     ToastSuccess('Hủy đơn hàng thành công');

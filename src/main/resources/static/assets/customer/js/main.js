@@ -51,17 +51,16 @@ function getAllProductPrintToCart() {
         }
     })
 }
+
 function formatNumberMoney(input) {
     let number = parseInt(input);
     if (number >= 1000 && number < 1000000) {
         let rounded = Math.ceil(number / 1000);
         return rounded >= 1000 ? (Math.floor(rounded / 1000) + "M") : (rounded + "K");
-    }
-    else if (number >= 1000000) {
+    } else if (number >= 1000000) {
         let rounded = Math.floor(number / 100000) / 10;
         return rounded + "M";
-    }
-    else {
+    } else {
         return number;
     }
 }
@@ -77,12 +76,14 @@ function formatNumberMoney(input) {
 // });
 function pushDataToArray(data) {
     let data_cart = getProductInLocalStorage();
+    let index = null;
     if (data_cart !== null && Array.isArray(data_cart)) {
         let found = false;
         for (let i = 0; i < data_cart.length; i++) {
-            if (data_cart[i].pro.id === data.pro.id) {
+            if (Number(data_cart[i].pro.id) === Number(data.pro.id)) {
                 data_cart[i].quantity = Number(data_cart[i].quantity) + Number(data.quantity);
                 found = true;
+                index = i;
                 break;
             }
         }
@@ -93,7 +94,37 @@ function pushDataToArray(data) {
         data_cart = []
         data_cart.push(data);
     }
-    saveProductTolocalStorage(data_cart);
+    let check = true;
+    for (let i = 0; i < dataShop.length; i++) {
+        let arrDT = dataShop[i].chiTietSanPham;
+        for (let j = 0; j < arrDT.length; j++) {
+            if (index !== null) {
+                if (Number(arrDT[j].id) === Number(data_cart[index].pro.id)) {
+                    if (Number(data_cart[index].quantity) > Number(arrDT[j].soLuongTon)) {
+                        check = false;
+                        break;
+                    } else {
+                        saveProductTolocalStorage(data_cart);
+                        break;
+                    }
+                }
+            } else {
+                if (Number(arrDT[j].id) === Number(data.pro.id)) {
+                    if (Number(data.quantity) > Number(arrDT[j].soLuongTon)) {
+                        check = false;
+                        break;
+                    } else {
+                        saveProductTolocalStorage(data_cart);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    if (!check) {
+        ToastError('Số lượng chọn lớn hơn số lượng tồn.');
+    }
+    return check;
 }
 
 function startUp() {
@@ -104,24 +135,8 @@ function startUp() {
             return;
         }
         if (Array.isArray(data)) {
-            Swal.fire({
-                title: "Giỏ hàng tạm thời có sản phẩm?",
-                text: "Bạn có muốn cập nhật vào giỏ hàng cá nhân không ?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                cancelButtonText: "Không",
-                confirmButtonText: "Có",
-                customClass: {
-                    confirmButton: 'btn-custom-black',
-                    cancelButton: 'btn-custom-info'
-                },
-                didRender: () => {
-                    $('.swal2-select').remove();
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
+            Confirm('Giỏ hàng tạm thời có sản phẩm?', 'Bạn có muốn cập nhật vào giỏ hàng cá nhân không ?', 'Không', 'Có').then((check) => {
+                if (check) {
                     let response = [];
                     data.forEach((item) => {
                         response = saveProductToServer(item.pro.id, item.quantity, true);
@@ -132,7 +147,7 @@ function startUp() {
                 } else {
                     localStorage.removeItem('shopping_carts')
                 }
-            });
+            })
         }
     } else {
         let data = getProductInLocalStorage();
@@ -189,18 +204,27 @@ function saveProductToServer(product_id, quantity, update) {
             data = datas
             printDataInServerResponse(datas)
             dataShopingCart = datas;
+            ToastSuccess('Thêm thành công.');
         },
         error: function (xhr) {
             switch (xhr.getResponseHeader('status')) {
-                case 'ProductNull':ToastError('Sản phẩm trống.');
-                break;
-                case 'MinQuantity':ToastError('Số lượng phải lớn hơn 0.');
+                case 'ProductNull':
+                    ToastError('Sản phẩm trống.');
                     break;
-                case 'ProductDetailNull':ToastError('Phiên bản không tồn tại.');
+                case 'MinQuantity':
+                    ToastError('Số lượng phải lớn hơn 0.');
                     break;
-                case 'MaxQuantity':ToastError('Số lượng vượt quá Số lượng tồn.');
+                case 'ProductDetailNull':
+                    ToastError('Phiên bản không tồn tại.');
                     break;
-                default:ToastError('Lỗi.');
+                case 'MaxQuantity':
+                    ToastError('Số lượng vượt quá Số lượng tồn.');
+                    break;
+                case '0Quantity':
+                    ToastError('Phiên bản hiện tại đang hết hàng.');
+                    break;
+                default:
+                    ToastError('Lỗi.');
             }
         }
     })
@@ -240,9 +264,11 @@ function printDataInServerResponse(datas) {
     $('#total-money-cart').text(total);
     $('#quantity__item_carts').text(datas.length);
 }
+
 function ToastSuccess(message) {
     Toast('success', message)
 }
+
 function Toast(status, message) {
     const Toast = Swal.mixin({
         toast: true,
@@ -286,6 +312,7 @@ function showLoading() {
 function hideLoading() {
     Swal.close();
 }
+
 function ToastError(message) {
     Toast('error', message)
 }
@@ -300,24 +327,8 @@ function saveProductTolocalStorage(data) {
 
 // hàm xóa sản phẩm trong giỏ hàng
 $(document).on('click', '.cart_trash', function () {
-    Swal.fire({
-        title: "Xóa sản phẩm?",
-        text: "Xóa sản phẩm khỏi giỏ hàng ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "Hủy",
-        confirmButtonText: "Xác Nhận",
-        customClass: {
-            confirmButton: 'btn-custom-black',
-            cancelButton: 'btn-custom-info'
-        },
-        didRender: () => {
-            $('.swal2-select').remove();
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
+    Confirm('Xóa sản phẩm?', 'Xóa sản phẩm khỏi giỏ hàng?', 'Hủy', 'Xác Nhận').then((result) => {
+        if (result) {
             if (username === undefined) {
                 let id = $(this).data('id-delete');
                 if (id === undefined) {
@@ -412,7 +423,7 @@ function printProductwithStartup() {
     `;
         total += extractNumberFromString(data.pro.gia_ban) * data.quantity;
     })
-    $('#list_product_items_cart').append(html);
+    $('#list_product_items_cart').empty().append(html);
     total = addCommasToNumber(total);
 
     $('#total-money-cart').text(total + 'đ');
@@ -438,6 +449,30 @@ function addCommasToNumber(number) {
         }
     }
     return parts.join('');
+}
+
+function Confirm(title, message, txt_cancel, txt_confirm) {
+    return new Promise((resolve, reject) => {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: txt_cancel,
+            confirmButtonText: txt_confirm,
+            customClass: {
+                confirmButton: 'btn-custom-black',
+                cancelButton: 'btn-custom-info'
+            },
+            didRender: () => {
+                $('.swal2-select').remove();
+            }
+        }).then((result) => {
+            resolve(result.isConfirmed);
+        });
+    })
 }
 
 //=================================================================================================================================
@@ -586,10 +621,13 @@ function addCommasToNumber(number) {
                 break;
             }
         }
+        if (Number(product_detail.soLuongTon) === 0) {
+            ToastError('Phiên bản hiện tại tạm hết hàng.');
+            return;
+        }
         if (username !== undefined) {
             dataShopingCart = saveProductToServer(product_detail.id, 1);
             printDataInServerResponse(dataShopingCart);
-            ToastSuccess('Thêm thành công.');
         } else {
             let data = {
                 pro: {
@@ -610,10 +648,12 @@ function addCommasToNumber(number) {
                 quantity: '1'
             };
             console.log(data);
-            pushDataToArray(data);
-            ToastSuccess('Thêm thành công.');
-            $('#list_product_items_cart').empty();
-            printProductwithStartup();
+            let check = pushDataToArray(data);
+            if (check) {
+                ToastSuccess('Thêm thành công.');
+                $('#list_product_items_cart').empty();
+                printProductwithStartup();
+            }
         }
     });
     /*-------------------
@@ -680,7 +720,7 @@ function addCommasToNumber(number) {
             newVal = oldValue + 1;
         }
         newVal = Math.max(newVal, 1);
-        if (isNaN(newVal)){
+        if (isNaN(newVal)) {
             newVal = 1;
         }
         $button.parent().find('input').val(newVal);
