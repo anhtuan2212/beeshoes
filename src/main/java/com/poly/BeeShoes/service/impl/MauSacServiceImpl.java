@@ -5,6 +5,7 @@ import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.repository.MauSacRepository;
 import com.poly.BeeShoes.service.MauSacService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class MauSacServiceImpl implements MauSacService {
 
     @Override
     public List<MauSac> getAll() {
-        return mauSacRepository.findAll();
+        return mauSacRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

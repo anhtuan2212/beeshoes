@@ -32,7 +32,7 @@ public class CoGiayServiceImpl implements CoGiayService {
 
     @Override
     public List<CoGiay> getAll() {
-        return coGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return coGiayRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

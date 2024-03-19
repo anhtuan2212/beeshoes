@@ -33,7 +33,7 @@ public class MuiGiayServiceImpl implements MuiGiayService {
 
     @Override
     public List<MuiGiay> getAll() {
-        return muiGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return muiGiayRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

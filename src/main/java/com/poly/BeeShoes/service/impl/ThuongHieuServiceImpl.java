@@ -48,7 +48,7 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
 
     @Override
     public List<ThuongHieu> getAll() {
-        return thuongHieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return thuongHieuRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

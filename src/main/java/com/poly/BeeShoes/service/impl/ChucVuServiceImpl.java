@@ -5,6 +5,7 @@ import com.poly.BeeShoes.model.MuiGiay;
 import com.poly.BeeShoes.repository.ChucVuReponsitory;
 import com.poly.BeeShoes.service.ChucVuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class ChucVuServiceImpl implements ChucVuService {
 
     @Override
     public List<ChucVu> getAll() {
-        return chucVuReponsitory.findAll();
+        return chucVuReponsitory.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

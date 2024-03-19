@@ -167,7 +167,22 @@ $(document).on('ready', function () {
                 '</div>'
         }
     });
-
+    function updateShowNum() {
+        let pageInfo = datatable.page.info();
+        let displayedRows = pageInfo.end - pageInfo.start;
+        let show = $('#datatableEntries')
+        if (Number(show.val()) < 10) {
+            show.find('option:selected').remove();
+            show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+        } else {
+            if (show.find('option[value="10"]').length === 0) {
+                show.append(`<option value="10" selected>10</option>`)
+            }
+        }
+    }
+    datatable.on('draw.dt', function () {
+        updateShowNum();
+    })
     $('#export-copy').click(function () {
         datatable.button('.buttons-copy').trigger()
     });
@@ -290,11 +305,16 @@ $(document).on('ready', function () {
                         let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
                         datatable.row(rowIndex).remove();
                     }
-                    datatable.row.add(rowData);
-                    datatable.draw()
+                    let newdata = Array.from(datatable.data());
+                    newdata.unshift(rowData);
+                    datatable.clear();
+                    for (const row of newdata) {
+                        datatable.row.add(row);
+                    }
+                    datatable.draw();
                     $('#inputDataId').val('');
                     $('#inputData').val('');
-                    $('#selectedStaus').val('');
+                    $('#selectedStaus').val(1);
                     $('#editUserModal').modal('hide')
                 }
                 switch (st) {

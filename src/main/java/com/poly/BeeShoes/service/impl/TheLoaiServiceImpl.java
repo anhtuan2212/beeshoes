@@ -50,7 +50,7 @@ public class TheLoaiServiceImpl implements TheLoaiService {
 
     @Override
     public List<TheLoai> getAll() {
-        return theLoaiRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return theLoaiRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

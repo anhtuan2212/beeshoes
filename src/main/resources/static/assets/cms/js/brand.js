@@ -1,5 +1,5 @@
 var datatable = null;
-activeSiderbar('thuong_hieu',"li_thuoc_tinh",'li_san_pham')
+activeSiderbar('thuong_hieu', "li_thuoc_tinh", 'li_san_pham')
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
@@ -168,6 +168,30 @@ $(document).on('ready', function () {
         }
     });
 
+    function updateShowNum() {
+        let pageInfo = datatable.page.info();
+        let displayedRows = pageInfo.end - pageInfo.start;
+        let show = $('#datatableEntries')
+        if (Number(show.val()) < 10) {
+            show.find('option:selected').remove();
+            show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+        } else {
+            if (show.find('option[value="10"]').length === 0) {
+                show.append(`<option value="10" selected>10</option>`)
+            }
+            if (show.val() > displayedRows) {
+                if (show.find(`option[value="${displayedRows}"]`).length === 0) {
+                    show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                } else {
+                    show.val(displayedRows);
+                }
+            }
+        }
+    }
+
+    datatable.on('draw.dt', function () {
+        updateShowNum();
+    })
     $('#export-copy').click(function () {
         datatable.button('.buttons-copy').trigger()
     });
@@ -247,7 +271,7 @@ $(document).on('ready', function () {
             ToastError("Tên không được trống.");
             return;
         }
-        if (trangThai===null){
+        if (trangThai === null) {
             ToastError("Trạng thái không được trống.");
             return;
         }
@@ -290,11 +314,34 @@ $(document).on('ready', function () {
                         let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
                         datatable.row(rowIndex).remove();
                     }
-                    datatable.row.add(rowData);
-                    datatable.draw()
+                    let newdata = Array.from(datatable.data());
+                    newdata.unshift(rowData);
+                    datatable.clear();
+                    for (const row of newdata) {
+                        datatable.row.add(row);
+                    }
+                    datatable.draw();
+                    let pageInfo = datatable.page.info();
+                    let displayedRows = pageInfo.end - pageInfo.start;
+                    let show = $('#datatableEntries')
+                    if (Number(show.val()) < 10) {
+                        show.find('option:selected').remove();
+                        show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                    } else {
+                        if (show.find('option[value="10"]').length === 0) {
+                            show.append(`<option value="10" selected>10</option>`)
+                        }
+                        if (show.val() > displayedRows) {
+                            if (show.find(`option[value="${displayedRows}"]`).length === 0) {
+                                show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                            } else {
+                                show.val(displayedRows);
+                            }
+                        }
+                    }
                     $('#inputDataId').val('');
                     $('#inputData').val('');
-                    $('#selectedStaus').val('');
+                    $('#selectedStaus').val(1);
                     $('#editUserModal').modal('hide')
                 }
                 switch (st) {
@@ -346,7 +393,7 @@ function edit(element) {
     let name = element.getAttribute('data-name');
     let st = element.getAttribute('data-status');
     let id = element.getAttribute('data-id');
-    if (st==null){
+    if (st == null) {
         $('#selectedStaus').val(1);
     }
     $('#inputData').val(name).focus();
@@ -406,6 +453,25 @@ function deleteCategory(element) {
                     ToastSuccess('Xóa Thành Công.');
                     var rowIndex = datatable.row($(element).closest('tr')).index();
                     datatable.row(rowIndex).remove().draw();
+                    let pageInfo = datatable.page.info();
+                    let displayedRows = pageInfo.end - pageInfo.start;
+                    let show = $('#datatableEntries')
+                    if (Number(show.val()) < 10) {
+                        show.find('option:selected').remove();
+                        show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                    } else {
+                        if (show.find('option[value="10"]').length === 0) {
+                            show.append(`<option value="10" selected>10</option>`)
+                        }
+                        if (show.val() > displayedRows) {
+                            if (show.find(`option[value="${displayedRows}"]`).length === 0) {
+                                show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                            } else {
+                                show.val(displayedRows);
+                            }
+                        }
+                    }
+
                 },
                 error: function (xhr, status, error) {
                     let st = xhr.getResponseHeader('status');

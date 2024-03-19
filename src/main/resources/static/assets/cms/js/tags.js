@@ -1,5 +1,5 @@
 var datatable = null;
-activeSiderbar('de_giay',"li_thuoc_tinh",'li_san_pham')
+activeSiderbar('tags', "li_thuoc_tinh", 'li_san_pham')
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
@@ -168,6 +168,30 @@ $(document).on('ready', function () {
         }
     });
 
+    function updateShowNum() {
+        let pageInfo = datatable.page.info();
+        let displayedRows = pageInfo.end - pageInfo.start;
+        let show = $('#datatableEntries')
+        if (Number(show.val()) < 10) {
+            show.find('option:selected').remove();
+            show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+        } else {
+            if (show.find('option[value="10"]').length === 0) {
+                show.append(`<option value="10" selected>10</option>`)
+            }
+            if (show.val()>displayedRows){
+                if (show.find(`option[value="${displayedRows}"]`).length === 0){
+                    show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                }else{
+                    show.val(displayedRows);
+                }
+            }
+        }
+    }
+
+    datatable.on('draw.dt', function () {
+        updateShowNum();
+    })
     $('#export-copy').click(function () {
         datatable.button('.buttons-copy').trigger()
     });
@@ -255,6 +279,7 @@ $(document).on('ready', function () {
         }
         return check;
     }
+
     $('#save').on('click', function () {
         let id = $('#inputDataId').val();
         let name = $('#inputData').val();
@@ -263,12 +288,12 @@ $(document).on('ready', function () {
             ToastError("Tên không được trống.");
             return;
         }
-        if (trangThai===null){
+        if (trangThai === null) {
             ToastError("Trạng thái không được trống.");
             return;
         }
-        if (checkString(name)){
-            ToastError('Tags "'+name+'" không hợp lệ !')
+        if (checkString(name)) {
+            ToastError('Tags "' + name + '" không hợp lệ !')
             return;
         }
 
@@ -278,7 +303,7 @@ $(document).on('ready', function () {
             data: {
                 id: id,
                 ten: name,
-                trangThai:trangThai
+                trangThai: trangThai
             },
             success: function (data, status, xhr) {
                 console.log(data)
@@ -287,7 +312,7 @@ $(document).on('ready', function () {
                 let updated = convertTime(data.ngaySua)
                 let create = data.create == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.create}</a>`;
                 let update = data.update == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.update}</a>`;
-                let trangthai = data.trangThai == true ?' <span class="legend-indicator bg-success"></span>Hiển Thị':' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
+                let trangthai = data.trangThai == true ? ' <span class="legend-indicator bg-success"></span>Hiển Thị' : ' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
                 if (data != null) {
                     var rowData = [
                         `<div class="custom-control custom-checkbox">
@@ -300,22 +325,27 @@ $(document).on('ready', function () {
                         `${create}`,
                         `${update}`,
                         `${trangthai}`,
-                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true?1:0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
+                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true ? 1 : 0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-id="${data.id}" onclick="deleteCategory(this)">
                                 <i class="tio-delete"></i>
                             </a>`];
 
-                    if (id !== ''){
-                        let rowIndex = datatable.row($('h5[data-id='+id+']').closest('tr')).index();
+                    if (id !== '') {
+                        let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
                         datatable.row(rowIndex).remove();
                     }
-                    datatable.row.add(rowData);
-                    datatable.draw()
+                    let newdata = Array.from(datatable.data());
+                    newdata.unshift(rowData);
+                    datatable.clear();
+                    for (const row of newdata) {
+                        datatable.row.add(row);
+                    }
+                    datatable.draw();
                     $('#inputDataId').val('');
                     $('#inputData').val('');
-                    $('#selectedStaus').val('');
+                    $('#selectedStaus').val(1);
                     $('#editUserModal').modal('hide')
                 }
                 switch (st) {
@@ -367,7 +397,7 @@ function edit(element) {
     let name = element.getAttribute('data-name');
     let st = element.getAttribute('data-status');
     let id = element.getAttribute('data-id');
-    if (st==null){
+    if (st == null) {
         $('#selectedStaus').val(1);
     }
     $('#inputData').val(name).focus();

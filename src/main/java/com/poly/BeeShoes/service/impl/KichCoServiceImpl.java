@@ -33,7 +33,7 @@ public class KichCoServiceImpl implements KichCoService {
 
     @Override
     public List<KichCo> getAll() {
-        return kichCoRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return kichCoRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

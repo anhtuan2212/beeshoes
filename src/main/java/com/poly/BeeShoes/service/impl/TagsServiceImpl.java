@@ -5,6 +5,7 @@ import com.poly.BeeShoes.model.TheLoai;
 import com.poly.BeeShoes.repository.TagsRepository;
 import com.poly.BeeShoes.service.TagsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class TagsServiceImpl implements TagsService {
 
     @Override
     public List<Tags> getAll() {
-        return tagsRepository.findAll();
+        return tagsRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override
