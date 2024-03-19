@@ -17,9 +17,10 @@ fetch('/assets/address-json/province.json')
         data.forEach((item) => {
             let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
             $('#newProvince').append(html);
+           $('#tinhThanhPho').append(html);
         })
-
         $('#newProvince').niceSelect('update');
+        $('#tinhThanhPho').niceSelect('update');
     })
     .then(() => {
         return fetch('/assets/address-json/district.json')
@@ -404,6 +405,7 @@ $(document).ready(function () {
                 }
             })
         }
+        quanHuyen.niceSelect('update')
     })
 
     quanHuyen.on('change', function () {
@@ -416,6 +418,7 @@ $(document).ready(function () {
                 phuongXa.append(html);
             }
         })
+        phuongXa.niceSelect('update')
     })
 
     phuongXa.on('change', function () {
