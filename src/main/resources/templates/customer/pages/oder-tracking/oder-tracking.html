@@ -147,8 +147,7 @@
                                    th:if="${hoadon != null and hoadon.getTrangThai().name()=='Huy'}">Đã Hủy
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXuLy'}">Chờ Xử
-                                    Lý
+                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChuanBiHang'}">Chuẩn Bị Hàng
                                 </p>
                                 <p class="show_trang_thai"
                                    th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXacNhan'}">Chờ
@@ -184,7 +183,7 @@
                                 <i class="fa fa-check"></i> </span>
                                 <span class="text">Chờ Xác Nhận</span>
                             </div>
-                            <div th:if="${st.getTrangThaiSauUpdate()=='ChoXuLy'}" class="step active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='ChuanBiHang'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-user"></i>
                             </span>
@@ -254,7 +253,7 @@
                                 <span class="text">Thất Bại</span>
                             </div>
                         </th:block>
-                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoXuLy'}">
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChuanBiHang'}">
                             <div class="step">
                             <span class="icon">
                                 <i class="fa fa-ambulance" aria-hidden="true"></i>
