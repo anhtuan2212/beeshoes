@@ -1,5 +1,5 @@
 var datatable = null;
-activeSiderbar('kich_co',"li_thuoc_tinh",'li_san_pham')
+activeSiderbar('kich_co', "li_thuoc_tinh", 'li_san_pham')
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
@@ -165,9 +165,47 @@ $(document).on('ready', function () {
                 '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
                 '<p class="mb-0">No data to show</p>' +
                 '</div>'
-        }
+        },
+        columnDefs: [{
+            type: 'date',
+            targets: [3],
+            render: function (data, type, row, meta) {
+                if (type === 'display' || type === 'filter') {
+                    return moment(data, 'dd-MM-yyyy HH:mm:ss').format('DD-MM-YYYY');
+                }
+                return data;
+            }
+        }],
+        order: [
+            [3, 'desc']
+        ]
     });
+    console.log(datatable.data())
 
+    function updateShowNum() {
+        let pageInfo = datatable.page.info();
+        let displayedRows = pageInfo.end - pageInfo.start;
+        let show = $('#datatableEntries')
+        if (Number(show.val()) < 10) {
+            show.find('option:selected').remove();
+            show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+        } else {
+            if (show.find('option[value="10"]').length === 0) {
+                show.append(`<option value="10" selected>10</option>`)
+            }
+            if (show.val() > displayedRows) {
+                if (show.find(`option[value="${displayedRows}"]`).length === 0) {
+                    show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                } else {
+                    show.val(displayedRows);
+                }
+            }
+        }
+    }
+
+    datatable.on('draw.dt', function () {
+        updateShowNum();
+    })
     $('#export-copy').click(function () {
         datatable.button('.buttons-copy').trigger()
     });
@@ -247,7 +285,7 @@ $(document).on('ready', function () {
             ToastError("Tên không được trống.");
             return;
         }
-        if (trangThai===null){
+        if (trangThai === null) {
             ToastError("Trạng thái không được trống.");
             return;
         }
@@ -290,12 +328,19 @@ $(document).on('ready', function () {
                         let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
                         datatable.row(rowIndex).remove();
                     }
-                    datatable.row.add(rowData);
-                    datatable.draw()
+                    let newdata = Array.from(datatable.data());
+                    newdata.unshift(rowData);
+                    datatable.clear();
+                    for (const row of newdata) {
+                        datatable.row.add(row);
+                    }
+                    datatable.draw();
+                    updateShowNum();
                     $('#inputDataId').val('');
                     $('#inputData').val('');
-                    $('#selectedStaus').val('');
-                    $('#editUserModal').modal('hide')
+                    $('#selectedStaus').val(1);
+                    $('#editUserModal').modal('hide');
+                    ToastSuccess("Lưu thành công.");
                 }
                 switch (st) {
                     case "oke":
@@ -341,7 +386,7 @@ function formatNumber(num) {
 
 function convertTime(time) {
 
-    if (time!==null){
+    if (time !== null) {
         var dateObject = new Date(time);
         var year = dateObject.getFullYear();
         var month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
@@ -349,14 +394,14 @@ function convertTime(time) {
         var formattedDate = day + '-' + month + '-' + year;
         return formattedDate;
     }
-return 'N/A';
+    return 'N/A';
 }
 
 function edit(element) {
     let name = element.getAttribute('data-name');
     let st = element.getAttribute('data-status');
     let id = element.getAttribute('data-id');
-    if (st==null){
+    if (st == null) {
         $('#selectedStaus').val(1);
     }
     $('#inputData').val(name).focus();
@@ -416,6 +461,19 @@ function deleteCategory(element) {
                     ToastSuccess('Xóa Thành Công.');
                     var rowIndex = datatable.row($(element).closest('tr')).index();
                     datatable.row(rowIndex).remove().draw();
+                    let pageInfo = datatable.page.info();
+                    let displayedRows = pageInfo.end - pageInfo.start;
+                    let show = $('#datatableEntries')
+                    if (Number(show.val()) < 10) {
+                        show.find('option:selected').remove();
+                        show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                    } else {
+                        if (show.find('option[value="10"]').length > 0) {
+                            show.val('10')
+                        } else {
+                            show.append(`<option value="10" selected>10</option>`)
+                        }
+                    }
                 },
                 error: function (xhr, status, error) {
                     let st = xhr.getResponseHeader('status');

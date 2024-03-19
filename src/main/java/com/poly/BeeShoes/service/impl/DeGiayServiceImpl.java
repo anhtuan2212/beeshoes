@@ -33,7 +33,7 @@ public class DeGiayServiceImpl implements DeGiayService {
 
     @Override
     public List<DeGiay> getAll() {
-        return deGiayRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return deGiayRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

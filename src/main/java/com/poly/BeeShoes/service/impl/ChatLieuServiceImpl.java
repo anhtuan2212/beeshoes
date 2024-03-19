@@ -33,7 +33,7 @@ public class ChatLieuServiceImpl implements ChatLieuService {
 
     @Override
     public List<ChatLieu> getAll() {
-        return chatLieuRepository.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        return chatLieuRepository.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override

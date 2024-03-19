@@ -20,7 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
-    <title>Users | Front - Admin &amp; Dashboard Template</title>
+    <title>LightBee | Màu Sắc</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/cms/img/icon/favicon.ico">
@@ -120,11 +120,11 @@
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Sản Phẩm</a></li>
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Thuộc Tính</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Thể Loại</li>
+                            <li class="breadcrumb-item active" aria-current="page">Màu Sắc</li>
                         </ol>
                     </nav>
 
-                    <h1 class="page-header-title">Thể Loại</h1>
+                    <h1 class="page-header-title">Màu Sắc</h1>
                 </div>
 
                 <div class="col-sm-auto">
@@ -196,7 +196,7 @@
                      },
                      "search": "#datatableSearch",
                      "entries": "#datatableEntries",
-                     "pageLength": 15,
+                     "pageLength": 10,
                      "isResponsive": false,
                      "isShowPaging": false,
                      "pagination": "datatablePagination"
@@ -344,7 +344,7 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
-                <h4 id="editUserModalTitle" class="modal-title">Sửa Tên</h4>
+                <h4 id="editUserModalTitle" class="modal-title">Màu Sắc</h4>
 
                 <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
                         aria-label="Close">
@@ -360,9 +360,9 @@
                 </div>
                 <div class="col-md-8 col-8 form-group">
                     <label class="">Mã Màu</label>
-                    <input id="colorCode" onchange="setColor(this.value)" type="text" class="form-control disabled">
+                    <input id="colorCode" readonly onchange="setColor(this.value)" type="text" class="form-control disabled">
                     <label class="">Tên Màu</label>
-                    <input id="color-name" type="text" class="form-control">
+                    <input id="color-name" type="text" class="form-control" placeholder="Vui lòng nhập tên.">
                     <input class="form-control" type="text" id="inputDataId" hidden="">
                 </div>
                 <div class="form-group p-4 pt-0 col-6">
