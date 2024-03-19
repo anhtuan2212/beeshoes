@@ -23,7 +23,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     public List<HoaDon> getAllHoaDon() {
-        return hoaDonRepository.findAll();
+        return hoaDonRepository.findAll(Sort.by(Sort.Direction.DESC, "ngayTao"));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
     @Override
     public List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon) {
-        return hoaDonRepository.findByTrangThai(trangThaiHoaDon);
+        return hoaDonRepository.findByTrangThai(trangThaiHoaDon, Sort.by(Sort.Direction.DESC, "ngayTao"));
     }
 
     @Override
