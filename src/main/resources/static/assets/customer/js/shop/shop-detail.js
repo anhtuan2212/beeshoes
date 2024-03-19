@@ -96,26 +96,6 @@ $(document).ready(function () {
         data_cart = getItems;
     }
 
-    function pushDataToArray(data) {
-        data_cart = getProductInLocalStorage();
-        if (data_cart !== null && Array.isArray(data_cart)) {
-            let found = false;
-            for (let i = 0; i < data_cart.length; i++) {
-                if (data_cart[i].pro.id === data.pro.id) {
-                    data_cart[i].quantity = Number(data_cart[i].quantity) + Number(data.quantity);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                data_cart.push(data);
-            }
-        } else {
-            data_cart = []
-            data_cart.push(data);
-        }
-        saveProductTolocalStorage(data_cart);
-    }
 
     $('input[name="kichthuoc"], input[name="color"]').on('change', function () {
         var kichThuoc = $('input[name="kichthuoc"]:checked').val();
@@ -131,7 +111,8 @@ $(document).ready(function () {
                 console.log(product);
                 $('#show-price').html(`${product.gia_ban}đ <span>${product.gia_goc}đ</span>`)
                 $('#product-sku').html(`<span>SKU:</span> ${product.detail_code}`);
-                $('#total-num-product').html(`Số lượng mẫu : ${product.so_luong_ton}`);
+
+                $('#total-num-product').html(`Số lượng mẫu : ${Number(product.so_luong_ton)===0?'TẠM HẾT HÀNG':product.so_luong_ton}`);
             }
 
         }
@@ -154,24 +135,29 @@ $(document).ready(function () {
         for (let i = 0; i < data_product_details.length; i++) {
             let product = data_product_details[i];
             if (product.size == kichThuoc && product.color_code == color) {
+                if (Number(product.so_luong_ton)===0){
+                    ToastError('Phiên bản hiện tại tạm hết hàng.')
+                    break;
+                }
                 if (Number(quantity) > Number(product.so_luong_ton)) {
                     ToastError('Số lượng vượt quá số lượng tồn.')
-                    return;
+                    break;
                 }
                 if (username === undefined) {
-                    pushDataToArray({pro: product, quantity: quantity})
-                    let total = 0;
-                    data_cart.forEach((data) => {
-                        total += extractNumberFromString(data.pro.gia_ban) * data.quantity;
-                    })
-                    total = addCommasToNumber(total);
-                    ToastSuccess('Thêm thành công.');
-                    printHtmlToCart(product, quantity, total + 'đ')
-                    localStorage.setItem('shopping_carts', JSON.stringify(data_cart));
-                    $('#quantity__item_carts').text(data_cart.length);
-                    return;
+                    let check = pushDataToArray({pro: product, quantity: quantity})
+                    if (check){
+                        let total = 0;
+                        data_cart = getProductInLocalStorage();
+                        data_cart.forEach((data) => {
+                            total += extractNumberFromString(data.pro.gia_ban) * data.quantity;
+                        })
+                        total = addCommasToNumber(total);
+                        ToastSuccess('Thêm thành công.');
+                        printHtmlToCart(product, quantity, total + 'đ')
+                        $('#quantity__item_carts').text(data_cart.length);
+                        break;
+                    }
                 } else {
-                    ToastSuccess('Thêm thành công.');
                     dataShopingCart = saveProductToServer(product.id, quantity)
                 }
 

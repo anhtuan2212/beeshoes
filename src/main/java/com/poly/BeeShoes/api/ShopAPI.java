@@ -48,6 +48,9 @@ public class ShopAPI {
         if (ctsp == null) {
             return ResponseEntity.notFound().header("status", "ProductDetailNull").build();
         }
+        if (ctsp.getSoLuongTon()<1){
+            return ResponseEntity.badRequest().header("status", "0Quantity").build();
+        }
         Authentication auth = getUserAuth();
         Object principal = auth.getPrincipal();
         if (principal instanceof User) {
@@ -189,6 +192,9 @@ public class ShopAPI {
             }
             if (!cal.equalsIgnoreCase("plus") && ghct.getSoLuong() > 1) {
                 ghct.setSoLuong(ghct.getSoLuong() - 1);
+            }
+            if (ghct.getSoLuong()>ghct.getChiTietSanPham().getSoLuongTon() || ghct.getChiTietSanPham().getSoLuongTon()<1){
+                return ResponseEntity.notFound().header("status","MaxNum").build();
             }
             gioHangChiTietService.save(ghct);
             return ResponseEntity.ok().build();
