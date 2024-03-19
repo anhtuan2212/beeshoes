@@ -317,6 +317,11 @@ $(document).ready(function () {
     let quanHuyenVal;
     let tinhTP;
 
+    provinceArr.forEach(function (item) {
+        let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
+        ele_quanHuyen.append(html);
+    })
+
     ele_tinh.on('change', function () {
         tinhTP = ele_tinh.val();
         provinceName = ele_tinh.find("option:selected").text();
