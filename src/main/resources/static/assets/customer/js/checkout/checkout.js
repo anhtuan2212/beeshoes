@@ -10,6 +10,7 @@ var wardName;
 var districtName;
 var provinceName;
 var houseNumber;
+var orderCode;
 fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
@@ -318,11 +319,6 @@ $(document).ready(function () {
     let quanHuyenVal;
     let tinhTP;
 
-    provinceArr.forEach(function (item) {
-        let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
-        ele_quanHuyen.append(html);
-    })
-
     ele_tinh.on('change', function () {
         tinhTP = ele_tinh.val();
         provinceName = ele_tinh.find("option:selected").text();
@@ -475,6 +471,7 @@ $(document).ready(function () {
                 }
             ),
             success: function (response) {
+                orderCode = response.data.order_code;
                 $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
                 $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
                 $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
@@ -562,6 +559,7 @@ $(document).ready(function () {
             ),
             success: function (response) {
                 console.log(response);
+                orderCode = response.data.order_code;
                 $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
                 $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
                 $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
@@ -654,6 +652,7 @@ $(document).ready(function () {
         console.log(orderNotes + "-" + totalAmount);
 
         var paymentDto = {
+            orderCode: orderCode,
             notes: orderNotes,
             total: total,
             shippingFee: shippingFee,

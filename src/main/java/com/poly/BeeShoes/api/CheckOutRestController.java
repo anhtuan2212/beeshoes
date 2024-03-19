@@ -66,6 +66,7 @@ public class CheckOutRestController {
         String customerName = jsonObject.get("customerName").getAsString();
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
+        String orderCode = jsonObject.get("orderCode").getAsString();
         HoaDon hoaDon = new HoaDon();
         if(request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
@@ -74,6 +75,7 @@ public class CheckOutRestController {
                 hoaDon.setKhachHang(khachHang);
             }
         }
+        hoaDon.setMaVanChuyen(orderCode);
         hoaDon.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));
@@ -147,6 +149,7 @@ public class CheckOutRestController {
         String customerName = jsonObject.get("customerName").getAsString();
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
+        String orderCode = jsonObject.get("orderCode").getAsString();
         HoaDon hoaDon = new HoaDon();
         if(request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
@@ -155,6 +158,7 @@ public class CheckOutRestController {
                 hoaDon.setKhachHang(khachHang);
             }
         }
+        hoaDon.setMaVanChuyen(orderCode);
         hoaDon.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgayTao(ConvertUtility.DateToTimestamp(new Date()));

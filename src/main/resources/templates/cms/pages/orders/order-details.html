@@ -1072,13 +1072,20 @@
                                 $('#xacNhanFromDetail').hide();
                                 $('#getAttrToHuyFromDetail').hide();
                                 $('#printOrder').removeClass('d-none');
-                            } else if (status == 'ChoXacNhan') {
-                                typeOfColor = 'danger';
                             } else if (status == 'ChuanBiHang') {
                                 typeOfColor = 'warning';
                                 $('#getAttrToHuyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').removeClass('d-none');
                                 $('#printOrder').removeClass('d-none');
+                            }  else if (status == 'ChoXacNhan') {
+                                typeOfColor = 'danger';
+                                $('#hoanTacFromDetail').hide();
+                            }  else if (status == 'ChoGiao') {
+                                typeOfColor = 'danger';
+                                $('#hoanTacFromDetail').hide();
+                            }  else if (status == 'DangGiao') {
+                                typeOfColor = 'danger';
+                                $('#hoanTacFromDetail').hide();
                             } else if (status == 'ThanhCong') {
                                 $('#xacNhanFromDetail').hide();
                                 $('#getAttrToHuyFromDetail').hide();
