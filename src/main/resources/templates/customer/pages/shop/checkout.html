@@ -105,6 +105,7 @@
                                     <p>Tên người nhận<span>*</span></p>
                                     <input type="text" id="customerName" th:value="${userLogged != null ? userLogged.khachHang.hoTen : ''}"
                                            placeholder="Ngô Trung Tuyến">
+                                    <span class="error-customerName text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -112,6 +113,7 @@
                                     <p>Số điện thoại<span>*</span></p>
                                     <input type="text" id="customerPhone" th:value="${userLogged != null ? userLogged.khachHang.sdt : ''}"
                                            placeholder="035xxxxxxx">
+                                    <span class="error-customerPhone text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +125,7 @@
                                         <select class="form-control" id="tinhThanhPho">
                                             <option id="provinceSelected" value="" selected>Tỉnh/Thành Phố</option>
                                         </select>
+                                        <span class="error-tinhThanhPho text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -131,6 +134,7 @@
                                         <select class="form-control" id="quanHuyen">
                                             <option id="districtSelected" value="" selected>Quận/Huyện</option>
                                         </select>
+                                        <span class="error-quanHuyen text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -139,12 +143,14 @@
                                         <select class="form-control" id="phuongXa">
                                             <option id="wardSelected" value="" selected>Phường/Xã</option>
                                         </select>
+                                        <span class="error-phuongXa text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Số Nhà<span>*</span></p>
                                         <input type="text" id="customerHouseNumber">
+                                        <span class="error-customerHouseNumber text-danger"></span>
                                     </div>
                                 </div>
                             </div>

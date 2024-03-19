@@ -64,7 +64,6 @@ public class HoaDonController {
         model.addAttribute("lichSuHoaDonList", lichSuHoaDonList);
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);
         model.addAttribute("hoaDon", hoaDon);
-        model.addAttribute("tongTien", tongTien);
         return "cms/pages/orders/order-details";
     }
 

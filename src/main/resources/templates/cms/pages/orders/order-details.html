@@ -180,13 +180,18 @@
                                 <dl class="row text-sm-right">
                                     <dt class="col-sm-6">Tổng tiền:</dt>
                                     <dd class="col-sm-6"
-                                        th:text="${#numbers.formatInteger(tongTien.intValue(), 0, 'COMMA')}"></dd>
+                                        th:text="${#numbers.formatInteger(hoaDon.tongTien.intValue(), 0, 'COMMA')}"></dd>
+                                    <th:block th:if="${hoaDon.voucher != null}">
+                                        <dt class="col-sm-6">Giảm giá: </dt>
+                                        <dd class="col-sm-6"
+                                            th:text="${#numbers.formatInteger(hoaDon.giamGia.intValue(), 0, 'COMMA')}"></dd>
+                                    </th:block>
                                     <dt class="col-sm-6">Phí ship: </dt>
                                     <dd class="col-sm-6"
                                         th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue(), 0, 'COMMA')}"></dd>
                                     <dt class="col-sm-6">Thực thu:</dt>
                                     <dd class="col-sm-6"
-                                        th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue() + tongTien, 0, 'COMMA')}"></dd>
+                                        th:text="${#numbers.formatInteger(hoaDon.thucThu.intValue(), 0, 'COMMA')}"></dd>
                                 </dl>
                                 <!-- End Row -->
                             </div>
