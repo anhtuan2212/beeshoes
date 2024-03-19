@@ -979,6 +979,21 @@
             Toast('error', message)
         }
 
+        function showLoader() {
+            Swal.fire({
+                title: 'Đang xử lý...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+        }
+
+        function hideLoader() {
+            Swal.close();
+        }
+
         // print
         function printTimeline(status, type) {
             let ul = $('#myTimeline');
@@ -1059,7 +1074,7 @@
                                 $('#printOrder').removeClass('d-none');
                             } else if (status == 'ChoXacNhan') {
                                 typeOfColor = 'danger';
-                            } else if (status == 'ChoGiao') {
+                            } else if (status == 'ChuanBiHang') {
                                 typeOfColor = 'warning';
                                 $('#getAttrToHuyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').removeClass('d-none');
@@ -1168,6 +1183,7 @@
         })
 
         $('#printOrder').on('click', function () {
+            showLoader();
             var items = [];
             var codAmount = 0;
             var customerName = document.querySelector('.customerName').textContent;
@@ -1250,7 +1266,7 @@
                             }
                         ),
                         success: function (responseSecond) {
-
+                            hideLoader();
                             console.log(responseSecond);
                             var token = responseSecond.data.token;
                             $.ajax({

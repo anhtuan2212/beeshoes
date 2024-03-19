@@ -6,6 +6,7 @@ import com.poly.BeeShoes.model.TrangThaiHoaDon;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     List<HoaDon> findAllByKhachHang(KhachHang khachHang,Sort sort);
 
     List<HoaDon> findByTrangThai(TrangThaiHoaDon trangThaiHoaDon);
+
+    List<HoaDon> findByNgayTaoBetweenAndTrangThai(Timestamp startDate, Timestamp endDate, TrangThaiHoaDon trangThaiHoaDon);
 
 //    List<HoaDon> findByTrangThai(String trangThai);
 

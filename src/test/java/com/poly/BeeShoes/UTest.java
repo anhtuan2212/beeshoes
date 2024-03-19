@@ -1,16 +1,19 @@
 package com.poly.BeeShoes;
 
-import com.poly.BeeShoes.model.HangKhachHang;
-import com.poly.BeeShoes.model.NhanVien;
-import com.poly.BeeShoes.model.User;
+import com.poly.BeeShoes.model.*;
+import com.poly.BeeShoes.repository.HoaDonRepository;
 import com.poly.BeeShoes.repository.NhanVienRepository;
 import com.poly.BeeShoes.repository.UserRepository;
 import com.poly.BeeShoes.service.HangKhachHangService;
+import com.poly.BeeShoes.utility.ConvertUtility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -21,6 +24,21 @@ public class UTest {
 
     @Autowired
     private NhanVienRepository nhanVienRepository;
+
+    @Autowired
+    private HoaDonRepository hoaDonRepository;
+
+    @Test
+    public void invoice() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        java.sql.Date date= java.sql.Date.valueOf(yesterday);
+        List<HoaDon> hoaDonList =
+                hoaDonRepository.findByNgayTaoBetweenAndTrangThai(
+                        ConvertUtility.DateToTimestamp(new Date()),
+                        ConvertUtility.DateToTimestamp(new Date(date.getTime())),
+                        TrangThaiHoaDon.ChoXacNhan);
+        hoaDonList.forEach(hoaDon -> System.out.println(hoaDon.getMaHoaDon() + " "));
+    }
 
     @Test
     public void testHKH() {
