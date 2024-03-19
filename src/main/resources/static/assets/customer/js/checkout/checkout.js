@@ -2,7 +2,7 @@ setTabsHeader('shop');
 var provinceArr = [];
 var districtArr = [];
 var wardArr = [];
-let arrXa=[];
+let arrXa = [];
 var ward;
 var district;
 var province;
@@ -34,7 +34,7 @@ fetch('/assets/address-json/province.json')
             .then(data => {
                 wardArr = data;
                 arrXa = [...data];
-                localStorage.setItem('arrXa',JSON.stringify(arrXa))
+                localStorage.setItem('arrXa', JSON.stringify(arrXa))
                 console.log(data);
                 if (username !== undefined) {
                     callApiShippingFee();
@@ -42,7 +42,6 @@ fetch('/assets/address-json/province.json')
             });
     })
     .catch(error => console.error('Error:', error));
-
 
 
 function callApiShippingFee() {
@@ -295,7 +294,7 @@ $(document).on('click', '#btn-addAddress', function () {
 })
 
 $('#newDistrict').on('change', function () {
-    let qh =$('#newDistrict').val();
+    let qh = $('#newDistrict').val();
     console.log(qh)
     let arr = JSON.parse(localStorage.getItem('arrXa'))
     console.log(arr)
@@ -308,7 +307,7 @@ $('#newDistrict').on('change', function () {
         }
     })
     $('#newWard').niceSelect('update');
-    districtName =$('#newDistrict').find("option:selected").text();
+    districtName = $('#newDistrict').find("option:selected").text();
 })
 $(document).ready(function () {
     let ele_quanHuyen = $('#newDistrict');
@@ -567,6 +566,50 @@ $(document).ready(function () {
     })
 
     $('#placeOrder').on('click', function () {
+        const regex = /^[0-9]*$/;
+        if (
+            $('#customerName').val() == '' || $('#customerName').val() == undefined ||
+            $('#customerPhone').val() == '' || $('#customerPhone').val() == undefined ||
+            $('#tinhThanhPho').val() == '' || $('#tinhThanhPho').val() == undefined ||
+            $('#quanHuyen').val() == '' || $('#quanHuyen').val() == undefined ||
+            $('#phuongXa').val() == '' || $('#phuongXa').val() == undefined ||
+            $('#customerHouseNumber').val() == '' || $('#customerHouseNumber').val() == undefined
+        ) {
+            $('.error-customerName').text('Không được để trống');
+            $('.error-customerPhone').text('Không được để trống');
+            $('.error-tinhThanhPho').text('Không được để trống');
+            $('.error-quanHuyen').text('Không được để trống');
+            $('.error-phuongXa').text('Không được để trống');
+            $('.error-customerHouseNumber').text('Không được để trống');
+            return;
+        } else if ($('#customerName').val() == '' || $('#customerName').val() == undefined) {
+            $('.error-customerName').text('Không được để trống');
+            return;
+        } else if ($('#customerPhone').val() == '' || $('#customerPhone').val() == undefined) {
+            $('.error-customerPhone').text('Không được để trống');
+            return;
+        } else if (!regex.test($('#customerPhone').val())) {
+            $('.error-customerPhone').text('Số điện thoại không đúng định dạng');
+            return;
+        } else if ($('#tinhThanhPho').val() == '' || $('#tinhThanhPho').val() == undefined) {
+            $('.error-tinhThanhPho').text('Không được để trống');
+            return;
+        } else if ($('#quanHuyen').val() == '' || $('#quanHuyen').val() == undefined) {
+            $('.error-quanHuyen').text('Không được để trống');
+            return;
+        } else if ($('#phuongXa').val() == '' || $('#phuongXa').val() == undefined) {
+            $('.error-phuongXa').text('Không được để trống');
+            return;
+        } else if ($('#customerHouseNumber').val() == '' || $('#customerHouseNumber').val() == undefined) {
+            $('.error-customerHouseNumber').text('Không được để trống');
+            return;
+        }
+        $('.error-customerName').text('');
+        $('.error-customerPhone').text('');
+        $('.error-tinhThanhPho').text('');
+        $('.error-quanHuyen').text('');
+        $('.error-phuongXa').text('');
+        $('.error-customerHouseNumber').text('');
         var total = parseInt($('#total').text().replace(/[,.]/g, ''));
         var voucherValue = 0;
         if (!isNaN(parseInt($('#voucherValue').text().replace(/[,.]/g, '')))) {
@@ -647,5 +690,4 @@ $(document).ready(function () {
             })
         }
     })
-
 })
