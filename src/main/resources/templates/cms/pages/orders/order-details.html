@@ -98,7 +98,7 @@
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}" id="getAttrToHuyFromDetail" type="button" class="btn btn-sm btn-outline-danger mr-1" data-toggle="modal" data-target="#modalCancelReasons">
+                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChuanBiHang'}" id="getAttrToHuyFromDetail" type="button" class="btn btn-sm btn-outline-danger mr-1" data-toggle="modal" data-target="#staticBackdrop">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
                 <button class="btn btn-sm btn-outline-primary d-none"
@@ -245,31 +245,6 @@
                     </div>
                 </div>
                 <!-- End Modal History -->
-
-                <!-- Modal Cancel Invoice-->
-                <div class="modal fade" id="modalCancelReasons" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalCenterTitle">Lý do hủy đơn hàng</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" id="inputReason">
-                                <textarea id="dataInputReason" style="border: 1px solid #e1e1e1;" rows="5" cols="44"></textarea>
-                                <span id="notiInputReason" class="text-danger d-none">Không được để trống!</span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                                <button id="huyFromDetail" type="button" class="btn btn-sm btn-danger d-none" data-dismiss="modal">
-                                    <i class="tio-delete-outlined"></i> Hủy
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Modal Cancel Invoice -->
             </div>
 
             <div class="col-lg-4">
@@ -859,7 +834,50 @@
         </div>
     </div>
 </div>
-<iframe id="myPrintInvoice" class="d-none"></iframe>
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 420px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Lý Do Hủy Đơn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pl-5">
+                <input type="text" hidden="hidden" id="id_oders_cancel">
+                <div class="w-100">
+                    <input id="lg1" type="radio" name="cancel" value="Tôi muốn cập nhật địa chỉ/sđt nhận hàng.">
+                    <label class="pointer" for="lg1">Tôi muốn cập nhật địa chỉ/sđt nhận hàng.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg2" type="radio" name="cancel" value="Tôi muốn thêm/thay đổi Mã giảm giá.">
+                    <label class="pointer" for="lg2">Tôi muốn thêm/thay đổi Mã giảm giá.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg3" type="radio" name="cancel" value="Tôi muốn thay đổi sản phẩm.">
+                    <label class="pointer" for="lg3">Tôi muốn thay đổi sản phẩm.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg4" type="radio" name="cancel" value="Tôi không có nhu cầu mua nữa.">
+                    <label class="pointer" for="lg4">Tôi không có nhu cầu mua nữa.</label>
+                </div>
+                <div class="w-100">
+                    <input id="lg5" type="radio" name="cancel" value="#">
+                    <label class="pointer" for="lg5">Khác</label>
+                </div>
+                <div class="w-100">
+                    <textarea class="w-75 d-none " id="lydo_cancel" rows="2"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
+                <button id="huyFromDetail" type="button" class="btn primary-btn">Hủy Đơn</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- End Export Orders Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
@@ -873,6 +891,91 @@
 
 <!-- JS Plugins Init. -->
 <script>
+    function Toast(status, message) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+            customClass: {
+                popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
+            }
+        });
+        Toast.fire({
+            icon: status,
+            title: message
+        });
+    }
+
+    function ToastSuccess(message) {
+        Toast('success', message)
+    }
+
+    function ToastError(message) {
+        Toast('error', message)
+    }
+
+    function showLoader() {
+        Swal.fire({
+            title: 'Đang xử lý...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading()
+            }
+        });
+    }
+
+    function hideLoader() {
+        Swal.close();
+    }
+
+    // print
+    function printTimeline(status, type) {
+        let ul = $('#myTimeline');
+        let li = document.createElement('li');
+        li.className = 'timeline-item';
+        let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">${status}</h4>
+                            </div>
+                        </div>`;
+        li.innerHTML = html;
+        ul.append(li);
+    }
+
+    function printHistory(thoiGian, nguoiThucHien, hanhDong) {
+        let ul = $('#myHistory');
+        let li = document.createElement('li');
+        li.className = 'step-item';
+        let html = `<div class="step-content-wrapper">
+                <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                <div class="step-content">
+                    <h5 class="mb-1">
+                        <a class="text-dark" href="#">${hanhDong}</a>
+                    </h5>
+                    <p class="font-size-sm mb-0">Thực hiện bởi: <h6>${nguoiThucHien}</h6> Thời gian thực hiện: <h6>${thoiGian}</h6></p>
+                </div>
+            </div>`;
+        li.innerHTML = html;
+        ul.append(li);
+    }
+
+    function printStatusHeader(typeOfColor, status) {
+        let div = $('.trangThaiHeader');
+        let html = `<span class="badge badge-soft-${typeOfColor}">Trạng Thái: ${status}
+                  <span class="legend-indicator bg-${typeOfColor}"></span>
+                </span>`;
+        div.html('');
+        div.append(html);
+    }
+
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
@@ -950,91 +1053,6 @@
 
     $(document).on('ready', function () {
 
-        function Toast(status, message) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                },
-                customClass: {
-                    popup: 'custom-toast-class', // Thêm lớp CSS tùy chỉnh
-                }
-            });
-            Toast.fire({
-                icon: status,
-                title: message
-            });
-        }
-
-        function ToastSuccess(message) {
-            Toast('success', message)
-        }
-
-        function ToastError(message) {
-            Toast('error', message)
-        }
-
-        function showLoader() {
-            Swal.fire({
-                title: 'Đang xử lý...',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading()
-                }
-            });
-        }
-
-        function hideLoader() {
-            Swal.close();
-        }
-
-        // print
-        function printTimeline(status, type) {
-            let ul = $('#myTimeline');
-            let li = document.createElement('li');
-            li.className = 'timeline-item';
-            let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">${status}</h4>
-                            </div>
-                        </div>`;
-            li.innerHTML = html;
-            ul.append(li);
-        }
-
-        function printHistory(thoiGian, nguoiThucHien, hanhDong) {
-            let ul = $('#myHistory');
-            let li = document.createElement('li');
-            li.className = 'step-item';
-            let html = `<div class="step-content-wrapper">
-                <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
-                <div class="step-content">
-                    <h5 class="mb-1">
-                        <a class="text-dark" href="#">${hanhDong}</a>
-                    </h5>
-                    <p class="font-size-sm mb-0">Thực hiện bởi: <h6>${nguoiThucHien}</h6> Thời gian thực hiện: <h6>${thoiGian}</h6></p>
-                </div>
-            </div>`;
-            li.innerHTML = html;
-            ul.append(li);
-        }
-
-        function printStatusHeader(typeOfColor, status) {
-            let div = $('.trangThaiHeader');
-            let html = `<span class="badge badge-soft-${typeOfColor}">Trạng Thái: ${status}
-                  <span class="legend-indicator bg-${typeOfColor}"></span>
-                </span>`;
-            div.html('');
-            div.append(html);
-        }
-
         // handle timeline
         $('#xacNhanFromDetail').on('click', function () {
             var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
@@ -1072,16 +1090,17 @@
                                 $('#xacNhanFromDetail').hide();
                                 $('#getAttrToHuyFromDetail').hide();
                                 $('#printOrder').removeClass('d-none');
-                            } else if (status == 'ChuanBiHang') {
-                                typeOfColor = 'warning';
-                                $('#getAttrToHuyFromDetail').addClass('d-none');
-                                $('#hoanTacFromDetail').removeClass('d-none');
-                                $('#printOrder').removeClass('d-none');
-                            }  else if (status == 'ChoXacNhan') {
+                            } else if (status == 'ChoXacNhan') {
                                 typeOfColor = 'danger';
                                 $('#hoanTacFromDetail').hide();
-                            }  else if (status == 'ChoGiao') {
+                            } else if (status == 'ChuanBiHang') {
+                                typeOfColor = 'warning';
+                                $('#getAttrToHuyFromDetail').removeClass('d-none');
+                                $('#hoanTacFromDetail').removeClass('d-none');
+                                $('#printOrder').removeClass('d-none');
+                            } else if (status == 'ChoGiao') {
                                 typeOfColor = 'danger';
+                                $('#getAttrToHuyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').hide();
                             }  else if (status == 'DangGiao') {
                                 typeOfColor = 'danger';
@@ -1105,48 +1124,6 @@
                 }
             });
         });
-
-        $('#dataInputReason').on('input', function () {
-            var dataInput = $(this).val().trim();
-            if(dataInput == '') {
-                $('#notiInputReason').removeClass('d-none');
-                $('#huyFromDetail').addClass('d-none');
-            } else {
-                $('#notiInputReason').addClass('d-none');
-                $('#huyFromDetail').removeClass('d-none');
-            }
-        })
-
-        $('#huyFromDetail').on('click', function () {
-            var idHoaDon = String($('#getAttrToHuyFromDetail').closest("div").attr("id-hoa-don"));
-            $.ajax({
-                type: "POST",
-                url: "/api/hoa-don/huy-detail",
-                contentType: "application/json",
-                data: {
-                    id:idHoaDon,
-                    lydo:'Thích Thì Hủy'
-                },
-                success: function (response) {
-                    console.log(response);
-                    ToastSuccess('Hủy đơn hàng thành công');
-                    let type = 'danger';
-                    let status = 'Hủy';
-                    let nguoiThucHien = response.nguoiThucHien;
-                    let thoiGian = response.thoiGian;
-                    let hanhDong = response.hanhDong;
-                    $('#xacNhanFromDetail').hide();
-                    $('#getAttrToHuyFromDetail').hide();
-                    printStatusHeader(type, status);
-                    printTimeline(status, type);
-                    printHistory(thoiGian, nguoiThucHien, hanhDong);
-                },
-                error: function (error) {
-                    ToastError('Xảy ra lỗi khi hủy đơn hàng, vui lòng thử lại!')
-                    console.error('Xảy ra lỗi: ', error);
-                }
-            });
-        })
 
         // reverse status
         $('#hoanTacFromDetail').on('click', function () {
@@ -1316,7 +1293,61 @@
             }
         }
 
-    });
+    })
+
+    $(document).on('click', '#dataInputReason',function () {
+        $('#staticBackdrop').modal('show');
+    })
+
+    $(document).on('change', '[name="cancel"]',function () {
+        let val = $(this).val()
+        let element = $('#lydo_cancel');
+        if (val == '#') {
+            element.css('animation-name', 'showForm');
+            element.removeClass('d-none').addClass('showForm');
+        } else {
+            element.css('animation-name', 'hideForm');
+            element.removeClass('showForm').addClass('hideForm');
+            setTimeout(function () {
+                element.addClass('d-none').removeClass('hideForm');
+            }, 400);
+        }
+    })
+    $(document).on('click', '#huyFromDetail',function () {
+        $('#staticBackdrop').modal('hide');
+        var idHoaDon = String($('#getAttrToHuyFromDetail').closest("div").attr("id-hoa-don"));
+        let lydo = $('[name="cancel"]:checked').val();
+        if (lydo == '#') {
+            lydo = $('#lydo_cancel').text();
+        }
+        $.ajax({
+            type: "POST",
+            url: "/api/hoa-don/huy-detail",
+            data: {
+                id: idHoaDon,
+                lydo: lydo
+            },
+            success: function (response) {
+                console.log(response);
+                ToastSuccess('Hủy đơn hàng thành công');
+                let type = 'danger';
+                let status = 'Hủy';
+                let nguoiThucHien = response.nguoiThucHien;
+                let thoiGian = response.thoiGian;
+                let hanhDong = response.hanhDong;
+                $('#xacNhanFromDetail').hide();
+                $('#getAttrToHuyFromDetail').hide();
+                printStatusHeader(type, status);
+                printTimeline(status, type);
+                printHistory(thoiGian, nguoiThucHien, hanhDong);
+            },
+            error: function (error) {
+                ToastError('Xảy ra lỗi khi hủy đơn hàng, vui lòng thử lại!')
+                console.error('Xảy ra lỗi: ', error);
+            }
+        });
+    })
+
 </script>
 <script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <!-- IE Support -->
