@@ -1,5 +1,8 @@
 setTabsHeader('pages');
 $(document).ready(function () {
+
+    $('#updateInformationModal').modal('show');
+
     $(document).on('click', '#btn-show-update', function () {
         if ($(this).data('update') == 0) {
             $('.content_product').removeClass('col-7').addClass('col-6')
@@ -144,7 +147,11 @@ $(document).ready(function () {
             }
         })
         $(kichCo).niceSelect('update');
-        $('#preview-img').attr('src', url);
+        if (mauSac.val() === '#') {
+            $('#preview-img').attr('src', '/assets/customer/img/icon/user.png');
+        } else {
+            $('#preview-img').attr('src', url);
+        }
     })
     $(document).on('click', '.btn-delete', function () {
         let li = $(this).closest('li.row');
@@ -233,7 +240,7 @@ $(document).ready(function () {
         if (mauSac === '#' || mauSac.length === 0) {
             ToastError('Vui lòng chọn màu.')
         }
-        if (kicCo.length === 0) {
+        if (kicCo.length === 0 || kicCo === '#') {
             ToastError('Vui lòng chọn cỡ.')
         }
         if (soLuong.length === 0 || Number(soLuong) < 1) {

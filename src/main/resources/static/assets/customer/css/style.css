@@ -4262,7 +4262,7 @@ body {
     background-color: #fff;
     -webkit-tap-highlight-color: transparent;
     border: solid 1px #e8e8e8;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     clear: both;
     box-sizing: border-box;
     display: block;
@@ -4280,4 +4280,36 @@ body {
     text-align: left !important;
     white-space: nowrap;
     width: auto;
+}
+
+.hidden {
+    opacity: 0 !important;
+    display: none !important;
+}
+
+.text-update {
+    background: none;
+    border: 0;
+    color: #05a !important;
+    outline: none;
+    text-decoration: underline !important;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.text-update:hover {
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.btn-edit-tracking {
+    border-radius: 35px;
+    width: 30px;
+    height: 30px;
+    padding-left: 0;
+    border: none;
+}
+
+.btn-edit-tracking:hover {
+    background-color: #7b7b7b;
 }
