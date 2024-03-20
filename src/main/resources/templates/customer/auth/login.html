@@ -77,7 +77,7 @@
                     <form id="form-login" th:action="@{/login-handle}" th:object="${loginDto}" method="post">
                         <div class="mt-3">
                             <label for="email">Email</label>
-                            <input th:field="*{email}" type="email" id="email" placeholder="Vui lòng nhập email" required>
+                            <input th:field="*{email}" type="email" id="email" placeholder="Vui lòng nhập email" autocomplete="email" autofocus required>
                             <div class="text-danger" th:if="${#fields.hasErrors()}" th:errors="*{email}"></div>
                             <div class="text-danger" id="text_error_email"></div>
                         </div>

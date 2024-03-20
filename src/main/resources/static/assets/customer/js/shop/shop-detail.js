@@ -5,12 +5,17 @@ $(document).ready(function () {
     })
 })
 $(document).ready(function () {
-    $('#quantity-selected').on('input', function() {
-        let value = parseInt($(this).val());
-        if (isNaN(value) || value < 0) {
-            $(this).val('');
-        }
+    $('#quantity-selected').inputmask({
+        mask: '9',
+        repeat: 2,
+        greedy: false,
+        numericInput: true,
+        placeholder: '',
+        showMaskOnFocus: false,
+        showMaskOnHover: false,
+        min: 1,
     });
+
     // Khi click vào ảnh
     $('#openFancybox').click(function () {
         // Lấy danh sách ảnh từ tất cả các phần tử có thuộc tính data-setbg

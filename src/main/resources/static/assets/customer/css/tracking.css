@@ -25,12 +25,21 @@
     max-width: 100vh;
 }
 
+.nice-select {
+    border-radius: 0;
+}
+
 .wraper-search {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
 }
-
+.modal-content {
+    border-radius: 0;
+}
+.btn {
+    border-radius: 0;
+}
 .text-error {
     font-weight: 700;
 }

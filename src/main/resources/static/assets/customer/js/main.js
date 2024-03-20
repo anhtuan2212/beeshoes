@@ -574,16 +574,39 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
 		Radio Btn
 	--------------------- */
     let product_id = '';
-    $(document).on('click', ".product__color__select label, .product__details__option__size label", function () {
-        $(".product__color__select label,.product__details__option__size label").removeClass('active');
+    $(document).on('click', ".product__details__option__size label", function () {
+        $(".product__details__option__size label").removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $(document).on('click', ".product__color__select label", function () {
+        $(".product__color__select label").removeClass('active');
         $(this).addClass('active');
         let id = $(this).closest('.product__item').data('product-id');
         if (product_id !== id) {
             product_id = id;
             $(".label_select_size").removeClass('active');
         }
+        let parent = $(this).closest('.product__item');
+        parent.find('.product__option__size label').addClass('hidden');
+        let product = dataShop.find(item => item.id === id);
+        let color = $(this).find('input').val();
+        if (Array.isArray(product.chiTietSanPham)) {
+            product.chiTietSanPham.forEach((ctsp) => {
+                if (ctsp.mauSac == color) {
+                    let element = parent.find('.product__option__size label').filter(function () {
+                        return $(this).find('input').val() === `${ctsp.kichCo}`;
+                    });
+                    element.removeClass('hidden');
+                }
+            })
+            let ele_size = parent.find('.label_select_size.active');
+            console.log(ele_size)
+            if (ele_size.length > 0 && ele_size.hasClass('hidden')) {
+                ele_size.removeClass('active');
+            }
+        }
     });
-
     $(document).on('click', ".label_select_size", function () {
         $(".label_select_size").removeClass('active');
         $(this).addClass('active');
@@ -592,7 +615,28 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
             product_id = id;
             $(".product__color__select label").removeClass('active');
         }
+        let parent = $(this).closest('.product__item');
+        parent.find('.product__color__select label').addClass('hidden');
+        let product = dataShop.find(item => item.id === id);
+        let size = $(this).find('input').val();
+        if (Array.isArray(product.chiTietSanPham)) {
+            product.chiTietSanPham.forEach((ctsp) => {
+                if (ctsp.kichCo == size) {
+                    let element = parent.find('.product__color__select label').filter(function () {
+                        return $(this).find('input').val() === `${ctsp.mauSac}`;
+                    });
+                    console.log(element)
+                    element.removeClass('hidden');
+                }
+            })
+            let ele_color = parent.find('.product__color__select label.active');
+            console.log(ele_color)
+            if (ele_color.length > 0 && ele_color.hasClass('hidden')) {
+                ele_color.removeClass('active');
+            }
+        }
     });
+
     $(document).on('click', '.btn-add-to-cart', function () {
         let element = $(this).closest('.product__item');
         let size = element.find('.product__option__size').find('.active')
@@ -620,6 +664,10 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
                 product_detail = ctsp;
                 break;
             }
+        }
+        if (product_detail === null) {
+            ToastError('Phiên bản hiện tại tạm dừng bán.');
+            return;
         }
         if (Number(product_detail.soLuongTon) === 0) {
             ToastError('Phiên bản hiện tại tạm hết hàng.');
