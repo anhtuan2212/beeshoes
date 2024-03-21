@@ -42,7 +42,7 @@ public class VoucherImpl implements VoucherService {
 
     @Override
     public List<Voucher> getAllByTrangThai(Integer trangthai) {
-        return voucherResponsitory.findAllByTrangThai(trangthai);
+        return voucherResponsitory.findAllByTrangThaiAndSoLuongGreaterThan(trangthai,0);
     }
 
     @Override
@@ -166,7 +166,6 @@ public class VoucherImpl implements VoucherService {
         Integer start = (int) pageable.getOffset();
         Integer end = (int) ((pageable.getOffset() + pageable.getPageSize()) > vouchers.size()
                 ? vouchers.size() : pageable.getOffset() + pageable.getPageSize());
-
         return new PageImpl<Voucher>(vouchers.subList(start, end), pageable, vouchers.size());
     }
 
@@ -176,25 +175,22 @@ public class VoucherImpl implements VoucherService {
         for (Voucher voucher : vouchers) {
             Timestamp ngayBatDauTimestamp = voucher.getNgayBatDau();
             Timestamp ngayKetThucTimestamp = voucher.getNgayKetThuc();
-
+            if (voucher.getSoLuong() < 1) {
+                voucher.setTrangThai(3);
+                voucherResponsitory.save(voucher);
+            }
             if (ngayBatDauTimestamp != null && ngayKetThucTimestamp != null) {
                 if (now.isAfter(voucher.getNgayBatDau().toLocalDateTime()) && now.isBefore(voucher.getNgayKetThuc().toLocalDateTime())) {
                     if (voucher.getTrangThai() == 1) {
                         voucher.setTrangThai(2);
                         voucherResponsitory.save(voucher);
-                        System.out.println("Start :" + voucher.getTen());
                     }
                 } else if (now.isAfter(voucher.getNgayKetThuc().toLocalDateTime())) {
                     if (voucher.getTrangThai() == 2) {
-                        System.out.println("End :" + voucher.getTen());
                         voucher.setTrangThai(3);
                         voucherResponsitory.save(voucher);
                     }
-                } else if (voucher.getSoLuong() < 1) {
-                    voucher.setTrangThai(3);
-                    voucherResponsitory.save(voucher);
                 }
-
             }
         }
     }

@@ -4313,3 +4313,16 @@ body {
 .btn-edit-tracking:hover {
     background-color: #7b7b7b;
 }
+.title_voucher{
+    color: black;
+    width: 100%;
+    border-bottom: 1px solid;
+    padding-bottom: 0;
+}
+.title_voucher:hover{
+    color: #0a1123;
+}
+.title_voucher button{
+    padding-bottom: 0;
+    padding-left: 0;
+}

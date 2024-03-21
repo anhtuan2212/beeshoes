@@ -1,39 +1,30 @@
 package com.poly.BeeShoes.api;
 
-import com.poly.BeeShoes.model.ChatLieu;
-import com.poly.BeeShoes.model.ThuongHieu;
-import com.poly.BeeShoes.model.User;
-import com.poly.BeeShoes.service.ChatLieuService;
-import com.poly.BeeShoes.service.ChiTietSanPhamService;
-import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.Session;
+import com.poly.BeeShoes.model.TheLoai;
+import com.poly.BeeShoes.service.SanPhamService;
+import com.poly.BeeShoes.service.TheLoaiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class ChatLieuApi {
-    private final ChatLieuService chatLieuService;
-    private final ChiTietSanPhamService chiTietSanPhamService;
-    @DeleteMapping("/xoa-chat-lieu")
+public class TheLoaiRestController {
+    private final TheLoaiService theLoaiService;
+    private final SanPhamService sanPhamService;
+    @DeleteMapping("/xoa-the-loai")
     public ResponseEntity xoaChatLieu(@RequestParam(value = "id") Long id) {
         boolean st = false;
-        ChatLieu cl = chatLieuService.getById(id);
-        if (chiTietSanPhamService.existsByChatLieu(cl)) {
+        TheLoai cl = theLoaiService.getById(id);
+        if (sanPhamService.exitsByTheLoai(cl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
         }
         if (id != null) {
-            st = chatLieuService.delete(id);
+            st = theLoaiService.delete(id);
         }
         if (st) {
             return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);
@@ -41,27 +32,28 @@ public class ChatLieuApi {
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(null);
     }
 
-    @PostMapping("/them-chat-lieu")
-    public ResponseEntity<ChatLieu> themThuongHieu(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
-        ChatLieu th = new ChatLieu();
+    @PostMapping("/them-the-loai")
+    public ResponseEntity<TheLoai> themThuongHieu(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
+        TheLoai th = new TheLoai();
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
         if (trangThai==null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
+
         if (id != null) {
-            if (chatLieuService.existsByTen(ten,id)) {
+            if (theLoaiService.existsByTen(ten,id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (chatLieuService.existsByTen(ten,null)) {
+            if (theLoaiService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }
 
-        if (id != null) {
-            th = chatLieuService.getById(id);
+        if (id !=null) {
+            th = theLoaiService.getById(id);
             th.setNgaySua(Timestamp.from(Instant.now()));
         } else {
             th.setNgaySua(Timestamp.from(Instant.now()));
@@ -69,7 +61,7 @@ public class ChatLieuApi {
         }
         th.setTrangThai(trangThai);
         th.setTen(ten);
-        ChatLieu sp = chatLieuService.save(th);
+        TheLoai sp = theLoaiService.save(th);
         if (sp.getNguoiTao() != null) {
             sp.setCreate(sp.getNguoiTao().getNhanVien().getMaNhanVien());
         } else {

@@ -1,9 +1,8 @@
-
 package com.poly.BeeShoes.api;
 
-import com.poly.BeeShoes.model.ThuongHieu;
-import com.poly.BeeShoes.service.SanPhamService;
-import com.poly.BeeShoes.service.ThuongHieuService;
+import com.poly.BeeShoes.model.DeGiay;
+import com.poly.BeeShoes.service.ChiTietSanPhamService;
+import com.poly.BeeShoes.service.DeGiayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,33 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class ThuongHieuApi {
-    private final ThuongHieuService thuongHieuService;
-    private final SanPhamService sanPhamService;
-
-    @DeleteMapping("/xoa-thuong-hieu")
-    public ResponseEntity xoaThuongHieu(@RequestParam(value = "id") Long id) {
-        boolean st = false;
-        ThuongHieu cl = thuongHieuService.getById(id);
-        if (sanPhamService.exitsByThuongHieu(cl)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
-        }
-        if (id != null) {
-            st = thuongHieuService.delete(id);
-        }
-        if (st) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(null);
-    }
-
-    @PostMapping("/them-thuong-hieu")
-    public ResponseEntity<ThuongHieu> themThuongHieu(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
-        ThuongHieu th = new ThuongHieu();
+public class DeGiayRestController {
+    private final DeGiayService deGiayService;
+    private final ChiTietSanPhamService chiTietSanPhamService;
+    @PostMapping("/them-de-giay")
+    public ResponseEntity<DeGiay> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
+        DeGiay th = new DeGiay();
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
@@ -45,17 +26,17 @@ public class ThuongHieuApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
         if (id != null) {
-            if (thuongHieuService.existsByTen(ten,id)) {
+            if (deGiayService.existsByTen(ten,id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (thuongHieuService.existsByTen(ten,null)) {
+            if (deGiayService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }
 
         if (id != null) {
-            th = thuongHieuService.getById(id);
+            th = deGiayService.getById(id);
             th.setNgaySua(Timestamp.from(Instant.now()));
         } else {
             th.setNgaySua(Timestamp.from(Instant.now()));
@@ -63,7 +44,7 @@ public class ThuongHieuApi {
         }
         th.setTrangThai(trangThai);
         th.setTen(ten);
-        ThuongHieu sp = thuongHieuService.save(th);
+        DeGiay sp = deGiayService.save(th);
         if (sp.getNguoiTao() != null) {
             sp.setCreate(sp.getNguoiTao().getNhanVien().getMaNhanVien());
         } else {
@@ -81,5 +62,20 @@ public class ThuongHieuApi {
             return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
+    }
+    @DeleteMapping("/xoa-de-giay")
+    public ResponseEntity xoa(@RequestParam(value = "id") Long id) {
+        boolean st = false;
+        DeGiay cl = deGiayService.getById(id);
+        if (chiTietSanPhamService.existsByDeGiay(cl)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
+        }
+        if (id != null) {
+            st = deGiayService.delete(id);
+        }
+        if (st) {
+            return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(null);
     }
 }

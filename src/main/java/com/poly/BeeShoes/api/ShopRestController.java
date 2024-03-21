@@ -6,7 +6,6 @@ import com.poly.BeeShoes.request.GioHangRequest;
 import com.poly.BeeShoes.request.chiTietSanPhamApiRquest;
 import com.poly.BeeShoes.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class ShopAPI {
+public class ShopRestController {
     private final ChiTietSanPhamService chiTietSanPhamService;
     private final GioHangService gioHangService;
     private final GioHangChiTietService gioHangChiTietService;
@@ -123,7 +122,7 @@ public class ShopAPI {
         }
         List<Voucher> lst = voucherService.getAllByTrangThai(2);
         lstHD.forEach((hoaDon -> {
-            lst.removeIf(v -> v.equals(hoaDon.getVoucher()));
+            lst.removeIf(v -> v.equals(hoaDon.getVoucher()) && v.getSoLuong()<1);
         }));
         for (Voucher vc : lst) {
             vc.setNguoiSua(null);

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class AnhApi {
+public class AnhRestController {
     private final AnhService anhService;
     private final ChiTietSanPhamService chiTietSanPhamService;
     @DeleteMapping("/delete-anh")

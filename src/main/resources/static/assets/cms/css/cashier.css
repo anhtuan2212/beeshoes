@@ -1,0 +1,61 @@
+/*
+=========================================================
+* Tẩn Láo Lù
+=========================================================
+
+* Code version: 1.0
+* Copyright 2024 anhtuanlc (https://anhtuanlc.online)
+* Licensed under MIT (https://anhtuanlc.online)
+* Coded by anhtuanlc
+
+=========================================================
+ */
+.btn-add-new-bill {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.nav-oder .nav-item a {
+    font-weight: 600;
+}
+
+.form-quantity {
+    padding: 0.4rem 0.4rem;
+
+}
+
+.input-group-quantity-counter {
+    width: 6.5rem !important;
+}
+
+.btn-scan-barcode {
+    white-space: nowrap;
+    margin-left: 5px;
+}
+
+.card-header-title {
+    float: right;
+}
+
+.money-dv {
+    right: 10px !important;
+}
+
+.input-group-merge input {
+    width: 150px !important;
+}
+
+.avatar-lg {
+    background-color: #f3f3f3;
+}
+.custom-select {
+    border: none !important;
+}
+.btn-delete-oder{
+    color: #adadad;
+}
+.btn-delete-oder:hover{
+    color: #423636;
+    font-weight: 500;
+}

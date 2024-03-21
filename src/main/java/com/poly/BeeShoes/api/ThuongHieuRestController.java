@@ -1,9 +1,9 @@
+
 package com.poly.BeeShoes.api;
 
-import com.poly.BeeShoes.library.LibService;
-import com.poly.BeeShoes.model.Tags;
+import com.poly.BeeShoes.model.ThuongHieu;
 import com.poly.BeeShoes.service.SanPhamService;
-import com.poly.BeeShoes.service.TagsService;
+import com.poly.BeeShoes.service.ThuongHieuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,29 @@ import java.time.Instant;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class TagsApi {
-    private final TagsService tagsService;
-    @PostMapping("/them-tags")
-    public ResponseEntity<Tags> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
-        Tags th = new Tags();
-        ten = LibService.convertNameTags(ten);
+public class ThuongHieuRestController {
+    private final ThuongHieuService thuongHieuService;
+    private final SanPhamService sanPhamService;
+
+    @DeleteMapping("/xoa-thuong-hieu")
+    public ResponseEntity xoaThuongHieu(@RequestParam(value = "id") Long id) {
+        boolean st = false;
+        ThuongHieu cl = thuongHieuService.getById(id);
+        if (sanPhamService.exitsByThuongHieu(cl)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
+        }
+        if (id != null) {
+            st = thuongHieuService.delete(id);
+        }
+        if (st) {
+            return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(null);
+    }
+
+    @PostMapping("/them-thuong-hieu")
+    public ResponseEntity<ThuongHieu> themThuongHieu(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
+        ThuongHieu th = new ThuongHieu();
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
@@ -28,16 +45,17 @@ public class TagsApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
         if (id != null) {
-            if (tagsService.existsByTen(ten,id)) {
+            if (thuongHieuService.existsByTen(ten,id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (tagsService.existsByTen(ten,null)) {
+            if (thuongHieuService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }
+
         if (id != null) {
-            th = tagsService.getById(id);
+            th = thuongHieuService.getById(id);
             th.setNgaySua(Timestamp.from(Instant.now()));
         } else {
             th.setNgaySua(Timestamp.from(Instant.now()));
@@ -45,7 +63,7 @@ public class TagsApi {
         }
         th.setTrangThai(trangThai);
         th.setTen(ten);
-        Tags sp = tagsService.save(th);
+        ThuongHieu sp = thuongHieuService.save(th);
         if (sp.getNguoiTao() != null) {
             sp.setCreate(sp.getNguoiTao().getNhanVien().getMaNhanVien());
         } else {
@@ -63,20 +81,5 @@ public class TagsApi {
             return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
-    }
-    @DeleteMapping("/xoa-tags")
-    public ResponseEntity xoa(@RequestParam(value = "id") Long id) {
-        boolean st = false;
-        Tags cl = tagsService.getById(id);
-        if (cl.getSanPhams().size()>0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
-        }
-        if (id != null) {
-            st = tagsService.delete(id);
-        }
-        if (st) {
-            return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(null);
     }
 }

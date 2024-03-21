@@ -1,9 +1,8 @@
 package com.poly.BeeShoes.api;
 
-import com.poly.BeeShoes.model.CoGiay;
 import com.poly.BeeShoes.model.MuiGiay;
 import com.poly.BeeShoes.service.ChiTietSanPhamService;
-import com.poly.BeeShoes.service.CoGiayService;
+import com.poly.BeeShoes.service.MuiGiayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,12 @@ import java.time.Instant;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class CoGiayApi {
-    private final CoGiayService coGiayService;
+public class MuiGiayRestController {
+    private final MuiGiayService muiGiayService;
     private final ChiTietSanPhamService chiTietSanPhamService;
-    @PostMapping("/them-co-giay")
-    public ResponseEntity<CoGiay> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
-        CoGiay th = new CoGiay();
+    @PostMapping("/them-mui-giay")
+    public ResponseEntity<MuiGiay> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
+        MuiGiay th = new MuiGiay();
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
@@ -27,17 +26,17 @@ public class CoGiayApi {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
         if (id != null) {
-            if (coGiayService.existsByTen(ten,id)) {
+            if (muiGiayService.existsByTen(ten,id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (coGiayService.existsByTen(ten,null)) {
+            if (muiGiayService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }
 
         if (id != null) {
-            th = coGiayService.getById(id);
+            th = muiGiayService.getById(id);
             th.setNgaySua(Timestamp.from(Instant.now()));
         } else {
             th.setNgaySua(Timestamp.from(Instant.now()));
@@ -45,7 +44,7 @@ public class CoGiayApi {
         }
         th.setTrangThai(trangThai);
         th.setTen(ten);
-        CoGiay sp = coGiayService.save(th);
+        MuiGiay sp = muiGiayService.save(th);
         if (sp.getNguoiTao() != null) {
             sp.setCreate(sp.getNguoiTao().getNhanVien().getMaNhanVien());
         } else {
@@ -58,21 +57,20 @@ public class CoGiayApi {
         }
         sp.setNguoiTao(null);
         sp.setNguoiSua(null);
-
         if (sp.getId() != null) {
             return ResponseEntity.status(HttpStatus.OK).header("status", "oke").body(sp);
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
-    @DeleteMapping("/xoa-co-giay")
+    @DeleteMapping("/xoa-mui-giay")
     public ResponseEntity xoa(@RequestParam(value = "id") Long id) {
         boolean st = false;
-        CoGiay cl = coGiayService.getById(id);
-        if (chiTietSanPhamService.existsByCoGiay(cl)) {
+        MuiGiay cl = muiGiayService.getById(id);
+        if (chiTietSanPhamService.existsByMuiGiay(cl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
         }
         if (id != null) {
-            st = coGiayService.delete(id);
+            st = muiGiayService.delete(id);
         }
         if (st) {
             return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);

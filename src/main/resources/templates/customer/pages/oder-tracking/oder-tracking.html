@@ -178,25 +178,33 @@
                             <div class="col-3">
                                 <strong>Họ Tên:</strong><br>
                                 <div>
-                                    <label>Tẩn Láo Lù</label>
-                                    <button class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
+                                    <label th:text="${hoadon != null and hoadon.getTenNguoiNhan() !=null ? hoadon.getTenNguoiNhan():''}">Tẩn
+                                        Láo Lù</label>
+                                    <th:block
+                                            th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
+                                        <button data-toggle="modal" data-target="#updateInformationModal"
+                                                class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
+                                    </th:block>
                                 </div>
                             </div>
                             <div class="col-3">
-                                <strong>Số Điện Thoại:</strong>
-                                <p>0866755653
-                                    <button class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
-                                </p>
-
+                                <strong>Số Điện Thoại:</strong><br>
+                                <label id="numberPhone" th:text="${hoadon.getSdtNhan()}"></label>
+                                <th:block
+                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
+                                    <button data-toggle="modal" data-target="#updateInformationModal"
+                                            class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
+                                </th:block>
                             </div>
                             <div class="col-6">
                                 <strong>Địa Chỉ:</strong>
                                 <br>
-                                <label>Thôn Tân Quang ,</label>
-                                <label>xã Trịnh Tường ,</label>
-                                <label>huyện Bát Xát ,</label>
-                                <label>Tỉnh Lào Cai</label>
-                                <button class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
+                                <label th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
+                                <th:block
+                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
+                                    <button data-toggle="modal" data-target="#updateInformationModal"
+                                            class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
+                                </th:block>
                             </div>
                         </div>
                     </article>
@@ -342,6 +350,9 @@
                                             </div>
                                             <label class="quantity-product"
                                                    th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
+                                            <div class="pro-qty d-none">
+                                                <input id="quantity-selected" type="text" th:value="${sanpham.getSoLuong()}" readonly>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center">
@@ -387,7 +398,7 @@
                         </div>
                         <th:block th:if="${user != null}">
                             <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
-                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
+                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan' and hoadon.getHinhThucThanhToan().name()=='KhiNhanHang'}"
                                    th:attr="data-id=${hoadon.getId()}"
                                    id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
                                 <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
@@ -505,7 +516,9 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="updateInformationModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+
+<div th:if="${user!=null}" class="modal fade" id="updateInformationModal" data-backdrop="static" data-keyboard="false"
+     tabindex="-1"
      aria-labelledby="updateInformationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -515,25 +528,29 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body body-form-update">
                 <label for="hoTen" class="w-100">Họ Tên:</label>
-                <input id="hoTen" type="text" class="w-100 form-input-custom" autofocus>
+                <input id="hoTen" type="text" class="w-100 form-input-custom"
+                       th:value="${hoadon!=null and hoadon.getTenNguoiNhan() != null ?hoadon.getTenNguoiNhan():''}"
+                       autofocus>
                 <label for="soDienThoai" class="w-100">Số Điện Thoại:</label>
-                <input id="soDienThoai" type="text" class="w-100 form-input-custom">
-                <label class="w-100">Địa Chỉ:</label>
-                <div class="w-100 pl-2">
-                    <input id="diaChi1" type="radio" name="diaChi" value="Thôn Tân Quang">
-                    <label for="diaChi1">Thôn Tân Quang</label>
-                </div>
-                <div class="w-100 pl-2">
-                    <input id="diaChi2" type="radio" name="diaChi" value="Thôn Tân Quang">
-                    <label for="diaChi2">Thôn Tân Quang</label>
-                </div>
-                <div class="w-100 pl-2">
-                    <input id="newAddress" type="radio" name="diaChi" value="#">
-                    <label for="newAddress">Khác</label>
-                </div>
-                <div class="w-100">
+                <input id="soDienThoai" type="text" class="w-100 form-input-custom"
+                       th:value="${hoadon!=null and hoadon.getSdtNhan() != null ?hoadon.getSdtNhan():''}">
+                <th:block th:if="${hoadon!=null and hoadon.getKhachHang() !=null}">
+                    <label class="w-100">Địa Chỉ:</label>
+                    <div class="w-100 pl-2"
+                         th:each="dc:${hoadon.getKhachHang().getDiaChi()}">
+                        <input th:id="'diachi_'+${dc.getId()}" type="radio" name="diaChi"
+                               th:value="${dc.getSoNha() +', '+ dc.getPhuongXa()+', '+dc.getQuanHuyen()+', '+dc.getTinhThanhPho()}">
+                        <label th:for="'diachi_'+${dc.getId()}"
+                               th:text="${dc.getSoNha() +', '+ dc.getPhuongXa()+', '+dc.getQuanHuyen()+', '+dc.getTinhThanhPho()}"></label>
+                    </div>
+                    <div class="w-100 pl-2">
+                        <input id="newAddress" type="radio" name="diaChi" value="#">
+                        <label for="newAddress">Khác</label>
+                    </div>
+                </th:block>
+                <div class="w-100 diaChiKhac d-none">
                     <label for="soNha" class="w-100">Số Nhà:</label>
                     <input id="soNha" type="text" class="form-input-custom w-100">
                     <label for="tinhTP" class="w-100">Tỉnh/TP:</label>

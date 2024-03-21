@@ -177,6 +177,9 @@ public class HoaDonRestController {
         }
         HoaDon hoaDon = hdct.getHoaDon();
         List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
+        if (lst.size()==1){
+            return ResponseEntity.notFound().header("status", "minPro").build();
+        }
         lst.remove(hdct);
         hoaDon.setHoaDonChiTiets(lst);
         hoaDon = tinhTien(hoaDon);
