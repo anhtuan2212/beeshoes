@@ -167,28 +167,35 @@
                 <div class="cart__discount">
                     <h6>Mã Giảm Giá</h6>
                     <form action="#">
-                         <input id="input_voucher" type="text" placeholder="Mã giảm giá">
+                        <input id="input_voucher" type="text" placeholder="Mã giảm giá">
                         <button id="btn-add-code-voucher" type="button">Áp Dụng</button>
                     </form>
                 </div>
-                <div class="list_voucher">
-                    <ul id="list-voucher">
-                        <!--                        <li class="mb-2">-->
-                        <!--                            <div id="voucher_1" class="wraper_voucher row m-0">-->
-                        <!--                                <div class="col-9 contents p-2">-->
-                        <!--                                    <h5 class="text-center">VLXXXX</h5>-->
-                        <!--                                    <label class="express_date">Hạn Đến: 23H59 22/12/2024</label>-->
-                        <!--                                    <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ 1.000.000đ</label>-->
-                        <!--                                    <label class="express_date">Tối Đa: Mã giảm tối đa 100.000đ</label>-->
-                        <!--                                    <label class="express_date w-100">Số Lượng : 10</label>-->
-                        <!--                                </div>-->
-                        <!--                                <div class="col-3 p-2 row m-0 card__discount position-relative">-->
-                        <!--                                    <label class="col-4">Mã Giảm Giá</label>-->
-                        <!--                                    <h3 class="col-6">100K</h3>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </li>-->
-                    </ul>
+                <div class="accordion list_voucher mb-5" id="accordionExample">
+                    <h2 class="mb-0 title_voucher" id="headingTwo">
+                        <button class="btn btn-link btn-block text-left active collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                aria-controls="collapseTwo">
+                            Tốt Nhất
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                         data-parent="#accordionExample">
+                        <ul class="mt-2" id="voucher-top">
+                        </ul>
+                    </div>
+                    <h2 class="mb-0 title_voucher" id="headingThree">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                aria-controls="collapseThree">
+                            Tất cả
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                         data-parent="#accordionExample">
+                        <ul class="mt-2" id="list-voucher">
+                        </ul>
+                    </div>
                 </div>
                 <div class="cart__total">
                     <h6>Tổng Giỏ Hàng</h6>

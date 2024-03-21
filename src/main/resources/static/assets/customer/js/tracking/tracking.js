@@ -1,18 +1,52 @@
 setTabsHeader('pages');
+
+function convertPhoneNumber(phoneNumber) {
+    if (isNaN(phoneNumber)) {
+        return "Số điện thoại không hợp lệ";
+    }
+    let firstPart = phoneNumber.substring(0, 3);
+    let lastPart = phoneNumber.substring(7);
+    let middlePart = "****";
+    return firstPart + middlePart + lastPart;
+}
+
 $(document).ready(function () {
 
-    $('#updateInformationModal').modal('show');
-
+    let numberPhone = $('#numberPhone');
+    let phoneNumber = numberPhone.text();
+    numberPhone.text(convertPhoneNumber(phoneNumber));
+    $(document).on('change', '.body-form-update input[name="diaChi"]', function () {
+        let val = $(this).val();
+        let dcK =  $('.diaChiKhac');
+        console.log(val)
+        if (val === '#') {
+            dcK.removeClass('d-none').addClass('showF').on('animationend',function () {
+                $(this).removeClass('showF').removeClass('d-none');
+            });
+            console.log('hiển thị');
+        }else{
+            if(!dcK.hasClass('d-none')){
+                dcK.removeClass('showF').addClass('hideF');
+                dcK.on('animationend',function () {
+                    $(this).addClass('d-none').removeClass('hideF');
+                })
+            }
+        }
+    })
     $(document).on('click', '#btn-show-update', function () {
         if ($(this).data('update') == 0) {
             $('.content_product').removeClass('col-7').addClass('col-6')
             $('.btn-del-group').removeClass('d-none').addClass('d-flex');
             $('#btn-add-product').removeClass('d-none');
+            $('.pro-qty').removeClass('d-none')
+            $('.quantity-product').addClass('d-none')
             $(this).data('update', 1).text('Xong');
         } else {
             $('.content_product').addClass('col-7').removeClass('col-6')
             $('.btn-del-group').addClass('d-none').removeClass('d-flex');
             $('#btn-add-product').addClass('d-none');
+            $('.pro-qty').addClass('d-none')
+            $('.quantity-product').removeClass('d-none')
             $(this).data('update', 0).text('Cập Nhật');
         }
     })
@@ -202,6 +236,9 @@ $(document).ready(function () {
                         switch (e.getResponseHeader('status')) {
                             case 'NotAuth':
                                 ToastError('Vui lòng đăng nhập.');
+                                break;
+                            case 'minPro':
+                                ToastError('Không thể xóa hết sản phẩm.');
                                 break;
                             default:
                                 ToastError('Lỗi.')

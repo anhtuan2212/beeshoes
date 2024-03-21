@@ -17,12 +17,11 @@ import java.util.List;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class Product {
+public class ProductRestController {
     private final TheLoaiService theLoaiService;
     private final ChatLieuService chatLieuService;
     private final DeGiayService deGiayService;

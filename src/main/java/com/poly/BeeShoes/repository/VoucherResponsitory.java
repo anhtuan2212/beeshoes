@@ -17,7 +17,7 @@ public interface VoucherResponsitory extends JpaRepository<Voucher,Long> {
   @Query("select c  from Voucher c  where c.ma  like %?1% or c.ten like %?1%" +
           "or c.loaiVoucher like %?1%")
     List<Voucher> searchVC(String key);
-    List<Voucher> findAllByTrangThai(Integer trangThai);
+    List<Voucher> findAllByTrangThaiAndSoLuongGreaterThan(Integer trangThai,Integer soluong);
 //  @Query("select t from Voucher t where t.loaiVoucher = :loai")
 //  List<Voucher> searchloai(String loai);
 //  Optional<Voucher> findByMavoucher(String maVoucher);

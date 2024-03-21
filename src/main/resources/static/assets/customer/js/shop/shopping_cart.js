@@ -297,11 +297,13 @@ $(document).ready(async function () {
                         SelectedVoucher = null;
                     }
                 }
+                let arrVoucher = [];
                 if (ListVoucher !== null && Array.isArray(ListVoucher)) {
                     let html = '';
                     ListVoucher.forEach((voucher) => {
                         let ele = $(`#voucher_${voucher.id}`)
                         if (totalMoney > Number(voucher.giaTriToiThieu)) {
+                            arrVoucher.push(voucher);
                             if (ele.length === 0) {
                                 let showPr = '';
                                 if (voucher.loaiVoucher === '$') {
@@ -310,25 +312,25 @@ $(document).ready(async function () {
                                     showPr = `<h3 class="col-6 phantram">${voucher.giaTriPhanTram}%</h3>`
                                 }
                                 html += `
-                        <li class="wraper_li scaleIn">
-                            <div data-id="${voucher.id}" id="voucher_${voucher.id}" class="wraper_voucher row m-0">
-                                <div class="col-9 contents p-2">
-                                    <h5 class="text-center voucher_code">${voucher.ma}</h5>
-                                    <label class="express_date">Hạn Đến: ${formatDate(voucher.endDate1)}</label>
-                                    <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(voucher.giaTriToiThieu) + 'đ'}</label>
-                                    <label class="express_date">Tối Đa:${addCommasToNumber(voucher.giaTriToiDa) + 'đ'}/Khách Hàng</label>
-                                    <label class="express_date w-100">Số Lượng : ${voucher.soLuong}</label>
-                                </div>
-                                <div class="col-3 p-2 row m-0 card__discount position-relative">
-                                    <label class="col-4">Mã Giảm Giá</label>
-                                    ${showPr}
-                                </div>
-                            </div>
-                        </li>`;
+                                <li class="wraper_li scaleIn">
+                                    <div data-id="${voucher.id}" id="voucher_${voucher.id}" class="wraper_voucher row m-0">
+                                        <div class="col-9 contents p-2">
+                                            <h5 class="text-center voucher_code">${voucher.ma}</h5>
+                                            <label class="express_date">Hạn Đến: ${formatDate(voucher.endDate1)}</label>
+                                            <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(voucher.giaTriToiThieu) + 'đ'}</label>
+                                            <label class="express_date">Tối Đa:${addCommasToNumber(voucher.giaTriToiDa) + 'đ'}/Khách Hàng</label>
+                                            <label class="express_date w-100">Số Lượng : ${voucher.soLuong}</label>
+                                        </div>
+                                        <div class="col-3 p-2 row m-0 card__discount position-relative">
+                                            <label class="col-4">Mã Giảm Giá</label>
+                                            ${showPr}
+                                        </div>
+                                    </div>
+                                </li>`;
                             }
                         } else {
                             if (ele.length !== 0) {
-                                ele.parent().addClass('scaleOut');
+                                ele.parent().removeClass('scaleIn').addClass('scaleOut');
                                 ele.parent().on('animationend', function () {
                                     ele.parent().remove();
                                 });
@@ -354,6 +356,33 @@ $(document).ready(async function () {
                 } else {
                     discountAmount = 0;
                     $('#discount_element').addClass('d-none');
+                }
+                let maxDiscountAmount = -Infinity; // Giả sử giá trị lớn nhất ban đầu là âm vô cùng
+                let maxDiscountVoucher = null; // Biến để lưu trữ voucher có discountAmount lớn nhất
+                if (Array.isArray(arrVoucher)) {
+                    arrVoucher.forEach((voucher) => {
+                        let discountAmount;
+                        if (voucher.loaiVoucher === '%') {
+                            if (Number(voucher.giaTriToiDa) < Number(totalMoney) * (Number(voucher.giaTriPhanTram) / 100)) {
+                                discountAmount = Number(voucher.giaTriToiDa);
+                            } else {
+                                discountAmount = Number(totalMoney) * (Number(voucher.giaTriPhanTram) / 100);
+                            }
+                        } else {
+                            discountAmount = voucher.giaTriTienMat;
+                        }
+                        if (discountAmount > maxDiscountAmount) {
+                            maxDiscountAmount = discountAmount;
+                            maxDiscountVoucher = voucher;
+                        }
+                    });
+                }
+                if (maxDiscountVoucher!==null){
+                  let ele_voucher =  $(`#voucher_${maxDiscountVoucher.id}`).closest('.wraper_li');
+                  $('#voucher-top').html(ele_voucher);
+                    ele_voucher.on('animationend',function () {
+                        $(this).removeClass('scaleIn');
+                    })
                 }
                 let totalPayment = Number(totalMoney) - Number(discountAmount);
                 totalPayment = Math.ceil(totalPayment / 1000) * 1000;

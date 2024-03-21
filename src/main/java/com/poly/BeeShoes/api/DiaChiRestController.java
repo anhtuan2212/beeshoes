@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RequestMapping("/api/dia-chi")
 @RequiredArgsConstructor
-public class DiaChiApi {
+public class DiaChiRestController {
     private final DiaChiService diaChiService;
     private final KhachHangService khachHangService;
     @DeleteMapping("/delete")

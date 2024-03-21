@@ -1,10 +1,8 @@
 package com.poly.BeeShoes.api;
 
 import com.poly.BeeShoes.library.LibService;
-import com.poly.BeeShoes.model.DeGiay;
-import com.poly.BeeShoes.model.KichCo;
-import com.poly.BeeShoes.service.ChiTietSanPhamService;
-import com.poly.BeeShoes.service.KichCoService;
+import com.poly.BeeShoes.model.Tags;
+import com.poly.BeeShoes.service.TagsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,40 +10,33 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class KichCoApi {
-    private final KichCoService kichCoService;
-    private final ChiTietSanPhamService chiTietSanPhamService;
-    @PostMapping("/them-kich-co")
-    public ResponseEntity<KichCo> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
-        KichCo th = new KichCo();
-
+public class TagsRestController {
+    private final TagsService tagsService;
+    @PostMapping("/them-tags")
+    public ResponseEntity<Tags> them(@RequestParam("trangThai") Boolean trangThai, @RequestParam("ten") String ten, @RequestParam(value = "id", required = false) Long id) {
+        Tags th = new Tags();
+        ten = LibService.convertNameTags(ten);
         if (ten.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "nameNull").body(null);
         }
         if (trangThai==null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "statusNull").body(null);
         }
-        if (!LibService.isNumeric(ten)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotIsNum").body(null);
-        }
-        if (Integer.parseInt(ten) < 20 || Integer.parseInt(ten) > 50) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "faildkhoang").body(null);
-        }
         if (id != null) {
-            if (kichCoService.existsByTen(ten,id)) {
+            if (tagsService.existsByTen(ten,id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         } else {
-            if (kichCoService.existsByTen(ten,null)) {
+            if (tagsService.existsByTen(ten,null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "existsByTen").body(null);
             }
         }
-
         if (id != null) {
-            th = kichCoService.getById(id);
+            th = tagsService.getById(id);
             th.setNgaySua(Timestamp.from(Instant.now()));
         } else {
             th.setNgaySua(Timestamp.from(Instant.now()));
@@ -53,7 +44,7 @@ public class KichCoApi {
         }
         th.setTrangThai(trangThai);
         th.setTen(ten);
-        KichCo sp = kichCoService.save(th);
+        Tags sp = tagsService.save(th);
         if (sp.getNguoiTao() != null) {
             sp.setCreate(sp.getNguoiTao().getNhanVien().getMaNhanVien());
         } else {
@@ -72,15 +63,15 @@ public class KichCoApi {
         }
         return ResponseEntity.status(HttpStatus.OK).header("status", "error").body(sp);
     }
-    @DeleteMapping("/xoa-kich-co")
+    @DeleteMapping("/xoa-tags")
     public ResponseEntity xoa(@RequestParam(value = "id") Long id) {
         boolean st = false;
-        KichCo cl = kichCoService.getById(id);
-        if (chiTietSanPhamService.existsByKichCo(cl)) {
+        Tags cl = tagsService.getById(id);
+        if (cl.getSanPhams().size()>0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").body(null);
         }
         if (id != null) {
-            st = kichCoService.delete(id);
+            st = tagsService.delete(id);
         }
         if (st) {
             return ResponseEntity.status(HttpStatus.OK).header("status", "success").body(null);
