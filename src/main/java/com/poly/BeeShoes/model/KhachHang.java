@@ -29,6 +29,9 @@ public class KhachHang {
     @OneToMany(mappedBy = "khachHang", fetch = FetchType.EAGER)
     List<DiaChi> diaChi;
 
+    @OneToOne(mappedBy = "khachHang")
+    private User user;
+
     @OneToOne
     @JoinColumn(name = "id_hang_khach_hang")
     HangKhachHang hangKhachHang;

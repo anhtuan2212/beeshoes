@@ -25,6 +25,11 @@
 
 }
 
+.logo {
+    width: 10.625rem !important;
+    height: 3.625rem !important;
+}
+
 .input-group-quantity-counter {
     width: 6.5rem !important;
 }
@@ -49,13 +54,63 @@
 .avatar-lg {
     background-color: #f3f3f3;
 }
+
 .custom-select {
     border: none !important;
 }
-.btn-delete-oder{
+
+.btn-delete-oder {
     color: #adadad;
 }
-.btn-delete-oder:hover{
-    color: #423636;
+
+.btn-delete-oder:hover {
+    color: #000000;
+    background-color: #807272;
     font-weight: 500;
 }
+
+@media print {
+    #oder-print {
+        display: block !important;
+    }
+}
+
+.btn-delete-oder {
+    position: absolute;
+    top: 7px;
+    right: 6px;
+    padding: 3px;
+    border-radius: 20px;
+    background-color: #e1e1e1;
+    cursor: pointer;
+}
+
+.nav-show-oder {
+    padding-right: 35px !important;
+}
+
+.wrapper-form-search {
+    position: relative;
+}
+
+.div-form-search {
+    z-index: 9;
+    background-color: #ffffff;
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    border: 0.0625rem solid rgba(231, 234, 243, .7);
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 12px rgba(140, 152, 164, .075);
+}
+.div-form-search ul{
+    overflow-y: auto;
+    height: 100%;
+}
+.div-form-search ul li{
+    border-bottom: 0.0625rem solid rgba(231, 234, 243, .7);
+    padding-bottom: 5px;
+    padding-top: 5px;
+    cursor: pointer;
+}
+
