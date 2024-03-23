@@ -148,19 +148,19 @@
 
                                     <div class="row align-items-center mb-3">
                                         <span class="col-5">Tổng:</span>
-                                        <h4 class="col-7 text-right text-dark mb-0">50.000.000đ</h4>
+                                        <h4 class="col-7 text-right text-dark mb-0 total-money">0đ</h4>
                                     </div>
                                     <!-- End Row -->
 
                                     <div class="row align-items-center">
                                         <span class="col-5">Phí Ship:</span>
-                                        <h4 class="col-7 text-right text-dark mb-0">Free</h4>
+                                        <h4 class="col-7 text-right text-dark mb-0 shipping-money">Free</h4>
                                     </div>
                                     <!-- End Row -->
                                     <hr class="my-2">
                                     <div class="row align-items-center">
                                         <span class="col-5">Giảm Giá:</span>
-                                        <h4 class="col-7 text-right text-dark mb-0">200.000</h4>
+                                        <h4 class="col-7 text-right text-dark mb-0 discount-money">0đ</h4>
                                     </div>
                                     <!-- End Row -->
 
@@ -168,7 +168,7 @@
 
                                     <div class="row align-items-center">
                                         <span class="col-5 text-dark font-weight-bold">Thực Thu:</span>
-                                        <h3 class="col-7 text-right text-dark mb-0">50.000.000đ</h3>
+                                        <h3 class="col-7 text-right text-dark mb-0 payment-money">0đ</h3>
                                     </div>
                                     <!-- End Row -->
                                 </div>
@@ -210,7 +210,8 @@
                                                         <i class="tio-search"></i>
                                                     </div>
                                                 </div>
-                                                <input id="searchProduct_hd_1" type="search" class="form-control form-input-search"
+                                                <input id="searchProduct_hd_1" type="search"
+                                                       class="form-control form-input-search"
                                                        placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa.">
                                             </div>
                                             <a class="btn btn-sm btn-ghost-secondary btn-scan-barcode"
@@ -221,14 +222,19 @@
                                         <div class="div-form-search d-none">
                                             <ul class="list-all-product pl-3 pt-3 mt-1 mb-1">
                                                 <th:block th:each="sp:${listsanpham}">
-                                                    <li class="media align-items-center li-item-ctsp-search" th:each="ctsp:${sp.getChiTietSanPham()}"
+                                                    <li  class="media align-items-center li-item-ctsp-search"
+                                                        th:each="ctsp:${sp.getChiTietSanPham()}"
                                                         th:attr="data-ctsp-id=${ctsp.getId()}">
                                                         <img class="avatar avatar-lg mr-3"
                                                              th:src="${ctsp.getAnh().getUrl()}"
                                                              alt="Image Description">
                                                         <div class="media-body">
-                                                            <h5 class="text-hover-primary mb-0" th:text="${sp.getTen()}"></h5>
-                                                            <label class="mb-0" th:text="${ctsp.getMauSac().getTen()}"></label>-<label class="mb-0" th:text="${ctsp.getKichCo().getTen()}"></label>
+                                                            <h5 class="text-hover-primary mb-0"
+                                                                th:text="${sp.getTen()}"></h5>
+                                                            <label class="mb-0"
+                                                                   th:text="${ctsp.getMauSac().getTen()}"></label>-<label
+                                                                class="mb-0"
+                                                                th:text="${ctsp.getKichCo().getTen()}"></label>
                                                         </div>
                                                     </li>
                                                 </th:block>
@@ -257,50 +263,55 @@
                          "isResponsive": false,
                          "isShowPaging": false
                        }'>
-                                    <tbody id="addVariantsContainer_hd_1">
-                                    <tr>
-                                        <td>
-                                            <a class="media align-items-center" href="/cms/view-product?id=16">
-                                                <img class="avatar avatar-lg mr-3"
-                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2Fy2hoOV7EZC.png?alt=media&amp;token=2b958da4-c6b9-460a-84bf-9428fc836127"
-                                                     alt="Image Description">
-                                                <div class="media-body">
-                                                    <h5 class="text-hover-primary mb-0">Giày Sneaker Nữ Nike Gamma Force
-                                                        (Màu Trắng-32)</h5>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td class="table-column-pl-0">
-                                            <div class="js-quantity-counter input-group-quantity-counter">
-                                                <input type="number"
-                                                       class="js-result form-quantity form-control input-group-quantity-counter-control"
-                                                       value="10">
-                                                <div class="input-group-quantity-counter-toggle">
-                                                    <a class="js-minus input-group-quantity-counter-btn"
-                                                       href="javascript:;">
-                                                        <i class="tio-remove"></i>
-                                                    </a>
-                                                    <a class="js-plus input-group-quantity-counter-btn"
-                                                       href="javascript:;">
-                                                        <i class="tio-add"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="table-column-pl-0">
-                                            <div class="input-group input-group-merge">
-                                                <input type="text" class="form-control" value="10.000.000" readonly>
-                                                <div class="input-group-prepend money-dv">
-                                                    <div class="input-group-text">VND</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="pl-1 pr-1">
-                                            <a class="btn btn-white" href="javascript:;">
-                                                <i class="tio-delete-outlined"></i>
-                                            </a>
+                                    <tbody>
+                                    <tr class="tr-show-no-data">
+                                        <td class="table-column-pr-0" rowspan="4">
+                                            <h5 class="text-center">Chưa có dữ liệu.</h5>
                                         </td>
                                     </tr>
+                                    <!--                                    <tr>-->
+                                    <!--                                        <td>-->
+                                    <!--                                            <a class="media align-items-center" href="/cms/view-product?id=16">-->
+                                    <!--                                                <img class="avatar avatar-lg mr-3"-->
+                                    <!--                                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2Fy2hoOV7EZC.png?alt=media&amp;token=2b958da4-c6b9-460a-84bf-9428fc836127"-->
+                                    <!--                                                     alt="Image Description">-->
+                                    <!--                                                <div class="media-body">-->
+                                    <!--                                                    <h5 class="text-hover-primary mb-0">Giày Sneaker Nữ Nike Gamma Force-->
+                                    <!--                                                        (Màu Trắng-32)</h5>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </a>-->
+                                    <!--                                        </td>-->
+                                    <!--                                        <td class="table-column-pl-0">-->
+                                    <!--                                            <div class="js-quantity-counter input-group-quantity-counter">-->
+                                    <!--                                                <input type="number"-->
+                                    <!--                                                       class="js-result form-quantity form-control input-group-quantity-counter-control"-->
+                                    <!--                                                       value="10">-->
+                                    <!--                                                <div class="input-group-quantity-counter-toggle">-->
+                                    <!--                                                    <a class="js-minus input-group-quantity-counter-btn"-->
+                                    <!--                                                       href="javascript:;">-->
+                                    <!--                                                        <i class="tio-remove"></i>-->
+                                    <!--                                                    </a>-->
+                                    <!--                                                    <a class="js-plus input-group-quantity-counter-btn"-->
+                                    <!--                                                       href="javascript:;">-->
+                                    <!--                                                        <i class="tio-add"></i>-->
+                                    <!--                                                    </a>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </div>-->
+                                    <!--                                        </td>-->
+                                    <!--                                        <td class="table-column-pl-0">-->
+                                    <!--                                            <div class="input-group input-group-merge">-->
+                                    <!--                                                <input type="text" class="form-control" value="10.000.000" readonly>-->
+                                    <!--                                                <div class="input-group-prepend money-dv">-->
+                                    <!--                                                    <div class="input-group-text">VND</div>-->
+                                    <!--                                                </div>-->
+                                    <!--                                            </div>-->
+                                    <!--                                        </td>-->
+                                    <!--                                        <td class="pl-1 pr-1">-->
+                                    <!--                                            <a class="btn btn-white" href="javascript:;">-->
+                                    <!--                                                <i class="tio-delete-outlined"></i>-->
+                                    <!--                                            </a>-->
+                                    <!--                                        </td>-->
+                                    <!--                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -327,7 +338,7 @@
                                 <div class="custom-control custom-radio mb-3">
                                     <input type="radio" id="deliveryOptionCheckbox_hd_1_1"
                                            name="deliveryOptionCheckbox_hd_1"
-                                           class="custom-control-input" checked="">
+                                           class="custom-control-input option-select-receipt" checked value="TQ">
                                     <label class="custom-control-label" for="deliveryOptionCheckbox_hd_1_1">
                                         <span class="d-block font-weight-bold mb-1">Tại Quầy</span>
                                         <span class="d-block">Có thể nhận hàng từ 7h30 đến 22h30 mọi ngày tại cửa hàng</span>
@@ -339,7 +350,7 @@
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="deliveryOptionCheckbox_hd_1_2"
                                            name="deliveryOptionCheckbox_hd_1"
-                                           class="custom-control-input">
+                                           class="custom-control-input option-select-receipt" value="CP">
                                     <label class="custom-control-label" for="deliveryOptionCheckbox_hd_1_2">
                                         <span class="d-block font-weight-bold mb-1">Chuyển Phát</span>
                                         <span class="d-block">Giao hàng toàn quốc từ 1 đến 2 ngày</span>
@@ -354,63 +365,6 @@
             </div>
         </div>
     </div>
-    <!-- Add Variants Field -->
-    <table style="display: none;">
-        <tr id="addVariantsTemplate">
-            <td class="table-column-pr-0">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input"
-                           id="productVariationsCheck1">
-                    <label class="custom-control-label"
-                           for="productVariationsCheck1"></label>
-                </div>
-            </td>
-            <td>
-                <a class="media align-items-center" href="/cms/view-product?id=16">
-                    <img class="avatar avatar-lg mr-3"
-                         src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2Fy2hoOV7EZC.png?alt=media&amp;token=2b958da4-c6b9-460a-84bf-9428fc836127"
-                         alt="Image Description">
-                    <div class="media-body">
-                        <h5 class="text-hover-primary mb-0">Giày Sneaker Nữ Nike Gamma Force
-                            (Màu Trắng-32)</h5>
-                    </div>
-                </a>
-            </td>
-            <td class="table-column-pl-0">
-                <div class="js-quantity-counter input-group-quantity-counter">
-                    <input type="number"
-                           class="js-result form-quantity form-control input-group-quantity-counter-control"
-                           value="10">
-                    <div class="input-group-quantity-counter-toggle">
-                        <a class="js-minus input-group-quantity-counter-btn"
-                           href="javascript:;">
-                            <i class="tio-remove"></i>
-                        </a>
-                        <a class="js-plus input-group-quantity-counter-btn"
-                           href="javascript:;">
-                            <i class="tio-add"></i>
-                        </a>
-                    </div>
-                </div>
-            </td>
-            <td class="table-column-pl-0">
-                <div class="input-group input-group-merge">
-                    <input type="text" class="form-control" value="10.000.000" readonly>
-                    <div class="input-group-prepend money-dv">
-                        <div class="input-group-text">VND</div>
-                    </div>
-                </div>
-            </td>
-            <td class="pl-1 pr-1">
-                <a class="btn btn-white" href="javascript:;">
-                    <i class="tio-delete-outlined"></i>
-                </a>
-            </td>
-        </tr>
-    </table>
-    <!-- End Add Variants Field -->
-    <!-- End Content -->
-    <!-- Footer -->
     <div th:replace="~{/cms/pages/_footer.html}"></div>
     <!-- End Footer -->
 </main>
@@ -592,19 +546,19 @@
 
                     <div class="row align-items-center mb-3">
                         <span class="col-5">Tổng:</span>
-                        <h4 class="col-7 text-right text-dark mb-0">50.000.000đ</h4>
+                        <h4 class="col-7 text-right text-dark mb-0 total-money">50.000.000đ</h4>
                     </div>
                     <!-- End Row -->
 
                     <div class="row align-items-center">
                         <span class="col-5">Phí Ship:</span>
-                        <h4 class="col-7 text-right text-dark mb-0">Free</h4>
+                        <h4 class="col-7 text-right text-dark mb-0 shipping-money">Free</h4>
                     </div>
                     <!-- End Row -->
                     <hr class="my-2">
                     <div class="row align-items-center">
                         <span class="col-5">Giảm Giá:</span>
-                        <h4 class="col-7 text-right text-dark mb-0">200.000</h4>
+                        <h4 class="col-7 text-right text-dark mb-0 discount-money">200.000</h4>
                     </div>
                     <!-- End Row -->
 
@@ -612,7 +566,7 @@
 
                     <div class="row align-items-center">
                         <span class="col-5 text-dark font-weight-bold">Thực Thu:</span>
-                        <h3 class="col-7 text-right text-dark mb-0">50.000.000đ</h3>
+                        <h3 class="col-7 text-right text-dark mb-0 payment-money">50.000.000đ</h3>
                     </div>
                     <!-- End Row -->
                 </div>
@@ -646,7 +600,7 @@
             <!-- Header -->
             <div class="card-header">
                 <div class="row justify-content-between align-items-center flex-grow-1">
-                    <div class="col-6">
+                    <div class="col-6 wrapper-form-search">
                         <div class="d-flex align-items-center">
                             <div class="input-group input-group-merge input-group-flush">
                                 <div class="input-group-prepend">
@@ -655,14 +609,31 @@
                                     </div>
                                 </div>
                                 <input id="searchProduct_hd_mau" data-id-hd="searchProduct_hd_" type="search"
-                                       class="form-control"
-                                       placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa."
-                                       autofocus="">
+                                       class="form-control form-input-search"
+                                       placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa.">
                             </div>
                             <a class="btn btn-sm btn-ghost-secondary btn-scan-barcode"
                                href="javascript:;">
                                 <i class="tio-barcode"></i> Quét Mã
                             </a>
+                        </div>
+                        <div class="div-form-search d-none">
+                            <ul class="list-all-product pl-3 pt-3 mt-1 mb-1">
+                                <th:block th:each="sp:${listsanpham}">
+                                    <li class="media align-items-center li-item-ctsp-search"
+                                        th:each="ctsp:${sp.getChiTietSanPham()}"
+                                        th:attr="data-ctsp-id=${ctsp.getId()}">
+                                        <img class="avatar avatar-lg mr-3"
+                                             th:src="${ctsp.getAnh().getUrl()}"
+                                             alt="Image Description">
+                                        <div class="media-body">
+                                            <h5 class="text-hover-primary mb-0" th:text="${sp.getTen()}"></h5>
+                                            <label class="mb-0" th:text="${ctsp.getMauSac().getTen()}"></label>-<label
+                                                class="mb-0" th:text="${ctsp.getKichCo().getTen()}"></label>
+                                        </div>
+                                    </li>
+                                </th:block>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-2">
@@ -687,72 +658,10 @@
                          "isResponsive": false,
                          "isShowPaging": false
                        }'>
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col" class="table-column-pr-0">
-                            <div class="custom-control custom-checkbox">
-                                <input id="datatableCheckAll_mau" data-id-hd="datatableCheckAll_" type="checkbox"
-                                       class="custom-control-input">
-                                <label class="custom-control-label"
-                                       for="datatableCheckAll_mau"></label>
-                            </div>
-                        </th>
-                        <th>Sản Phẩm</th>
-                        <th class="table-column-pl-0">Số Lượng</th>
-                        <th class="table-column-pl-0">Thành Tiền</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody id="addVariantsContainer">
-                    <tr>
-                        <td class="table-column-pr-0">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input"
-                                       id="productVariationsCheck">
-                                <label class="custom-control-label"
-                                       for="productVariationsCheck"></label>
-                            </div>
-                        </td>
-                        <td>
-                            <a class="media align-items-center" href="/cms/view-product?id=16">
-                                <img class="avatar avatar-lg mr-3"
-                                     src="https://firebasestorage.googleapis.com/v0/b/datn-lightbe.appspot.com/o/images%2Fy2hoOV7EZC.png?alt=media&amp;token=2b958da4-c6b9-460a-84bf-9428fc836127"
-                                     alt="Image Description">
-                                <div class="media-body">
-                                    <h5 class="text-hover-primary mb-0">Giày Sneaker Nữ Nike Gamma Force
-                                        (Màu Trắng-32)</h5>
-                                </div>
-                            </a>
-                        </td>
-                        <td class="table-column-pl-0">
-                            <div class="js-quantity-counter input-group-quantity-counter">
-                                <input type="number"
-                                       class="js-result form-quantity form-control input-group-quantity-counter-control"
-                                       value="10">
-                                <div class="input-group-quantity-counter-toggle">
-                                    <a class="js-minus input-group-quantity-counter-btn"
-                                       href="javascript:;">
-                                        <i class="tio-remove"></i>
-                                    </a>
-                                    <a class="js-plus input-group-quantity-counter-btn"
-                                       href="javascript:;">
-                                        <i class="tio-add"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="table-column-pl-0">
-                            <div class="input-group input-group-merge">
-                                <input type="text" class="form-control" value="10.000.000" readonly>
-                                <div class="input-group-prepend money-dv">
-                                    <div class="input-group-text">VND</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="pl-1 pr-1">
-                            <a class="btn btn-white" href="javascript:;">
-                                <i class="tio-delete-outlined"></i>
-                            </a>
+                    <tbody>
+                    <tr class="tr-show-no-data">
+                        <td class="table-column-pr-0" rowspan="4">
+                            <h5 class="text-center">Chưa có dữ liệu.</h5>
                         </td>
                     </tr>
                     </tbody>
@@ -781,7 +690,7 @@
                 <div class="custom-control custom-radio mb-3">
                     <input type="radio" id="deliveryOptionCheckbox_hd_mau_1" data-id-hd="deliveryOptionCheckbox_hd_"
                            name="deliveryOptionCheckbox_hd_mau"
-                           class="custom-control-input" checked="">
+                           class="custom-control-input option-select-receipt" checked="" value="TQ">
                     <label class="custom-control-label" for="deliveryOptionCheckbox_hd_mau_1">
                         <span class="d-block font-weight-bold mb-1">Tại Quầy</span>
                         <span class="d-block">Có thể nhận hàng từ 7h30 đến 22h30 mọi ngày tại cửa hàng</span>
@@ -793,7 +702,7 @@
                 <div class="custom-control custom-radio">
                     <input type="radio" id="deliveryOptionCheckbox_hd_mau_2" data-id-hd="deliveryOptionCheckbox_hd_"
                            name="deliveryOptionCheckbox_hd_mau"
-                           class="custom-control-input">
+                           class="custom-control-input option-select-receipt" value="CP">
                     <label class="custom-control-label" for="deliveryOptionCheckbox_hd_mau_2">
                         <span class="d-block font-weight-bold mb-1">Chuyển Phát</span>
                         <span class="d-block">Giao hàng toàn quốc từ 1 đến 2 ngày</span>
