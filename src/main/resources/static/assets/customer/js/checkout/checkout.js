@@ -572,7 +572,34 @@ $(document).ready(function () {
         var customerEmail = $('#customerEmail').val();
         var customerName = $('#customerName').val();
         var typeOfPayment = $('input[name=paymentMethod]:checked').val();
-        console.log(typeOfPayment);
+        if(customerName == '' || customerName == undefined) {
+            ToastError('Tên người nhận không được để trống');
+            return;
+        }
+        if(customerPhone == '' || customerPhone == undefined) {
+            ToastError('Số điện thoại nhận hàng không được để trống');
+            return;
+        }
+        if(customerEmail == '' || customerEmail == undefined) {
+            ToastError('Email không được để trống');
+            return
+        }
+        if(houseNumber == '' || houseNumber == undefined) {
+            ToastError('Số nhà không được để trống');
+            return;
+        }
+        if(provinceName == '' || provinceName == undefined) {
+            ToastError('Vui lòng chọn tỉnh thành');
+            return;
+        }
+        if(districtName == '' || districtName == undefined) {
+            ToastError('Vui lòng chọn quận huyện');
+            return;
+        }
+        if(wardName == '' || wardName == undefined) {
+            ToastError('Vui lòng chọn phường xã');
+            return;
+        }
         var voucherCode = $('#voucherCode').attr('voucher-code');
         var orderNotes = $('#orderNotes').val();
         if (orderNotes == '' || orderNotes == null) {
