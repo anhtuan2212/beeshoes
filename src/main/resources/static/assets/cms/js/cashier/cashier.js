@@ -355,7 +355,8 @@ function updateQuantityProduct(id, oder, operator, element) {
 }
 
 $(document).on('ready', function () {
-
+    $('#body-html').addClass('navbar-vertical-aside-mini-mode');
+    $('#styleSwitcherDropdown').addClass('hs-unfold-hidden');
     $(document).on('click', '.input-group-quantity-counter-btn', function () {
         let oder = getOderNum(this);
         let tr = $(this).closest('tr')
