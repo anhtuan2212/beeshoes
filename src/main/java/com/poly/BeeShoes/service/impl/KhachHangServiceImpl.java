@@ -33,7 +33,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public KhachHang detail(Long id) {
-        KhachHang khachHang = khachHangRepository.findById(id).get();
+        KhachHang khachHang = khachHangRepository.findById(id).orElse(null);
         return khachHang;
     }
 

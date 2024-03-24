@@ -214,6 +214,50 @@ function updateTotalMoney(oder) {
     wrapper.find('h3.payment-money').text(addCommasToNumber(payment) + 'đ')
 }
 
+function getTotalMoney(oder) {
+    let data = getListProductLocal(oder);
+    let total = 0;
+    if (data !== null && Array.isArray(data)) {
+        data.forEach((pro) => {
+            total += Number(pro.quantity) * Number(pro.giaBan);
+        })
+    }
+    let wrapper = $(`#oder_content_${oder}`);
+    let type = wrapper.find(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
+    let shipingFee = 0;
+    if (type === 'CP') {
+        shipingFee = 30000;
+        if (total > 2000000) {
+            shipingFee = 0;
+        }
+    }
+    return total + shipingFee;
+}
+
+let arrProvince = [];
+let arrDistrict = [];
+let arrWard = [];
+fetch('/assets/address-json/province.json')
+    .then(response => response.json())
+    .then(data => {
+        arrProvince = data;
+    })
+    .then(() => {
+        return fetch('/assets/address-json/district.json')
+            .then(response => response.json())
+            .then(data => {
+                arrDistrict = data;
+            });
+    })
+    .then(() => {
+        return fetch('/assets/address-json/ward.json')
+            .then(response => response.json())
+            .then(data => {
+                arrWard = data;
+            });
+    })
+    .catch(error => console.error('Error:', error));
+
 function printElement(elementToPrint) {
     let iframe = document.getElementById("myFrame");
     let iframeDocument = iframe.contentWindow.document;
@@ -355,7 +399,8 @@ function updateQuantityProduct(id, oder, operator, element) {
 }
 
 $(document).on('ready', function () {
-
+    $('#body-html').addClass('navbar-vertical-aside-mini-mode');
+    $('#styleSwitcherDropdown').addClass('hs-unfold-hidden');
     $(document).on('click', '.input-group-quantity-counter-btn', function () {
         let oder = getOderNum(this);
         let tr = $(this).closest('tr')
@@ -366,6 +411,139 @@ $(document).on('ready', function () {
             updateQuantityProduct(id, oder, 'minus', this)
         }
     })
+
+    function TinhTien() {
+        let oder = $('#modal-input-id-oder').val()
+        let total = getTotalMoney(oder)
+        let val = Number($('#pay-cash-money').val().replace(/[^\d]/g, ''));
+        let hasTM = $('#payment-type-cash').is(':checked');
+        let hasCK = $('#payment-type-card').is(':checked');
+        let NH = $('#payment-on-delivery').is(':checked');
+        let thua = 0;
+        let thieu = total;
+        let ck = 0
+        if (NH) {
+            thieu = total;
+            val = 0
+            thua = 0
+            ck = 0
+        }
+        if (!hasTM && hasCK) {
+            ck = total
+            thieu = 0
+        }
+        if (hasTM && !hasCK) {
+            if (val >= total) {
+                thua = val - total;
+                thieu = 0;
+            } else {
+                thieu = total - val;
+                thua = 0
+            }
+        }
+        if (hasCK && hasTM) {
+            if (val < total) {
+                ck = total - val;
+                thua = 0;
+            } else {
+                thua = val - total;
+            }
+            if (val + ck > total) {
+                thua = val + ck - total
+            } else {
+                thua = 0;
+            }
+            thieu = 0;
+        }
+        $('#change-money').val(addCommasToNumber(thua))
+        $('#pay-chuyen-khoan-money').val(addCommasToNumber(ck))
+        $('#lack-of-money').val(addCommasToNumber(thieu))
+    }
+
+    $(document).on('input', '#pay-cash-money', function () {
+        TinhTien();
+    })
+
+    $(document).on('change', '#payment-type-card', function () {
+        let isChecked = $(this).is(':checked');
+        let wrap = $('.body-modal-payment');
+        let qr = $('.show-qr-payment');
+        let size = $('.setup-modal-size');
+        let tck = $('.wrapper-money-ck');
+        let showcode = $('#pay-card-money').closest('.input-group');
+        TinhTien();
+        if (isChecked) {
+            wrap.addClass('col-4');
+            wrap.removeClass('col-6');
+            qr.removeClass('d-none');
+            tck.removeClass('d-none');
+            size.addClass('modal-xl');
+            showcode.removeClass('d-none');
+            $('#payment-on-delivery').prop('checked', false);
+        } else {
+            wrap.removeClass('col-4');
+            wrap.addClass('col-6');
+            qr.addClass('d-none');
+            tck.addClass('d-none');
+            size.removeClass('modal-xl');
+            showcode.addClass('d-none');
+        }
+        let checkTM = $('#payment-type-cash').is(':checked')
+        let tienmat = $('.wrapper-money-tm');
+        if (checkTM) {
+            tienmat.removeClass('d-none')
+        } else {
+            tienmat.addClass('d-none');
+        }
+    })
+    $(document).on('change', '#payment-on-delivery', function () {
+        let check = $(this).is(':checked');
+        let wrap = $('.body-modal-payment');
+        let qr = $('.show-qr-payment');
+        let size = $('.setup-modal-size');
+        let tck = $('.wrapper-money-ck');
+        let tm = $('.wrapper-money-tm');
+        let showcode = $('#pay-card-money').closest('.input-group');
+        if (check) {
+            $('#payment-type-card').prop('checked', false);
+            $('#payment-type-cash').prop('checked', false);
+            wrap.removeClass('col-4');
+            wrap.addClass('col-6');
+            qr.addClass('d-none');
+            tm.addClass('d-none');
+            tck.addClass('d-none');
+            size.removeClass('modal-xl');
+            showcode.addClass('d-none');
+        }
+        TinhTien();
+    })
+    $(document).on('change', '#payment-type-cash', function () {
+        let check = $(this).is(':checked');
+        let tienmat = $('.wrapper-money-tm');
+        TinhTien();
+        if (check) {
+            $('#payment-on-delivery').prop('checked', false);
+            tienmat.removeClass('d-none')
+        } else {
+            tienmat.addClass('d-none');
+        }
+    })
+    $(document).on('click', '.btn-payment-oder', function () {
+        $('#form-modal-payment').modal('show');
+        let oder = getOderNum(this);
+        $('#modal-input-id-oder').val(oder);
+        $('#total-money').val(addCommasToNumber(getTotalMoney(oder)))
+        TinhTien();
+        let input = $(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
+        if (input === 'CP') {
+            $('#payment-on-delivery').closest('div.form-group').removeClass('d-none')
+        } else {
+            $('#payment-on-delivery').closest('div.form-group').addClass('d-none')
+        }
+    })
+    $(document).on('input', '.money-input-mask', function () {
+        $(this).mask('#.###.###.###', {reverse: true});
+    });
     $(document).on('click', '.btn-delete-tr-oder', function () {
         let tr = $(this).closest('tr');
         let id = tr.data('id-product');
@@ -390,6 +568,111 @@ $(document).on('ready', function () {
     $(document).on('change', '.option-select-receipt', function () {
         let oder = getOderNum(this);
         updateTotalMoney(oder);
+        let val = $(this).val();
+        let wrapper = $(`#oder_content_${oder}`);
+        let kh = wrapper.find('select.customer-selected[name="khachHang"]').val();
+        if (val === 'CP') {
+            if (kh === '#') {
+                ToastError('Vui lòng chọn khách hàng.');
+                wrapper.find(`.option-select-receipt[name="deliveryOptionCheckbox_hd_${oder}"]`).filter(function() {
+                    return $(this).val() === 'TQ';
+                }).prop('checked', true);
+                return;
+            }
+            wrapper.find('.wrapper-address-user').removeClass('d-none');
+        } else {
+            wrapper.find('.wrapper-address-user').addClass('d-none');
+        }
+    })
+
+    function getOptionAddress(id, oder) {
+        $.ajax({
+            url: '/api/get-address-by-customer',
+            type: 'GET',
+            data: {id: id},
+            success: function (data) {
+                if (Array.isArray(data)) {
+                    let html = '';
+                    data.forEach((ad) => {
+                        html += `
+                                   <div class="custom-control custom-radio ml-3">
+                                        <input type="radio" id="address_customer_${oder}_${ad.id}"
+                                               name="option-address_${oder}"
+                                               class="custom-control-input option-select-address" value="${ad.id}">
+                                        <label class="custom-control-label custom-address" for="address_customer_${oder}_${ad.id}">
+                                            <span class="d-block mb-1">${ad.soNha}, </span>
+                                            <span class="d-block mb-1">${ad.phuongXa}, </span>
+                                            <span class="d-block mb-1">${ad.quanHuyen}, </span>
+                                            <span class="d-block mb-1">${ad.tinhThanhPho}</span>
+                                        </label>
+                                    </div>`;
+                    });
+                    html += `<div class="custom-control custom-radio ml-3">
+                            <input type="radio" id="address_khac_${oder}" 
+                                   name="option-address_${oder}"
+                                   class="custom-control-input option-select-address" value="#">
+                            <label class="custom-control-label custom-address" for="address_khac_${oder}">
+                                <span class="d-block font-weight-bold mb-1">khác</span>
+                            </label>
+                        </div>
+                        <div class="w-100 row wrapper-option-address-khac"></div>
+                        `;
+                    $(`#oder_content_${oder}`).find('.wrapper-address-user').html(html);
+                }
+            },
+            error: function (xhr) {
+                console.log(xhr)
+            }
+        })
+    }
+
+    $(document).on('change', '.option-select-address', function () {
+        let oder = getOderNum(this);
+        let val = $(`input[name="option-address_${oder}"]:checked`).val();
+        let wrapper = $(`#oder_content_${oder}`);
+        if (val === '#') {
+            let province = '';
+            if (Array.isArray(arrProvince)) {
+                arrProvince.forEach((item) => {
+                    province += `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
+                })
+            }
+            let html =
+                `<div class="form-group col-6 mb-3">
+                        <label for="soNha_${oder}" class="mb-0">Số Nhà:</label>
+                        <input class="form-control soNha" id="soNha_${oder}" type="text">
+                    </div>
+                    <div class="form-group col-6 mb-3">
+                        <label for="tinhTP_${oder}" class="mb-0">Tỉnh/TP:</label>
+                        <select class="js-select2-custom custom-select tinhTP"
+                                id="tinhTP_${oder}" type="text"
+                                data-hs-select2-options='{
+                        "placeholder": "Tìm Tỉnh/TP...",
+                        "searchInputPlaceholder": "Tìm Tỉnh/TP..."}'>${province}</select>
+                    </div>
+                    <div class="form-group col-6 mb-3">
+                        <label for="quanHuyen_${oder}" class="mb-0">Quận/Huyện:</label>
+                        <select class="js-select2-custom custom-select quanHuyen"
+                                id="quanHuyen_${oder}" type="text"
+                                data-hs-select2-options='{
+                        "placeholder": "Tìm Quận/Huyện...",
+                        "searchInputPlaceholder": "Quận/Huyện..."}'> </select>
+                    </div>
+                    <div class="form-group col-6 mb-3">
+                        <label for="phuongXa_${oder}" class="mb-0">Phường/Xã:</label>
+                        <select class="js-select2-custom custom-select phuongXa"
+                                id="phuongXa_${oder}" type="text"
+                                data-hs-select2-options='{
+                        "placeholder": "Tìm Phường/Xã...",
+                        "searchInputPlaceholder": "Tìm Phường/Xã..."}'> </select>
+                    </div>`;
+            wrapper.find('.wrapper-option-address-khac').html(html);
+            $('.js-select2-custom').each(function () {
+                initSelect2($(this));
+            });
+        }else{
+            wrapper.find('.wrapper-option-address-khac').empty();
+        }
     })
     $(document).on('click', '.li-item-ctsp-search', function () {
         console.log('run')
@@ -449,9 +732,10 @@ $(document).on('ready', function () {
         Quagga.stop();
     });
     $(document).on('change', '.customer-selected', function () {
-        // let id = $(this).closest('.oder-wraper-content').data('id-num-hd');
+        let oder = getOderNum(this);
         let content = $(this).closest('.oder-wraper-content');
-        if ($(this).val() !== '#') {
+        let val = $(this).val();
+        if (val !== '#') {
             let option = $(this).find('option:selected');
             let arrName = option.text().split('-');
             let name = arrName[0];
@@ -462,6 +746,7 @@ $(document).on('ready', function () {
             content.find('strong.email-customer').text(email)
             content.find('strong.phone-customer').text(phone)
             content.find('strong.code-customer').text(cusCode)
+            getOptionAddress(val, oder);
         } else {
             content.find('strong.fullName-customer').text('')
             content.find('strong.email-customer').text('')
