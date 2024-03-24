@@ -116,9 +116,9 @@
                                                         th:text="${cus.getHoTen()+'-'+cus.getMaKhachHang()}"></option>
                                             </th:block>
                                         </select>
-                                        <a href="javascript:;">
-                                            <i class="tio-add" data-toggle="tooltip"
-                                               data-original-title="Thêm Khách Hàng"></i>
+                                        <a data-toggle="tooltip"
+                                           data-original-title="Thêm Khách Hàng" href="javascript:;">
+                                            <i class="tio-add"></i>
                                         </a>
                                     </div>
                                     <div class="w-100 pl-3">
@@ -173,7 +173,8 @@
                                     <!-- End Row -->
                                 </div>
                                 <div class="card-footer">
-                                    <a id="btn-payment-hd-1" class="btn btn-primary w-100">THANH TOÁN</a>
+                                    <a id="btn-payment-hd-1" class="btn btn-primary btn-payment-oder w-100">THANH
+                                        TOÁN</a>
                                 </div>
                                 <!-- Body -->
                             </div>
@@ -222,7 +223,7 @@
                                         <div class="div-form-search d-none">
                                             <ul class="list-all-product pl-3 pt-3 mt-1 mb-1">
                                                 <th:block th:each="sp:${listsanpham}">
-                                                    <li  class="media align-items-center li-item-ctsp-search"
+                                                    <li class="media align-items-center li-item-ctsp-search"
                                                         th:each="ctsp:${sp.getChiTietSanPham()}"
                                                         th:attr="data-ctsp-id=${ctsp.getId()}">
                                                         <img class="avatar avatar-lg mr-3"
@@ -356,7 +357,30 @@
                                         <span class="d-block">Giao hàng toàn quốc từ 1 đến 2 ngày</span>
                                     </label>
                                 </div>
-                                <!-- End Custom Checkbox -->
+                                <div class="wrapper-address-user ml-4 mt-2 w-100 d-none">
+<!--                                    <div class="custom-control custom-radio ml-3">-->
+<!--                                        <input type="radio" id="address_hd_cus"-->
+<!--                                               name="option-address_hd"-->
+<!--                                               class="custom-control-input" value="id">-->
+<!--                                        <label class="custom-control-label custom-address" for="address_hd_cus">-->
+<!--                                            <span class="d-block mb-1">Tân Quang,</span>-->
+<!--                                            <span class="d-block mb-1">xã Trịnh Tường,</span>-->
+<!--                                            <span class="d-block mb-1">huyện Bát Xát,</span>-->
+<!--                                            <span class="d-block mb-1">tỉnh Lào Cai</span>-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+<!--                                    <div class="custom-control custom-radio ml-3">-->
+<!--                                        <input type="radio" id="address_khac_1" data-id-hd="address_khac_"-->
+<!--                                               name="option-address_1"-->
+<!--                                               class="custom-control-input" value="#">-->
+<!--                                        <label class="custom-control-label custom-address" for="address_khac_1">-->
+<!--                                            <span class="d-block font-weight-bold mb-1">khác</span>-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+<!--                                    <div class="w-100 row wrapper-option-address-khac">-->
+
+<!--                                    </div>-->
+                                </div>
                             </div>
                             <!-- Body -->
                         </div>
@@ -571,7 +595,8 @@
                     <!-- End Row -->
                 </div>
                 <div class="card-footer">
-                    <a id="btn-payment-hd-mau" data-id-hd="btn-payment-hd" class="btn btn-primary w-100">THANH TOÁN</a>
+                    <a id="btn-payment-hd-mau" data-id-hd="btn-payment-hd"
+                       class="btn btn-primary btn-payment-oder w-100">THANH TOÁN</a>
                 </div>
                 <!-- Body -->
             </div>
@@ -708,6 +733,7 @@
                         <span class="d-block">Giao hàng toàn quốc từ 1 đến 2 ngày</span>
                     </label>
                 </div>
+                <div class="wrapper-address-user ml-4 mt-2 w-100 d-none"></div>
                 <!-- End Custom Checkbox -->
             </div>
             <!-- Body -->
@@ -743,6 +769,118 @@
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="form-modal-payment" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered setup-modal-size" role="document">
+        <div class="modal-content" style="width: 100%">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="form-modal-payment-label">Thanh Toán</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+            <!-- Body -->
+            <div class="modal-body pt-0 pb-0">
+                <input hidden="hidden" type="text" id="modal-input-id-oder">
+                <div class="row mt-2">
+                    <div class="col-6 body-modal-payment">
+                        <h3 class="w-100 mb-2">Loại Thanh Toán</h3>
+                        <div class="form-group w-100">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="payment-type-cash" name="payment-type"
+                                       class="custom-control-input" value="cash" checked>
+                                <label class="custom-control-label" for="payment-type-cash">Tiền Mặt</label>
+                            </div>
+                        </div>
+                        <div class="form-group w-100">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="payment-type-card" name="payment-type" value="card"
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="payment-type-card">Chuyển Khoản</label>
+                            </div>
+                        </div>
+                        <div class="form-group w-100 d-none">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="payment-on-delivery" name="payment-type" value="card"
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="payment-on-delivery">Thanh toán khi nhận
+                                    hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 body-modal-payment">
+                        <h3 class="w-100 mb-2">Tính Tiền</h3>
+                        <label class="w-100 mb-0" for="total-money">Tổng Tiền</label>
+                        <div class="input-group input-group-merge mb-2">
+                            <input class="form-control money-input-mask" type="text" id="total-money" value="0"
+                                   readonly>
+                            <div class="input-group-prepend money-dv">
+                                <div class="input-group-text">VND</div>
+                            </div>
+                        </div>
+                        <div class="w-100 wrapper-money-tm">
+                            <label class="w-100 mb-0" for="pay-cash-money">Tiền Mặt Khách Đưa</label>
+                            <div class="input-group input-group-merge mb-2">
+                                <input class="form-control money-input-mask" type="text" id="pay-cash-money" value="0">
+                                <div class="input-group-prepend money-dv">
+                                    <div class="input-group-text">VND</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100 wrapper-money-ck d-none">
+                            <label class="w-100 mb-0" for="pay-chuyen-khoan-money">Tiền Chuyển Khoản</label>
+                            <div class="input-group input-group-merge mb-2">
+                                <input class="form-control money-input-mask" type="text" id="pay-chuyen-khoan-money"
+                                       value="0" readonly>
+                                <div class="input-group-prepend money-dv">
+                                    <div class="input-group-text">VND</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group d-none mb-2">
+                            <label class="w-100 mb-0" for="pay-card-money">Mã Giao Dịch</label>
+                            <input class="form-control" type="text" id="pay-card-money" value="">
+                        </div>
+                        <label class="w-100 mb-0" for="change-money">Tiền Thừa</label>
+                        <div class="input-group input-group-merge mb-2">
+                            <input class="form-control money-input-mask" type="text" id="change-money" value="0"
+                                   readonly>
+                            <div class="input-group-prepend money-dv">
+                                <div class="input-group-text">VND</div>
+                            </div>
+                        </div>
+                        <label class="w-100 mb-0" for="lack-of-money">Tiền Thiếu</label>
+                        <div class="input-group input-group-merge mb-2">
+                            <input class="form-control money-input-mask" type="text" id="lack-of-money" value="0"
+                                   readonly>
+                            <div class="input-group-prepend money-dv">
+                                <div class="input-group-text">VND</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 show-qr-payment d-none">
+                        <h5 class="text-center">Vietcombank</h5>
+                        <img width="170" height="184" src="/assets/cms/img/payment-qr/vietcom.jpg" alt="">
+                        <h3>Tan Lao Lu</h3>
+                        <h6>1039549646</h6>
+                        <label>Trụ sở CN Sở giao dịch</label>
+                    </div>
+                </div>
+            </div>
+            <!-- End Body -->
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary">Hoàn Thành</button>
             </div>
             <!-- End Footer -->
         </div>

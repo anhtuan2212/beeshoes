@@ -24,7 +24,16 @@
     padding: 0.4rem 0.4rem;
 
 }
-
+.show-qr-payment{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.custom-address{
+    display: flex;
+    flex-direction: row;
+}
 .logo {
     width: 10.625rem !important;
     height: 3.625rem !important;
