@@ -446,6 +446,23 @@ $(document).ready(function () {
         })
 
     })
+
+    $('#searchInv').on('click', function () {
+        var invStt = $('.select_status').val();
+        var invCode = $('.search_input').val();
+
+        $.ajax({
+            url: '/user-profile/search',
+            type: 'GET',
+            data: {status: invStt, invoiceCode: invCode},
+            success: function (response) {
+
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    })
 });
 
 function checkDuplicate(email, phone, id) {

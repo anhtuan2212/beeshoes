@@ -49,6 +49,7 @@ public class HoaDon {
     String diaChiNhan;
     String sdtNhan;
     String tenNguoiNhan;
+    String emailNguoiNhan;
 
     BigDecimal tongTien;
     BigDecimal giamGia;

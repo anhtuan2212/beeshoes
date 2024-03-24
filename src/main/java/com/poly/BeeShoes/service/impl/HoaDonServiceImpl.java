@@ -27,6 +27,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public List<HoaDon> getByCustomerIdAndInvoiceCodeAndStatus(Long customerId, String invoiceCode, String status) {
+        return hoaDonRepository.findByKhachHangIdAndMaHoaDonAndTrangThai(customerId, invoiceCode, status, Sort.by(Sort.Direction.DESC));
+    }
+
+    @Override
     public List<HoaDon> getByKhachHang(KhachHang khachHang) {
         Sort sort = Sort.by(Sort.Direction.DESC, "ngayTao");
         return hoaDonRepository.findAllByKhachHang(khachHang,sort);
@@ -36,6 +41,8 @@ public class HoaDonServiceImpl implements HoaDonService {
     public List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon) {
         return hoaDonRepository.findByTrangThai(trangThaiHoaDon, Sort.by(Sort.Direction.DESC, "ngayTao"));
     }
+
+
 
     @Override
     public Optional<HoaDon> getHoaDonById(Long id) {

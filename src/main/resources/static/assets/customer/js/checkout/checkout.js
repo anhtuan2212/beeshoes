@@ -126,9 +126,15 @@ function callApiShippingFee() {
             }
         ),
         success: function (response) {
-            console.log(response);
-            $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-            $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+            orderCode = response.data.order_code;
+            var shippingFee = response.data.total_fee;
+            if(totalAmount > 2000000) {
+                $('#shippingFee').text('Miễn phí');
+                shippingFee = 0;
+            } else {
+                $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+            }
+            $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
             $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
         },
         error: function (error) {
@@ -270,11 +276,16 @@ $(document).on('click', '#btn-addAddress', function () {
                             }
                         ),
                         success: function (response) {
-                            console.log(response);
+                            orderCode = response.data.order_code;
                             var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
-                            var shippingFee = document.getElementById("totalAmount").textContent.replace(/[.,]/g, '');
-                            $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-                            $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+                            var shippingFee = response.data.total_fee;
+                            if(totalAmount > 2000000) {
+                                $('#shippingFee').text('Miễn phí');
+                                shippingFee = 0;
+                            } else {
+                                $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                            }
+                            $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
                             $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
                         },
                         error: function (error) {
@@ -345,48 +356,6 @@ $(document).ready(function () {
     var tinhThanhPho = $('#tinhThanhPho');
     var quanHuyen = $('#quanHuyen');
     var phuongXa = $('#phuongXa');
-
-    // $.ajax({
-    //     type: "GET",
-    //     url: "/assets/address-json/province.json",
-    //     contentType: "application/json",
-    //     success: function (response) {
-    //         provinceArr = response;
-    //         console.log(response)
-    //         console.log(123)
-    //         $.each(response, function (index, item) {
-    //             let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
-    //             tinhThanhPho.append(html);
-    //         });
-    //     },
-    //     error: function (error) {
-    //         console.error('Xảy ra lỗi: ', error);
-    //     }
-    // });
-    //
-    // $.ajax({
-    //     type: "GET",
-    //     url: "/assets/address-json/district.json",
-    //     contentType: "application/json",
-    //     success: function (response) {
-    //         districtArr = response;
-    //     },
-    //     error: function (error) {
-    //         console.error('Xảy ra lỗi: ', error);
-    //     }
-    // });
-    //
-    // $.ajax({
-    //     type: "GET",
-    //     url: "/assets/address-json/ward.json",
-    //     contentType: "application/json",
-    //     success: function (response) {
-    //         wardArr = response;
-    //     },
-    //     error: function (error) {
-    //         console.error('Xảy ra lỗi: ', error);
-    //     }
-    // })
 
     tinhThanhPho.on('change', function () {
         tinhThanhPhoSelected = tinhThanhPho.val();
@@ -472,8 +441,13 @@ $(document).ready(function () {
             ),
             success: function (response) {
                 orderCode = response.data.order_code;
-                $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+                var shippingFee = response.data.total_fee;
+                if(totalAmount > 2000000) {
+                    $('#shippingFee').text('Miễn phí');
+                } else {
+                    $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                }
+                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
                 $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
             },
             error: function (error) {
@@ -558,10 +532,15 @@ $(document).ready(function () {
                 }
             ),
             success: function (response) {
-                console.log(response);
                 orderCode = response.data.order_code;
-                $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(response.data.total_fee)).toLocaleString('en-US'));
+                var shippingFee = response.data.total_fee;
+                if(totalAmount > 2000000) {
+                    $('#shippingFee').text('Miễn phí');
+                    shippingFee = 0;
+                } else {
+                    $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                }
+                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
                 $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
             },
             error: function (error) {
@@ -573,61 +552,24 @@ $(document).ready(function () {
 
     $('#placeOrder').on('click', function () {
         const regex = /^[0-9]*$/;
-        if (
-            $('#customerName').val() == '' || $('#customerName').val() == undefined ||
-            $('#customerPhone').val() == '' || $('#customerPhone').val() == undefined ||
-            $('#tinhThanhPho').val() == '' || $('#tinhThanhPho').val() == undefined ||
-            $('#quanHuyen').val() == '' || $('#quanHuyen').val() == undefined ||
-            $('#phuongXa').val() == '' || $('#phuongXa').val() == undefined ||
-            $('#customerHouseNumber').val() == '' || $('#customerHouseNumber').val() == undefined
-        ) {
-            $('.error-customerName').text('Không được để trống');
-            $('.error-customerPhone').text('Không được để trống');
-            $('.error-tinhThanhPho').text('Không được để trống');
-            $('.error-quanHuyen').text('Không được để trống');
-            $('.error-phuongXa').text('Không được để trống');
-            $('.error-customerHouseNumber').text('Không được để trống');
-            return;
-        } else if ($('#customerName').val() == '' || $('#customerName').val() == undefined) {
-            $('.error-customerName').text('Không được để trống');
-            return;
-        } else if ($('#customerPhone').val() == '' || $('#customerPhone').val() == undefined) {
-            $('.error-customerPhone').text('Không được để trống');
-            return;
-        } else if (!regex.test($('#customerPhone').val())) {
-            $('.error-customerPhone').text('Số điện thoại không đúng định dạng');
-            return;
-        } else if ($('#tinhThanhPho').val() == '' || $('#tinhThanhPho').val() == undefined) {
-            $('.error-tinhThanhPho').text('Không được để trống');
-            return;
-        } else if ($('#quanHuyen').val() == '' || $('#quanHuyen').val() == undefined) {
-            $('.error-quanHuyen').text('Không được để trống');
-            return;
-        } else if ($('#phuongXa').val() == '' || $('#phuongXa').val() == undefined) {
-            $('.error-phuongXa').text('Không được để trống');
-            return;
-        } else if ($('#customerHouseNumber').val() == '' || $('#customerHouseNumber').val() == undefined) {
-            $('.error-customerHouseNumber').text('Không được để trống');
-            return;
-        }
-        $('.error-customerName').text('');
-        $('.error-customerPhone').text('');
-        $('.error-tinhThanhPho').text('');
-        $('.error-quanHuyen').text('');
-        $('.error-phuongXa').text('');
-        $('.error-customerHouseNumber').text('');
+
         var total = parseInt($('#total').text().replace(/[,.]/g, ''));
         var voucherValue = 0;
         if (!isNaN(parseInt($('#voucherValue').text().replace(/[,.]/g, '')))) {
             voucherValue = parseInt($('#voucherValue').text().replace(/[,.]/g, ''));
         }
-        var shippingFee = parseInt($('#shippingFee').text().replace(/[,.]/g, ''));
+        var shippingFeeText = $('#shippingFee').text();
+        var shippingFee = 0;
+        if(shippingFeeText != 'Miễn phí') {
+            shippingFee = parseInt(shippingFeeText.replace(/[,.]/g, ''));
+        }
         console.log(voucherValue);
         if ($('#customerHouseNumber').val() != null || $('#customerHouseNumber').val() != undefined) {
             houseNumber = $('#customerHouseNumber').val();
         }
         console.log(houseNumber + ',' + ward + ',' + district + ',' + province);
         var customerPhone = $('#customerPhone').val();
+        var customerEmail = $('#customerEmail').val();
         var customerName = $('#customerName').val();
         var typeOfPayment = $('input[name=paymentMethod]:checked').val();
         console.log(typeOfPayment);
@@ -662,6 +604,7 @@ $(document).ready(function () {
             voucherValue: voucherValue,
             customerPhone: customerPhone,
             customerName: customerName,
+            customerEmail: customerEmail,
             addressReceive: houseNumber + "," + wardName + "," + districtName + "," + provinceName
         }
         console.log(paymentDto);

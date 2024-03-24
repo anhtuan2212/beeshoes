@@ -439,6 +439,40 @@ public class HoaDonRestController {
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
 
+    @PostMapping("/update-receive-address")
+    public ResponseEntity<String> updateReceiveAddress(
+            @RequestBody String data,
+            HttpServletRequest request
+    ) {
+        JsonObject response = JsonParser.parseString(data).getAsJsonObject();
+        Long invoiceId = response.get("invoiceId").getAsLong();
+        String cusName = response.get("customerName").getAsString();
+        String cusPhone = response.get("customerPhone").getAsString();
+        BigDecimal shippingFee = BigDecimal.valueOf(response.get("shippingFee").getAsLong());
+        String cusHouseNum = response.get("customerHouseNumber").getAsString();
+        String receiveAddress = response.get("updateAddress").getAsString();
+
+        HoaDon needUpdate = hoaDonService.getHoaDonById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Invalid data of invoiceId"));
+        needUpdate.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
+        needUpdate.setTenNguoiNhan(cusName);
+        needUpdate.setSdtNhan(cusPhone);
+        needUpdate.setPhiShip(shippingFee);
+        needUpdate.setDiaChiNhan(cusHouseNum + "," + receiveAddress);
+        HoaDon updated = hoaDonService.save(needUpdate);
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setHanhDong("Cập nhật địa chỉ nhận hàng");
+        lichSuHoaDon.setHoaDon(updated);
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setTrangThaiSauUpdate(updated.getTrangThai().name());
+        if(request.getUserPrincipal() != null) {
+            User loggedUser = userService.getByUsername(request.getUserPrincipal().getName());
+            lichSuHoaDon.setNguoiThucHien(loggedUser);
+        }
+        lichSuHoaDonService.save(lichSuHoaDon);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+
 //    @GetMapping("/getWard")
 //    public ResponseEntity callWardGHN(
 //            @RequestParam("district_id") int districtID
