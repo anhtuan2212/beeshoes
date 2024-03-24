@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface HoaDonService {
 
     List<HoaDon> getAllHoaDon();
+    List<HoaDon> getByCustomerIdAndInvoiceCodeAndStatus(Long customerId, String invoiceCode, String status);
     List<HoaDon> getByKhachHang(KhachHang khachHang);
 
     List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon);

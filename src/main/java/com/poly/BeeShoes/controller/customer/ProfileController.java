@@ -3,6 +3,7 @@ package com.poly.BeeShoes.controller.customer;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.request.ProfileRequest;
 import com.poly.BeeShoes.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -104,5 +106,26 @@ public class ProfileController {
         khachHang.setNgaySua(Timestamp.from(Instant.now()));
         khachHangService.update(khachHang);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user-profile/search")
+    public String filterByStatusAndInvoiceCode(
+            @RequestParam("status") String status,
+            @RequestParam("invoiceCode") String invoiceCode,
+            Model model,
+            HttpServletRequest request
+    ) {
+        if(request.getUserPrincipal() != null) {
+            User user = userService.getByUsername(request.getUserPrincipal().getName());
+            KhachHang khachHang = user.getKhachHang();
+            List<HoaDon> invoiceList =
+                    hoaDonService.getByCustomerIdAndInvoiceCodeAndStatus(khachHang.getId(), invoiceCode, status);
+            List<Voucher> voucherList = voucherService.getAll();
+            invoiceList.forEach(inv -> voucherList.removeIf(vou -> vou == inv.getVoucher()));
+            model.addAttribute("user", user);
+            model.addAttribute("lsthoadon", invoiceList);
+            model.addAttribute("lstvouchers", voucherList);
+        }
+        return "customer/pages/profile/user-profile";
     }
 }

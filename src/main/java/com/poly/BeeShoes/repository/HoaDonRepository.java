@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     List<HoaDon> findByNguoiTao_Id(Long userId);
+
+    List<HoaDon> findByKhachHangIdAndMaHoaDonAndTrangThai(Long customerId, String invoiceCode, String status, Sort sort);
     List<HoaDon> findAllByKhachHang(KhachHang khachHang,Sort sort);
 
     List<HoaDon> findByTrangThai(TrangThaiHoaDon trangThaiHoaDon, Sort sort);

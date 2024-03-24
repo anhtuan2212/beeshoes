@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <!-- Required Meta Tags Always Come First -->
     <meta charset="utf-8">
@@ -21,7 +22,7 @@
     <!-- CSS Timeline -->
     <link rel="stylesheet" href="/assets/cms/css/timeline.css">
     <style>
-        .swal2-timer-progress-bar{
+        .swal2-timer-progress-bar {
             background-color: #a5dc86;
         }
     </style>
@@ -56,7 +57,8 @@
                     </nav>
 
                     <div class="d-sm-flex align-items-sm-center">
-                        <h1 id="id-for-attribute" th:attr="id-for-call-api=${hoaDon.id}" class="page-header-title" th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
+                        <h1 id="id-for-attribute" th:attr="id-for-call-api=${hoaDon.id}" class="page-header-title"
+                            th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
                         <div class="trangThaiHeader ml-sm-3">
                             <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
                     (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
@@ -98,7 +100,9 @@
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChuanBiHang'}" id="getAttrToHuyFromDetail" type="button" class="btn btn-sm btn-outline-danger mr-1" data-toggle="modal" data-target="#staticBackdrop">
+                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChuanBiHang'}"
+                        id="getAttrToHuyFromDetail" type="button" class="btn btn-sm btn-outline-danger mr-1"
+                        data-toggle="modal" data-target="#staticBackdrop">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
                 <button class="btn btn-sm btn-outline-primary d-none"
@@ -107,7 +111,8 @@
                 </button>
             </div>
             <div class="col-6 d-flex justify-content-end">
-                <button th:class="'btn btn-sm btn-outline-dark mr-1 ' + ${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'Huy' ? 'd-none' : ''}" id="printOrder">
+                <button th:class="'btn btn-sm btn-outline-dark mr-1 ' + ${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'Huy' ? 'd-none' : ''}"
+                        id="printOrder">
                     <i class="tio-print"></i> In hóa đơn
                 </button>
                 <button class="btn btn-sm btn-outline-dark mr-1" data-toggle="modal" data-target="#history">
@@ -125,14 +130,15 @@
                         <h4 class="card-header-title">Chi tiết đơn hàng <span
                                 class="badge badge-soft-dark rounded-circle ml-1"
                                 th:text="${hoaDonChiTietList.size()}"></span></h4>
-                        <a class="link" href="javascript:;">Chỉnh sửa</a>
+                        <btn class="btn btn-outline-primary">Chỉnh sửa</btn>
                     </div>
                     <!-- End Header -->
 
                     <!-- Body -->
                     <div class="card-body">
                         <!-- Media -->
-                        <div class="media mb-1 product" th:each="hdct, productInfo : ${hoaDonChiTietList}" th:data-productId="${productInfo.index}">
+                        <div class="media mb-1 product" th:each="hdct, productInfo : ${hoaDonChiTietList}"
+                             th:data-productId="${productInfo.index}">
                             <div class="avatar avatar-xl mr-3">
                                 <img class="img-fluid" th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
                             </div>
@@ -140,7 +146,8 @@
                             <div class="media-body">
                                 <div class="row">
                                     <div class="col-md-6 mb-3 mb-md-0">
-                                        <a class="h5 d-block productName" th:href="@{|/cms/view-product?id=${hdct.chiTietSanPham.sanPham.id}|}"
+                                        <a class="h5 d-block productName"
+                                           th:href="@{|/cms/view-product?id=${hdct.chiTietSanPham.sanPham.id}|}"
                                            th:text="${hdct.chiTietSanPham.sanPham.ten}"></a>
                                         <div class="font-size-sm text-body">
                                             <span>Color:</span>
@@ -155,7 +162,8 @@
                                     </div>
 
                                     <div class="col col-md-2 align-self-center">
-                                        <h6 class="productPrice" th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue(), 0, 'COMMA')}"></h6>
+                                        <h6 class="productPrice"
+                                            th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue(), 0, 'COMMA')}"></h6>
                                     </div>
 
                                     <div class="col col-md-2 align-self-center">
@@ -182,13 +190,14 @@
                                     <dd class="col-sm-6"
                                         th:text="${#numbers.formatInteger(hoaDon.tongTien.intValue(), 0, 'COMMA')}"></dd>
                                     <th:block th:if="${hoaDon.voucher != null}">
-                                        <dt class="col-sm-6">Giảm giá: </dt>
+                                        <dt class="col-sm-6">Giảm giá:</dt>
                                         <dd class="col-sm-6"
                                             th:text="${#numbers.formatInteger(hoaDon.giamGia.intValue(), 0, 'COMMA')}"></dd>
                                     </th:block>
-                                    <dt class="col-sm-6">Phí ship: </dt>
+                                    <dt class="col-sm-6">Phí ship:</dt>
                                     <dd class="col-sm-6"
-                                        th:text="${#numbers.formatInteger(hoaDon.phiShip.intValue(), 0, 'COMMA')}"></dd>
+                                        id="shippingFee"
+                                        th:text="${hoaDon.phiShip == 0 ? 'Miễn phí' : #numbers.formatInteger(hoaDon.phiShip.intValue(), 0, 'COMMA')}"></dd>
                                     <dt class="col-sm-6">Thực thu:</dt>
                                     <dd class="col-sm-6"
                                         th:text="${#numbers.formatInteger(hoaDon.thucThu.intValue(), 0, 'COMMA')}"></dd>
@@ -211,7 +220,8 @@
                                 <h5 class="modal-title" id="historyTitle">Lịch Sử Đơn Hàng </h5>
                                 <div class="trangThaiHeader ml-sm-1">
                                     <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                      (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}" th:text="'Trạng thái: ' + ${hoaDon.trangThai}"></span>
+                      (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                                          th:text="'Trạng thái: ' + ${hoaDon.trangThai}"></span>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -252,27 +262,31 @@
                 <div th:if="${hoaDon.khachHang != null}" class="card">
                     <!-- Header -->
                     <div class="card-header">
-                        <h4 class="card-header-title">Khách hàng</h4>
+                        <h4 class="card-header-title">Thông tin nhận hàng</h4>
+                        <button th:if="${hoaDon.trangThai.name() == 'ChoXacNhan' || hoaDon.trangThai.name() == 'ChuanBiHang'}" class="btn btn-outline-primary fixInvoice">Chỉnh sửa</button>
                     </div>
                     <!-- End Header -->
 
                     <!-- Body -->
                     <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Khách hàng</h5>
+                        </div>
                         <a class="media align-items-center"
                            th:href="@{|/cms/khach-hang/detail/${hoaDon.khachHang.id}|}">
                             <div class="avatar avatar-circle mr-3">
                                 <img class="avatar-img" src="/assets/cms/img/160x160/img10.jpg" alt="Image Description">
                             </div>
                             <div class="media-body">
-                                <span id="" class="customerName text-body d-inline-block text-hover-primary" th:text="${hoaDon.khachHang.hoTen}"></span>
+                                <span id=""
+                                      class="customerName text-body d-inline-block text-hover-primary"
+                                      th:text="${hoaDon.khachHang.hoTen}"></span>
                             </div>
                             <div class="media-body text-right">
                                 <i class="tio-chevron-right text-body"></i>
                             </div>
                         </a>
-
                         <hr>
-
                         <a class="media align-items-center" href="/cms/customer-detail">
                             <div class="icon icon-soft-info icon-circle mr-3">
                                 <i class="tio-shopping-basket-outlined"></i>
@@ -285,47 +299,32 @@
                                 <i class="tio-chevron-right text-body"></i>
                             </div>
                         </a>
-
                         <hr>
-
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5>Thông tin liên hệ</h5>
-                            <a class="link" href="javascript:;">Chỉnh sửa</a>
+                            <h5>Tên người nhận</h5>
                         </div>
-
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="nameCusNonLog customerName" th:text="${hoaDon.tenNguoiNhan}"></span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Số điện thoại</h5>
+                        </div>
                         <ul class="list-unstyled list-unstyled-py-2">
-                            <li class="customerPhone" th:text="${hoaDon.khachHang.sdt}">
+                            <li class="customerPhone phoneCusNonLog" id="phoneCusLogged"
+                                th:text="${hoaDon.khachHang.sdt}">
                                 <i class="tio-online mr-2"></i>
                             </li>
                         </ul>
-
                         <hr>
-
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5>Địa chỉ mặc định</h5>
-                            <a class="link" href="javascript:;">Chỉnh sửa</a>
+                            <h5>Địa chỉ nhận hàng</h5>
                         </div>
 
-                        <span th:if="${hoaDon.khachHang!= null && hoaDon.khachHang.diaChiMacDinh != null}" class="customerAddress d-block"
-                              th:utext="${hoaDon.khachHang.diaChiMacDinh.soNha} + ', <br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.phuongXa} + ', <br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.quanHuyen} + ', <br>' +
-                      ${hoaDon.khachHang.diaChiMacDinh.tinhThanhPho}">
-                   <img class="avatar avatar-xss avatar-circle ml-1"
-                        src="/assets/cms/vendor/flag-icon-css/flags/1x1/gb.svg" alt="Great Britain Flag">
-                </span>
-
-                        <hr>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5>Địa chỉ giao hàng</h5>
-                            <a class="link" href="javascript:;">Chỉnh sửa</a>
-                        </div>
-
-                        <span class="d-block"
+                        <span class="d-block receiveAddress"
                               th:utext="${hoaDon.diaChiNhan != null ? hoaDon.diaChiNhan : ''}">
-                   <img class="avatar avatar-xss avatar-circle ml-1"
-                        src="/assets/cms/vendor/flag-icon-css/flags/1x1/gb.svg" alt="Great Britain Flag">
                 </span>
                     </div>
                     <!-- End Body -->
@@ -333,52 +332,67 @@
                 <div th:if="${hoaDon.khachHang == null}" class="card">
                     <div class="card-header">
                         <h4>Thông tin người nhận</h4>
+                        <button th:if="${hoaDon.trangThai.name() == 'ChoXacNhan' || hoaDon.trangThai.name() == 'ChuanBiHang'}" class="btn btn-outline-primary justify-content-end fixInvoice">Chỉnh sửa</button>
                     </div>
                     <div class="card-body">
-                        <div class="">
-                            <p>Tên: <span class="customerName" th:text="${hoaDon.tenNguoiNhan}"></span></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Tên người nhận</h5>
                         </div>
-                        <div class="">
-                            <p>Sdt: <span class="customerPhone" th:text="${hoaDon.sdtNhan}"></span></p>
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="nameCusNonLog customerName" th:text="${hoaDon.tenNguoiNhan}"></span>
+                            </div>
                         </div>
-                        <div class="">
-                            <p>Địa chỉ: <span class="customerAddress" th:text="${hoaDon.diaChiNhan}"></span></p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Số điện thoại</h5>
                         </div>
+                        <ul class="list-unstyled list-unstyled-py-2">
+                            <li class="customerPhone phoneCusNonLog"
+                                th:text="${hoaDon.sdtNhan}">
+                                <i class="tio-online mr-2"></i>
+                            </li>
+                        </ul>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Địa chỉ nhận hàng</h5>
+                        </div>
+                        <span class="receiveAddress customerAddress"
+                              th:text="${hoaDon.diaChiNhan}"></span></p>
                     </div>
+                    <!-- End Card -->
                 </div>
-                <!-- End Card -->
             </div>
+            <!-- End Row -->
         </div>
-        <!-- End Row -->
-    </div>
-    <!-- End Content -->
+        <!-- End Content -->
 
-    <!-- Footer -->
-    <div class="d-print-none">
+        <!-- Footer -->
+        <div class="d-print-none">
 
-        <div class="footer">
-            <div class="row justify-content-between align-items-center">
-                <div class="col">
-                    <p class="font-size-sm mb-0">&copy; Front. <span
-                            class="d-none d-sm-inline-block">2020 Htmlstream.</span></p>
-                </div>
-                <div class="col-auto">
-                    <div class="d-flex justify-content-end">
-                        <!-- List Dot -->
-                        <ul class="list-inline list-separator">
-                            <li class="list-inline-item">
-                                <a class="list-separator-link" href="#">FAQ</a>
-                            </li>
+            <div class="footer">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col">
+                        <p class="font-size-sm mb-0">&copy; Front. <span
+                                class="d-none d-sm-inline-block">2020 Htmlstream.</span></p>
+                    </div>
+                    <div class="col-auto">
+                        <div class="d-flex justify-content-end">
+                            <!-- List Dot -->
+                            <ul class="list-inline list-separator">
+                                <li class="list-inline-item">
+                                    <a class="list-separator-link" href="#">FAQ</a>
+                                </li>
 
-                            <li class="list-inline-item">
-                                <a class="list-separator-link" href="#">License</a>
-                            </li>
+                                <li class="list-inline-item">
+                                    <a class="list-separator-link" href="#">License</a>
+                                </li>
 
-                            <li class="list-inline-item">
-                                <!-- Keyboard Shortcuts Toggle -->
-                                <div class="hs-unfold">
-                                    <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
-                                       href="javascript:;" data-hs-unfold-options='{
+                                <li class="list-inline-item">
+                                    <!-- Keyboard Shortcuts Toggle -->
+                                    <div class="hs-unfold">
+                                        <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle"
+                                           href="javascript:;" data-hs-unfold-options='{
                                 "target": "#keyboardShortcutsSidebar",
                                 "type": "css-animation",
                                 "animationIn": "fadeInRight",
@@ -386,21 +400,21 @@
                                 "hasOverlay": true,
                                 "smartPositionOff": true
                                }'>
-                                        <i class="tio-command-key"></i>
-                                    </a>
-                                </div>
-                                <!-- End Keyboard Shortcuts Toggle -->
-                            </li>
-                        </ul>
-                        <!-- End List Dot -->
+                                            <i class="tio-command-key"></i>
+                                        </a>
+                                    </div>
+                                    <!-- End Keyboard Shortcuts Toggle -->
+                                </li>
+                            </ul>
+                            <!-- End List Dot -->
+                        </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
-
-
-    </div>
-    <!-- End Footer -->
+        <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
 
@@ -878,6 +892,47 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateReceiveAddress" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="updateAddressLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 420px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông tin nhận hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body p-4">
+                <input type="text" hidden="hidden" id="id_address">
+                <div class="w-100">
+                    <label for="updatedCusName" class="pointer mb-0 w-100">Họ Tên:</label>
+                    <input class="w-100 mb-3 form-control" type="text" id="updatedCusName">
+                    <label for="updatedCusPhone" class="pointer mb-0 w-100">Số Điện Thoại:</label>
+                    <input class="w-100 mb-3 form-control" type="text" id="updatedCusPhone">
+                    <label for="updatedCusHouseNumber" class="pointer mb-0 w-100">Số Nhà:</label>
+                    <input class="w-100 mb-3 form-control" type="text" id="updatedCusHouseNumber">
+                    <label for="updatedCusProvince" class="pointer mb-0 w-100">Tỉnh/TP:</label>
+                    <select class="w-100 mb-3 form-control" type="text" id="updatedCusProvince">
+                        <option value="" selected>Tỉnh/Thành Phố</option>
+                    </select>
+                    <label for="updatedCusDistrict" class="pointer mb-0 w-100">Quận Huyện:</label>
+                    <select class="w-100 mb-3 form-control" type="text" id="updatedCusDistrict">
+                        <option value="" selected>Quận/Huyện</option>
+                    </select>
+                    <label for="updatedCusWard" class="pointer mb-0 w-100">Phường Xã:</label>
+                    <select class="w-100 form-control" type="text" id="updatedCusWard">
+                        <option value="" selected>Phường/Xã</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
+                <button id="updateReceiveAddressBtn" type="button" class="btn primary-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- End Export Orders Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
@@ -891,6 +946,80 @@
 
 <!-- JS Plugins Init. -->
 <script>
+    var province = $('#updatedCusProvince');
+    var district = $('#updatedCusDistrict');
+    var ward = $('#updatedCusWard');
+    var provinceName, districtName, wardName;
+    var provinceId, districtId, wardCode;
+    var provinceArr, districtArr, wardArr;
+
+    $.ajax({
+        type: "GET",
+        url: "/assets/address-json/province.json",
+        contentType: "application/json",
+        success: function (response) {
+            provinceArr = response;
+            console.log(response)
+            console.log(123)
+            $.each(response, function (index, item) {
+                let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
+                province.append(html);
+            });
+        },
+        error: function (error) {
+            console.error('Xảy ra lỗi: ', error);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/assets/address-json/district.json",
+        contentType: "application/json",
+        success: function (response) {
+            districtArr = response;
+        },
+        error: function (error) {
+            console.error('Xảy ra lỗi: ', error);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/assets/address-json/ward.json",
+        contentType: "application/json",
+        success: function (response) {
+            wardArr = response;
+        },
+        error: function (error) {
+            console.error('Xảy ra lỗi: ', error);
+        }
+    })
+
+    province.on('change', function () {
+        district.html('<option value="">Quận/Huyện</option>');
+        ward.html('<option value="">Phường/Xã</option>');
+        provinceId = province.val();
+        provinceName = province.find('option:selected').text();
+        districtArr.forEach(function (item) {
+            if (item.ProvinceID == provinceId) {
+                let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                district.append(html);
+            }
+        })
+    })
+
+    district.on('change', function () {
+        ward.html('<option value="">Phường/Xã</option>');
+        districtId = district.val();
+        districtName = district.find('option:selected').text();
+        wardArr.forEach(function (item) {
+            if (item.DistrictID == districtId) {
+                let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+                ward.append(html);
+            }
+        })
+    })
+
     function Toast(status, message) {
         const Toast = Swal.mixin({
             toast: true,
@@ -1079,7 +1208,7 @@
                             let type = 'success';
                             let status = response.trangThaiSauUpdate;
                             let typeOfColor = 'success';
-                            if(status != 'ChoXacNhan' && status != 'Huy') {
+                            if (status != 'ChoXacNhan' && status != 'Huy') {
                                 $('printOrder').removeClass('d-none');
                             } else {
                                 $('printOrder').addClass('d-none');
@@ -1102,7 +1231,8 @@
                                 typeOfColor = 'danger';
                                 $('#getAttrToHuyFromDetail').addClass('d-none');
                                 $('#hoanTacFromDetail').hide();
-                            }  else if (status == 'DangGiao') {
+                                $('.fixInvoice').hide();
+                            } else if (status == 'DangGiao') {
                                 typeOfColor = 'danger';
                                 $('#hoanTacFromDetail').hide();
                             } else if (status == 'ThanhCong') {
@@ -1295,11 +1425,11 @@
 
     })
 
-    $(document).on('click', '#dataInputReason',function () {
+    $(document).on('click', '#dataInputReason', function () {
         $('#staticBackdrop').modal('show');
     })
 
-    $(document).on('change', '[name="cancel"]',function () {
+    $(document).on('change', '[name="cancel"]', function () {
         let val = $(this).val()
         let element = $('#lydo_cancel');
         if (val == '#') {
@@ -1313,7 +1443,7 @@
             }, 400);
         }
     })
-    $(document).on('click', '#huyFromDetail',function () {
+    $(document).on('click', '#huyFromDetail', function () {
         $('#staticBackdrop').modal('hide');
         var idHoaDon = String($('#getAttrToHuyFromDetail').closest("div").attr("id-hoa-don"));
         let lydo = $('[name="cancel"]:checked').val();
@@ -1346,6 +1476,139 @@
                 console.error('Xảy ra lỗi: ', error);
             }
         });
+    })
+
+    $(document).on('click', '.fixInvoice', function () {
+        var cusName = $('.nameCusNonLog').text();
+        var cusPhone = $('.phoneCusNonLog').text();
+        var cusAddress = $('.receiveAddress').text().split(',');
+        $('#updatedCusName').val(cusName);
+        $('#updatedCusPhone').val(cusPhone);
+        $('#updatedCusHouseNumber').val(cusAddress[0]);
+        $('#updatedCusProvince option').each(function () {
+            if ($(this).text() == cusAddress[3]) {
+                $(this).prop('selected', true);
+                return false;
+            }
+        })
+        for (let i = 0; i < provinceArr.length; i++) {
+            let item = provinceArr[i];
+            if (item.ProvinceName == cusAddress[3]) {
+                province.val(item.ProvinceID);
+                districtArr.forEach(function (dis) {
+                    if (dis.ProvinceID == item.ProvinceID) {
+                        let html = `<option value="${dis.DistrictID}" ${dis.DistrictName == cusAddress[2] ? 'selected' : ''}>${String(dis.DistrictName)}</option>`;
+                        district.append(html);
+                        if (dis.DistrictName == cusAddress[2]) {
+                            wardArr.forEach((wd) => {
+                                if (wd.DistrictID == dis.DistrictID) {
+                                    let print = `<option value="${wd.Code}" ${cusAddress[1] == wd.Name ? 'selected' : ''}>${String(wd.Name)}</option>`;
+                                    ward.append(print);
+                                }
+                            })
+                        }
+                    }
+                })
+                break;
+            }
+        }
+        $('#updateReceiveAddress').modal('show');
+    })
+
+    $('#updateReceiveAddressBtn').on('click', function () {
+        showLoader();
+        var invoiceId = $('#id-for-attribute').attr('id-for-call-api');
+        var customerName = $('#updatedCusName').val();
+        var customerPhone = $('#updatedCusPhone').val();
+        var customerHouseNumber = $('#updatedCusHouseNumber').val();
+        var provinceName = province.find('option:selected').text();
+        var provinceId = province.val();
+        var districtName = district.find('option:selected').text();
+        var districtId = district.val();
+        var wardName = ward.find('option:selected').text();
+        var wardCode = ward.val();
+        var receiveAddressUpdate = wardName + ',' + districtName + ',' + provinceName;
+        var shippingFee = 0;
+
+        $.ajax({
+            type: "POST",
+            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+            contentType: "application/json",
+            headers: {
+                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+            },
+            data: JSON.stringify(
+                {
+                    shop_id: "190713",
+                    from_name: "LightBee Shop",
+                    from_phone: "0359966461",
+                    from_address: "Trường Cao Đẳng FPT Polytechnic",
+                    from_ward_name: "Phường Xuân Phương",
+                    from_district_name: "Nam Từ Liêm",
+                    from_province_name: "Hà Nội",
+                    to_name: customerName,
+                    to_phone: customerPhone,
+                    to_address: provinceName,
+                    to_ward_code: wardCode,
+                    to_district_id: districtId,
+                    service_id: 55320,
+                    service_type_id: 2,
+                    payment_type_id: 2,
+                    cod_amount: 200000,
+                    required_note: "CHOXEMHANGKHONGTHU",
+                    items: [
+                        {
+                            name: "Áo Polo",
+                            code: "Polo123",
+                            quantity: 1,
+                            price: 200000,
+                            length: 12,
+                            width: 12,
+                            height: 12,
+                            weight: 1200,
+                            category:
+                                {
+                                    level1: "Áo"
+                                }
+                        }
+                    ],
+                    weight: 2000,
+                    length: 1,
+                    width: 19,
+                    height: 10
+                }
+            ),
+            success: function (response) {
+                shippingFee = parseInt(response.data.total_fee);
+                $.ajax({
+                    type: "POST",
+                    url: "/api/hoa-don/update-receive-address",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        invoiceId: invoiceId,
+                        customerName: customerName,
+                        customerPhone: customerPhone,
+                        customerHouseNumber: customerHouseNumber,
+                        updateAddress: receiveAddressUpdate,
+                        shippingFee: shippingFee
+                    }),
+                    success: function () {
+                        $('#updateReceiveAddress').modal('hide');
+                        ToastSuccess('Cập nhật thành công thông tin nhận hàng');
+                        $('#shippingFee').text(shippingFee == 0 ? 'Miễn phí' : shippingFee.toLocaleString('en-US'));
+                        $('.nameCusNonLog').text(customerName);
+                        $('.phoneCusNonLog').text(customerPhone);
+                        $('.receiveAddress').text(customerHouseNumber + ',' + receiveAddressUpdate);
+                    },
+                    error: function (error) {
+                        console.error('Xảy ra lỗi: ', error);
+                    }
+                })
+            },
+            error: function (error) {
+                console.error('Xảy ra lỗi: ', error);
+            }
+        })
     })
 
 </script>
