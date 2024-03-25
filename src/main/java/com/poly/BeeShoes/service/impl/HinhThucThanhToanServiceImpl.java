@@ -38,4 +38,9 @@ public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
     public boolean delete(Long id) {
         return false;
     }
+
+    @Override
+    public HinhThucThanhToan getByHinhThuc(String hinhThuc) {
+        return hinhThucThanhToanRepository.findByHinhThuc(hinhThuc);
+    }
 }

@@ -265,10 +265,10 @@
                 </td>
                 <td ><a th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}" th:text="${hoaDon.maHoaDon}"></a></td>
                 <td>
-                    <span th:text="${hoaDon.tenNguoiNhan}"></span>
+                    <span th:text="${hoaDon.tenNguoiNhan ? 'N/A' : hoaDon.sdtNhan}"></span>
                 </td>
                 <td>
-                    <span th:text="${hoaDon.sdtNhan}"></span>
+                    <span th:text="${hoaDon.sdtNhan == null ? 'N/A' : hoaDon.sdtNhan}"></span>
                 </td>
                 <td>
                     <span th:text="${#numbers.formatDecimal(hoaDon.thucThu, 1, 'DEFAULT', 0, 'DEFAULT')}"></span>
