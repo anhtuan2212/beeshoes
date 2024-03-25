@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VoucherResponsitory extends JpaRepository<Voucher,Long> {
-  Voucher findByMa(String ma);
+  Optional<Voucher> findByMa(String ma);
   @Query("select c  from Voucher c  where c.ma  like %?1% or c.ten like %?1%" +
           "or c.loaiVoucher like %?1%")
     List<Voucher> searchVC(String key);

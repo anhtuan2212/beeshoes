@@ -18,8 +18,8 @@ public class GlobalExceptionHandler {
     public String handleBadRequestException(HttpServletRequest request) {
         return "redirect:/error/404";
     }
-    @ExceptionHandler(value = {Exception.class})
-    public String defaultErrorHandler(HttpServletRequest req, Exception e) {
-        return "redirect:/error/404";
-    }
+//    @ExceptionHandler(value = {Exception.class})
+//    public String defaultErrorHandler(HttpServletRequest req, Exception e) {
+//        return "redirect:/error/404";
+//    }
 }

@@ -29,6 +29,12 @@ public class HoaDon {
     @JoinColumn(name = "id_khach_hang")
     KhachHang khachHang;
 
+    @ManyToMany
+    @JoinTable(name = "thanh_toan",
+            joinColumns = @JoinColumn(name = "id_hoa_don"),
+            inverseJoinColumns = @JoinColumn(name = "id_hinh_thuc_thanh_toan"))
+    private List<HinhThucThanhToan> hinhThucThanhToans;
+
     String maHoaDon;
 
     String maVanChuyen;

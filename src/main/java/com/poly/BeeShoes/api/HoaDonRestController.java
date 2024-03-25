@@ -6,9 +6,7 @@ import com.poly.BeeShoes.dto.LichSuHoaDonDto;
 import com.poly.BeeShoes.dto.WardDto;
 import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
-import com.poly.BeeShoes.request.AddProductOderRequest;
-import com.poly.BeeShoes.request.UpdateProductRquest;
-import com.poly.BeeShoes.request.chiTietSanPhamApiRquest;
+import com.poly.BeeShoes.request.*;
 import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import com.poly.BeeShoes.utility.MailUtility;
@@ -25,6 +23,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,7 +46,9 @@ public class HoaDonRestController {
     private final MauSacService mauSacService;
     private final KichCoService kichCoService;
     private final SanPhamService sanPhamService;
+    private final KhachHangService khachHangService;
     private final MailUtility mailUtility;
+    private final HinhThucThanhToanService hinhThucThanhToanService;
     Gson gson = new Gson();
 
     @PostMapping("/xac-nhan")
@@ -80,6 +82,215 @@ public class HoaDonRestController {
             System.out.println(updatedHoaDon.getMaHoaDon() + " | " + updatedHoaDon.getTrangThai().name());
         });
         return ResponseEntity.status(HttpStatus.OK).body("Xác nhận thành công đơn hàng");
+    }
+
+    @PostMapping("/payment-cashier")
+    public ResponseEntity banTaiQuay(@ModelAttribute PaymentCashierRequest request) {
+        TypePaymentRequest typePayment = gson.fromJson(request.getTypePayment(), TypePaymentRequest.class);
+        System.out.println(request);
+        Type listType = new TypeToken<List<ProductCashierRequest>>() {
+        }.getType();
+        List<ProductCashierRequest> listProduct = gson.fromJson(request.getProduct(), listType);
+        List<HoaDonChiTiet> lstHDCT = new ArrayList<>();
+        Voucher voucher = voucherService.getByMa(request.getVoucher());
+        List<HinhThucThanhToan> httt = new ArrayList<>();
+        KhachHang kh = new KhachHang();
+        if (!request.getCustomer().equals("#")) {
+            kh = khachHangService.detail(Long.parseLong(request.getCustomer()));
+        }
+        if (typePayment.isChuyenKhoan()) {
+            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("ChuyenKhoan");
+            if (ht == null) {
+                ht = new HinhThucThanhToan();
+                ht.setHinhThuc("ChuyenKhoan");
+                ht.setTrangThai(true);
+                ht.setMoTa("Chuyển Khoản");
+                ht = hinhThucThanhToanService.save(ht);
+                httt.add(ht);
+            }
+        }
+        if (typePayment.isTienMat()) {
+            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("TienMat");
+            if (ht == null) {
+                ht = new HinhThucThanhToan();
+                ht.setHinhThuc("TienMat");
+                ht.setTrangThai(true);
+                ht.setMoTa("Tiền Mặt");
+                ht = hinhThucThanhToanService.save(ht);
+                httt.add(ht);
+            }
+        }
+        if (typePayment.isKhiNhanHang()) {
+            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("KhiNhanHang");
+            if (ht == null) {
+                ht = new HinhThucThanhToan();
+                ht.setHinhThuc("KhiNhanHang");
+                ht.setTrangThai(true);
+                ht.setMoTa("Thanh Toán Khi Nhận Hàng");
+                ht = hinhThucThanhToanService.save(ht);
+                httt.add(ht);
+            }
+        }
+        HoaDon hd = new HoaDon();
+        Integer total = 0;
+        for (int i = 0; i < listProduct.size(); i++) {
+            ProductCashierRequest pro = listProduct.get(i);
+            ChiTietSanPham ctsp = chiTietSanPhamService.getById(pro.getId());
+            total += ctsp.getGiaBan().intValue() * pro.getQuantity();
+        }
+
+
+        Integer giamGia = 0;
+        if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
+            if (voucher.getLoaiVoucher().equals("$")) {
+                giamGia = voucher.getGiaTriTienMat().intValue();
+            } else {
+                giamGia = total * voucher.getGiaTriPhanTram();
+                if (giamGia > voucher.getGiaTriToiDa().intValue()) {
+                    giamGia = voucher.getGiaTriToiDa().intValue();
+                }
+            }
+        }
+        Integer thucthu = total - giamGia + request.getShippingFee();
+        if (request.getCustomer().equals("#")) {
+            hd.setTenNguoiNhan("Khách Lẻ");
+            hd.setKhachHang(null);
+        } else {
+            hd.setTenNguoiNhan(kh.getHoTen());
+            hd.setKhachHang(kh);
+            hd.setSdtNhan(kh.getSdt());
+        }
+        hd.setLoaiHoaDon(true);
+        hd.setPhiShip(BigDecimal.valueOf(request.getShippingFee()));
+        hd.setMaHoaDon(hoaDonService.generateInvoiceCode());
+        hd.setTongTien(BigDecimal.valueOf(total));
+        hd.setGiamGia(BigDecimal.valueOf(giamGia));
+        hd.setHinhThucThanhToans(httt);
+        hd.setVoucher(voucher);
+        hd.setNgayTao(Timestamp.from(Instant.now()));
+        hd.setThucThu(BigDecimal.valueOf(thucthu));
+        if (request.getReceivingType().equals("TQ")) {
+            hd.setDiaChiNhan("Tại Quầy");
+            if (thucthu <= request.getTransfer() + request.getCash()) {
+                hd.setSoTienDaThanhToan(BigDecimal.valueOf(thucthu));
+                hd.setSoTienCanThanhToan(BigDecimal.ZERO);
+            } else {
+                hd.setSoTienDaThanhToan(BigDecimal.valueOf(request.getTransfer() + request.getCash()));
+                Integer thieu = thucthu - request.getTransfer() + request.getCash();
+                hd.setSoTienCanThanhToan(BigDecimal.valueOf(thieu));
+            }
+            hd.setTrangThai(TrangThaiHoaDon.ThanhCong);
+        } else {
+            hd.setDiaChiNhan(request.getAddress());
+            if (typePayment.isKhiNhanHang()) {
+                hd.setSoTienCanThanhToan(BigDecimal.valueOf(thucthu));
+                hd.setSoTienDaThanhToan(BigDecimal.ZERO);
+            } else {
+                if (thucthu <= request.getTransfer() + request.getCash()) {
+                    hd.setSoTienDaThanhToan(BigDecimal.valueOf(thucthu));
+                    hd.setSoTienCanThanhToan(BigDecimal.ZERO);
+                } else {
+                    hd.setSoTienDaThanhToan(BigDecimal.valueOf(request.getTransfer() + request.getCash()));
+                    Integer thieu = thucthu - request.getTransfer() + request.getCash();
+                    hd.setSoTienCanThanhToan(BigDecimal.valueOf(thieu));
+                }
+            }
+            hd.setTrangThai(TrangThaiHoaDon.ChuanBiHang);
+        }
+        User userTH = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            User user = userService.getByUsername(userDetails.getUsername());
+            if (user.getNhanVien() != null) {
+                userTH = user;
+                hd.setNhanVien(user.getNhanVien());
+            } else {
+                hd.setNhanVien(null);
+            }
+        }
+
+        hd = hoaDonService.save(hd);
+        for (int i = 0; i < listProduct.size(); i++) {
+            ProductCashierRequest pro = listProduct.get(i);
+            ChiTietSanPham ctsp = chiTietSanPhamService.getById(pro.getId());
+            HoaDonChiTiet hdct = new HoaDonChiTiet();
+            hdct.setChiTietSanPham(ctsp);
+            hdct.setHoaDon(hd);
+            hdct.setSoLuong(pro.getQuantity());
+            hdct.setGiaBan(ctsp.getGiaBan());
+            hdct.setGiaGoc(ctsp.getGiaGoc());
+            hdct = hoaDonChiTietService.save(hdct);
+            lstHDCT.add(hdct);
+        }
+
+        hd.setHoaDonChiTiets(lstHDCT);
+        String ten = hd.getNhanVien() == null ? "anonymous" : hd.getNhanVien().getHoTen();
+        List<LichSuHoaDon> listLshd = new ArrayList<>();
+        if (request.getReceivingType().equals("TQ")) {
+            LichSuHoaDon lshd = new LichSuHoaDon();
+            lshd.setHoaDon(hd);
+            lshd.setHanhDong("Đơn Hàng Tạo Bởi :" + ten);
+            lshd.setThoiGian(Timestamp.from(Instant.now()));
+            lshd.setNguoiThucHien(userTH);
+            lshd.setTrangThaiSauUpdate("ThanhCong");
+            lshd = lichSuHoaDonService.save(lshd);
+            listLshd.add(lshd);
+        } else {
+            LichSuHoaDon tao = new LichSuHoaDon();
+            tao.setHoaDon(hd);
+            tao.setHanhDong("Đơn Hàng Tạo Bởi " + ten + "Tại Quầy.");
+            tao.setThoiGian(Timestamp.from(Instant.now()));
+            tao.setNguoiThucHien(userTH);
+            tao.setTrangThaiSauUpdate("ChuanBiHang");
+            tao = lichSuHoaDonService.save(tao);
+            LichSuHoaDon cb = new LichSuHoaDon();
+            cb.setHoaDon(hd);
+            cb.setHanhDong("Đơn Hàng được xác nhận bởi : " + ten);
+            cb.setThoiGian(Timestamp.from(Instant.now()));
+            cb.setNguoiThucHien(userTH);
+            cb.setTrangThaiSauUpdate("ChuanBiHang");
+            cb = lichSuHoaDonService.save(cb);
+            listLshd.add(cb);
+            listLshd.add(tao);
+        }
+        hd.setLichSuHoaDons(listLshd);
+        hd = hoaDonService.save(hd);
+        ResponseOder response = new ResponseOder();
+        List<ProductInResponse> lstPro = new ArrayList<>();
+        for (int i = 0; i < hd.getHoaDonChiTiets().size(); i++) {
+            HoaDonChiTiet hdct = hd.getHoaDonChiTiets().get(i);
+            ProductInResponse pro = new ProductInResponse();
+            pro.setAnh(hdct.getChiTietSanPham().getAnh().getUrl());
+            pro.setTen(hdct.getChiTietSanPham().getSanPham().getTen());
+            pro.setId(hdct.getId());
+            pro.setGiaGoc(hdct.getGiaGoc().intValue());
+            pro.setGiaBan(hdct.getGiaBan().intValue());
+            pro.setSoLuong(hdct.getSoLuong());
+            pro.setKichCo(hdct.getChiTietSanPham().getKichCo().getTen());
+            pro.setMauSac(hdct.getChiTietSanPham().getMauSac().getTen());
+            pro.setMaSanPham(hdct.getChiTietSanPham().getMaSanPham());
+            lstPro.add(pro);
+        }
+        response.setSanPham(lstPro);
+        response.setDaThanhToan(hd.getSoTienDaThanhToan().intValue());
+        response.setChuaThanhToan(hd.getSoTienCanThanhToan().intValue());
+        response.setGiamGia(hd.getGiamGia().intValue());
+        response.setPhiShip(hd.getPhiShip().intValue());
+        response.setTenNguoiNhan(hd.getTenNguoiNhan());
+        response.setSDT(hd.getSdtNhan());
+        response.setMaHoaDon(hd.getMaHoaDon());
+        response.setDiaChi(hd.getDiaChiNhan());
+        response.setTongtien(hd.getTongTien().intValue());
+        response.setThucthu(hd.getThucThu().intValue());
+        response.setNgayTao(hd.getNgayTao());
+        response.setType(request.getReceivingType());
+        if (request.getReceivingType().equals("TQ")) {
+            response.setNgayThanhToan(hd.getNgayTao());
+        } else {
+            response.setNgayThanhToan(null);
+        }
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/huy")
@@ -177,7 +388,7 @@ public class HoaDonRestController {
         }
         HoaDon hoaDon = hdct.getHoaDon();
         List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
-        if (lst.size()==1){
+        if (lst.size() == 1) {
             return ResponseEntity.notFound().header("status", "minPro").build();
         }
         lst.remove(hdct);
@@ -195,7 +406,7 @@ public class HoaDonRestController {
         lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
         if (user != null) {
             String tb = "Xóa sản phẩm khỏi hóa đơn thành công!";
-            String body = "<h1>Bạn đã thực hiện xóa sản phẩm '"+hdct.getChiTietSanPham().getMaSanPham()+"' thành công!";
+            String body = "<h1>Bạn đã thực hiện xóa sản phẩm '" + hdct.getChiTietSanPham().getMaSanPham() + "' thành công!";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
         UpdateProductRquest rs = new UpdateProductRquest();
@@ -308,7 +519,7 @@ public class HoaDonRestController {
         lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
         if (user != null) {
             String tb = "Thêm sản phẩm vào hóa đơn thành công.";
-            String body = "<h1>Bạn đã thực hiện xóa sản phẩm '"+hdct.getChiTietSanPham().getMaSanPham()+"' vào hóa đơn!";
+            String body = "<h1>Bạn đã thực hiện xóa sản phẩm '" + hdct.getChiTietSanPham().getMaSanPham() + "' vào hóa đơn!";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
         UpdateProductRquest rs = new UpdateProductRquest();

@@ -1,26 +1,6 @@
-function PrintBillOder(data) {
-    let elementToPrint = $('#oder-print');
-    elementToPrint.find('#full_name_print').text(data.tenNguoiNhan)
-    elementToPrint.find('#id_hoa_don_print').text(data.maHoaDon);
-    elementToPrint.find('#id_hoa_don_print').text(data.maHoaDon);
-    let html = '';
-    data.sanPham.forEach((item, index) => {
-        html +=
-            `
-             <tr>
-                    <td>${index + 1}</td>
-                    <th>${item.ten}</th>
-                    <td>${item.soLuong}</td>
-                    <td class="table-column-right-aligned">${addCommasToNumber(item.giaBan * item.soLuong)}đ</td>
-                </tr>
-            `;
-    })
-    $('#show_product_print').html(html);
-    $('#tongtien_print').text(data.tongtien);
-    $('#thuc_thu_print').text(data.thucthu);
-    // $('#chua_thanh_toan_print').text(data.)
-    let element = document.getElementById('oder-print')
-    printElement(element);
+function PrintBillOder() {
+    let elementToPrint = document.getElementById("oder-print");
+    printElement(elementToPrint);
 }
 
 resetData();
@@ -29,7 +9,7 @@ function initSelect2(element) {
     $.HSCore.components.HSSelect2.init(element);
 }
 
-let shippingFee = 0;
+let shippingFee = null;
 let canRunDetection = true;
 let dataShop = [];
 let dataProductDetails = [];
@@ -49,70 +29,6 @@ window.onload = function () {
         }
     })
 };
-
-async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
-    let wrapper = $(`#oder_content_${oder}`);
-    try {
-        if (phuongXaSelected === undefined && quanHuyenSelected === undefined) {
-            return null;
-        }
-        let data = {
-            shop_id: "190713",
-            from_name: "LightBee Shop",
-            from_phone: "0359966461",
-            from_address: "Trường Cao Đẳng FPT Polytechnic",
-            from_ward_name: "Phường Xuân Phương",
-            from_district_name: "Nam Từ Liêm",
-            from_province_name: "Hà Nội",
-            to_name: "test",
-            to_phone: "0359966461",
-            to_address: "Nam Đinh",
-            to_ward_code: phuongXaSelected,
-            to_district_id: quanHuyenSelected,
-            service_id: 55320,
-            service_type_id: 2,
-            payment_type_id: 2,
-            cod_amount: 200000,
-            required_note: "CHOXEMHANGKHONGTHU",
-            items: [
-                {
-                    name: "Áo Polo",
-                    code: "Polo123",
-                    quantity: 1,
-                    price: 200000,
-                    length: 12,
-                    width: 12,
-                    height: 12,
-                    weight: 1200,
-                    category:
-                        {
-                            level1: "Áo"
-                        }
-                }
-            ],
-            weight: 2000,
-            length: 1,
-            width: 19,
-            height: 10
-        };
-        let response = await $.ajax({
-            type: "POST",
-            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
-            contentType: "application/json",
-            headers: {
-                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-            },
-            data: JSON.stringify(data)
-        });
-        wrapper.find('.show-text-error').text('');
-        return response;
-    } catch (error) {
-        console.error('Xảy ra lỗi: ', error);
-        ToastError('Không hỗ trợ giao hàng ở địa chỉ này.')
-        wrapper.find('.show-text-error').text('Không hỗ trợ giao');
-        return null;
-    }
-}
 
 // hàm thêm dấu chấm vào số
 function addCommasToNumber(number) {
@@ -161,7 +77,7 @@ function PrintHtmlOder(product, numOder) {
                         <div class="js-quantity-counter input-group-quantity-counter">
                             <input type="number"
                                    class="js-result form-quantity form-control input-group-quantity-counter-control"
-                                   value="${product.quantity}" readonly>
+                                   value="${product.quantity}">
                             <div class="input-group-quantity-counter-toggle">
                                 <a class="js-minus input-group-quantity-counter-btn"
                                    href="javascript:;">
@@ -276,7 +192,7 @@ function getListProductLocal(oder) {
     return JSON.parse(localStorage.getItem(`List_product_oder_${oder}`));
 }
 
-function updateTotalMoney(oder) {
+async function updateTotalMoney(oder) {
     let data = getListProductLocal(oder);
     let total = 0;
     if (data !== null && Array.isArray(data)) {
@@ -285,16 +201,54 @@ function updateTotalMoney(oder) {
         })
     }
     let wrapper = $(`#oder_content_${oder}`);
+    let btnPayment = $(`#btn-payment-hd-${oder}`);
     let type = wrapper.find(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
-    let ship = shippingFee === null ? 0 : shippingFee;
+    let shipingFee = 0;
     if (type === 'CP') {
-        if (total > 2000000) {
-            ship = 0;
+        if (total >= 2000000) {
+            shipingFee = Promise.resolve(0);
+        } else {
+            let wrapper = $(`#oder_content_${oder}`);
+            let op = wrapper.find('.option-select-address:checked');
+            let id = op.attr('id');
+            let phuongXaSelected;
+            let quanHuyenSelected;
+            if (op.val() === '#') {
+                phuongXaSelected = wrapper.find('select.custom-select.phuongXa').val();
+                quanHuyenSelected = wrapper.find('select.custom-select.quanHuyen').val();
+            } else {
+                let label = wrapper.find(`label[for="${id}"]`);
+                let Nphuong = label.find('span.phuongXa').text()
+                let Nhuyen = label.find('span.quanHuyen').text()
+                let Ntinh = label.find('span.tinhTP').text()
+                let tinh = arrProvince.find(tinh => tinh.ProvinceName == Ntinh);
+                if (tinh) {
+                    let huyen = arrDistrict.find(huyen => huyen.ProvinceID == tinh.ProvinceID && huyen.DistrictName == Nhuyen);
+                    if (huyen) {
+                        quanHuyenSelected = huyen.DistrictID;
+                        let xa = arrWard.find(xa => xa.DistrictID == huyen.DistrictID && xa.Name == Nphuong);
+                        if (xa) {
+                            phuongXaSelected = xa.Code;
+                        }
+                    }
+                }
+            }
+            console.log("Phường: "+phuongXaSelected)
+            console.log("Huyện: "+quanHuyenSelected)
+            let shipping = await getShippingFee(oder,phuongXaSelected, quanHuyenSelected);
+            if (shipping !== null) {
+                shipingFee = shipping.data.total_fee;
+                btnPayment.addClass('btn-payment-oder').removeClass('show-toast-error')
+            } else {
+                btnPayment.removeClass('btn-payment-oder').addClass('show-toast-error')
+                shipingFee = 0;
+            }
+            console.log(shipingFee)
         }
     }
-    let payment = total + ship;
+    let payment = total + shipingFee;
     wrapper.find('h4.total-money').text(addCommasToNumber(total) + 'đ')
-    wrapper.find('h4.shipping-money').text(addCommasToNumber(ship) + 'đ')
+    wrapper.find('h4.shipping-money').text(addCommasToNumber(shipingFee) + 'đ')
     wrapper.find('h3.payment-money').text(addCommasToNumber(payment) + 'đ')
 }
 
@@ -307,18 +261,53 @@ function getTotalMoney(oder) {
         })
     }
     let wrapper = $(`#oder_content_${oder}`);
+    let btnPayment = $(`#btn-payment-hd-${oder}`);
     let type = wrapper.find(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
-    let ship = shippingFee === null ? 0 : shippingFee;
+    let shipingFee = 0;
     if (type === 'CP') {
-        if (total > 2000000) {
-            ship = 0;
+        if (total >= 2000000) {
+            shipingFee = Promise.resolve(0);
+        } else {
+            let wrapper = $(`#oder_content_${oder}`);
+            let op = wrapper.find('.option-select-address:checked');
+            let id = op.attr('id');
+            let phuongXaSelected;
+            let quanHuyenSelected;
+            if (op.val() === '#') {
+                phuongXaSelected = wrapper.find('select.custom-select.phuongXa').val();
+                quanHuyenSelected = wrapper.find('select.custom-select.quanHuyen').val();
+            } else {
+                let label = wrapper.find(`label[for="${id}"]`);
+                let Nphuong = label.find('span.phuongXa').text()
+                let Nhuyen = label.find('span.quanHuyen').text()
+                let Ntinh = label.find('span.tinhTP').text()
+                let tinh = arrProvince.find(tinh => tinh.ProvinceName == Ntinh);
+                if (tinh) {
+                    let huyen = arrDistrict.find(huyen => huyen.ProvinceID == tinh.ProvinceID && huyen.DistrictName == Nhuyen);
+                    if (huyen) {
+                        quanHuyenSelected = huyen.DistrictID;
+                        let xa = arrWard.find(xa => xa.DistrictID == huyen.DistrictID && xa.Name == Nphuong);
+                        if (xa) {
+                            phuongXaSelected = xa.Code;
+                        }
+                    }
+                }
+            }
+            console.log("Phường: "+phuongXaSelected)
+            console.log("Huyện: "+quanHuyenSelected)
+            let shipping = await getShippingFee(oder,phuongXaSelected, quanHuyenSelected);
+            if (shipping !== null) {
+                shipingFee = shipping.data.total_fee;
+                btnPayment.addClass('btn-payment-oder').removeClass('show-toast-error')
+            } else {
+                btnPayment.removeClass('btn-payment-oder').addClass('show-toast-error')
+                shipingFee = 0;
+            }
+            console.log(shipingFee)
         }
     }
-    if (shippingFee == null) {
-        ToastError('Vui lòng chọn lại nơi nhận hàng.')
-        return null;
-    }
-    return total + ship;
+    let payment = total + shipingFee;
+    return total + shipingFee;
 }
 
 let arrProvince = [];
@@ -428,8 +417,8 @@ function deleteById(id, oder) {
     }
     list = list.filter(item => item.id !== id);
     saveToLocalStorage(list, oder);
-    updateTotalMoney(oder);
     ToastSuccess('Xóa thành công.')
+    updateTotalMoney(oder);
 }
 
 let Detection = true;
@@ -446,6 +435,53 @@ function addProductByBarcode(code) {
             Detection = true;
         }, 2000);
     }
+}
+function TinhTien() {
+    let oder = $('#modal-input-id-oder').val()
+    let total = getTotalMoney(oder)
+    let val = Number($('#pay-cash-money').val().replace(/[^\d]/g, ''));
+    let hasTM = $('#payment-type-cash').is(':checked');
+    let hasCK = $('#payment-type-card').is(':checked');
+    let NH = $('#payment-on-delivery').is(':checked');
+    let thua = 0;
+    let thieu = total;
+    let ck = 0
+    if (NH) {
+        thieu = total;
+        val = 0
+        thua = 0
+        ck = 0
+    }
+    if (!hasTM && hasCK) {
+        ck = total
+        thieu = 0
+    }
+    if (hasTM && !hasCK) {
+        if (val >= total) {
+            thua = val - total;
+            thieu = 0;
+        } else {
+            thieu = total - val;
+            thua = 0
+        }
+    }
+    if (hasCK && hasTM) {
+        if (val < total) {
+            ck = total - val;
+            thua = 0;
+        } else {
+            thua = val - total;
+        }
+        if (val + ck > total) {
+            thua = val + ck - total
+        } else {
+            thua = 0;
+        }
+        thieu = 0;
+    }
+    $('#change-money').val(addCommasToNumber(thua))
+    $('#pay-chuyen-khoan-money').val(addCommasToNumber(ck))
+    $('#lack-of-money').val(addCommasToNumber(thieu))
 }
 
 function updateQuantityProduct(id, oder, operator, element) {
@@ -480,10 +516,75 @@ function updateQuantityProduct(id, oder, operator, element) {
             data[index].quantity = Number(data[index].quantity) + 1;
         }
         saveToLocalStorage(data, oder);
-        updateTotalMoney(oder);
         PrintHtmlOder(data[index], oder);
+        updateTotalMoney(oder);
     }
 }
+
+function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
+    let wrapper = $(`#oder_content_${oder}`);
+    try {
+        if (phuongXaSelected === undefined && quanHuyenSelected === undefined) {
+            return null;
+        }
+        let data = {
+            shop_id: "190713",
+            from_name: "LightBee Shop",
+            from_phone: "0359966461",
+            from_address: "Trường Cao Đẳng FPT Polytechnic",
+            from_ward_name: "Phường Xuân Phương",
+            from_district_name: "Nam Từ Liêm",
+            from_province_name: "Hà Nội",
+            to_name: "test",
+            to_phone: "0359966461",
+            to_address: "Nam Đinh",
+            to_ward_code: phuongXaSelected,
+            to_district_id: quanHuyenSelected,
+            service_id: 55320,
+            service_type_id: 2,
+            payment_type_id: 2,
+            cod_amount: 200000,
+            required_note: "CHOXEMHANGKHONGTHU",
+            items: [
+                {
+                    name: "Áo Polo",
+                    code: "Polo123",
+                    quantity: 1,
+                    price: 200000,
+                    length: 12,
+                    width: 12,
+                    height: 12,
+                    weight: 1200,
+                    category:
+                        {
+                            level1: "Áo"
+                        }
+                }
+            ],
+            weight: 2000,
+            length: 1,
+            width: 19,
+            height: 10
+        };
+        let response = await $.ajax({
+            type: "POST",
+            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+            contentType: "application/json",
+            headers: {
+                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+            },
+            data: JSON.stringify(data)
+        });
+        wrapper.find('.show-text-error').text('');
+        return response;
+    } catch (error) {
+        console.error('Xảy ra lỗi: ', error);
+        ToastError('Không hỗ trợ giao hàng ở địa chỉ này.')
+        wrapper.find('.show-text-error').text('Không hỗ trợ giao');
+        return null;
+    }
+}
+
 
 $(document).on('ready', function () {
     $('#body-html').addClass('navbar-vertical-aside-mini-mode');
@@ -498,64 +599,53 @@ $(document).on('ready', function () {
             updateQuantityProduct(id, oder, 'minus', this)
         }
     })
+    $(document).on('click', '.show-toast-error', function () {
+        ToastError('Vui lòng hoàn thành việc lấy phí ship.')
+    })
 
-    function TinhTien() {
-        let oder = $('#modal-input-id-oder').val()
-        let total = getTotalMoney(oder)
-        if (total === null) {
-            return false;
-        }
-        let val = Number($('#pay-cash-money').val().replace(/[^\d]/g, ''));
-        console.log(val);
-        let hasTM = $('#payment-type-cash').is(':checked');
-        let hasCK = $('#payment-type-card').is(':checked');
-        let NH = $('#payment-on-delivery').is(':checked');
-        let thua = 0;
-        let thieu = total;
-        let ck = 0
-        if (NH) {
-            thieu = total;
-            val = 0
-            thua = 0
-            ck = 0
-        }
-        if (!hasTM && hasCK) {
-            ck = total
-            thieu = 0
-        }
-        if (hasTM && !hasCK) {
-            if (val >= total) {
-                thua = val - total;
-                thieu = 0;
-            } else {
-                thieu = total - val;
-                thua = 0
-            }
-        }
-        if (hasCK && hasTM) {
-            if (val < total) {
-                ck = total - val;
-                thua = 0;
-            } else {
-                thua = val - total;
-            }
-            if (val + ck > total) {
-                thua = val + ck - total
-            } else {
-                thua = 0;
-            }
-            thieu = 0;
-        }
-        $('#change-money').val(addCommasToNumber(thua))
-        $('#pay-chuyen-khoan-money').val(addCommasToNumber(ck))
-        $('#lack-of-money').val(addCommasToNumber(thieu))
-        return true;
-    }
+
 
     $(document).on('input', '#pay-cash-money', function () {
         TinhTien();
     })
 
+    $(document).on('change', 'select.custom-select.tinhTP', function () {
+        let oder = getOderNum(this);
+        let wrapper = $(`#oder_content_${oder}`);
+        let quanHuyen = wrapper.find('select.custom-select.quanHuyen');
+        let phuongXa = wrapper.find('select.custom-select.phuongXa');
+        let val = $(this).val();
+        quanHuyen.html('<option value="">Quận/Huyện</option>');
+        phuongXa.html('<option value="">Phường/Xã</option>');
+        if (val.length > 0) {
+            arrDistrict.forEach(function (item) {
+                if (Number(item.ProvinceID) === Number(val)) {
+                    let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                    quanHuyen.append(html);
+                }
+            })
+        }
+        initSelect2($(quanHuyen));
+    })
+    $(document).on('change', 'select.custom-select.phuongXa', async function () {
+        await updateTotalMoney(getOderNum(this))
+    })
+    $(document).on('change', 'select.custom-select.quanHuyen', function () {
+        let oder = getOderNum(this);
+        let wrapper = $(`#oder_content_${oder}`);
+        let phuongXa = wrapper.find('select.custom-select.phuongXa');
+        let val = $(this).val();
+        phuongXa.html('<option value="">Phường/Xã</option>');
+        if (val.length > 0) {
+            arrWard.forEach(function (item) {
+                if (Number(item.DistrictID) === Number(val)) {
+                    let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+                    phuongXa.append(html);
+                }
+            })
+        }
+        initSelect2(phuongXa);
+    })
     $(document).on('change', '#payment-type-card', function () {
         let isChecked = $(this).is(':checked');
         let wrap = $('.body-modal-payment');
@@ -621,27 +711,17 @@ $(document).on('ready', function () {
         }
     })
     $(document).on('click', '.btn-payment-oder', function () {
-        let bool = TinhTien();
-        if (!bool) {
-            return;
-        }
-        let oder = getOderNum(this);
-        let sp = getListProductLocal(oder)
-        if (sp.length === 0) {
-            ToastError('Vui lòng chọn sản phẩm.')
-            return;
-        }
         $('#form-modal-payment').modal('show');
-        $('#pay-cash-money').focus();
+        let oder = getOderNum(this);
         $('#modal-input-id-oder').val(oder);
-        $('#total-money').val(addCommasToNumber(getTotalMoney(oder) == null ? 0 : getTotalMoney(oder)))
+        $('#total-money').val(addCommasToNumber(getTotalMoney(oder)))
+        TinhTien();
         let input = $(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
         if (input === 'CP') {
             $('#payment-on-delivery').closest('div.form-group').removeClass('d-none')
         } else {
             $('#payment-on-delivery').closest('div.form-group').addClass('d-none')
         }
-        $('#lack-of-money').val(addCommasToNumber(getTotalMoney(oder)))
     })
     $(document).on('input', '.money-input-mask', function () {
         $(this).mask('#.###.###.###', {reverse: true});
@@ -682,85 +762,9 @@ $(document).on('ready', function () {
             }
             wrapper.find('.wrapper-address-user').removeClass('d-none');
         } else {
-            shippingFee = 0;
-            $(`.option-select-address[name="option-address_${oder}"]`).prop('checked', false);
             wrapper.find('.wrapper-address-user').addClass('d-none');
         }
         updateTotalMoney(oder);
-    })
-
-    $(document).on('click', '.payment-success', function () {
-        let oder = $('#modal-input-id-oder').val();
-        let listProduct = getListProductLocal(oder);
-        let arrPro = [];
-        listProduct.forEach((item) => {
-            let oj = {
-                id: item.id,
-                quantity: item.quantity,
-            }
-            arrPro.push(oj);
-        })
-        let wrapper = $(`#oder_content_${oder}`);
-        let khachHang = wrapper.find('select.customer-selected[name="khachHang"]').val();
-        let typeNH = wrapper.find(`[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
-        let diaChiNhanHang = '';
-        if (typeNH === 'CP') {
-            let dc = wrapper.find(`.option-select-address[name="option-address_${oder}"]:checked`);
-            if (dc.val() !== '#') {
-                let label = wrapper.find(`label[for="${dc.attr('id')}"]`);
-                let nameSoNha = label.find('span.soNha').text()
-                let nameXa = label.find('span.phuongXa').text()
-                let nameHyen = label.find('span.quanHuyen').text()
-                let nameTinh = label.find('span.tinhTP').text()
-                diaChiNhanHang = nameSoNha + ', ' + nameXa + ', ' + nameHyen + ', ' + nameTinh;
-            } else {
-                let nameSoNha = wrapper.find('input.soNha').val();
-                let nameXa = wrapper.find('select.phuongXa').find('option:selected').text();
-                let nameHuyen = wrapper.find('select.phuongXa').find('option:selected').text();
-                let nameTinh = wrapper.find('select.phuongXa').find('option:selected').text();
-                diaChiNhanHang = nameSoNha + ', ' + nameXa + ', ' + nameHuyen + ', ' + nameTinh;
-            }
-        }
-        let hasTM = $('#payment-type-cash').is(':checked');
-        let hasCK = $('#payment-type-card').is(':checked');
-        let NH = $('#payment-on-delivery').is(':checked');
-        let typePayment = {
-            tienMat: hasTM,
-            chuyenKhoan: hasCK,
-            khiNhanHang: NH
-        }
-
-        let cash = $('#pay-cash-money').val().replace(/[.,]/g, '');
-        let transfer = $('#pay-chuyen-khoan-money').val().replace(/[.,]/g, '');
-        let transferCode = $('#pay-card-money').val();
-
-        $.ajax({
-            url: '/api/hoa-don/payment-cashier',
-            type: 'POST',
-            data: {
-                product: JSON.stringify(arrPro),
-                customer: khachHang,
-                receivingType: typeNH,
-                address: diaChiNhanHang,
-                typePayment: JSON.stringify(typePayment),
-                cash: cash,
-                transfer: transfer,
-                transferCode: transferCode,
-                voucher: '',
-                shippingFee: shippingFee,
-            },
-            success: function (data) {
-                console.log(data)
-                PrintBillOder(data);
-                ToastSuccess('Thành công.');
-                $('#form-modal-payment').modal('hide');
-            },
-            error: function (error) {
-                console.log(error)
-                ToastError('Lỗi.')
-            }
-        })
-        console.log(khachHang, typeNH, diaChiNhanHang);
     })
 
     function getOptionAddress(id, oder) {
@@ -786,7 +790,7 @@ $(document).on('ready', function () {
                                     </div>`;
                     });
                     html += `<div class="custom-control custom-radio ml-3">
-                            <input type="radio" id="address_khac_${oder}" 
+                            <input type="radio" id="address_khac_${oder}"
                                    name="option-address_${oder}"
                                    class="custom-control-input option-select-address" value="#">
                             <label class="custom-control-label custom-address" for="address_khac_${oder}">
@@ -806,11 +810,10 @@ $(document).on('ready', function () {
 
     $(document).on('change', '.option-select-address', async function () {
         let oder = getOderNum(this);
-        let input = $(`input[name="option-address_${oder}"]:checked`);
-        let val = input.val();
+        let val = $(`input[name="option-address_${oder}"]:checked`).val();
         let wrapper = $(`#oder_content_${oder}`);
         if (val === '#') {
-            let province = '<option value="">Chọn Tỉnh</option>';
+            let province = '';
             if (Array.isArray(arrProvince)) {
                 arrProvince.forEach((item) => {
                     province += `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
@@ -844,86 +847,16 @@ $(document).on('ready', function () {
                                 data-hs-select2-options='{
                         "placeholder": "Tìm Phường/Xã...",
                         "searchInputPlaceholder": "Tìm Phường/Xã..."}'> </select>
+                        <p class="show-text-error"></p>
                     </div>`;
             wrapper.find('.wrapper-option-address-khac').html(html);
             $('.js-select2-custom').each(function () {
                 initSelect2($(this));
             });
-            shippingFee = null;
         } else {
             wrapper.find('.wrapper-option-address-khac').empty();
-            let phuongXaSelected;
-            let quanHuyenSelected;
-            let label = wrapper.find(`label[for="${input.attr('id')}"]`);
-            let nameXa = label.find('span.phuongXa').text()
-            let nameHyen = label.find('span.quanHuyen').text()
-            let nameTinh = label.find('span.tinhTP').text()
-            let tinh = arrProvince.find(tinh => tinh.ProvinceName == nameTinh);
-            if (tinh) {
-                let huyen = arrDistrict.find(huyen => huyen.ProvinceID == tinh.ProvinceID && huyen.DistrictName == nameHyen);
-                if (huyen) {
-                    quanHuyenSelected = huyen.DistrictID;
-                    let xa = arrWard.find(xa => xa.DistrictID == huyen.DistrictID && xa.Name == nameXa);
-                    if (xa) {
-                        phuongXaSelected = xa.Code;
-                    }
-                }
-            }
-            let data = await getShippingFee(oder, phuongXaSelected, quanHuyenSelected);
-            if (data !== null) {
-                shippingFee = data.data.total_fee;
-                console.log(shippingFee)
-            } else {
-                shippingFee = null;
-            }
         }
-        updateTotalMoney(oder);
-    })
-    $(document).on('change', 'select.custom-select.phuongXa', async function () {
-        let code = $(this).val();
-        let oder = getOderNum(this);
-        let quan = $(`#oder_content_${oder}`).find('select.custom-select.quanHuyen').val();
-        let result = await getShippingFee(oder, code, quan);
-        if (result !== null) {
-            shippingFee = result.data.total_fee;
-            updateTotalMoney(oder);
-        } else {
-            shippingFee = null;
-        }
-    })
-    $(document).on('change', 'select.custom-select.tinhTP', function () {
-        let oder = getOderNum(this);
-        let wrapper = $(`#oder_content_${oder}`);
-        let quanHuyen = wrapper.find('select.custom-select.quanHuyen');
-        let phuongXa = wrapper.find('select.custom-select.phuongXa');
-        let val = $(this).val();
-        quanHuyen.html('<option value="">Quận/Huyện</option>');
-        phuongXa.html('<option value="">Phường/Xã</option>');
-        if (val.length > 0) {
-            arrDistrict.forEach(function (item) {
-                if (Number(item.ProvinceID) === Number(val)) {
-                    let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
-                    quanHuyen.append(html);
-                }
-            })
-        }
-        initSelect2($(quanHuyen));
-    })
-    $(document).on('change', 'select.custom-select.quanHuyen', function () {
-        let oder = getOderNum(this);
-        let wrapper = $(`#oder_content_${oder}`);
-        let phuongXa = wrapper.find('select.custom-select.phuongXa');
-        let val = $(this).val();
-        phuongXa.html('<option value="">Phường/Xã</option>');
-        if (val.length > 0) {
-            arrWard.forEach(function (item) {
-                if (Number(item.DistrictID) === Number(val)) {
-                    let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
-                    phuongXa.append(html);
-                }
-            })
-        }
-        initSelect2(phuongXa);
+        await updateTotalMoney(oder);
     })
     $(document).on('click', '.li-item-ctsp-search', function () {
         console.log('run')

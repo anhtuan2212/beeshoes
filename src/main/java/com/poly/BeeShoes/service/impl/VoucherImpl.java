@@ -42,12 +42,12 @@ public class VoucherImpl implements VoucherService {
 
     @Override
     public List<Voucher> getAllByTrangThai(Integer trangthai) {
-        return voucherResponsitory.findAllByTrangThaiAndSoLuongGreaterThan(trangthai,0);
+        return voucherResponsitory.findAllByTrangThaiAndSoLuongGreaterThan(trangthai, 0);
     }
 
     @Override
     public Voucher getByMa(String ma) {
-        return voucherResponsitory.findByMa(ma);
+        return voucherResponsitory.findByMa(ma).orElse(null);
     }
 
     @Override
