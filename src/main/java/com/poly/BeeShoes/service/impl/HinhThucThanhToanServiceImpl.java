@@ -41,6 +41,6 @@ public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
 
     @Override
     public HinhThucThanhToan getByHinhThuc(String hinhThuc) {
-        return hinhThucThanhToanRepository.findByHinhThuc(hinhThuc);
+        return hinhThucThanhToanRepository.findByHinhThuc(hinhThuc).get();
     }
 }
