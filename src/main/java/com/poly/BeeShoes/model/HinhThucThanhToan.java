@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class HinhThucThanhToan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String maGiaoDich;
-    boolean hinhThuc;
+    String hinhThuc;
     String moTa;
     Timestamp ngayTao;
     Timestamp ngaySua;
@@ -33,4 +34,6 @@ public class HinhThucThanhToan {
 
     boolean trangThai;
 
+    @ManyToMany(mappedBy = "hinhThucThanhToans")
+    private List<HoaDon> hoaDon;
 }

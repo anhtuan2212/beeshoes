@@ -405,8 +405,8 @@
 
             <div class="col-sm-auto order-1 order-sm-2 text-sm-right mb-3">
                 <div class="mb-3">
-                    <h2>#HD00001</h2>
-                    <span class="d-block">id hóa đơn</span>
+                    <h2 id="id_hoa_don_print">#HD00001</h2>
+<!--                    <span class="d-block">id hóa đơn</span>-->
                 </div>
 
                 <address class="text-dark">
@@ -423,7 +423,7 @@
         <div class="row justify-content-md-between mb-3">
             <div class="col-md">
                 <h4>Khách Hàng:</h4>
-                <h4>Lù Đẹp Trai</h4>
+                <h4 id="full_name_print">Lù Đẹp Trai</h4>
 
                 <address>
                     Tòa A4 Chung Cư A4<br>
@@ -457,27 +457,7 @@
                 </tr>
                 </thead>
 
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <th>Design UX and UI</th>
-                    <td>1</td>
-                    <td class="table-column-right-aligned">$500</td>
-                </tr>
-
-                <tr>
-                    <td>2</td>
-                    <th>Web project</th>
-                    <td>1</td>
-                    <td class="table-column-right-aligned">$1250</td>
-                </tr>
-
-                <tr>
-                    <td>3</td>
-                    <th>SEO</th>
-                    <td>1</td>
-                    <td class="table-column-right-aligned">$2000</td>
-                </tr>
+                <tbody id="show_product_print">
                 </tbody>
             </table>
         </div>
@@ -489,14 +469,14 @@
             <div class="col-md-8 col-lg-7">
                 <dl class="row text-sm-right">
                     <dt class="col-sm-6">Tổng phụ:</dt>
-                    <dd class="col-sm-6">50.000.000</dd>
+                    <dd class="col-sm-6" id="tongtien_print">50.000.000</dd>
                     <dt class="col-sm-6">Tổng cộng:</dt>
-                    <dd class="col-sm-6">50.000.000</dd>
+                    <dd class="col-sm-6" id="thuc_thu_print">50.000.000</dd>
                     <dt class="col-sm-6">Thuế:</dt>
                     <dd class="col-sm-6">0</dd>
-                    <dt class="col-sm-6">Đã thanh toán:</dt>
+                    <dt class="col-sm-6" id="da_thanh_toan_print" >Đã thanh toán:</dt>
                     <dd class="col-sm-6">50.000.000</dd>
-                    <dt class="col-sm-6">Chưa Thanh Toán:</dt>
+                    <dt class="col-sm-6" id="chua_thanh_toan_print">Chưa Thanh Toán:</dt>
                     <dd class="col-sm-6">0</dd>
                 </dl>
                 <!-- End Row -->
@@ -830,7 +810,7 @@
                         <div class="w-100 wrapper-money-tm">
                             <label class="w-100 mb-0" for="pay-cash-money">Tiền Mặt Khách Đưa</label>
                             <div class="input-group input-group-merge mb-2">
-                                <input class="form-control money-input-mask" type="text" id="pay-cash-money" value="0">
+                                <input class="form-control money-input-mask" type="text" id="pay-cash-money" value="0" autofocus>
                                 <div class="input-group-prepend money-dv">
                                     <div class="input-group-text">VND</div>
                                 </div>
@@ -880,7 +860,7 @@
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary">Hoàn Thành</button>
+                <button type="button" class="btn btn-primary payment-success">Hoàn Thành</button>
             </div>
             <!-- End Footer -->
         </div>

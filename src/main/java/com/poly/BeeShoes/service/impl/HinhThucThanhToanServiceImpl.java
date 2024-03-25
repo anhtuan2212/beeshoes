@@ -18,4 +18,24 @@ public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
     public List<HinhThucThanhToan> getAll() {
         return hinhThucThanhToanRepository.findAll();
     }
+
+    @Override
+    public HinhThucThanhToan save(HinhThucThanhToan hinhThucThanhToan) {
+        return hinhThucThanhToanRepository.save(hinhThucThanhToan);
+    }
+
+    @Override
+    public HinhThucThanhToan getById(Long id) {
+        return hinhThucThanhToanRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public HinhThucThanhToan getByTen(String hinhThuc) {
+        return hinhThucThanhToanRepository.findByHinhThuc(hinhThuc).orElse(null);
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return false;
+    }
 }
