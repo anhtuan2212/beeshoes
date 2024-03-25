@@ -43,6 +43,10 @@ public class CheckOutRestController {
     private LichSuHoaDonService lichSuHoaDonService;
     @Autowired
     private MailUtility mailUtility;
+    @Autowired
+    private HinhThucThanhToanService hinhThucThanhToanService;
+    @Autowired
+    private ThanhToanService thanhToanService;
 
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
@@ -92,8 +96,15 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        hoaDon.setHinhThucThanhToan(PaymentMethod.Online);
+        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanService.getByHinhThuc("Online");
+        hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
+        ThanhToan thanhToan = new ThanhToan();
+        thanhToan.setHoaDon(savedHoaDon);
+        thanhToan.setHinhThucThanhToan(hinhThucThanhToan);
+        ThanhToan savedThanhToan = thanhToanService.save(thanhToan);
+        savedHoaDon.setThanhToan(savedThanhToan);
+        hoaDonService.save(savedHoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
         lichSuHoaDon.setHoaDon(savedHoaDon);
@@ -178,7 +189,8 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        hoaDon.setHinhThucThanhToan(PaymentMethod.KhiNhanHang);
+        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanService.getByHinhThuc("Online");
+        hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());

@@ -86,6 +86,7 @@ public class HoaDon {
     @Enumerated(EnumType.STRING)
     TrangThaiHoaDon trangThai;
 
-    @Enumerated(EnumType.STRING)
-    PaymentMethod hinhThucThanhToan;
+    @OneToOne
+    @JoinColumn(name = "hinh_thuc_thanh_toan")
+    HinhThucThanhToan hinhThucThanhToan;
 }
