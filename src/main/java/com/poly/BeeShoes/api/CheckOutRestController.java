@@ -18,7 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/check-out")
@@ -96,8 +98,14 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanService.getByHinhThuc("Online");
-        hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
+        HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
+        hinhThucThanhToan.setHinhThuc("Online");
+        hinhThucThanhToan.setTrangThai(true);
+        hinhThucThanhToan.setMoTa("Online");
+        HinhThucThanhToan savedHinhThucThanhToan = hinhThucThanhToanService.save(hinhThucThanhToan);
+        List<HinhThucThanhToan> hinhThucThanhToanList = new ArrayList<>();
+        hinhThucThanhToanList.add(savedHinhThucThanhToan);
+        hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         ThanhToan thanhToan = new ThanhToan();
         thanhToan.setHoaDon(savedHoaDon);
@@ -189,8 +197,14 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanService.getByHinhThuc("Online");
-        hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
+        HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
+        hinhThucThanhToan.setHinhThuc("Khi Nhận Hàng");
+        hinhThucThanhToan.setTrangThai(true);
+        hinhThucThanhToan.setMoTa("Khi Nhận Hàng");
+        HinhThucThanhToan savedHinhThucThanhToan = hinhThucThanhToanService.save(hinhThucThanhToan);
+        List<HinhThucThanhToan> hinhThucThanhToanList = new ArrayList<>();
+        hinhThucThanhToanList.add(savedHinhThucThanhToan);
+        hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
