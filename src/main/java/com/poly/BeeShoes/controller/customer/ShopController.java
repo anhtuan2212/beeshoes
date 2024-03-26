@@ -27,33 +27,36 @@ public class ShopController {
     private final MauSacService mauSacService;
     private final KichCoService kichCoService;
     private final TagsService tagsService;
+    private final ChiTietSanPhamService chiTietSanPhamService;
 
-    @GetMapping({"/shop","/shop/"})
-    public String shop(Model model){
-        Pageable pageable = PageRequest.of(0,9);
+    @GetMapping({"/shop", "/shop/"})
+    public String shop(Model model) {
+        Pageable pageable = PageRequest.of(0, 9);
         Page<SanPham> spx = sanPhamService.getAllShop(pageable);
-        model.addAttribute("lstkichco",kichCoService.getAllClient());
-        model.addAttribute("lstmausac",mauSacService.getAllClient());
-        model.addAttribute("lsttheloai",theLoaiService.getAllClient());
-        model.addAttribute("lsttags",tagsService.getAllClient());
-        model.addAttribute("lstthuonghieu",thuongHieuService.getAllClient());
-        model.addAttribute("lstsanpham",spx);
-        model.addAttribute("totalsize",sanPhamService.getCount());
+        model.addAttribute("lstkichco", kichCoService.getAllClient());
+        model.addAttribute("lstmausac", mauSacService.getAllClient());
+        model.addAttribute("lsttheloai", theLoaiService.getAllClient());
+        model.addAttribute("lsttags", tagsService.getAllClient());
+        model.addAttribute("lstthuonghieu", thuongHieuService.getAllClient());
+        model.addAttribute("lstsanpham", spx);
+        model.addAttribute("totalsize", sanPhamService.getCount());
         return "customer/pages/shop/shop";
     }
-    @GetMapping({"/shop-detail","/shop-detail/"})
-    public String shopDetail(@RequestParam("product")Long id,Model model){
+
+    @GetMapping({"/shop-detail", "/shop-detail/"})
+    public String shopDetail(@RequestParam("product") Long id, Model model) {
         SanPham sanPham = sanPhamService.getById(id);
-        if (sanPham==null || !sanPham.isTrangThai()){
+        if (sanPham == null || !sanPham.isTrangThai()) {
             return "redirect:/shop";
         }
         List<SanPham> lst = sanPhamService.findTop4ByTheLoaiOrderByNgayTaoDesc(sanPham.getTheLoai());
-        model.addAttribute("sanPham",sanPham);
-        model.addAttribute("lstRelatedProduct",lst);
+        model.addAttribute("sanPham", sanPham);
+        model.addAttribute("lstRelatedProduct", lst);
         return "customer/pages/shop/shop-details";
     }
-    @GetMapping({"/shopping-cart","/shopping-cart/"})
-    public String shoppingCart(){
+
+    @GetMapping({"/shopping-cart", "/shopping-cart/"})
+    public String shoppingCart() {
         return "customer/pages/shop/shopping-cart";
     }
 }

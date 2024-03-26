@@ -117,7 +117,7 @@ $(document).ready(function () {
                 $('#show-price').html(`${product.gia_ban}đ <span>${product.gia_goc}đ</span>`)
                 $('#product-sku').html(`<span>SKU:</span> ${product.detail_code}`);
 
-                $('#total-num-product').html(`Số lượng mẫu : ${Number(product.so_luong_ton)===0?'TẠM HẾT HÀNG':product.so_luong_ton}`);
+                $('#total-num-product').html(`Số lượng mẫu : ${Number(product.so_luong_ton) === 0 ? 'TẠM HẾT HÀNG' : product.so_luong_ton}`);
             }
 
         }
@@ -140,7 +140,7 @@ $(document).ready(function () {
         for (let i = 0; i < data_product_details.length; i++) {
             let product = data_product_details[i];
             if (product.size == kichThuoc && product.color_code == color) {
-                if (Number(product.so_luong_ton)===0){
+                if (Number(product.so_luong_ton) === 0) {
                     ToastError('Phiên bản hiện tại tạm hết hàng.')
                     break;
                 }
@@ -150,7 +150,7 @@ $(document).ready(function () {
                 }
                 if (username === undefined) {
                     let check = pushDataToArray({pro: product, quantity: quantity})
-                    if (check){
+                    if (check) {
                         let total = 0;
                         data_cart = getProductInLocalStorage();
                         data_cart.forEach((data) => {
@@ -166,6 +166,59 @@ $(document).ready(function () {
                     dataShopingCart = saveProductToServer(product.id, quantity)
                 }
 
+            }
+        }
+    });
+
+    $('#btn-buy-product').on('click', function () {
+        let quantity = $('#quantity-selected').val();
+
+        if (quantity < 1) {
+            ToastError('Vui lòng nhập số lượng !');
+            $('#quantity-selected').focus();
+            return;
+        }
+        let kichThuoc = $('input[name="kichthuoc"]:checked').val();
+        let color = $('input[name="color"]:checked').val();
+        if (kichThuoc === undefined || color === undefined) {
+            ToastError('Vui lòng chọn Màu Sắc và Kích Cỡ.');
+            return;
+        }
+        for (let i = 0; i < data_product_details.length; i++) {
+            let product = data_product_details[i];
+            if (product.size == kichThuoc && product.color_code == color) {
+                if (Number(product.so_luong_ton) === 0) {
+                    ToastError('Phiên bản hiện tại tạm hết hàng.')
+                    return;
+                }
+                if (Number(quantity) > Number(product.so_luong_ton)) {
+                    ToastError('Số lượng vượt quá số lượng tồn.')
+                    return;
+                }
+
+                let Data = {
+                    quantity:quantity,
+                    id_product_detail: product.id
+                }
+                let jsonData = [Data]
+                let form = $('<form>', {
+                    action: '/checkout',
+                    method: 'POST',
+                    style: 'display: none;'
+
+                });
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'listData',
+                    value: JSON.stringify(jsonData)
+                }).appendTo(form);
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'maGiamGia',
+                    value: ''
+                }).appendTo(form);
+                form.appendTo('body');
+                form.submit();
             }
         }
     });

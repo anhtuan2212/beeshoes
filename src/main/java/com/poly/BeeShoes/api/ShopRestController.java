@@ -192,6 +192,25 @@ public class ShopRestController {
             if (!cal.equalsIgnoreCase("plus") && ghct.getSoLuong() > 1) {
                 ghct.setSoLuong(ghct.getSoLuong() - 1);
             }
+            if (ghct.getSoLuong()<1){
+                return ResponseEntity.notFound().header("status","minNum").build();
+            }
+            if (ghct.getSoLuong()>ghct.getChiTietSanPham().getSoLuongTon()||ghct.getChiTietSanPham().getSoLuongTon()<1){
+                return ResponseEntity.notFound().header("status","MaxNum").build();
+            }
+            gioHangChiTietService.save(ghct);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+    @PostMapping("/set-shopping-cart-quantity")
+    public ResponseEntity setQuantity(@RequestParam("id") Long id, @RequestParam("num") Integer num) {
+        GioHangChiTiet ghct = gioHangChiTietService.getById(id);
+        if (ghct != null) {
+                ghct.setSoLuong(num);
+            if (ghct.getSoLuong()<1){
+                return ResponseEntity.notFound().header("status","minNum").build();
+            }
             if (ghct.getSoLuong()>ghct.getChiTietSanPham().getSoLuongTon() || ghct.getChiTietSanPham().getSoLuongTon()<1){
                 return ResponseEntity.notFound().header("status","MaxNum").build();
             }

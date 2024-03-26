@@ -107,7 +107,17 @@ quanHuyen.on('change', function () {
     $(phuongXa).niceSelect('update');
 })
 
+let worker = new Worker('/assets/customer/js/profile/worker.js');
+document.addEventListener("DOMContentLoaded", function () {
+    worker.postMessage('start');
+});
+
+worker.onmessage = function (e) {
+    console.log(e.data);
+};
+
 $(document).ready(function () {
+
     $(document).on('click', '.btn-delete-address', function () {
         let id = $(this).data('id');
         Swal.fire({

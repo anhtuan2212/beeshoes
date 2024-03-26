@@ -107,7 +107,8 @@
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
                                                 <th:block th:each="tl:${lsttheloai}">
-                                                    <li><a class="selected_cate" th:attr="data-id=${tl.getId()}" href="javascript:;"
+                                                    <li><a class="selected_cate" th:attr="data-id=${tl.getId()}"
+                                                           href="javascript:;"
                                                            th:text="${tl.getTen()}+' ( '+${tl.getCountProduct()}+' )'"></a>
                                                     </li>
                                                 </th:block>
@@ -125,7 +126,9 @@
                                         <div class="shop__sidebar__brand">
                                             <ul>
                                                 <th:block th:each="th:${lstthuonghieu}">
-                                                    <li><a class="selected_brand" href="javascript:;" th:attr="data-id=${th.getId()}"  th:text="${th.getTen()}"></a></li>
+                                                    <li><a class="selected_brand" href="javascript:;"
+                                                           th:attr="data-id=${th.getId()}" th:text="${th.getTen()}"></a>
+                                                    </li>
                                                 </th:block>
                                             </ul>
                                         </div>
@@ -140,10 +143,14 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li><a class="selected_price" data-id="0->1000000" href="javascript:;">0đ - 1.000.000đ</a></li>
-                                                <li><a class="selected_price" data-id="1000000->5000000" href="javascript:;">1.000.000đ - 5.000.000đ</a></li>
-                                                <li><a class="selected_price" data-id="5000000->10000000" href="javascript:;">5.000.000đ - 10.000.000đ</a></li>
-                                                <li><a class="selected_price" data-id="10000000+" href="javascript:;">10.000.000đ +</a></li>
+                                                <li><a class="selected_price" data-id="0->1000000" href="javascript:;">0đ
+                                                    - 1.000.000đ</a></li>
+                                                <li><a class="selected_price" data-id="1000000->5000000"
+                                                       href="javascript:;">1.000.000đ - 5.000.000đ</a></li>
+                                                <li><a class="selected_price" data-id="5000000->10000000"
+                                                       href="javascript:;">5.000.000đ - 10.000.000đ</a></li>
+                                                <li><a class="selected_price" data-id="10000000+" href="javascript:;">10.000.000đ
+                                                    +</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -157,9 +164,10 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             <th:block th:each="size:${lstkichco}">
-                                                <label class="selected_size" th:attr="data-id=${size.getTen()}" th:for="'size'+${size.getId()}">
+                                                <label class="selected_size" th:attr="data-id=${size.getTen()}"
+                                                       th:for="'size'+${size.getId()}">
                                                     <th:block th:text="${size.getTen()}"></th:block>
-<!--                                                    <input class="d-none" type="radio" name="selected_size"  th:id="'size'+${size.getId()}">-->
+                                                    <!--                                                    <input class="d-none" type="radio" name="selected_size"  th:id="'size'+${size.getId()}">-->
                                                 </label>
                                             </th:block>
                                         </div>
@@ -174,9 +182,12 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             <th:block th:each="color:${lstmausac}">
-                                                <label class="label_select_color" th:attr="data-id=${color.getMaMauSac()}" data-toggle="tooltip" data-placement="top" title="Tooltip on top" th:for="'color'+${color.getId()}"
+                                                <label class="label_select_color"
+                                                       th:attr="data-id=${color.getMaMauSac()}" data-toggle="tooltip"
+                                                       data-placement="top" title="Tooltip on top"
+                                                       th:for="'color'+${color.getId()}"
                                                        th:style="'background-color:'+${color.getMaMauSac()} ">
-                                                    <input class="select_color"  type="radio"
+                                                    <input class="select_color" type="radio"
                                                            th:id="'color'+${color.getId()}">
                                                 </label>
                                             </th:block>
@@ -192,7 +203,8 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__tags">
                                             <th:block th:each="tag:${lsttags}">
-                                                <a class="selected_tags" th:attr="data-id=${tag.getTen()}"  href="javascript:;" th:text="${tag.getTen()}"></a>
+                                                <a class="selected_tags" th:attr="data-id=${tag.getTen()}"
+                                                   href="javascript:;" th:text="${tag.getTen()}"></a>
                                             </th:block>
                                         </div>
                                     </div>
@@ -207,7 +219,9 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <label class="text-hien-thi">Hiển Thị 1 –> <label class="text-hien-thi" id="total-num-show" th:text="${#lists.size(lstsanpham.getContent())}"></label>
+                                <label class="text-hien-thi">Hiển Thị 1 –> <label class="text-hien-thi"
+                                                                                  id="total-num-show"
+                                                                                  th:text="${#lists.size(lstsanpham.getContent())}"></label>
                                     Trong Tổng Số
                                     <th:block th:text="${totalsize}"></th:block>
                                     Kết Quả
@@ -231,14 +245,17 @@
                         <div class="product__item sale" th:attr="data-product-id=${sp.getId()}">
                             <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <div class="product__item__pic set-bg susor-pointer"
-                                     th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-details(product=${sp.getId()})}">
-                                    <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="" >
+                                     th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-detail(product=${sp.getId()})}">
+                                    <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="">
                                     <span class="label" th:if="${sp.isSale()}">SALE</span>
                                     <ul class="product__hover">
-                                        <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+                                        <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png"
+                                                                        alt=""></a>
                                         </li>
                                         <li>
-                                            <a class="btn-add-to-cart" href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a>
+                                            <a class="btn-add-to-cart" href="javascript:;"><img
+                                                    src="/assets/customer/img/icon/shopping-cart-add.svg"
+                                                    alt=""></a>
                                         </li>
                                         <li><a th:href="@{/shop-detail(product=${sp.getId()})}"><img
                                                 src="/assets/customer/img/icon/eye.svg" alt=""></a></li>
@@ -263,9 +280,12 @@
                                 </th:block>
                                 <div class="product__option__size">
                                     <th:block th:each="size:${sp.getDistinctKichCoList()}">
-                                        <label class="label_select_size" th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
+                                        <label class="label_select_size"
+                                               th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
                                             <th:block th:text="${size.getTen()}"></th:block>
-                                            <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}" type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}" th:value="${size.getTen()}" data-id-size="4">
+                                            <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}"
+                                                   type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}"
+                                                   th:value="${size.getTen()}" data-id-size="4">
                                         </label>
                                     </th:block>
                                 </div>
