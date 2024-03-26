@@ -123,26 +123,6 @@
                         </tr>
                         </thead>
                         <tbody id="show-data">
-                        <!--                                <tr>-->
-                        <!--                                    <td class="product__cart__item">-->
-                        <!--                                        <div class="product__cart__item__pic">-->
-                        <!--                                            <img src="/assets/customer/img/shopping-cart/cart-1.jpg" alt="">-->
-                        <!--                                        </div>-->
-                        <!--                                        <div class="product__cart__item__text">-->
-                        <!--                                            <h6>T-shirt Contrast Pocket</h6>-->
-                        <!--                                            <h5>$98.49</h5>-->
-                        <!--                                        </div>-->
-                        <!--                                    </td>-->
-                        <!--                                    <td class="quantity__item">-->
-                        <!--                                        <div class="quantity">-->
-                        <!--                                            <div class="pro-qty-2">-->
-                        <!--                                                <input type="text" value="1">-->
-                        <!--                                            </div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </td>-->
-                        <!--                                    <td class="cart__price">$ 30.00</td>-->
-                        <!--                                    <td class="cart__close"><i class="fa fa-close"></i></td>-->
-                        <!--                                </tr>-->
                         </tbody>
                     </table>
                     <div id="datatablePagination">
@@ -166,22 +146,14 @@
             <div class="col-lg-4 mt-lg-3 col-md-4">
                 <div class="cart__discount">
                     <h6>Mã Giảm Giá</h6>
-                    <input id="input_voucher" type="text" placeholder="Mã giảm giá">
-                    <button id="btn-add-code-voucher" type="button">Áp Dụng</button>
+                    <form action="#">
+                        <input id="input_voucher" type="text" placeholder="Mã giảm giá">
+                        <button id="btn-add-code-voucher" type="button">Áp Dụng</button>
+                    </form>
                 </div>
                 <div class="accordion list_voucher mb-5" id="accordionExample">
-                    <h2 class="mb-0 title_voucher" id="headingTwo">
-                        <button class="btn btn-link btn-block text-left active collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                aria-controls="collapseTwo">
-                            Tốt Nhất
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
-                         data-parent="#accordionExample">
-                        <ul class="mt-2" id="voucher-top">
-                        </ul>
-                    </div>
+                    <ul class="mt-2" id="voucher-top">
+                    </ul>
                     <h2 class="mb-0 title_voucher" id="headingThree">
                         <button class="btn btn-link btn-block text-left collapsed" type="button"
                                 data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
@@ -200,6 +172,7 @@
                     <ul>
                         <li>Tổng Tiền <span id="sub-total">0đ</span></li>
                         <li id="discount_element" class="d-none">Giảm Giá<span id="discount_money">0đ</span></li>
+                        <li id="shipping" class="d-none">Phí Ship<span>Miễn Phí</span></li>
                         <li>Tổng Thanh Toán <span id="total-money">0đ</span></li>
                     </ul>
                     <a href="javascript:;" id="btn-checkout" class="primary-btn">Thanh Toán</a>

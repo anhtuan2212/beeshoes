@@ -62,7 +62,7 @@ function printAllData() {
             }
             let html = `<div class="col-lg-4 col-md-6 col-sm-6 product_wraper mix fadeOut">
                         <div class="product__item sale" data-product-id="${product.id}">
-                                <div class="product__item__pic set-bg susor-pointer" data-setbg="${url}" data-href="/shop-details?product=${product.id}" style="background-image: url('${url}');">
+                                <div class="product__item__pic set-bg susor-pointer" data-setbg="${url}" data-href="/shop-detail?product=${product.id}" style="background-image: url('${url}');">
                                     ${sales}
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
@@ -121,7 +121,10 @@ $(document).ready(function () {
         }
         fillterdata(dataShop)
     });
-
+    // $(document).on('click', '.product__item__pic', function () {
+    //     let url = $(this).data('href');
+    //     window.location.href = url;
+    // })
     $('.selected_tags').on('click', function () {
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
@@ -251,11 +254,11 @@ $(document).ready(function () {
                 if (showNum < displayNumShow) {
                     const ishave = $productWrapper.hasClass('fadeOut')
                     if (ishave) {
-                    $productWrapper.removeClass('fadeOut col-lg-4 col-md-6 col-sm-6').addClass('fadeIn');
-                    $($productWrapper).on('animationend', function () {
-                        $(this).removeClass('fadeIn')
-                        $(this).addClass('col-lg-4 col-md-6 col-sm-6')
-                    })
+                        $productWrapper.removeClass('fadeOut col-lg-4 col-md-6 col-sm-6').addClass('fadeIn');
+                        $($productWrapper).on('animationend', function () {
+                            $(this).removeClass('fadeIn')
+                            $(this).addClass('col-lg-4 col-md-6 col-sm-6')
+                        })
                     }
                     showNum++;
                 } else {

@@ -20,23 +20,36 @@ $('#password').val('22122001Lu$')
  * */
 
 startUp()
+
+let worker = new Worker('/assets/customer/js/work_get_all_product.js');
 window.onload = function () {
-    // ToastSuccess('Tải hoàn tất !')
-    $.ajax({
-        url: '/api/get-all-san-pham',
-        type: 'GET',
-        success: function (data) {
-            dataShop = data;
-            console.log(dataShop)
-            if (typeof printAllData === 'function') {
-                printAllData();
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Lỗi khi gọi API: " + textStatus, errorThrown);
-        }
-    })
+    worker.postMessage('start');
 };
+
+worker.onmessage = function (e) {
+    console.log(e.data);
+    dataShop = e.data;
+    if (typeof printAllData === 'function') {
+        printAllData();
+    }
+};
+// window.onload = function () {
+//     // ToastSuccess('Tải hoàn tất !')
+//     $.ajax({
+//         url: '/api/get-all-san-pham',
+//         type: 'GET',
+//         success: function (data) {
+//             dataShop = data;
+//             console.log(dataShop)
+//             if (typeof printAllData === 'function') {
+//                 printAllData();
+//             }
+//         },
+//         error: function (jqXHR, textStatus, errorThrown) {
+//             console.error("Lỗi khi gọi API: " + textStatus, errorThrown);
+//         }
+//     })
+// };
 
 function getAllProductPrintToCart() {
     $.ajax({

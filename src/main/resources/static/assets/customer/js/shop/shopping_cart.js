@@ -3,15 +3,19 @@ let ShopingCart = [];
 let ListVoucher = []
 let SelectedVoucher = null;
 localStorage.removeItem('checkout_data');
-window.addEventListener('pageshow', function (event) {
-    if (event.persisted) {
-        location.reload()
-    }
-});
-window.addEventListener('popstate', function (event) {
-    location.reload()
-});
+// window.addEventListener('pageshow', function (event) {
+//     if (event.persisted) {
+//         location.reload()
+//     }
+// });
+// window.addEventListener('popstate', function (event) {
+//     location.reload()
+// });
+
+
 $(document).ready(async function () {
+
+
         let NumDataLength = 0;
         if (username === undefined) {
             deleteCheckoutDatalocalStorage();
@@ -206,12 +210,19 @@ $(document).ready(async function () {
             let data = getCheckoutDataLocalStorage();
             if (data !== null && Array.isArray(data) && data.length > 0) {
                 let datasubmit = [];
+                let total = 0;
                 data.forEach((product) => {
+                    total += extractNumberFromString(product.pro.gia_ban) * product.quantity
                     datasubmit.push({
                         quantity: product.quantity,
                         id_product_detail: product.pro.id
                     });
                 });
+                if (total > 50000000) {
+                    ToastError('Tổng tiền không được lớn hơn 50 triệu !')
+                    return;
+                }
+
                 let jsonData = JSON.stringify(datasubmit);
                 let form = $('<form>', {
                     action: '/checkout',
@@ -377,12 +388,20 @@ $(document).ready(async function () {
                         }
                     });
                 }
-                if (maxDiscountVoucher!==null){
-                  let ele_voucher =  $(`#voucher_${maxDiscountVoucher.id}`).closest('.wraper_li');
-                  $('#voucher-top').html(ele_voucher);
-                    ele_voucher.on('animationend',function () {
+                if (maxDiscountVoucher !== null) {
+                    let ele_voucher = $(`#voucher_${maxDiscountVoucher.id}`).closest('.wraper_li');
+                    $('#voucher-top').html(ele_voucher);
+                    ele_voucher.on('animationend', function () {
                         $(this).removeClass('scaleIn');
                     })
+                }
+                if (totalMoney > 2000000) {
+                    $('#shipping').removeClass('d-none')
+                } else {
+                    $('#shipping').addClass('d-none')
+                }
+                if (totalMoney > 50000000) {
+                    Confirm('Lưu ý?', 'Bạn không thể đặt đơn online lớn hơn 50 Triệu !', 'Đóng', 'Tôi Hiểu')
                 }
                 let totalPayment = Number(totalMoney) - Number(discountAmount);
                 totalPayment = Math.ceil(totalPayment / 1000) * 1000;
@@ -392,11 +411,16 @@ $(document).ready(async function () {
         }
 
         function updateProductQuantity(id, num, data) {
+            let check = true;
             if (Array.isArray(data)) {
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].pro.id == id) {
-                        console.log(data[i])
                         data[i].quantity = Math.max(Number(data[i].quantity) + Number(num), 1);
+                        if (Number(data[i].quantity) > Number(data[i].pro.so_luong_ton)) {
+                            ToastError('Số lượng không thể lơn hơn số lượng tồn')
+                            data[i].quantity = data[i].pro.so_luong_ton
+                            check = false;
+                        }
                         let newPrice = extractNumberFromString(data[i].pro.gia_ban) * Number(data[i].quantity);
                         newPrice = addCommasToNumber(newPrice);
                         let indexRow = datatable.row($(`#product_${id}`).closest('tr')).index();
@@ -405,6 +429,31 @@ $(document).ready(async function () {
                     }
                 }
             }
+            return check;
+        }
+
+        function setProductQuantity(id, num, data) {
+            let check = true;
+            if (Array.isArray(data)) {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].pro.id == id) {
+                        console.log(data[i])
+                        data[i].quantity = Math.max(Number(num), 1);
+                        if (Number(data[i].quantity) > Number(data[i].pro.so_luong_ton)) {
+                            ToastError('Số lượng không thể lơn hơn số lượng tồn')
+                            data[i].quantity = data[i].pro.so_luong_ton
+                            setValInput(id, data[i].quantity.toString());
+                            check = false;
+                        }
+                        let newPrice = extractNumberFromString(data[i].pro.gia_ban) * Number(data[i].quantity);
+                        newPrice = addCommasToNumber(newPrice);
+                        let indexRow = datatable.row($(`#product_${id}`).closest('tr')).index();
+                        datatable.cell({row: indexRow, column: 3}).data(newPrice + 'đ').draw();
+                        break;
+                    }
+                }
+            }
+            return check;
         }
 
         function addQuantityProduct(id, num) {
@@ -412,11 +461,11 @@ $(document).ready(async function () {
                 if (username === undefined) {
                     let dataLocal = getProductInLocalStorage();
                     let dataCheckout = getCheckoutDataLocalStorage();
-                    updateProductQuantity(id, num, dataLocal);
+                    let check = updateProductQuantity(id, num, dataLocal);
                     updateProductQuantity(id, num, dataCheckout);
                     saveCheckoutDatalocalStorage(dataCheckout);
                     saveProductTolocalStorage(dataLocal);
-                    resolve(true);
+                    resolve(check);
                 } else {
                     let dataCheckout = getCheckoutDataLocalStorage();
                     updateProductQuantity(id, num, dataCheckout);
@@ -440,6 +489,9 @@ $(document).ready(async function () {
                                     case 'MaxNum':
                                         ToastError('Số lượng tồn mẫu đã tối đa.');
                                         break;
+                                    case 'minNum':
+                                        ToastError('Số lượng phải lớn hơn 0.');
+                                        break;
                                     default:
                                         ToastError("Lỗi.");
                                 }
@@ -448,12 +500,65 @@ $(document).ready(async function () {
                             }
                         });
                     } else {
-                        resolve(true);
+                        resolve(false);
                     }
                 }
             });
         }
 
+        function setValInput(id, val) {
+            let element = document.querySelector(`div.pro-qty-2[data-id=${id}]`);
+            element.querySelector('input').value = val;
+        }
+        function setQuantityProduct(id, num) {
+            return new Promise((resolve, reject) => {
+                if (username === undefined) {
+                    let dataLocal = getProductInLocalStorage();
+                    let dataCheckout = getCheckoutDataLocalStorage();
+                    let check = setProductQuantity(id, num, dataLocal);
+                    setProductQuantity(id, num, dataCheckout);
+                    saveCheckoutDatalocalStorage(dataCheckout);
+                    saveProductTolocalStorage(dataLocal);
+                    resolve(check);
+                } else {
+                    let dataCheckout = getCheckoutDataLocalStorage();
+                    setProductQuantity(id, num, dataCheckout);
+                    saveCheckoutDatalocalStorage(dataCheckout);
+                    let id_cart = $(`#product_${id}`).data('cart-id');
+                    if (id_cart !== undefined) {
+                        $.ajax({
+                            url: '/api/set-shopping-cart-quantity',
+                            type: 'POST',
+                            data: {
+                                id: id_cart,
+                                num: num,
+                            },
+                            success: function () {
+                                setProductQuantity(id, num, ShopingCart);
+                                ToastSuccess("Lưu thành công.");
+                                resolve(true); // Trả về thành công khi AJAX thành công
+                            },
+                            error: function (e, x, h) {
+                                switch (e.getResponseHeader('status')) {
+                                    case 'minNum':
+                                        ToastError('Số lượng phải lớn hơn 0.');
+                                        break;
+                                    case 'MaxNum':
+                                        ToastError('Số lượng tồn mẫu đã tối đa.');
+                                        break;
+                                    default:
+                                        ToastError("Lỗi.");
+                                }
+                                console.log(x, h);
+                                reject(false);
+                            }
+                        });
+                    } else {
+                        resolve(false);
+                    }
+                }
+            });
+        }
 
         function addDataSelectedCheckout(id) {
             let data = [];
@@ -536,6 +641,23 @@ $(document).ready(async function () {
             });
         }
 
+        $(document).on('change', '.input_quantity_product', function () {
+            let val = $(this).val();
+            let num = parseInt(val.replace(/\D/g, ''));
+            let id = $(this).closest('.pro-qty-2').data('id');
+
+            if (isNaN(num) || num < 1 || num > 500) {
+                $(this).val(1);
+                num = 1;
+            } else {
+                $(this).val(num);
+            }
+            setQuantityProduct(id, num)
+                .then(() => {
+                    updateTotalMoney();
+                });
+        })
+
         function printAllProductInServer(data) {
             if (Array.isArray(data)) {
                 console.log(data)
@@ -574,7 +696,7 @@ $(document).ready(async function () {
                                 <div class="quantity">
                                     <div class="pro-qty-2" data-id="${product.chitietSanPham.id}">
                                     <span class="fa fa-angle-left dec qtybtn"></span>
-                                        <input type="text" value="${product.soLuong}" readonly>
+                                        <input class="input_quantity_product" type="text" value="${product.soLuong}">
                                     <span class="fa fa-angle-right inc qtybtn"></span>
                                     </div>
                                 </div>
@@ -627,7 +749,7 @@ $(document).ready(async function () {
                     <td class="quantity__item">
                         <div class="quantity">
                             <div class="pro-qty-2" data-id="${product.pro.id}"><span class="fa fa-angle-left dec qtybtn"></span>
-                                <input type="text" value="${product.quantity}" readonly>
+                                <input class="input_quantity_product" type="text" value="${product.quantity}">
                             <span class="fa fa-angle-right inc qtybtn"></span></div>
                         </div>
                     </td>

@@ -10,6 +10,82 @@ function convertPhoneNumber(phoneNumber) {
     return firstPart + middlePart + lastPart;
 }
 
+function UpdateQuantity(id, calcu, num) {
+    console.log(calcu)
+    $.ajax({
+        url: '/api/hoa-don/update-quantity',
+        type: 'POST',
+        data: {
+            id: id,
+            calcu: calcu,
+            num: num
+        }, success: function (data) {
+            console.log(data);
+            $('#total-money').text(addCommasToNumber(data[0].tongTien) + 'đ')
+            $('#discount-money').text(addCommasToNumber(data[0].giamGia == null ? 0 : data[0].giamGia) + 'đ')
+            $('#payment-money').text(addCommasToNumber(data[0].thucThu) + 'đ')
+            for (let i = 0; i < data.length; i++) {
+                let wrapper = $(`#product-detail-${data[i].idHDCT}`);
+                if (wrapper.length === 0) {
+                    let html = `
+                        <li class="row" data-id-hdct="${data[i].idHDCT}">
+                            <div class="col-2 p-0">
+                                <img class="product_img" src="${data[i].img}">
+                            </div>
+                            <div id="product-detail-${data[i].idHDCT}" class="content_product p-0 col-6">
+                                <div>
+                                    <h6 class="product_name mb-2">${data[i].ten}</h6>
+                                    <div class="w-100">
+                                        Màu :<label>${data[i].tenMau}</label>,
+                                        Kích Cỡ :<label>${data[i].kichCo}</label>
+                                    </div>
+                                    <label class="quantity-product">Số Lượng :${data[i].soLuong}</label>
+                                    <div class="pro-qty"><span class="fa fa-angle-up dec qtybtn"></span>
+                                       <input class="input-quantity" id="quantity-selected-${data[i].idHDCT}" type="text" value="${data[i].soLuong}" readonly>
+                                                <span class="fa fa-angle-down inc qtybtn"></span>
+                                                </div>
+                                </div>
+                            </div>
+                            <div class="col-3 d-flex align-items-center">
+                                <h5 class="product_price_cu">${addCommasToNumber(data[i].giaGoc)}đ</h5>
+                                <h5 class="product_price">${addCommasToNumber(data[i].giaBan)}đ</h5>
+                            </div>
+                            <div class="col-1 align-items-center btn-del-group d-flex">
+                                <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm" data-id-hdct="${data[i].idHDCT}">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </div>
+                        </li>`;
+                    $('#show-all-product').append(html);
+                }else{
+                    wrapper.find(`input.input-quantity`).val(data[i].soLuong);
+                    console.log(wrapper.find(`input.input-quantity`))
+                    wrapper.find('label.quantity-product').text(`Số Lượng :${data[i].soLuong}`);
+                }
+            }
+            ToastSuccess('Lưu thành công.')
+        }, error: function (xhr) {
+            console.log(xhr.getResponseHeader('status'));
+            switch (xhr.getResponseHeader('status')) {
+                case 'NotAuth':
+                    ToastError('Vui lòng đăng nhập.')
+                    break;
+                case 'HDCTisNull':
+                    ToastError('Vui lòng chọn lại sản phẩm.')
+                    break;
+                case 'minQuantity':
+                    ToastError('Số lượng không được nhỏ hơn 0.')
+                    break;
+                case 'maxQuantity':
+                    ToastError('Số lượng lớn hơn số lượng tồn.')
+                    break;
+                default:
+                    ToastError('Lỗi.');
+            }
+        }
+    })
+}
+
 $(document).ready(function () {
 
     let numberPhone = $('#numberPhone');
@@ -17,20 +93,29 @@ $(document).ready(function () {
     numberPhone.text(convertPhoneNumber(phoneNumber));
     $(document).on('change', '.body-form-update input[name="diaChi"]', function () {
         let val = $(this).val();
-        let dcK =  $('.diaChiKhac');
+        let dcK = $('.diaChiKhac');
         console.log(val)
         if (val === '#') {
-            dcK.removeClass('d-none').addClass('showF').on('animationend',function () {
+            dcK.removeClass('d-none').addClass('showF').on('animationend', function () {
                 $(this).removeClass('showF').removeClass('d-none');
             });
             console.log('hiển thị');
-        }else{
-            if(!dcK.hasClass('d-none')){
+        } else {
+            if (!dcK.hasClass('d-none')) {
                 dcK.removeClass('showF').addClass('hideF');
-                dcK.on('animationend',function () {
+                dcK.on('animationend', function () {
                     $(this).addClass('d-none').removeClass('hideF');
                 })
             }
+        }
+    })
+    $(document).on('click', '.qtybtn', function () {
+        let ele = $(this);
+        let id = ele.closest('li.row').data('id-hdct');
+        if (ele.hasClass('dec')) {
+            UpdateQuantity(id, 'plus', 1)
+        } else {
+            UpdateQuantity(id, 'minus', 1)
         }
     })
     $(document).on('click', '#btn-show-update', function () {
@@ -299,7 +384,7 @@ $(document).ready(function () {
                 console.log(data)
                 if (data.sale) {
                     let html = `
-                    <li class="row">
+                    <li class="row" data-id-hdct="${data.id_hdct}">
                         <div class="col-2 p-0">
                             <img class="product_img" src="${data.anh}">
                         </div>
@@ -311,6 +396,9 @@ $(document).ready(function () {
                                     Kích Cỡ :<label>${data.kichCo}</label>
                                 </div>
                                 <label class="quantity-product">Số Lượng :${data.soLuong}</label>
+                                 <div class="pro-qty d-none">
+                                     <input class="input-quantity" id="quantity-selected-${data.id_hdct}" type="text" value="${data.soLuong}" readonly>
+                                </div>
                             </div>
                         </div>
                         <div class="col-3 d-flex align-items-center">

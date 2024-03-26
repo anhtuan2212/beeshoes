@@ -332,7 +332,7 @@
                     <div class="card-body mt-0">
                         <div class="card_content">
                             <ul class="w-100" id="show-all-product">
-                                <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}">
+                                <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}" th:attr="data-id-hdct=${sanpham.getId()}">
                                     <div class="col-2 p-0">
                                         <img class="product_img"
                                              th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
@@ -351,7 +351,7 @@
                                             <label class="quantity-product"
                                                    th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
                                             <div class="pro-qty d-none">
-                                                <input id="quantity-selected" type="text" th:value="${sanpham.getSoLuong()}" readonly>
+                                                <input  class="input-quantity" th:id="'quantity-selected'+${sanpham.getId()}" type="text" th:value="${sanpham.getSoLuong()}" readonly>
                                             </div>
                                         </div>
                                     </div>
