@@ -1,10 +1,10 @@
 package com.poly.BeeShoes.api;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.poly.BeeShoes.dto.LichSuHoaDonDto;
-import com.poly.BeeShoes.dto.WardDto;
-import com.poly.BeeShoes.library.LibService;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.request.*;
 import com.poly.BeeShoes.service.*;
@@ -19,16 +19,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @CrossOrigin("*")
@@ -207,8 +203,22 @@ public class HoaDonRestController {
         Type listType = new TypeToken<List<ProductCashierRequest>>() {
         }.getType();
         List<ProductCashierRequest> listProduct = gson.fromJson(request.getProduct(), listType);
+        for (ProductCashierRequest pcr : listProduct) {
+            ChiTietSanPham ctsp = chiTietSanPhamService.getById(pcr.getId());
+            if(ctsp.getSoLuongTon() < pcr.getQuantity()) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .header("status", "error")
+                        .body(String.format("Số lượng sản phẩm %s vượt quá số lượng tồn", ctsp.getSanPham().getTen()));
+            }
+        }
+        int total = 0;
+        int giamGia = 0;
+        for (int i = 0; i < listProduct.size(); i++) {
+            ProductCashierRequest pro = listProduct.get(i);
+            ChiTietSanPham ctsp = chiTietSanPhamService.getById(pro.getId());
+            total += ctsp.getGiaBan().intValue() * pro.getQuantity();
+        }
         List<HoaDonChiTiet> lstHDCT = new ArrayList<>();
-        Voucher voucher = voucherService.getByMa(request.getVoucher());
         List<HinhThucThanhToan> httt = new ArrayList<>();
         KhachHang kh = new KhachHang();
         if (!request.getCustomer().equals("#")) {
@@ -218,7 +228,7 @@ public class HoaDonRestController {
             HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("ChuyenKhoan");
             if (ht == null) {
                 ht = new HinhThucThanhToan();
-                ht.setHinhThuc("ChuyenKhoan");
+                ht.setHinhThuc("Chuyển Khoản");
                 ht.setTrangThai(true);
                 ht.setMoTa("Chuyển Khoản");
                 ht = hinhThucThanhToanService.save(ht);
@@ -229,7 +239,7 @@ public class HoaDonRestController {
             HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("TienMat");
             if (ht == null) {
                 ht = new HinhThucThanhToan();
-                ht.setHinhThuc("TienMat");
+                ht.setHinhThuc("Tiền Mặt");
                 ht.setTrangThai(true);
                 ht.setMoTa("Tiền Mặt");
                 ht = hinhThucThanhToanService.save(ht);
@@ -240,7 +250,7 @@ public class HoaDonRestController {
             HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("KhiNhanHang");
             if (ht == null) {
                 ht = new HinhThucThanhToan();
-                ht.setHinhThuc("KhiNhanHang");
+                ht.setHinhThuc("Khi Nhận Hàng");
                 ht.setTrangThai(true);
                 ht.setMoTa("Thanh Toán Khi Nhận Hàng");
                 ht = hinhThucThanhToanService.save(ht);
@@ -248,26 +258,24 @@ public class HoaDonRestController {
             }
         }
         HoaDon hd = new HoaDon();
-        Integer total = 0;
-        for (int i = 0; i < listProduct.size(); i++) {
-            ProductCashierRequest pro = listProduct.get(i);
-            ChiTietSanPham ctsp = chiTietSanPhamService.getById(pro.getId());
-            total += ctsp.getGiaBan().intValue() * pro.getQuantity();
-        }
-
-
-        Integer giamGia = 0;
-        if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
-            if (voucher.getLoaiVoucher().equals("$")) {
-                giamGia = voucher.getGiaTriTienMat().intValue();
-            } else {
-                giamGia = total * voucher.getGiaTriPhanTram();
-                if (giamGia > voucher.getGiaTriToiDa().intValue()) {
-                    giamGia = voucher.getGiaTriToiDa().intValue();
+        if(request.getVoucher() != null) {
+            Voucher voucher = voucherService.getByMa(request.getVoucher());
+            if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
+                if (voucher.getLoaiVoucher().equals("$")) {
+                    if(voucher.getGiaTriTienMat().intValue() >= total) {
+                        giamGia = total;
+                    }
+                    giamGia = voucher.getGiaTriTienMat().intValue();
+                } else {
+                    giamGia = total / 100 * voucher.getGiaTriPhanTram();
+                    if(giamGia >= voucher.getGiaTriToiDa().intValue()) {
+                        giamGia = voucher.getGiaTriToiDa().intValue();
+                    }
                 }
             }
+            hd.setVoucher(voucher);
         }
-        Integer thucthu = total - giamGia + request.getShippingFee();
+        int thucthu = total - giamGia + request.getShippingFee();
         if (request.getCustomer().equals("#")) {
             hd.setTenNguoiNhan("Khách Lẻ");
             hd.setKhachHang(null);
@@ -282,7 +290,6 @@ public class HoaDonRestController {
         hd.setTongTien(BigDecimal.valueOf(total));
         hd.setGiamGia(BigDecimal.valueOf(giamGia));
         hd.setHinhThucThanhToans(httt);
-        hd.setVoucher(voucher);
         hd.setNgayTao(Timestamp.from(Instant.now()));
         hd.setThucThu(BigDecimal.valueOf(thucthu));
         if (request.getReceivingType().equals("TQ")) {
@@ -292,7 +299,7 @@ public class HoaDonRestController {
                 hd.setSoTienCanThanhToan(BigDecimal.ZERO);
             } else {
                 hd.setSoTienDaThanhToan(BigDecimal.valueOf(request.getTransfer() + request.getCash()));
-                Integer thieu = thucthu - request.getTransfer() + request.getCash();
+                int thieu = thucthu - request.getTransfer() + request.getCash();
                 hd.setSoTienCanThanhToan(BigDecimal.valueOf(thieu));
             }
             hd.setTrangThai(TrangThaiHoaDon.ThanhCong);
@@ -307,7 +314,7 @@ public class HoaDonRestController {
                     hd.setSoTienCanThanhToan(BigDecimal.ZERO);
                 } else {
                     hd.setSoTienDaThanhToan(BigDecimal.valueOf(request.getTransfer() + request.getCash()));
-                    Integer thieu = thucthu - request.getTransfer() + request.getCash();
+                    int thieu = thucthu - request.getTransfer() + request.getCash();
                     hd.setSoTienCanThanhToan(BigDecimal.valueOf(thieu));
                 }
             }
@@ -327,6 +334,12 @@ public class HoaDonRestController {
         }
 
         hd = hoaDonService.save(hd);
+        if(hd.getVoucher() != null) {
+            Voucher voucher = hd.getVoucher();
+            voucher.setSoLuong(voucher.getSoLuong() - 1);
+            voucherService.save(voucher);
+        }
+
         for (int i = 0; i < listProduct.size(); i++) {
             ProductCashierRequest pro = listProduct.get(i);
             ChiTietSanPham ctsp = chiTietSanPhamService.getById(pro.getId());
@@ -338,6 +351,8 @@ public class HoaDonRestController {
             hdct.setGiaGoc(ctsp.getGiaGoc());
             hdct = hoaDonChiTietService.save(hdct);
             lstHDCT.add(hdct);
+            ctsp.setSoLuongTon(ctsp.getSoLuongTon() - pro.getQuantity());
+            chiTietSanPhamService.save(ctsp);
         }
 
         hd.setHoaDonChiTiets(lstHDCT);
@@ -764,6 +779,40 @@ public class HoaDonRestController {
 
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
+    @PostMapping("/update-receive-address")
+    public ResponseEntity<String> updateReceiveAddress(
+            @RequestBody String data,
+            HttpServletRequest request
+    ) {
+        JsonObject response = JsonParser.parseString(data).getAsJsonObject();
+        Long invoiceId = response.get("invoiceId").getAsLong();
+        String cusName = response.get("customerName").getAsString();
+        String cusPhone = response.get("customerPhone").getAsString();
+        BigDecimal shippingFee = BigDecimal.valueOf(response.get("shippingFee").getAsLong());
+        String cusHouseNum = response.get("customerHouseNumber").getAsString();
+        String receiveAddress = response.get("updateAddress").getAsString();
+
+        HoaDon needUpdate = hoaDonService.getHoaDonById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Invalid data of invoiceId"));
+        needUpdate.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
+        needUpdate.setTenNguoiNhan(cusName);
+        needUpdate.setSdtNhan(cusPhone);
+        needUpdate.setPhiShip(shippingFee);
+        needUpdate.setDiaChiNhan(cusHouseNum + "," + receiveAddress);
+        HoaDon updated = hoaDonService.save(needUpdate);
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setHanhDong("Cập nhật địa chỉ nhận hàng");
+        lichSuHoaDon.setHoaDon(updated);
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setTrangThaiSauUpdate(updated.getTrangThai().name());
+        if(request.getUserPrincipal() != null) {
+            User loggedUser = userService.getByUsername(request.getUserPrincipal().getName());
+            lichSuHoaDon.setNguoiThucHien(loggedUser);
+        }
+        lichSuHoaDonService.save(lichSuHoaDon);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
 //    @GetMapping("/getWard")

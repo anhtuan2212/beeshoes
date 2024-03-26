@@ -1,4 +1,4 @@
-setTabsHeader('pages');
+    setTabsHeader('pages');
 
 function convertPhoneNumber(phoneNumber) {
     if (isNaN(phoneNumber)) {
@@ -88,12 +88,91 @@ function UpdateQuantity(id, calcu, num) {
 
 $(document).ready(function () {
 
+    var province = $('#tinhTP');
+    var district = $('#quanHuyen');
+    var ward = $('#phuongXa');
+    var provinceName, districtName, wardName;
+    var provinceId, districtId, wardCode;
+    var provinceArr, districtArr, wardArr;
+
+    $.ajax({
+        type: "GET",
+        url: "/assets/address-json/province.json",
+        contentType: "application/json",
+        success: function (response) {
+            provinceArr = response;
+            console.log(response)
+            console.log(123)
+            $.each(response, function (index, item) {
+                let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
+                province.append(html);
+            });
+            province.niceSelect('update');
+        },
+        error: function (error) {
+            console.error('Xảy ra lỗi: ', error);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/assets/address-json/district.json",
+        contentType: "application/json",
+        success: function (response) {
+            districtArr = response;
+        },
+        error: function (error) {
+            console.error('Xảy ra lỗi: ', error);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/assets/address-json/ward.json",
+        contentType: "application/json",
+        success: function (response) {
+            wardArr = response;
+        },
+        error: function (error) {
+            console.error('Xảy ra lỗi: ', error);
+        }
+    })
+
+    province.on('change', function () {
+        district.html('<option value="">Quận/Huyện</option>');
+        ward.html('<option value="">Phường/Xã</option>');
+        provinceId = province.val();
+        provinceName = province.find('option:selected').text();
+        districtArr.forEach(function (item) {
+            if (item.ProvinceID == provinceId) {
+                let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                district.append(html);
+            }
+        })
+        district.niceSelect('update');
+    })
+
+    district.on('change', function () {
+        ward.html('<option value="">Phường/Xã</option>');
+        districtId = district.val();
+        districtName = district.find('option:selected').text();
+        wardArr.forEach(function (item) {
+            if (item.DistrictID == districtId) {
+                let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+                ward.append(html);
+            }
+        })
+        ward.niceSelect('update')
+    })
+
     let numberPhone = $('#numberPhone');
     let phoneNumber = numberPhone.text();
     numberPhone.text(convertPhoneNumber(phoneNumber));
+    let invAddress = '';
     $(document).on('change', '.body-form-update input[name="diaChi"]', function () {
         let val = $(this).val();
-        let dcK = $('.diaChiKhac');
+        invAddress = $(this).val();
+        let dcK =  $('.diaChiKhac');
         console.log(val)
         if (val === '#') {
             dcK.removeClass('d-none').addClass('showF').on('animationend', function () {
@@ -273,6 +352,11 @@ $(document).ready(function () {
         }
     })
     $(document).on('click', '.btn-delete', function () {
+        var products = document.querySelectorAll('.product-information');
+        if(products.length < 2) {
+            ToastError('Phải có ít nhất 1 sản phẩm có số lượng lớn hơn 0 trong đơn hàng');
+            return;
+        }
         let li = $(this).closest('li.row');
         let id = $(this).data('id-hdct');
         Swal.fire({
@@ -495,6 +579,49 @@ $(document).ready(function () {
         // let kc = kichCo.find('option:selected').text();
 
     });
+
+    $(document).on('click', '#btn-save', function () {
+        var invCode = $('#oder-code').text();
+        var cusName = $('#hoTen').val();
+        var cusPhone = $('#soDienThoai').val();
+        var invReceiveAddress = $('.body-form-update input[name="diaChi"]:checked').val();
+        if (invReceiveAddress === '#') {
+            var soNha = $('#soNha').val();
+            var tinhTP = $('#tinhTP').find('option:selected').text();
+            var quanHuyen = $('#quanHuyen').find('option:selected').text();
+            var phuongXa = $('#phuongXa').find('option:selected').text();
+            invReceiveAddress = soNha + ',' + phuongXa + ',' + quanHuyen + ',' + tinhTP;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/user-profile/update-receive-infor",
+            contentType: "application/json",
+            data: JSON.stringify({
+                invCode: invCode,
+                customerName: cusName,
+                customerPhone: cusPhone,
+                invReceiveAddress: invReceiveAddress
+            }),
+            success: function (response) {
+                var myData = response.split('-');
+                $('.invCusName').text(myData[0]);
+                $('.invCusPhone').text(myData[1]);
+                $('.invAddress').text(myData[2]);
+                $('#updateInformationModal').modal('hide');
+                ToastSuccess('Cập nhật thành công thông tin nhận hàng');
+            },
+            error: function (error) {
+                console.error('Xảy ra lỗi: ', error);
+            }
+        })
+    })
+
+    $('.quantity-selected').on('change', function () {
+        var qtyChange = $(this).val();
+        var prodPrice = $(this).closest('.product-information').find('.product_price').text().replace('đ', '');
+        prodPrice = prodPrice.replace(/[,.]/g, '') * qtyChange;
+        $(this).closest('.product-information').find('.product_price').text(prodPrice.toLocaleString('en-US') + 'đ');
+    })
 })
 
 function formatServerTime(serverTimeString) {

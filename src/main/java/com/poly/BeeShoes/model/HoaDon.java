@@ -55,6 +55,7 @@ public class HoaDon {
     String diaChiNhan;
     String sdtNhan;
     String tenNguoiNhan;
+    String emailNguoiNhan;
 
     BigDecimal tongTien;
     BigDecimal giamGia;
@@ -85,6 +86,7 @@ public class HoaDon {
     @Enumerated(EnumType.STRING)
     TrangThaiHoaDon trangThai;
 
-    @Enumerated(EnumType.STRING)
-    PaymentMethod hinhThucThanhToan;
+    @OneToOne
+    @JoinColumn(name = "hinh_thuc_thanh_toan")
+    HinhThucThanhToan hinhThucThanhToan;
 }

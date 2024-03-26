@@ -11,4 +11,6 @@ public interface HinhThucThanhToanService {
     HinhThucThanhToan getById(Long id);
     HinhThucThanhToan getByTen(String hinhThuc);
     boolean delete(Long id);
+    HinhThucThanhToan getByHinhThuc(String hinhThuc);
+
 }

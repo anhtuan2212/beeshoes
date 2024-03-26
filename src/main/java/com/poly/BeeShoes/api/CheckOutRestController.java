@@ -18,7 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/check-out")
@@ -43,6 +45,10 @@ public class CheckOutRestController {
     private LichSuHoaDonService lichSuHoaDonService;
     @Autowired
     private MailUtility mailUtility;
+    @Autowired
+    private HinhThucThanhToanService hinhThucThanhToanService;
+    @Autowired
+    private ThanhToanService thanhToanService;
 
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
@@ -56,21 +62,22 @@ public class CheckOutRestController {
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
         String voucherCode = null;
         BigDecimal voucherValue = new BigDecimal(0);
-        if(jsonObject.get("voucher") != null) {
+        if (jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
         }
-        if(jsonObject.get("voucherValue") != null) {
+        if (jsonObject.get("voucherValue") != null) {
             voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
         }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
         String customerName = jsonObject.get("customerName").getAsString();
         String customerPhone = jsonObject.get("customerPhone").getAsString();
+        String customerEmail = jsonObject.get("customerEmail").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         String orderCode = jsonObject.get("orderCode").getAsString();
         HoaDon hoaDon = new HoaDon();
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
-            if(user.getNhanVien() == null) {
+            if (user.getNhanVien() == null) {
                 KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
                 hoaDon.setKhachHang(khachHang);
             }
@@ -87,22 +94,36 @@ public class CheckOutRestController {
         hoaDon.setSdtNhan(customerPhone);
         hoaDon.setTenNguoiNhan(customerName);
         hoaDon.setDiaChiNhan(addressReceive);
+        hoaDon.setEmailNguoiNhan(customerEmail);
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        hoaDon.setHinhThucThanhToan(PaymentMethod.Online);
+        HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
+        hinhThucThanhToan.setHinhThuc("Online");
+        hinhThucThanhToan.setTrangThai(true);
+        hinhThucThanhToan.setMoTa("Online");
+        HinhThucThanhToan savedHinhThucThanhToan = hinhThucThanhToanService.save(hinhThucThanhToan);
+        List<HinhThucThanhToan> hinhThucThanhToanList = new ArrayList<>();
+        hinhThucThanhToanList.add(savedHinhThucThanhToan);
+        hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
+        ThanhToan thanhToan = new ThanhToan();
+        thanhToan.setHoaDon(savedHoaDon);
+        thanhToan.setHinhThucThanhToan(hinhThucThanhToan);
+        ThanhToan savedThanhToan = thanhToanService.save(thanhToan);
+        savedHoaDon.setThanhToan(savedThanhToan);
+        hoaDonService.save(savedHoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
         lichSuHoaDon.setHoaDon(savedHoaDon);
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setHanhDong("Đặt đơn hàng");
         lichSuHoaDonService.save(lichSuHoaDon);
-        if(voucher != null) {
+        if (voucher != null) {
             voucher.setSoLuong(voucher.getSoLuong() - 1);
             voucherService.save(voucher);
         }
-        for(JsonElement e : jsonArray) {
+        for (JsonElement e : jsonArray) {
             Long idPDetail = e.getAsJsonObject().get("productDetailId").getAsLong();
             int quantity = e.getAsJsonObject().get("quantity").getAsInt();
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
@@ -120,6 +141,7 @@ public class CheckOutRestController {
             System.out.println(e.getAsJsonObject().get("quantity").getAsInt());
             System.out.println(notes + " " + totalAmount + " " + voucherCode);
         }
+        mailUtility.sendMail(customerEmail, "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
 
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
         String vnpUrl = vnPayService.createOrder(savedHoaDon.getMaHoaDon(), total, notes, baseUrl);
@@ -139,21 +161,22 @@ public class CheckOutRestController {
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
         String voucherCode = null;
         BigDecimal voucherValue = new BigDecimal(0);
-        if(jsonObject.get("voucher") != null) {
+        if (jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
         }
-        if(jsonObject.get("voucherValue") != null || !jsonObject.get("voucherValue").isJsonNull()) {
+        if (jsonObject.get("voucherValue") != null || !jsonObject.get("voucherValue").isJsonNull()) {
             voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
         }
         JsonArray jsonArray = jsonObject.getAsJsonArray("productDetail");
         String customerName = jsonObject.get("customerName").getAsString();
         String customerPhone = jsonObject.get("customerPhone").getAsString();
+        String customerEmail = jsonObject.get("customerEmail").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         String orderCode = jsonObject.get("orderCode").getAsString();
         HoaDon hoaDon = new HoaDon();
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
-            if(user.getNhanVien() == null) {
+            if (user.getNhanVien() == null) {
                 KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
                 hoaDon.setKhachHang(khachHang);
             }
@@ -170,10 +193,18 @@ public class CheckOutRestController {
         hoaDon.setSdtNhan(customerPhone);
         hoaDon.setTenNguoiNhan(customerName);
         hoaDon.setDiaChiNhan(addressReceive);
+        hoaDon.setEmailNguoiNhan(customerEmail);
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        hoaDon.setHinhThucThanhToan(PaymentMethod.KhiNhanHang);
+        HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
+        hinhThucThanhToan.setHinhThuc("Khi Nhận Hàng");
+        hinhThucThanhToan.setTrangThai(true);
+        hinhThucThanhToan.setMoTa("Khi Nhận Hàng");
+        HinhThucThanhToan savedHinhThucThanhToan = hinhThucThanhToanService.save(hinhThucThanhToan);
+        List<HinhThucThanhToan> hinhThucThanhToanList = new ArrayList<>();
+        hinhThucThanhToanList.add(savedHinhThucThanhToan);
+        hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
@@ -181,11 +212,11 @@ public class CheckOutRestController {
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setHanhDong("Đặt đơn hàng");
         lichSuHoaDonService.save(lichSuHoaDon);
-        if(voucher != null) {
+        if (voucher != null) {
             voucher.setSoLuong(voucher.getSoLuong() - 1);
             voucherService.save(voucher);
         }
-        for(JsonElement e : jsonArray) {
+        for (JsonElement e : jsonArray) {
             Long idPDetail = e.getAsJsonObject().get("productDetailId").getAsLong();
             int quantity = e.getAsJsonObject().get("quantity").getAsInt();
             HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
@@ -203,10 +234,7 @@ public class CheckOutRestController {
             System.out.println(e.getAsJsonObject().get("quantity").getAsInt());
             System.out.println(notes + " " + totalAmount + " " + voucherCode);
         }
-        if(savedHoaDon.getKhachHang() != null) {
-            User user = userService.findByKhachHang_Id(savedHoaDon.getKhachHang().getId());
-            mailUtility.sendMail(user.getEmail(), "[LightBee - Đặt hàng thành công]", "Cảm ơn bạn :D");
-        }
+        mailUtility.sendMail(customerEmail, "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
         String urlRedirect = "/orderSuccess?invoiceCode=" + savedHoaDon.getMaHoaDon() + "&totalAmount=" + savedHoaDon.getThucThu();
         return new ResponseEntity<>(urlRedirect, HttpStatus.OK);
     }

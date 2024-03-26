@@ -134,7 +134,7 @@
                 </div>
 
             </div>
-            <article class="card" th:if="${hoadon!=null}">
+            <article class="card product-infor" th:if="${hoadon!=null}">
                 <header class="card-header">Mã Hóa Đơn:<strong id="oder-code"
                                                                th:text="${hoadon.getMaHoaDon()}"></strong></header>
                 <div class="card-body">
@@ -176,30 +176,20 @@
                                                                                        th:text="${hoadon.getMaVanChuyen()}"></a>
                             </div>
                             <div class="col-3">
-                                <strong>Họ Tên:</strong><br>
+                                <strong>Họ Tên Người Nhận:</strong><br>
                                 <div>
-                                    <label th:text="${hoadon != null and hoadon.getTenNguoiNhan() !=null ? hoadon.getTenNguoiNhan():''}">Tẩn
+                                    <label class="invCusName" th:text="${hoadon != null and hoadon.getTenNguoiNhan() !=null ? hoadon.getTenNguoiNhan():''}">Tẩn
                                         Láo Lù</label>
-                                    <th:block
-                                            th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
-                                        <button data-toggle="modal" data-target="#updateInformationModal"
-                                                class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
-                                    </th:block>
                                 </div>
                             </div>
                             <div class="col-3">
                                 <strong>Số Điện Thoại:</strong><br>
-                                <label id="numberPhone" th:text="${hoadon.getSdtNhan()}"></label>
-                                <th:block
-                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
-                                    <button data-toggle="modal" data-target="#updateInformationModal"
-                                            class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
-                                </th:block>
+                                <label class="invCusPhone" id="numberPhone" th:text="${hoadon.getSdtNhan()}"></label>
                             </div>
                             <div class="col-6">
                                 <strong>Địa Chỉ:</strong>
                                 <br>
-                                <label th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
+                                <label class="invAddress" th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
                                 <th:block
                                         th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
                                     <button data-toggle="modal" data-target="#updateInformationModal"
@@ -332,7 +322,7 @@
                     <div class="card-body mt-0">
                         <div class="card_content">
                             <ul class="w-100" id="show-all-product">
-                                <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}" th:attr="data-id-hdct=${sanpham.getId()}">
+                                <li class="row product-information" th:each="sanpham:${hoadon.getHoaDonChiTiets()}" th:attr="data-id-hdct=${sanpham.getId()}">
                                     <div class="col-2 p-0">
                                         <img class="product_img"
                                              th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
@@ -398,7 +388,7 @@
                         </div>
                         <th:block th:if="${user != null}">
                             <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
-                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan' and hoadon.getHinhThucThanhToan().name()=='KhiNhanHang'}"
+                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
                                    th:attr="data-id=${hoadon.getId()}"
                                    id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
                                 <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
@@ -564,7 +554,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
-                <button id="btn-save" type="button" class="btn primary-btn">Lưu</button>
+                <button id="btn-save" onclick="" type="button" class="btn primary-btn">Lưu</button>
             </div>
         </div>
     </div>
