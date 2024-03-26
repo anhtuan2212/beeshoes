@@ -1,4 +1,4 @@
-setTabsHeader('pages');
+    setTabsHeader('pages');
 
 function convertPhoneNumber(phoneNumber) {
     if (isNaN(phoneNumber)) {

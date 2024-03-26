@@ -757,7 +757,7 @@ $(document).on('ready', function () {
             },
             error: function (error) {
                 console.log(error)
-                ToastError('Lỗi.')
+                ToastError(error.getResponseHeader("status"))
             }
         })
         console.log(khachHang, typeNH, diaChiNhanHang);
@@ -1146,6 +1146,10 @@ $(document).on('ready', function () {
     $(document).on('mouseleave', '.div-form-search', function () {
         $(this).addClass('d-none');
     });
+
+    $(document).on('click', '#addCustomer', function () {
+        alert('add customer');
+    })
 
     // INITIALIZATION OF ADD INPUT FILED
     // =======================================================
