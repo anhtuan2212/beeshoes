@@ -171,14 +171,17 @@
                 <div class="product__item sale" th:attr="data-product-id=${sp.getId()}">
                     <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                         <div class="product__item__pic set-bg susor-pointer"
-                             th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-details(product=${sp.getId()})}">
-                            <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="" >
+                             th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-detail(product=${sp.getId()})}">
+                            <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="">
                             <span class="label" th:if="${sp.isSale()}">SALE</span>
                             <ul class="product__hover">
-                                <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+                                <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png"
+                                                                alt=""></a>
                                 </li>
                                 <li>
-                                    <a class="btn-add-to-cart" href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a>
+                                    <a class="btn-add-to-cart" href="javascript:;"><img
+                                            src="/assets/customer/img/icon/shopping-cart-add.svg"
+                                            alt=""></a>
                                 </li>
                                 <li><a th:href="@{/shop-detail(product=${sp.getId()})}"><img
                                         src="/assets/customer/img/icon/eye.svg" alt=""></a></li>
@@ -203,14 +206,17 @@
                         </th:block>
                         <div class="product__option__size">
                             <th:block th:each="size:${sp.getDistinctKichCoList()}">
-                                <label class="label_select_size" th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
+                                <label class="label_select_size"
+                                       th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
                                     <th:block th:text="${size.getTen()}"></th:block>
-                                    <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}" type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}" th:value="${size.getTen()}" data-id-size="4">
+                                    <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}"
+                                           type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}"
+                                           th:value="${size.getTen()}" data-id-size="4">
                                 </label>
                             </th:block>
                         </div>
                         <div class="product__color__select">
-                            <th:block th:each="ms:${sp.getMauSac()}">
+                            <th:block th:each="ms:${sp.getDistinctMauSacList()}">
                                 <label th:style="'background-color:' + ${ms.getMaMauSac()}">
                                     <input type="radio" th:value="${ms.getMaMauSac()}">
                                 </label>
@@ -223,14 +229,17 @@
                 <div class="product__item sale" th:attr="data-product-id=${sp.getId()}">
                     <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                         <div class="product__item__pic set-bg susor-pointer"
-                             th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-details(product=${sp.getId()})}">
-                            <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="" >
+                             th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-detail(product=${sp.getId()})}">
+                            <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="">
                             <span class="label" th:if="${sp.isSale()}">SALE</span>
                             <ul class="product__hover">
-                                <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
+                                <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png"
+                                                                alt=""></a>
                                 </li>
                                 <li>
-                                    <a class="btn-add-to-cart" href="javascript:;"><img src="/assets/customer/img/icon/shopping-cart-add.svg" alt=""></a>
+                                    <a class="btn-add-to-cart" href="javascript:;"><img
+                                            src="/assets/customer/img/icon/shopping-cart-add.svg"
+                                            alt=""></a>
                                 </li>
                                 <li><a th:href="@{/shop-detail(product=${sp.getId()})}"><img
                                         src="/assets/customer/img/icon/eye.svg" alt=""></a></li>
@@ -255,14 +264,17 @@
                         </th:block>
                         <div class="product__option__size">
                             <th:block th:each="size:${sp.getDistinctKichCoList()}">
-                                <label class="label_select_size" th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
+                                <label class="label_select_size"
+                                       th:for="'size_id_'+${size.getId()}+'_'+${sp.getId()}">
                                     <th:block th:text="${size.getTen()}"></th:block>
-                                    <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}" type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}" th:value="${size.getTen()}" data-id-size="4">
+                                    <input class="size_selected" th:name="'kichthuoc'+${sp.getId()}"
+                                           type="radio" th:id="'size_id_'+${size.getId()}+'_'+${sp.getId()}"
+                                           th:value="${size.getTen()}" data-id-size="4">
                                 </label>
                             </th:block>
                         </div>
                         <div class="product__color__select">
-                            <th:block th:each="ms:${sp.getMauSac()}">
+                            <th:block th:each="ms:${sp.getDistinctMauSacList()}">
                                 <label th:style="'background-color:' + ${ms.getMaMauSac()}">
                                     <input type="radio" th:value="${ms.getMaMauSac()}">
                                 </label>

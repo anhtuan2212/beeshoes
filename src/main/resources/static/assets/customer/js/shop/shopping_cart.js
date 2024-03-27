@@ -433,7 +433,7 @@ $(document).ready(async function () {
         }
 
         function setProductQuantity(id, num, data) {
-            let check = true;
+            let check = null;
             if (Array.isArray(data)) {
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].pro.id == id) {
@@ -443,7 +443,7 @@ $(document).ready(async function () {
                             ToastError('Số lượng không thể lơn hơn số lượng tồn')
                             data[i].quantity = data[i].pro.so_luong_ton
                             setValInput(id, data[i].quantity.toString());
-                            check = false;
+                            check = data[i].quantity;
                         }
                         let newPrice = extractNumberFromString(data[i].pro.gia_ban) * Number(data[i].quantity);
                         newPrice = addCommasToNumber(newPrice);
@@ -510,6 +510,7 @@ $(document).ready(async function () {
             let element = document.querySelector(`div.pro-qty-2[data-id=${id}]`);
             element.querySelector('input').value = val;
         }
+
         function setQuantityProduct(id, num) {
             return new Promise((resolve, reject) => {
                 if (username === undefined) {
@@ -533,10 +534,11 @@ $(document).ready(async function () {
                                 id: id_cart,
                                 num: num,
                             },
-                            success: function () {
+                            success: function (data) {
                                 setProductQuantity(id, num, ShopingCart);
                                 ToastSuccess("Lưu thành công.");
-                                resolve(true); // Trả về thành công khi AJAX thành công
+                                console.log(data)
+                                resolve(data);
                             },
                             error: function (e, x, h) {
                                 switch (e.getResponseHeader('status')) {
@@ -549,12 +551,11 @@ $(document).ready(async function () {
                                     default:
                                         ToastError("Lỗi.");
                                 }
-                                console.log(x, h);
-                                reject(false);
+                                reject(null);
                             }
                         });
                     } else {
-                        resolve(false);
+                        resolve(null);
                     }
                 }
             });
@@ -640,10 +641,9 @@ $(document).ready(async function () {
                 });
             });
         }
-
         $(document).on('change', '.input_quantity_product', function () {
-            let val = $(this).val();
-            let num = parseInt(val.replace(/\D/g, ''));
+            let ele = $(this);
+            let num = parseInt(ele.val().replace(/\D/g, ''));
             let id = $(this).closest('.pro-qty-2').data('id');
 
             if (isNaN(num) || num < 1 || num > 500) {
@@ -653,9 +653,12 @@ $(document).ready(async function () {
                 $(this).val(num);
             }
             setQuantityProduct(id, num)
-                .then(() => {
+                .then((data) => {
+                    curentInput = ele.val();
                     updateTotalMoney();
-                });
+                }).catch(()=>{
+            });
+
         })
 
         function printAllProductInServer(data) {

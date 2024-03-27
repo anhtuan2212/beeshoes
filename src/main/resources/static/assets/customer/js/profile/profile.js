@@ -51,7 +51,7 @@ fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
         provinceArr = data;
-        console.log(data)
+        // console.log(data)
         return fillAllTinh(data);
     })
     .then(() => {
@@ -59,7 +59,7 @@ fetch('/assets/address-json/province.json')
             .then(response => response.json())
             .then(data => {
                 districtArr = data;
-                console.log(data)
+                // console.log(data)
             });
     })
     .then(() => {
@@ -67,7 +67,7 @@ fetch('/assets/address-json/province.json')
             .then(response => response.json())
             .then(data => {
                 wardArr = data;
-                console.log(data)
+                // console.log(data)
             });
     })
     .catch(error => console.error('Error:', error));
@@ -284,7 +284,7 @@ $(document).ready(function () {
                 console.log(e.getResponseHeader('status'))
             }
         })
-        console.log(id, soNha, phuongXa, quanHuyen, tinhTP);
+        // console.log(id, soNha, phuongXa, quanHuyen, tinhTP);
     })
     $(document).on('click', '#btn-huy', function () {
         let id = $('#id_oders_cancel').val();
@@ -336,7 +336,7 @@ $(document).ready(function () {
                 let birthDate = $('#ngaySinh').val();
                 let currentAvatar = $('#avatar_preview').attr('src');
                 let inputFile = document.getElementById('avatar_selected').files[0];
-                console.log(fullName, email, phone, gender, birthDate);
+                // console.log(fullName, email, phone, gender, birthDate);
                 if (fullName.length === 0) {
                     ToastError('Vui lòng nhập tên.')
                     return;
@@ -381,7 +381,7 @@ $(document).ready(function () {
                     const storageRef = ref(storage, "images/" + file.name);
                     await uploadBytes(storageRef, file);
                     const url = await getDownloadURL(storageRef);
-                    console.log(url)
+                    // console.log(url)
                     avatar = url;
                     await deleteImageFromFirebaseStorage(currentAvatar);
                 } else {

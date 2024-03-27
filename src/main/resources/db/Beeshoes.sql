@@ -355,6 +355,7 @@ CREATE TABLE hoa_don -- bỏ field deleted
     ma_hoa_don varchar(256),
     ten_nguoi_nhan varchar(256),
     ma_van_chuyen varchar(256),
+    email_nguoi_nhan varchar(256),
     loai_hoa_don bit,
     id_nhan_vien bigint,
     id_khach_hang bigint,

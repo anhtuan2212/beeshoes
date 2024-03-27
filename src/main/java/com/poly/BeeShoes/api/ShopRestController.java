@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -215,7 +217,9 @@ public class ShopRestController {
                 return ResponseEntity.notFound().header("status","MaxNum").build();
             }
             gioHangChiTietService.save(ghct);
-            return ResponseEntity.ok().build();
+            Map<String,Integer> map = new HashMap<>();
+            map.put("num", ghct.getSoLuong());
+            return ResponseEntity.ok().body(map);
         }
         return ResponseEntity.notFound().build();
     }
