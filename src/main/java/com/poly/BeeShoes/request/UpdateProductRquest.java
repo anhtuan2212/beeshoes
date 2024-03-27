@@ -29,4 +29,5 @@ public class UpdateProductRquest {
     BigDecimal tongTien;
     BigDecimal giamGia;
     BigDecimal thucThu;
+    Integer phiShip;
 }

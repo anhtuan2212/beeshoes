@@ -275,7 +275,7 @@
                             <h3 class="title_card">Danh Sách Đơn Hàng</h3>
                             <div class="form_filter">
                                 <select class="select_status" type="text">
-                                    <option value="All">Tất Cả</option>
+                                    <option value="All" selected>Tất Cả</option>
                                     <option value="ChoXacNhan">Chờ Xác Nhận</option>
                                     <option value="ChuanBiHang">Chuẩn Bị Hàng</option>
                                     <option value="ChoGiao">Chờ Giao Hàng</option>
@@ -285,7 +285,6 @@
                                     <option value="ThanhCong">Thành Công</option>
                                 </select>
                                 <input class="search_input mr-2" type="text" placeholder="Tìm kiếm mã hóa đơn.">
-                                <button class="btn btn-outline-dark" id="searchInv">Tìm kiếm</button>
                             </div>
                         </div>
                         <div class="card w-100 mb-3" th:each="hoadon,iter:${lsthoadon}">

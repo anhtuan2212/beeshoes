@@ -587,10 +587,6 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
 		Radio Btn
 	--------------------- */
     let product_id = '';
-    $(document).on('click', ".product__details__option__size label", function () {
-        $(".product__details__option__size label").removeClass('active');
-        $(this).addClass('active');
-    });
 
     $(document).on('click', ".product__color__select label", function () {
         $(".product__color__select label").removeClass('active');
@@ -768,44 +764,27 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
     /*-------------------
 		Quantity change
 	--------------------- */
-    var proQty = $('.pro-qty');
-    proQty.prepend('<span class="fa fa-angle-up dec qtybtn"></span>');
-    proQty.append('<span class="fa fa-angle-down inc qtybtn"></span>');
-    proQty.on('click', '.qtybtn', function () {
-        var $button = $(this);
-        var oldValue = parseFloat($button.parent().find('input').val());
-        var newVal;
-        if ($button.hasClass('inc')) {
-            newVal = oldValue - 1;
-        } else {
-            newVal = oldValue + 1;
-        }
-        newVal = Math.max(newVal, 1);
-        if (isNaN(newVal)) {
-            newVal = 1;
-        }
-        $button.parent().find('input').val(newVal);
-    });
 
 
-    var proQty = $('.pro-qty-2');
-    proQty.prepend('<span class="fa fa-angle-left dec qtybtn"></span>');
-    proQty.append('<span class="fa fa-angle-right inc qtybtn"></span>');
-    proQty.on('click', '.qtybtn', function () {
-        var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
-        if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        $button.parent().find('input').val(newVal);
-    });
+
+    // var proQty = $('.pro-qty-2');
+    // proQty.prepend('<span class="fa fa-angle-left dec qtybtn"></span>');
+    // proQty.append('<span class="fa fa-angle-right inc qtybtn"></span>');
+    // proQty.on('click', '.qtybtn', function () {
+    //     var $button = $(this);
+    //     var oldValue = $button.parent().find('input').val();
+    //     if ($button.hasClass('inc')) {
+    //         var newVal = parseFloat(oldValue) + 1;
+    //     } else {
+    //         // Don't allow decrementing below zero
+    //         if (oldValue > 0) {
+    //             var newVal = parseFloat(oldValue) - 1;
+    //         } else {
+    //             newVal = 0;
+    //         }
+    //     }
+    //     $button.parent().find('input').val(newVal);
+    // });
 
     /*------------------
         Achieve Counter

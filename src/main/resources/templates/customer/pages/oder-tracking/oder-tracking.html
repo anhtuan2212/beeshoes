@@ -189,7 +189,7 @@
                             <div class="col-6">
                                 <strong>Địa Chỉ:</strong>
                                 <br>
-                                <label class="invAddress" th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
+                                <label id="invAddress" class="invAddress" th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
                                 <th:block
                                         th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
                                     <button data-toggle="modal" data-target="#updateInformationModal"
@@ -340,8 +340,9 @@
                                             </div>
                                             <label class="quantity-product"
                                                    th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
-                                            <div class="pro-qty d-none">
-                                                <input  class="input-quantity" th:id="'quantity-selected'+${sanpham.getId()}" type="text" th:value="${sanpham.getSoLuong()}" readonly>
+                                            <div class="pro-qty d-none"><span class="fa fa-angle-up dec qtybtn"></span>
+                                                <input  class="input-quantity" th:id="'quantity-selected-'+${sanpham.getId()}" type="text" th:value="${sanpham.getSoLuong()}" readonly>
+                                                <span class="fa fa-angle-down inc qtybtn"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -375,7 +376,7 @@
                     </div>
                     <div class="w-100 d-flex justify-content-end mt-1 pr-3">
                         <label class="">Phí Ship :</label><h6 id="shipping-money" class="show_discount_money ml-2 mb-0"
-                                                              th:text="${#numbers.formatDecimal(hoadon.getPhiShip(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h6>
+                                                              th:text="${hoadon.getPhiShip()>1?#numbers.formatDecimal(hoadon.getPhiShip(), 1, 'DEFAULT', 0, 'DEFAULT')+'đ':'Miễn Phí'}"></h6>
                     </div>
                     <div class="w-100 thanh-tien d-flex justify-content-end align-items-center mt-1 mb-3 pr-3">
                         <label class="mb-0">Thành Tiền: </label><h4 id="payment-money" class="show_total_money"

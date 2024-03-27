@@ -1,100 +1,11 @@
-    setTabsHeader('pages');
+setTabsHeader('pages');
+let provinceName, districtName, wardName;
+let provinceId, districtId, wardCode;
+let provinceArr, districtArr, wardArr;
+let province = $('#tinhTP');
+printAddress();
 
-function convertPhoneNumber(phoneNumber) {
-    if (isNaN(phoneNumber)) {
-        return "Số điện thoại không hợp lệ";
-    }
-    let firstPart = phoneNumber.substring(0, 3);
-    let lastPart = phoneNumber.substring(7);
-    let middlePart = "****";
-    return firstPart + middlePart + lastPart;
-}
-
-function UpdateQuantity(id, calcu, num) {
-    console.log(calcu)
-    $.ajax({
-        url: '/api/hoa-don/update-quantity',
-        type: 'POST',
-        data: {
-            id: id,
-            calcu: calcu,
-            num: num
-        }, success: function (data) {
-            console.log(data);
-            $('#total-money').text(addCommasToNumber(data[0].tongTien) + 'đ')
-            $('#discount-money').text(addCommasToNumber(data[0].giamGia == null ? 0 : data[0].giamGia) + 'đ')
-            $('#payment-money').text(addCommasToNumber(data[0].thucThu) + 'đ')
-            for (let i = 0; i < data.length; i++) {
-                let wrapper = $(`#product-detail-${data[i].idHDCT}`);
-                if (wrapper.length === 0) {
-                    let html = `
-                        <li class="row" data-id-hdct="${data[i].idHDCT}">
-                            <div class="col-2 p-0">
-                                <img class="product_img" src="${data[i].img}">
-                            </div>
-                            <div id="product-detail-${data[i].idHDCT}" class="content_product p-0 col-6">
-                                <div>
-                                    <h6 class="product_name mb-2">${data[i].ten}</h6>
-                                    <div class="w-100">
-                                        Màu :<label>${data[i].tenMau}</label>,
-                                        Kích Cỡ :<label>${data[i].kichCo}</label>
-                                    </div>
-                                    <label class="quantity-product">Số Lượng :${data[i].soLuong}</label>
-                                    <div class="pro-qty"><span class="fa fa-angle-up dec qtybtn"></span>
-                                       <input class="input-quantity" id="quantity-selected-${data[i].idHDCT}" type="text" value="${data[i].soLuong}" readonly>
-                                                <span class="fa fa-angle-down inc qtybtn"></span>
-                                                </div>
-                                </div>
-                            </div>
-                            <div class="col-3 d-flex align-items-center">
-                                <h5 class="product_price_cu">${addCommasToNumber(data[i].giaGoc)}đ</h5>
-                                <h5 class="product_price">${addCommasToNumber(data[i].giaBan)}đ</h5>
-                            </div>
-                            <div class="col-1 align-items-center btn-del-group d-flex">
-                                <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm" data-id-hdct="${data[i].idHDCT}">
-                                    <i class="fa fa-close"></i>
-                                </button>
-                            </div>
-                        </li>`;
-                    $('#show-all-product').append(html);
-                }else{
-                    wrapper.find(`input.input-quantity`).val(data[i].soLuong);
-                    console.log(wrapper.find(`input.input-quantity`))
-                    wrapper.find('label.quantity-product').text(`Số Lượng :${data[i].soLuong}`);
-                }
-            }
-            ToastSuccess('Lưu thành công.')
-        }, error: function (xhr) {
-            console.log(xhr.getResponseHeader('status'));
-            switch (xhr.getResponseHeader('status')) {
-                case 'NotAuth':
-                    ToastError('Vui lòng đăng nhập.')
-                    break;
-                case 'HDCTisNull':
-                    ToastError('Vui lòng chọn lại sản phẩm.')
-                    break;
-                case 'minQuantity':
-                    ToastError('Số lượng không được nhỏ hơn 0.')
-                    break;
-                case 'maxQuantity':
-                    ToastError('Số lượng lớn hơn số lượng tồn.')
-                    break;
-                default:
-                    ToastError('Lỗi.');
-            }
-        }
-    })
-}
-
-$(document).ready(function () {
-
-    var province = $('#tinhTP');
-    var district = $('#quanHuyen');
-    var ward = $('#phuongXa');
-    var provinceName, districtName, wardName;
-    var provinceId, districtId, wardCode;
-    var provinceArr, districtArr, wardArr;
-
+function printAddress() {
     $.ajax({
         type: "GET",
         url: "/assets/address-json/province.json",
@@ -102,7 +13,7 @@ $(document).ready(function () {
         success: function (response) {
             provinceArr = response;
             console.log(response)
-            console.log(123)
+            province.html('<option value="">Chọn Tỉnh/TP</option>');
             $.each(response, function (index, item) {
                 let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
                 province.append(html);
@@ -137,7 +48,238 @@ $(document).ready(function () {
             console.error('Xảy ra lỗi: ', error);
         }
     })
+}
 
+function convertPhoneNumber(phoneNumber) {
+    if (isNaN(phoneNumber)) {
+        return "Số điện thoại không hợp lệ";
+    }
+    let firstPart = phoneNumber.substring(0, 3);
+    let lastPart = phoneNumber.substring(7);
+    let middlePart = "****";
+    return firstPart + middlePart + lastPart;
+}
+
+function extracAddress(str) {
+    let parts = str.toString().split(',');
+    parts.reverse();
+    let thanhPhoTinh = parts.shift().trim(); // Thành phố/tỉnh
+    let quanHuyen = parts.shift().trim(); // Quận/huyện
+    let phuongXa = parts.shift().trim(); // Phường/xã
+    parts.reverse()
+    let soNha = parts.join(',');
+    return {quanHuyen: quanHuyen, phuongXa: phuongXa, tinhTP: thanhPhoTinh, soNha: soNha}
+}
+
+function getAddressInArray(nameTinh, nameHyen, nameXa) {
+    let quanHuyenSelected;
+    let phuongXaSelected;
+    let tinh = provinceArr.find(tinh => tinh.ProvinceName == nameTinh);
+    if (tinh) {
+        let huyen = districtArr.find(huyen => huyen.ProvinceID == tinh.ProvinceID && huyen.DistrictName == nameHyen);
+        if (huyen) {
+            quanHuyenSelected = huyen
+            let xa = wardArr.find(xa => xa.DistrictID == huyen.DistrictID && xa.Name == nameXa);
+            if (xa) {
+                phuongXaSelected = xa
+            }
+        }
+    }
+    return {tinh: tinh, quanHuyen: quanHuyenSelected, phuongXa: phuongXaSelected}
+}
+
+async function getShippingFee(quantity) {
+    let addres = extracAddress($('#invAddress').text())
+    let formad = getAddressInArray(addres.tinhTP, addres.quanHuyen, addres.phuongXa)
+    let wei = 500 * Number(quantity);
+    try {
+        const response = await new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+                contentType: "application/json",
+                headers: {
+                    "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                },
+                data: JSON.stringify(
+                    {
+                        shop_id: "190713",
+                        from_name: "LightBee Shop",
+                        from_phone: "0359966461",
+                        from_address: "Trường Cao Đẳng FPT Polytechnic",
+                        from_ward_name: "Phường Xuân Phương",
+                        from_district_name: "Nam Từ Liêm",
+                        from_province_name: "Hà Nội",
+                        to_name: "test",
+                        to_phone: "0359966461",
+                        to_address: "Nam Đinh",
+                        to_ward_code: formad.phuongXa.Code,
+                        to_district_id: formad.quanHuyen.DistrictID,
+                        service_id: 55320,
+                        service_type_id: 2,
+                        payment_type_id: 2,
+                        cod_amount: parseInt(200000),
+                        required_note: "CHOXEMHANGKHONGTHU",
+                        items: [
+                            {
+                                name: "Áo Polo",
+                                code: "Polo123",
+                                quantity: 1,
+                                price: 200000,
+                                length: 12,
+                                width: 12,
+                                height: 12,
+                                weight: 1200,
+                                category:
+                                    {
+                                        level1: "Áo"
+                                    }
+                            }
+                        ],
+                        weight: wei,
+                        length: 1,
+                        width: 19,
+                        height: 10
+                    }
+                ),
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (error) {
+                    reject(error);
+                }
+            });
+        });
+        return response;
+    } catch (error) {
+        console.error('Xảy ra lỗi: ', error);
+        ToastError('Không hỗ trợ giao');
+        return null;
+    }
+}
+
+async function updateShippingFee(id, shippingFee) {
+    try {
+        const response = await new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/api/hoa-don/update-shipping-fee',
+                type: 'POST',
+                data: {
+                    id: id,
+                    shippingfee: shippingFee,
+                },
+                success: function (data) {
+                    console.log(data)
+                    resolve(data)
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log(xhr)
+                    reject(errorThrown)
+                }
+            })
+        })
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function UpdateQuantity(id, calcu, num) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/hoa-don/update-quantity',
+            type: 'POST',
+            data: {
+                id: id,
+                calcu: calcu,
+                num: num
+            }, success: async function (data) {
+                console.log(data);
+                $('#total-money').text(addCommasToNumber(data[0].tongTien) + 'đ')
+                $('#shipping-money').text(Number(data[0].phiShip) > 1 ? addCommasToNumber(data[0].phiShip) + 'đ' : 'Miễn Phí');
+                $('#payment-money').text(addCommasToNumber(data[0].thucThu) + 'đ')
+                $('#discount-money').text(addCommasToNumber(data[0].giamGia == null ? 0 : data[0].giamGia) + 'đ')
+                let count = 0;
+                for (let i = 0; i < data.length; i++) {
+                    count += Number(data[i].soLuong);
+                    let wrapper = $(`#product-detail-${data[i].idHDCT}`);
+                    if (wrapper.length === 0) {
+                        let html = `
+                        <li class="row" data-id-hdct="${data[i].idHDCT}">
+                            <div class="col-2 p-0">
+                                <img class="product_img" src="${data[i].img}">
+                            </div>
+                            <div id="product-detail-${data[i].idHDCT}" class="content_product p-0 col-6">
+                                <div>
+                                    <h6 class="product_name mb-2">${data[i].ten}</h6>
+                                    <div class="w-100">
+                                        Màu :<label>${data[i].tenMau}</label>,
+                                        Kích Cỡ :<label>${data[i].kichCo}</label>
+                                    </div>
+                                    <label class="quantity-product">Số Lượng :${data[i].soLuong}</label>
+                                    <div class="pro-qty"><span class="fa fa-angle-up dec qtybtn"></span>
+                                       <input class="input-quantity" id="quantity-selected-${data[i].idHDCT}" type="text" value="${data[i].soLuong}" readonly>
+                                                <span class="fa fa-angle-down inc qtybtn"></span>
+                                                </div>
+                                </div>
+                            </div>
+                            <div class="col-3 d-flex align-items-center">
+                                <h5 class="product_price_cu">${addCommasToNumber(data[i].giaGoc)}đ</h5>
+                                <h5 class="product_price">${addCommasToNumber(data[i].giaBan)}đ</h5>
+                            </div>
+                            <div class="col-1 align-items-center btn-del-group d-flex">
+                                <button class="btn-delete" data-toggle="tooltip" title="Xóa Sản Phẩm" data-id-hdct="${data[i].idHDCT}">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </div>
+                        </li>`;
+                        $('#show-all-product').append(html);
+                    } else {
+                        wrapper.find(`input.input-quantity`).val(data[i].soLuong);
+                        console.log(wrapper.find(`input.input-quantity`))
+                        wrapper.find('label.quantity-product').text(`Số Lượng :${data[i].soLuong}`);
+                    }
+                }
+                ToastSuccess('Lưu thành công.');
+                if (Number(data[0].tongTien) < 2000000) {
+                    let response = await getShippingFee(count);
+                    let idHD = data[0].idHD;
+                    let total_fee = response.data.total_fee;
+                    let newTotal = await updateShippingFee(idHD, total_fee)
+                    $('#shipping-money').text(Number(newTotal.shippingfee) > 1 ? addCommasToNumber(newTotal.shippingfee) + 'đ' : 'Miễn Phí');
+                    $('#payment-money').text(addCommasToNumber(newTotal.thucThu) + 'đ');
+                }
+                resolve(data);
+            }, error: function (xhr) {
+                console.log(xhr.getResponseHeader('status'));
+                switch (xhr.getResponseHeader('status')) {
+                    case 'NotAuth':
+                        ToastError('Vui lòng đăng nhập.')
+                        break;
+                    case 'maxMoney':
+                        ToastError('Tổng tiền quá lớn cho đơn online.')
+                        break;
+                    case 'HDCTisNull':
+                        ToastError('Vui lòng chọn lại sản phẩm.')
+                        break;
+                    case 'minQuantity':
+                        ToastError('Số lượng không được nhỏ hơn 0.')
+                        break;
+                    case 'maxQuantity':
+                        ToastError('Số lượng lớn hơn số lượng tồn.')
+                        break;
+                    default:
+                        ToastError('Lỗi.');
+                }
+                resolve(null);
+            }
+        })
+    })
+}
+
+$(document).ready(function () {
+    let district = $('#quanHuyen');
+    let ward = $('#phuongXa');
     province.on('change', function () {
         district.html('<option value="">Quận/Huyện</option>');
         ward.html('<option value="">Phường/Xã</option>');
@@ -165,6 +307,7 @@ $(document).ready(function () {
         ward.niceSelect('update')
     })
 
+
     let numberPhone = $('#numberPhone');
     let phoneNumber = numberPhone.text();
     numberPhone.text(convertPhoneNumber(phoneNumber));
@@ -172,7 +315,7 @@ $(document).ready(function () {
     $(document).on('change', '.body-form-update input[name="diaChi"]', function () {
         let val = $(this).val();
         invAddress = $(this).val();
-        let dcK =  $('.diaChiKhac');
+        let dcK = $('.diaChiKhac');
         console.log(val)
         if (val === '#') {
             dcK.removeClass('d-none').addClass('showF').on('animationend', function () {
@@ -192,9 +335,15 @@ $(document).ready(function () {
         let ele = $(this);
         let id = ele.closest('li.row').data('id-hdct');
         if (ele.hasClass('dec')) {
-            UpdateQuantity(id, 'plus', 1)
+            UpdateQuantity(id, 'plus', 1).then((res) => {
+                let item = res.find(item => Number(item.idHDCT) === Number(id));
+                $(`#quantity-selected-${id}`).siblings('input').val(item.soLuong)
+            })
         } else {
-            UpdateQuantity(id, 'minus', 1)
+            UpdateQuantity(id, 'minus', 1).then((res) => {
+                let item = res.find(item => Number(item.idHDCT) === Number(id));
+                $(`#quantity-selected-${id}`).siblings('input').val(item.soLuong)
+            })
         }
     })
     $(document).on('click', '#btn-show-update', function () {
@@ -352,11 +501,6 @@ $(document).ready(function () {
         }
     })
     $(document).on('click', '.btn-delete', function () {
-        var products = document.querySelectorAll('.product-information');
-        if(products.length < 2) {
-            ToastError('Phải có ít nhất 1 sản phẩm có số lượng lớn hơn 0 trong đơn hàng');
-            return;
-        }
         let li = $(this).closest('li.row');
         let id = $(this).data('id-hdct');
         Swal.fire({
@@ -379,7 +523,7 @@ $(document).ready(function () {
                     type: 'POST',
                     data: {
                         id: id
-                    }, success: function (data) {
+                    }, success: async function (data) {
                         console.log(data);
                         li.remove();
                         let element = document.getElementById('history-oder');
@@ -401,6 +545,14 @@ $(document).ready(function () {
                         $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
                         $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
                         ToastSuccess('Thành công.')
+                        if (Number(data.tongTien) < 2000000) {
+                            let response = await getShippingFee(data.soLuong);
+                            let idHD = data.id;
+                            let total_fee = response.data.total_fee;
+                            let newTotal = await updateShippingFee(idHD, total_fee)
+                            $('#shipping-money').text(Number(newTotal.shippingfee) > 1 ? addCommasToNumber(newTotal.shippingfee) + 'đ' : 'Miễn Phí');
+                            $('#payment-money').text(addCommasToNumber(newTotal.thucThu) + 'đ');
+                        }
                     }, error: function (e, x, h) {
                         switch (e.getResponseHeader('status')) {
                             case 'NotAuth':
@@ -445,15 +597,19 @@ $(document).ready(function () {
         let id = $('#oder-id-update').val();
         if (mauSac === '#' || mauSac.length === 0) {
             ToastError('Vui lòng chọn màu.')
+            return;
         }
         if (kicCo.length === 0 || kicCo === '#') {
             ToastError('Vui lòng chọn cỡ.')
+            return;
         }
         if (soLuong.length === 0 || Number(soLuong) < 1) {
             ToastError('Vui lòng nhập số lượng.')
+            return;
         }
         if (id.length === 0) {
             ToastError('ID Rỗng.')
+            return;
         }
         $.ajax({
             url: '/api/hoa-don/add-product',
@@ -480,9 +636,10 @@ $(document).ready(function () {
                                     Kích Cỡ :<label>${data.kichCo}</label>
                                 </div>
                                 <label class="quantity-product">Số Lượng :${data.soLuong}</label>
-                                 <div class="pro-qty d-none">
-                                     <input class="input-quantity" id="quantity-selected-${data.id_hdct}" type="text" value="${data.soLuong}" readonly>
-                                </div>
+                                 <div class="pro-qty">
+                                 <span class="fa fa-angle-up dec qtybtn"></span>
+                                                <input class="input-quantity" id="quantity-selected-${data.id_hdct}" type="text" value="${data.soLuong}" readonly="">
+                                <span class="fa fa-angle-down inc qtybtn"></span></div>
                             </div>
                         </div>
                         <div class="col-3 d-flex align-items-center">
@@ -514,16 +671,22 @@ $(document).ready(function () {
                     let hr = document.createElement('hr');
                     div.insertAdjacentElement('afterend', hr);
                 } else {
-                    $(`#product-detail-${data.id_hdct}`).find('.quantity-product').text('Số Lượng :' + data.soLuong)
+                    let element = $(`#product-detail-${data.id_hdct}`);
+                    element.find('.quantity-product').text('Số Lượng :' + data.soLuong)
+                    element.find('.input-quantity').val(data.soLuong)
                 }
                 $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
                 $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
+                $('#shipping-money').text(Number(data.phiShip) > 1 ? addCommasToNumber(data.phiShip) + 'đ' : 'Miễn Phí');
                 $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
                 ToastSuccess('Chọn Thành Công.')
             }, error: function (e, x, h) {
                 switch (e.getResponseHeader('status')) {
                     case 'HoaDonNull':
                         ToastError('Hóa đơn không tồn tại.');
+                        break;
+                    case 'numMin':
+                        ToastError('Số lượng phải lớn hơn 1.');
                         break;
                     case 'MaxQuantity':
                         ToastError('Số lượng sản phẩm lớn hơn số lượng tồn.');

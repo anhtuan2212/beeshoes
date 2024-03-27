@@ -1,10 +1,86 @@
+function printHtmlToCart(product, quantity, totalMoney) {
+    console.log(product)
+    let element = $('#list_product_items_cart').find(`div.cart_product_item[data-id-product="${product.id}"]`);
+    if (element.length === 1) {
+        let num = element.find(`#quantyti_${product.id}`).text().replace('SL:', '')
+        let allNum = Number(num) + Number(quantity);
+        console.log(allNum)
+        element.find(`#quantyti_${product.id}`).text('SL:' + allNum)
+    } else {
+        let html = `
+    <div class="cart_product_item row" data-id-product="${product.id}">
+        <div class="thumb col-3">
+            <img src="${product.product_img}" alt="product img">
+        </div>
+        <div class="cart_content col-9 ">
+            <h5 class="title col-12 w_100">${product.name}</h5>
+            <div class="product_quantity col-12 w_100 mt-1 " >
+                <label class="mb-0" id="quantyti_${product.id}" >SL:${quantity}</label>
+            </div>
+            <div class="col-12 height-mid">
+                <label class="small mb-0">MS:${product.color_name}</label>
+                <label class="small mb-0">KT:${product.size}</label>
+            </div>
+            <h6 class="product_price col-sm-12 w_100">${product.gia_ban}đ</h6>
+            <a class="cart_trash" data-id-delete="${product.id}"><i class="fa fa-trash"></i></a>
+        </div>
+    </div>
+    `;
+        $('#list_product_items_cart').append(html);
+    }
+    $('#total-money-cart').text(totalMoney);
+}
+
 $(document).ready(function () {
+    let data_product_details = [];
+
+    $(document).on('click', ".product__details__option__size label", function () {
+        $(".product__details__option__size label").removeClass('active');
+        $(this).addClass('active');
+        let size = $(this).find('input').val();
+        let parent = $(this).closest('.product__details__option');
+        parent.find('.product__details__option__color label').addClass('hidden');
+        if (Array.isArray(data_product_details)) {
+            data_product_details.forEach((item) => {
+                if (size == item.size) {
+                    let element = parent.find('.product__details__option__color .label_select_color .select_color').filter(function () {
+                        return $(this).val() == item.color_code;
+                    })
+                    element.closest('label.label_select_color').removeClass('hidden');
+                    console.log(element)
+                }
+            })
+            let ele_size = parent.find('.product__details__option__color label.activeSelected"');
+            if (ele_size.length > 0 && ele_size.hasClass('hidden')) {
+                ele_size.removeClass('activeSelected');
+                ele_size.find('input').prop('checked', false);
+            }
+        }
+    });
+
     $('.select_color').on('change', function () {
         $('.select_color').closest('.label_select_color').removeClass('activeSelected')
         $(this).closest('.label_select_color').addClass('activeSelected');
+        let color = $(this).val();
+        let parent = $(this).closest('.product__details__option');
+        parent.find('.product__details__option__size label').addClass('hidden');
+        if (Array.isArray(data_product_details)) {
+            data_product_details.forEach((item) => {
+                if (color == item.color_code) {
+                    let element = parent.find('.product__details__option__size label input.size_selected').filter(function () {
+                        return Number($(this).val()) === Number(item.size);
+                    })
+                    element.closest('label').removeClass('hidden');
+                }
+            })
+            let ele_size = parent.find('.product__details__option__size label.active');
+            if (ele_size.length > 0 && ele_size.hasClass('hidden')) {
+                ele_size.removeClass('active');
+                ele_size.find('input').prop('checked', false);
+            }
+        }
     })
-})
-$(document).ready(function () {
+
     $('#quantity-selected').inputmask({
         mask: '9',
         repeat: 2,
@@ -46,43 +122,25 @@ $(document).ready(function () {
             clickContent: false
         });
     });
-});
 
-function printHtmlToCart(product, quantity, totalMoney) {
-    console.log(product)
-    let element = $('#list_product_items_cart').find(`div.cart_product_item[data-id-product="${product.id}"]`);
-    if (element.length === 1) {
-        let num = element.find(`#quantyti_${product.id}`).text().replace('SL:', '')
-        let allNum = Number(num) + Number(quantity);
-        console.log(allNum)
-        element.find(`#quantyti_${product.id}`).text('SL:' + allNum)
-    } else {
-        let html = `
-    <div class="cart_product_item row" data-id-product="${product.id}">
-        <div class="thumb col-3">
-            <img src="${product.product_img}" alt="product img">
-        </div>
-        <div class="cart_content col-9 ">
-            <h5 class="title col-12 w_100">${product.name}</h5>
-            <div class="product_quantity col-12 w_100 mt-1 " >
-                <label class="mb-0" id="quantyti_${product.id}" >SL:${quantity}</label>
-            </div>
-            <div class="col-12 height-mid">
-                <label class="small mb-0">MS:${product.color_name}</label>
-                <label class="small mb-0">KT:${product.size}</label>
-            </div>
-            <h6 class="product_price col-sm-12 w_100">${product.gia_ban}đ</h6>
-            <a class="cart_trash" data-id-delete="${product.id}"><i class="fa fa-trash"></i></a>
-        </div>
-    </div>
-    `;
-        $('#list_product_items_cart').append(html);
-    }
-    $('#total-money-cart').text(totalMoney);
-}
-
-$(document).ready(function () {
-    let data_product_details = [];
+    let proQty = $('.pro-qty');
+    proQty.prepend('<span class="fa fa-angle-up dec qtybtn"></span>');
+    proQty.append('<span class="fa fa-angle-down inc qtybtn"></span>');
+    proQty.on('click', '.qtybtn', function () {
+        let $button = $(this);
+        let oldValue = parseFloat($button.parent().find('input').val());
+        let newVal;
+        if ($button.hasClass('inc')) {
+            newVal = oldValue - 1;
+        } else {
+            newVal = oldValue + 1;
+        }
+        newVal = Math.max(newVal, 1);
+        if (isNaN(newVal)) {
+            newVal = 1;
+        }
+        $button.parent().find('input').val(newVal);
+    });
 
     $('#table-data tbody tr').each(function () {
         var obj = {};
@@ -137,9 +195,11 @@ $(document).ready(function () {
             ToastError('Vui lòng chọn Màu Sắc và Kích Cỡ.');
             return;
         }
+        let find = false;
         for (let i = 0; i < data_product_details.length; i++) {
             let product = data_product_details[i];
             if (product.size == kichThuoc && product.color_code == color) {
+                find = true;
                 if (Number(product.so_luong_ton) === 0) {
                     ToastError('Phiên bản hiện tại tạm hết hàng.')
                     break;
@@ -167,6 +227,9 @@ $(document).ready(function () {
                 }
 
             }
+        }
+        if (!find) {
+            ToastError('Phiên bản không tồn tại.')
         }
     });
 
@@ -197,7 +260,7 @@ $(document).ready(function () {
                 }
 
                 let Data = {
-                    quantity:quantity,
+                    quantity: quantity,
                     id_product_detail: product.id
                 }
                 let jsonData = [Data]

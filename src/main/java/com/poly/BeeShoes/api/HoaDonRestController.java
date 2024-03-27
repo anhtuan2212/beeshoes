@@ -48,96 +48,185 @@ public class HoaDonRestController {
     Gson gson = new Gson();
 
     @GetMapping("/get-all-hoadon")
-    public ResponseEntity getAll(){
+    public ResponseEntity<List<HoaDonResponse>> getAll() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            User  user = userService.getByUsername(userDetails.getUsername());
-//            List<HoaDon> ListHD = hoaDonService.getByKhachHang(user.getKhachHang());
-//            List<HoaDon> lst = new ArrayList<>();
-//            ListHD.forEach(item->{
-//                item.setNhanVien(null);
-//                item.setKhachHang(null);
-//                item.setVoucher(null);
-//                item.setNhanVien(null);
-//                item.setNhanVien(null);
-//                item.setNhanVien(null);
-//            });
-            return ResponseEntity.ok().build();
+            User user = userService.getByUsername(userDetails.getUsername());
+            if (user.getKhachHang() == null) {
+                return ResponseEntity.notFound().header("status", "NotIsCustomer").build();
+            }
+            List<HoaDon> lstHD = hoaDonService.getByKhachHang(user.getKhachHang());
+            List<HoaDonResponse> response = new ArrayList<>();
+            lstHD.forEach(item -> {
+                HoaDonResponse hd = new HoaDonResponse();
+                hd.setId(item.getId());
+                hd.setMaHoaDon(item.getMaHoaDon());
+                hd.setSdtNhan(item.getSdtNhan());
+                if (item.getPhiShip() != null) {
+                    hd.setPhiShip(item.getPhiShip().intValue());
+                }
+                if (item.getGiamGia() != null) {
+                    hd.setGiamGia(item.getGiamGia().intValue());
+                }
+
+                hd.setDiaChiNhan(item.getDiaChiNhan());
+                if (item.getVoucher() != null) {
+                    hd.setVoucher(item.getVoucher().getMa());
+                }
+                hd.setTenNguoiNhan(item.getTenNguoiNhan());
+                if (item.getThucThu() != null) {
+                    hd.setThucThu(item.getThucThu().intValue());
+                }
+                if (item.getTongTien() != null) {
+                    hd.setTongTien(item.getTongTien().intValue());
+                }
+                hd.setMaVanChuyen(item.getMaVanChuyen());
+                if (item.getSoTienCanThanhToan() != null) {
+                    hd.setSoTienCanThanhToan(item.getSoTienCanThanhToan().intValue());
+                }
+                if (item.getSoTienDaThanhToan() != null) {
+                    hd.setSoTienDaThanhToan(item.getSoTienDaThanhToan().intValue());
+                }
+                hd.setEmailNguoiNhan(item.getEmailNguoiNhan());
+                hd.setTrangThai(item.getTrangThai().name());
+                List<HoaDonChiTietResphone> hdctResponse = new ArrayList<>();
+                List<HoaDonChiTiet> listHDCT = item.getHoaDonChiTiets();
+                listHDCT.forEach(hdct -> {
+                    HoaDonChiTietResphone hdctres = new HoaDonChiTietResphone();
+                    hdctres.setId(hdct.getId());
+                    hdctres.setAnh(hdct.getChiTietSanPham().getAnh().getUrl());
+                    hdctres.setMaMauSac(hdct.getChiTietSanPham().getMauSac().getMaMauSac());
+                    hdctres.setTenMauSac(hdct.getChiTietSanPham().getMauSac().getTen());
+                    hdctres.setKichCo(hdct.getChiTietSanPham().getKichCo().getTen());
+                    hdctres.setTenSanPham(hdct.getChiTietSanPham().getSanPham().getTen());
+                    hdctres.setMaSanPham(hdct.getChiTietSanPham().getMaSanPham());
+                    hdctres.setGiaBan(hdct.getGiaBan().intValue());
+                    hdctres.setGiaGoc(hdct.getGiaGoc().intValue());
+                    hdctres.setSoLuong(hdct.getSoLuong());
+                    hdctres.setSoLuongTon(hdct.getChiTietSanPham().getSoLuongTon());
+                    hdctResponse.add(hdctres);
+                });
+                hd.setHoaDonChiTiet(hdctResponse);
+                List<LichSuHoaDonResphone> lshdResponse = new ArrayList<>();
+                List<LichSuHoaDon> listLSHD = item.getLichSuHoaDons();
+                listLSHD.forEach(lshd -> {
+                    LichSuHoaDonResphone lshdres = new LichSuHoaDonResphone();
+                    lshdres.setId(lshd.getId());
+                    lshdres.setHanhDong(lshd.getHanhDong());
+                    lshdres.setThoiGian(lshd.getThoiGian().toLocalDateTime());
+                    lshdResponse.add(lshdres);
+                });
+                hd.setLichSuHoaDon(lshdResponse);
+                response.add(hd);
+            });
+
+            return ResponseEntity.ok().body(response);
         } else {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
     }
+
     @PostMapping("/update-quantity")
     public ResponseEntity update(@RequestParam("id") Long id,
                                  @RequestParam("num") Integer num,
                                  @RequestParam("calcu") String calcu) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
-            if (hdct == null) {
-                return ResponseEntity.notFound().header("status", "HDCTisNull").build();
-            }
-            ChiTietSanPham ctsp = hdct.getChiTietSanPham();
-            HoaDonChiTiet newHD = null;
-            boolean isNew = false;
-            if (ctsp.getGiaBan().intValue() == hdct.getGiaBan().intValue()) {
-                if (calcu.equals("plus")) {
-                    if (hdct.getSoLuong() + num > ctsp.getSoLuongTon()) {
-                        return ResponseEntity.notFound().header("status", "maxQuantity").build();
-                    }
-                    hdct.setSoLuong(hdct.getSoLuong() + num);
-                } else {
-                    if (hdct.getSoLuong() - num < 1) {
-                        return ResponseEntity.notFound().header("status", "minQuantity").build();
-                    } else {
-                        hdct.setSoLuong(hdct.getSoLuong() - num);
-                    }
-                }
-                hdct = hoaDonChiTietService.save(hdct);
-            } else {
-                if (calcu.equals("plus")) {
-                    List<HoaDonChiTiet> lst = hdct.getHoaDon().getHoaDonChiTiets();
-                    for (HoaDonChiTiet item : lst) {
-                        if (item.getChiTietSanPham().getId() == ctsp.getId() && item.getGiaBan().intValue() == ctsp.getGiaBan().intValue()) {
-                            System.out.println(item.getChiTietSanPham().getMaSanPham());
-                            newHD = item;
-                            newHD.setSoLuong(item.getSoLuong() + num);
-                            break;
-                        }
-                    }
-                    if (newHD == null) {
-                        isNew = true;
-                        newHD = new HoaDonChiTiet();
-                        newHD.setSoLuong(num);
-                        newHD.setChiTietSanPham(ctsp);
-                        newHD.setGiaGoc(ctsp.getGiaGoc());
-                        newHD.setGiaBan(ctsp.getGiaBan());
-                        newHD.setHoaDon(hdct.getHoaDon());
-                    }
-                    newHD = hoaDonChiTietService.save(newHD);
-                } else {
-                    if (hdct.getSoLuong() - num < 1) {
-                        return ResponseEntity.notFound().header("status", "minQuantity").build();
-                    } else {
-                        hdct.setSoLuong(hdct.getSoLuong() - num);
-                    }
-                }
-            }
-            HoaDon hoaDonRes = hoaDonService.getHoaDonById(hdct.getHoaDon().getId()).orElse(null);
-            assert hoaDonRes != null;
-            if (isNew){
-                List<HoaDonChiTiet> lstHo = hoaDonRes.getHoaDonChiTiets();
-                lstHo.add(newHD);
-                hoaDonRes.setHoaDonChiTiets(lstHo);
-            }
-            hoaDonRes = tinhTien(hoaDonRes);
-            List<HDCTResponse> lst = getHdctResponse(hoaDonRes);
-            return ResponseEntity.ok().body(lst);
-        } else {
+        if (auth == null) {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
+        HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
+        if (hdct == null) {
+            return ResponseEntity.notFound().header("status", "HDCTisNull").build();
+        }
+        ChiTietSanPham ctsp = hdct.getChiTietSanPham();
+        HoaDonChiTiet newHD = null;
+        boolean isNew = false;
+        if (ctsp.getGiaBan().intValue() == hdct.getGiaBan().intValue()) {
+            if (calcu.equals("plus")) {
+                if (ctsp.getSoLuongTon() - num < 0) {
+                    return ResponseEntity.notFound().header("status", "maxQuantity").build();
+                }
+                hdct.setSoLuong(hdct.getSoLuong() + num);
+                ctsp.setSoLuongTon(ctsp.getSoLuongTon() - num);
+            } else {
+                if (hdct.getSoLuong() - num < 1) {
+                    return ResponseEntity.notFound().header("status", "minQuantity").build();
+                }
+                hdct.setSoLuong(hdct.getSoLuong() - num);
+                ctsp.setSoLuongTon(ctsp.getSoLuongTon() + num);
+            }
+            //tính tổng tiền
+            float total = tinhTong(hdct.getHoaDon().getHoaDonChiTiets());
+            if (total > 50000000) {
+                return ResponseEntity.notFound().header("status", "maxMoney").build();
+            }
+
+            ctsp = chiTietSanPhamService.save(ctsp);
+            hdct = hoaDonChiTietService.save(hdct);
+        } else {
+            if (calcu.equals("plus")) {
+                List<HoaDonChiTiet> lst = hdct.getHoaDon().getHoaDonChiTiets();
+                for (HoaDonChiTiet item : lst) {
+                    if (item.getChiTietSanPham().getId() == ctsp.getId() && item.getGiaBan().intValue() == ctsp.getGiaBan().intValue()) {
+                        if (ctsp.getSoLuongTon() - num < 0) {
+                            return ResponseEntity.notFound().header("status", "maxQuantity").build();
+                        }
+                        newHD = item;
+                        newHD.setSoLuong(item.getSoLuong() + num);
+                        ctsp.setSoLuongTon(ctsp.getSoLuongTon() - num);
+                        break;
+                    }
+                }
+                if (newHD == null) {
+                    isNew = true;
+                    newHD = new HoaDonChiTiet();
+                    newHD.setSoLuong(num);
+                    ctsp.setSoLuongTon(ctsp.getSoLuongTon() - num);
+                    newHD.setChiTietSanPham(ctsp);
+                    newHD.setGiaGoc(ctsp.getGiaGoc());
+                    newHD.setGiaBan(ctsp.getGiaBan());
+                    newHD.setHoaDon(hdct.getHoaDon());
+                }
+                float total = tinhTong(newHD.getHoaDon().getHoaDonChiTiets());
+                if (total > 50000000) {
+                    return ResponseEntity.notFound().header("status", "maxMoney").build();
+                }
+                ctsp = chiTietSanPhamService.save(ctsp);
+                newHD = hoaDonChiTietService.save(newHD);
+            } else {
+                if (hdct.getSoLuong() - num < 1) {
+                    return ResponseEntity.notFound().header("status", "minQuantity").build();
+                } else {
+                    hdct.setSoLuong(hdct.getSoLuong() - num);
+                    ctsp.setSoLuongTon(ctsp.getSoLuongTon() + num);
+                }
+            }
+        }
+        ctsp = chiTietSanPhamService.save(ctsp);
+        HoaDon hoaDonRes = hoaDonService.getHoaDonById(hdct.getHoaDon().getId());
+        assert hoaDonRes != null;
+        if (isNew) {
+            List<HoaDonChiTiet> lstHo = hoaDonRes.getHoaDonChiTiets();
+            lstHo.add(newHD);
+            hoaDonRes.setHoaDonChiTiets(lstHo);
+        }
+        hoaDonRes = tinhTien(hoaDonRes);
+        List<HDCTResponse> lst = getHdctResponse(hoaDonRes);
+        return ResponseEntity.ok().body(lst);
+    }
+
+    private float tinhTong(List<HoaDonChiTiet> hoaDonChiTiets) {
+        List<HoaDonChiTiet> lstHDCT = new ArrayList<>(hoaDonChiTiets);
+        Map<Long, HoaDonChiTiet> uniqueMap = new LinkedHashMap<>();
+        for (HoaDonChiTiet dct : lstHDCT) {
+            uniqueMap.putIfAbsent(dct.getId(), dct);
+        }
+        lstHDCT = new ArrayList<>(uniqueMap.values());
+        float total = lstHDCT.stream()
+                .map(dct -> dct.getGiaBan().floatValue() * dct.getSoLuong())
+                .reduce(0f, Float::sum);
+        return total;
     }
 
     private static List<HDCTResponse> getHdctResponse(HoaDon hoaDon) {
@@ -158,6 +247,8 @@ public class HoaDonRestController {
             response.setTongTien(hoaDon.getTongTien().intValue());
             response.setThucThu(hoaDon.getThucThu().intValue());
             response.setGiamGia(hoaDon.getGiamGia().intValue());
+            response.setIdHD(hoaDon.getId());
+            response.setPhiShip(hoaDon.getPhiShip().intValue());
             lst.add(response);
         }
         return lst;
@@ -205,7 +296,7 @@ public class HoaDonRestController {
         List<ProductCashierRequest> listProduct = gson.fromJson(request.getProduct(), listType);
         for (ProductCashierRequest pcr : listProduct) {
             ChiTietSanPham ctsp = chiTietSanPhamService.getById(pcr.getId());
-            if(ctsp.getSoLuongTon() < pcr.getQuantity()) {
+            if (ctsp.getSoLuongTon() < pcr.getQuantity()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .header("status", "error")
                         .body(String.format("Số lượng sản phẩm %s vượt quá số lượng tồn", ctsp.getSanPham().getTen()));
@@ -225,7 +316,7 @@ public class HoaDonRestController {
             kh = khachHangService.detail(Long.parseLong(request.getCustomer()));
         }
         if (typePayment.isChuyenKhoan()) {
-            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("ChuyenKhoan");
+            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("Chuyển Khoản");
             if (ht == null) {
                 ht = new HinhThucThanhToan();
                 ht.setHinhThuc("Chuyển Khoản");
@@ -236,7 +327,7 @@ public class HoaDonRestController {
             }
         }
         if (typePayment.isTienMat()) {
-            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("TienMat");
+            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("Tiền Mặt");
             if (ht == null) {
                 ht = new HinhThucThanhToan();
                 ht.setHinhThuc("Tiền Mặt");
@@ -247,7 +338,7 @@ public class HoaDonRestController {
             }
         }
         if (typePayment.isKhiNhanHang()) {
-            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("KhiNhanHang");
+            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("Khi Nhận Hàng");
             if (ht == null) {
                 ht = new HinhThucThanhToan();
                 ht.setHinhThuc("Khi Nhận Hàng");
@@ -258,17 +349,17 @@ public class HoaDonRestController {
             }
         }
         HoaDon hd = new HoaDon();
-        if(request.getVoucher() != null) {
+        if (request.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(request.getVoucher());
             if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
                 if (voucher.getLoaiVoucher().equals("$")) {
-                    if(voucher.getGiaTriTienMat().intValue() >= total) {
+                    if (voucher.getGiaTriTienMat().intValue() >= total) {
                         giamGia = total;
                     }
                     giamGia = voucher.getGiaTriTienMat().intValue();
                 } else {
                     giamGia = total / 100 * voucher.getGiaTriPhanTram();
-                    if(giamGia >= voucher.getGiaTriToiDa().intValue()) {
+                    if (giamGia >= voucher.getGiaTriToiDa().intValue()) {
                         giamGia = voucher.getGiaTriToiDa().intValue();
                     }
                 }
@@ -334,7 +425,7 @@ public class HoaDonRestController {
         }
 
         hd = hoaDonService.save(hd);
-        if(hd.getVoucher() != null) {
+        if (hd.getVoucher() != null) {
             Voucher voucher = hd.getVoucher();
             voucher.setSoLuong(voucher.getSoLuong() - 1);
             voucherService.save(voucher);
@@ -464,7 +555,7 @@ public class HoaDonRestController {
             @RequestBody Long idHoaDon,
             HttpServletRequest request
     ) {
-        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
+        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon);
         String trangThaiBeforeUpdate = hoaDon.getTrangThai().name();
         if (hoaDon.getTrangThai() == TrangThaiHoaDon.ChoXacNhan) {
             hoaDon.setTrangThai(TrangThaiHoaDon.ChuanBiHang);
@@ -515,13 +606,16 @@ public class HoaDonRestController {
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
         System.out.println(id);
         if (hdct == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().header("status", "HDCTNull").build();
         }
         HoaDon hoaDon = hdct.getHoaDon();
         List<HoaDonChiTiet> lst = hoaDon.getHoaDonChiTiets();
         if (lst.size() == 1) {
             return ResponseEntity.notFound().header("status", "minPro").build();
         }
+        ChiTietSanPham chiTietSanPham = hdct.getChiTietSanPham();
+        chiTietSanPham.setSoLuongTon(chiTietSanPham.getSoLuongTon() + hdct.getSoLuong());
+        chiTietSanPhamService.save(chiTietSanPham);
         lst.remove(hdct);
         hoaDon.setHoaDonChiTiets(lst);
         hoaDon = tinhTien(hoaDon);
@@ -540,6 +634,13 @@ public class HoaDonRestController {
             String body = "<h1>Bạn đã thực hiện xóa sản phẩm '" + hdct.getChiTietSanPham().getMaSanPham() + "' thành công!";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
+        List<HoaDonChiTiet> lstHDCT = hoaDon.getHoaDonChiTiets();
+        int slt = 0;
+        if (lstHDCT != null && !lstHDCT.isEmpty()) {
+            for (HoaDonChiTiet item : lstHDCT) {
+                slt += item.getSoLuong();
+            }
+        }
         UpdateProductRquest rs = new UpdateProductRquest();
         rs.setId_hdct(hdct.getId());
         rs.setGiamGia(hoaDon.getGiamGia());
@@ -547,7 +648,27 @@ public class HoaDonRestController {
         rs.setThucThu(hoaDon.getThucThu());
         rs.setTimes(lichSuHoaDon.getThoiGian());
         rs.setMessage(lichSuHoaDon.getHanhDong());
+        rs.setSoLuong(slt);
+        rs.setId(hoaDon.getId());
         return ResponseEntity.ok().body(rs);
+    }
+
+    @PostMapping("/update-shipping-fee")
+    public ResponseEntity shipping(@RequestParam("id") Long id, @RequestParam("shippingfee") Integer shipping) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return ResponseEntity.notFound().header("status", "NotAuth").build();
+        }
+        System.out.println(shipping);
+        HoaDon hd = hoaDonService.getHoaDonById(id);
+        hd.setPhiShip(BigDecimal.valueOf(shipping));
+        HoaDon hoaDon = tinhTien(hd);
+        Integer thucThu = hoaDon.getThucThu().intValue();
+        Integer shippingfee = hoaDon.getPhiShip().intValue();
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("thucThu", thucThu);
+        resultMap.put("shippingfee", shippingfee);
+        return ResponseEntity.ok().body(resultMap);
     }
 
     private HoaDon tinhTien(HoaDon hoaDon) {
@@ -563,6 +684,18 @@ public class HoaDonRestController {
         System.out.println("Total: " + total);
 
         hoaDon.setTongTien(BigDecimal.valueOf(total));
+
+        if (hoaDon.getVoucher() != null) {
+            Voucher vc = hoaDon.getVoucher();
+            if (vc.getGiaTriToiThieu().intValue() > total) {
+                hoaDon.setGiamGia(BigDecimal.ZERO);
+                hoaDon.setVoucher(null);
+            }
+        }
+
+        if (total > 2000000) {
+            hoaDon.setPhiShip(BigDecimal.ZERO);
+        }
 
         float thucThu = 0;
 
@@ -588,9 +721,12 @@ public class HoaDonRestController {
         } else {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
-        HoaDon hoaDon = hoaDonService.getHoaDonById(dt.getId()).orElse(null);
+        HoaDon hoaDon = hoaDonService.getHoaDonById(dt.getId());
         if (hoaDon == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "HoaDonNull").build();
+        }
+        if (dt.getSoLuong() < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "numMin").build();
         }
         MauSac mauSac = mauSacService.getMauSacByMa(dt.getMauSac());
         KichCo kichCo = kichCoService.getById(dt.getKichCo());
@@ -671,6 +807,7 @@ public class HoaDonRestController {
         rs.setTongTien(hoaDon.getTongTien());
         rs.setThucThu(hoaDon.getThucThu());
         rs.setGiamGia(hoaDon.getGiamGia());
+        rs.setPhiShip(hoaDon.getPhiShip().intValue());
         System.out.println(rs);
         return ResponseEntity.status(HttpStatus.OK).body(rs);
     }
@@ -681,7 +818,7 @@ public class HoaDonRestController {
             @RequestParam("lydo") String lydo,
             HttpServletRequest request
     ) {
-        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
+        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon);
         hoaDon.setTrangThai(TrangThaiHoaDon.Huy);
         hoaDon.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
@@ -725,7 +862,7 @@ public class HoaDonRestController {
             @RequestBody Long idHoaDon,
             HttpServletRequest request
     ) {
-        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon).get();
+        HoaDon hoaDon = hoaDonService.getHoaDonById(idHoaDon);
         hoaDon.setTrangThai(TrangThaiHoaDon.ChoXacNhan);
         hoaDon.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
         HoaDon updatedHoaDon = hoaDonService.save(hoaDon);
@@ -794,8 +931,7 @@ public class HoaDonRestController {
         String cusHouseNum = response.get("customerHouseNumber").getAsString();
         String receiveAddress = response.get("updateAddress").getAsString();
 
-        HoaDon needUpdate = hoaDonService.getHoaDonById(invoiceId)
-                .orElseThrow(() -> new RuntimeException("Invalid data of invoiceId"));
+        HoaDon needUpdate = hoaDonService.getHoaDonById(invoiceId);
         needUpdate.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
         needUpdate.setTenNguoiNhan(cusName);
         needUpdate.setSdtNhan(cusPhone);
@@ -807,7 +943,7 @@ public class HoaDonRestController {
         lichSuHoaDon.setHoaDon(updated);
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setTrangThaiSauUpdate(updated.getTrangThai().name());
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             User loggedUser = userService.getByUsername(request.getUserPrincipal().getName());
             lichSuHoaDon.setNguoiThucHien(loggedUser);
         }

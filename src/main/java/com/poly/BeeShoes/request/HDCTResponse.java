@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HDCTResponse {
+    Long idHD;
     Long idCTSP;
     Long idHDCT;
     String img;
@@ -20,4 +21,5 @@ public class HDCTResponse {
     Integer tongTien;
     Integer giamGia;
     Integer thucThu;
+    Integer phiShip;
 }
