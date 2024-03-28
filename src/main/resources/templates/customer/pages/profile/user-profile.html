@@ -228,19 +228,24 @@
                         </div>
                         <h5 class="title_card w-100 border-bottom pb-1 mt-4">Địa Chỉ Giao Hàng</h5>
                         <div class="wrapper_address row m-0 mt-3">
-                            <div class="item_address mb-1 col-12 col-xl-6 p-0 pr-1" th:each="diachi:${user.getKhachHang().getDiaChi()}">
-                                <div th:id="'customer_address_'+${diachi.getId()}" class="content_dress row m-0 customerAddress">
+                            <div class="item_address mb-1 col-12 col-xl-6 p-0 pr-1"
+                                 th:each="diachi:${user.getKhachHang().getDiaChi()}">
+                                <div th:id="'customer_address_'+${diachi.getId()}"
+                                     class="content_dress row m-0 customerAddress">
                                     <div class="col-12 d-flex justify-content-between">
                                         <div class="pt-3">
                                             <label class="w-100 txt_address mb-0">Địa Chỉ: <label
                                                     class="mb-0 customerHouseNumber"
                                                     th:text="${diachi.getSoNha()}"></label></label>
                                             <div class="d-flex flex-row">
-                                                <label class="txt_address customerWard" th:attr="data-address=${diachi.getPhuongXa()}"
+                                                <label class="txt_address customerWard"
+                                                       th:attr="data-address=${diachi.getPhuongXa()}"
                                                        th:text="${diachi.getPhuongXa()}+', '"></label>
-                                                <label class="txt_address customerDistrict" th:attr="data-address=${diachi.getQuanHuyen()}"
+                                                <label class="txt_address customerDistrict"
+                                                       th:attr="data-address=${diachi.getQuanHuyen()}"
                                                        th:text="${diachi.getQuanHuyen()}+', '"></label>
-                                                <label class="txt_address customerProvince" th:attr="data-address=${diachi.getTinhThanhPho()}"
+                                                <label class="txt_address customerProvince"
+                                                       th:attr="data-address=${diachi.getTinhThanhPho()}"
                                                        th:text="${diachi.getTinhThanhPho()}"></label>
                                             </div>
                                             <div>
@@ -250,8 +255,10 @@
                                         </div>
                                         <div class="btn-action-address">
                                             <div class="d-flex justify-content-center">
-                                                <a class="mr-2 update-address" th:attr="data-id=${diachi.getId()}" href="javascript:;">Cập Nhật</a>
-                                                <a class="btn-delete-address" th:attr="data-id=${diachi.getId()}"  href="javascript:;">Xóa</a>
+                                                <a class="mr-2 update-address" th:attr="data-id=${diachi.getId()}"
+                                                   href="javascript:;">Cập Nhật</a>
+                                                <a class="btn-delete-address" th:attr="data-id=${diachi.getId()}"
+                                                   href="javascript:;">Xóa</a>
                                             </div>
                                             <button type="button"
                                                     th:attr="data-customer-id=${user.getKhachHang().getId()},data-id=${diachi.getId()}"
@@ -274,7 +281,7 @@
                         <div class="mb-3 d-flex justify-content-between">
                             <h3 class="title_card">Danh Sách Đơn Hàng</h3>
                             <div class="form_filter">
-                                <select class="select_status" type="text">
+                                <select id="select_status_oder" class="select_status" type="text">
                                     <option value="All" selected>Tất Cả</option>
                                     <option value="ChoXacNhan">Chờ Xác Nhận</option>
                                     <option value="ChuanBiHang">Chuẩn Bị Hàng</option>
@@ -284,72 +291,110 @@
                                     <option value="DaGiao">Đã Giao Hàng</option>
                                     <option value="ThanhCong">Thành Công</option>
                                 </select>
-                                <input class="search_input mr-2" type="text" placeholder="Tìm kiếm mã hóa đơn.">
+                                <input id="input-search-oder" class="search_input mr-2" type="text"
+                                       placeholder="Tìm kiếm mã hóa đơn.">
                             </div>
                         </div>
-                        <div class="card w-100 mb-3" th:each="hoadon,iter:${lsthoadon}">
-                            <div class="card-header d-flex justify-content-between mr-1 ml-1">
-                                <div class="oder_code_wrapper">
-                                    Mã Hóa Đơn: <a class="oder_code" href="javascript:;"
-                                                   th:text="${hoadon.getMaHoaDon()}"></a>
-                                </div>
-                                <div class="status">
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='Huy'}">Đã Hủy</label>
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='ChoXuLy'}">Chờ Xử Lý</label>
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}">Chờ Xác Nhận</label>
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='ChoGiao'}">Chờ Giao</label>
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='DangGiao'}">Đang Giao</label>
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='HoanTra'}">Hoàn Trả</label>
-                                    <label th:id="'trangthai_'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name()=='ThanhCong'}">Thành Công</label>
-                                </div>
+                        <div class="w-100" id="show-all-oder">
+                            <div id="show-no-data-oder" class="w-100 mt-5 hidden">
+                                <h4 class="text-center">Không có dữ liệu.</h4>
                             </div>
-                            <div class="card-body">
-                                <div class="card_content ">
-                                    <ul class="w-100">
-                                        <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}">
-                                            <div class="col-2 p-0">
-                                                <img class="product_img"
-                                                     th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
-                                            </div>
-                                            <div class="col-7 p-0">
-                                                <div>
-                                                    <h6 class="product_name mb-2"
-                                                        th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
-                                                    <div class="w-100">
-                                                        Màu :<label
-                                                            th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}">Màu
-                                                        Trắng</label>, Kích Cỡ :<label
-                                                            th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}">32</label>
-                                                    </div>
-                                                    <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-3 d-flex align-items-center">
-                                                <h5 class="product_price_cu"
-                                                    th:text="${#numbers.formatDecimal(sanpham.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
-                                                <h5 class="product_price"
-                                                    th:text="${#numbers.formatDecimal(sanpham.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-footer pt-0">
-                                <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
-                                    <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money"
-                                                                                th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div th:id="'lydo_'+${hoadon.getId()}" th:text="${hoadon.getLichSuHoaDons().get(#lists.size(hoadon.getLichSuHoaDons())-1).getHanhDong()}">
-                                        Đơn hàng được tạo bởi bạn.
+                            <div class="card w-100 mb-3 oder_wrapper" th:each="hoadon,iter:${lsthoadon}">
+
+                                <div class="card-header d-flex justify-content-between mr-1 ml-1">
+                                    <div class="oder_code_wrapper">
+                                        Mã Hóa Đơn: <a class="oder_code" href="javascript:;"
+                                                       th:text="${hoadon.getMaHoaDon()}"></a>
                                     </div>
-                                    <div class="card-btn-group">
-                                        <button th:if="${hoadon.getTrangThai().name() == 'Huy' or hoadon.getTrangThai().name() == 'ThanhCong' or  hoadon.getTrangThai().name() == 'HoanTra'}" class="primary-btn" type="button">Mua Lại</button>
-                                        <a th:href="'/oder-tracking?oder='+${hoadon.getMaHoaDon()}" class="info-btn">Xem Chi Tiết</a>
-                                        <button th:id="'btn-cancel-'+${hoadon.getId()}" th:if="${hoadon.getTrangThai().name() == 'ChoXacNhan'}"
-                                                th:attr="data-id=${hoadon.getId()}" class="info-btn btn-cancel-oders"
-                                                type="button">Hủy Đơn
-                                        </button>
+                                    <div class="status">
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='Huy'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Đã Hủy</label>
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='ChuanBiHang'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Chuẩn Bị
+                                            Hàng</label>
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Chờ Xác
+                                            Nhận</label>
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='ChoGiao'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Chờ Giao</label>
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='DangGiao'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Đang Giao</label>
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='HoanTra'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Hoàn Trả</label>
+                                        <label th:id="'trangthai_'+${hoadon.getId()}"
+                                               th:if="${hoadon.getTrangThai().name()=='ThanhCong'}"
+                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
+                                        >Thành Công</label>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card_content ">
+                                        <ul class="w-100 wrapper_product_details">
+                                            <li class="row" th:each="sanpham:${hoadon.getHoaDonChiTiets()}"
+                                                th:attr="data-id-ctsp=${sanpham.getChiTietSanPham().getId()},data-quantity=${sanpham.getSoLuong()}">
+                                                <div class="col-2 p-0">
+                                                    <img class="product_img"
+                                                         th:src="${sanpham.getChiTietSanPham().getAnh().getUrl()}">
+                                                </div>
+                                                <div class="col-7 p-0">
+                                                    <div>
+                                                        <h6 class="product_name mb-2"
+                                                            th:text="${sanpham.getChiTietSanPham().getSanPham().getTen()}"></h6>
+                                                        <div class="w-100">
+                                                            Màu :<label
+                                                                th:text="${sanpham.getChiTietSanPham().getMauSac().getTen()}">Màu
+                                                            Trắng</label>, Kích Cỡ :<label
+                                                                th:text="${sanpham.getChiTietSanPham().getKichCo().getTen()}">32</label>
+                                                        </div>
+                                                        <label th:text="'Số Lượng :'+${sanpham.getSoLuong()}"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 d-flex align-items-center">
+                                                    <h5 class="product_price_cu"
+                                                        th:text="${#numbers.formatDecimal(sanpham.getGiaGoc(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                    <h5 class="product_price"
+                                                        th:text="${#numbers.formatDecimal(sanpham.getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h5>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-footer pt-0">
+                                    <div class="wrapper_money w-100 d-flex justify-content-end align-items-center pb-2 pt-2">
+                                        <label class="mb-0">Thành Tiền: </label><h4 class="show_total_money"
+                                                                                    th:text="${#numbers.formatDecimal(hoadon.getThucThu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div th:id="'lydo_'+${hoadon.getId()}"
+                                             th:text="${hoadon.getLichSuHoaDons().get(#lists.size(hoadon.getLichSuHoaDons())-1).getHanhDong()}">
+                                            Đơn hàng được tạo bởi bạn.
+                                        </div>
+                                        <div class="card-btn-group">
+                                            <button th:if="${hoadon.getTrangThai().name() == 'Huy' or hoadon.getTrangThai().name() == 'ThanhCong' or  hoadon.getTrangThai().name() == 'HoanTra'}"
+                                                    class="primary-btn" type="button">Mua Lại
+                                            </button>
+                                            <a th:href="'/oder-tracking?oder='+${hoadon.getMaHoaDon()}"
+                                               class="info-btn">Xem
+                                                Chi Tiết</a>
+                                            <button th:id="'btn-cancel-'+${hoadon.getId()}"
+                                                    th:if="${hoadon.getTrangThai().name() == 'ChoXacNhan'}"
+                                                    th:attr="data-id=${hoadon.getId()}"
+                                                    class="info-btn btn-cancel-oders"
+                                                    type="button">Hủy Đơn
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -361,18 +406,22 @@
                             <div class="w-100 mb-3 d-flex justify-content-between">
                                 <h3 class="title_card">Danh Sách Mã Giảm Giá</h3>
                                 <div class="form_filter">
-                                    <select class="select_status" type="text">
-                                        <option value="">Tất Cả</option>
-<!--                                        <option value="">Đã Sử Dụng</option>-->
-<!--                                        <option value="">Chưa Sử Dụng</option>-->
+                                    <select id="select_status_voucher" class="select_status" type="text">
+                                        <option value="All">Tất Cả</option>
+                                        <option value="%">Phần Trăm</option>
+                                        <option value="$">Tiền Mặt</option>
                                     </select>
-                                    <input class="search_input" type="text" placeholder="Tìm kiếm mã giảm giá.">
+                                    <input id="input_search_voucher" class="search_input" type="text" placeholder="Tìm kiếm mã giảm giá.">
                                 </div>
                             </div>
                             <div class="list_voucher">
-                                <ul id="w-100 list-voucher row">
-                                    <li class="wraper_li col-12 col-md-6 col-xl-4 p-0" th:each="voucher :${lstvouchers}">
-                                        <div data-id="4" th:id="'voucher_'+${voucher.getId()}"
+                                <div id="show-no-data-voucher" class="w-100 mt-5 hidden">
+                                    <h4 class="text-center">Không có dữ liệu.</h4>
+                                </div>
+                                <ul id="list-voucher" class="w-100 row">
+                                    <li class="wraper_li col-12 col-md-6 col-xl-4 p-0"
+                                        th:each="voucher :${lstvouchers}">
+                                        <div th:id="'voucher_'+${voucher.getId()}"
                                              class="wraper_voucher row m-0">
                                             <div class="col-9 contents p-2">
                                                 <h5 class="text-center voucher_code" th:text="${voucher.getMa()}"></h5>
@@ -387,9 +436,9 @@
                                             </div>
                                             <div class="col-3 p-2 row m-0 card__discount position-relative">
                                                 <label class="col-4">Mã Giảm Giá</label>
-                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}" class="col-6 tienmat"
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}" class="col-6 voucher_type tienmat"
                                                     th:text="${#strings.substring(voucher.getGiaTriTienMat().intValue(), 0, #strings.length(voucher.getGiaTriTienMat().intValue()) - 3) + 'K'}"></h3>
-                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}" class="col-6 phantram"
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}" class="col-6 voucher_type phantram"
                                                     th:text="${voucher.getGiaTriPhanTram()}+'%'"></h3>
                                             </div>
                                         </div>
@@ -452,6 +501,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="updateAddress" data-backdrop="static" data-keyboard="false" tabindex="-1"
      aria-labelledby="updateAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="width: 420px;">

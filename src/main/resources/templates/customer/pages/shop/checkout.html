@@ -168,7 +168,9 @@
                         <th:block sec:authorize="isAuthenticated()">
                             <div class="wrapper_address" id="idCustomer" th:attr="idCustomer=${userLogged.getKhachHang().getId()}">
                                 <p>Địa chỉ nhận hàng <span class="ml-2 text-primary" id="addNewAddress">+Thêm địa chỉ nhận hàng mới</span></p>
-                                <div class="item_address mb-1" th:each="adr:${userLogged.getKhachHang().getDiaChi()}">
+                                <div class="item_address mb-1" th:each="adr:${userLogged.getKhachHang().getDiaChi()}"
+                                th:id="'customer_address_'+${adr.getId()}"
+                                >
                                     <div class="content_dress row m-0 customerAddress">
                                         <div class="checkbox-wrapper-30 col-1">
                                    <span class="checkbox">
@@ -192,9 +194,9 @@
                                                                                                       th:text="${adr.getSoNha()}"></label></label>
                                                 <div class="d-flex flex-row">
                                                     <label class="txt_address customerWard"
-                                                           th:text="${adr.getPhuongXa()}+','"></label>
+                                                           th:text="${adr.getPhuongXa()}"></label>,
                                                     <label class="txt_address customerDistrict"
-                                                           th:text="${adr.getQuanHuyen()}+','"></label>
+                                                           th:text="${adr.getQuanHuyen()}"></label>,
                                                     <label class="txt_address customerProvince"
                                                            th:text="${adr.getTinhThanhPho()}"></label>
                                                 </div>
@@ -207,14 +209,9 @@
                                             </div>
                                             <div class="btn-action-address">
                                                 <div class="d-flex justify-content-center">
-                                                    <a class="mr-2" href="javascript:;">Cập Nhật</a>
-                                                    <a href="javascript:;">Xóa</a>
+                                                    <a th:attr="data-id=${adr.getId()}" class="mr-2 update-address" href="javascript:;">Cập Nhật</a>
+                                                    <a th:attr="data-id=${adr.getId()}" class="btn-delete-address" href="javascript:;">Xóa</a>
                                                 </div>
-                                                <button th:if="${userLogged.getKhachHang().getDiaChiMacDinh()== null or adr.getId() != userLogged.getKhachHang().getDiaChiMacDinh().getId()}"
-                                                        type="button" class="info-btn">Đặt Mặc Định
-                                                </button>
-                                                <button th:if="${userLogged.getKhachHang().getDiaChiMacDinh()!= null and adr.getId() == userLogged.getKhachHang().getDiaChiMacDinh().getId()}"
-                                                        type="button" class="info-btn disabled">Đặt Mặc Định</button>
                                             </div>
                                         </div>
 
@@ -298,6 +295,39 @@
 <!-- Footer Section Begin -->
 <div th:replace="~{/customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
+
+
+<div class="modal fade" id="updateAddress" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="updateAddressLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 420px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateAddressLabel">Cập Nhật Địa Chỉ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body p-4">
+                <input type="text" hidden="hidden" id="id_address_update">
+                <div class="w-100">
+                    <label for="soNha_cu" class="pointer mb-0 w-100">Số Nhà:</label>
+                    <input class="w-100 mb-3 form-input-custom" type="text" id="soNha_cu">
+                    <label for="tinhTP_cu" class="pointer mb-0 w-100">Tỉnh/TP:</label>
+                    <select class="w-100 mb-3" type="text" id="tinhTP_cu"></select>
+                    <label for="quanHuyen" class="pointer mb-0 w-100">Quận Huyện:</label>
+                    <select class="w-100 mb-3" type="text" id="quanHuyen_cu"></select>
+                    <label for="phuongXa" class="pointer mb-0 w-100">Phường Xã:</label>
+                    <select class="w-100" type="text" id="phuongXa_cu"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn info-btn" data-dismiss="modal">Đóng</button>
+                <button id="btn-update" type="button" class="btn primary-btn">Cập Nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="newAddress" data-backdrop="static" data-keyboard="false" tabindex="-1"
      aria-labelledby="updateAddressLabel" aria-hidden="true">

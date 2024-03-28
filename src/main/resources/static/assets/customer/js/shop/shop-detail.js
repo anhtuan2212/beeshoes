@@ -1,4 +1,4 @@
-function printHtmlToCart(product, quantity, totalMoney) {
+ function printHtmlToCart(product, quantity, totalMoney) {
     console.log(product)
     let element = $('#list_product_items_cart').find(`div.cart_product_item[data-id-product="${product.id}"]`);
     if (element.length === 1) {
@@ -47,7 +47,6 @@ $(document).ready(function () {
                         return $(this).val() == item.color_code;
                     })
                     element.closest('label.label_select_color').removeClass('hidden');
-                    console.log(element)
                 }
             })
             let ele_size = parent.find('.product__details__option__color label.activeSelected"');

@@ -37,6 +37,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         return hoaDonRepository.findAllByKhachHang(khachHang,sort);
     }
 
+
     @Override
     public List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon) {
         return hoaDonRepository.findByTrangThai(trangThaiHoaDon, Sort.by(Sort.Direction.DESC, "ngayTao"));
