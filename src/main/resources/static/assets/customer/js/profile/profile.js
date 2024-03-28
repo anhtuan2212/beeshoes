@@ -47,6 +47,7 @@ let quanHuyen = $('#quanHuyen');
 let phuongXa = $('#phuongXa')
 let tinh_selected;
 let huyen_selected;
+let arrHoaDon = [];
 fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
@@ -107,17 +108,111 @@ quanHuyen.on('change', function () {
     $(phuongXa).niceSelect('update');
 })
 
-let worker = new Worker('/assets/customer/js/profile/worker.js');
-document.addEventListener("DOMContentLoaded", function () {
-    worker.postMessage('start');
-});
-
-worker.onmessage = function (e) {
-    console.log(e.data);
-};
+// let worker = new Worker('/assets/customer/js/profile/worker.js');
+// document.addEventListener("DOMContentLoaded", function () {
+//     worker.postMessage('start');
+// });
+//
+// worker.onmessage = function (e) {
+//     arrHoaDon = e.data;
+// };
 
 $(document).ready(function () {
-
+    $(document).on('input', '#input-search-oder', function () {
+        let all = $('#show-all-oder');
+        let val = $(this).val();
+        let oder_code = all.find('.oder_code_wrapper .oder_code')
+        let no_data = true;
+        oder_code.each((index, ele) => {
+            let code = $(ele).text();
+            if (code.toLowerCase().includes(val.toLowerCase())) {
+                no_data = false;
+                $(ele).closest('.oder_wrapper').removeClass('hidden')
+            } else {
+                $(ele).closest('.oder_wrapper').addClass('hidden')
+            }
+        })
+        if (no_data) {
+            $('#show-no-data-oder').removeClass('hidden')
+        } else {
+            $('#show-no-data-oder').addClass('hidden')
+        }
+    })
+    $(document).on('input', '#input_search_voucher', function () {
+        let all = $('#list-voucher');
+        let val = $(this).val();
+        let code_voucher = all.find('.wraper_li .voucher_code')
+        let no_data = true;
+        code_voucher.each((index, ele) => {
+            let code = $(ele).text();
+            if (code.toLowerCase().includes(val.toLowerCase())) {
+                no_data = false;
+                $(ele).closest('.wraper_li').removeClass('hidden')
+            } else {
+                $(ele).closest('.wraper_li').addClass('hidden')
+            }
+        })
+        if (no_data) {
+            $('#show-no-data-voucher').removeClass('hidden')
+        } else {
+            $('#show-no-data-voucher').addClass('hidden')
+        }
+    })
+    $(document).on('change', '#select_status_oder', function () {
+        let all = $('#show-all-oder');
+        let val = $(this).val();
+        let oder_status = all.find('.oder_wrapper .status');
+        let no_data = true;
+        if (val === 'All') {
+            if (oder_status.length > 0) {
+                $('#show-no-data-oder').addClass('hidden')
+                oder_status.closest('.oder_wrapper').removeClass('hidden');
+            }
+            return;
+        }
+        oder_status.each((index, ele) => {
+            let status = $(ele).find('label').data('status');
+            if (status.includes(val)) {
+                no_data = false;
+                $(ele).closest('.oder_wrapper').removeClass('hidden')
+            } else {
+                $(ele).closest('.oder_wrapper').addClass('hidden')
+            }
+        })
+        if (no_data) {
+            $('#show-no-data-oder').removeClass('hidden')
+        } else {
+            $('#show-no-data-oder').addClass('hidden')
+        }
+    })
+    $(document).on('change', '#select_status_voucher', function () {
+        let all = $('#list-voucher');
+        let val = $(this).val();
+        let type = all.find('.wraper_li .voucher_type');
+        let no_data = true;
+        if (val === 'All') {
+            if (type.length > 0) {
+                $('#show-no-data-oder').addClass('hidden')
+                type.closest('.wraper_li').removeClass('hidden');
+            }
+            return;
+        }
+        type.each((index, ele) => {
+            let isPhanTram = $(ele).hasClass('phantram') && val === '%';
+            let isTienMat = $(ele).hasClass('tienmat') && val === '$';
+            if (isPhanTram || isTienMat) {
+                no_data = false;
+                $(ele).closest('.wraper_li').removeClass('hidden');
+            } else {
+                $(ele).closest('.wraper_li').addClass('hidden');
+            }
+        });
+        if (no_data) {
+            $('#show-no-data-oder').removeClass('hidden')
+        } else {
+            $('#show-no-data-oder').addClass('hidden')
+        }
+    })
     $(document).on('click', '.btn-delete-address', function () {
         let id = $(this).data('id');
         Swal.fire({

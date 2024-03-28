@@ -31,7 +31,7 @@ public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
 
     @Override
     public HinhThucThanhToan getByTen(String hinhThuc) {
-        return hinhThucThanhToanRepository.findByHinhThuc(hinhThuc).orElse(null);
+        return hinhThucThanhToanRepository.findFirstByHinhThuc(hinhThuc).orElse(null);
     }
 
     @Override
@@ -41,6 +41,6 @@ public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
 
     @Override
     public HinhThucThanhToan getByHinhThuc(String hinhThuc) {
-        return hinhThucThanhToanRepository.findByHinhThuc(hinhThuc).get();
+        return hinhThucThanhToanRepository.findFirstByHinhThuc(hinhThuc).orElse(null);
     }
 }

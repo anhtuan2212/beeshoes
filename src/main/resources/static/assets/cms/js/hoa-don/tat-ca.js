@@ -1,5 +1,4 @@
 $(document).on('ready', function () {
-
     function Toast(status, message) {
         const Toast = Swal.mixin({
             toast: true,
@@ -26,7 +25,7 @@ $(document).on('ready', function () {
     }
 
     //tất cả
-    $('.xacNhanFromAction').on('click', function() {
+    $('.xacNhanFromAction').on('click', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don]").attr("data-ma-hoa-don");
         selectedValue.push(String(maHoaDon));
@@ -61,7 +60,7 @@ $(document).on('ready', function () {
         });
     });
 
-    $('.huyFromAction').on('click', function() {
+    $('.huyFromAction').on('click', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don]").attr("data-ma-hoa-don");
         selectedValue.push(String(maHoaDon));
@@ -98,7 +97,7 @@ $(document).on('ready', function () {
     //end tất cả
 
     // Chờ xác nhận tab
-    $('#xacNhanFromCheckBoxCXN').on('click', function() {
+    $('#xacNhanFromCheckBoxCXN').on('click', function () {
         var selectedValue = [];
         $('#myBodyAllCXN').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cxn');
@@ -136,7 +135,7 @@ $(document).on('ready', function () {
         });
     });
 
-    $('#xacNhanFromActionCXN').on('click', function() {
+    $('#xacNhanFromActionCXN').on('click', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cxn]").attr("data-ma-hoa-don-cxn");
         selectedValue.push(String(maHoaDon));
@@ -171,7 +170,7 @@ $(document).on('ready', function () {
         });
     });
 
-    $('#huyFromCheckBoxCXN').on('click', function() {
+    $('#huyFromCheckBoxCXN').on('click', function () {
         var selectedValue = [];
         $('#myBodyAllCXN').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cxn');
@@ -210,7 +209,7 @@ $(document).on('ready', function () {
         });
     });
 
-    $('#huyFromActionCXN').on('click', function() {
+    $('#huyFromActionCXN').on('click', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cxn]").attr("data-ma-hoa-don-cxn");
         selectedValue.push(String(maHoaDon));
@@ -247,7 +246,7 @@ $(document).on('ready', function () {
     //end chờ xác nhận
 
     // Chờ giao tab
-    $('#xacNhanFromCheckBoxCG').on('click', function() {
+    $('#xacNhanFromCheckBoxCG').on('click', function () {
         var selectedValue = [];
         $('#myBodyAllCG').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cg');
@@ -285,7 +284,7 @@ $(document).on('ready', function () {
         });
     });
 
-    $('#xacNhanFromActionCG').on('click', function() {
+    $('#xacNhanFromActionCG').on('click', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cg]").attr("data-ma-hoa-don-cg");
         selectedValue.push(String(maHoaDon));
@@ -322,7 +321,7 @@ $(document).on('ready', function () {
     // end chờ giao
 
     // đang giao tab
-    $('#xacNhanFromCheckBoxDG').on('click', function() {
+    $('#xacNhanFromCheckBoxDG').on('click', function () {
         var selectedValue = [];
         $('#myBodyAllDG').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-dg');
@@ -360,7 +359,7 @@ $(document).on('ready', function () {
         });
     });
 
-    $('#xacNhanFromActionDG').on('click', function() {
+    $('#xacNhanFromActionDG').on('click', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-dg]").attr("data-ma-hoa-don-dg");
         selectedValue.push(String(maHoaDon));

@@ -18,10 +18,12 @@ fetch('/assets/address-json/province.json')
         data.forEach((item) => {
             let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
             $('#newProvince').append(html);
-           $('#tinhThanhPho').append(html);
+            $('#tinhThanhPho').append(html);
+            $('#tinhTP_cu').append(html);
         })
         $('#newProvince').niceSelect('update');
         $('#tinhThanhPho').niceSelect('update');
+        $('#tinhTP_cu').niceSelect('update');
     })
     .then(() => {
         return fetch('/assets/address-json/district.json')
@@ -63,15 +65,16 @@ function callApiShippingFee() {
             province = item.ProvinceID;
         }
     })
-    districtArr.forEach((item) => {
+    let arDiss = [...districtArr]
+    arDiss.forEach((item) => {
         if (item.ProvinceID == province && item.DistrictName == districtName) {
             console.log(item.DistrictName)
             district = item.DistrictID;
         }
     })
-    wardArr.forEach((item) => {
+    let arWard = [...wardArr]
+    arWard.forEach((item) => {
         if (item.DistrictID = district && item.Name == wardName) {
-            console.log(item.Name)
             ward = item.Code;
         }
     })
@@ -128,7 +131,7 @@ function callApiShippingFee() {
         success: function (response) {
             orderCode = response.data.order_code;
             var shippingFee = response.data.total_fee;
-            if(totalAmount > 2000000) {
+            if (totalAmount > 2000000) {
                 $('#shippingFee').text('Miễn phí');
                 shippingFee = 0;
             } else {
@@ -144,6 +147,123 @@ function callApiShippingFee() {
     })
 }
 
+$(document).on('click', '.update-address', function () {
+    $('#updateAddress').modal('show');
+    let id = $(this).data('id');
+    $('#id_address_update').val(id);
+    let element = $(this).closest('.item_address')
+    let ele_tinh = $('#tinhTP_cu');
+    let ele_quanHuyen = $('#quanHuyen_cu');
+    let ele_phuongXa = $('#phuongXa_cu')
+    let soNha = element.find('label.customerHouseNumber').text();
+    let phuongXa = element.find('label.customerWard').text();
+    let quanHuyen = element.find('label.customerDistrict').text();
+    let tinhTP = element.find('label.customerProvince').text();
+    $('#soNha_cu').val(soNha)
+    ele_quanHuyen.empty()
+    ele_phuongXa.empty()
+    wardArr = JSON.parse(localStorage.getItem('arrXa'))
+    for (let i = 0; i < provinceArr.length; i++) {
+        let item = provinceArr[i];
+        if (item.ProvinceName == tinhTP) {
+            ele_tinh.val(item.ProvinceID);
+            districtArr.forEach(function (dis) {
+                if (dis.ProvinceID == item.ProvinceID) {
+                    let html = `<option value="${dis.DistrictID}" ${dis.DistrictName == quanHuyen ? 'selected' : ''}>${String(dis.DistrictName)}</option>`;
+                    ele_quanHuyen.append(html);
+                    if (dis.DistrictName == quanHuyen) {
+                        wardArr.forEach((ward) => {
+                            console.log(ward)
+                            if (ward.DistrictID == dis.DistrictID) {
+                                let prin = `<option value="${ward.Code}" ${phuongXa == ward.Name ? 'selected' : ''}>${String(ward.Name)}</option>`;
+                                ele_phuongXa.append(prin);
+                            }
+                        })
+                    }
+                }
+            })
+            $(ele_quanHuyen).niceSelect('update');
+            $(ele_phuongXa).niceSelect('update');
+            break;
+        }
+    }
+})
+$(document).on('click', '#btn-update', function () {
+    let id = $('#id_address_update').val();
+    let soNha = $('#soNha_cu').val();
+    let phuongXa = $('#phuongXa_cu').find('option:selected').text();
+    let quanHuyen = $('#quanHuyen_cu').find('option:selected').text();
+    let tinhTP = $('#tinhTP_cu').find('option:selected').text();
+    $.ajax({
+        url: '/cms/khach-hang/update/update-diachi',
+        type: 'POST',
+        data: {
+            id: id,
+            soNhaDto: soNha,
+            phuongXaDto: phuongXa,
+            quanHuyenDto: quanHuyen,
+            tinhThanhPhoDto: tinhTP
+        },
+        success: () => {
+            ToastSuccess('Cập nhật thành công.');
+            let element = $(`#customer_address_${id}`);
+            element.find('label.customerHouseNumber').text(soNha);
+            element.find('label.customerWard').text(phuongXa)
+            element.find('label.customerDistrict').text(quanHuyen)
+            element.find('label.customerProvince').text(tinhTP);
+
+        },
+        error: function (e) {
+            console.log(e.getResponseHeader('status'))
+        }
+    })
+    $('#updateAddress').modal('hide');
+    // console.log(id, soNha, phuongXa, quanHuyen, tinhTP);
+})
+$(document).on('click', '.btn-delete-address', function () {
+    let id = $(this).data('id');
+    let element = $(this);
+    Swal.fire({
+        title: "Bạn chắc chứ?",
+        text: "Thay đổi sẽ không thể hoàn tác !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Hủy",
+        confirmButtonText: "Xác Nhận",
+        customClass: {
+            confirmButton: 'btn-custom-black',
+            cancelButton: 'btn-custom-info'
+        },
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/api/dia-chi/delete',
+                type: 'DELETE',
+                data: {
+                    id: id
+                },
+                success: function () {
+                    $(element).closest('.item_address').remove();
+                    ToastSuccess('Thành công.')
+                }, error: function (e, h, x) {
+                    switch (e.getResponseHeader('status')) {
+                        case 'isAddressDefault':
+                            ToastError('Không thể xóa địa chỉ mặc định.');
+                            break;
+                        case 'AddressNull':
+                            ToastError('Địa chỉ không tồn tại.');
+                            break;
+                        default:
+                            ToastError('Lỗi.');
+                    }
+                    console.log(h, x)
+                }
+            })
+        }
+    })
+})
 $(document).on('click', '#addNewAddress', function () {
     $('#newAddress').modal('show');
 })
@@ -279,7 +399,7 @@ $(document).on('click', '#btn-addAddress', function () {
                             orderCode = response.data.order_code;
                             var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
                             var shippingFee = response.data.total_fee;
-                            if(totalAmount > 2000000) {
+                            if (totalAmount > 2000000) {
                                 $('#shippingFee').text('Miễn phí');
                                 shippingFee = 0;
                             } else {
@@ -329,7 +449,25 @@ $(document).ready(function () {
     let phuongXaVal;
     let quanHuyenVal;
     let tinhTP;
+    let tinh_update = $('#tinhTP_cu');
+    let huyen_update = $('#quanHuyen_cu');
+    let xa_update = $('#phuongXa_cu');
 
+    tinh_update.on('change', function () {
+        tinhTP = $(this).val();
+        huyen_update.html('<option value="">Quận/Huyện</option>');
+        xa_update.html('<option value="">Phường/Xã</option>');
+        if (tinhTP) {
+            districtArr.forEach(function (item) {
+                if (item.ProvinceID == tinhTP) {
+                    let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                    huyen_update.append(html);
+                }
+            })
+        }
+        $(xa_update).niceSelect('update')
+        $(huyen_update).niceSelect('update')
+    })
     ele_tinh.on('change', function () {
         tinhTP = ele_tinh.val();
         provinceName = ele_tinh.find("option:selected").text();
@@ -345,7 +483,17 @@ $(document).ready(function () {
         }
         $(ele_quanHuyen).niceSelect('update')
     })
-
+    huyen_update.on('change', function () {
+        let val = huyen_update.val();
+        xa_update.html('<option value="">Phường/Xã</option>');
+        wardArr.forEach((item) => {
+            if (item.DistrictID == val) {
+                let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+                xa_update.append(html);
+            }
+        })
+        xa_update.niceSelect('update')
+    })
     ele_phuongXa.on('change', function () {
         phuongXaVal = ele_phuongXa.val();
         wardName = ele_phuongXa.find("option:selected").text();
@@ -442,7 +590,7 @@ $(document).ready(function () {
             success: function (response) {
                 orderCode = response.data.order_code;
                 var shippingFee = response.data.total_fee;
-                if(totalAmount > 2000000) {
+                if (totalAmount > 2000000) {
                     $('#shippingFee').text('Miễn phí');
                 } else {
                     $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
@@ -534,7 +682,7 @@ $(document).ready(function () {
             success: function (response) {
                 orderCode = response.data.order_code;
                 var shippingFee = response.data.total_fee;
-                if(totalAmount > 2000000) {
+                if (totalAmount > 2000000) {
                     $('#shippingFee').text('Miễn phí');
                     shippingFee = 0;
                 } else {
@@ -560,7 +708,7 @@ $(document).ready(function () {
         }
         var shippingFeeText = $('#shippingFee').text();
         var shippingFee = 0;
-        if(shippingFeeText != 'Miễn phí') {
+        if (shippingFeeText != 'Miễn phí') {
             shippingFee = parseInt(shippingFeeText.replace(/[,.]/g, ''));
         }
         console.log(voucherValue);
@@ -572,31 +720,31 @@ $(document).ready(function () {
         var customerEmail = $('#customerEmail').val();
         var customerName = $('#customerName').val();
         var typeOfPayment = $('input[name=paymentMethod]:checked').val();
-        if(customerName == '' || customerName == undefined) {
+        if (customerName == '' || customerName == undefined) {
             ToastError('Tên người nhận không được để trống');
             return;
         }
-        if(customerPhone == '' || customerPhone == undefined) {
+        if (customerPhone == '' || customerPhone == undefined) {
             ToastError('Số điện thoại nhận hàng không được để trống');
             return;
         }
-        if(customerEmail == '' || customerEmail == undefined) {
+        if (customerEmail == '' || customerEmail == undefined) {
             ToastError('Email không được để trống');
             return
         }
-        if(houseNumber == '' || houseNumber == undefined) {
+        if (houseNumber == '' || houseNumber == undefined) {
             ToastError('Số nhà không được để trống');
             return;
         }
-        if(provinceName == '' || provinceName == undefined) {
+        if (provinceName == '' || provinceName == undefined) {
             ToastError('Vui lòng chọn tỉnh thành');
             return;
         }
-        if(districtName == '' || districtName == undefined) {
+        if (districtName == '' || districtName == undefined) {
             ToastError('Vui lòng chọn quận huyện');
             return;
         }
-        if(wardName == '' || wardName == undefined) {
+        if (wardName == '' || wardName == undefined) {
             ToastError('Vui lòng chọn phường xã');
             return;
         }
