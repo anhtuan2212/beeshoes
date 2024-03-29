@@ -237,7 +237,7 @@
                                     <div class="row productsInCart">
                                         <div class="col-7 justify-content-start">
                                             <p th:text="${entry.key.id}" class="productDetailId d-none"></p>
-                                            <p class="nameProduct"
+                                            <p th:attr="qty-product=${entry.value}" class="nameProduct"
                                                th:text="${iter.index + 1} + '. ' + ${entry.key.sanPham.ten} + ' (x' + ${entry.value} + ')'"></p>
                                         </div>
                                         <div class="col-5 justify-content-end">
@@ -282,7 +282,6 @@
                             </div>
 
                             <button id="placeOrder" class="site-btn">Đặt Hàng</button>
-
                         </div>
                     </div>
                 </div>

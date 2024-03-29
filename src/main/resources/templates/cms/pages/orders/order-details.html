@@ -194,11 +194,13 @@
                     </div>
                     <div class="card-footer">
                         <div class="row mb-3">
-                            <div class="col-md-4 col-lg-5 justify-content-md-start">
-                                <h5>Đơn vị vận chuyển</h5>
-                                <img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png" alt="">
-                            </div>
-                            <div class="col-md-8 justify-content-md-end col-lg-7">
+                            <th:block th:if="${hoaDon.diaChiNhan != 'Tại Quầy'}">
+                                <div class="col-md-4 col-lg-5 justify-content-md-start">
+                                    <h5>Đơn vị vận chuyển</h5>
+                                    <img src="https://api.ghn.vn/themes/angulr/img/logo-ghn-new.png" alt="">
+                                </div>
+                            </th:block>
+                            <div class="align-items-end justify-content-md-end col-lg-7">
                                 <dl class="row text-sm-right">
                                     <dt class="col-sm-6">Tổng tiền:</dt>
                                     <dd class="col-sm-6" id="total-money"
@@ -225,7 +227,7 @@
                 <!-- End Card -->
 
                 <!-- Modal History -->
-                <div class="modal fade" id="history" tabindex="-1" role="dialog" aria-labelledby="historyTitle"
+                <div class="modal fade overflow-auto" id="history" tabindex="-1" role="dialog" aria-labelledby="historyTitle"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
