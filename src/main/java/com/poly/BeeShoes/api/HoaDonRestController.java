@@ -166,6 +166,9 @@ public class HoaDonRestController {
         res.put("quantity",hdct.getSoLuong());
         res.put("thucThu",hd.getThucThu().intValue());
         res.put("giamGia",hd.getGiamGia().intValue());
+        res.put("idHDCT",hdct.getId().intValue());
+        res.put("giaBan",hdct.getGiaBan().intValue());
+        res.put("soLuong",hdct.getSoLuong());
         res.put("count", count);
         res.put("idHD", hd.getId().intValue());
         return ResponseEntity.ok().body(res);

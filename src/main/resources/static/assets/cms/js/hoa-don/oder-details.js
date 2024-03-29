@@ -1,9 +1,27 @@
-var province = $('#updatedCusProvince');
-var district = $('#updatedCusDistrict');
-var ward = $('#updatedCusWard');
-var provinceName, districtName, wardName;
-var provinceId, districtId, wardCode;
-var provinceArr, districtArr, wardArr;
+let province = $('#updatedCusProvince');
+let district = $('#updatedCusDistrict');
+let ward = $('#updatedCusWard');
+let provinceName, districtName, wardName;
+let provinceId, districtId, wardCode;
+let provinceArr, districtArr, wardArr;
+let dataShop = [];
+let worker = new Worker('/assets/customer/js/work_get_all_product.js');
+window.onload = function () {
+    worker.postMessage('start');
+};
+
+worker.onmessage = function (e) {
+    console.log(e.data);
+    dataShop = e.data;
+    let dataS = [...dataShop];
+    let element = $('#tenSanPham');
+    element.html('<option value="#">Chọn Sản Phẩm</option>')
+    if (dataS !== null && Array.isArray(dataS)) {
+        dataS.forEach((item, index) => {
+            element.append(`<option value="${item.id}" ${index === 0 ? 'selected' : ''}>${item.ten}</option>`)
+        })
+    }
+};
 
 $.ajax({
     type: "GET",
@@ -196,9 +214,11 @@ function setQuantity(id, num) {
                 quantity: num
             }, success: async function (response) {
                 console.log(response)
-                $('#shippingFee').text(addCommasToNumber(response.phiShip))
-                $('#total-money').text(addCommasToNumber(response.tongTien))
-                $('#payment-money').text(addCommasToNumber(response.thucThu))
+                let money = Number(response.giaBan) * Number(response.soLuong);
+                $(`.wrapper_product_detail[data-id-hdct="${response.idHDCT}"]`).find('.text-quantity-product').text(addCommasToNumber(money));
+                $('#shippingFee').text(addCommasToNumber(response.phiShip));
+                $('#total-money').text(addCommasToNumber(response.tongTien));
+                $('#payment-money').text(addCommasToNumber(response.thucThu));
                 if (Number(response.giamGia) > 0) {
                     let dis = $('#discount-money');
                     if (dis.length === 0) {
@@ -308,6 +328,8 @@ function UpdateQuantity(id, calcu, num) {
                     } else {
                         wrapper.find('.form-edit-quantity input').val(data[i].soLuong);
                         wrapper.find('.wrapper-quantity .productQuantity').text(data[i].soLuong);
+                        let money = Number(data[i].giaBan) * Number(data[i].soLuong);
+                        wrapper.find('.text-quantity-product').text(addCommasToNumber(money))
                     }
                 }
                 if (Number(data[0].giamGia) > 0) {
@@ -460,6 +482,10 @@ async function getShippingFee(quantity) {
     }
 }
 
+function initSelect2(element) {
+    $.HSCore.components.HSSelect2.init(element);
+}
+
 async function updateShippingFee(id, shippingFee) {
     try {
         const response = await new Promise((resolve, reject) => {
@@ -487,11 +513,57 @@ async function updateShippingFee(id, shippingFee) {
 }
 
 $(document).on('ready', function () {
+    $('.js-select2-custom').each(function () {
+        initSelect2($(this));
+    });
 
+    $(document).on('change', '#tenSanPham', function () {
+        let id = $(this).val();
+        let dataS = dataShop;
+        let arr = [];
+        let mauSac = $('#mauSac');
+        mauSac.empty();
+        let kichCo = $('#kichCo');
+        kichCo.empty();
+        let url = '';
+        dataS.forEach((item) => {
+            if (item.id == id) {
+                item.chiTietSanPham.forEach((chil, ind) => {
+                    if (ind === 0) {
+                        url = chil.anh;
+                        item.chiTietSanPham.forEach((ctsp, i) => {
+                            let kc = item.kichCo.find((k) => k.ten == ctsp.kichCo)
+                            kichCo.append(`<option value="${kc.id}" ${i === 0 ? 'selected' : ''}>${kc.ten}</option>`)
+                        })
+                    }
+                    if (!arr.includes(chil.mauSac)) {
+                        mauSac.append(`<option value="${chil.mauSac}" ${ind === 0 ? 'selected' : ''}>${chil.tenMau}</option>`)
+                        arr.push(chil.mauSac);
+                    }
+                })
+            }
+        })
+        $('#preview-img').attr('src', url);
+    })
+    $('#select_product').on('show.bs.modal', function () {
+        let mauSac = $('#mauSac');
+        let kichCo = $('#kichCo');
+        let element = $('#tenSanPham');
+        element.val('#');
+        kichCo.html('<option value="#" selected>Chọn Kích Thước</option>');
+        mauSac.html('<option value="#" selected>Chọn Màu</option>')
+        $('#soLuong').val(1);
+
+    });
     $(document).on('change', '.form-edit-quantity input', function () {
         let id = $(this).closest('.form-edit-quantity').data('id');
         let val = $(this).val();
         let element = $(this);
+        if (Number(val) < 1 || val.length === 0) {
+            ToastError('Vui lòng nhập số lớn hơn 0.')
+            $(this).val(1).trigger('change');
+            return;
+        }
         setQuantity(id, val).then((res) => {
             element.val(res.quantity);
         });
@@ -567,14 +639,12 @@ $(document).on('ready', function () {
     })
     $(document).on('click', '#btn-edit-product', function () {
         let element = $(this);
-        console.log(123123123)
         if (element.hasClass('select')) {
             element.removeClass('select');
             $('#btn-add-product').addClass('d-none')
             $('.form-edit-quantity').addClass('d-none')
             $('.wrapper-btn-delete').addClass('d-none')
             $('.productQuantity').removeClass('d-none')
-            $('.wrapper-quantity').removeClass('col-md-1').addClass('col-md-2')
             element.text('Chỉnh Sửa')
         } else {
             element.addClass('select');
@@ -583,7 +653,6 @@ $(document).on('ready', function () {
             $('#btn-add-product').removeClass('d-none')
             $('.wrapper-btn-delete').removeClass('d-none')
             $('.productQuantity').addClass('d-none')
-            $('.wrapper-quantity').removeClass('col-md-2').addClass('col-md-1')
         }
     })
     // ONLY DEV
