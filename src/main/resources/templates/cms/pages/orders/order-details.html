@@ -239,7 +239,8 @@
                 <!-- End Card -->
 
                 <!-- Modal History -->
-                <div class="modal fade overflow-auto" id="history" tabindex="-1" role="dialog" aria-labelledby="historyTitle"
+                <div class="modal fade overflow-auto" id="history" tabindex="-1" role="dialog"
+                     aria-labelledby="historyTitle"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -981,7 +982,7 @@
             </div>
             <div class="modal-body p-4">
                 <div class="w-100 mb-3">
-                    <input id="oder-id-update" type="text" hidden="hidden">
+                    <input id="oder-id-update" type="text" hidden="hidden" th:value="${hoaDon.getId()}">
                     <label for="tenSanPham" class="pointer mb-0 w-100">Sản Phẩm :</label>
                     <select class="custom-select js-select2-custom" id="tenSanPham"
                             size="1"
@@ -1021,11 +1022,10 @@
                         </div>
                         <div class="form-group">
                             <label for="soLuong" class="pointer mb-0 w-100">Số Lượng:</label>
-                            <input class="w-100  form-control" type="text" id="soLuong">
+                            <input class="w-100  form-control" type="number" id="soLuong">
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-info" data-dismiss="modal">Đóng</button>

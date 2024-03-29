@@ -130,7 +130,9 @@ public class HoaDonRestController {
     @PostMapping("/set-quantity")
     public ResponseEntity setNum(
             @RequestParam("id") Long id,
-            @RequestParam("quantity") Integer num) {
+            @RequestParam("quantity") Integer num,
+            HttpServletRequest request
+    ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (num < 1) {
             return ResponseEntity.notFound().header("status", "quantityZero").build();
@@ -139,7 +141,7 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
-        if (hdct ==null){
+        if (hdct == null) {
             return ResponseEntity.notFound().header("status", "HDCTisNull").build();
         }
         ChiTietSanPham ctsp = hdct.getChiTietSanPham();
@@ -152,32 +154,52 @@ public class HoaDonRestController {
         Integer quantityChange = num - hdct.getSoLuong();
         ctsp.setSoLuongTon(ctsp.getSoLuongTon() + quantityChange);
         hdct.setSoLuong(num);
-         chiTietSanPhamService.save(ctsp);
+        chiTietSanPhamService.save(ctsp);
         hdct = hoaDonChiTietService.save(hdct);
         HoaDon hd = tinhTien(hdct.getHoaDon());
         List<HoaDonChiTiet> lst = hd.getHoaDonChiTiets();
-        Integer count =0;
-        for (HoaDonChiTiet item : lst){
-            count+= item.getSoLuong();
+        Integer count = 0;
+        for (HoaDonChiTiet item : lst) {
+            count += item.getSoLuong();
         }
-        Map<String, Integer> res = new HashMap<>();
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setHoaDon(hd);
+        lichSuHoaDon.setHanhDong("cập nhật số lượng sản phẩm '" + ctsp.getMaSanPham() + "' là " + num + ".");
+        if (request.getUserPrincipal() != null) {
+            lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
+        }
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setTrangThaiSauUpdate(hd.getTrangThai().name());
+        lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
+
+        Map<String, Object> res = new HashMap<>();
         res.put("phiShip", hd.getPhiShip().intValue());
         res.put("tongTien", hd.getTongTien().intValue());
-        res.put("quantity",hdct.getSoLuong());
-        res.put("thucThu",hd.getThucThu().intValue());
-        res.put("giamGia",hd.getGiamGia().intValue());
-        res.put("idHDCT",hdct.getId().intValue());
-        res.put("giaBan",hdct.getGiaBan().intValue());
-        res.put("soLuong",hdct.getSoLuong());
+        res.put("quantity", hdct.getSoLuong());
+        res.put("thucThu", hd.getThucThu().intValue());
+        res.put("giamGia", hd.getGiamGia().intValue());
+        res.put("idHDCT", hdct.getId().intValue());
+        res.put("giaBan", hdct.getGiaBan().intValue());
+        res.put("soLuong", hdct.getSoLuong());
         res.put("count", count);
-        res.put("idHD", hd.getId().intValue());
+        res.put("idHD", hd.getId());
+        res.put("times", lichSuHoaDon.getThoiGian());
+        res.put("message", lichSuHoaDon.getHanhDong());
+        if (lichSuHoaDon.getNguoiThucHien() == null) {
+            res.put("user", "anonymus");
+        } else if (lichSuHoaDon.getNguoiThucHien().getNhanVien() != null) {
+            res.put("user", lichSuHoaDon.getNguoiThucHien().getNhanVien().getHoTen());
+        } else {
+            res.put("user", lichSuHoaDon.getNguoiThucHien().getKhachHang().getHoTen());
+        }
         return ResponseEntity.ok().body(res);
     }
 
     @PostMapping("/update-quantity")
     public ResponseEntity update(@RequestParam("id") Long id,
                                  @RequestParam("num") Integer num,
-                                 @RequestParam("calcu") String calcu) {
+                                 @RequestParam("calcu") String calcu,
+                                 HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
@@ -253,13 +275,28 @@ public class HoaDonRestController {
         ctsp = chiTietSanPhamService.save(ctsp);
         HoaDon hoaDonRes = hoaDonService.getHoaDonById(hdct.getHoaDon().getId());
         assert hoaDonRes != null;
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setHoaDon(hoaDonRes);
+        if (request.getUserPrincipal() != null) {
+            lichSuHoaDon.setNguoiThucHien(userService.getByUsername(request.getUserPrincipal().getName()));
+        }
+        lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+        lichSuHoaDon.setTrangThaiSauUpdate(hoaDonRes.getTrangThai().name());
         if (isNew) {
+            lichSuHoaDon.setHanhDong("Thêm sản phẩm '" + ctsp.getMaSanPham() + "' vào hóa đơn.");
             List<HoaDonChiTiet> lstHo = hoaDonRes.getHoaDonChiTiets();
             lstHo.add(newHD);
             hoaDonRes.setHoaDonChiTiets(lstHo);
+        } else {
+            if (calcu.equals("plus")) {
+                lichSuHoaDon.setHanhDong("Tăng " + num + " sản phẩm '" + ctsp.getMaSanPham() + "' vào hóa đơn.");
+            } else {
+                lichSuHoaDon.setHanhDong("Giảm " + num + " sản phẩm '" + ctsp.getMaSanPham() + "' trong hóa đơn.");
+            }
         }
+        lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
         hoaDonRes = tinhTien(hoaDonRes);
-        List<HDCTResponse> lst = getHdctResponse(hoaDonRes);
+        List<HDCTResponse> lst = getHdctResponse(hoaDonRes, lichSuHoaDon);
         return ResponseEntity.ok().body(lst);
     }
 
@@ -276,11 +313,20 @@ public class HoaDonRestController {
         return total;
     }
 
-    private static List<HDCTResponse> getHdctResponse(HoaDon hoaDon) {
+    private static List<HDCTResponse> getHdctResponse(HoaDon hoaDon, LichSuHoaDon lichSuHoaDon) {
         List<HDCTResponse> lst = new ArrayList<>();
         for (int i = 0; i < hoaDon.getHoaDonChiTiets().size(); i++) {
             HoaDonChiTiet newHD = hoaDon.getHoaDonChiTiets().get(i);
             HDCTResponse response = new HDCTResponse();
+            response.setTimes(lichSuHoaDon.getThoiGian());
+            response.setMessage(lichSuHoaDon.getHanhDong());
+            if (lichSuHoaDon.getNguoiThucHien() == null) {
+                response.setUser("anonymus");
+            } else if (lichSuHoaDon.getNguoiThucHien().getNhanVien() != null) {
+                response.setUser(lichSuHoaDon.getNguoiThucHien().getNhanVien().getHoTen());
+            } else {
+                response.setUser(lichSuHoaDon.getNguoiThucHien().getKhachHang().getHoTen());
+            }
             response.setImg(newHD.getChiTietSanPham().getAnh().getUrl());
             response.setKichCo(newHD.getChiTietSanPham().getKichCo().getTen());
             response.setMaMauSac(newHD.getChiTietSanPham().getMauSac().getMaMauSac());
@@ -511,7 +557,7 @@ public class HoaDonRestController {
             tao.setHanhDong("Đơn Hàng Tạo Bởi " + ten + "Tại Quầy.");
             tao.setThoiGian(Timestamp.from(Instant.now()));
             tao.setNguoiThucHien(userTH);
-            tao.setTrangThaiSauUpdate("ChuanBiHang");
+            tao.setTrangThaiSauUpdate("ChoXacNhan");
             tao = lichSuHoaDonService.save(tao);
             LichSuHoaDon cb = new LichSuHoaDon();
             cb.setHoaDon(hd);
@@ -677,7 +723,7 @@ public class HoaDonRestController {
         lichSuHoaDon.setTrangThaiSauUpdate(hoaDon.getTrangThai().name());
         lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
         if (user != null) {
-            String tb = "Xóa sản phẩm khỏi hóa đơn thành công!";
+            String tb = "[LightBee Shop - Thông báo cập nhật thông tin đơn hàng]";
             String body = "<h1>Bạn đã thực hiện xóa sản phẩm '" + hdct.getChiTietSanPham().getMaSanPham() + "' thành công!";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
@@ -833,13 +879,14 @@ public class HoaDonRestController {
         lichSuHoaDon.setTrangThaiSauUpdate(hoaDon.getTrangThai().name());
         lichSuHoaDon = lichSuHoaDonService.save(lichSuHoaDon);
         if (user != null) {
-            String tb = "Thêm sản phẩm vào hóa đơn thành công.";
+            String tb = "[LightBee Shop - Thông báo cập nhật thông tin đơn hàng]";
             String body = "<h1>Bạn đã thực hiện xóa sản phẩm '" + hdct.getChiTietSanPham().getMaSanPham() + "' vào hóa đơn!";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
         UpdateProductRquest rs = new UpdateProductRquest();
         rs.setSoLuong(hdct.getSoLuong());
         rs.setId(ctsp.getId());
+        rs.setIdHD(hoaDon.getId());
         rs.setId_hdct(hdct.getId());
         rs.setMaSanPham(ctsp.getMaSanPham());
         rs.setGiaGoc(ctsp.getGiaGoc().intValue());
@@ -852,11 +899,17 @@ public class HoaDonRestController {
         rs.setSoLuongTon(ctsp.getSoLuongTon());
         rs.setTimes(lichSuHoaDon.getThoiGian());
         rs.setMessage(lichSuHoaDon.getHanhDong());
+        if (lichSuHoaDon.getNguoiThucHien() == null) {
+            rs.setUser("anonymus");
+        } else if (lichSuHoaDon.getNguoiThucHien().getNhanVien() != null) {
+            rs.setUser(lichSuHoaDon.getNguoiThucHien().getNhanVien().getHoTen());
+        } else {
+            rs.setUser(lichSuHoaDon.getNguoiThucHien().getKhachHang().getHoTen());
+        }
         rs.setTongTien(hoaDon.getTongTien());
         rs.setThucThu(hoaDon.getThucThu());
         rs.setGiamGia(hoaDon.getGiamGia());
         rs.setPhiShip(hoaDon.getPhiShip().intValue());
-        System.out.println(rs);
         return ResponseEntity.status(HttpStatus.OK).body(rs);
     }
 

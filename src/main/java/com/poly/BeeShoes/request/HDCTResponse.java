@@ -3,6 +3,8 @@ package com.poly.BeeShoes.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 public class HDCTResponse {
@@ -22,4 +24,7 @@ public class HDCTResponse {
     Integer giamGia;
     Integer thucThu;
     Integer phiShip;
+    Timestamp times;
+    String message;
+    String user;
 }

@@ -184,6 +184,24 @@ async function updateShippingFee(id, shippingFee) {
     }
 }
 
+function printHistory(times, message) {
+    let element = document.getElementById('history-oder');
+    let firstChild = element.firstChild;
+    let div = document.createElement('div');
+    div.className = 'w-100 row justify-content-center';
+    let ht = `
+                    <div class="col-3 times">
+                        ${formatServerTime(times)}
+                    </div>
+                    <div class="col-9 actions">
+                        ${message}
+                    </div>`;
+    div.innerHTML = ht;
+    element.insertBefore(div, firstChild);
+    let hr = document.createElement('hr');
+    div.insertAdjacentElement('afterend', hr);
+}
+
 function UpdateQuantity(id, calcu, num) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -195,6 +213,7 @@ function UpdateQuantity(id, calcu, num) {
                 num: num
             }, success: async function (data) {
                 console.log(data);
+                printHistory(data[0].times,data[0].message)
                 $('#total-money').text(addCommasToNumber(data[0].tongTien) + 'đ')
                 $('#shipping-money').text(Number(data[0].phiShip) > 1 ? addCommasToNumber(data[0].phiShip) + 'đ' : 'Miễn Phí');
                 $('#payment-money').text(addCommasToNumber(data[0].thucThu) + 'đ')
@@ -403,22 +422,7 @@ $(document).ready(function () {
                 $(`.show_trang_thai`).text('Đã Hủy');
                 $(`.btn-cancel-oders`).remove();
                 $(`#btn-show-update`).remove();
-                let element = document.getElementById('history-oder');
-                let firstChild = element.firstChild;
-                let div = document.createElement('div');
-                div.className = 'w-100 row justify-content-center';
-                let html = `
-                    <div class="col-3 times">
-                        ${formatServerTime(data.thoiGian)}
-                    </div>
-                    <div class="col-9 actions">
-                        ${data.hanhDong}
-                    </div>`;
-                div.innerHTML = html;
-                element.insertBefore(div, firstChild);
-                let hr = document.createElement('hr');
-                div.insertAdjacentElement('afterend', hr);
-
+                printHistory(data.thoiGian,data.hanhDong);
                 $('.step').each((index, ele) => {
                     if (!$(ele).hasClass('active')) {
                         $(ele).remove();
@@ -489,7 +493,6 @@ $(document).ready(function () {
             if (mau == item.mauSac) {
                 url = item.anh;
                 let size = object.kichCo.find((oj) => oj.ten == item.kichCo);
-                console.log(size)
                 kichCo.append(`<option value="${size.id}" ${i === 0 ? 'selected' : ''}>${size.ten}</option>`)
             }
         })
@@ -526,21 +529,7 @@ $(document).ready(function () {
                     }, success: async function (data) {
                         console.log(data);
                         li.remove();
-                        let element = document.getElementById('history-oder');
-                        let firstChild = element.firstChild;
-                        let div = document.createElement('div');
-                        div.className = 'w-100 row justify-content-center';
-                        let ht = `
-                            <div class="col-3 times">
-                                ${formatServerTime(data.times)}
-                            </div>
-                            <div class="col-9 actions">
-                                ${data.message}
-                            </div>`;
-                        div.innerHTML = ht;
-                        element.insertBefore(div, firstChild);
-                        let hr = document.createElement('hr');
-                        div.insertAdjacentElement('afterend', hr);
+                        printHistory(data.times,data.message)
                         $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
                         $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
                         $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
@@ -654,22 +643,7 @@ $(document).ready(function () {
                     </li>
                     `;
                     $('#show-all-product').append(html);
-
-                    let element = document.getElementById('history-oder');
-                    let firstChild = element.firstChild;
-                    let div = document.createElement('div');
-                    div.className = 'w-100 row justify-content-center';
-                    let ht = `
-                    <div class="col-3 times">
-                        ${formatServerTime(data.times)}
-                    </div>
-                    <div class="col-9 actions">
-                        ${data.message}
-                    </div>`;
-                    div.innerHTML = ht;
-                    element.insertBefore(div, firstChild);
-                    let hr = document.createElement('hr');
-                    div.insertAdjacentElement('afterend', hr);
+                    printHistory(data.times,data.message)
                 } else {
                     let element = $(`#product-detail-${data.id_hdct}`);
                     element.find('.quantity-product').text('Số Lượng :' + data.soLuong)
@@ -766,10 +740,11 @@ $(document).ready(function () {
                 invReceiveAddress: invReceiveAddress
             }),
             success: function (response) {
-                var myData = response.split('-');
-                $('.invCusName').text(myData[0]);
-                $('.invCusPhone').text(myData[1]);
-                $('.invAddress').text(myData[2]);
+                console.log(response)
+                $('.invCusName').text(response.tenNguoiNhan);
+                $('.invCusPhone').text(response.sdtNguoiNhan);
+                $('.invAddress').text(response.diaChi);
+                printHistory(response.times,response.message);
                 $('#updateInformationModal').modal('hide');
                 ToastSuccess('Cập nhật thành công thông tin nhận hàng');
             },
