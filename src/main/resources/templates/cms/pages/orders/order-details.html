@@ -131,7 +131,9 @@
                                 class="badge badge-soft-dark rounded-circle ml-1"
                                 th:text="${hoaDonChiTietList.size()}"></span></h4>
                         <div th:if="${hoaDon.getTrangThai().name()=='ChoXacNhan'}">
-                            <button id="btn-add-product" class="btn btn-outline-primary d-none">Thêm Sản Phẩm</button>
+                            <button id="btn-add-product" data-toggle="modal" data-target="#select_product"
+                                    class="btn btn-outline-primary d-none">Thêm Sản Phẩm
+                            </button>
                             <button id="btn-edit-product" class="btn btn-outline-primary">Chỉnh sửa</button>
                         </div>
                     </div>
@@ -140,7 +142,8 @@
                     <!-- Body -->
                     <div id="show-list-data" class="card-body">
                         <!-- Media -->
-                        <div class="media mb-1 wrapper_product_detail product" th:each="hdct, productInfo : ${hoaDonChiTietList}"
+                        <div class="media mb-1 wrapper_product_detail product"
+                             th:each="hdct, productInfo : ${hoaDonChiTietList}"
                              th:data-productId="${productInfo.index}" th:attr="data-id-hdct=${hdct.getId()}">
                             <div class="avatar avatar-xl mr-3">
                                 <img class="img-fluid" th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
@@ -170,23 +173,32 @@
 
                                     <div class="wrapper-quantity col col-md-2 align-self-center p-0">
                                         <h6 class="productQuantity text-center" th:text="${hdct.getSoLuong()}"></h6>
-                                        <div class="position-relative w-100 form-edit-quantity d-none"
+                                        <div class="js-quantity-counter form-edit-quantity input-group-quantity-counter d-none"
                                              th:attr="data-id=${hdct.getId()}">
-                                            <span class="btn-quantity plus"><i class="tio-caret-up"></i></span>
-                                            <input type="number" class="form-control"
+                                            <input type="number"
+                                                   class="js-result form-quantity form-control input-group-quantity-counter-control"
                                                    th:value="${hdct.getSoLuong()}">
-                                            <span class="btn-quantity minus"><i class="tio-caret-down"></i></span>
+                                            <div class="input-group-quantity-counter-toggle">
+                                                <a class="js-minus minus btn-quantity input-group-quantity-counter-btn"
+                                                   href="javascript:;">
+                                                    <i class="tio-remove"></i>
+                                                </a>
+                                                <a class="js-plus plus btn-quantity input-group-quantity-counter-btn"
+                                                   href="javascript:;">
+                                                    <i class="tio-add"></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col col-md-2 align-self-center text-center">
+                                    <div class="col col-md-2 align-self-center text-left position-relative">
                                         <h6 class="text-quantity-product"
                                             th:text="${#numbers.formatInteger(hdct.chiTietSanPham.giaBan.intValue() * hdct.getSoLuong(), 0, 'COMMA')}"></h6>
-                                    </div>
-                                    <div class="col col-md-1 align-self-center text-right wrapper-btn-delete d-none">
-                                        <button th:attr="data-id=${hdct.getId()},data-id-hd=${hoaDon.getId()}"
-                                                class="btn pointer btn-delete-product"><i class="tio-delete"></i>
-                                        </button>
+                                        <div class="wrapper-btn-delete d-none">
+                                            <button th:attr="data-id=${hdct.getId()},data-id-hd=${hoaDon.getId()}"
+                                                    class="btn pointer btn-delete-product"><i class="tio-delete"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +239,8 @@
                 <!-- End Card -->
 
                 <!-- Modal History -->
-                <div class="modal fade overflow-auto" id="history" tabindex="-1" role="dialog" aria-labelledby="historyTitle"
+                <div class="modal fade overflow-auto" id="history" tabindex="-1" role="dialog"
+                     aria-labelledby="historyTitle"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -956,7 +969,71 @@
 <!-- End Export Orders Modal -->
 <!-- ========== END SECONDARY CONTENTS ========== -->
 
+<div class="modal fade" id="select_product" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="select_productLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="select_productLabel">Chọn Sản Phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
+            </div>
+            <div class="modal-body p-4">
+                <div class="w-100 mb-3">
+                    <input id="oder-id-update" type="text" hidden="hidden" th:value="${hoaDon.getId()}">
+                    <label for="tenSanPham" class="pointer mb-0 w-100">Sản Phẩm :</label>
+                    <select class="custom-select js-select2-custom" id="tenSanPham"
+                            size="1"
+                            data-hs-select2-options='{
+                                            "placeholder": "Sản Phẩm...",
+                                            "searchInputPlaceholder": "Tìm Sản Phẩm..."}'>
+                        <option value="#" selected>Chọn Sản Phẩm</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <img id="preview-img" class="img-product-preview" width="250" height="250"
+                             src="/assets/customer/img/about/ludeptrai.jpg" alt="">
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="mauSac" class="pointer mb-0 w-100">Màu Sắc :</label>
+                            <select class="custom-select js-select2-custom mb-3" id="mauSac"
+                                    size="1"
+                                    style="opacity: 0;"
+                                    data-hs-select2-options='{
+                                            "placeholder": "Màu Sắc...",
+                                            "searchInputPlaceholder": "Tìm Màu Sắc..."}'>
+                                <option value="#" selected>Chọn Màu Sắc</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="kichCo" class="pointer mb-0 w-100">Kích Cỡ:</label>
+                            <select class="custom-select mb-3 js-select2-custom" id="kichCo"
+                                    size="1"
+                                    style="opacity: 0;"
+                                    data-hs-select2-options='{
+                                            "placeholder": "Kích Cỡ...",
+                                            "searchInputPlaceholder": "Tìm Kích Cỡ..."}'>
+                                <option value="#" selected>Chọn Kích Cỡ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="soLuong" class="pointer mb-0 w-100">Số Lượng:</label>
+                            <input class="w-100  form-control" type="number" id="soLuong">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-info" data-dismiss="modal">Đóng</button>
+                <button id="btn-select" type="button" class="btn btn-primary">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- JS Implementing Plugins -->
 <script src="/assets/cms/js/vendor.min.js"></script>
 

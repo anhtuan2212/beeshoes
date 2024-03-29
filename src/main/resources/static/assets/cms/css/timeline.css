@@ -190,22 +190,31 @@
 }
 
 .btn-quantity {
-    background-color: #f7f7f7;
+    /*background-color: #f7f7f7;*/
     cursor: pointer;
+    /*position: absolute;*/
+    /*right: 1px;*/
+    /*border-radius: 3px;*/
+}
+
+.wrapper-quantity {
+    margin-left: -13px;
+}
+
+.form-edit-quantity {
+    width: 6.8rem;
+}
+
+.wrapper-btn-delete {
     position: absolute;
-    right: 1px;
-    border-radius: 3px;
-}
-
-.btn-quantity:hover {
-    background-color: #b7bebb;
-    z-index: 99;
-}
-
-.btn-quantity.minus {
+    right: -15px;
     bottom: 0;
 }
-
+.img-product-preview{
+    object-fit: cover;
+    width: 250px !important;
+    height: 250px !important;
+}
 .pointer {
     cursor: pointer;
 }

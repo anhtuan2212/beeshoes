@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -87,16 +86,16 @@ public class ProfileController {
         boolean emailExists = userService.existsByEmail(request.getEmail());
         boolean phoneNumberExists = khachHangService.existsBySdt(request.getSdt());
 
-        if(user.getEmail().equalsIgnoreCase(request.getEmail())){
+        if (user.getEmail().equalsIgnoreCase(request.getEmail())) {
             emailExists = false;
         }
-        if(khachHang.getSdt().equalsIgnoreCase(request.getSdt())){
+        if (khachHang.getSdt().equalsIgnoreCase(request.getSdt())) {
             phoneNumberExists = false;
         }
-        if (emailExists){
+        if (emailExists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Exists by email.").build();
         }
-        if (phoneNumberExists){
+        if (phoneNumberExists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Exists by phone number.").build();
         }
         user.setEmail(request.getEmail());
@@ -118,7 +117,7 @@ public class ProfileController {
             Model model,
             HttpServletRequest request
     ) {
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
             KhachHang khachHang = user.getKhachHang();
             List<HoaDon> invoiceList =
@@ -133,7 +132,7 @@ public class ProfileController {
     }
 
     @PostMapping("/user-profile/update-receive-infor")
-    public ResponseEntity<String> updateReceiveInfor(
+    public ResponseEntity updateReceiveInfor(
             @RequestBody String data,
             HttpServletRequest request
     ) {
@@ -148,7 +147,7 @@ public class ProfileController {
         needUpdateInv.setDiaChiNhan(invReceiveAddr);
         HoaDon updatedInv = hoaDonService.save(needUpdateInv);
         LichSuHoaDon invHistory = new LichSuHoaDon();
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             String body = "Bạn vừa cập nhật thông tin nhận hàng của đơn hàng có mã " + updatedInv.getMaHoaDon() +
                     " <br> <a href='http://localhost:8080/oder-tracking?oder=" + updatedInv.getMaHoaDon() +
                     "'>Xem chi tiết tại đây</a>";
@@ -160,8 +159,13 @@ public class ProfileController {
         invHistory.setHoaDon(updatedInv);
         invHistory.setTrangThaiSauUpdate(updatedInv.getTrangThai().name());
         invHistory.setHanhDong("Cập nhật thông tin đơn hàng");
-        lichSuHoaDonService.save(invHistory);
-
-        return ResponseEntity.ok(updatedInv.getTenNguoiNhan() + "-" + updatedInv.getSdtNhan() + "-" + updatedInv.getDiaChiNhan());
+        invHistory = lichSuHoaDonService.save(invHistory);
+        Map<String, Object> res = new HashMap<>();
+        res.put("tenNguoiNhan", updatedInv.getTenNguoiNhan());
+        res.put("sdtNguoiNhan", updatedInv.getSdtNhan());
+        res.put("diaChi", updatedInv.getDiaChiNhan());
+        res.put("times", invHistory.getThoiGian());
+        res.put("message", invHistory.getHanhDong());
+        return ResponseEntity.ok().body(res);
     }
 }

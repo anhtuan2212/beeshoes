@@ -2,7 +2,6 @@ function PrintBillOder(data) {
     let elementToPrint = $('#oder-print');
     elementToPrint.find('#full_name_print').text(data.tenNguoiNhan)
     elementToPrint.find('#id_hoa_don_print').text(data.maHoaDon);
-    elementToPrint.find('#id_hoa_don_print').text(data.maHoaDon);
     let html = '';
     data.sanPham.forEach((item, index) => {
         html +=
@@ -16,11 +15,35 @@ function PrintBillOder(data) {
             `;
     })
     $('#show_product_print').html(html);
-    $('#tongtien_print').text(data.tongtien);
-    $('#thuc_thu_print').text(data.thucthu);
-    // $('#chua_thanh_toan_print').text(data.)
+    $('#tongtien_print').text(addCommasToNumber(data.tongtien) + 'đ');
+    $('#da_thanh_toan_print').text(addCommasToNumber(data.daThanhToan) + 'đ');
+    $('#shipping_fee_print').text(addCommasToNumber(data.phiShip) + 'đ');
+    $('#discount_money_print').text(addCommasToNumber(data.giamGia) + 'đ');
+    $('#thuc_thu_print').text(addCommasToNumber(data.thucthu) + 'đ');
+    if (data.type === 'CP') {
+        let adress = extracAddress(data.diaChi)
+        let html =
+            `${adress.soNha}<br>
+            ${adress.phuongXa}, ${adress.quanHuyen}<br>
+            ${adress.tinhTP}`;
+        $('#customer_address_print').html(html);
+    } else {
+        $('#customer_address_print').text(data.diaChi)
+    }
     let element = document.getElementById('oder-print')
     printElement(element);
+
+}
+
+function extracAddress(str) {
+    let parts = str.toString().split(',');
+    parts.reverse();
+    let thanhPhoTinh = parts.shift().trim(); // Thành phố/tỉnh
+    let quanHuyen = parts.shift().trim(); // Quận/huyện
+    let phuongXa = parts.shift().trim(); // Phường/xã
+    parts.reverse()
+    let soNha = parts.join(',');
+    return {quanHuyen: quanHuyen, phuongXa: phuongXa, tinhTP: thanhPhoTinh, soNha: soNha}
 }
 
 resetData();
@@ -29,7 +52,28 @@ function initSelect2(element) {
     $.HSCore.components.HSSelect2.init(element);
 }
 
-let shippingFee = 0;
+let shippingFees = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0
+};
+
+function getVariableShipping(oder) {
+    if (oder.length === 0) {
+        return null;
+    }
+    return shippingFees[Number(oder)];
+}
+
+function setVariableShipping(oder, value) {
+    if (oder.length === 0) {
+        return;
+    }
+    shippingFees[Number(oder)] = value;
+}
+
 let canRunDetection = true;
 let dataShop = [];
 let dataProductDetails = [];
@@ -51,6 +95,7 @@ window.onload = function () {
 };
 
 async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
+    setVariableShipping(oder, null)
     let wrapper = $(`#oder_content_${oder}`);
     try {
         if (phuongXaSelected === undefined && quanHuyenSelected === undefined) {
@@ -108,7 +153,7 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
         return response;
     } catch (error) {
         console.error('Xảy ra lỗi: ', error);
-        ToastError('Không hỗ trợ giao hàng ở địa chỉ này.')
+        ToastError(error.responseJSON.code_message_value);
         wrapper.find('.show-text-error').text('Không hỗ trợ giao');
         return null;
     }
@@ -286,15 +331,19 @@ function updateTotalMoney(oder) {
     }
     let wrapper = $(`#oder_content_${oder}`);
     let type = wrapper.find(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
-    let ship = shippingFee === null ? 0 : shippingFee;
+    let ship = getVariableShipping(oder) === null ? 0 : getVariableShipping(oder);
     if (type === 'CP') {
         if (total > 2000000) {
             ship = 0;
         }
     }
     let payment = total + ship;
+    if (ship === 0) {
+        wrapper.find('h4.shipping-money').text('Miễn Phí')
+    } else {
+        wrapper.find('h4.shipping-money').text(addCommasToNumber(ship) + 'đ')
+    }
     wrapper.find('h4.total-money').text(addCommasToNumber(total) + 'đ')
-    wrapper.find('h4.shipping-money').text(addCommasToNumber(ship) + 'đ')
     wrapper.find('h3.payment-money').text(addCommasToNumber(payment) + 'đ')
 }
 
@@ -308,14 +357,17 @@ function getTotalMoney(oder) {
     }
     let wrapper = $(`#oder_content_${oder}`);
     let type = wrapper.find(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
-    let ship = shippingFee === null ? 0 : shippingFee;
+    let shipFee = getVariableShipping(oder)
+    console.log(shipFee);
+    console.log(oder);
+    let ship = shipFee === null ? 0 : shipFee;
     if (type === 'CP') {
         if (total > 2000000) {
             ship = 0;
         }
     }
-    if (shippingFee == null) {
-        ToastError('Vui lòng chọn lại nơi nhận hàng.')
+    if (shipFee == null) {
+        ToastError('Vui lòng chọn nơi nhận hàng.')
         return null;
     }
     return total + ship;
@@ -485,6 +537,21 @@ function updateQuantityProduct(id, oder, operator, element) {
     }
 }
 
+function resetBill(oder) {
+    let element = $(`#oder_content_${oder}`);
+    saveToLocalStorage([], oder)
+    element.find('select.customer-selected[name="khachHang"]').val('#').trigger('change');
+    setVariableShipping(oder, 0);
+    element.find('table tbody').html(`<tr class="tr-show-no-data">
+        <td class="table-column-pr-0" rowSpan="4">
+            <h5 class="text-center">Chưa có dữ liệu.</h5>
+        </td>
+    </tr>`);
+    $('input[name="deliveryOptionCheckbox_hd_' + oder + '"][value="TQ"]').prop('checked', true);
+    element.find('.wrapper-address-user').addClass('d-none');
+    updateTotalMoney(oder);
+}
+
 $(document).on('ready', function () {
     $('#body-html').addClass('navbar-vertical-aside-mini-mode');
     $('#styleSwitcherDropdown').addClass('hs-unfold-hidden');
@@ -499,8 +566,12 @@ $(document).on('ready', function () {
         }
     })
 
-    function TinhTien() {
-        let oder = $('#modal-input-id-oder').val()
+    function TinhTien(oder) {
+        console.log(shippingFees);
+        if (oder.length === 0) {
+            ToastError('oder trống.')
+            return false;
+        }
         let total = getTotalMoney(oder)
         if (total === null) {
             return false;
@@ -553,7 +624,8 @@ $(document).on('ready', function () {
     }
 
     $(document).on('input', '#pay-cash-money', function () {
-        TinhTien();
+        let oder = $('#modal-input-id-oder').val()
+        TinhTien(oder);
     })
 
     $(document).on('change', '#payment-type-card', function () {
@@ -563,7 +635,8 @@ $(document).on('ready', function () {
         let size = $('.setup-modal-size');
         let tck = $('.wrapper-money-ck');
         let showcode = $('#pay-card-money').closest('.input-group');
-        TinhTien();
+        let oder = $('#modal-input-id-oder').val()
+        TinhTien(oder);
         if (isChecked) {
             wrap.addClass('col-4');
             wrap.removeClass('col-6');
@@ -607,12 +680,14 @@ $(document).on('ready', function () {
             size.removeClass('modal-xl');
             showcode.addClass('d-none');
         }
-        TinhTien();
+        let oder = $('#modal-input-id-oder').val()
+        TinhTien(oder);
     })
     $(document).on('change', '#payment-type-cash', function () {
         let check = $(this).is(':checked');
         let tienmat = $('.wrapper-money-tm');
-        TinhTien();
+        let oder = $('#modal-input-id-oder').val()
+        TinhTien(oder);
         if (check) {
             $('#payment-on-delivery').prop('checked', false);
             tienmat.removeClass('d-none')
@@ -621,14 +696,20 @@ $(document).on('ready', function () {
         }
     })
     $(document).on('click', '.btn-payment-oder', function () {
-        let bool = TinhTien();
+        let oder = getOderNum(this);
+        let bool = TinhTien(oder);
         if (!bool) {
             return;
         }
-        let oder = getOderNum(this);
         let sp = getListProductLocal(oder)
         if (sp.length === 0) {
             ToastError('Vui lòng chọn sản phẩm.')
+            return;
+        }
+
+        let optAD = $(`[name="option-address_${oder}"]`).val();
+        if (optAD === '#') {
+            ToastError('Vui lòng chọn địa chỉ.')
             return;
         }
         $('#form-modal-payment').modal('show');
@@ -680,9 +761,10 @@ $(document).on('ready', function () {
                 }).prop('checked', true);
                 return;
             }
+            setVariableShipping(oder, null);
             wrapper.find('.wrapper-address-user').removeClass('d-none');
         } else {
-            shippingFee = 0;
+            setVariableShipping(oder, 0);
             $(`.option-select-address[name="option-address_${oder}"]`).prop('checked', false);
             wrapper.find('.wrapper-address-user').addClass('d-none');
         }
@@ -747,11 +829,12 @@ $(document).on('ready', function () {
                 transfer: transfer,
                 transferCode: transferCode,
                 voucher: '',
-                shippingFee: shippingFee,
+                shippingFee: getVariableShipping(oder),
             },
             success: function (data) {
                 console.log(data)
                 PrintBillOder(data);
+                resetBill(oder)
                 ToastSuccess('Thành công.');
                 $('#form-modal-payment').modal('hide');
             },
@@ -849,7 +932,7 @@ $(document).on('ready', function () {
             $('.js-select2-custom').each(function () {
                 initSelect2($(this));
             });
-            shippingFee = null;
+            setVariableShipping(oder, null);
         } else {
             wrapper.find('.wrapper-option-address-khac').empty();
             let phuongXaSelected;
@@ -871,10 +954,9 @@ $(document).on('ready', function () {
             }
             let data = await getShippingFee(oder, phuongXaSelected, quanHuyenSelected);
             if (data !== null) {
-                shippingFee = data.data.total_fee;
-                console.log(shippingFee)
+                setVariableShipping(oder, data.data.total_fee);
             } else {
-                shippingFee = null;
+                setVariableShipping(oder, null);
             }
         }
         updateTotalMoney(oder);
@@ -885,10 +967,10 @@ $(document).on('ready', function () {
         let quan = $(`#oder_content_${oder}`).find('select.custom-select.quanHuyen').val();
         let result = await getShippingFee(oder, code, quan);
         if (result !== null) {
-            shippingFee = result.data.total_fee;
+            setVariableShipping(oder, result.data.total_fee);
             updateTotalMoney(oder);
         } else {
-            shippingFee = null;
+            setVariableShipping(oder, null);
         }
     })
     $(document).on('change', 'select.custom-select.tinhTP', function () {
@@ -984,8 +1066,13 @@ $(document).on('ready', function () {
     });
     $(document).on('change', '.customer-selected', function () {
         let oder = getOderNum(this);
+        let wrapper = $(`#oder_content_${oder}`);
+        $('input[name="deliveryOptionCheckbox_hd_' + oder + '"][value="TQ"]').prop('checked', true);
+        wrapper.find('.wrapper-address-user').addClass('d-none');
         let content = $(this).closest('.oder-wraper-content');
         let val = $(this).val();
+        setVariableShipping(oder, 0);
+        updateTotalMoney(oder);
         if (val !== '#') {
             let option = $(this).find('option:selected');
             let arrName = option.text().split('-');
@@ -1026,7 +1113,11 @@ $(document).on('ready', function () {
                     }
                 }
                 let id_ct = a.attr('href');
-                $(id_ct).remove();
+                let element = $(id_ct);
+                let id = element.children().data('id-num-hd');
+                setVariableShipping(id, 0);
+                saveToLocalStorage([], id)
+                element.remove();
                 li.remove();
                 ToastSuccess('Xóa Thành Công.')
             }
@@ -1057,7 +1148,7 @@ $(document).on('ready', function () {
         listItem.append(navTtem)
         let contentMau = $('#oder_content_mau');
         let div = contentMau.clone();
-        div.find('h4.card-header-title').text('Hóa Đơn ' + numId);
+        div.find('h4.header-title').text('Hóa Đơn ' + numId);
         div.find('select.customer-selected').addClass('js-select2-custom')
         div.find('[data-id-hd]').each((index, ele) => {
             let curentId = $(ele).attr('id');

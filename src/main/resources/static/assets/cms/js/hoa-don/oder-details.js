@@ -1,9 +1,27 @@
-var province = $('#updatedCusProvince');
-var district = $('#updatedCusDistrict');
-var ward = $('#updatedCusWard');
-var provinceName, districtName, wardName;
-var provinceId, districtId, wardCode;
-var provinceArr, districtArr, wardArr;
+let province = $('#updatedCusProvince');
+let district = $('#updatedCusDistrict');
+let ward = $('#updatedCusWard');
+let provinceName, districtName, wardName;
+let provinceId, districtId, wardCode;
+let provinceArr, districtArr, wardArr;
+let dataShop = [];
+let worker = new Worker('/assets/customer/js/work_get_all_product.js');
+window.onload = function () {
+    worker.postMessage('start');
+};
+
+worker.onmessage = function (e) {
+    console.log(e.data);
+    dataShop = e.data;
+    let dataS = [...dataShop];
+    let element = $('#tenSanPham');
+    element.html('<option value="#" selected>Chọn Sản Phẩm</option>')
+    if (Array.isArray(dataS)) {
+        dataS.forEach((item) => {
+            element.append(`<option value="${item.id}">${item.ten}</option>`)
+        })
+    }
+};
 
 $.ajax({
     type: "GET",
@@ -196,9 +214,11 @@ function setQuantity(id, num) {
                 quantity: num
             }, success: async function (response) {
                 console.log(response)
-                $('#shippingFee').text(addCommasToNumber(response.phiShip))
-                $('#total-money').text(addCommasToNumber(response.tongTien))
-                $('#payment-money').text(addCommasToNumber(response.thucThu))
+                let money = Number(response.giaBan) * Number(response.soLuong);
+                $(`.wrapper_product_detail[data-id-hdct="${response.idHDCT}"]`).find('.text-quantity-product').text(addCommasToNumber(money));
+                $('#shippingFee').text(addCommasToNumber(response.phiShip));
+                $('#total-money').text(addCommasToNumber(response.tongTien));
+                $('#payment-money').text(addCommasToNumber(response.thucThu));
                 if (Number(response.giamGia) > 0) {
                     let dis = $('#discount-money');
                     if (dis.length === 0) {
@@ -219,6 +239,7 @@ function setQuantity(id, num) {
                         $('#payment-money').text(addCommasToNumber(total.thucThu))
                     }
                 }
+                printHistory(formatDateTime(response.times),response.user,response.message)
                 resolve(response);
             }, error: function (xhr) {
                 console.log(xhr.getResponseHeader('status'));
@@ -308,7 +329,10 @@ function UpdateQuantity(id, calcu, num) {
                     } else {
                         wrapper.find('.form-edit-quantity input').val(data[i].soLuong);
                         wrapper.find('.wrapper-quantity .productQuantity').text(data[i].soLuong);
+                        let money = Number(data[i].giaBan) * Number(data[i].soLuong);
+                        wrapper.find('.text-quantity-product').text(addCommasToNumber(money))
                     }
+                    printHistory(formatDateTime(data[0].times), data[0].user, data[0].mesage);
                 }
                 if (Number(data[0].giamGia) > 0) {
                     let dis = $('#discount-money');
@@ -460,6 +484,10 @@ async function getShippingFee(quantity) {
     }
 }
 
+function initSelect2(element) {
+    $.HSCore.components.HSSelect2.init(element);
+}
+
 async function updateShippingFee(id, shippingFee) {
     try {
         const response = await new Promise((resolve, reject) => {
@@ -486,12 +514,210 @@ async function updateShippingFee(id, shippingFee) {
     }
 }
 
-$(document).on('ready', function () {
+function formatDateTime(inputDateString) {
+    const date = new Date(inputDateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return formattedDateString;
+}
 
+$(document).on('ready', function () {
+    $('.js-select2-custom').each(function () {
+        initSelect2($(this));
+    });
+    $(document).on('click', '#btn-select', function () {
+        let sanPham = $('#tenSanPham').val();
+        let mauSac = $('#mauSac').val();
+        let kicCo = $('#kichCo').val();
+        let soLuong = $('#soLuong').val();
+        let id = $('#oder-id-update').val();
+        if (sanPham === '#' || sanPham.length === 0) {
+            ToastError('Vui lòng chọn sản phẩm.')
+            return;
+        }
+        if (mauSac === '#' || mauSac.length === 0) {
+            ToastError('Vui lòng chọn màu.')
+            return;
+        }
+        if (kicCo.length === 0 || kicCo === '#') {
+            ToastError('Vui lòng chọn cỡ.')
+            return;
+        }
+        if (soLuong.length === 0 || Number(soLuong) < 1) {
+            ToastError('Vui lòng nhập số lượng lớn hơn 0.')
+            return;
+        }
+        if (id.length === 0) {
+            ToastError('ID Rỗng.')
+            return;
+        }
+        $.ajax({
+            url: '/api/hoa-don/add-product',
+            type: 'POST',
+            data: {
+                id: id,
+                mauSac: mauSac,
+                sanPham: sanPham,
+                kichCo: kicCo,
+                soLuong: soLuong
+            }, success: function (data) {
+                let wrapper = $('#show-list-data');
+                if (data.sale) {
+                    let html =
+                        `<div class="media mb-1 wrapper_product_detail product" data-productid="${data.id_hdct}" data-id-hdct="${data.id_hdct}">
+                            <div class="avatar avatar-xl mr-3">
+                                <img class="img-fluid" src="${data.anh}" alt="Image Description">
+                            </div>
+                            <div class="media-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <a class="h5 d-block productName" href="/cms/view-product?id=${data.id}">${data.ten}</a>
+                                        <div class="font-size-sm text-body">
+                                            <span>Color:</span>
+                                            <span class="font-weight-bold productColor">${data.mauSac}</span>
+                                        </div>
+                                        <div class="font-size-sm text-body">
+                                            <span>Size:</span>
+                                            <span class="font-weight-bold productSize">${data.kichCo}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-md-2 align-self-center">
+                                        <h6 class="productPrice">${addCommasToNumber(data.giaBan)}</h6>
+                                    </div>
+
+                                    <div class="wrapper-quantity col col-md-2 align-self-center p-0">
+                                        <h6 class="productQuantity text-center d-none">${data.soLuong}</h6>
+                                        <div class="js-quantity-counter form-edit-quantity input-group-quantity-counter " data-id="${data.id_hdct}">
+                                            <input type="number" class="js-result form-quantity form-control input-group-quantity-counter-control" value="${data.soLuong}">
+                                            <div class="input-group-quantity-counter-toggle">
+                                                <a class="js-minus minus btn-quantity input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-remove"></i>
+                                                </a>
+                                                <a class="js-plus plus btn-quantity input-group-quantity-counter-btn" href="javascript:;">
+                                                    <i class="tio-add"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-md-2 align-self-center text-left position-relative">
+                                        <h6 class="text-quantity-product">${addCommasToNumber(Number(data.giaBan) * Number(data.soLuong))}</h6>
+                                        <div class="wrapper-btn-delete">
+                                            <button class="btn pointer btn-delete-product" data-id="${data.id_hdct}" data-id-hd="${data.idHD}"><i class="tio-delete"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    wrapper.append(html);
+                } else {
+                    let element = $(`.wrapper_product_detail[data-id-hdct="${data.id_hdct}"]`);
+                    element.find('.productQuantity').text(data.soLuong)
+                    element.find('.form-edit-quantity').find('input').val(data.soLuong)
+                }
+                printHistory(formatDateTime(data.times), data.user, data.message);
+                $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
+                $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
+                $('#shippingFee').text(Number(data.phiShip) > 1 ? addCommasToNumber(data.phiShip) + 'đ' : 'Miễn Phí');
+                $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
+                ToastSuccess('Chọn Thành Công.')
+            }, error: function (e, x, h) {
+                switch (e.getResponseHeader('status')) {
+                    case 'HoaDonNull':
+                        ToastError('Hóa đơn không tồn tại.');
+                        break;
+                    case 'numMin':
+                        ToastError('Số lượng phải lớn hơn 1.');
+                        break;
+                    case 'MaxQuantity':
+                        ToastError('Số lượng sản phẩm lớn hơn số lượng tồn.');
+                        break;
+                    case 'NotAuth':
+                        ToastError('Vui lòng đăng nhập.');
+                        break;
+                    case 'MinQuantity':
+                        ToastError('Số lượng sản phẩm phải lớn hơn 0.');
+                        break;
+                    case 'CTSPNull':
+                        ToastError('Sản phẩm không tồn tại.');
+                        break;
+                    default:
+                        ToastError('Lỗi.');
+                }
+            }
+        })
+    })
+    $(document).on('change', '#mauSac', function () {
+        let id = $('#tenSanPham').val();
+        let mau = $(this).val();
+        let dataS = dataShop;
+        let kichCo = $('#kichCo');
+        let url = '';
+        kichCo.html('<option value="#" selected>Chọn Cỡ</option>');
+        let product = dataS.find(item => {
+            return Number(item.id) === Number(id)
+        })
+        product.chiTietSanPham.filter((obj) => {
+            if (mau == obj.mauSac) {
+                url = obj.anh;
+                let size = product.kichCo.find((item) => item.ten == obj.kichCo);
+                kichCo.append(`<option value="${size.id}">${size.ten}</option>`)
+            }
+        });
+        if ($(this).val() === '#') {
+            $('#preview-img').attr('src', '/assets/customer/img/icon/user.png');
+        } else {
+            $('#preview-img').attr('src', url);
+        }
+    })
+    $(document).on('change', '#tenSanPham', function () {
+        let id = $(this).val();
+        let dataS = dataShop;
+        let mauSac = $('#mauSac');
+        mauSac.html('<option value="#">Chọn Màu</option>');
+        let kichCo = $('#kichCo');
+        kichCo.html('<option value="#">Chọn Cỡ</option>');
+        let uniqueMauSac = [];
+        let product = dataS.find(item => Number(item.id) === Number(id));
+        if (product) {
+            let uniqueMauSacSet = new Set();
+            product.chiTietSanPham.forEach(obj => {
+                uniqueMauSacSet.add(obj.mauSac);
+            });
+            uniqueMauSac = Array.from(uniqueMauSacSet).map(mauSacValue => {
+                return product.chiTietSanPham.find(obj => obj.mauSac === mauSacValue);
+            });
+        }
+        uniqueMauSac.forEach(obj => {
+            mauSac.append(`<option value="${obj.mauSac}">${obj.tenMau}</option>`);
+        });
+        $('#preview-img').attr('src', '/assets/customer/img/icon/user.png');
+    })
+    $('#select_product').on('show.bs.modal', function () {
+        let mauSac = $('#mauSac');
+        let kichCo = $('#kichCo');
+        let element = $('#tenSanPham');
+        element.val('#');
+        kichCo.html('<option value="#" selected>Chọn Cỡ</option>');
+        mauSac.html('<option value="#" selected>Chọn Màu</option>')
+        $('#soLuong').val(1);
+
+    });
     $(document).on('change', '.form-edit-quantity input', function () {
         let id = $(this).closest('.form-edit-quantity').data('id');
         let val = $(this).val();
         let element = $(this);
+        if (Number(val) < 1 || val.length === 0) {
+            ToastError('Vui lòng nhập số lớn hơn 0.')
+            $(this).val(1).trigger('change');
+            return;
+        }
         setQuantity(id, val).then((res) => {
             element.val(res.quantity);
         });
@@ -567,14 +793,12 @@ $(document).on('ready', function () {
     })
     $(document).on('click', '#btn-edit-product', function () {
         let element = $(this);
-        console.log(123123123)
         if (element.hasClass('select')) {
             element.removeClass('select');
             $('#btn-add-product').addClass('d-none')
             $('.form-edit-quantity').addClass('d-none')
             $('.wrapper-btn-delete').addClass('d-none')
             $('.productQuantity').removeClass('d-none')
-            $('.wrapper-quantity').removeClass('col-md-1').addClass('col-md-2')
             element.text('Chỉnh Sửa')
         } else {
             element.addClass('select');
@@ -583,7 +807,6 @@ $(document).on('ready', function () {
             $('#btn-add-product').removeClass('d-none')
             $('.wrapper-btn-delete').removeClass('d-none')
             $('.productQuantity').addClass('d-none')
-            $('.wrapper-quantity').removeClass('col-md-2').addClass('col-md-1')
         }
     })
     // ONLY DEV

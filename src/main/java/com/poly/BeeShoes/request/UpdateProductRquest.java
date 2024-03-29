@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @ToString
 public class UpdateProductRquest {
     Long id;
+    Long idHD;
     Long id_hdct;
     String maSanPham;
     String mauSac;
@@ -26,6 +27,7 @@ public class UpdateProductRquest {
     Integer soLuong;
     Timestamp times;
     String message;
+    String user;
     BigDecimal tongTien;
     BigDecimal giamGia;
     BigDecimal thucThu;
