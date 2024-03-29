@@ -30,12 +30,12 @@ function ToastError(message) {
 function formvalidate() {
     var result = true;
     var ten = document.getElementById("ten").value;
-    var tienmat = document.getElementById("tienmat").value;
+    var tienmat = document.getElementById("tienmat").value.replace(/[,.]/g, '');
     var phantram = document.getElementById("phantram").value;
-    var toithieu = document.getElementById("toithieu").value;
+    var toithieu = document.getElementById("toithieu").value.replace(/[,.]/g, '');
     var batdau = document.getElementById("batdau").value;
     var ketthuc = document.getElementById("ketthuc").value;
-    var dieukien = document.getElementById("dieukien").value;
+    var dieukien = document.getElementById("dieukien").value.replace(/[,.]/g, '');
     var soluong = document.getElementById("soluong").value;
     var loai = document.getElementById("loai").value;
     if (ten.length == 0) {
@@ -165,6 +165,9 @@ document.getElementById("loai").addEventListener("change", function () {
     }
 });
 
+$(document).on('input', '.money-input-mask', function () {
+    $(this).mask('#.###.###.###', {reverse: true});
+});
 
 $(document).on('ready', function () {
     // ONLY DEV

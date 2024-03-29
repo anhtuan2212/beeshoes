@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.LichSuHoaDon;
 import com.poly.BeeShoes.repository.LichSuHoaDonRepository;
 import com.poly.BeeShoes.service.LichSuHoaDonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class LichSuHoaDonServiceImpl implements LichSuHoaDonService {
 
     @Override
     public List<LichSuHoaDon> getAllLichSuHoaDonByIdHoaDon(Long id) {
-        return lichSuHoaDonRepository.findByHoaDon_Id(id);
+        return lichSuHoaDonRepository.findByHoaDon_Id(id, Sort.by(Sort.Direction.DESC, "thoiGian"));
     }
 
     @Override

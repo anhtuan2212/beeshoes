@@ -80,71 +80,82 @@ function callApiShippingFee() {
     })
     console.log(ward + ',' + district + ',' + province);
 
-    $.ajax({
-        type: "POST",
-        url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
-        contentType: "application/json",
-        headers: {
-            "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-        },
-        data: JSON.stringify(
-            {
-                shop_id: "190713",
-                from_name: "LightBee Shop",
-                from_phone: "0359966461",
-                from_address: "Trường Cao Đẳng FPT Polytechnic",
-                from_ward_name: "Phường Xuân Phương",
-                from_district_name: "Nam Từ Liêm",
-                from_province_name: "Hà Nội",
-                to_name: "test",
-                to_phone: "0359966461",
-                to_address: "Nam Đinh",
-                to_ward_code: ward,
-                to_district_id: district,
-                service_id: 55320,
-                service_type_id: 2,
-                payment_type_id: 2,
-                cod_amount: parseInt(200000),
-                required_note: "CHOXEMHANGKHONGTHU",
-                items: [
-                    {
-                        name: "Áo Polo",
-                        code: "Polo123",
-                        quantity: 1,
-                        price: 200000,
-                        length: 12,
-                        width: 12,
-                        height: 12,
-                        weight: 1200,
-                        category:
-                            {
-                                level1: "Áo"
-                            }
-                    }
-                ],
-                weight: 2000,
-                length: 1,
-                width: 19,
-                height: 10
-            }
-        ),
-        success: function (response) {
-            orderCode = response.data.order_code;
-            var shippingFee = response.data.total_fee;
-            if (totalAmount > 2000000) {
-                $('#shippingFee').text('Miễn phí');
-                shippingFee = 0;
-            } else {
+    if(totalAmount > 2000000) {
+        $('#shippingFee').text('Miễn phí');
+        shippingFee = 0;
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+            contentType: "application/json",
+            headers: {
+                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+            },
+            data: JSON.stringify(
+                {
+                    shop_id: "190713",
+                    from_name: "LightBee Shop",
+                    from_phone: "0359966461",
+                    from_address: "Trường Cao Đẳng FPT Polytechnic",
+                    from_ward_name: "Phường Xuân Phương",
+                    from_district_name: "Nam Từ Liêm",
+                    from_province_name: "Hà Nội",
+                    to_name: "test",
+                    to_phone: "0359966461",
+                    to_address: "Nam Đinh",
+                    to_ward_code: ward,
+                    to_district_id: district,
+                    service_id: 55320,
+                    service_type_id: 2,
+                    payment_type_id: 2,
+                    cod_amount: parseInt(200000),
+                    required_note: "CHOXEMHANGKHONGTHU",
+                    items: [
+                        {
+                            name: "Áo Polo",
+                            code: "Polo123",
+                            quantity: 1,
+                            price: 200000,
+                            length: 12,
+                            width: 12,
+                            height: 12,
+                            weight: 1200,
+                            category:
+                                {
+                                    level1: "Áo"
+                                }
+                        }
+                    ],
+                    weight: 2000,
+                    length: 1,
+                    width: 19,
+                    height: 10
+                }
+            ),
+            success: function (response) {
+                orderCode = response.data.order_code;
+                var shippingFee = response.data.total_fee;
                 $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
+                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
+            },
+            error: function (error) {
+                console.error('Xảy ra lỗi: ', error)
+                $('#shippingFee').text('Không hỗ trợ giao');
+                ToastError(error.responseJSON.code_message_value);
             }
-            $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
-            $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
-        },
-        error: function (error) {
-            console.error('Xảy ra lỗi: ', error)
-            $('#shippingFee').text('Không hỗ trợ giao');
-        }
+        })
+    }
+}
+
+function getQtyProduct() {
+    var productsInCart = document.querySelectorAll('.productsInCart');
+    var qtyProduct = 0;
+    productsInCart.forEach((item) => {
+        console.log(item.find('.nameProduct').text());
+        qtyProduct += qty;
     })
+    return qtyProduct;
 }
 
 $(document).on('click', '.update-address', function () {
@@ -339,85 +350,86 @@ $(document).on('click', '#btn-addAddress', function () {
 
                                     </div>
                                 </div>`);
-            $.ajax({
-                type: "POST",
-                url: "/cms/khach-hang/set-default-address",
-                data: {
-                    idDiaChi: response.id,
-                    idKhachHang: idCustomer
-                },
-                success: function (response) {
-                    $.ajax({
-                        type: "POST",
-                        url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
-                        contentType: "application/json",
-                        headers: {
-                            "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-                        },
-                        data: JSON.stringify(
-                            {
-                                shop_id: "190713",
-                                from_name: "LightBee Shop",
-                                from_phone: "0359966461",
-                                from_address: "Trường Cao Đẳng FPT Polytechnic",
-                                from_ward_name: "Phường Xuân Phương",
-                                from_district_name: "Nam Từ Liêm",
-                                from_province_name: "Hà Nội",
-                                to_name: "test",
-                                to_phone: "0359966461",
-                                to_address: "Nam Đinh",
-                                to_ward_code: newWardCode,
-                                to_district_id: newDistrictId,
-                                service_id: 55320,
-                                service_type_id: 2,
-                                payment_type_id: 2,
-                                cod_amount: parseInt(200000),
-                                required_note: "CHOXEMHANGKHONGTHU",
-                                items: [
-                                    {
-                                        name: "Áo Polo",
-                                        code: "Polo123",
-                                        quantity: 1,
-                                        price: 200000,
-                                        length: 12,
-                                        width: 12,
-                                        height: 12,
-                                        weight: 1200,
-                                        category:
-                                            {
-                                                level1: "Áo"
-                                            }
-                                    }
-                                ],
-                                weight: 2000,
-                                length: 1,
-                                width: 19,
-                                height: 10
-                            }
-                        ),
-                        success: function (response) {
-                            orderCode = response.data.order_code;
-                            var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
-                            var shippingFee = response.data.total_fee;
-                            if (totalAmount > 2000000) {
-                                $('#shippingFee').text('Miễn phí');
-                                shippingFee = 0;
-                            } else {
+            var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
+            if(totalAmount > 2000000) {
+                $('#shippingFee').text('Miễn phí');
+                shippingFee = 0;
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/cms/khach-hang/set-default-address",
+                    data: {
+                        idDiaChi: response.id,
+                        idKhachHang: idCustomer
+                    },
+                    success: function (response) {
+                        $.ajax({
+                            type: "POST",
+                            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+                            contentType: "application/json",
+                            headers: {
+                                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                            },
+                            data: JSON.stringify(
+                                {
+                                    shop_id: "190713",
+                                    from_name: "LightBee Shop",
+                                    from_phone: "0359966461",
+                                    from_address: "Trường Cao Đẳng FPT Polytechnic",
+                                    from_ward_name: "Phường Xuân Phương",
+                                    from_district_name: "Nam Từ Liêm",
+                                    from_province_name: "Hà Nội",
+                                    to_name: "test",
+                                    to_phone: "0359966461",
+                                    to_address: "Nam Đinh",
+                                    to_ward_code: newWardCode,
+                                    to_district_id: newDistrictId,
+                                    service_id: 55320,
+                                    service_type_id: 2,
+                                    payment_type_id: 2,
+                                    cod_amount: parseInt(200000),
+                                    required_note: "CHOXEMHANGKHONGTHU",
+                                    items: [
+                                        {
+                                            name: "Áo Polo",
+                                            code: "Polo123",
+                                            quantity: 1,
+                                            price: 200000,
+                                            length: 12,
+                                            width: 12,
+                                            height: 12,
+                                            weight: 1200,
+                                            category:
+                                                {
+                                                    level1: "Áo"
+                                                }
+                                        }
+                                    ],
+                                    weight: 2000,
+                                    length: 1,
+                                    width: 19,
+                                    height: 10
+                                }
+                            ),
+                            success: function (response) {
+                                orderCode = response.data.order_code;
+                                var shippingFee = response.data.total_fee;
                                 $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
+                                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
+                            },
+                            error: function (error) {
+                                console.error('Xảy ra lỗi: ', error)
+                                ToastError(error.responseJSON.code_message_value);
+                                $('#shippingFee').text('Không hỗ trợ giao');
                             }
-                            $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
-                            $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
-                        },
-                        error: function (error) {
-                            console.error('Xảy ra lỗi: ', error)
-                            $('#shippingFee').text('Không hỗ trợ giao');
-                        }
-                    })
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error)
-                }
-            })
+                        })
+                    },
+                    error: function (error) {
+                        console.error('Xảy ra lỗi: ', error)
+                    }
+                })
+            }
         },
         error: function (error) {
             console.error('Xảy ra lỗi: ', error)
@@ -539,70 +551,71 @@ $(document).ready(function () {
         wardName = phuongXa.find("option:selected").text();
         var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
         var shippingFee = document.getElementById("totalAmount").textContent.replace(/[.,]/g, '');
-        $.ajax({
-            type: "POST",
-            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
-            contentType: "application/json",
-            headers: {
-                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-            },
-            data: JSON.stringify(
-                {
-                    shop_id: "190713",
-                    from_name: "LightBee Shop",
-                    from_phone: "0359966461",
-                    from_address: "Trường Cao Đẳng FPT Polytechnic",
-                    from_ward_name: "Phường Xuân Phương",
-                    from_district_name: "Nam Từ Liêm",
-                    from_province_name: "Hà Nội",
-                    to_name: "test",
-                    to_phone: "0359966461",
-                    to_address: "Nam Đinh",
-                    to_ward_code: phuongXaSelected,
-                    to_district_id: quanHuyenSelected,
-                    service_id: 55320,
-                    service_type_id: 2,
-                    payment_type_id: 2,
-                    cod_amount: parseInt(200000),
-                    required_note: "CHOXEMHANGKHONGTHU",
-                    items: [
-                        {
-                            name: "Áo Polo",
-                            code: "Polo123",
-                            quantity: 1,
-                            price: 200000,
-                            length: 12,
-                            width: 12,
-                            height: 12,
-                            weight: 1200,
-                            category:
-                                {
-                                    level1: "Áo"
-                                }
-                        }
-                    ],
-                    weight: 2000,
-                    length: 1,
-                    width: 19,
-                    height: 10
-                }
-            ),
-            success: function (response) {
-                orderCode = response.data.order_code;
-                var shippingFee = response.data.total_fee;
-                if (totalAmount > 2000000) {
-                    $('#shippingFee').text('Miễn phí');
-                } else {
+        if(totalAmount > 2000000) {
+            $('#shippingFee').text('Miễn phí');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+                contentType: "application/json",
+                headers: {
+                    "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                },
+                data: JSON.stringify(
+                    {
+                        shop_id: "190713",
+                        from_name: "LightBee Shop",
+                        from_phone: "0359966461",
+                        from_address: "Trường Cao Đẳng FPT Polytechnic",
+                        from_ward_name: "Phường Xuân Phương",
+                        from_district_name: "Nam Từ Liêm",
+                        from_province_name: "Hà Nội",
+                        to_name: "test",
+                        to_phone: "0359966461",
+                        to_address: "Nam Đinh",
+                        to_ward_code: phuongXaSelected,
+                        to_district_id: quanHuyenSelected,
+                        service_id: 55320,
+                        service_type_id: 2,
+                        payment_type_id: 2,
+                        cod_amount: parseInt(200000),
+                        required_note: "CHOXEMHANGKHONGTHU",
+                        items: [
+                            {
+                                name: "Áo Polo",
+                                code: "Polo123",
+                                quantity: 1,
+                                price: 200000,
+                                length: 12,
+                                width: 12,
+                                height: 12,
+                                weight: 1200,
+                                category:
+                                    {
+                                        level1: "Áo"
+                                    }
+                            }
+                        ],
+                        weight: 2000,
+                        length: 1,
+                        width: 19,
+                        height: 10
+                    }
+                ),
+                success: function (response) {
+                    orderCode = response.data.order_code;
+                    var shippingFee = response.data.total_fee;
                     $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                    $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
+                    $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error)
+                    ToastError(error.responseJSON.code_message_value);
+                    $('#shippingFee').text('Không hỗ trợ giao');
                 }
-                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
-                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
-            },
-            error: function (error) {
-                console.error('Xảy ra lỗi: ', error)
-                $('#shippingFee').text('Không hỗ trợ giao');
-            }
-        })
+            })
+        }
     })
 
     $('.selected_product').on('change', function () {
@@ -631,71 +644,72 @@ $(document).ready(function () {
         })
         console.log(ward + ',' + province + ',' + district);
 
-        $.ajax({
-            type: "POST",
-            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
-            contentType: "application/json",
-            headers: {
-                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-            },
-            data: JSON.stringify(
-                {
-                    shop_id: "190713",
-                    from_name: "LightBee Shop",
-                    from_phone: "0359966461",
-                    from_address: "Trường Cao Đẳng FPT Polytechnic",
-                    from_ward_name: "Phường Xuân Phương",
-                    from_district_name: "Nam Từ Liêm",
-                    from_province_name: "Hà Nội",
-                    to_name: "test",
-                    to_phone: "0359966461",
-                    to_address: "Nam Đinh",
-                    to_ward_code: ward,
-                    to_district_id: district,
-                    service_id: 55320,
-                    service_type_id: 2,
-                    payment_type_id: 2,
-                    cod_amount: parseInt(200000),
-                    required_note: "CHOXEMHANGKHONGTHU",
-                    items: [
-                        {
-                            name: "Áo Polo",
-                            code: "Polo123",
-                            quantity: 1,
-                            price: 200000,
-                            length: 12,
-                            width: 12,
-                            height: 12,
-                            weight: 1200,
-                            category:
-                                {
-                                    level1: "Áo"
-                                }
-                        }
-                    ],
-                    weight: 2000,
-                    length: 1,
-                    width: 19,
-                    height: 10
-                }
-            ),
-            success: function (response) {
-                orderCode = response.data.order_code;
-                var shippingFee = response.data.total_fee;
-                if (totalAmount > 2000000) {
-                    $('#shippingFee').text('Miễn phí');
-                    shippingFee = 0;
-                } else {
+        if(totalAmount > 2000000) {
+            $('#shippingFee').text('Miễn phí');
+            shippingFee = 0;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
+                contentType: "application/json",
+                headers: {
+                    "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
+                },
+                data: JSON.stringify(
+                    {
+                        shop_id: "190713",
+                        from_name: "LightBee Shop",
+                        from_phone: "0359966461",
+                        from_address: "Trường Cao Đẳng FPT Polytechnic",
+                        from_ward_name: "Phường Xuân Phương",
+                        from_district_name: "Nam Từ Liêm",
+                        from_province_name: "Hà Nội",
+                        to_name: "test",
+                        to_phone: "0359966461",
+                        to_address: "Nam Đinh",
+                        to_ward_code: ward,
+                        to_district_id: district,
+                        service_id: 55320,
+                        service_type_id: 2,
+                        payment_type_id: 2,
+                        cod_amount: parseInt(200000),
+                        required_note: "CHOXEMHANGKHONGTHU",
+                        items: [
+                            {
+                                name: "Áo Polo",
+                                code: "Polo123",
+                                quantity: 1,
+                                price: 200000,
+                                length: 12,
+                                width: 12,
+                                height: 12,
+                                weight: 1200,
+                                category:
+                                    {
+                                        level1: "Áo"
+                                    }
+                            }
+                        ],
+                        weight: 2000,
+                        length: 1,
+                        width: 19,
+                        height: 10
+                    }
+                ),
+                success: function (response) {
+                    orderCode = response.data.order_code;
+                    var shippingFee = response.data.total_fee;
                     $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
+                    $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
+                    $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
+                },
+                error: function (error) {
+                    console.error('Xảy ra lỗi: ', error)
+                    ToastError(error.responseJSON.code_message_value);
+                    $('#shippingFee').text('Không hỗ trợ giao');
                 }
-                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
-                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
-            },
-            error: function (error) {
-                console.error('Xảy ra lỗi: ', error)
-                $('#shippingFee').text('Không hỗ trợ giao');
-            }
-        })
+            })
+        }
     })
 
     $('#placeOrder').on('click', function () {
