@@ -64,7 +64,7 @@
                     <h5 class="card-title">Bộ lọc</h5>
                     <hr>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <label>Tìm kiếm</label>
                             <!-- Search -->
                             <div class="input-group input-group-merge input-group-flush">
@@ -77,17 +77,6 @@
                                        placeholder="Tìm kiếm theo Họ Tên, Sđt" aria-label="Tìm kiếm">
                             </div>
                             <!-- End Search -->
-                        </div>
-
-                        <div class="col-6">
-                            <label>Ngày sinh</label>
-                            <!-- Daterangepicker -->
-                            <button id="js-daterangepicker-predefined"
-                                    class="btn btn-sm btn-white dropdown-toggle mb-2 mb-sm-0 form-control">
-                                <i class="tio-date-range" style="text-align: center"></i>
-                                <span class="js-daterangepicker-predefined-preview ml-1"></span>
-                            </button>
-                             <!-- End Daterangepicker -->
                         </div>
                     </div>
                     <br>
@@ -103,7 +92,7 @@
                                                     }'>
                                 <option value="all" selected>Tất cả</option>
                                 <option value="Hoạt động">Hoạt động</option>
-                                <option value="Đã nghỉ">Đã nghỉ</option>
+                                <option value="Ngưng hoạt động">Ngưng hoạt động</option>
                             </select>
                         </div>
 
@@ -197,7 +186,7 @@
                             <td th:text="${kh.getSdt()}"></td>
                             <td th:text="${#dates.format (kh.getNgaySinh(), 'dd-MM-yyyy')}"></td>
                             <td th:text="${kh.isGioiTinh()==true?'Nam':'Nữ'}"></td>
-                            <td th:text="${kh.isTrangThai()==true?'Hoạt động':'Đã nghỉ'}"></td>
+                            <td th:text="${kh.isTrangThai()==true?'Hoạt động':'Ngưng hoạt động'}"></td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-sm btn-white" th:href="@{/cms/khach-hang/detail/{id}(id=${kh.id})}">

@@ -815,6 +815,9 @@ if(val == '$' ){
         // END ONLY DEV
         // =======================================================
 
+        $(document).on('input', '.money-input-mask', function () {
+            $(this).mask('#.###.###.###', {reverse: true});
+        });
 
         // BUILDER TOGGLE INVOKER
         // =======================================================

@@ -146,7 +146,7 @@
 
 .timeline-horizontal .timeline-item {
     display: table-cell;
-    height: 140px;
+    height: 180px;
     width: 20%;
     min-width: 170px;
     float: none !important;
