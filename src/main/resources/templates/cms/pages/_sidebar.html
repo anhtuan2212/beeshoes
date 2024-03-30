@@ -39,14 +39,14 @@
                         </li>
                         <li class="nav-item">
                             <a id="ban_hang" class="js-nav-tooltip-link nav-link" href="/cms/cashier" title=""
-                               data-placement="left" data-original-title="Layouts">
+                               data-placement="left" data-original-title="Bán Hàng">
                                 <i class="tio-shop-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Bán Hàng</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="quan_ly_don_hang" class="js-nav-tooltip-link nav-link" href="/cms/hoa-don" title=""
-                               data-placement="left" data-original-title="Layouts">
+                               data-placement="left" data-original-title="Quản Lý Đơn Hàng">
                                 <i class="tio-receipt-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Quản Lý Đơn Hàng</span>
                             </a>
@@ -163,13 +163,42 @@
                         <!-- Voucher -->
                         <li class="nav-item">
                             <a class="js-nav-tooltip-link nav-link" href="/cms/voucher" title=""
-                               data-placement="left" data-original-title="Layouts">
+                               data-placement="left" data-original-title="Phiếu Giảm Giá">
                                 <i class="tio-ticket nav-icon"></i>
-                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Mã Giảm Giá</span>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Phiếu Giảm Giá</span>
                             </a>
                         </li>
                         <!-- End Voucher -->
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
+                               title="Pages">
+                                <i class="tio-document-text-outlined nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Báo Cáo</span>
+                            </a>
+
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                <li class="nav-item">
+                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Referrals">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Báo Cáo Doanh Thu</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Referrals">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Báo Cáo Sản Phẩm</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Referrals">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Báo Cáo Phiếu Giảm Giá</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
+
                 </div>
                 <!-- End Content -->
 
@@ -189,7 +218,7 @@
     </aside>
 </div>
 <script>
-    function activeSiderbar(id, idCha,idOng) {
+    function activeSiderbar(id, idCha, idOng) {
         $('#' + id).addClass('active').closest('li.nav-item').addClass('show')
         if (idCha.length > 0) {
             $('#' + idCha).addClass('show')

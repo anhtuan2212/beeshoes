@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,8 +49,7 @@ public class CheckOutRestController {
     private MailUtility mailUtility;
     @Autowired
     private HinhThucThanhToanService hinhThucThanhToanService;
-    @Autowired
-    private ThanhToanService thanhToanService;
+
 
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
@@ -107,11 +108,38 @@ public class CheckOutRestController {
         hinhThucThanhToanList.add(savedHinhThucThanhToan);
         hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
-        ThanhToan thanhToan = new ThanhToan();
-        thanhToan.setHoaDon(savedHoaDon);
-        thanhToan.setHinhThucThanhToan(hinhThucThanhToan);
-        ThanhToan savedThanhToan = thanhToanService.save(thanhToan);
-        savedHoaDon.setThanhToan(savedThanhToan);
+        //sửa lại thanh toán
+        List<HinhThucThanhToan> httt = new ArrayList<>();
+//        if ( nếu là thanh toán khi nhận hàng) {
+//            HinhThucThanhToan ht = new HinhThucThanhToan();
+//            ht.setHinhThuc("Khi Nhận Hàng");
+//            ht.setTrangThai(false);
+//            ht.setTienThanhToan();
+//            ht.setTienThua();
+//            ht.setMaGiaoDich("COD");
+//            ht.setNgayTao(Timestamp.from(Instant.now()));
+//            ht.setHoaDon(hd);
+//            ht.setMoTa("Thanh Toán Khi Nhận Hàng");
+//            ht = hinhThucThanhToanService.save(ht);
+//            httt.add(ht);
+//        }
+        //        if ( nếu là thanh toán vnpay) {
+//            HinhThucThanhToan ht = new HinhThucThanhToan();
+//            ht.setHinhThuc("VNPAY");
+//            ht.setTrangThai(false);
+//            ht.setTienThanhToan(BigDecimal.ZERO); số tiền đã thanh toán
+//            ht.setTienThua(BigDecimal.ZERO); mặc định VNPAY tiền thừa là 0
+//            ht.setMaGiaoDich("Mã Giao Dich nếu có k thì ghi VNPAY");
+//            ht.setNgayTao(Timestamp.from(Instant.now()));
+//            ht.setHoaDon(hd);
+//            ht.setMoTa("Thanh Toán online bằng VNPAY");
+//            ht = hinhThucThanhToanService.save(ht);
+//            httt.add(ht);
+//        }
+
+        hoaDon.setHinhThucThanhToans(httt);
+
+
         hoaDonService.save(savedHoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
         lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());

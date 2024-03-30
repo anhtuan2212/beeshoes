@@ -29,10 +29,7 @@ public class HoaDon {
     @JoinColumn(name = "id_khach_hang")
     KhachHang khachHang;
 
-    @ManyToMany
-    @JoinTable(name = "thanh_toan",
-            joinColumns = @JoinColumn(name = "id_hoa_don"),
-            inverseJoinColumns = @JoinColumn(name = "id_hinh_thuc_thanh_toan"))
+   @OneToMany(mappedBy = "hoaDon")
     private List<HinhThucThanhToan> hinhThucThanhToans;
 
     String maHoaDon;
@@ -44,9 +41,6 @@ public class HoaDon {
     @JoinColumn(name = "id_voucher")
     Voucher voucher;
 
-    @OneToOne
-    @JoinColumn(name = "id_thanh_toan")
-    ThanhToan thanhToan;
 
     @OneToOne
     @JoinColumn(name = "id_don_vi_van_chuyen")

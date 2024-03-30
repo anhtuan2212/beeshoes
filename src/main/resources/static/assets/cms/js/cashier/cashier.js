@@ -537,6 +537,13 @@ function updateQuantityProduct(id, oder, operator, element) {
     }
 }
 
+function extractNumberFromString(str) {
+    str = str.toString();
+    let numberStr = str.replace(/\D/g, '');
+    let number = parseInt(numberStr);
+    return number;
+}
+
 function resetBill(oder) {
     let element = $(`#oder_content_${oder}`);
     saveToLocalStorage([], oder)
@@ -773,6 +780,16 @@ $(document).on('ready', function () {
 
     $(document).on('click', '.payment-success', function () {
         let oder = $('#modal-input-id-oder').val();
+        let hasTM = $('#payment-type-cash').is(':checked');
+        let hasCK = $('#payment-type-card').is(':checked');
+        let NH = $('#payment-on-delivery').is(':checked');
+        if (hasTM) {
+            let tienThieu = extractNumberFromString($('#lack-of-money').val());
+            if (tienThieu > 1) {
+                ToastError('Vui lòng nhập số tiền thanh toán.')
+                return;
+            }
+        }
         let listProduct = getListProductLocal(oder);
         let arrPro = [];
         listProduct.forEach((item) => {
@@ -803,9 +820,6 @@ $(document).on('ready', function () {
                 diaChiNhanHang = nameSoNha + ', ' + nameXa + ', ' + nameHuyen + ', ' + nameTinh;
             }
         }
-        let hasTM = $('#payment-type-cash').is(':checked');
-        let hasCK = $('#payment-type-card').is(':checked');
-        let NH = $('#payment-on-delivery').is(':checked');
         let typePayment = {
             tienMat: hasTM,
             chuyenKhoan: hasCK,
@@ -840,7 +854,16 @@ $(document).on('ready', function () {
             },
             error: function (error) {
                 console.log(error)
-                ToastError(error.getResponseHeader("status"))
+                switch (error.getResponseHeader("status")) {
+                    case 'error':
+                        ToastError('Số lượng sản phẩm vượt quá số lượng tồn');
+                        break;
+                    case 'paymentError':
+                        ToastError('Đơn tại quầy không thể thiếu.');
+                        break;
+                    default:
+                        ToastError('Lỗi.')
+                }
             }
         })
         console.log(khachHang, typeNH, diaChiNhanHang);
