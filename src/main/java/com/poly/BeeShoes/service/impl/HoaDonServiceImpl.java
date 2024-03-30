@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,16 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public List<HoaDon> getAllByDate(Date date) {
+        return hoaDonRepository.findAllByNgayTao(date);
+    }
+
+    @Override
+    public List<HoaDon> getAllByDateRange(Timestamp from, Timestamp to) {
+        return hoaDonRepository.findAllByNgayTaoBetween(from, to);
+    }
+
+    @Override
     public List<HoaDon> getByCustomerIdAndInvoiceCodeAndStatus(Long customerId, String invoiceCode, String status) {
         return hoaDonRepository.findByKhachHangIdAndMaHoaDonAndTrangThai(customerId, invoiceCode, status, Sort.by(Sort.Direction.DESC));
     }
@@ -34,7 +45,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     @Override
     public List<HoaDon> getByKhachHang(KhachHang khachHang) {
         Sort sort = Sort.by(Sort.Direction.DESC, "ngayTao");
-        return hoaDonRepository.findAllByKhachHang(khachHang,sort);
+        return hoaDonRepository.findAllByKhachHang(khachHang, sort);
     }
 
 
@@ -42,7 +53,6 @@ public class HoaDonServiceImpl implements HoaDonService {
     public List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon) {
         return hoaDonRepository.findByTrangThai(trangThaiHoaDon, Sort.by(Sort.Direction.DESC, "ngayTao"));
     }
-
 
 
     @Override

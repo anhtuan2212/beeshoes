@@ -408,39 +408,6 @@ public class HoaDonRestController {
         if (!request.getCustomer().equals("#")) {
             kh = khachHangService.detail(Long.parseLong(request.getCustomer()));
         }
-        if (typePayment.isChuyenKhoan()) {
-            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("Chuyển Khoản");
-            if (ht == null) {
-                ht = new HinhThucThanhToan();
-                ht.setHinhThuc("Chuyển Khoản");
-                ht.setTrangThai(true);
-                ht.setMoTa("Chuyển Khoản");
-                ht = hinhThucThanhToanService.save(ht);
-                httt.add(ht);
-            }
-        }
-        if (typePayment.isTienMat()) {
-            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("Tiền Mặt");
-            if (ht == null) {
-                ht = new HinhThucThanhToan();
-                ht.setHinhThuc("Tiền Mặt");
-                ht.setTrangThai(true);
-                ht.setMoTa("Tiền Mặt");
-                ht = hinhThucThanhToanService.save(ht);
-                httt.add(ht);
-            }
-        }
-        if (typePayment.isKhiNhanHang()) {
-            HinhThucThanhToan ht = hinhThucThanhToanService.getByTen("Khi Nhận Hàng");
-            if (ht == null) {
-                ht = new HinhThucThanhToan();
-                ht.setHinhThuc("Khi Nhận Hàng");
-                ht.setTrangThai(true);
-                ht.setMoTa("Thanh Toán Khi Nhận Hàng");
-                ht = hinhThucThanhToanService.save(ht);
-                httt.add(ht);
-            }
-        }
         HoaDon hd = new HoaDon();
         if (request.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(request.getVoucher());
@@ -484,7 +451,9 @@ public class HoaDonRestController {
             } else {
                 hd.setSoTienDaThanhToan(BigDecimal.valueOf(request.getTransfer() + request.getCash()));
                 int thieu = thucthu - request.getTransfer() + request.getCash();
-                hd.setSoTienCanThanhToan(BigDecimal.valueOf(thieu));
+                if (thieu > 0) {
+                    return ResponseEntity.notFound().header("status", "paymentError").build();
+                }
             }
             hd.setTrangThai(TrangThaiHoaDon.ThanhCong);
         } else {
@@ -518,6 +487,46 @@ public class HoaDonRestController {
         }
 
         hd = hoaDonService.save(hd);
+        int tienThua = request.getCash() + request.getTransfer() - hd.getThucThu().intValue();
+        if (typePayment.isChuyenKhoan()) {
+            HinhThucThanhToan ht = new HinhThucThanhToan();
+            ht.setHinhThuc("Chuyển Khoản");
+            ht.setHoaDon(hd);
+            ht.setTienThanhToan(BigDecimal.valueOf(request.getTransfer()));
+            ht.setTienThua(BigDecimal.valueOf(tienThua));
+            ht.setMaGiaoDich(request.getTransferCode());
+            ht.setNgayTao(Timestamp.from(Instant.now()));
+            ht.setTrangThai(true);
+            ht.setMoTa("Chuyển Khoản");
+            ht = hinhThucThanhToanService.save(ht);
+            httt.add(ht);
+        }
+        if (typePayment.isTienMat()) {
+            HinhThucThanhToan ht = new HinhThucThanhToan();
+            ht.setHinhThuc("Tiền Mặt");
+            ht.setTienThanhToan(BigDecimal.valueOf(request.getCash()));
+            ht.setTienThua(BigDecimal.valueOf(tienThua));
+            ht.setHoaDon(hd);
+            ht.setMaGiaoDich("CASH");
+            ht.setNgayTao(Timestamp.from(Instant.now()));
+            ht.setTrangThai(true);
+            ht.setMoTa("Tiền Mặt");
+            ht = hinhThucThanhToanService.save(ht);
+            httt.add(ht);
+        }
+        if (typePayment.isKhiNhanHang()) {
+            HinhThucThanhToan ht = new HinhThucThanhToan();
+            ht.setHinhThuc("Khi Nhận Hàng");
+            ht.setTrangThai(true);
+            ht.setTienThanhToan(BigDecimal.ZERO);
+            ht.setTienThua(BigDecimal.ZERO);
+            ht.setMaGiaoDich("COD");
+            ht.setNgayTao(Timestamp.from(Instant.now()));
+            ht.setHoaDon(hd);
+            ht.setMoTa("Thanh Toán Khi Nhận Hàng");
+            ht = hinhThucThanhToanService.save(ht);
+            httt.add(ht);
+        }
         if (hd.getVoucher() != null) {
             Voucher voucher = hd.getVoucher();
             voucher.setSoLuong(voucher.getSoLuong() - 1);

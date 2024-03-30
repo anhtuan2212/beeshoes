@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class HinhThucThanhToan {
     Long id;
     String maGiaoDich;
     String hinhThuc;
+    BigDecimal tienThanhToan;
+    BigDecimal tienThua;
     String moTa;
     Timestamp ngayTao;
     Timestamp ngaySua;
@@ -34,6 +37,7 @@ public class HinhThucThanhToan {
 
     boolean trangThai;
 
-    @ManyToMany(mappedBy = "hinhThucThanhToans")
-    private List<HoaDon> hoaDon;
+    @ManyToOne
+    @JoinColumn(name = "id_hoa_don")
+    private HoaDon hoaDon;
 }

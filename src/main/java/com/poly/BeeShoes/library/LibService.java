@@ -18,6 +18,11 @@ public class LibService {
         BigDecimal bd = new BigDecimal(str);
         return bd;
     }
+    public static int calculatePercentageChange(int yesterday, int today) {
+        double percentageChange = ((double)(today - yesterday) / yesterday) * 100;
+        percentageChange = Math.abs(percentageChange);
+        return (int) percentageChange;
+    }
     public static String chuanHoaTen(String ten) {
         return ten.toLowerCase().replaceAll("\\s+", "");
     }

@@ -356,6 +356,8 @@ CREATE TABLE hoa_don -- bỏ field deleted
     ten_nguoi_nhan varchar(256),
     ma_van_chuyen varchar(256),
     email_nguoi_nhan varchar(256),
+    so_tien_can_thanh_toan decimal(11, 2) default 0,
+    so_tien_da_thanh_toan decimal(11, 2),
     loai_hoa_don bit,
     id_nhan_vien bigint,
     id_khach_hang bigint,
@@ -370,12 +372,12 @@ CREATE TABLE hoa_don -- bỏ field deleted
     ngay_nhan timestamp,
     sdt_nhan varchar(10),
     dia_chi_nhan nvarchar(256),
-    id_thanh_toan bigint,
     ngay_tao timestamp,
     ngay_sua timestamp,
     nguoi_tao bigint,
     nguoi_sua bigint,
     trang_thai varchar(50),
+    hinh_thuc_thanh_toan nvarchar(256),
     primary key(id)
 )engine=INNODB;
 
@@ -408,7 +410,10 @@ CREATE TABLE hinh_thuc_thanh_toan
 (
     id bigint auto_increment,
     ma_giao_dich varchar(256),
-    hinh_thuc varchar(256), -- 2 hinh thuc thanh toan khi nhan hang + thanh toan online (vnpay or momo)
+    id_hoa_don bigint,
+    hinh_thuc varchar(256),
+    tien_thanh_toan decimal(11, 2),
+    tien_thua decimal(11, 2),
     mo_ta nvarchar(256),
     ngay_tao timestamp,
     ngay_sua timestamp,
@@ -418,20 +423,6 @@ CREATE TABLE hinh_thuc_thanh_toan
     primary key(id)
 )engine=INNODB;
 
--- Thanh Toán (id_hoa_don, id_hinh_thuc_thanh_toan, nguoi_tao, nguoi_sua) //done
-CREATE TABLE thanh_toan
-(
-    id bigint auto_increment,
-    id_hoa_don bigint,
-    id_hinh_thuc_thanh_toan bigint,
-    mo_ta nvarchar(256),
-    ngay_tao timestamp,
-    ngay_sua timestamp,
-    nguoi_tao bigint,
-    nguoi_sua bigint,
-    trang_thai bit default 1,
-    primary key(id)
-)engine=INNODB;
 
 -- Giỏ Hàng (id_khach_hang, nguoi_tao, nguoi_sua) //done
 CREATE TABLE gio_hang
@@ -562,7 +553,6 @@ ALTER TABLE hoa_don ADD FOREIGN KEY(id_nhan_vien) REFERENCES nhan_vien(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_voucher) REFERENCES voucher(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(id_don_vi_van_chuyen) REFERENCES don_vi_van_chuyen(id);
-ALTER TABLE hoa_don ADD FOREIGN KEY(id_thanh_toan) REFERENCES thanh_toan(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE hoa_don ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
 
@@ -577,12 +567,9 @@ ALTER TABLE lich_su_hoa_don ADD FOREIGN KEY(nguoi_thuc_hien) REFERENCES user(id)
 -- Hình Thức Thanh Toán (nguoi_tao, nguoi_sua)
 ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
-
+ALTER TABLE hinh_thuc_thanh_toan ADD FOREIGN KEY(id_hoa_don) REFERENCES hoa_don(id);
 -- Thanh Toán (id_hoa_don, id_hinh_thuc_thanh_toan, nguoi_tao, nguoi_sua)
-ALTER TABLE thanh_toan ADD FOREIGN KEY(id_hoa_don) REFERENCES hoa_don(id);
-ALTER TABLE thanh_toan ADD FOREIGN KEY(id_hinh_thuc_thanh_toan) REFERENCES hinh_thuc_thanh_toan(id);
-ALTER TABLE thanh_toan ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
-ALTER TABLE thanh_toan ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
+
 
 -- Giỏ Hàng (id_khach_hang, nguoi_tao, nguoi_sua)
 ALTER TABLE gio_hang ADD FOREIGN KEY(id_khach_hang) REFERENCES khach_hang(id);
@@ -598,6 +585,3 @@ ALTER TABLE tags_san_pham ADD FOREIGN KEY(id_tag) REFERENCES tags(id);
 -- Ảnh (id_san_pham, nguoi_tao, nguoi_sua)
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);
 ALTER TABLE tags ADD FOREIGN KEY(nguoi_sua) REFERENCES user(id);
-ALTER TABLE hoa_don add column so_tien_can_thanh_toan decimal(11, 2) default 0;
-ALTER TABLE hoa_don add column so_tien_da_thanh_toan decimal(11, 2);
-ALTER TABLE hoa_don add column hinh_thuc_thanh_toan nvarchar(256);
