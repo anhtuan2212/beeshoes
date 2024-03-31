@@ -351,6 +351,7 @@ $(document).ready(async function () {
                     let voucher = $('#list-voucher');
                     voucher.append(html);
                 }
+
                 let discountAmount;
                 if (SelectedVoucher !== null) {
                     $('#discount_element').removeClass('d-none');
@@ -368,6 +369,7 @@ $(document).ready(async function () {
                     discountAmount = 0;
                     $('#discount_element').addClass('d-none');
                 }
+
                 let maxDiscountAmount = -Infinity; // Giả sử giá trị lớn nhất ban đầu là âm vô cùng
                 let maxDiscountVoucher = null; // Biến để lưu trữ voucher có discountAmount lớn nhất
                 if (Array.isArray(arrVoucher)) {

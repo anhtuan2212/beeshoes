@@ -18,6 +18,6 @@ public class HistoryPaymentController {
     @GetMapping("/history-payment")
     public String index(Model model) {
         model.addAttribute("listData", hinhThucThanhToanService.getAll());
-        return "cms/report/historyPayment";
+        return "cms/pages/report/historyPayment";
     }
 }

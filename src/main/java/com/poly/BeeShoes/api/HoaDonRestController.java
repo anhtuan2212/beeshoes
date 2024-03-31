@@ -427,7 +427,7 @@ public class HoaDonRestController {
             }
             hd.setVoucher(voucher);
         }
-        int thucthu = total - giamGia + request.getShippingFee();
+
         if (request.getCustomer().equals("#")) {
             hd.setTenNguoiNhan("Khách Lẻ");
             hd.setKhachHang(null);
@@ -437,7 +437,14 @@ public class HoaDonRestController {
             hd.setSdtNhan(kh.getSdt());
         }
         hd.setLoaiHoaDon(true);
-        hd.setPhiShip(BigDecimal.valueOf(request.getShippingFee()));
+        int thucthu = 0;
+        if (total > 2000000) {
+            hd.setPhiShip(BigDecimal.ZERO);
+            thucthu = total - giamGia;
+        } else {
+            hd.setPhiShip(BigDecimal.valueOf(request.getShippingFee()));
+            thucthu = total - giamGia + request.getShippingFee();
+        }
         hd.setMaHoaDon(hoaDonService.generateInvoiceCode());
         hd.setTongTien(BigDecimal.valueOf(total));
         hd.setGiamGia(BigDecimal.valueOf(giamGia));
