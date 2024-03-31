@@ -4,12 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.poly.BeeShoes.library.LibService;
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.payment.vnpay.VNPayService;
 import com.poly.BeeShoes.service.*;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import com.poly.BeeShoes.utility.MailUtility;
+import com.poly.BeeShoes.utility.Utility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,6 @@ public class CheckOutRestController {
     @Autowired
     private HinhThucThanhToanService hinhThucThanhToanService;
 
-
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
             @RequestBody String paymentDto,
@@ -74,7 +74,10 @@ public class CheckOutRestController {
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String customerEmail = jsonObject.get("customerEmail").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
-        String orderCode = jsonObject.get("orderCode").getAsString();
+        String orderCode = Utility.randomString(8);
+        if(jsonObject.get("orderCode") != null) {
+            orderCode = jsonObject.get("orderCode").getAsString();
+        }
         HoaDon hoaDon = new HoaDon();
         if (request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
@@ -99,51 +102,26 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
-        hinhThucThanhToan.setHinhThuc("Online");
-        hinhThucThanhToan.setTrangThai(true);
-        hinhThucThanhToan.setMoTa("Online");
-        HinhThucThanhToan savedHinhThucThanhToan = hinhThucThanhToanService.save(hinhThucThanhToan);
-        List<HinhThucThanhToan> hinhThucThanhToanList = new ArrayList<>();
-        hinhThucThanhToanList.add(savedHinhThucThanhToan);
-        hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
         //sửa lại thanh toán
         List<HinhThucThanhToan> httt = new ArrayList<>();
-//        if ( nếu là thanh toán khi nhận hàng) {
-//            HinhThucThanhToan ht = new HinhThucThanhToan();
-//            ht.setHinhThuc("Khi Nhận Hàng");
-//            ht.setTrangThai(false);
-//            ht.setTienThanhToan();
-//            ht.setTienThua();
-//            ht.setMaGiaoDich("COD");
-//            ht.setNgayTao(Timestamp.from(Instant.now()));
-//            ht.setHoaDon(hd);
-//            ht.setMoTa("Thanh Toán Khi Nhận Hàng");
-//            ht = hinhThucThanhToanService.save(ht);
-//            httt.add(ht);
-//        }
-        //        if ( nếu là thanh toán vnpay) {
-//            HinhThucThanhToan ht = new HinhThucThanhToan();
-//            ht.setHinhThuc("VNPAY");
-//            ht.setTrangThai(false);
-//            ht.setTienThanhToan(BigDecimal.ZERO); số tiền đã thanh toán
-//            ht.setTienThua(BigDecimal.ZERO); mặc định VNPAY tiền thừa là 0
-//            ht.setMaGiaoDich("Mã Giao Dich nếu có k thì ghi VNPAY");
-//            ht.setNgayTao(Timestamp.from(Instant.now()));
-//            ht.setHoaDon(hd);
-//            ht.setMoTa("Thanh Toán online bằng VNPAY");
-//            ht = hinhThucThanhToanService.save(ht);
-//            httt.add(ht);
-//        }
+        HinhThucThanhToan ht = new HinhThucThanhToan();
+        ht.setHinhThuc("VNPAY");
+        ht.setTrangThai(false);
+        ht.setTienThanhToan(BigDecimal.valueOf(totalAmount));
+        ht.setTienThua(BigDecimal.ZERO);
+        ht.setMaGiaoDich("VNPAY");
+        ht.setNgayTao(Timestamp.from(Instant.now()));
+        ht.setHoaDon(savedHoaDon);
+        ht.setMoTa("Thanh Toán online bằng VNPAY");
+        ht = hinhThucThanhToanService.save(ht);
+        httt.add(ht);
+        savedHoaDon.setHinhThucThanhToans(httt);
+        HoaDon savedHoaDon2 = hoaDonService.save(savedHoaDon);
 
-        hoaDon.setHinhThucThanhToans(httt);
-
-
-        hoaDonService.save(savedHoaDon);
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
-        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
-        lichSuHoaDon.setHoaDon(savedHoaDon);
+        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan);
+        lichSuHoaDon.setHoaDon(savedHoaDon2);
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setHanhDong("Đặt đơn hàng");
         lichSuHoaDonService.save(lichSuHoaDon);
@@ -159,7 +137,7 @@ public class CheckOutRestController {
             hoaDonChiTiet.setChiTietSanPham(chiTietSanPham);
             hoaDonChiTiet.setGiaGoc(chiTietSanPham.getGiaBan());
             hoaDonChiTiet.setGiaBan(chiTietSanPham.getGiaBan());
-            hoaDonChiTiet.setHoaDon(savedHoaDon);
+            hoaDonChiTiet.setHoaDon(savedHoaDon2);
             hoaDonChiTiet.setSoLuong(quantity);
             hoaDonChiTietService.save(hoaDonChiTiet);
             chiTietSanPham.setSoLuongTon(chiTietSanPham.getSoLuongTon() - quantity);
@@ -200,7 +178,10 @@ public class CheckOutRestController {
         String customerPhone = jsonObject.get("customerPhone").getAsString();
         String customerEmail = jsonObject.get("customerEmail").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
-        String orderCode = jsonObject.get("orderCode").getAsString();
+        String orderCode = Utility.randomString(8);
+        if(jsonObject.get("orderCode") != null) {
+            orderCode = jsonObject.get("orderCode").getAsString();
+        }
         HoaDon hoaDon = new HoaDon();
         if (request.getUserPrincipal() != null) {
             User user = userService.getByUsername(request.getUserPrincipal().getName());
@@ -225,21 +206,30 @@ public class CheckOutRestController {
         Voucher voucher = voucherService.getByMa(voucherCode);
         hoaDon.setVoucher(voucher);
         hoaDon.setLoaiHoaDon(false);
-        HinhThucThanhToan hinhThucThanhToan = new HinhThucThanhToan();
-        hinhThucThanhToan.setHinhThuc("Khi Nhận Hàng");
-        hinhThucThanhToan.setTrangThai(true);
-        hinhThucThanhToan.setMoTa("Khi Nhận Hàng");
-        HinhThucThanhToan savedHinhThucThanhToan = hinhThucThanhToanService.save(hinhThucThanhToan);
-        List<HinhThucThanhToan> hinhThucThanhToanList = new ArrayList<>();
-        hinhThucThanhToanList.add(savedHinhThucThanhToan);
-        hoaDon.setHinhThucThanhToans(hinhThucThanhToanList);
         HoaDon savedHoaDon = hoaDonService.save(hoaDon);
+
+        List<HinhThucThanhToan> httt = new ArrayList<>();
+        HinhThucThanhToan ht = new HinhThucThanhToan();
+        ht.setHinhThuc("Khi Nhận Hàng");
+        ht.setTrangThai(false);
+        ht.setTienThanhToan(BigDecimal.valueOf(totalAmount));
+        ht.setTienThua(BigDecimal.ZERO);
+        ht.setMaGiaoDich("COD");
+        ht.setNgayTao(Timestamp.from(Instant.now()));
+        ht.setHoaDon(savedHoaDon);
+        ht.setMoTa("Thanh Toán Khi Nhận Hàng");
+        ht = hinhThucThanhToanService.save(ht);
+        httt.add(ht);
+        savedHoaDon.setHinhThucThanhToans(httt);
+        HoaDon savedHoaDon2 = hoaDonService.save(savedHoaDon);
+
         LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
-        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan.name());
-        lichSuHoaDon.setHoaDon(savedHoaDon);
+        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan);
+        lichSuHoaDon.setHoaDon(savedHoaDon2);
         lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         lichSuHoaDon.setHanhDong("Đặt đơn hàng");
         lichSuHoaDonService.save(lichSuHoaDon);
+
         if (voucher != null) {
             voucher.setSoLuong(voucher.getSoLuong() - 1);
             voucherService.save(voucher);
@@ -252,7 +242,7 @@ public class CheckOutRestController {
             hoaDonChiTiet.setChiTietSanPham(chiTietSanPham);
             hoaDonChiTiet.setGiaBan(chiTietSanPham.getGiaBan());
             hoaDonChiTiet.setGiaGoc(chiTietSanPham.getGiaBan());
-            hoaDonChiTiet.setHoaDon(savedHoaDon);
+            hoaDonChiTiet.setHoaDon(savedHoaDon2);
             hoaDonChiTiet.setSoLuong(quantity);
             hoaDonChiTietService.save(hoaDonChiTiet);
             chiTietSanPham.setSoLuongTon(chiTietSanPham.getSoLuongTon() - quantity);

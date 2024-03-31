@@ -1,20 +1,18 @@
 package com.poly.BeeShoes;
 
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.repository.HoaDonRepository;
 import com.poly.BeeShoes.repository.NhanVienRepository;
 import com.poly.BeeShoes.repository.UserRepository;
-import com.poly.BeeShoes.service.HangKhachHangService;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @SpringBootTest
 public class UTest {
@@ -30,14 +28,11 @@ public class UTest {
 
     @Test
     public void invoice() {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        java.sql.Date date= java.sql.Date.valueOf(yesterday);
-        List<HoaDon> hoaDonList =
-                hoaDonRepository.findByNgayTaoBetweenAndTrangThai(
-                        ConvertUtility.DateToTimestamp(new Date()),
-                        ConvertUtility.DateToTimestamp(new Date(date.getTime())),
-                        TrangThaiHoaDon.ChoXacNhan);
-        hoaDonList.forEach(hoaDon -> System.out.println(hoaDon.getMaHoaDon() + " "));
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.DAY_OF_YEAR, -1);
+//        Date date = calendar.getTime();
+//        List<int[]> invList = hoaDonRepository.cntInvoiceInHourByCreatedDate(date);
+//        invList.forEach(inv -> System.out.println(inv[0] + "-" + inv[1]));
     }
 
     @Test

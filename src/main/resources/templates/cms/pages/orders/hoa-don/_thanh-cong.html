@@ -263,14 +263,15 @@
                     </div>
                 </td>
                 <td>
-                    <span  th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                    <span  th:class="${hoaDon.trangThai == 'Thành Công' ? 'badge badge-soft-success' :
+                    (hoaDon.trangThai == 'Chờ Giao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
                            th:text="${hoaDon.trangThai}">
                     </span>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-outline-info" th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}">
-                        <i class="tio-visible-outlined"></i> Chi tiết</a>
+                    <a class="btn btn-sm btn-outline-info" data-toggle="tooltip"
+                       data-original-title="Xem Chi Tiết" th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}">
+                        <i class="tio-visible-outlined"></i></a>
                 </td>
             </tr>
             </tbody>

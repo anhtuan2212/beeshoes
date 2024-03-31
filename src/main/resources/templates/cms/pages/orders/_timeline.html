@@ -4,11 +4,11 @@
             <div style="display:inline-block;width:100%;overflow-x:auto;white-space:nowrap;">
                 <ul class="timeline timeline-horizontal" id="myTimeline" th:each="lshd : ${lichSuHoaDonList}">
                     <li class="timeline-item">
-                        <div th:class="'timeline-badge ' + ${lshd.trangThaiSauUpdate == 'Huy' ? 'danger' : 'success'}">
+                        <div th:class="'timeline-badge ' + ${lshd.trangThaiSauUpdate == 'Hủy' ? 'danger' : 'success'}">
                             <i class="tio-checkmark-square-outlined"></i></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <p><small class="text-muted" th:text="${lshd.hanhDong}"><i class="tio-timer"></i> 11 hours ago </small></p>
+                                <p><small class="text-muted" th:text="${lshd.hanhDong}"><i class="tio-timer"></i></small></p>
                                 <h4 class="timeline-title" th:text="${lshd.trangThaiSauUpdate}"></h4>
                             </div>
                         </div>

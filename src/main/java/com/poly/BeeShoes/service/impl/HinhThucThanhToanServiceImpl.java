@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.HinhThucThanhToan;
+import com.poly.BeeShoes.model.HoaDon;
 import com.poly.BeeShoes.repository.HinhThucThanhToanRepository;
 import com.poly.BeeShoes.service.HinhThucThanhToanService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,11 @@ import java.util.List;
 public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
 
     private final HinhThucThanhToanRepository hinhThucThanhToanRepository;
+
+    @Override
+    public List<HinhThucThanhToan> getByHinhThucThanhToan(String hinhThuc) {
+        return null;
+    }
 
     @Override
     public List<HinhThucThanhToan> getAll() {

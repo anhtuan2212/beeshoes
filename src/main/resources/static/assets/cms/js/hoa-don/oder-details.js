@@ -135,18 +135,19 @@ function hideLoader() {
 }
 
 // print
-function printTimeline(status, type) {
+function printTimeline(status, type, action) {
     let ul = $('#myTimeline');
     let li = document.createElement('li');
     li.className = 'timeline-item';
     let html = `<div class="timeline-badge ${type}"><i class="tio-checkmark-square-outlined"></i></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
+                            <p><small class="text-muted">${action}</small></p>
                                 <h4 class="timeline-title">${status}</h4>
                             </div>
                         </div>`;
     li.innerHTML = html;
-    ul.append(li);
+    ul.prepend(li);
 }
 
 function printHistory(thoiGian, nguoiThucHien, hanhDong) {
@@ -163,7 +164,7 @@ function printHistory(thoiGian, nguoiThucHien, hanhDong) {
                 </div>
             </div>`;
     li.innerHTML = html;
-    ul.append(li);
+    ul.prepend(li);
 }
 
 function printStatusHeader(typeOfColor, status) {
@@ -910,42 +911,43 @@ $(document).on('ready', function () {
                         ToastSuccess('Xác nhận đơn hàng thành công');
                         let type = 'success';
                         let status = response.trangThaiSauUpdate;
+                        let action = response.hanhDong;
                         let typeOfColor = 'success';
-                        if (status != 'ChoXacNhan' && status != 'Huy') {
+                        if (status != 'Chờ Xác Nhận' && status != 'Hủy') {
                             $('printOrder').removeClass('d-none');
                         } else {
                             $('printOrder').addClass('d-none');
                         }
-                        if (status == 'Huy') {
+                        if (status == 'Hủy') {
                             type = 'danger';
                             typeOfColor = 'danger';
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#printOrder').removeClass('d-none');
-                        } else if (status == 'ChoXacNhan') {
+                        } else if (status == 'Chờ Xác Nhận') {
                             typeOfColor = 'danger';
                             $('#hoanTacFromDetail').hide();
-                        } else if (status == 'ChuanBiHang') {
+                        } else if (status == 'Chuẩn Bị Hàng') {
                             typeOfColor = 'warning';
                             $('#getAttrToHuyFromDetail').removeClass('d-none');
                             $('#hoanTacFromDetail').removeClass('d-none');
                             $('#printOrder').removeClass('d-none');
-                        } else if (status == 'ChoGiao') {
+                        } else if (status == 'Chờ Giao') {
                             typeOfColor = 'danger';
                             $('#getAttrToHuyFromDetail').addClass('d-none');
                             $('#hoanTacFromDetail').hide();
                             $('.fixInvoice').hide();
-                        } else if (status == 'DangGiao') {
+                        } else if (status == 'Đang Giao') {
                             typeOfColor = 'danger';
                             $('#hoanTacFromDetail').hide();
-                        } else if (status == 'ThanhCong') {
+                        } else if (status == 'Thành Công') {
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#hoanTacFromDetail').hide();
                             $('#printOrder').removeClass('d-none');
                         }
                         printStatusHeader(typeOfColor, status);
-                        printTimeline(status, type);
+                        printTimeline(status, type, action);
                         printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
                         console.log(response);
                     },
@@ -983,10 +985,11 @@ $(document).on('ready', function () {
                         $('#getAttrToHuyFromDetail').removeClass('d-none');
                         let type = 'success';
                         let status = response.trangThaiSauUpdate;
+                        let action = response.hanhDong;
                         $('#hoanTacFromDetail').hide();
                         $('#printOrder').hide();
                         printStatusHeader(type, status);
-                        printTimeline(status, type);
+                        printTimeline(status, type, action);
                         printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
                         console.log(response);
                     },
@@ -1171,7 +1174,7 @@ $(document).on('click', '#huyFromDetail', function () {
             $('#xacNhanFromDetail').hide();
             $('#getAttrToHuyFromDetail').hide();
             printStatusHeader(type, status);
-            printTimeline(status, type);
+            printTimeline(status, type, hanhDong);
             printHistory(thoiGian, nguoiThucHien, hanhDong);
         },
         error: function (error) {

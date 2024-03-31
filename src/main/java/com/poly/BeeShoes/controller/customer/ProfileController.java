@@ -157,7 +157,7 @@ public class ProfileController {
         }
         invHistory.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
         invHistory.setHoaDon(updatedInv);
-        invHistory.setTrangThaiSauUpdate(updatedInv.getTrangThai().name());
+        invHistory.setTrangThaiSauUpdate(updatedInv.getTrangThai());
         invHistory.setHanhDong("Cập nhật thông tin đơn hàng");
         invHistory = lichSuHoaDonService.save(invHistory);
         Map<String, Object> res = new HashMap<>();

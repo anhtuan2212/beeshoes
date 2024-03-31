@@ -1,13 +1,14 @@
 package com.poly.BeeShoes.service;
 
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface HoaDonService {
+    List<int[]> cntInvoiceInHourByCreatedDate(String date);
 
     List<HoaDon> getAllHoaDon();
 
@@ -19,7 +20,7 @@ public interface HoaDonService {
 
     List<HoaDon> getByKhachHang(KhachHang khachHang);
 
-    List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon);
+    List<HoaDon> getAllHoaDonByTrangThai(String trangThaiHoaDon);
 
     HoaDon getHoaDonById(Long id);
 
@@ -29,9 +30,9 @@ public interface HoaDonService {
 
     HoaDon taoMoiHoaDonKhiBanTaiQuay(User user);
 
-    boolean capNhatTrangThaiHoaDon(User user, HoaDon hoaDon, TrangThaiHoaDon trangThaiHoaDon);
+    boolean capNhatTrangThaiHoaDon(User user, HoaDon hoaDon, String trangThaiHoaDon);
 
-    boolean capNhatTrangThaiTatCaHoaDon(User user, List<HoaDon> danhSachHoaDon, TrangThaiHoaDon trangThaiHoaDon);
+    boolean capNhatTrangThaiTatCaHoaDon(User user, List<HoaDon> danhSachHoaDon, String trangThaiHoaDon);
 
     HoaDon getHoaDonByMa(String ma);
 

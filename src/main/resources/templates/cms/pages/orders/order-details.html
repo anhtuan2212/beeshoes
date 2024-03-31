@@ -60,8 +60,8 @@
                         <h1 id="id-for-attribute" th:attr="id-for-call-api=${hoaDon.id}" class="page-header-title"
                             th:text="'Đơn Hàng #' + ${hoaDon.maHoaDon}"></h1>
                         <div class="trangThaiHeader ml-sm-3">
-                            <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                            <span th:class="${hoaDon.trangThai == 'Thành Công' ? 'badge badge-soft-success' :
+                    (hoaDon.trangThai == 'Chờ Giao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
                                   th:text="'Trạng thái: ' + ${hoaDon.trangThai}">
                   <span class="legend-indicator bg-success"></span>
                 </span>
@@ -96,22 +96,22 @@
 
         <div class="row mt-2 mb-2">
             <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start" id="myButton">
-                <button th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}"
+                <button th:if="${hoaDon.trangThai != 'Hủy' && hoaDon.trangThai != 'Thành Công'}"
                         class="btn btn-sm btn-outline-success mr-1" id="xacNhanFromDetail">
                     <i class="tio-checkmark-circle-outlined"></i> Xác Nhận
                 </button>
-                <button th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'ChuanBiHang'}"
+                <button th:if="${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng'}"
                         id="getAttrToHuyFromDetail" type="button" class="btn btn-sm btn-outline-danger mr-1"
                         data-toggle="modal" data-target="#staticBackdrop">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
-                <button class="btn btn-sm btn-outline-primary d-none"
+                <button th:class="'btn btn-sm btn-outline-primary ' + ${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng' ? 'd-none' : ''}"
                         id="hoanTacFromDetail">
                     <i class="tio-history"></i> Hoàn Tác
                 </button>
             </div>
             <div class="col-6 d-flex justify-content-end">
-                <button th:class="'btn btn-sm btn-outline-dark mr-1 ' + ${hoaDon.trangThai.toString() == 'ChoXacNhan' || hoaDon.trangThai.toString() == 'Huy' ? 'd-none' : ''}"
+                <button th:class="'btn btn-sm btn-outline-dark mr-1 ' + ${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Hủy' ? 'd-none' : ''}"
                         id="printOrder">
                     <i class="tio-print"></i> In hóa đơn
                 </button>
@@ -130,7 +130,7 @@
                         <h4 class="card-header-title">Chi tiết đơn hàng <span
                                 class="badge badge-soft-dark rounded-circle ml-1"
                                 th:text="${hoaDonChiTietList.size()}"></span></h4>
-                        <div th:if="${hoaDon.getTrangThai().name()=='ChoXacNhan'}">
+                        <div th:if="${hoaDon.getTrangThai() == 'Chờ Xác Nhận'}">
                             <button id="btn-add-product" data-toggle="modal" data-target="#select_product"
                                     class="btn btn-outline-primary d-none">Thêm Sản Phẩm
                             </button>
@@ -146,7 +146,7 @@
                              th:each="hdct, productInfo : ${hoaDonChiTietList}"
                              th:data-productId="${productInfo.index}" th:attr="data-id-hdct=${hdct.getId()}">
                             <div class="avatar avatar-xl mr-3">
-                                <img class="img-fluid" th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
+                            <img class="img-fluid" style="max-height: 78.75px; max-width: 78.75px" th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
                             </div>
                             <div class="media-body">
                                 <div class="row">
@@ -247,8 +247,8 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="historyTitle">Lịch Sử Đơn Hàng </h5>
                                 <div class="trangThaiHeader ml-sm-1">
-                                    <span th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                      (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                                    <span th:class="${hoaDon.trangThai == 'Thành Công' ? 'badge badge-soft-success' :
+                      (hoaDon.trangThai == 'Chờ Giao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
                                           th:text="'Trạng thái: ' + ${hoaDon.trangThai}"></span>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -291,7 +291,7 @@
                     <!-- Header -->
                     <div class="card-header">
                         <h4 class="card-header-title">Thông tin nhận hàng</h4>
-                        <button th:if="${hoaDon.trangThai.name() == 'ChoXacNhan' || hoaDon.trangThai.name() == 'ChuanBiHang'}"
+                        <button th:if="${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng'}"
                                 class="btn btn-outline-primary fixInvoice">Chỉnh sửa
                         </button>
                     </div>
@@ -362,7 +362,7 @@
                 <div th:if="${hoaDon.khachHang == null}" class="card">
                     <div class="card-header">
                         <h4>Thông tin người nhận</h4>
-                        <button th:if="${hoaDon.trangThai.name() == 'ChoXacNhan' || hoaDon.trangThai.name() == 'ChuanBiHang'}"
+                        <button th:if="${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng'}"
                                 class="btn btn-outline-primary justify-content-end fixInvoice">Chỉnh sửa
                         </button>
                     </div>
