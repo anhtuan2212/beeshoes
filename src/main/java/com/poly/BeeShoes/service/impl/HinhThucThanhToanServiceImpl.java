@@ -4,6 +4,7 @@ import com.poly.BeeShoes.model.HinhThucThanhToan;
 import com.poly.BeeShoes.repository.HinhThucThanhToanRepository;
 import com.poly.BeeShoes.service.HinhThucThanhToanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class HinhThucThanhToanServiceImpl implements HinhThucThanhToanService {
 
     @Override
     public List<HinhThucThanhToan> getAll() {
-        return hinhThucThanhToanRepository.findAll();
+        return hinhThucThanhToanRepository.findAll(Sort.by(Sort.Direction.DESC, "ngayTao"));
     }
 
     @Override
