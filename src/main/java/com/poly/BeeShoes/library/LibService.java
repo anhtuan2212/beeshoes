@@ -18,14 +18,26 @@ public class LibService {
         BigDecimal bd = new BigDecimal(str);
         return bd;
     }
+
     public static int calculatePercentageChange(int yesterday, int today) {
-        double percentageChange = ((double)(today - yesterday) / yesterday) * 100;
-        percentageChange = Math.abs(percentageChange);
+        double percentageChange;
+        if (yesterday > today) {
+            // Tính phần trăm giảm nếu hôm qua lớn hơn hôm nay
+            percentageChange = ((double) (yesterday - today) / yesterday) * 100;
+        } else if (today > yesterday) {
+            // Tính phần trăm tăng nếu hôm nay lớn hơn hôm qua
+            percentageChange = ((double) (today - yesterday) / yesterday) * 100;
+        } else {
+            // Trường hợp không có sự thay đổi
+            percentageChange = 0;
+        }
         return (int) percentageChange;
     }
+
     public static String chuanHoaTen(String ten) {
         return ten.toLowerCase().replaceAll("\\s+", "");
     }
+
     public static String convertNameTags(String input) {
         input = input.replaceAll("[^A-Za-z0-9]", "").toUpperCase();
         if (input.length() > 0 && input.charAt(0) != '#') {
@@ -33,10 +45,12 @@ public class LibService {
         }
         return input;
     }
+
     public static boolean isNumeric(String str) {
         // Sử dụng regex để kiểm tra xem chuỗi chỉ chứa số hay không
         return str.matches("\\d+");
     }
+
     public static boolean containsAlphabetic(String str) {
         for (char c : str.toCharArray()) {
             if (Character.isLetter(c)) {
@@ -45,6 +59,7 @@ public class LibService {
         }
         return false;
     }
+
     public static List<String> checkDataProduct(Long sanPham, Long theLoai, Long thuongHieu, Long chatLieu, Long deGiay, Long coGiay, Long muiGiay, String giaNhap, String giaGoc) {
         List<String> lst = new ArrayList<>();
         if (sanPham < 1) {
@@ -83,7 +98,7 @@ public class LibService {
     }
 
     public static List<String> checkDataProductDetail(List<String> lst, List<ProductDetailVersion> productdetail, String[] array) {
-        if (array==null){
+        if (array == null) {
             lst.add("Anh");
             return lst;
         }

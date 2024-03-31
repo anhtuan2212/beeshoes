@@ -54,19 +54,19 @@ public class DashboardController {
         for (HoaDon hd : lstToDay) {
             if (hd.isLoaiHoaDon()) {
                 quantity_store_oder_today++;
-                total_store_revenue_today = hd.getThucThu().intValue();
+                total_store_revenue_today += hd.getThucThu().intValue();
             } else {
                 quantity_online_oder_today++;
-                total_online_revenue_today = hd.getThucThu().intValue();
+                total_online_revenue_today += hd.getThucThu().intValue();
             }
         }
         for (HoaDon hd : lstYesterDay) {
             if (hd.isLoaiHoaDon()) {
                 quantity_store_oder_yesterday++;
-                total_store_revenue_yesterday = hd.getThucThu().intValue();
+                total_store_revenue_yesterday += hd.getThucThu().intValue();
             } else {
                 quantity_online_oder_yesterday++;
-                total_online_revenue_yesterday = hd.getThucThu().intValue();
+                total_online_revenue_yesterday += hd.getThucThu().intValue();
             }
         }
         for (HoaDon hd : lstHD) {
@@ -90,18 +90,23 @@ public class DashboardController {
         Map<String, Object> in_store_data = createDataMap(total_store, num_oder_store, calculatePercentageChange(quantity_store_oder_yesterday, quantity_store_oder_today), quantity_store_oder_today > quantity_store_oder_yesterday);
         Map<String, Object> discount_data = createDataMap(total_discount, num_oder_discount, 0, false);
 
+        int change_online = total_online_revenue_today - total_online_revenue_yesterday;
+        int change_store = total_store_revenue_today - total_store_revenue_yesterday;
+        Map<String, Object> today_detail_data = new HashMap<>();
+        today_detail_data.put("revenue_today_online", total_online_revenue_today);
+        today_detail_data.put("revenue_today_store", total_store_revenue_today);
+        today_detail_data.put("change_store", change_store);
+        today_detail_data.put("change_online", change_online);
+        today_detail_data.put("percent_online", calculatePercentageChange(total_online_revenue_yesterday, total_online_revenue_today));
+        today_detail_data.put("percent_store", calculatePercentageChange(total_store_revenue_yesterday, total_store_revenue_today));
+        today_detail_data.put("direction_store", total_store_revenue_today > total_store_revenue_yesterday);
+        today_detail_data.put("direction_online", total_online_revenue_today > total_online_revenue_yesterday);
+        today_detail_data.put("quantity_today_store", quantity_store_oder_today);
+        today_detail_data.put("quantity_yesterday_store", quantity_store_oder_yesterday);
+        today_detail_data.put("quantity_today_online", quantity_online_oder_today);
+        today_detail_data.put("quantity_yesterday_online", quantity_online_oder_yesterday);
 
-//        Map<String, Object> today_detail_data = new HashMap<>();
-//        today_detail_data.put("revenue_today_online", total_online_revenue_today);
-//        today_detail_data.put("revenue_today_store", total_store_revenue_today);
-//        today_detail_data.put("percent_online", total_store_revenue_today);
-//        today_detail_data.put("percent_store", total_store_revenue_today);
-//        today_detail_data.put("direction_store", total_store_revenue_today);
-//        today_detail_data.put("direction_online", total_store_revenue_today);
-//        today_detail_data.put("quantity_today_store", quantity_store_oder_today);
-//        today_detail_data.put("quantity_today_online", quantity_online_oder_today);
-//
-//        model.addAttribute("today_detail_data", today_detail_data);
+        model.addAttribute("today_detail_data", today_detail_data);
         model.addAttribute("online_data", online_data);
         model.addAttribute("discount_data", discount_data);
         model.addAttribute("total_all_data", total_all_data);

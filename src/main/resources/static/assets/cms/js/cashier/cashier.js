@@ -815,8 +815,8 @@ $(document).on('ready', function () {
             } else {
                 let nameSoNha = wrapper.find('input.soNha').val();
                 let nameXa = wrapper.find('select.phuongXa').find('option:selected').text();
-                let nameHuyen = wrapper.find('select.phuongXa').find('option:selected').text();
-                let nameTinh = wrapper.find('select.phuongXa').find('option:selected').text();
+                let nameHuyen = wrapper.find('select.quanHuyen').find('option:selected').text();
+                let nameTinh = wrapper.find('select.tinhTP').find('option:selected').text();
                 diaChiNhanHang = nameSoNha + ', ' + nameXa + ', ' + nameHuyen + ', ' + nameTinh;
             }
         }

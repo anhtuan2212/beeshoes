@@ -66,10 +66,12 @@
                             <div class="d-flex align-items-center">
                                 <span class="d-block font-size-sm" th:text="${in_store_data.numOder}+' đơn'"></span>
                                 <span class="badge badge-soft-success ml-2" th:if="${in_store_data.direction}">
-                                    <i class="tio-trending-up" ></i> <th:block th:text="${in_store_data.percent}+'%'"></th:block>
+                                    <i class="tio-trending-up"></i> <th:block
+                                        th:text="${in_store_data.percent}+'%'"></th:block>
                                 </span>
                                 <span class="badge badge-soft-danger ml-2" th:if="${in_store_data.direction==false}">
-                                    <i class="tio-trending-down"></i> <th:block th:text="${in_store_data.percent}+'%'"></th:block>
+                                    <i class="tio-trending-down"></i> <th:block
+                                        th:text="${in_store_data.percent}+'%'"></th:block>
                                 </span>
                             </div>
                         </div>
@@ -94,10 +96,12 @@
                             <div class="d-flex align-items-center">
                                 <span class="d-block font-size-sm" th:text="${online_data.numOder}+' đơn'"></span>
                                 <span class="badge badge-soft-success ml-2" th:if="${online_data.direction}">
-                                    <i class="tio-trending-up" ></i> <th:block th:text="${online_data.percent}+'%'"></th:block>
+                                    <i class="tio-trending-up"></i> <th:block
+                                        th:text="${online_data.percent}+'%'"></th:block>
                                 </span>
                                 <span class="badge badge-soft-danger ml-2" th:if="${online_data.direction==false}">
-                                    <i class="tio-trending-down"></i> <th:block th:text="${online_data.percent}+'%'"></th:block>
+                                    <i class="tio-trending-down"></i> <th:block
+                                        th:text="${online_data.percent}+'%'"></th:block>
                                 </span>
                             </div>
                         </div>
@@ -145,10 +149,12 @@
                             <div class="d-flex align-items-center">
                                 <span class="d-block font-size-sm" th:text="${total_all_data.numOder}+' đơn'"></span>
                                 <span class="badge badge-soft-success ml-2" th:if="${total_all_data.direction}">
-                                    <i class="tio-trending-up" ></i> <th:block th:text="${total_all_data.percent}+'%'"></th:block>
+                                    <i class="tio-trending-up"></i> <th:block
+                                        th:text="${total_all_data.percent}+'%'"></th:block>
                                 </span>
                                 <span class="badge badge-soft-danger ml-2" th:if="${total_all_data.direction==false}">
-                                    <i class="tio-trending-down"></i> <th:block th:text="${total_all_data.percent}+'%'"></th:block>
+                                    <i class="tio-trending-down"></i> <th:block
+                                        th:text="${total_all_data.percent}+'%'"></th:block>
                                 </span>
                             </div>
                         </div>
@@ -183,8 +189,8 @@
                           "dropdownAutoWidth": true,
                           "width": true
                         }'>
-                            <option value="">Bán Online</option>
-                            <option value="in-store">Tại Quầy</option>
+                            <option value="in-website">Bán Online</option>
+                            <option value="in-store" selected>Tại Quầy</option>
                         </select>
                         <!-- End Select -->
 
@@ -285,13 +291,20 @@
                     <div class="col-md-3 column-divider-md">
                         <div class="row">
                             <div class="col-sm-6 col-md-12">
-                                <!-- Stats -->
-                                <div class="d-flex justify-content-center flex-column" style="min-height: 10.5rem;">
+                                <div class="d-flex justify-content-center flex-column chart-store"
+                                     style="min-height: 10.5rem;">
                                     <h6 class="card-subtitle">Doanh Thu</h6>
-                                    <span class="d-block display-4 text-dark mb-1 mr-3">$97,458.20</span>
-                                    <span class="d-block text-success">
-                        <i class="tio-trending-up mr-1"></i> $2,401.02 (3.7%)
-                      </span>
+                                    <span class="d-block display-4 text-dark mb-1 mr-3"
+                                          th:text="${#numbers.formatDecimal(today_detail_data.revenue_today_store,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></span>
+                                    <span class="d-block text-success" th:if="${today_detail_data.direction_store}">
+                                        <i class="tio-trending-up mr-1"></i> <th:block
+                                            th:text="${#numbers.formatDecimal(today_detail_data.change_store,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ ('+${today_detail_data.percent_store}+'%)' "></th:block>
+                                    </span>
+                                    <span class="d-block text-danger"
+                                          th:if="${today_detail_data.direction_store==false}">
+                                        <i class="tio-trending-down mr-1"></i> <th:block
+                                            th:text="${#numbers.formatDecimal(today_detail_data.change_store,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ ('+${today_detail_data.percent_store}+'%)' "></th:block>
+                                    </span>
                                 </div>
                                 <!-- End Stats -->
 
@@ -308,10 +321,12 @@
                                 <!-- Stats -->
                                 <div class="d-flex justify-content-center flex-column" style="min-height: 10.5rem;">
                                     <h6 class="card-subtitle">Đặt Hàng</h6>
-                                    <span class="d-block display-4 text-dark mb-1 mr-3">67,893</span>
+                                    <span class="d-block display-4 text-dark mb-1 mr-3"
+                                          th:text="${today_detail_data.quantity_today_store}"></span>
                                     <span class="d-block text-danger">
-                        <i class="tio-trending-down mr-1"></i> +3,301 (1.2%)
-                      </span>
+                                        <i class="tio-trending-down mr-1"></i> +3,301 (1.2%)
+                                    </span>
+<!--                             git add -->
                                 </div>
                                 <!-- End Stats -->
                             </div>
