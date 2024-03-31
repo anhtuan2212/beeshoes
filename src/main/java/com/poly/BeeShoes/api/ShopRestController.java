@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -28,6 +29,7 @@ public class ShopRestController {
     private final VoucherService voucherService;
     private final HoaDonService hoaDonService;
     private final UserService userService;
+    private final KhachHangService khachHangService;
 
 
     public Authentication getUserAuth() {
@@ -43,13 +45,13 @@ public class ShopRestController {
         ChiTietSanPham ctsp = chiTietSanPhamService.getById(request.getProduct());
         System.out.println(ctsp.getMaSanPham());
         System.out.println(ctsp.getKichCo().getTen());
-        if (request.getQuantity()<1){
+        if (request.getQuantity() < 1) {
             return ResponseEntity.badRequest().header("status", "MinQuantity").build();
         }
         if (ctsp == null) {
             return ResponseEntity.notFound().header("status", "ProductDetailNull").build();
         }
-        if (ctsp.getSoLuongTon()<1){
+        if (ctsp.getSoLuongTon() < 1) {
             return ResponseEntity.badRequest().header("status", "0Quantity").build();
         }
         Authentication auth = getUserAuth();
@@ -77,7 +79,7 @@ public class ShopRestController {
                     ghct.setSoLuong(ghct.getSoLuong() + request.getQuantity());
                 }
             }
-            if (ghct.getSoLuong()> ctsp.getSoLuongTon()){
+            if (ghct.getSoLuong() > ctsp.getSoLuongTon()) {
                 return ResponseEntity.badRequest().header("status", "MaxQuantity").build();
             }
             ghct = gioHangChiTietService.save(ghct);
@@ -124,7 +126,26 @@ public class ShopRestController {
         }
         List<Voucher> lst = voucherService.getAllByTrangThai(2);
         lstHD.forEach((hoaDon -> {
-            lst.removeIf(v -> v.equals(hoaDon.getVoucher()) && v.getSoLuong()<1);
+            lst.removeIf(v -> v.equals(hoaDon.getVoucher()) && v.getSoLuong() < 1);
+        }));
+        for (Voucher vc : lst) {
+            vc.setNguoiSua(null);
+            vc.setNguoiTao(null);
+            vc.setEndDate1(vc.getNgayKetThuc().toLocalDateTime());
+        }
+        return ResponseEntity.ok().body(lst);
+    }
+
+    @GetMapping("/get-all-voucher-by-customer")
+    public ResponseEntity<List<Voucher>> getAllVoucher(@RequestParam("customer") Long id) {
+        KhachHang khachHang = khachHangService.detail(id);
+        List<HoaDon> lstHD = new ArrayList<>();
+        if (khachHang != null){
+            lstHD = hoaDonService.getByKhachHang(khachHang);
+        }
+        List<Voucher> lst = voucherService.getAllByTrangThai(2);
+        lstHD.forEach((hoaDon -> {
+            lst.removeIf(v -> v.equals(hoaDon.getVoucher()) && v.getSoLuong() < 1);
         }));
         for (Voucher vc : lst) {
             vc.setNguoiSua(null);
@@ -194,30 +215,31 @@ public class ShopRestController {
             if (!cal.equalsIgnoreCase("plus") && ghct.getSoLuong() > 1) {
                 ghct.setSoLuong(ghct.getSoLuong() - 1);
             }
-            if (ghct.getSoLuong()<1){
-                return ResponseEntity.notFound().header("status","minNum").build();
+            if (ghct.getSoLuong() < 1) {
+                return ResponseEntity.notFound().header("status", "minNum").build();
             }
-            if (ghct.getSoLuong()>ghct.getChiTietSanPham().getSoLuongTon()||ghct.getChiTietSanPham().getSoLuongTon()<1){
-                return ResponseEntity.notFound().header("status","MaxNum").build();
+            if (ghct.getSoLuong() > ghct.getChiTietSanPham().getSoLuongTon() || ghct.getChiTietSanPham().getSoLuongTon() < 1) {
+                return ResponseEntity.notFound().header("status", "MaxNum").build();
             }
             gioHangChiTietService.save(ghct);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
+
     @PostMapping("/set-shopping-cart-quantity")
     public ResponseEntity setQuantity(@RequestParam("id") Long id, @RequestParam("num") Integer num) {
         GioHangChiTiet ghct = gioHangChiTietService.getById(id);
         if (ghct != null) {
-                ghct.setSoLuong(num);
-            if (ghct.getSoLuong()<1){
-                return ResponseEntity.notFound().header("status","minNum").build();
+            ghct.setSoLuong(num);
+            if (ghct.getSoLuong() < 1) {
+                return ResponseEntity.notFound().header("status", "minNum").build();
             }
-            if (ghct.getSoLuong()>ghct.getChiTietSanPham().getSoLuongTon() || ghct.getChiTietSanPham().getSoLuongTon()<1){
-                return ResponseEntity.notFound().header("status","MaxNum").build();
+            if (ghct.getSoLuong() > ghct.getChiTietSanPham().getSoLuongTon() || ghct.getChiTietSanPham().getSoLuongTon() < 1) {
+                return ResponseEntity.notFound().header("status", "MaxNum").build();
             }
             gioHangChiTietService.save(ghct);
-            Map<String,Integer> map = new HashMap<>();
+            Map<String, Integer> map = new HashMap<>();
             map.put("num", ghct.getSoLuong());
             return ResponseEntity.ok().body(map);
         }

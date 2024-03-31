@@ -4,8 +4,7 @@ function PrintBillOder(data) {
     elementToPrint.find('#id_hoa_don_print').text(data.maHoaDon);
     let html = '';
     data.sanPham.forEach((item, index) => {
-        html +=
-            `
+        html += `
              <tr>
                     <td>${index + 1}</td>
                     <th>${item.ten}</th>
@@ -22,8 +21,7 @@ function PrintBillOder(data) {
     $('#thuc_thu_print').text(addCommasToNumber(data.thucthu) + 'đ');
     if (data.type === 'CP') {
         let adress = extracAddress(data.diaChi)
-        let html =
-            `${adress.soNha}<br>
+        let html = `${adress.soNha}<br>
             ${adress.phuongXa}, ${adress.quanHuyen}<br>
             ${adress.tinhTP}`;
         $('#customer_address_print').html(html);
@@ -53,11 +51,7 @@ function initSelect2(element) {
 }
 
 let shippingFees = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0
+    1: 0, 2: 0, 3: 0, 4: 0, 5: 0
 };
 
 function getVariableShipping(oder) {
@@ -74,25 +68,59 @@ function setVariableShipping(oder, value) {
     shippingFees[Number(oder)] = value;
 }
 
+let SelectedVoucher = {
+    1: null, 2: null, 3: null, 4: null, 5: null
+};
+
+function getVoucher(oder) {
+    if (oder.length === 0) {
+        return null;
+    }
+    return SelectedVoucher[Number(oder)];
+}
+
+function setVoucher(oder, value) {
+    if (oder.length === 0) {
+        return;
+    }
+    SelectedVoucher[Number(oder)] = value;
+}
+
 let canRunDetection = true;
+let ListVoucher = [];
 let dataShop = [];
 let dataProductDetails = [];
 let num_oder_add = null;
 window.onload = function () {
     // ToastSuccess('Tải hoàn tất !')
     $.ajax({
-        url: '/api/get-all-san-pham',
-        type: 'GET',
-        success: function (data) {
+        url: '/api/get-all-san-pham', type: 'GET', success: function (data) {
             dataShop = [...data];
             dataProductDetails = data.flatMap(obj => obj.chiTietSanPham);
             console.log(dataShop)
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
+        }, error: function (jqXHR, textStatus, errorThrown) {
             console.error("Lỗi khi gọi API: " + textStatus, errorThrown);
         }
     })
 };
+
+function getAllVoucher(id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/get-all-voucher-by-customer',
+            type: 'GET',
+            data: {
+                customer: id
+            },
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (xhr) {
+                reject(xhr);
+            }
+        });
+    });
+}
 
 async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
     setVariableShipping(oder, null)
@@ -119,22 +147,19 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
             payment_type_id: 2,
             cod_amount: 200000,
             required_note: "CHOXEMHANGKHONGTHU",
-            items: [
-                {
-                    name: "Áo Polo",
-                    code: "Polo123",
-                    quantity: 1,
-                    price: 200000,
-                    length: 12,
-                    width: 12,
-                    height: 12,
-                    weight: 1200,
-                    category:
-                        {
-                            level1: "Áo"
-                        }
+            items: [{
+                name: "Áo Polo",
+                code: "Polo123",
+                quantity: 1,
+                price: 200000,
+                length: 12,
+                width: 12,
+                height: 12,
+                weight: 1200,
+                category: {
+                    level1: "Áo"
                 }
-            ],
+            }],
             weight: 2000,
             length: 1,
             width: 19,
@@ -310,7 +335,23 @@ function resetData() {
     localStorage.setItem('List_product_oder_3', JSON.stringify([]))
     localStorage.setItem('List_product_oder_4', JSON.stringify([]))
     localStorage.setItem('List_product_oder_5', JSON.stringify([]))
+    getAllVoucher(0).then((res) => {
+        ListVoucher = res;
+        console.log(res)
+    })
+}
 
+function formatNumberMoney(input) {
+    let number = parseInt(input);
+    if (number >= 1000 && number < 1000000) {
+        let rounded = Math.ceil(number / 1000);
+        return rounded >= 1000 ? (Math.floor(rounded / 1000) + "M") : (rounded + "K");
+    } else if (number >= 1000000) {
+        let rounded = Math.floor(number / 100000) / 10;
+        return rounded + "M";
+    } else {
+        return number;
+    }
 }
 
 function saveToLocalStorage(listPro, oder) {
@@ -319,6 +360,24 @@ function saveToLocalStorage(listPro, oder) {
 
 function getListProductLocal(oder) {
     return JSON.parse(localStorage.getItem(`List_product_oder_${oder}`));
+}
+
+function formatDate(dateTimeString) {
+    let dateTime = new Date(dateTimeString);
+
+    // Lấy các thành phần của ngày và giờ
+    let day = dateTime.getDate();
+    let month = dateTime.getMonth() + 1;
+    let year = dateTime.getFullYear();
+    let hours = dateTime.getHours();
+    let minutes = dateTime.getMinutes();
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    let formattedDateTime = hours + 'H' + minutes + ' Ngày ' + day + '/' + month + '/' + year;
+
+    return formattedDateTime;
 }
 
 function updateTotalMoney(oder) {
@@ -337,13 +396,107 @@ function updateTotalMoney(oder) {
             ship = 0;
         }
     }
-    let payment = total + ship;
+    let select = getVoucher(oder);
+    if (select !== null) {
+        if (total < Number(select.giaTriToiThieu)) {
+            setVoucher(oder, null);
+        }
+    }
+    let arrVoucher = [];
+    let arr = [...ListVoucher]
+    if (arr !== null && Array.isArray(arr)) {
+        let html = '';
+        arr.forEach((voucher) => {
+            let ele = $(`#voucher_${voucher.id}_${oder}`)
+            if (total > Number(voucher.giaTriToiThieu)) {
+                arrVoucher.push(voucher);
+                if (ele.length === 0) {
+                    let showPr = '';
+                    if (voucher.loaiVoucher === '$') {
+                        showPr = `<h2 class="text-value-discount">${formatNumberMoney(voucher.giaTriToiDa)}</h2>`;
+                    } else {
+                        showPr = `<h2 class="text-value-discount">${voucher.giaTriPhanTram}%</h2>`
+                    }
+                    html += `<li class="item-voucher scaleIn">
+                                  <div id="voucher_${voucher.id}_${oder}" data-id="${voucher.id}" class="wrapper_voucher row m-0">
+                                      <div class="col-9 contents p-2">
+                                          <h5 class="text-center voucher_code">${voucher.ma}</h5>
+                                          <label class="express_date">Hạn Đến: ${formatDate(voucher.endDate1)}</label>
+                                          <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(voucher.giaTriToiThieu) + 'đ'}</label>
+                                          <label class="express_date">Tối Đa:${addCommasToNumber(voucher.giaTriToiDa) + 'đ'}/Khách Hàng</label>
+                                          <label class="express_date w-100">Số Lượng : ${voucher.soLuong}</label>
+                                      </div>
+                                      <div class="col-3 p-2 row m-0 card__discount position-relative">
+                                          <label class="text-discount">Mã Giảm Giá</label>
+                                          ${showPr}
+                                      </div>
+                                  </div>
+                              </li>`;
+                }
+            } else {
+                if (ele.length !== 0) {
+                    ele.parent().removeClass('scaleIn').addClass('scaleOut');
+                    ele.parent().on('animationend', function () {
+                        ele.parent().remove();
+                    });
+                }
+            }
+        })
+        let voucher = $(`#list_show_voucher_hd_${oder}`);
+        voucher.append(html);
+    }
+
+    let discountAmount;
+    let selectedVoucher = getVoucher(oder);
+    if (selectedVoucher !== null) {
+        if (selectedVoucher.loaiVoucher === '%') {
+            if (Number(selectedVoucher.giaTriToiDa) < Number(totalMoney) * (Number(selectedVoucher.giaTriPhanTram) / 100)) {
+                discountAmount = Number(selectedVoucher.giaTriToiDa);
+            } else {
+                discountAmount = Number(totalMoney) * (Number(selectedVoucher.giaTriPhanTram) / 100);
+            }
+        } else {
+            discountAmount = selectedVoucher.giaTriTienMat;
+        }
+    } else {
+        discountAmount = 0;
+    }
+
+    let maxDiscountAmount = -Infinity;
+    let maxDiscountVoucher = null;
+    if (Array.isArray(arrVoucher)) {
+        arrVoucher.forEach((voucher) => {
+            let discountAmount;
+            if (voucher.loaiVoucher === '%') {
+                if (Number(voucher.giaTriToiDa) < Number(total) * (Number(voucher.giaTriPhanTram) / 100)) {
+                    discountAmount = Number(voucher.giaTriToiDa);
+                } else {
+                    discountAmount = Number(total) * (Number(voucher.giaTriPhanTram) / 100);
+                }
+            } else {
+                discountAmount = voucher.giaTriTienMat;
+            }
+            if (discountAmount > maxDiscountAmount) {
+                maxDiscountAmount = discountAmount;
+                maxDiscountVoucher = voucher;
+            }
+        });
+    }
+    if (maxDiscountVoucher !== null) {
+        let ele_voucher = $(`#voucher_${maxDiscountVoucher.id}_${oder}`).closest('li');
+        $(`#best_voucher_voucher_hd_${oder}`).html(ele_voucher);
+        ele_voucher.on('animationend', function () {
+            $(this).removeClass('scaleIn');
+        })
+    }
+    let payment = total + ship - discountAmount;
     if (ship === 0) {
         wrapper.find('h4.shipping-money').text('Miễn Phí')
     } else {
         wrapper.find('h4.shipping-money').text(addCommasToNumber(ship) + 'đ')
     }
     wrapper.find('h4.total-money').text(addCommasToNumber(total) + 'đ')
+    wrapper.find('h4.discount-money').text(addCommasToNumber(discountAmount) + 'đ')
     wrapper.find('h3.payment-money').text(addCommasToNumber(payment) + 'đ')
 }
 
@@ -439,8 +592,7 @@ function Toast(status, message) {
         }
     });
     Toast.fire({
-        icon: status,
-        title: message
+        icon: status, title: message
     });
 }
 
@@ -514,8 +666,7 @@ function updateQuantityProduct(id, oder, operator, element) {
             if (check) {
                 deleteById(id, oder);
                 if (tbody.find('tr').length === 1) {
-                    let html =
-                        `<tr class="tr-show-no-data">
+                    let html = `<tr class="tr-show-no-data">
                     <td class="table-column-pr-0" rowspan="4">
                         <h5 class="text-center">Chưa có dữ liệu.</h5>
                     </td>
@@ -743,8 +894,7 @@ $(document).on('ready', function () {
             if (check) {
                 deleteById(id, oder);
                 if (tbody.find('tr').length === 1) {
-                    let html =
-                        `<tr class="tr-show-no-data">
+                    let html = `<tr class="tr-show-no-data">
                     <td class="table-column-pr-0" rowspan="4">
                         <h5 class="text-center">Chưa có dữ liệu.</h5>
                     </td>
@@ -755,6 +905,8 @@ $(document).on('ready', function () {
             }
         })
     })
+
+
     $(document).on('change', '.option-select-receipt', function () {
         let oder = getOderNum(this);
         let val = $(this).val();
@@ -794,8 +946,7 @@ $(document).on('ready', function () {
         let arrPro = [];
         listProduct.forEach((item) => {
             let oj = {
-                id: item.id,
-                quantity: item.quantity,
+                id: item.id, quantity: item.quantity,
             }
             arrPro.push(oj);
         })
@@ -821,19 +972,18 @@ $(document).on('ready', function () {
             }
         }
         let typePayment = {
-            tienMat: hasTM,
-            chuyenKhoan: hasCK,
-            khiNhanHang: NH
+            tienMat: hasTM, chuyenKhoan: hasCK, khiNhanHang: NH
         }
-
+        let shippingFe = getVariableShipping(oder);
         let cash = $('#pay-cash-money').val().replace(/[.,]/g, '');
+        let total = $('#total-money').val().replace(/[.,]/g, '');
         let transfer = $('#pay-chuyen-khoan-money').val().replace(/[.,]/g, '');
         let transferCode = $('#pay-card-money').val();
-
+        if (Number(total) > 2000000 || typeNH === 'TQ') {
+            shippingFe = 0;
+        }
         $.ajax({
-            url: '/api/hoa-don/payment-cashier',
-            type: 'POST',
-            data: {
+            url: '/api/hoa-don/payment-cashier', type: 'POST', data: {
                 product: JSON.stringify(arrPro),
                 customer: khachHang,
                 receivingType: typeNH,
@@ -843,16 +993,14 @@ $(document).on('ready', function () {
                 transfer: transfer,
                 transferCode: transferCode,
                 voucher: '',
-                shippingFee: getVariableShipping(oder),
-            },
-            success: function (data) {
+                shippingFee: shippingFe,
+            }, success: function (data) {
                 console.log(data)
                 PrintBillOder(data);
                 resetBill(oder)
                 ToastSuccess('Thành công.');
                 $('#form-modal-payment').modal('hide');
-            },
-            error: function (error) {
+            }, error: function (error) {
                 console.log(error)
                 switch (error.getResponseHeader("status")) {
                     case 'error':
@@ -871,10 +1019,7 @@ $(document).on('ready', function () {
 
     function getOptionAddress(id, oder) {
         $.ajax({
-            url: '/api/get-address-by-customer',
-            type: 'GET',
-            data: {id: id},
-            success: function (data) {
+            url: '/api/get-address-by-customer', type: 'GET', data: {id: id}, success: function (data) {
                 if (Array.isArray(data)) {
                     let html = '';
                     data.forEach((ad) => {
@@ -903,8 +1048,7 @@ $(document).on('ready', function () {
                         `;
                     $(`#oder_content_${oder}`).find('.wrapper-address-user').html(html);
                 }
-            },
-            error: function (xhr) {
+            }, error: function (xhr) {
                 console.log(xhr)
             }
         })
@@ -922,8 +1066,7 @@ $(document).on('ready', function () {
                     province += `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
                 })
             }
-            let html =
-                `<div class="form-group col-6 mb-3">
+            let html = `<div class="form-group col-6 mb-3">
                         <label for="soNha_${oder}" class="mb-0">Số Nhà:</label>
                         <input class="form-control soNha" id="soNha_${oder}" type="text">
                     </div>
@@ -1047,31 +1190,22 @@ $(document).on('ready', function () {
     modalBarcode.on('shown.bs.modal', function () {
         let video = document.getElementById("video_show_camera");
         let beepSound = document.getElementById("sound_beep");
-        Quagga.init(
-            {
-                inputStream: {
-                    name: "Live",
-                    type: "LiveStream",
-                    target: document.querySelector("#show_video_live"),
-                    constraints: {
-                        width: 640,
-                        height: 480,
-                        facingMode: "environment",
-                    },
+        Quagga.init({
+            inputStream: {
+                name: "Live", type: "LiveStream", target: document.querySelector("#show_video_live"), constraints: {
+                    width: 640, height: 480, facingMode: "environment",
                 },
-                decoder: {
-                    readers: ["code_128_reader"],
-                },
+            }, decoder: {
+                readers: ["code_128_reader"],
             },
-            function (err) {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                console.log("Initialization finished. Ready to start");
-                Quagga.start();
+        }, function (err) {
+            if (err) {
+                console.log(err);
+                return;
             }
-        );
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
         Quagga.onDetected(function (result) {
             if (canRunDetection) {
                 addProductByBarcode(result.codeResult.code)
@@ -1162,8 +1296,7 @@ $(document).on('ready', function () {
                 }
             }
         }
-        let navTtem =
-            ` <li class="nav-item position-relative">
+        let navTtem = ` <li class="nav-item position-relative">
                 <a class="nav-link nav-show-oder" id="nav-link-tab-${numId}" data-toggle="pill" href="#nav-content-tab-${numId}" role="tab"
                    aria-controls="nav-content-tab-${numId}" aria-selected="false">Hóa Đơn ${numId}</a>
                 <i class="tio-clear btn-delete-oder"></i>
@@ -1189,8 +1322,7 @@ $(document).on('ready', function () {
             }
             // console.log(ele)
         })
-        let navContent =
-            `<div class="tab-pane fade" id="nav-content-tab-${numId}" role="tabpanel" aria-labelledby="nav-link-tab-${numId}">
+        let navContent = `<div class="tab-pane fade" id="nav-content-tab-${numId}" role="tabpanel" aria-labelledby="nav-link-tab-${numId}">
              <div id="oder_content_${numId}" class="row oder-wraper-content" data-id-num-hd="${numId}">
               ${div.html()}
               </div>
@@ -1282,8 +1414,7 @@ $(document).on('ready', function () {
                 $('.js-quantity-counter').each(function () {
                     var quantityCounter = new HSQuantityCounter($(this)).init();
                 });
-            },
-            deletedField: function () {
+            }, deletedField: function () {
                 $('.tooltip').hide();
             }
         }).init();
