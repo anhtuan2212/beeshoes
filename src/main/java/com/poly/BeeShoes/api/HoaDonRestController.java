@@ -413,16 +413,18 @@ public class HoaDonRestController {
             Voucher voucher = voucherService.getByMa(request.getVoucher());
             if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
                 if (voucher.getLoaiVoucher().equals("$")) {
-                    if (voucher.getGiaTriTienMat().intValue() >= total) {
+                    if (voucher.getGiaTriTienMat().intValue() > total) {
                         giamGia = total;
+                    } else {
+                        giamGia = voucher.getGiaTriTienMat().intValue();
                     }
-                    giamGia = voucher.getGiaTriTienMat().intValue();
                 } else {
                     giamGia = total / 100 * voucher.getGiaTriPhanTram();
-                    if (giamGia >= voucher.getGiaTriToiDa().intValue()) {
+                    if (giamGia > voucher.getGiaTriToiDa().intValue()) {
                         giamGia = voucher.getGiaTriToiDa().intValue();
                     }
                 }
+                voucherService.save(voucher);
             }
             hd.setVoucher(voucher);
         }

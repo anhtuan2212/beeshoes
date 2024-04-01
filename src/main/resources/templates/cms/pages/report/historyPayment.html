@@ -209,15 +209,15 @@
                         </td>
                         <td class="table-column-pl-0">
                             <a class="media align-items-center"
-                               th:href="'/cms/hoa-don/'+${tt.getHoaDon().getMaHoaDon()}+'/chi-tiet'">
+                               th:href="'/cms/hoa-don/'+${tt.getHoaDon()==null?'':tt.getHoaDon().getMaHoaDon()}+'/chi-tiet'">
                                 <div class="media-body">
-                                    <h5 class="text-hover-primary mb-0" th:text="${tt.getHoaDon().getMaHoaDon()}"></h5>
+                                    <h5 class="text-hover-primary mb-0" th:text="${tt.getHoaDon()==null?'':tt.getHoaDon().getMaHoaDon()}"></h5>
                                 </div>
                             </a>
                         </td>
                         <td class="">
                             <div class="media-body">
-                                <h5 class="text-hover-primary mb-0" th:text="${tt.getHoaDon().getTenNguoiNhan()}"></h5>
+                                <h5 class="text-hover-primary mb-0" th:text="${tt.getHoaDon()==null?'': tt.getHoaDon().getTenNguoiNhan()}"></h5>
                             </div>
                         </td>
                         <td class="" th:text="${tt.getMaGiaoDich()}">
