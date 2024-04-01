@@ -798,35 +798,49 @@ $(document).ready(function () {
         }
         console.log(paymentDto);
 
-        if (typeOfPayment == 'whenReceive') {
-            $.ajax({
-                type: "POST",
-                url: "/check-out/placeOrder-whenReceive",
-                contentType: "application/json",
-                data: JSON.stringify(paymentDto),
-                success: function (response) {
-                    console.log(response);
-                    window.location.href = response;
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error);
+        $.ajax({
+            type: "POST",
+            url: "/check-out/checkQty-of-prod",
+            contentType: "application/json",
+            data: JSON.stringify(productDetailList),
+            success: function (response) {
+                if(response == 'ok') {
+                    if (typeOfPayment == 'whenReceive') {
+                        $.ajax({
+                            type: "POST",
+                            url: "/check-out/placeOrder-whenReceive",
+                            contentType: "application/json",
+                            data: JSON.stringify(paymentDto),
+                            success: function (response) {
+                                console.log(response);
+                                window.location.href = response;
+                            },
+                            error: function (error) {
+                                console.error('Xảy ra lỗi: ', error);
+                            }
+                        })
+                    }
+                    if (typeOfPayment == 'online') {
+                        $.ajax({
+                            type: "POST",
+                            url: "/check-out/placeOrder-online",
+                            contentType: "application/json",
+                            data: JSON.stringify(paymentDto),
+                            success: function (response) {
+                                console.log(response);
+                                window.location.href = response;
+                            },
+                            error: function (error) {
+                                console.error('Xảy ra lỗi: ', error);
+                            }
+                        })
+                    }
                 }
-            })
-        }
-        if (typeOfPayment == 'online') {
-            $.ajax({
-                type: "POST",
-                url: "/check-out/placeOrder-online",
-                contentType: "application/json",
-                data: JSON.stringify(paymentDto),
-                success: function (response) {
-                    console.log(response);
-                    window.location.href = response;
-                },
-                error: function (error) {
-                    console.error('Xảy ra lỗi: ', error);
-                }
-            })
-        }
+            },
+            error: function (error) {
+                console.error('Xảy ra lỗi: ', error);
+                ToastError(error);
+            }
+        })
     })
 })
