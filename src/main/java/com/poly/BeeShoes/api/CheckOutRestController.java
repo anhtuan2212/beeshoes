@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
 @RequestMapping("/check-out")
@@ -51,6 +52,27 @@ public class CheckOutRestController {
     @Autowired
     private HinhThucThanhToanService hinhThucThanhToanService;
 
+    @PostMapping("/checkQty-of-prod")
+    public ResponseEntity<String> checkQty(
+            @RequestBody String listProdDetail
+    ) {
+        JsonArray jsonArray = JsonParser.parseString(listProdDetail).getAsJsonArray();
+        AtomicBoolean check = new AtomicBoolean(true);
+        jsonArray.forEach(item -> {
+            JsonObject jsonObject = item.getAsJsonObject();
+            Long idProdDetail = jsonObject.get("productDetailId").getAsLong();
+            int qty = jsonObject.get("quantity").getAsInt();
+            ChiTietSanPham prodDetail = chiTietSanPhamService.getById(idProdDetail);
+            if(qty > prodDetail.getSoLuongTon()) {
+                check.set(false);
+            }
+        });
+        if(check.get()) {
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @PostMapping("/placeOrder-online")
     public ResponseEntity<String> createOrderOnline(
             @RequestBody String paymentDto,
@@ -59,7 +81,10 @@ public class CheckOutRestController {
         JsonObject jsonObject = JsonParser.parseString(paymentDto).getAsJsonObject();
         String notes = jsonObject.get("notes").getAsString();
         int total = jsonObject.get("total").getAsInt();
-        int shippingFee = jsonObject.get("shippingFee").getAsInt();
+        int shippingFee = 0;
+        if(jsonObject.get("shippingFee") != null) {
+            shippingFee = jsonObject.get("shippingFee").getAsInt();
+        }
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
         String voucherCode = null;
         BigDecimal voucherValue = new BigDecimal(0);
@@ -163,7 +188,10 @@ public class CheckOutRestController {
         JsonObject jsonObject = JsonParser.parseString(paymentDto).getAsJsonObject();
         String notes = jsonObject.get("notes").getAsString();
         int total = jsonObject.get("total").getAsInt();
-        int shippingFee = jsonObject.get("shippingFee").getAsInt();
+        int shippingFee = 0;
+        if(jsonObject.get("shippingFee") != null) {
+            shippingFee = jsonObject.get("shippingFee").getAsInt();
+        }
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
         String voucherCode = null;
         BigDecimal voucherValue = new BigDecimal(0);
