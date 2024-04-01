@@ -78,7 +78,7 @@ $(document).ready(async function () {
         $('#btn-add-code-voucher').on('click', function () {
             let data = ListVoucher;
             let products = getCheckoutDataLocalStorage();
-            if (products === null) {
+            if (products.length === 0) {
                 ToastError('Vui lòng chọn sản phẩm.')
                 return;
             }
@@ -643,6 +643,7 @@ $(document).ready(async function () {
                 });
             });
         }
+
         $(document).on('change', '.input_quantity_product', function () {
             let ele = $(this);
             let num = parseInt(ele.val().replace(/\D/g, ''));
@@ -658,7 +659,7 @@ $(document).ready(async function () {
                 .then((data) => {
                     curentInput = ele.val();
                     updateTotalMoney();
-                }).catch(()=>{
+                }).catch(() => {
             });
 
         })

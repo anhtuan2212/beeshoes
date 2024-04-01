@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -126,8 +124,9 @@ public class ShopRestController {
         }
         List<Voucher> lst = voucherService.getAllByTrangThai(2);
         lstHD.forEach((hoaDon -> {
-            lst.removeIf(v -> v.equals(hoaDon.getVoucher()) && v.getSoLuong() < 1);
+            lst.removeIf(v -> v.equals(hoaDon.getVoucher()));
         }));
+        lst.removeIf(v -> v.getSoLuong() < 1);
         for (Voucher vc : lst) {
             vc.setNguoiSua(null);
             vc.setNguoiTao(null);
@@ -139,19 +138,28 @@ public class ShopRestController {
     @GetMapping("/get-all-voucher-by-customer")
     public ResponseEntity<List<Voucher>> getAllVoucher(@RequestParam("customer") Long id) {
         KhachHang khachHang = khachHangService.detail(id);
-        List<HoaDon> lstHD = new ArrayList<>();
-        if (khachHang != null){
-            lstHD = hoaDonService.getByKhachHang(khachHang);
-        }
         List<Voucher> lst = voucherService.getAllByTrangThai(2);
-        lstHD.forEach((hoaDon -> {
-            lst.removeIf(v -> v.equals(hoaDon.getVoucher()) && v.getSoLuong() < 1);
-        }));
-        for (Voucher vc : lst) {
+        List<HoaDon> lstHD;
+        lst = lst.stream().distinct().collect(Collectors.toList());
+        if (khachHang != null) {
+            lstHD = hoaDonService.getByKhachHang(khachHang);
+            System.out.println(lstHD.size());
+            lst.removeIf(voucher -> {
+                for (HoaDon hoaDon : lstHD) {
+                    if (hoaDon.getVoucher() != null && voucher.getMa().equals(hoaDon.getVoucher().getMa())) {
+                        System.out.println(voucher.getMa());
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        lst.removeIf(v -> v.getSoLuong() < 1);
+        lst.forEach(vc -> {
             vc.setNguoiSua(null);
             vc.setNguoiTao(null);
             vc.setEndDate1(vc.getNgayKetThuc().toLocalDateTime());
-        }
+        });
         return ResponseEntity.ok().body(lst);
     }
 
