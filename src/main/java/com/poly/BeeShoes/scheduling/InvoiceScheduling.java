@@ -1,7 +1,7 @@
 package com.poly.BeeShoes.scheduling;
 
 import com.poly.BeeShoes.model.HoaDon;
-import com.poly.BeeShoes.model.TrangThaiHoaDon;
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.repository.HoaDonRepository;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.poly.BeeShoes.service.impl;
 
 import com.poly.BeeShoes.model.HoaDon;
 import com.poly.BeeShoes.model.KhachHang;
-import com.poly.BeeShoes.model.TrangThaiHoaDon;
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.User;
 import com.poly.BeeShoes.repository.HoaDonRepository;
 import com.poly.BeeShoes.service.HoaDonService;
@@ -14,13 +14,17 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class HoaDonServiceImpl implements HoaDonService {
 
     private final HoaDonRepository hoaDonRepository;
+
+    @Override
+    public List<int[]> cntInvoiceInHourByCreatedDate(String date) {
+        return hoaDonRepository.cntInvoiceInHourByCreatedDate(date);
+    }
 
     @Override
     public List<HoaDon> getAllHoaDon() {
@@ -50,7 +54,7 @@ public class HoaDonServiceImpl implements HoaDonService {
 
 
     @Override
-    public List<HoaDon> getAllHoaDonByTrangThai(TrangThaiHoaDon trangThaiHoaDon) {
+    public List<HoaDon> getAllHoaDonByTrangThai(String trangThaiHoaDon) {
         return hoaDonRepository.findByTrangThai(trangThaiHoaDon, Sort.by(Sort.Direction.DESC, "ngayTao"));
     }
 
@@ -80,7 +84,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public boolean capNhatTrangThaiHoaDon(User user, HoaDon hoaDon, TrangThaiHoaDon trangThaiHoaDon) {
+    public boolean capNhatTrangThaiHoaDon(User user, HoaDon hoaDon, String trangThaiHoaDon) {
         try {
             hoaDon.setTrangThai(trangThaiHoaDon);
             hoaDon.setNgaySua(ConvertUtility.DateToTimestamp(new Date()));
@@ -93,7 +97,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public boolean capNhatTrangThaiTatCaHoaDon(User user, List<HoaDon> danhSachHoaDon, TrangThaiHoaDon trangThaiHoaDon) {
+    public boolean capNhatTrangThaiTatCaHoaDon(User user, List<HoaDon> danhSachHoaDon, String trangThaiHoaDon) {
         try {
             danhSachHoaDon.forEach(hoaDon -> {
                 hoaDon.setTrangThai(trangThaiHoaDon);

@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.model;
 
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -77,8 +78,7 @@ public class HoaDon {
     @JoinColumn(name = "nguoi_sua")
     User nguoiSua;
 
-    @Enumerated(EnumType.STRING)
-    TrangThaiHoaDon trangThai;
+    String trangThai;
 
     @OneToOne
     @JoinColumn(name = "hinh_thuc_thanh_toan")

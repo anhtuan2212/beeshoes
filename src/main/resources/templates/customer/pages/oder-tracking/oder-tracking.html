@@ -144,30 +144,30 @@
                             <div class="col-3"><strong>Đơn Vị:</strong> <br>Giao Hàng Nhanh</div>
                             <div class="col-3"><strong>Trạng Thái:</strong> <br>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='Huy'}">Đã Hủy
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Hủy'}">Đã Hủy
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChuanBiHang'}">Chuẩn Bị
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Chuẩn Bị Hàng'}">Chuẩn Bị
                                     Hàng
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoXacNhan'}">Chờ
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Chờ Xác Nhận'}">Chờ
                                     Xác Nhận
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ChoGiao'}">Chờ
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Chờ Giao'}">Chờ
                                     Giao
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='DangGiao'}">Đang
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Đang Giao'}">Đang
                                     Giao
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='HoanTra'}">Hoàn
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Hoàn Trả'}">Hoàn
                                     Trả
                                 </p>
                                 <p class="show_trang_thai"
-                                   th:if="${hoadon != null and hoadon.getTrangThai().name()=='ThanhCong'}">Thành
+                                   th:if="${hoadon != null and hoadon.getTrangThai()=='Thành Công'}">Thành
                                     Công
                                 </p>
                             </div>
@@ -191,7 +191,7 @@
                                 <br>
                                 <label id="invAddress" class="invAddress" th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
                                 <th:block
-                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai().name()=='ChoXacNhan'}">
+                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai()=='Chờ Xác Nhận'}">
                                     <button data-toggle="modal" data-target="#updateInformationModal"
                                             class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
                                 </th:block>
@@ -389,10 +389,10 @@
                         </div>
                         <th:block th:if="${user != null}">
                             <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
-                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
+                                <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận'}"
                                    th:attr="data-id=${hoadon.getId()}"
                                    id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
-                                <a th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
+                                <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận'}"
                                    th:attr="data-id=${hoadon.getId()}"
                                    class="info-btn btn-cancel-oders">Hủy Đơn</a>
                             </div>

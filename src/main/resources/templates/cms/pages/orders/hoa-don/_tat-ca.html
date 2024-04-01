@@ -44,10 +44,10 @@
                                     "searchInputPlaceholder": "Tìm Trạng Thái"
                                     }'>
                         <option value="all" selected>Trạng Thái</option>
-                        <option value="ChoXacNhan">Chờ Xác Nhận</option>
-                        <option value="ChoGiao">Chờ Giao</option>
-                        <option value="DangGiao">Đang Giao</option>
-                        <option value="ThanhCong">Thành Công</option>
+                        <option value="Chờ Xác Nhận">Chờ Xác Nhận</option>
+                        <option value="Chờ Giao">Chờ Giao</option>
+                        <option value="Đang Giao">Đang Giao</option>
+                        <option value="Thành Công">Thành Công</option>
                     </select>
                 </div>
                 <!-- End Unfold -->
@@ -279,8 +279,8 @@
                     </div>
                 </td>
                 <td>
-                    <span  th:class="${hoaDon.trangThai.toString() == 'ThanhCong' ? 'badge badge-soft-success' :
-                    (hoaDon.trangThai.toString() == 'ChoGiao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
+                    <span  th:class="${hoaDon.trangThai == 'Thành Công' ? 'badge badge-soft-success' :
+                    (hoaDon.trangThai == 'Chờ Giao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}"
                            th:text="${hoaDon.trangThai}">
                     </span>
                 </td>
@@ -290,16 +290,19 @@
                             <span class="caret"></span></button>
                         <ul class="text-center dropdown-menu">
                             <li>
-                                <a class="btn btn-sm btn-outline-dark" th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}">
-                                    <i class="tio-visible-outlined"></i> Chi tiết</a>
+                                <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+                                   data-original-title="Xem Chi Tiết" th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}">
+                                    <i class="tio-visible-outlined"></i></a>
                             </li>
-                            <li th:if="${hoaDon.trangThai.toString() != 'Huy' && hoaDon.trangThai.toString() != 'ThanhCong'}">
-                                <button class="btn btn-sm btn-outline-success xacNhanFromAction">
-                                    <i class="tio-checkmark-circle-outlined"></i> Xác Nhận</button>
+                            <li th:if="${hoaDon.trangThai != 'Hủy' && hoaDon.trangThai != 'Thành Công'}">
+                                <a data-toggle="tooltip"
+                                   data-original-title="Xác Nhận Đơn" class="btn btn-sm btn-outline-success xacNhanFromAction">
+                                    <i class="tio-checkmark-circle-outlined"></i> Xác Nhận</a>
                             </li>
-                            <li th:if="${hoaDon.trangThai.toString() == 'ChoXacNhan'}">
-                                <button class="btn btn-sm btn-outline-danger huyFromAction">
-                                    <i class="tio-delete-outlined"></i> Hủy</button>
+                            <li th:if="${hoaDon.trangThai == 'Chờ Xác Nhận'}">
+                                <a data-toggle="tooltip"
+                                   data-original-title="Hủy Đơn" class="btn btn-sm btn-outline-danger huyFromAction">
+                                    <i class="tio-delete-outlined"></i> Hủy</a>
                             </li>
                         </ul>
                     </div>
