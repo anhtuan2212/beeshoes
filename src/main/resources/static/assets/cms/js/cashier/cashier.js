@@ -410,7 +410,7 @@ function updateTotalMoney(oder) {
             let ele = $(`#list_show_voucher_hd_${oder}`).find(`#voucher_${voucher.id}_${oder}`)
             if (Number(total) >= Number(voucher.giaTriToiThieu)) {
                 arrVoucher.push(voucher);
-                if (ele.length === 0 ) {
+                if (ele.length === 0) {
                     let showPr = '';
                     if (voucher.loaiVoucher === '$') {
                         showPr = `<h2 class="text-value-discount">${formatNumberMoney(voucher.giaTriToiDa)}</h2>`;
@@ -695,7 +695,12 @@ function updateQuantityProduct(id, oder, operator, element) {
         if (operator === 'minus') {
             data[index].quantity = Number(data[index].quantity) - 1;
         } else {
-            data[index].quantity = Number(data[index].quantity) + 1;
+            if (Number(data[index].quantity) + 1 > data[index].soLuongTon) {
+                ToastError('Số lượng lớn hơn số lượng tồn.');
+                return;
+            } else {
+                data[index].quantity = Number(data[index].quantity) + 1;
+            }
         }
         saveToLocalStorage(data, oder);
         updateTotalMoney(oder);
@@ -1100,6 +1105,7 @@ $(document).on('ready', function () {
                     default:
                         ToastError('Lỗi.')
                 }
+                ToastError(error.responseText)
             }
         })
         console.log(khachHang, typeNH, diaChiNhanHang);
