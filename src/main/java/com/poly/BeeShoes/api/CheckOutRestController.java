@@ -70,7 +70,7 @@ public class CheckOutRestController {
         if(check.get()) {
             return new ResponseEntity<>("ok", HttpStatus.OK);
         }
-        return new ResponseEntity<>("error", HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.notFound().header("status","MaxNum").build();
     }
 
     @PostMapping("/placeOrder-online")

@@ -7,9 +7,10 @@
 * Copyright 2024 anhtuanlc (https://anhtuanlc.online)
 * Licensed under MIT (https://anhtuanlc.online)
 * Coded by anhtuanlc
-
+select2 select2-container select2-container--default select2-container--above
 =========================================================
  */
+
 .btn-add-new-bill {
     cursor: pointer;
     font-size: 16px;
@@ -67,8 +68,22 @@
     background-color: #f3f3f3;
 }
 
-.custom-select {
-    border: none !important;
+/*.custom-select {*/
+/*    border: none !important;*/
+/*}*/
+.btn-add-customer {
+    width: 38px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: solid 1px #e5e5e5;
+    margin-top: -1px;
+    margin-left: 3px;
+}
+.btn-add-customer:hover {
+    background-color: #cccccc;
 }
 
 .btn-delete-oder {
@@ -163,6 +178,7 @@
     animation-name: scaleOut;
     margin-bottom: 0 !important;
 }
+
 .list-voucher {
     padding: 0;
     margin-bottom: 0;

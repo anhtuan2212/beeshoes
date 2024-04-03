@@ -433,10 +433,29 @@ public class HoaDonRestController {
         if (request.getCustomer().equals("#")) {
             hd.setTenNguoiNhan("Khách Lẻ");
             hd.setKhachHang(null);
+            if (request.getReceivingType().equals("CP")) {
+                hd.setTenNguoiNhan(request.getHoten());
+                hd.setEmailNguoiNhan(request.getEmail());
+                hd.setSdtNhan(request.getSdt());
+                hd.setKhachHang(null);
+            }
         } else {
-            hd.setTenNguoiNhan(kh.getHoTen());
+            if (!request.getHoten().isBlank()) {
+                hd.setTenNguoiNhan(request.getHoten());
+            } else {
+                hd.setTenNguoiNhan(kh.getHoTen());
+            }
+            if (!request.getSdt().isBlank()) {
+                hd.setSdtNhan(request.getSdt());
+            } else {
+                hd.setSdtNhan(kh.getSdt());
+            }
+            if (!request.getEmail().isBlank()) {
+                hd.setEmailNguoiNhan(request.getEmail());
+            } else {
+                hd.setEmailNguoiNhan(kh.getUser().getEmail());
+            }
             hd.setKhachHang(kh);
-            hd.setSdtNhan(kh.getSdt());
         }
         hd.setLoaiHoaDon(true);
         int thucthu = 0;
@@ -467,6 +486,7 @@ public class HoaDonRestController {
             }
             hd.setTrangThai(TrangThaiHoaDon.ThanhCong);
         } else {
+            hd.setMaVanChuyen(request.getShippingCode());
             hd.setDiaChiNhan(request.getAddress());
             if (typePayment.isKhiNhanHang()) {
                 hd.setSoTienCanThanhToan(BigDecimal.valueOf(thucthu));
@@ -495,7 +515,6 @@ public class HoaDonRestController {
                 hd.setNhanVien(null);
             }
         }
-
         hd = hoaDonService.save(hd);
         int tienThua = request.getCash() + request.getTransfer() - hd.getThucThu().intValue();
         if (typePayment.isChuyenKhoan()) {

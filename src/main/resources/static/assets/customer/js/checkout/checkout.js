@@ -80,7 +80,7 @@ function callApiShippingFee() {
     })
     console.log(ward + ',' + district + ',' + province);
 
-    if(totalAmount > 2000000) {
+    if (totalAmount > 2000000) {
         $('#shippingFee').text('Miễn phí');
         shippingFee = 0;
     } else {
@@ -351,7 +351,7 @@ $(document).on('click', '#btn-addAddress', function () {
                                     </div>
                                 </div>`);
             var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
-            if(totalAmount > 2000000) {
+            if (totalAmount > 2000000) {
                 $('#shippingFee').text('Miễn phí');
                 shippingFee = 0;
             } else {
@@ -551,7 +551,7 @@ $(document).ready(function () {
         wardName = phuongXa.find("option:selected").text();
         var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
         var shippingFee = document.getElementById("totalAmount").textContent.replace(/[.,]/g, '');
-        if(totalAmount > 2000000) {
+        if (totalAmount > 2000000) {
             $('#shippingFee').text('Miễn phí');
         } else {
             $.ajax({
@@ -644,7 +644,7 @@ $(document).ready(function () {
         })
         console.log(ward + ',' + province + ',' + district);
 
-        if(totalAmount > 2000000) {
+        if (totalAmount > 2000000) {
             $('#shippingFee').text('Miễn phí');
             shippingFee = 0;
         } else {
@@ -804,7 +804,7 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify(productDetailList),
             success: function (response) {
-                if(response == 'ok') {
+                if (response == 'ok') {
                     if (typeOfPayment == 'whenReceive') {
                         $.ajax({
                             type: "POST",
@@ -839,7 +839,11 @@ $(document).ready(function () {
             },
             error: function (error) {
                 console.error('Xảy ra lỗi: ', error);
-                ToastError(error);
+                if (error.getResponseHeader('status') === 'MaxNum') {
+                    ToastError('Số lượng sản phẩm vượt quá số lượng tồn.');
+                } else {
+                    ToastError('Lỗi.')
+                }
             }
         })
     })
