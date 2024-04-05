@@ -33,6 +33,31 @@ function PrintBillOder(data) {
 
 }
 
+window.addEventListener('beforeunload', function (event) {
+    let yourConditionIsTrue = true;
+    // Kiểm tra điều kiện
+    if (yourConditionIsTrue) {
+        let confirmationMessage = 'Bạn có chắc chắn muốn rời trang này?';
+        (event || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
+    }
+});
+
+function showLoader() {
+    Swal.fire({
+        title: 'Đang lấy phí giao hàng...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
+
+function hideLoader() {
+    Swal.close();
+}
+
 function extracAddress(str) {
     let parts = str.toString().split(',');
     parts.reverse();
@@ -86,6 +111,7 @@ function setVoucher(oder, value) {
     SelectedVoucher[Number(oder)] = value;
 }
 
+let shippingCode = '';
 let canRunDetection = true;
 let ListVoucher = [];
 let dataShop = [];
@@ -123,7 +149,32 @@ function getAllVoucher(id) {
 }
 
 async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
+    if (isNaN(parseInt(phuongXaSelected))) {
+        ToastError('Phường xã không hợp lệ.')
+        return;
+    }
+    if (isNaN(parseInt(quanHuyenSelected))) {
+        ToastError('Quận huyện không hợp lệ.')
+        return;
+    }
+    showLoader();
     setVariableShipping(oder, null)
+    let listProduct = getListProductLocal(oder);
+    console.log(oder)
+    let quantity = 0;
+    let total = 0;
+    listProduct.forEach((item) => {
+        quantity += item.quantity
+        total += Number(item.quantity) * Number(item.giaBan)
+    })
+    if (quantity === 0) {
+        quantity = 1;
+    }
+    if (total > 2000000) {
+        let res = 0;
+        res.data.total_fee = 0
+        return res.data.total_fee;
+    }
     let wrapper = $(`#oder_content_${oder}`);
     try {
         if (phuongXaSelected === undefined && quanHuyenSelected === undefined) {
@@ -160,7 +211,7 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
                     level1: "Áo"
                 }
             }],
-            weight: 2000,
+            weight: 600 * quantity,
             length: 1,
             width: 19,
             height: 10
@@ -175,10 +226,17 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
             data: JSON.stringify(data)
         });
         wrapper.find('.show-text-error').text('');
+        shippingCode = response.data.order_code;
+        hideLoader();
         return response;
     } catch (error) {
+        hideLoader();
         console.error('Xảy ra lỗi: ', error);
-        ToastError(error.responseJSON.code_message_value);
+        if (error.responseJSON.code_message_value === null || error.responseJSON.code_message_value === undefined) {
+            ToastError(error.responseJSON.message);
+        } else {
+            ToastError(error.responseJSON.code_message_value);
+        }
         wrapper.find('.show-text-error').text('Không hỗ trợ giao');
         return null;
     }
@@ -231,7 +289,7 @@ function PrintHtmlOder(product, numOder) {
                         <div class="js-quantity-counter input-group-quantity-counter">
                             <input type="number"
                                    class="js-result form-quantity form-control input-group-quantity-counter-control"
-                                   value="${product.quantity}" readonly>
+                                   value="${product.quantity}">
                             <div class="input-group-quantity-counter-toggle">
                                 <a class="js-minus input-group-quantity-counter-btn"
                                    href="javascript:;">
@@ -326,7 +384,50 @@ function saveProductToOder(product, numOder, quantity) {
         PrintHtmlOder(pro, numOder)
     }
     saveToLocalStorage(data, numOder)
+    resetShipping(numOder);
     updateTotalMoney(numOder)
+
+}
+
+function resetShipping(oder) {
+    let wrapper = $(`#oder_content_${oder}`);
+    let typeNH = $(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
+    if (typeNH === 'CP') {
+        let option = $(`.option-select-address[name="address_khac_${oder}"]:checked`);
+        if (option.val() === undefined || option.val() === null) {
+            return;
+        }
+        let quan = '';
+        let xa = '';
+        if (option.val() === '#') {
+            quan = $(`#quanHuyen_${oder}`).val();
+            xa = $(`#phuongXa_${oder}`).val();
+        } else {
+            let label = wrapper.find(`label[for="${option.attr('id')}"]`);
+            let nameXa = label.find('span.phuongXa').text()
+            let nameHyen = label.find('span.quanHuyen').text()
+            let nameTinh = label.find('span.tinhTP').text()
+            let tinh = arrProvince.find(tinh => tinh.ProvinceName == nameTinh);
+            if (tinh) {
+                let huyen = arrDistrict.find(huyen => huyen.ProvinceID == tinh.ProvinceID && huyen.DistrictName == nameHyen);
+                if (huyen) {
+                    quan = huyen.DistrictID;
+                    let phuong = arrWard.find(xa => xa.DistrictID == huyen.DistrictID && xa.Name == nameXa);
+                    if (phuong) {
+                        xa = phuong.Code;
+                    }
+                }
+            }
+        }
+        getShippingFee(oder, xa, quan).then((res) => {
+            if (res !== null) {
+                setVariableShipping(oder, res.data.total_fee);
+                updateTotalMoney(oder)
+            } else {
+                setVariableShipping(oder, null);
+            }
+        });
+    }
 }
 
 function resetData() {
@@ -410,7 +511,7 @@ function updateTotalMoney(oder) {
             let ele = $(`#list_show_voucher_hd_${oder}`).find(`#voucher_${voucher.id}_${oder}`)
             if (Number(total) >= Number(voucher.giaTriToiThieu)) {
                 arrVoucher.push(voucher);
-                if (ele.length === 0 ) {
+                if (ele.length === 0) {
                     let showPr = '';
                     if (voucher.loaiVoucher === '$') {
                         showPr = `<h2 class="text-value-discount">${formatNumberMoney(voucher.giaTriToiDa)}</h2>`;
@@ -445,7 +546,6 @@ function updateTotalMoney(oder) {
         let voucher = $(`#list_show_voucher_hd_${oder}`);
         voucher.prepend(html);
     }
-    console.log(arrVoucher);
     let discountAmount;
     let selectedVoucher = getVoucher(oder);
     if (selectedVoucher !== null) {
@@ -548,6 +648,18 @@ fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
         arrProvince = data;
+        let tinh = $('#tinhTP');
+        let quanHuyen = $('#quanHuyen');
+        let phuongXa = $('#phuongXa');
+        tinh.append(`<option value="#">Chọn Tỉnh/TP</option>`);
+        arrProvince.forEach((item) => {
+            tinh.append(`<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`)
+        })
+        quanHuyen.append(`<option value="#">Chọn Quận/Huyện</option>`);
+        phuongXa.append(`<option value="#">Chọn Phường/Xã</option>`);
+        initSelect2(tinh);
+        initSelect2(quanHuyen);
+        initSelect2(phuongXa);
     })
     .then(() => {
         return fetch('/assets/address-json/district.json')
@@ -695,12 +807,18 @@ function updateQuantityProduct(id, oder, operator, element) {
         if (operator === 'minus') {
             data[index].quantity = Number(data[index].quantity) - 1;
         } else {
-            data[index].quantity = Number(data[index].quantity) + 1;
+            if (Number(data[index].quantity) + 1 > data[index].soLuongTon) {
+                ToastError('Số lượng lớn hơn số lượng tồn.');
+                return;
+            } else {
+                data[index].quantity = Number(data[index].quantity) + 1;
+            }
         }
         saveToLocalStorage(data, oder);
         updateTotalMoney(oder);
         PrintHtmlOder(data[index], oder);
     }
+    resetShipping(oder);
 }
 
 function extractNumberFromString(str) {
@@ -726,6 +844,24 @@ function resetBill(oder) {
 }
 
 $(document).on('ready', function () {
+    $(document).on('click', '.btn-add-customer', function () {
+        $('#form-add-customer').modal('show');
+        let oder = getOderNum(this);
+        $('#id-oder-numnber').val(oder);
+        $('#firstName').val('');
+        $('#MidName').val('');
+        $('#lastName').val('');
+        $('#email').val('');
+        $('#phone').val('');
+        $('#soNha').val('');
+        $('#quanHuyen').val('#');
+        $('#phuongXa').val('#');
+        $('#tinhTP').val('#');
+        $('#ngaySinh').val(null);
+        $('#text-error-email').text('')
+        $('#text-error-phone').text('')
+        $('[name="gender_customer"][value="true"]').prop('checked', true);
+    })
     $('#body-html').addClass('navbar-vertical-aside-mini-mode');
     $('#styleSwitcherDropdown').addClass('hs-unfold-hidden');
     $(document).on('click', '.input-group-quantity-counter-btn', function () {
@@ -737,11 +873,33 @@ $(document).on('ready', function () {
         } else {
             updateQuantityProduct(id, oder, 'minus', this)
         }
+        updateTotalMoney(oder)
     })
-
+    $(document).on('change', '.input-group-quantity-counter-control', function () {
+        let val = $(this).val();
+        if (Number(val) < 1 || isNaN(parseInt(val))) {
+            $(this).val(1).trigger('change');
+            return;
+        }
+        let tr = $(this).closest('tr');
+        let oder = getOderNum(this)
+        let id = tr.data('id-product');
+        let data = getListProductLocal(oder);
+        let wrapper = $(`#oder_content_${oder}`);
+        let i = data.findIndex(item => Number(item.id) === Number(id));
+        if (Number(data[i].soLuongTon) < Number(val)) {
+            ToastError('Số lượng lớn hơn số lượng tồn.');
+        } else {
+            data[i].quantity = val;
+            saveToLocalStorage(data, oder);
+            let giaBan = Number(data[i].giaBan) * Number(val);
+            tr.find('input.form-show-total-tr').val(addCommasToNumber(giaBan))
+            resetShipping(oder);
+            updateTotalMoney(oder);
+        }
+    })
     $(document).on('click', '.wrapper_voucher', function () {
         let oder = getOderNum(this);
-        console.log(oder)
         let wrapper = $(`#oder_content_${oder}`)
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
@@ -772,7 +930,6 @@ $(document).on('ready', function () {
         }
         if (data !== null && Array.isArray(data)) {
             let voucher = data.find(item => item.ma === value.toUpperCase());
-            console.log(voucher)
             if (voucher === undefined) {
                 ToastError('Mã không tồn tại.');
             } else {
@@ -818,7 +975,6 @@ $(document).on('ready', function () {
             return false;
         }
         let val = Number($('#pay-cash-money').val().replace(/[^\d]/g, ''));
-        console.log(val);
         let hasTM = $('#payment-type-cash').is(':checked');
         let hasCK = $('#payment-type-card').is(':checked');
         let NH = $('#payment-on-delivery').is(':checked');
@@ -942,15 +1098,60 @@ $(document).on('ready', function () {
         if (!bool) {
             return;
         }
+        let wrapper = $(`#oder_content_${oder}`);
+        let typeNH = wrapper.find(`[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
+        if (typeNH === null || typeNH === undefined) {
+            ToastError('Vui lòng chọn nơi nhận hàng.')
+            return;
+        }
+        let newAddres = wrapper.find('.wrapper-option-address-khac');
+        if (typeNH === 'CP') {
+            let hoTen = newAddres.find('input.hoTen');
+            let soDT = newAddres.find('input.soDienThoai');
+            let Email = newAddres.find('input.email');
+            let soNha = newAddres.find('input.soNha');
+            let regexPhone = /^0[0-9]{9}$/;
+            let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (hoTen.length > 0) {
+                if (hoTen.val().length === 0) {
+                    ToastError('Vui lòng nhập tên.');
+                    return;
+                }
+                if (hoTen.val().length < 3) {
+                    ToastError('Tên phải lớn hơn 3 ký tự.');
+                    return;
+                }
+            }
+            if (soDT.length > 0) {
+                if (soDT.val().length === 0) {
+                    ToastError('Vui lòng nhập số điện thoại.');
+                    return;
+                }
+                if (!regexPhone.test(soDT.val())) {
+                    ToastError('Số điện thoại không đúng định dạng.');
+                    return;
+                }
+            }
+            if (Email.length > 0) {
+                if (Email.val().length === 0) {
+                    ToastError('Vui lòng nhập email.');
+                    return;
+                }
+                if (!regexEmail.test(Email.val())) {
+                    ToastError('Email không đúng định dạng.');
+                    return;
+                }
+            }
+            if (soNha.length > 0) {
+                if (soNha.val().length === 0) {
+                    ToastError('Vui lòng nhập số nhà.');
+                    return;
+                }
+            }
+        }
         let sp = getListProductLocal(oder)
         if (sp.length === 0) {
             ToastError('Vui lòng chọn sản phẩm.')
-            return;
-        }
-
-        let optAD = $(`[name="option-address_${oder}"]`).val();
-        if (optAD === '#') {
-            ToastError('Vui lòng chọn địa chỉ.')
             return;
         }
         $('#form-modal-payment').modal('show');
@@ -968,6 +1169,7 @@ $(document).on('ready', function () {
     $(document).on('input', '.money-input-mask', function () {
         $(this).mask('#.###.###.###', {reverse: true});
     });
+
     $(document).on('click', '.btn-delete-tr-oder', function () {
         let tr = $(this).closest('tr');
         let id = tr.data('id-product');
@@ -985,29 +1187,210 @@ $(document).on('ready', function () {
                     tbody.append(html)
                 }
                 tr.remove();
+                resetShipping(oder);
             }
         })
     })
 
+    let typingTimer;
+    let doneTypingInterval = 1500;
+    $(document).on('input', '#email', function () {
+        clearTimeout(typingTimer);
+        let email = $(this).val();
+        let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (email.length === 0) {
+            $('#text-error-email').text('Vui lòng nhập email.');
+        } else if (!regexEmail.test(email)) {
+            $('#text-error-email').text('Email không đúng định dạng.');
+        } else {
+            $('#text-error-email').text('');
+            typingTimer = setTimeout(() => {
+                $.ajax({
+                    url: '/api/check-valid-email',
+                    type: 'POST',
+                    data: {email: email},
+                    success: function (data) {
+                        if (data) {
+                            $('#text-error-email').text('Email đã tồn tại.');
+                        }
+                    }
+                });
+            }, doneTypingInterval);
+        }
+    });
+    let typingPhoneTimer;
+    let doneTypingPhoneInterval = 1500;
+    $(document).on('input', '#phone', function () {
+        clearTimeout(typingPhoneTimer);
+        let phone = $(this).val().replace(/\s/g, '');
+        let regexPhone = /^0[0-9]{9}$/;
+        if (phone.length === 0) {
+            $('#text-error-phone').text('Vui lòng nhập số điện thoại.');
+        } else if (!regexPhone.test(phone)) {
+            $('#text-error-phone').text('Số điện thoại không đúng định dạng.');
+        } else {
+            $('#text-error-phone').text('');
+            typingPhoneTimer = setTimeout(() => {
+                $.ajax({
+                    url: '/api/check-valid-phone',
+                    type: 'POST',
+                    data: {phone: phone},
+                    success: function (data) {
+                        if (data) {
+                            $('#text-error-phone').text('Số điện thoại đã tồn tại.');
+                        }
+                    }
+                });
+            }, doneTypingPhoneInterval);
+        }
+    });
+    $(document).on('click', '#btn-save-customer', function () {
+        let oder = $('#id-oder-numnber').val()
+        let wrapper = $(`#oder_content_${oder}`);
+        let ho = $('#firstName').val();
+        let tenDem = $('#MidName').val();
+        let ten = $('#lastName').val();
+        let email = $('#email').val();
+        let soDT = $('#phone').val().replace(/\s/g, '');
+        let soNha = $('#soNha').val();
+        let quanHuyen = $('#quanHuyen').find('option:selected').text();
+        let phuongXa = $('#phuongXa').find('option:selected').text();
+        let tinh = $('#tinhTP').find('option:selected').text();
+        let ngaySinh = $('#ngaySinh').val();
+        let gender = $('[name="gender_customer"]:checked').val();
+        let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        let regexPhone = /^0[0-9]{9}$/;
+        if (ho.length === 0) {
+            ToastError('Vui lòng nhập họ.');
+            return;
+        }
+        if (tenDem.length === 0) {
+            ToastError('Vui lòng nhập tên đệm.');
+            return;
+        }
+        if (ten.length === 0) {
+            ToastError('Vui lòng nhập tên.');
+            return;
+        }
+        if (email.length === 0) {
+            ToastError('Vui lòng nhập email.');
+            return;
+        }
+        if (!regexEmail.test(email)) {
+            ToastError('Email không đúng định dạng.');
+            return;
+        }
+        if (soDT.length === 0) {
+            ToastError('Vui lòng nhập số điện thoại.');
+            return;
+        }
+        if (!regexPhone.test(soDT)) {
+            ToastError('Vui lòng nhập số điện thoại.');
+            return;
+        }
+        if (gender.length === 0) {
+            ToastError('Vui lòng chọn giới tính.');
+            return;
+        }
+        if (ngaySinh.length === 0) {
+            ToastError('Vui lòng chọn ngày sinh.');
+            return;
+        }
+        if (soNha.length === 0) {
+            ToastError('Vui lòng nhập số nhà.');
+            return;
+        }
+        if (phuongXa.length === 0) {
+            ToastError('Vui lòng chọn phường xã.');
+            return;
+        }
+        if (quanHuyen.length === 0) {
+            ToastError('Vui lòng chọn quận huyện.');
+            return;
+        }
+        if (tinh.length === 0) {
+            ToastError('Vui lòng chọn tỉnh.');
+            return;
+        }
+        let fullname = `${ho} ${tenDem} ${ten}`;
+        $.ajax({
+            url: '/api/add-new-customer',
+            type: 'POST',
+            data: {
+                hoTen: fullname,
+                email: email,
+                gioiTinh: gender,
+                ngaySinh: ngaySinh,
+                sdt: soDT,
+                soNha: soNha,
+                phuongXa: phuongXa,
+                quanHuyen: quanHuyen,
+                tinhThanhPho: tinh,
+            },
+            success: function (data) {
+                let html = `<option value="${data.id}" data-phone="${data.phone}" data-email="${data.mail}">${data.ten + '-' + data.ma}</option>`;
+                let select = wrapper.find('select.customer-selected');
+                select.prepend(html);
+                ToastSuccess('Thêm thành công.')
+                $('#form-add-customer').modal('hide');
+            },
+            error: function (e) {
+                console.log(e.getResponseHeader('status'));
+
+                switch (e.getResponseHeader('status')) {
+
+                    case 'emtyHoTen':
+                        ToastError('Họ Tên trống.');
+                        break;
+
+                    case 'emtySDT':
+                        ToastError('Số điện thoại trống.');
+                        break;
+
+                    case 'exitsBySDT':
+                        ToastError('Số điện thoại đã tồn tại.');
+                        break;
+
+                    case 'emtyEmail':
+                        ToastError('Email trống.');
+                        break;
+                    case 'exitsByEmail':
+                        ToastError('Email đã tồn tại.');
+                        break;
+
+                    case 'emtySoNha':
+                        ToastError('Số nhà trống.');
+                        break;
+
+                    case 'emtyPhuongXa':
+                        ToastError('Phường xã trống.');
+                        break;
+
+                    case 'emtyQuanHuyen':
+                        ToastError('Quận huyện trống.');
+                        break;
+
+                    case 'emtyTinhTP':
+                        ToastError('Tỉnh thành phố trống.');
+                        break;
+
+                    default:
+                        ToastError('Lỗi.');
+                }
+            }
+        })
+    })
 
     $(document).on('change', '.option-select-receipt', function () {
         let oder = getOderNum(this);
         let val = $(this).val();
         let wrapper = $(`#oder_content_${oder}`);
-        let kh = wrapper.find('select.customer-selected[name="khachHang"]').val();
         if (val === 'CP') {
-            if (kh === '#') {
-                ToastError('Vui lòng chọn khách hàng.');
-                wrapper.find(`.option-select-receipt[name="deliveryOptionCheckbox_hd_${oder}"]`).filter(function () {
-                    return $(this).val() === 'TQ';
-                }).prop('checked', true);
-                return;
-            }
             setVariableShipping(oder, null);
             wrapper.find('.wrapper-address-user').removeClass('d-none');
         } else {
             setVariableShipping(oder, 0);
-            $(`.option-select-address[name="option-address_${oder}"]`).prop('checked', false);
+            $(`.option-select-address[name="address_khac_${oder}"]`).prop('checked', false);
             wrapper.find('.wrapper-address-user').addClass('d-none');
         }
         updateTotalMoney(oder);
@@ -1037,8 +1420,16 @@ $(document).on('ready', function () {
         let khachHang = wrapper.find('select.customer-selected[name="khachHang"]').val();
         let typeNH = wrapper.find(`[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
         let diaChiNhanHang = '';
+        let nameCus = '';
+        let phoneCus = '';
+        let emailCus = '';
         if (typeNH === 'CP') {
-            let dc = wrapper.find(`.option-select-address[name="option-address_${oder}"]:checked`);
+            let dc = wrapper.find(`.option-select-address[name="address_khac_${oder}"]:checked`);
+            if (dc.val() === '#') {
+                nameCus = wrapper.find('input.hoTen').val();
+                phoneCus = wrapper.find('input.soDienThoai').val();
+                emailCus = wrapper.find('input.email').val();
+            }
             if (dc.val() !== '#') {
                 let label = wrapper.find(`label[for="${dc.attr('id')}"]`);
                 let nameSoNha = label.find('span.soNha').text()
@@ -1062,7 +1453,6 @@ $(document).on('ready', function () {
         let total = $('#total-money').val().replace(/[.,]/g, '');
         let transfer = $('#pay-chuyen-khoan-money').val().replace(/[.,]/g, '');
         let transferCode = $('#pay-card-money').val();
-        console.log(shippingFe)
         let voucher = getVoucher(oder)
         let code = '';
         if (voucher !== null) {
@@ -1082,6 +1472,10 @@ $(document).on('ready', function () {
                 transferCode: transferCode,
                 voucher: code,
                 shippingFee: shippingFe,
+                shippingCode: shippingCode,
+                hoten: nameCus,
+                email: emailCus,
+                sdt: phoneCus,
             }, success: function (data) {
                 console.log(data)
                 PrintBillOder(data);
@@ -1100,9 +1494,9 @@ $(document).on('ready', function () {
                     default:
                         ToastError('Lỗi.')
                 }
+                ToastError(error.responseText)
             }
         })
-        console.log(khachHang, typeNH, diaChiNhanHang);
     })
 
     function getOptionAddress(id, oder) {
@@ -1114,7 +1508,7 @@ $(document).on('ready', function () {
                         html += `
                                    <div class="custom-control custom-radio ml-3">
                                         <input type="radio" id="address_customer_${oder}_${ad.id}"
-                                               name="option-address_${oder}"
+                                               name="address_khac_${oder}"
                                                class="custom-control-input option-select-address" value="${ad.id}">
                                         <label class="custom-control-label custom-address" for="address_customer_${oder}_${ad.id}">
                                             <span class="d-block mb-1 soNha">${ad.soNha}</span>,
@@ -1124,17 +1518,7 @@ $(document).on('ready', function () {
                                         </label>
                                     </div>`;
                     });
-                    html += `<div class="custom-control custom-radio ml-3">
-                            <input type="radio" id="address_khac_${oder}" 
-                                   name="option-address_${oder}"
-                                   class="custom-control-input option-select-address" value="#">
-                            <label class="custom-control-label custom-address" for="address_khac_${oder}">
-                                <span class="d-block font-weight-bold mb-1">khác</span>
-                            </label>
-                        </div>
-                        <div class="w-100 row wrapper-option-address-khac"></div>
-                        `;
-                    $(`#oder_content_${oder}`).find('.wrapper-address-user').html(html);
+                    $(`#oder_content_${oder}`).find('.wrapper-address-user .show-list-user').html(html);
                 }
             }, error: function (xhr) {
                 console.log(xhr)
@@ -1142,21 +1526,117 @@ $(document).on('ready', function () {
         })
     }
 
+    $(document).on('input', '.hoTen,.soDienThoai,.email,.soNha', function () {
+        let oder = getOderNum(this)
+        let element = $(this);
+        let val = element.val();
+        let regexPhone = /^0[0-9]{9}$/;
+        let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        let checkName = true;
+        let checkPhone = true;
+        let checkEmail = true;
+        if (element.hasClass('hoTen')) {
+            if (val.length < 3) {
+                element.parent().find('span.text-error-hoten').text('Tên phải lớn hơn 2 ký tự.')
+                checkName = false;
+            }
+            if (val.length === 0) {
+                element.parent().find('span.text-error-hoten').text('Vui lòng nhập tên.')
+                checkName = false;
+            }
+        }
+        if (element.hasClass('soDienThoai')) {
+            if (!regexPhone.test(val)) {
+                element.parent().find('span.text-error-soDienThoai').text('Số điện thoại không đúng định dạng.')
+                checkPhone = false;
+            }
+            if (val.length === 0) {
+                element.parent().find('span.text-error-soDienThoai').text('Vui lòng nhập số điện thoại.')
+                checkPhone = false;
+            }
+
+        }
+        if (element.hasClass('email')) {
+            if (!regexEmail.test(val)) {
+                element.parent().find('span.text-error-email').text('Email không đúng định dạng.')
+                checkEmail = false;
+            }
+            if (val.length === 0) {
+                element.parent().find('span.text-error-email').text('Vui lòng nhập email.')
+                checkEmail = false;
+            }
+
+
+        }
+        if (element.hasClass('soNha')) {
+            if (val.length === 0) {
+                element.parent().find('span.text-error-soNha').text('Vui lòng nhập số nhà.')
+            } else {
+                element.parent().find('span.text-error-soNha').text('')
+            }
+        }
+        if (checkName) {
+            element.parent().find('span.text-error-hoten').text('')
+        }
+
+        if (checkEmail) {
+            element.parent().find('span.text-error-email').text('')
+        }
+
+        if (checkPhone) {
+            element.parent().find('span.text-error-soDienThoai').text('')
+        }
+    })
     $(document).on('change', '.option-select-address', async function () {
         let oder = getOderNum(this);
-        let input = $(`input[name="option-address_${oder}"]:checked`);
+        let input = $(`input[name="address_khac_${oder}"]:checked`);
         let val = input.val();
         let wrapper = $(`#oder_content_${oder}`);
         if (val === '#') {
-            let province = '<option value="">Chọn Tỉnh</option>';
+            let data = getListProductLocal(oder);
+            if (data.length === 0) {
+                ToastError('Vui lòng chọn sản phẩm.')
+                $(this).prop('checked', false).trigger('change')
+                return;
+            }
+            let khachhang = wrapper.find('select.customer-selected');
+            let val = khachhang.val();
+            let hoten = '';
+            let email = '';
+            let sdt = '';
+            if (val !== '#') {
+                let option = khachhang.find('option:selected');
+                email = option.data('email');
+                sdt = option.data('phone');
+                let name = option.text().split('-');
+                hoten = name[0];
+            }
+            let province = '<option value="#">Chọn Tỉnh</option>';
             if (Array.isArray(arrProvince)) {
                 arrProvince.forEach((item) => {
                     province += `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
                 })
             }
-            let html = `<div class="form-group col-6 mb-3">
+            let html = `
+                    <div class="form-group col-4 mb-3">
+                        <label for="hoTen_${oder}" class="mb-0">Họ Tên:</label>
+                        <input class="form-control hoTen" id="hoTen_${oder}" type="text" value="${hoten}">
+                        <span class="text-danger text-error-hoten"></span>
+                    </div>
+                    <div class="form-group col-4 mb-3">
+                        <label for="soDienThoai_${oder}" class="mb-0">Số Điện Thoại:</label>
+                        <input class="form-control soDienThoai" id="soDienThoai_${oder}" type="text" value="${sdt}">
+                        <span class="text-danger text-error-soDienThoai"></span>
+                    </div>
+                    <div class="form-group col-4 mb-3">
+                        <label for="email_${oder}" class="mb-0">Email:</label>
+                        <input class="form-control email" id="email_${oder}" type="text" value="${email}">
+                        <span class="text-danger text-error-email"></span>
+                    </div>
+                    <div class="form-group col-6 mb-3">
                         <label for="soNha_${oder}" class="mb-0">Số Nhà:</label>
                         <input class="form-control soNha" id="soNha_${oder}" type="text">
+                        <span class="text-danger text-error-soNha"></span>
                     </div>
                     <div class="form-group col-6 mb-3">
                         <label for="tinhTP_${oder}" class="mb-0">Tỉnh/TP:</label>
@@ -1188,30 +1668,8 @@ $(document).on('ready', function () {
             });
             setVariableShipping(oder, null);
         } else {
+            resetShipping(oder);
             wrapper.find('.wrapper-option-address-khac').empty();
-            let phuongXaSelected;
-            let quanHuyenSelected;
-            let label = wrapper.find(`label[for="${input.attr('id')}"]`);
-            let nameXa = label.find('span.phuongXa').text()
-            let nameHyen = label.find('span.quanHuyen').text()
-            let nameTinh = label.find('span.tinhTP').text()
-            let tinh = arrProvince.find(tinh => tinh.ProvinceName == nameTinh);
-            if (tinh) {
-                let huyen = arrDistrict.find(huyen => huyen.ProvinceID == tinh.ProvinceID && huyen.DistrictName == nameHyen);
-                if (huyen) {
-                    quanHuyenSelected = huyen.DistrictID;
-                    let xa = arrWard.find(xa => xa.DistrictID == huyen.DistrictID && xa.Name == nameXa);
-                    if (xa) {
-                        phuongXaSelected = xa.Code;
-                    }
-                }
-            }
-            let data = await getShippingFee(oder, phuongXaSelected, quanHuyenSelected);
-            if (data !== null) {
-                setVariableShipping(oder, data.data.total_fee);
-            } else {
-                setVariableShipping(oder, null);
-            }
         }
         updateTotalMoney(oder);
     })
@@ -1219,6 +1677,12 @@ $(document).on('ready', function () {
         let code = $(this).val();
         let oder = getOderNum(this);
         let quan = $(`#oder_content_${oder}`).find('select.custom-select.quanHuyen').val();
+        let data = getListProductLocal(oder);
+        if (data.length === 0) {
+            setVariableShipping(oder, null);
+            updateTotalMoney(oder);
+            ToastError('Vui lòng chọn sản phẩm.')
+        }
         let result = await getShippingFee(oder, code, quan);
         if (result !== null) {
             setVariableShipping(oder, result.data.total_fee);
@@ -1226,6 +1690,37 @@ $(document).on('ready', function () {
         } else {
             setVariableShipping(oder, null);
         }
+    })
+    $(document).on('change', '#tinhTP', function () {
+        let quanHuyen = $('#quanHuyen');
+        let phuongXa = $('#phuongXa');
+        let val = $(this).val();
+        quanHuyen.html('<option value="">Chọn Quận/Huyện</option>');
+        phuongXa.html('<option value="">Chọn Phường/Xã</option>');
+        if (val.length > 0) {
+            arrDistrict.forEach(function (item) {
+                if (Number(item.ProvinceID) === Number(val)) {
+                    let html = `<option value="${item.DistrictID}">${String(item.DistrictName)}</option>`;
+                    quanHuyen.append(html);
+                }
+            })
+        }
+        initSelect2(quanHuyen);
+        initSelect2(phuongXa);
+    })
+    $(document).on('change', '#quanHuyen', function () {
+        let phuongXa = $('#phuongXa');
+        let val = $(this).val();
+        phuongXa.html('<option value="#">Chọn Phường/Xã</option>');
+        if (val.length > 0) {
+            arrWard.forEach(function (item) {
+                if (Number(item.DistrictID) === Number(val)) {
+                    let html = `<option value="${item.Code}">${String(item.Name)}</option>`;
+                    phuongXa.append(html);
+                }
+            })
+        }
+        initSelect2(phuongXa);
     })
     $(document).on('change', 'select.custom-select.tinhTP', function () {
         let oder = getOderNum(this);
@@ -1262,7 +1757,6 @@ $(document).on('ready', function () {
         initSelect2(phuongXa);
     })
     $(document).on('click', '.li-item-ctsp-search', function () {
-        console.log('run')
         let id_pro = $(this).data('ctsp-id');
         let oder = getOderNum(this);
         let product = findProductById(id_pro);
@@ -1315,6 +1809,8 @@ $(document).on('ready', function () {
         $('input[name="deliveryOptionCheckbox_hd_' + oder + '"][value="TQ"]').prop('checked', true);
         wrapper.find('.wrapper-address-user').addClass('d-none');
         let content = $(this).closest('.oder-wraper-content');
+        wrapper.find('.wrapper-option-address-khac').empty();
+        wrapper.find('.option-select-address').prop('checked', false);
         let val = $(this).val();
         setVariableShipping(oder, 0);
         setVoucher(oder, null);
@@ -1476,15 +1972,11 @@ $(document).on('ready', function () {
         }
     });
     $(document).on('focus', '.form-input-search', function () {
-        console.log('focus')
         let formShow = $(this).closest('.wrapper-form-search').find('.div-form-search');
         formShow.removeClass('d-none')
     });
     $(document).on('blur', '.form-input-search', function () {
-        console.log('un focus')
         let formShow = $(this).closest('.wrapper-form-search').find('.div-form-search');
-
-        // Kiểm tra xem chuột có nằm trong phạm vi của .div-form-search hay không
         if (!formShow.is(':hover')) {
             formShow.addClass('d-none');
         }

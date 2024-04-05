@@ -116,7 +116,7 @@
                                                         th:text="${cus.getHoTen()+'-'+cus.getMaKhachHang()}"></option>
                                             </th:block>
                                         </select>
-                                        <a id="addCustomer" data-toggle="tooltip"
+                                        <a data-toggle="tooltip" class="btn-add-customer"
                                            data-original-title="Thêm Khách Hàng" href="javascript:;">
                                             <i class="tio-add"></i>
                                         </a>
@@ -134,10 +134,13 @@
                                 <div class="card-body">
                                     <!-- Input Group -->
                                     <div class="input-group input-group-merge">
-                                        <input type="text" class="form-control input_voucher" name="name" placeholder="Nhập mã"
+                                        <input type="text" class="form-control input_voucher" name="name"
+                                               placeholder="Nhập mã"
                                                aria-label="Promo code">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-block btn-primary btn-apply-voucher">Áp Dụng</button>
+                                            <button type="button" class="btn btn-block btn-primary btn-apply-voucher">Áp
+                                                Dụng
+                                            </button>
                                         </div>
                                     </div>
                                     <!-- End Input Group -->
@@ -147,10 +150,12 @@
                                     <ul id="best_voucher_voucher_hd_1" class="list-voucher">
                                     </ul>
                                     <div class="accordion list_voucher mb-5" id="accordionExample">
-                                        <button class="btn btn-link btn-show-all-voucher btn-block text-right collapsed" type="button"
+                                        <button class="btn btn-link btn-show-all-voucher btn-block text-right collapsed"
+                                                type="button"
                                                 data-toggle="collapse" data-target="#collapseThree"
                                                 aria-expanded="false"
-                                                aria-controls="collapseThree">Tất cả</button>
+                                                aria-controls="collapseThree">Tất cả
+                                        </button>
                                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                                              data-parent="#accordionExample">
                                             <ul id="list_show_voucher_hd_1" class="list-voucher">
@@ -371,28 +376,18 @@
                                     </label>
                                 </div>
                                 <div class="wrapper-address-user ml-4 mt-2 w-100 d-none">
-                                    <!--                                    <div class="custom-control custom-radio ml-3">-->
-                                    <!--                                        <input type="radio" id="address_hd_cus"-->
-                                    <!--                                               name="option-address_hd"-->
-                                    <!--                                               class="custom-control-input" value="id">-->
-                                    <!--                                        <label class="custom-control-label custom-address" for="address_hd_cus">-->
-                                    <!--                                            <span class="d-block mb-1">Tân Quang,</span>-->
-                                    <!--                                            <span class="d-block mb-1">xã Trịnh Tường,</span>-->
-                                    <!--                                            <span class="d-block mb-1">huyện Bát Xát,</span>-->
-                                    <!--                                            <span class="d-block mb-1">tỉnh Lào Cai</span>-->
-                                    <!--                                        </label>-->
-                                    <!--                                    </div>-->
-                                    <!--                                    <div class="custom-control custom-radio ml-3">-->
-                                    <!--                                        <input type="radio" id="address_khac_1" data-id-hd="address_khac_"-->
-                                    <!--                                               name="option-address_1"-->
-                                    <!--                                               class="custom-control-input" value="#">-->
-                                    <!--                                        <label class="custom-control-label custom-address" for="address_khac_1">-->
-                                    <!--                                            <span class="d-block font-weight-bold mb-1">khác</span>-->
-                                    <!--                                        </label>-->
-                                    <!--                                    </div>-->
-                                    <!--                                    <div class="w-100 row wrapper-option-address-khac">-->
+                                    <div class="show-list-user">
 
-                                    <!--                                    </div>-->
+                                    </div>
+                                    <div class="custom-control custom-radio ml-3">
+                                        <input type="radio" id="address_khac_1"
+                                               name="address_khac_1"
+                                               class="custom-control-input option-select-address" value="#">
+                                        <label class="custom-control-label custom-address" for="address_khac_1">
+                                            <span class="d-block font-weight-bold mb-1">địa chỉ mới</span>
+                                        </label>
+                                    </div>
+                                    <div class="w-100 row wrapper-option-address-khac"></div>
                                 </div>
                             </div>
                             <!-- Body -->
@@ -533,9 +528,9 @@
                                         th:text="${cus.getHoTen()+'-'+cus.getMaKhachHang()}"></option>
                             </th:block>
                         </select>
-                        <a href="javascript:;">
-                            <i class="tio-add" data-toggle="tooltip"
-                               data-original-title="Thêm Khách Hàng"></i>
+                        <a class="btn-add-customer" data-toggle="tooltip"
+                           data-original-title="Thêm Khách Hàng" href="javascript:;">
+                            <i class="tio-add"></i>
                         </a>
                     </div>
                     <div class="w-100 pl-3">
@@ -562,12 +557,15 @@
                     <small class="form-text mb-2"></small>
                     <ul id="best_voucher_voucher_hd_mau" data-id-hd="best_voucher_voucher_hd_" class="list-voucher">
                     </ul>
-                    <div class="accordion list_voucher mb-5" id="accordionExample_mau" data-id-hd="accordionExample_" data-type="collapse">
+                    <div class="accordion list_voucher mb-5" id="accordionExample_mau" data-id-hd="accordionExample_"
+                         data-type="collapse">
                         <button class="btn btn-link btn-show-all-voucher btn-block text-right collapsed" type="button"
                                 data-toggle="collapse" data-target="#collapseThree"
                                 aria-expanded="false"
-                                aria-controls="collapseThree">Tất cả</button>
-                        <div id="collapseThree_" data-id-hd="collapseThree_" class="collapse" aria-labelledby="headingThree"
+                                aria-controls="collapseThree">Tất cả
+                        </button>
+                        <div id="collapseThree_" data-id-hd="collapseThree_" class="collapse"
+                             aria-labelledby="headingThree"
                              data-parent="#accordionExample_mau">
                             <ul id="list_show_voucher_hd_mau" data-id-hd="list_show_voucher_hd_" class="list-voucher">
                             </ul>
@@ -740,7 +738,20 @@
                         <span class="d-block">Giao hàng toàn quốc từ 1 đến 2 ngày</span>
                     </label>
                 </div>
-                <div class="wrapper-address-user ml-4 mt-2 w-100 d-none"></div>
+                <div class="wrapper-address-user ml-4 mt-2 w-100 d-none">
+                    <div class="show-list-user">
+
+                    </div>
+                    <div class="custom-control custom-radio ml-3">
+                        <input type="radio" id="address_khac_mau" data-id-hd="address_khac_"
+                               name="address_khac_mau"
+                               class="custom-control-input option-select-address" value="#">
+                        <label class="custom-control-label custom-address" for="address_khac_mau">
+                            <span class="d-block font-weight-bold mb-1">địa chỉ mới</span>
+                        </label>
+                    </div>
+                    <div class="w-100 row wrapper-option-address-khac"></div>
+                </div>
                 <!-- End Custom Checkbox -->
             </div>
             <!-- Body -->
@@ -888,6 +899,214 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary payment-success">Hoàn Thành</button>
+            </div>
+            <!-- End Footer -->
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="form-add-customer" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content" style="width: 100%">
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="form-add-customer-label">Thêm thành viên</h5>
+                <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="tio-clear tio-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+            <!-- End Header -->
+            <!-- Body -->
+            <div class="modal-body pt-0 pb-0">
+                <input hidden="hidden" type="text" id="numoder">
+                <div class="row">
+                    <div class="col-lg-4 mb-3 mb-lg-0">
+                        <h4>Thông Tin Tài Khoản</h4>
+                    </div>
+                    <div class="col-lg-8">
+                        <!-- Card -->
+                        <div class="card">
+                            <!-- Body -->
+                            <div class="card-body">
+                                <input id="id-oder-numnber" type="text" hidden="hidden" readonly>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="firstName" class="input-label">Họ<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="text" class="form-control" name="firstName" id="firstName"
+                                                   placeholder="Họ" aria-label="Họ">
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="MidName" class="input-label">Tên Đệm<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="text" class="form-control" name="lastName" id="MidName"
+                                                   placeholder="Tên đệm" aria-label="Tên đệm">
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="lastName" class="input-label">Tên<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="text" class="form-control" name="lastName" id="lastName"
+                                                   placeholder="Tên" aria-label="Tên">
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="email" class="input-label">Email<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="email" class="form-control" name="email" id="email"
+                                                   placeholder="clarice@example.com" aria-label="clarice@example.com">
+                                            <span id="text-error-email" class="text-danger"></span>
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="phone" class="input-label">Phone <span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="text" class="js-masked-input form-control" name="phone"
+                                                   id="phone" placeholder="xxxx xxx xxx"
+                                                   aria-label="xxxx xxx xxx"
+                                                   data-hs-mask-options="{&quot;template&quot;: &quot;0000 000 000&quot;}"
+                                                   maxlength="16">
+                                            <span id="text-error-phone" class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="ngaySinh" class="input-label">Ngày Sinh<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="date" class="form-control" id="ngaySinh">
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <label>Giới Tính<span
+                                                class="input-label-secondary">(*)</span></label>
+                                        <div class="input-group input-group-sm-down-break">
+                                            <!-- Custom Radio -->
+                                            <div class="form-control">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input"
+                                                           name="gender_customer" id="userAccountTypeRadio1" value="true" checked>
+                                                    <label class="custom-control-label"
+                                                           for="userAccountTypeRadio1">Nam</label>
+                                                </div>
+                                            </div>
+                                            <!-- End Custom Radio -->
+
+                                            <!-- Custom Radio -->
+                                            <div class="form-control">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input"
+                                                           name="gender_customer" id="userAccountTypeRadio2" value="false">
+                                                    <label class="custom-control-label"
+                                                           for="userAccountTypeRadio2">Nữ</label>
+                                                </div>
+                                            </div>
+                                            <!-- End Custom Radio -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Row -->
+
+
+                                <div class="custom-control custom-checkbox form-group">
+                                    <input type="checkbox" class="custom-control-input" id="marketingEmailsCheckbox">
+                                    <label class="custom-control-label" for="marketingEmailsCheckbox">Đồng ý nhận email
+                                        các chương trình khuyến mãi, thông báo và email tiếp thị.</label>
+                                </div>
+                                <!-- End Custom Checkbox -->
+                            </div>
+                            <!-- Body -->
+                        </div>
+                        <!-- End Card -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 mb-3 mb-lg-0">
+                        <h4>Địa Chỉ Giao Hàng</h4>
+                    </div>
+                    <div class="col-lg-8">
+                        <!-- Card -->
+                        <div class="card">
+                            <!-- Body -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="soNha" class="input-label">Số Nhà<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <input type="text" class="form-control" name="firstName" id="soNha"
+                                                   placeholder="Số Nhà..." aria-label="Số Nhà...">
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="tinhTP" class="input-label">Tỉnh Thành Phố<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <select type="text" class="form-control" id="tinhTP"></select>
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="quanHuyen" class="input-label">Quận Huyện<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <select type="text" class="form-control" id="quanHuyen"></select>
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Form Group -->
+                                        <div class="form-group">
+                                            <label for="phuongXa" class="input-label">Phường Xã<span
+                                                    class="input-label-secondary">(*)</span></label>
+                                            <select type="text" class="form-control" id="phuongXa"></select>
+                                        </div>
+                                        <!-- End Form Group -->
+                                    </div>
+                                </div>
+                                <!-- End Row -->
+                                <!-- End Custom Checkbox -->
+                            </div>
+                            <!-- Body -->
+                        </div>
+                        <!-- End Card -->
+                    </div>
+                </div>
+            </div>
+            <!-- End Body -->
+            <!-- Footer -->
+            <div class="modal-footer justify-content-between">
+                <div>
+                    <label>(*) Trường bắt buộc</label>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Đóng</button>
+                    <button id="btn-save-customer" type="button" class="btn btn-primary">Thêm Mới</button>
+                </div>
             </div>
             <!-- End Footer -->
         </div>

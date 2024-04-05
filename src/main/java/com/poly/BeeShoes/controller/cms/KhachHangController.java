@@ -68,76 +68,76 @@ public class KhachHangController {
 
     @PostMapping("/add")
     public String addKH(@ModelAttribute("khachHang") KhachHangRequest khachHang, Model model,
-                        @RequestParam("sdt") String sdt,
-                        @RequestParam("email") String email) {
-        boolean check = false;
-        if(khachHang.getHoTen().isBlank()){
-            model.addAttribute("errorHoTen", "Họ tên không được để trống");
-            check=true;
-        }if(khachHang.getSdt().isBlank()){
-            model.addAttribute("errorSdt", "Sdt không được để trống");
-            check=true;
-        }
-        if(khachHangService.existsBySdt(sdt)){
-            model.addAttribute("trungSdt", "Số điện thoại đã tồn tại");
-            check=true;
-        }
-        if(khachHang.getEmail().isBlank()){
-            model.addAttribute("errorEmail", "Email không được để trống");
-            check=true;
-        }
-        if(userService.existsByEmail(email)){
-            model.addAttribute("trungEmail", "Email đã tồn tại");
-            check=true;
-        }if(khachHang.getSoNha().isBlank()){
-            model.addAttribute("errorSoNha", "Số nhà không được để trống");
-            check=true;
-        }if(khachHang.getPhuongXa().isBlank()){
-            model.addAttribute("errorPhuongXa", "Phường xã không được để trống");
-            check=true;
-        }if(khachHang.getQuanHuyen().isBlank()){
-            model.addAttribute("errorQuanHuyen", "Quận huyện không được để trống");
-            check=true;
-        }if(khachHang.getTinhThanhPho().isBlank()){
-            model.addAttribute("errorTinhTP", "Tỉnh tp không được để trống");
-            check=true;
-        }
-        if(check){
-            model.addAttribute("khachHang", khachHang);
-            return "redirect:/cms/khach-hang/view-addKH";
-        }
-        KhachHang kh1 = new KhachHang();
-        kh1.setHoTen(khachHang.getHoTen());
-        kh1.setGioiTinh(khachHang.isGioiTinh());
-        kh1.setNgaySinh(khachHang.getNgaySinh());
-        kh1.setSdt(khachHang.getSdt());
-        kh1.setNgayTao(Timestamp.from(Instant.now()));
-        kh1.setMaKhachHang(khachHangService.generateCustomerCode());
-        kh1.setTrangThai(khachHang.isTrangThai());
-        KhachHang kh = khachHangService.add(kh1);
-        DiaChi dc = new DiaChi();
-        dc.setSoNha(khachHang.getSoNha());
-        dc.setPhuongXa(khachHang.getPhuongXa());
-        dc.setQuanHuyen(khachHang.getQuanHuyen());
-        dc.setTinhThanhPho(khachHang.getTinhThanhPho());
-        dc.setNgayTao(Timestamp.from(Instant.now()));
-        dc.setKhachHang(kh);
-        DiaChi diaChi = diaChiService.add(dc);
-        kh.setDiaChiMacDinh(diaChi);
-        kh = khachHangService.add(kh);
-        User user = new User();
-        user.setEmail(khachHang.getEmail());
-        user.setRole(Role.CUSTOMER);
-        String password = LibService.generateRandomString(10);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setKhachHang(kh);
-        User u =  userService.createNewUser(user);
-        if(u!=null){
-            String tb = "Chúc mừng bạn đã tạo tài khoản thành công!";
-            String body = "<h1>Đăng Ký Thành Công !</h1><h2>email đăng nhập là : "+user.getEmail() +"</h2><h2>Mật Khẩu là : "+password+"</h2>";
-            mailUtility.sendMail(user.getEmail(), tb, body);
-        }
-        return "redirect:/cms/khach-hang";
+                @RequestParam("sdt") String sdt,
+                @RequestParam("email") String email) {
+            boolean check = false;
+            if(khachHang.getHoTen().isBlank()){
+                model.addAttribute("errorHoTen", "Họ tên không được để trống");
+                check=true;
+            }if(khachHang.getSdt().isBlank()){
+                model.addAttribute("errorSdt", "Sdt không được để trống");
+                check=true;
+            }
+            if(khachHangService.existsBySdt(sdt)){
+                model.addAttribute("trungSdt", "Số điện thoại đã tồn tại");
+                check=true;
+            }
+            if(khachHang.getEmail().isBlank()){
+                model.addAttribute("errorEmail", "Email không được để trống");
+                check=true;
+            }
+            if(userService.existsByEmail(email)){
+                model.addAttribute("trungEmail", "Email đã tồn tại");
+                check=true;
+            }if(khachHang.getSoNha().isBlank()){
+                model.addAttribute("errorSoNha", "Số nhà không được để trống");
+                check=true;
+            }if(khachHang.getPhuongXa().isBlank()){
+                model.addAttribute("errorPhuongXa", "Phường xã không được để trống");
+                check=true;
+            }if(khachHang.getQuanHuyen().isBlank()){
+                model.addAttribute("errorQuanHuyen", "Quận huyện không được để trống");
+                check=true;
+            }if(khachHang.getTinhThanhPho().isBlank()){
+                model.addAttribute("errorTinhTP", "Tỉnh tp không được để trống");
+                check=true;
+            }
+            if(check){
+                model.addAttribute("khachHang", khachHang);
+                return "redirect:/cms/khach-hang/view-addKH";
+            }
+            KhachHang kh1 = new KhachHang();
+            kh1.setHoTen(khachHang.getHoTen());
+            kh1.setGioiTinh(khachHang.isGioiTinh());
+            kh1.setNgaySinh(khachHang.getNgaySinh());
+            kh1.setSdt(khachHang.getSdt());
+            kh1.setNgayTao(Timestamp.from(Instant.now()));
+            kh1.setMaKhachHang(khachHangService.generateCustomerCode());
+            kh1.setTrangThai(khachHang.isTrangThai());
+            KhachHang kh = khachHangService.add(kh1);
+            DiaChi dc = new DiaChi();
+            dc.setSoNha(khachHang.getSoNha());
+            dc.setPhuongXa(khachHang.getPhuongXa());
+            dc.setQuanHuyen(khachHang.getQuanHuyen());
+            dc.setTinhThanhPho(khachHang.getTinhThanhPho());
+            dc.setNgayTao(Timestamp.from(Instant.now()));
+            dc.setKhachHang(kh);
+            DiaChi diaChi = diaChiService.add(dc);
+            kh.setDiaChiMacDinh(diaChi);
+            kh = khachHangService.add(kh);
+            User user = new User();
+            user.setEmail(khachHang.getEmail());
+            user.setRole(Role.CUSTOMER);
+            String password = LibService.generateRandomString(10);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setKhachHang(kh);
+            User u =  userService.createNewUser(user);
+            if(u!=null){
+                String tb = "Chúc mừng bạn đã tạo tài khoản thành công!";
+                String body = "<h1>Đăng Ký Thành Công !</h1><h2>email đăng nhập là : "+user.getEmail() +"</h2><h2>Mật Khẩu là : "+password+"</h2>";
+                mailUtility.sendMail(user.getEmail(), tb, body);
+            }
+            return "redirect:/cms/khach-hang";
     }
 
     @GetMapping("/detail/{id}")

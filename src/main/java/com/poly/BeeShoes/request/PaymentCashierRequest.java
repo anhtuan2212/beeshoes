@@ -18,4 +18,8 @@ public class PaymentCashierRequest {
     String transferCode;
     String voucher;
     Integer shippingFee;
+    String shippingCode;
+    String hoten;
+    String email;
+    String sdt;
 }
