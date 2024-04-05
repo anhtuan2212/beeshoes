@@ -50,30 +50,39 @@ public class KhachHangRestController {
         if (khachHang.getHoTen().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtyHoTen").build();
         }
+
         if (khachHang.getSdt().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtySDT").build();
         }
+
         if (khachHangService.existsBySdt(khachHang.getSdt())) {
             return ResponseEntity.notFound().header("status", "exitsBySDT").build();
         }
+
         if (khachHang.getEmail().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtyEmail").build();
         }
+
         if (userService.existsByEmail(khachHang.getEmail())) {
             return ResponseEntity.notFound().header("status", "exitsByEmail").build();
         }
+
         if (khachHang.getSoNha().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtySoNha").build();
         }
+
         if (khachHang.getPhuongXa().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtyPhuongXa").build();
         }
+
         if (khachHang.getQuanHuyen().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtyQuanHuyen").build();
         }
+
         if (khachHang.getTinhThanhPho().isBlank()) {
             return ResponseEntity.notFound().header("status", "emtyTinhTP").build();
         }
+
         KhachHang kh1 = new KhachHang();
         kh1.setHoTen(khachHang.getHoTen());
         kh1.setGioiTinh(khachHang.isGioiTinh());

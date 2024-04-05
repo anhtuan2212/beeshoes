@@ -43,6 +43,21 @@ window.addEventListener('beforeunload', function (event) {
     }
 });
 
+function showLoader() {
+    Swal.fire({
+        title: 'Đang lấy phí giao hàng...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
+
+function hideLoader() {
+    Swal.close();
+}
+
 function extracAddress(str) {
     let parts = str.toString().split(',');
     parts.reverse();
@@ -142,6 +157,7 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
         ToastError('Quận huyện không hợp lệ.')
         return;
     }
+    showLoader();
     setVariableShipping(oder, null)
     let listProduct = getListProductLocal(oder);
     console.log(oder)
@@ -211,8 +227,10 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
         });
         wrapper.find('.show-text-error').text('');
         shippingCode = response.data.order_code;
+        hideLoader();
         return response;
     } catch (error) {
+        hideLoader();
         console.error('Xảy ra lỗi: ', error);
         if (error.responseJSON.code_message_value === null || error.responseJSON.code_message_value === undefined) {
             ToastError(error.responseJSON.message);
@@ -1080,6 +1098,57 @@ $(document).on('ready', function () {
         if (!bool) {
             return;
         }
+        let wrapper = $(`#oder_content_${oder}`);
+        let typeNH = wrapper.find(`[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
+        if (typeNH === null || typeNH === undefined) {
+            ToastError('Vui lòng chọn nơi nhận hàng.')
+            return;
+        }
+        let newAddres = wrapper.find('.wrapper-option-address-khac');
+        if (typeNH === 'CP') {
+            let hoTen = newAddres.find('input.hoTen');
+            let soDT = newAddres.find('input.soDienThoai');
+            let Email = newAddres.find('input.email');
+            let soNha = newAddres.find('input.soNha');
+            let regexPhone = /^0[0-9]{9}$/;
+            let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (hoTen.length > 0) {
+                if (hoTen.val().length === 0) {
+                    ToastError('Vui lòng nhập tên.');
+                    return;
+                }
+                if (hoTen.val().length < 3) {
+                    ToastError('Tên phải lớn hơn 3 ký tự.');
+                    return;
+                }
+            }
+            if (soDT.length > 0) {
+                if (soDT.val().length === 0) {
+                    ToastError('Vui lòng nhập số điện thoại.');
+                    return;
+                }
+                if (!regexPhone.test(soDT.val())) {
+                    ToastError('Số điện thoại không đúng định dạng.');
+                    return;
+                }
+            }
+            if (Email.length > 0) {
+                if (Email.val().length === 0) {
+                    ToastError('Vui lòng nhập email.');
+                    return;
+                }
+                if (!regexEmail.test(Email.val())) {
+                    ToastError('Email không đúng định dạng.');
+                    return;
+                }
+            }
+            if (soNha.length > 0) {
+                if (soNha.val().length === 0) {
+                    ToastError('Vui lòng nhập số nhà.');
+                    return;
+                }
+            }
+        }
         let sp = getListProductLocal(oder)
         if (sp.length === 0) {
             ToastError('Vui lòng chọn sản phẩm.')
@@ -1100,6 +1169,7 @@ $(document).on('ready', function () {
     $(document).on('input', '.money-input-mask', function () {
         $(this).mask('#.###.###.###', {reverse: true});
     });
+
     $(document).on('click', '.btn-delete-tr-oder', function () {
         let tr = $(this).closest('tr');
         let id = tr.data('id-product');
@@ -1261,40 +1331,49 @@ $(document).on('ready', function () {
                 let html = `<option value="${data.id}" data-phone="${data.phone}" data-email="${data.mail}">${data.ten + '-' + data.ma}</option>`;
                 let select = wrapper.find('select.customer-selected');
                 select.prepend(html);
-                // initSelect2(select);
                 ToastSuccess('Thêm thành công.')
                 $('#form-add-customer').modal('hide');
             },
             error: function (e) {
                 console.log(e.getResponseHeader('status'));
+
                 switch (e.getResponseHeader('status')) {
+
                     case 'emtyHoTen':
                         ToastError('Họ Tên trống.');
                         break;
+
                     case 'emtySDT':
                         ToastError('Số điện thoại trống.');
                         break;
+
                     case 'exitsBySDT':
                         ToastError('Số điện thoại đã tồn tại.');
                         break;
+
                     case 'emtyEmail':
                         ToastError('Email trống.');
                         break;
                     case 'exitsByEmail':
                         ToastError('Email đã tồn tại.');
                         break;
+
                     case 'emtySoNha':
                         ToastError('Số nhà trống.');
                         break;
+
                     case 'emtyPhuongXa':
                         ToastError('Phường xã trống.');
                         break;
+
                     case 'emtyQuanHuyen':
                         ToastError('Quận huyện trống.');
                         break;
+
                     case 'emtyTinhTP':
                         ToastError('Tỉnh thành phố trống.');
                         break;
+
                     default:
                         ToastError('Lỗi.');
                 }
@@ -1306,7 +1385,6 @@ $(document).on('ready', function () {
         let oder = getOderNum(this);
         let val = $(this).val();
         let wrapper = $(`#oder_content_${oder}`);
-        let kh = wrapper.find('select.customer-selected[name="khachHang"]').val();
         if (val === 'CP') {
             setVariableShipping(oder, null);
             wrapper.find('.wrapper-address-user').removeClass('d-none');
@@ -1448,6 +1526,67 @@ $(document).on('ready', function () {
         })
     }
 
+    $(document).on('input', '.hoTen,.soDienThoai,.email,.soNha', function () {
+        let oder = getOderNum(this)
+        let element = $(this);
+        let val = element.val();
+        let regexPhone = /^0[0-9]{9}$/;
+        let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        let checkName = true;
+        let checkPhone = true;
+        let checkEmail = true;
+        if (element.hasClass('hoTen')) {
+            if (val.length < 3) {
+                element.parent().find('span.text-error-hoten').text('Tên phải lớn hơn 2 ký tự.')
+                checkName = false;
+            }
+            if (val.length === 0) {
+                element.parent().find('span.text-error-hoten').text('Vui lòng nhập tên.')
+                checkName = false;
+            }
+        }
+        if (element.hasClass('soDienThoai')) {
+            if (!regexPhone.test(val)) {
+                element.parent().find('span.text-error-soDienThoai').text('Số điện thoại không đúng định dạng.')
+                checkPhone = false;
+            }
+            if (val.length === 0) {
+                element.parent().find('span.text-error-soDienThoai').text('Vui lòng nhập số điện thoại.')
+                checkPhone = false;
+            }
+
+        }
+        if (element.hasClass('email')) {
+            if (!regexEmail.test(val)) {
+                element.parent().find('span.text-error-email').text('Email không đúng định dạng.')
+                checkEmail = false;
+            }
+            if (val.length === 0) {
+                element.parent().find('span.text-error-email').text('Vui lòng nhập email.')
+                checkEmail = false;
+            }
+
+
+        }
+        if (element.hasClass('soNha')) {
+            if (val.length === 0) {
+                element.parent().find('span.text-error-soNha').text('Vui lòng nhập số nhà.')
+            } else {
+                element.parent().find('span.text-error-soNha').text('')
+            }
+        }
+        if (checkName) {
+            element.parent().find('span.text-error-hoten').text('')
+        }
+
+        if (checkEmail) {
+            element.parent().find('span.text-error-email').text('')
+        }
+
+        if (checkPhone) {
+            element.parent().find('span.text-error-soDienThoai').text('')
+        }
+    })
     $(document).on('change', '.option-select-address', async function () {
         let oder = getOderNum(this);
         let input = $(`input[name="address_khac_${oder}"]:checked`);
@@ -1482,18 +1621,22 @@ $(document).on('ready', function () {
                     <div class="form-group col-4 mb-3">
                         <label for="hoTen_${oder}" class="mb-0">Họ Tên:</label>
                         <input class="form-control hoTen" id="hoTen_${oder}" type="text" value="${hoten}">
+                        <span class="text-danger text-error-hoten"></span>
                     </div>
                     <div class="form-group col-4 mb-3">
                         <label for="soDienThoai_${oder}" class="mb-0">Số Điện Thoại:</label>
                         <input class="form-control soDienThoai" id="soDienThoai_${oder}" type="text" value="${sdt}">
+                        <span class="text-danger text-error-soDienThoai"></span>
                     </div>
                     <div class="form-group col-4 mb-3">
                         <label for="email_${oder}" class="mb-0">Email:</label>
                         <input class="form-control email" id="email_${oder}" type="text" value="${email}">
+                        <span class="text-danger text-error-email"></span>
                     </div>
                     <div class="form-group col-6 mb-3">
                         <label for="soNha_${oder}" class="mb-0">Số Nhà:</label>
                         <input class="form-control soNha" id="soNha_${oder}" type="text">
+                        <span class="text-danger text-error-soNha"></span>
                     </div>
                     <div class="form-group col-6 mb-3">
                         <label for="tinhTP_${oder}" class="mb-0">Tỉnh/TP:</label>
@@ -1526,6 +1669,7 @@ $(document).on('ready', function () {
             setVariableShipping(oder, null);
         } else {
             resetShipping(oder);
+            wrapper.find('.wrapper-option-address-khac').empty();
         }
         updateTotalMoney(oder);
     })
