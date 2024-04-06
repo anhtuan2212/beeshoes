@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.controller.cms;
 
 import com.poly.BeeShoes.model.HoaDon;
+import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.service.HoaDonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.poly.BeeShoes.library.LibService.calculatePercentageChange;
 
@@ -20,14 +23,53 @@ public class DashboardController {
 
     @GetMapping({"/", "", "/index"})
     public String indexDashboard(Model model) {
-        List<HoaDon> lstHD = hoaDonService.getAllHoaDon();
-        Date today = new Date();
+        Date endDate = new Date();
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startDate = calendar.getTime();
+        System.out.println(startDate.toLocaleString() + "|" + endDate.toLocaleString());
+        List<HoaDon> lstHD = hoaDonService.getHoaDonBetwent(startDate, endDate);
+        Date today = new Date();
         calendar.add(Calendar.DATE, -1);
         Date yesterday = calendar.getTime();
         List<HoaDon> lstToDay = hoaDonService.getAllByDate(today);
         List<HoaDon> lstYesterDay = hoaDonService.getAllByDate(yesterday);
 
+        // Lấy top 6 sản phẩm có nhiều lượt mua nhất
+        Map<Long, Map<String, Object>> productMap = new HashMap<>();
+        lstHD.forEach(order -> {
+            // Duyệt qua từng hóa đơn chi tiết của mỗi hóa đơn
+            order.getHoaDonChiTiets().forEach(item -> {
+                long productId = item.getChiTietSanPham().getSanPham().getId();
+                int quantity = item.getSoLuong();
+                BigDecimal totalRevenue = item.getGiaBan().multiply(BigDecimal.valueOf(quantity));
+
+                // Nếu sản phẩm đã có trong Map, cập nhật thông tin số lượng bán và tổng tiền
+                if (productMap.containsKey(productId)) {
+                    Map<String, Object> productInfo = productMap.get(productId);
+                    int currentQuantity = (int) productInfo.getOrDefault("soLuong", 0);
+                    BigDecimal currentTotalRevenue = (BigDecimal) productInfo.getOrDefault("tongTien", BigDecimal.ZERO);
+                    productInfo.put("soLuong", currentQuantity + quantity);
+                    productInfo.put("tongTien", currentTotalRevenue.add(totalRevenue));
+                } else {
+                    Map<String, Object> productInfo = new HashMap<>();
+                    productInfo.put("id", item.getChiTietSanPham().getSanPham().getId());
+                    productInfo.put("ten", item.getChiTietSanPham().getSanPham().getTen());
+                    productInfo.put("anh", item.getChiTietSanPham().getSanPham().getMainImage().getUrl());
+                    productInfo.put("soLuong", quantity);
+                    productInfo.put("tongTien", totalRevenue);
+                    productInfo.put("giaBan", item.getChiTietSanPham().getGiaBan());
+                    productMap.put(productId, productInfo);
+                }
+            });
+        });
+        List<Map<String, Object>> top6Products = productMap.values().stream()
+                .sorted((p1, p2) -> Integer.compare((int) p2.get("soLuong"), (int) p1.get("soLuong")))
+                .limit(6)
+                .collect(Collectors.toList());
+
+        System.out.println(top6Products);
         int quantity_oder_today = lstToDay.size();
         int quantity_oder_yesterday = lstYesterDay.size();
 
@@ -46,29 +88,6 @@ public class DashboardController {
         int num_oder_store = 0;
         int num_oder_discount = 0;
 
-        int total_online_revenue_today = 0;
-        int total_online_revenue_yesterday = 0;
-        int total_store_revenue_today = 0;
-        int total_store_revenue_yesterday = 0;
-
-        for (HoaDon hd : lstToDay) {
-            if (hd.isLoaiHoaDon()) {
-                quantity_store_oder_today++;
-                total_store_revenue_today += hd.getThucThu().intValue();
-            } else {
-                quantity_online_oder_today++;
-                total_online_revenue_today += hd.getThucThu().intValue();
-            }
-        }
-        for (HoaDon hd : lstYesterDay) {
-            if (hd.isLoaiHoaDon()) {
-                quantity_store_oder_yesterday++;
-                total_store_revenue_yesterday += hd.getThucThu().intValue();
-            } else {
-                quantity_online_oder_yesterday++;
-                total_online_revenue_yesterday += hd.getThucThu().intValue();
-            }
-        }
         for (HoaDon hd : lstHD) {
             total_all += hd.getThucThu().intValue();
             if (hd.getGiamGia().intValue() > 0) {
@@ -90,23 +109,7 @@ public class DashboardController {
         Map<String, Object> in_store_data = createDataMap(total_store, num_oder_store, calculatePercentageChange(quantity_store_oder_yesterday, quantity_store_oder_today), quantity_store_oder_today > quantity_store_oder_yesterday);
         Map<String, Object> discount_data = createDataMap(total_discount, num_oder_discount, 0, false);
 
-        int change_online = total_online_revenue_today - total_online_revenue_yesterday;
-        int change_store = total_store_revenue_today - total_store_revenue_yesterday;
-        Map<String, Object> today_detail_data = new HashMap<>();
-        today_detail_data.put("revenue_today_online", total_online_revenue_today);
-        today_detail_data.put("revenue_today_store", total_store_revenue_today);
-        today_detail_data.put("change_store", change_store);
-        today_detail_data.put("change_online", change_online);
-        today_detail_data.put("percent_online", calculatePercentageChange(total_online_revenue_yesterday, total_online_revenue_today));
-        today_detail_data.put("percent_store", calculatePercentageChange(total_store_revenue_yesterday, total_store_revenue_today));
-        today_detail_data.put("direction_store", total_store_revenue_today > total_store_revenue_yesterday);
-        today_detail_data.put("direction_online", total_online_revenue_today > total_online_revenue_yesterday);
-        today_detail_data.put("quantity_today_store", quantity_store_oder_today);
-        today_detail_data.put("quantity_yesterday_store", quantity_store_oder_yesterday);
-        today_detail_data.put("quantity_today_online", quantity_online_oder_today);
-        today_detail_data.put("quantity_yesterday_online", quantity_online_oder_yesterday);
-
-        model.addAttribute("today_detail_data", today_detail_data);
+        model.addAttribute("top_products", top6Products);
         model.addAttribute("online_data", online_data);
         model.addAttribute("discount_data", discount_data);
         model.addAttribute("total_all_data", total_all_data);

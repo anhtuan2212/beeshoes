@@ -182,7 +182,7 @@
 
                     <div class="col-sm-auto">
                         <!-- Select -->
-                        <select class="js-select2-custom custom-select-sm" size="1" style="opacity: 0;"
+                        <select id="total-oder-today-type" class="js-select2-custom custom-select-sm" size="1" style="opacity: 0;"
                                 data-hs-select2-options='{
                           "minimumResultsForSearch": "Infinity",
                           "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
@@ -213,18 +213,18 @@
                     <div class="col-md-9 mb-5 mb-md-0">
                         <!-- Bar Chart -->
                         <div class="chartjs-custom mb-4">
-                            <canvas class="js-chart" style="height: 18rem;" data-hs-chartjs-options='{
+                            <canvas id="total-data-today" style="height: 18rem;" data-hs-chartjs-options='{
                             "type": "bar",
                             "data": {
-                              "labels": ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
+                              "labels": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
                               "datasets": [{
-                                "data": [200, 300, 290, 350, 150, 350, 300, 100, 125, 220, 200, 300, 290, 350, 150, 350, 300, 100, 125, 220, 225,124,324],
+                                "data": [100,200, 300, 290, 350, 150, 350, 300, 100, 125, 220, 200, 300, 290, 350, 150, 350, 300, 100, 125, 220, 225,124,324],
                                 "backgroundColor": "#377dff",
                                 "hoverBackgroundColor": "#377dff",
                                 "borderColor": "#377dff"
                               },
                               {
-                                "data": [150, 230, 382, 204, 169, 290, 300, 100, 300, 225, 120, 150, 230, 382, 204, 169, 290, 300, 100, 300, 140,145,210],
+                                "data": [100,150, 230, 382, 204, 169, 290, 300, 100, 300, 225, 120, 150, 230, 382, 204, 169, 290, 300, 100, 300, 140,145,210],
                                 "backgroundColor": "#e7eaf3",
                                 "borderColor": "#e7eaf3"
                               }]
@@ -279,10 +279,10 @@
                         <!-- Legend Indicators -->
                         <div class="row justify-content-center">
                             <div class="col-auto">
-                                <span class="legend-indicator"></span>Doanh Thu
+                                <span class="legend-indicator"></span>Hôm Qua
                             </div>
                             <div class="col-auto">
-                                <span class="legend-indicator bg-primary"></span> Đặt Hàng
+                                <span class="legend-indicator bg-primary"></span>Hôm Nay
                             </div>
                         </div>
                         <!-- End Legend Indicators -->
@@ -293,18 +293,14 @@
                             <div class="col-sm-6 col-md-12">
                                 <div class="d-flex justify-content-center flex-column chart-store"
                                      style="min-height: 10.5rem;">
-                                    <h6 class="card-subtitle">Doanh Thu</h6>
-                                    <span class="d-block display-4 text-dark mb-1 mr-3"
-                                          th:text="${#numbers.formatDecimal(today_detail_data.revenue_today_store,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></span>
-                                    <span class="d-block text-success" th:if="${today_detail_data.direction_store}">
-                                        <i class="tio-trending-up mr-1"></i> <th:block
-                                            th:text="${#numbers.formatDecimal(today_detail_data.change_store,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ ('+${today_detail_data.percent_store}+'%)' "></th:block>
-                                    </span>
-                                    <span class="d-block text-danger"
-                                          th:if="${today_detail_data.direction_store==false}">
-                                        <i class="tio-trending-down mr-1"></i> <th:block
-                                            th:text="${#numbers.formatDecimal(today_detail_data.change_store,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ ('+${today_detail_data.percent_store}+'%)' "></th:block>
-                                    </span>
+                                    <h6 class="card-subtitle">Doanh Thu dự kiến</h6>
+                                    <span id="show-total-money" class="d-block display-4 text-dark mb-1 mr-3"></span>
+<!--                                    <span class="d-block text-success">-->
+<!--                                        <i class="tio-trending-up mr-1"></i> 19999đ (+20%)-->
+<!--                                    </span>-->
+<!--                                    <span class="d-block text-danger">-->
+<!--                                        <i class="tio-trending-down mr-1"></i>-->
+<!--                                    </span>-->
                                 </div>
                                 <!-- End Stats -->
 
@@ -320,9 +316,8 @@
                             <div class="col-sm-6 col-md-12">
                                 <!-- Stats -->
                                 <div class="d-flex justify-content-center flex-column" style="min-height: 10.5rem;">
-                                    <h6 class="card-subtitle">Đặt Hàng</h6>
-                                    <span class="d-block display-4 text-dark mb-1 mr-3"
-                                          th:text="${today_detail_data.quantity_today_store}"></span>
+                                    <h6 class="card-subtitle">Số lượng đơn</h6>
+                                    <span id="text-quantity-oder-today" class="d-block display-4 text-dark mb-1 mr-3"></span>
                                     <span class="d-block text-danger">
                                         <i class="tio-trending-down mr-1"></i> +3,301 (1.2%)
                                     </span>
@@ -412,8 +407,17 @@
                     <!-- Header -->
                     <div class="card-header">
                         <h4 class="card-header-title">Top Sản Phẩm</h4>
-
-                        <a class="btn btn-sm btn-ghost-secondary" href="/cms/product">Tất Cả</a>
+                        <select class="js-select2-custom custom-select-sm" size="1" style="opacity: 0;"
+                                data-hs-select2-options='{
+                          "minimumResultsForSearch": "Infinity",
+                          "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
+                          "dropdownAutoWidth": true,
+                          "width": true
+                        }'>
+                            <option value="thisMonth">Tháng Này</option>
+                            <option value="thisWeek">Tuần Này</option>
+                            <option value="ToDay">Hôm Nay</option>
+                        </select>
                     </div>
                     <!-- End Header -->
 
@@ -425,7 +429,7 @@
                                 <thead class="thead-light">
                                 <tr>
                                     <th scope="col">SẢN PHẨM</th>
-                                    <th scope="col">THAY ĐỔI</th>
+<!--                                    <th scope="col">THAY ĐỔI</th>-->
                                     <th scope="col">GIÁ BÁN</th>
                                     <th scope="col">ĐÃ BÁN</th>
                                     <th scope="col">DOANH THU</th>
@@ -433,129 +437,24 @@
                                 </thead>
 
                                 <tbody>
-                                <tr>
+                                <tr th:each="pro:${top_products}">
                                     <td>
                                         <!-- Media -->
-                                        <a class="media align-items-center" href="./ecommerce-product-description.html">
-                                            <img class="avatar mr-3" src="/assets/cms/img/400x400/img4.jpg"
+                                        <a class="media align-items-center" th:href="@{'/cms/view-product?id='+pro.id}">
+                                            <img class="avatar mr-3" th:src="${pro.anh}"
                                                  alt="Image Description">
 
                                             <div class="media-body">
-                                                <h5 class="text-hover-primary mb-0">Photive wireless speakers</h5>
+                                                <h5 class="text-hover-primary mb-0" th:text="${pro.ten}"></h5>
                                             </div>
                                         </a>
                                         <!-- End Media -->
                                     </td>
-                                    <td><i class="tio-trending-down text-danger mr-1"></i> 72%</td>
-                                    <td>$65</td>
-                                    <td>7,545</td>
+<!--                                    <td><i class="tio-trending-down text-danger mr-1"></i> 72%</td>-->
+                                    <td th:text="${#numbers.formatDecimal (pro.giaBan, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">$65</td>
+                                    <td th:text="${#numbers.formatDecimal (pro.soLuong, 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
                                     <td>
-                                        <h4 class="mb-0">$15,302.00</h4>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <!-- Media -->
-                                        <a class="media align-items-center" href="./ecommerce-product-description.html">
-                                            <img class="avatar mr-3" src="/assets/cms/img/400x400/img26.jpg"
-                                                 alt="Image Description">
-
-                                            <div class="media-body">
-                                                <h5 class="text-hover-primary mb-0">Topman shoe in green</h5>
-                                            </div>
-                                        </a>
-                                        <!-- End Media -->
-                                    </td>
-                                    <td><i class="tio-trending-up text-success mr-1"></i> 69%</td>
-                                    <td>$21</td>
-                                    <td>6,643</td>
-                                    <td>
-                                        <h4 class="mb-0">$12,492.21</h4>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <!-- Media -->
-                                        <a class="media align-items-center" href="./ecommerce-product-description.html">
-                                            <img class="avatar mr-3" src="/assets/cms/img/400x400/img25.jpg"
-                                                 alt="Image Description">
-
-                                            <div class="media-body">
-                                                <h5 class="text-hover-primary mb-0">RayBan black sunglasses</h5>
-                                            </div>
-                                        </a>
-                                        <!-- End Media -->
-                                    </td>
-                                    <td><i class="tio-trending-down text-danger mr-1"></i> 65%</td>
-                                    <td>$37</td>
-                                    <td>5,951</td>
-                                    <td>
-                                        <h4 class="mb-0">$10,351.71</h4>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <!-- Media -->
-                                        <a class="media align-items-center" href="./ecommerce-product-description.html">
-                                            <img class="avatar mr-3" src="/assets/cms/img/400x400/img6.jpg"
-                                                 alt="Image Description">
-
-                                            <div class="media-body">
-                                                <h5 class="text-hover-primary mb-0">Mango Women's shoe</h5>
-                                            </div>
-                                        </a>
-                                        <!-- End Media -->
-                                    </td>
-                                    <td><i class="tio-trending-down text-danger mr-1"></i> 53%</td>
-                                    <td>$65</td>
-                                    <td>5,002</td>
-                                    <td>
-                                        <h4 class="mb-0">$9,917.45</h4>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <!-- Media -->
-                                        <a class="media align-items-center" href="./ecommerce-product-description.html">
-                                            <img class="avatar mr-3" src="/assets/cms/img/400x400/img3.jpg"
-                                                 alt="Image Description">
-
-                                            <div class="media-body">
-                                                <h5 class="text-hover-primary mb-0">Calvin Klein t-shirts</h5>
-                                            </div>
-                                        </a>
-                                        <!-- End Media -->
-                                    </td>
-                                    <td><i class="tio-trending-up text-success mr-1"></i> 50%</td>
-                                    <td>$89</td>
-                                    <td>4,714</td>
-                                    <td>
-                                        <h4 class="mb-0">$8,466.02</h4>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <!-- Media -->
-                                        <a class="media align-items-center" href="./ecommerce-product-description.html">
-                                            <img class="avatar mr-3" src="/assets/cms/img/400x400/img5.jpg"
-                                                 alt="Image Description">
-
-                                            <div class="media-body">
-                                                <h5 class="text-hover-primary mb-0">Givenchy perfume</h5>
-                                            </div>
-                                        </a>
-                                        <!-- End Media -->
-                                    </td>
-                                    <td><i class="tio-trending-up text-success mr-1"></i> 50%</td>
-                                    <td>$99</td>
-                                    <td>4,155</td>
-                                    <td>
-                                        <h4 class="mb-0">$7,715.89</h4>
+                                        <h4 class="mb-0" th:text="${#numbers.formatDecimal (pro.tongTien, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -575,21 +474,21 @@
                 <div class="col-lg-6">
                     <!-- Body -->
                     <div class="card-body">
-                        <h4>Đơn Hàng <i class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
+                        <h4>Doanh Thu <i class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
                                         data-placement="top"
                                         title="Doanh thu thuần (tổng doanh thu trừ đi khoản giảm giá và trả lại) cộng với thuế và phí vận chuyển. Bao gồm các đơn đặt hàng từ tất cả các kênh bán hàng."></i>
                         </h4>
 
                         <div class="row align-items-sm-center mb-5">
                             <div class="col-sm">
-                                <span class="display-4 text-dark mr-2">$597,820.75</span>
+                                <span id="total-money-today" class="display-4 text-dark mr-2"></span>
                             </div>
 
                             <div class="col-sm-auto">
                     <span class="h3 text-success">
                       <i class="tio-trending-up"></i> 25.9%
                     </span>
-                                <span class="d-block">&mdash; 1,347,935 Đơn <span
+                                <span class="d-block">&mdash; 1,347,935,234đ <span
                                         class="badge badge-soft-dark badge-pill ml-1">+$97k Hôm Nay</span></span>
                             </div>
                         </div>
@@ -639,7 +538,6 @@
                                       "fontColor": "#97a4af",
                                       "fontFamily": "Open Sans, sans-serif",
                                       "padding": 10,
-                                      "prefix": "$",
                                       "postfix": "k"
                                     }
                                   }],
@@ -657,7 +555,6 @@
                                   }]
                               },
                               "tooltips": {
-                                "prefix": "$",
                                 "postfix": "k",
                                 "hasIndicator": true,
                                 "mode": "index",
@@ -813,11 +710,11 @@
                 <div class="col-lg-6">
                     <!-- Body -->
                     <div class="card-body">
-                        <h4>Tổng Đơn Đặt Hàng</h4>
+                        <h4>Đơn Hàng</h4>
 
                         <div class="row align-items-sm-center mb-5">
                             <div class="col-sm">
-                                <span class="display-4 text-dark mr-2">1,348,935</span>
+                                <span id="total-quantity-today" class="display-4 text-dark mr-2"></span>
                             </div>
 
                             <div class="col-sm-auto">
@@ -832,12 +729,12 @@
 
                         <!-- Bar Chart -->
                         <div class="chartjs-custom mb-4" style="height: 18rem;">
-                            <canvas class="js-chart" data-hs-chartjs-options='{
+                            <canvas id="total-oder-all" data-hs-chartjs-options='{
                             "type": "line",
                             "data": {
-                               "labels": ["1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM"],
+                               "labels": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
                                "datasets": [{
-                                "data": [15, 26, 29, 20, 23, 38, 20, 30, 20, 22],
+                                "data": [],
                                 "backgroundColor": "transparent",
                                 "borderColor": "#377dff",
                                 "borderWidth": 2,
@@ -848,7 +745,7 @@
                                 "pointHoverRadius": 0
                               },
                               {
-                                "data": [20, 20, 15, 18, 20, 24, 35, 20, 35, 22],
+                                "data": [],
                                 "backgroundColor": "transparent",
                                 "borderColor": "#e7eaf3",
                                 "borderWidth": 2,
@@ -874,7 +771,7 @@
                                       "fontColor": "#97a4af",
                                       "fontFamily": "Open Sans, sans-serif",
                                       "padding": 10,
-                                      "postfix": "k"
+                                      "postfix": ""
                                     }
                                   }],
                                   "xAxes": [{
@@ -891,7 +788,7 @@
                                   }]
                               },
                               "tooltips": {
-                                "postfix": "k",
+                                "postfix": "",
                                 "hasIndicator": true,
                                 "mode": "index",
                                 "intersect": false,
@@ -1775,7 +1672,7 @@
 <script src="/assets/cms/vendor/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>
 <!-- JS Front -->
 <script src="/assets/cms/js/theme.min.js"></script>
-<script src="/assets/cms/js/trangchu/trangchu.js"></script>
+<script src="/assets/cms/js/dashboard/dashboard.js"></script>
 
 <!-- JS Plugins Init. -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>

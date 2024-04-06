@@ -8,9 +8,12 @@ import java.util.Date;
 import java.util.List;
 
 public interface HoaDonService {
-    List<int[]> cntInvoiceInHourByCreatedDate(String date);
+    List<Object[]> getAllCountCreatedByCreatDate(String date);
+    List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date,boolean loaiHD);
 
     List<HoaDon> getAllHoaDon();
+
+    List<HoaDon> getHoaDonBetwent(Date start,Date end);
 
     List<HoaDon> getAllByDate(Date date);
 
