@@ -22,13 +22,23 @@ public class HoaDonServiceImpl implements HoaDonService {
     private final HoaDonRepository hoaDonRepository;
 
     @Override
-    public List<int[]> cntInvoiceInHourByCreatedDate(String date) {
-        return hoaDonRepository.cntInvoiceInHourByCreatedDate(date);
+    public List<Object[]> getAllCountCreatedByCreatDate(String date) {
+        return hoaDonRepository.getAllCountCreatedByCreatDate(date);
+    }
+
+    @Override
+    public List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date, boolean loaiHD) {
+        return hoaDonRepository.getCountCreatedByCreatDateAndTypeHD(date, loaiHD);
     }
 
     @Override
     public List<HoaDon> getAllHoaDon() {
         return hoaDonRepository.findAll(Sort.by(Sort.Direction.DESC, "ngayTao"));
+    }
+
+    @Override
+    public List<HoaDon> getHoaDonBetwent(Date start, Date end) {
+        return hoaDonRepository.findByNgayTaoBetween(start, end);
     }
 
     @Override

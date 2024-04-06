@@ -1450,8 +1450,14 @@ $(document).on('ready', function () {
         }
         let shippingFe = getVariableShipping(oder);
         let cash = $('#pay-cash-money').val().replace(/[.,]/g, '');
-        let total = $('#total-money').val().replace(/[.,]/g, '');
+        if (cash === null || cash === undefined) {
+            cash = 0;
+        }
+        // let total = $('#total-money').val().replace(/[.,]/g, '');
         let transfer = $('#pay-chuyen-khoan-money').val().replace(/[.,]/g, '');
+        if (transfer === null || transfer === undefined) {
+            transfer = 0;
+        }
         let transferCode = $('#pay-card-money').val();
         let voucher = getVoucher(oder)
         let code = '';
@@ -1691,6 +1697,10 @@ $(document).on('ready', function () {
             setVariableShipping(oder, null);
         }
     })
+    $(document).on('click', '.js-create-field', function () {
+        let oder = getOderNum(this);
+        $(`#searchProduct_hd_${oder}`).focus().trigger('focus');
+    })
     $(document).on('change', '#tinhTP', function () {
         let quanHuyen = $('#quanHuyen');
         let phuongXa = $('#phuongXa');
@@ -1877,6 +1887,7 @@ $(document).on('ready', function () {
         let tabContent = $('#tab-content-show');
         let quantity_oder = listItem.find('li');
         if (quantity_oder.length > 4) {
+            ToastError('Số lượng hóa đơn chờ đạt tối đa.')
             return;
         }
         let numId = quantity_oder.length + 1
