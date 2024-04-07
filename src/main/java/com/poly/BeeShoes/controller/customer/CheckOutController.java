@@ -1,17 +1,21 @@
 package com.poly.BeeShoes.controller.customer;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import com.poly.BeeShoes.constant.TrangThaiHoaDon;
+import com.poly.BeeShoes.dto.HoaDonDto;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.payment.vnpay.VNPayService;
 import com.poly.BeeShoes.request.ProductCheckoutRequest;
-import com.poly.BeeShoes.request.ProductDetailVersion;
 import com.poly.BeeShoes.service.*;
+import com.poly.BeeShoes.utility.ConvertUtility;
+import com.poly.BeeShoes.utility.MailUtility;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -19,15 +23,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,6 +41,10 @@ public class CheckOutController {
     private final GioHangChiTietService gioHangChiTietService;
     private final HoaDonService hoaDonService;
     private final HoaDonChiTietService hoaDonChiTietService;
+    private final MailUtility mailUtility;
+    private final HinhThucThanhToanService hinhThucThanhToanService;
+    private final LichSuHoaDonService lichSuHoaDonService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     Gson gson = new Gson();
     @PostMapping("/checkout")
@@ -100,7 +104,11 @@ public class CheckOutController {
     }
     @GetMapping("/vnpay-payment")
     @Transactional
-    public String GetMapping(HttpServletRequest request, Model model){
+    public String GetMapping(
+            HttpServletRequest request,
+            HttpSession session,
+            Model model
+    ){
         int paymentStatus = vnPayService.orderReturn(request);
         int total = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
         String[] invoiceCode = request.getParameter("vnp_TxnRef").split("-");
@@ -118,6 +126,68 @@ public class CheckOutController {
                     hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
                 }
             }
+
+            if(hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
+                HoaDon hoaDon = (HoaDon) session.getAttribute(invoiceCode[0]);
+                Voucher voucher = hoaDon.getVoucher();
+                HoaDon savedHoaDon = hoaDonService.save(hoaDon);
+                //sửa lại thanh toán
+                List<HinhThucThanhToan> httt = new ArrayList<>();
+                HinhThucThanhToan ht = new HinhThucThanhToan();
+                ht.setHinhThuc("VNPAY");
+                ht.setTrangThai(false);
+                ht.setTienThanhToan(BigDecimal.valueOf(total));
+                ht.setTienThua(BigDecimal.ZERO);
+                ht.setMaGiaoDich("VNPAY");
+                ht.setNgayTao(Timestamp.from(Instant.now()));
+                ht.setHoaDon(savedHoaDon);
+                ht.setMoTa("Thanh Toán online bằng VNPAY");
+                ht = hinhThucThanhToanService.save(ht);
+                httt.add(ht);
+                savedHoaDon.setHinhThucThanhToans(httt);
+                HoaDon savedHoaDon2 = hoaDonService.save(savedHoaDon);
+
+                HoaDonDto hoaDonDto = new HoaDonDto();
+                hoaDonDto.setId(savedHoaDon2.getId());
+                hoaDonDto.setMaHoaDon(savedHoaDon2.getMaHoaDon());
+                hoaDonDto.setTenNguoiNhan(savedHoaDon2.getTenNguoiNhan());
+                hoaDonDto.setSdtNhan(savedHoaDon2.getSdtNhan());
+                hoaDonDto.setThucThu(savedHoaDon2.getThucThu());
+                hoaDonDto.setTrangThai(savedHoaDon2.getTrangThai());
+
+                LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+                lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan);
+                lichSuHoaDon.setHoaDon(savedHoaDon2);
+                lichSuHoaDon.setThoiGian(ConvertUtility.DateToTimestamp(new Date()));
+                lichSuHoaDon.setHanhDong("Đặt đơn hàng");
+                lichSuHoaDonService.save(lichSuHoaDon);
+                if (voucher != null) {
+                    voucher.setSoLuong(voucher.getSoLuong() - 1);
+                    voucherService.save(voucher);
+                }
+
+                JsonArray jsonArray = (JsonArray) session.getAttribute("jsonArray");
+                for (JsonElement e : jsonArray) {
+                    Long idPDetail = e.getAsJsonObject().get("productDetailId").getAsLong();
+                    int quantity = e.getAsJsonObject().get("quantity").getAsInt();
+                    HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+                    ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getById(idPDetail);
+                    hoaDonChiTiet.setChiTietSanPham(chiTietSanPham);
+                    hoaDonChiTiet.setGiaGoc(chiTietSanPham.getGiaBan());
+                    hoaDonChiTiet.setGiaBan(chiTietSanPham.getGiaBan());
+                    hoaDonChiTiet.setHoaDon(savedHoaDon2);
+                    hoaDonChiTiet.setSoLuong(quantity);
+                    hoaDonChiTietService.save(hoaDonChiTiet);
+                    chiTietSanPham.setSoLuongTon(chiTietSanPham.getSoLuongTon() - quantity);
+                    chiTietSanPhamService.save(chiTietSanPham);
+                }
+                session.removeAttribute("jsonArray");
+                session.removeAttribute(invoiceCode[0]);
+
+                messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
+                mailUtility.sendMail(hoaDon.getEmailNguoiNhan(), "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
+            }
+
             return "payment/vnpay/order-success";
         } else {
             return "payment/vnpay/order-failed";

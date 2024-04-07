@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.poly.BeeShoes.constant.TrangThaiHoaDon;
+import com.poly.BeeShoes.dto.HoaDonDto;
 import com.poly.BeeShoes.dto.LichSuHoaDonDto;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.request.*;
@@ -14,6 +15,7 @@ import com.poly.BeeShoes.utility.MailUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,6 +48,7 @@ public class HoaDonRestController {
     private final KhachHangService khachHangService;
     private final MailUtility mailUtility;
     private final HinhThucThanhToanService hinhThucThanhToanService;
+    private final SimpMessagingTemplate messagingTemplate;
     Gson gson = new Gson();
 
 //    @GetMapping("/get-all-hoadon")
@@ -609,6 +612,14 @@ public class HoaDonRestController {
         }
         hd.setLichSuHoaDons(listLshd);
         hd = hoaDonService.save(hd);
+        HoaDonDto hoaDonDto = new HoaDonDto();
+        hoaDonDto.setId(hd.getId());
+        hoaDonDto.setMaHoaDon(hd.getMaHoaDon());
+        hoaDonDto.setTenNguoiNhan(hd.getTenNguoiNhan());
+        hoaDonDto.setSdtNhan(hd.getSdtNhan());
+        hoaDonDto.setThucThu(hd.getThucThu());
+        hoaDonDto.setTrangThai(hd.getTrangThai());
+        messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
         ResponseOder response = new ResponseOder();
         List<ProductInResponse> lstPro = new ArrayList<>();
         for (int i = 0; i < hd.getHoaDonChiTiets().size(); i++) {
