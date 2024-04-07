@@ -22,8 +22,18 @@ public class HoaDonServiceImpl implements HoaDonService {
     private final HoaDonRepository hoaDonRepository;
 
     @Override
+    public List<Object[]> getAllCountCreatedByDateRange(Date start, Date end) {
+        return hoaDonRepository.getAllCountCreatedByDateRange(start, end);
+    }
+
+    @Override
     public List<Object[]> getAllCountCreatedByCreatDate(String date) {
         return hoaDonRepository.getAllCountCreatedByCreatDate(date);
+    }
+
+    @Override
+    public List<Object[]> getAllRevenueCreatedByCreatDate(String date) {
+        return hoaDonRepository.getAllRevenueCreatedByCreatDate(date);
     }
 
     @Override

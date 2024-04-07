@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface HoaDonService {
+    List<Object[]> getAllCountCreatedByDateRange(Date start , Date end);
     List<Object[]> getAllCountCreatedByCreatDate(String date);
+    List<Object[]> getAllRevenueCreatedByCreatDate(String date);
     List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date,boolean loaiHD);
 
     List<HoaDon> getAllHoaDon();

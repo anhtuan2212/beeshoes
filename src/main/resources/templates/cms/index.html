@@ -182,7 +182,8 @@
 
                     <div class="col-sm-auto">
                         <!-- Select -->
-                        <select id="total-oder-today-type" class="js-select2-custom custom-select-sm" size="1" style="opacity: 0;"
+                        <select id="total-oder-today-type" class="js-select2-custom custom-select-sm" size="1"
+                                style="opacity: 0;"
                                 data-hs-select2-options='{
                           "minimumResultsForSearch": "Infinity",
                           "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
@@ -295,12 +296,12 @@
                                      style="min-height: 10.5rem;">
                                     <h6 class="card-subtitle">Doanh Thu dự kiến</h6>
                                     <span id="show-total-money" class="d-block display-4 text-dark mb-1 mr-3"></span>
-<!--                                    <span class="d-block text-success">-->
-<!--                                        <i class="tio-trending-up mr-1"></i> 19999đ (+20%)-->
-<!--                                    </span>-->
-<!--                                    <span class="d-block text-danger">-->
-<!--                                        <i class="tio-trending-down mr-1"></i>-->
-<!--                                    </span>-->
+                                    <!--                                    <span class="d-block text-success">-->
+                                    <!--                                        <i class="tio-trending-up mr-1"></i> 19999đ (+20%)-->
+                                    <!--                                    </span>-->
+                                    <!--                                    <span class="d-block text-danger">-->
+                                    <!--                                        <i class="tio-trending-down mr-1"></i>-->
+                                    <!--                                    </span>-->
                                 </div>
                                 <!-- End Stats -->
 
@@ -317,11 +318,12 @@
                                 <!-- Stats -->
                                 <div class="d-flex justify-content-center flex-column" style="min-height: 10.5rem;">
                                     <h6 class="card-subtitle">Số lượng đơn</h6>
-                                    <span id="text-quantity-oder-today" class="d-block display-4 text-dark mb-1 mr-3"></span>
+                                    <span id="text-quantity-oder-today"
+                                          class="d-block display-4 text-dark mb-1 mr-3"></span>
                                     <span class="d-block text-danger">
                                         <i class="tio-trending-down mr-1"></i> +3,301 (1.2%)
                                     </span>
-<!--                             git add -->
+                                    <!--                             git add -->
                                 </div>
                                 <!-- End Stats -->
                             </div>
@@ -407,16 +409,17 @@
                     <!-- Header -->
                     <div class="card-header">
                         <h4 class="card-header-title">Top Sản Phẩm</h4>
-                        <select class="js-select2-custom custom-select-sm" size="1" style="opacity: 0;"
+                        <select id="top-product-option" class="js-select2-custom custom-select-sm" size="1"
+                                style="opacity: 0;"
                                 data-hs-select2-options='{
                           "minimumResultsForSearch": "Infinity",
                           "customClass": "custom-select custom-select-sm mb-2 mb-sm-0 mr-2",
                           "dropdownAutoWidth": true,
                           "width": true
                         }'>
-                            <option value="thisMonth">Tháng Này</option>
-                            <option value="thisWeek">Tuần Này</option>
-                            <option value="ToDay">Hôm Nay</option>
+                            <option value="month">Tháng Này</option>
+                            <option value="week">Tuần Này</option>
+                            <option value="day">Hôm Nay</option>
                         </select>
                     </div>
                     <!-- End Header -->
@@ -428,19 +431,20 @@
                             <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
                                 <thead class="thead-light">
                                 <tr>
+                                    <th scope="col">TOP</th>
                                     <th scope="col">SẢN PHẨM</th>
-<!--                                    <th scope="col">THAY ĐỔI</th>-->
                                     <th scope="col">GIÁ BÁN</th>
                                     <th scope="col">ĐÃ BÁN</th>
                                     <th scope="col">DOANH THU</th>
                                 </tr>
                                 </thead>
 
-                                <tbody>
-                                <tr th:each="pro:${top_products}">
+                                <tbody id="show-top-product">
+                                <tr th:each="pro,iter:${top_products}">
+                                    <td th:text="${iter.index+1}"></td>
                                     <td>
                                         <!-- Media -->
-                                        <a class="media align-items-center" th:href="@{'/cms/view-product?id='+pro.id}">
+                                        <a class="media align-items-center" th:href="'/cms/view-product?id='+${pro.id}">
                                             <img class="avatar mr-3" th:src="${pro.anh}"
                                                  alt="Image Description">
 
@@ -450,11 +454,14 @@
                                         </a>
                                         <!-- End Media -->
                                     </td>
-<!--                                    <td><i class="tio-trending-down text-danger mr-1"></i> 72%</td>-->
-                                    <td th:text="${#numbers.formatDecimal (pro.giaBan, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">$65</td>
+                                    <!--                                    <td><i class="tio-trending-down text-danger mr-1"></i> 72%</td>-->
+                                    <td th:text="${#numbers.formatDecimal (pro.giaBan, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">
+                                        $65
+                                    </td>
                                     <td th:text="${#numbers.formatDecimal (pro.soLuong, 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
                                     <td>
-                                        <h4 class="mb-0" th:text="${#numbers.formatDecimal (pro.tongTien, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
+                                        <h4 class="mb-0"
+                                            th:text="${#numbers.formatDecimal (pro.tongTien, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></h4>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -474,11 +481,17 @@
                 <div class="col-lg-6">
                     <!-- Body -->
                     <div class="card-body">
-                        <h4>Doanh Thu <i class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Doanh thu thuần (tổng doanh thu trừ đi khoản giảm giá và trả lại) cộng với thuế và phí vận chuyển. Bao gồm các đơn đặt hàng từ tất cả các kênh bán hàng."></i>
-                        </h4>
-
+                        <div class="d-flex justify-content-between">
+                            <h4>Doanh Thu <i class="tio-help-outlined text-body ml-1" data-toggle="tooltip"
+                                             data-placement="top"
+                                             title="Doanh thu thuần (tổng doanh thu trừ đi khoản giảm giá và trả lại) cộng với thuế và phí vận chuyển. Bao gồm các đơn đặt hàng từ tất cả các kênh bán hàng."></i>
+                            </h4>
+                            <button id="js-option-revenue"
+                                    class="btn btn-sm btn-white dropdown-toggle mb-2 mb-sm-0">
+                                <i class="tio-date-range"></i>
+                                <span class="js-daterangepicker-predefined-preview ml-1"></span>
+                            </button>
+                        </div>
                         <div class="row align-items-sm-center mb-5">
                             <div class="col-sm">
                                 <span id="total-money-today" class="display-4 text-dark mr-2"></span>
@@ -496,7 +509,7 @@
 
                         <!-- Bar Chart -->
                         <div class="chartjs-custom mb-4" style="height: 18rem;">
-                            <canvas class="js-chart" data-hs-chartjs-options='{
+                            <canvas id="total-revenue-chart" data-hs-chartjs-options='{
                             "type": "line",
                             "data": {
                                "labels": ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
@@ -556,239 +569,6 @@
                               },
                               "tooltips": {
                                 "postfix": "k",
-                                "hasIndicator": true,
-                                "mode": "index",
-                                "intersect": false,
-                                "lineMode": true,
-                                "lineWithLineColor": "rgba(19, 33, 68, 0.075)"
-                              },
-                              "hover": {
-                                "mode": "nearest",
-                                "intersect": true
-                              }
-                            }
-                          }'>
-                            </canvas>
-                        </div>
-                        <!-- End Bar Chart -->
-
-                        <!-- Legend Indicators -->
-                        <div class="row justify-content-center">
-                            <div class="col-auto">
-                                <span class="legend-indicator"></span> Hôm Qua
-                            </div>
-                            <div class="col-auto">
-                                <span class="legend-indicator bg-primary"></span> Hôm Nay
-                            </div>
-                        </div>
-                        <!-- End Legend Indicators -->
-                    </div>
-                    <!-- End Body -->
-
-                    <div class="d-lg-none">
-                        <hr>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 column-divider-lg">
-                    <!-- Body -->
-                    <div class="card-body">
-                        <h4>Khách Hàng</h4>
-
-                        <div class="row align-items-sm-center mb-5">
-                            <div class="col-sm">
-                                <span class="display-4 text-dark mr-2">831,071</span>
-                            </div>
-
-                            <div class="col-sm-auto">
-                    <span class="h3 text-danger">
-                      <i class="tio-trending-down"></i> 16%
-                    </span>
-                                <span class="d-block">&mdash; 467,001 Thành Viên <span
-                                        class="badge badge-soft-dark badge-pill ml-1">+7k Hôm Nay</span></span>
-                            </div>
-                        </div>
-                        <!-- End Row -->
-
-                        <!-- Bar Chart -->
-                        <div class="chartjs-custom mb-4" style="height: 18rem;">
-                            <canvas class="js-chart" data-hs-chartjs-options='{
-                            "type": "line",
-                            "data": {
-                               "labels": ["1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM"],
-                               "datasets": [{
-                                "data": [20, 20, 24, 15, 30, 35, 20, 28, 18, 16],
-                                "backgroundColor": "transparent",
-                                "borderColor": "#377dff",
-                                "borderWidth": 2,
-                                "pointRadius": 0,
-                                "hoverBorderColor": "#377dff",
-                                "pointBackgroundColor": "#377dff",
-                                "pointBorderColor": "#fff",
-                                "pointHoverRadius": 0
-                              },
-                              {
-                                "data": [15, 23, 18, 20, 36, 29, 20, 22, 20, 22],
-                                "backgroundColor": "transparent",
-                                "borderColor": "#e7eaf3",
-                                "borderWidth": 2,
-                                "pointRadius": 0,
-                                "hoverBorderColor": "#e7eaf3",
-                                "pointBackgroundColor": "#e7eaf3",
-                                "pointBorderColor": "#fff",
-                                "pointHoverRadius": 0
-                              }]
-                            },
-                            "options": {
-                               "scales": {
-                                  "yAxes": [{
-                                    "gridLines": {
-                                      "color": "#e7eaf3",
-                                      "drawBorder": false,
-                                      "zeroLineColor": "#e7eaf3"
-                                    },
-                                    "ticks": {
-                                      "beginAtZero": true,
-                                      "stepSize": 10,
-                                      "fontSize": 12,
-                                      "fontColor": "#97a4af",
-                                      "fontFamily": "Open Sans, sans-serif",
-                                      "padding": 10,
-                                      "postfix": "k"
-                                    }
-                                  }],
-                                  "xAxes": [{
-                                    "gridLines": {
-                                      "display": false,
-                                      "drawBorder": false
-                                    },
-                                    "ticks": {
-                                      "fontSize": 12,
-                                      "fontColor": "#97a4af",
-                                      "fontFamily": "Open Sans, sans-serif",
-                                      "padding": 5
-                                    }
-                                  }]
-                              },
-                              "tooltips": {
-                                "postfix": "k",
-                                "hasIndicator": true,
-                                "mode": "index",
-                                "intersect": false,
-                                "lineMode": true,
-                                "lineWithLineColor": "rgba(19, 33, 68, 0.075)"
-                              },
-                              "hover": {
-                                "mode": "nearest",
-                                "intersect": true
-                              }
-                            }
-                          }'>
-                            </canvas>
-                        </div>
-                        <!-- End Bar Chart -->
-
-                        <!-- Legend Indicators -->
-                        <div class="row justify-content-center">
-                            <div class="col-auto">
-                                <span class="legend-indicator"></span> Hôm Qua
-                            </div>
-                            <div class="col-auto">
-                                <span class="legend-indicator bg-primary"></span> Hôm Nay
-                            </div>
-                        </div>
-                        <!-- End Legend Indicators -->
-                    </div>
-                    <!-- End Body -->
-                </div>
-            </div>
-            <!-- End Row -->
-
-            <hr class="my-0">
-
-            <div class="row">
-                <div class="col-lg-6">
-                    <!-- Body -->
-                    <div class="card-body">
-                        <h4>Đơn Hàng</h4>
-
-                        <div class="row align-items-sm-center mb-5">
-                            <div class="col-sm">
-                                <span id="total-quantity-today" class="display-4 text-dark mr-2"></span>
-                            </div>
-
-                            <div class="col-sm-auto">
-                    <span class="h3 text-success">
-                      <i class="tio-trending-up"></i> 4.7%
-                    </span>
-                                <span class="d-block">&mdash; đơn hàng theo thời gian <span
-                                        class="badge badge-soft-dark badge-pill ml-1">+5k Hôm Nay</span></span>
-                            </div>
-                        </div>
-                        <!-- End Row -->
-
-                        <!-- Bar Chart -->
-                        <div class="chartjs-custom mb-4" style="height: 18rem;">
-                            <canvas id="total-oder-all" data-hs-chartjs-options='{
-                            "type": "line",
-                            "data": {
-                               "labels": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
-                               "datasets": [{
-                                "data": [],
-                                "backgroundColor": "transparent",
-                                "borderColor": "#377dff",
-                                "borderWidth": 2,
-                                "pointRadius": 0,
-                                "hoverBorderColor": "#377dff",
-                                "pointBackgroundColor": "#377dff",
-                                "pointBorderColor": "#fff",
-                                "pointHoverRadius": 0
-                              },
-                              {
-                                "data": [],
-                                "backgroundColor": "transparent",
-                                "borderColor": "#e7eaf3",
-                                "borderWidth": 2,
-                                "pointRadius": 0,
-                                "hoverBorderColor": "#e7eaf3",
-                                "pointBackgroundColor": "#e7eaf3",
-                                "pointBorderColor": "#fff",
-                                "pointHoverRadius": 0
-                              }]
-                            },
-                            "options": {
-                               "scales": {
-                                  "yAxes": [{
-                                    "gridLines": {
-                                      "color": "#e7eaf3",
-                                      "drawBorder": false,
-                                      "zeroLineColor": "#e7eaf3"
-                                    },
-                                    "ticks": {
-                                      "beginAtZero": true,
-                                      "stepSize": 10,
-                                      "fontSize": 12,
-                                      "fontColor": "#97a4af",
-                                      "fontFamily": "Open Sans, sans-serif",
-                                      "padding": 10,
-                                      "postfix": ""
-                                    }
-                                  }],
-                                  "xAxes": [{
-                                    "gridLines": {
-                                      "display": false,
-                                      "drawBorder": false
-                                    },
-                                    "ticks": {
-                                      "fontSize": 12,
-                                      "fontColor": "#97a4af",
-                                      "fontFamily": "Open Sans, sans-serif",
-                                      "padding": 5
-                                    }
-                                  }]
-                              },
-                              "tooltips": {
-                                "postfix": "",
                                 "hasIndicator": true,
                                 "mode": "index",
                                 "intersect": false,
@@ -931,6 +711,173 @@
                         <!-- End Legend Indicators -->
                     </div>
                     <!-- End Body -->
+                </div>
+            </div>
+            <!-- End Row -->
+
+            <hr class="my-0">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- Body -->
+                    <div class="card-body">
+                        <h4>Đơn Hàng</h4>
+
+                        <div class="row align-items-sm-center mb-5">
+                            <div class="col-sm">
+                                <span id="total-quantity-today" class="display-4 text-dark mr-2"></span>
+                            </div>
+
+                            <div class="col-sm-auto">
+                    <span class="h3 text-success">
+                      <i class="tio-trending-up"></i> 4.7%
+                    </span>
+                                <span class="d-block">&mdash; đơn hàng theo thời gian <span
+                                        class="badge badge-soft-dark badge-pill ml-1">+5k Hôm Nay</span></span>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+
+                        <!-- Bar Chart -->
+                        <div class="chartjs-custom mb-4" style="height: 18rem;">
+                            <canvas id="total-oder-all" data-hs-chartjs-options='{
+                            "type": "line",
+                            "data": {
+                               "labels": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
+                               "datasets": [{
+                                "data": [],
+                                "backgroundColor": "transparent",
+                                "borderColor": "#377dff",
+                                "borderWidth": 2,
+                                "pointRadius": 0,
+                                "hoverBorderColor": "#377dff",
+                                "pointBackgroundColor": "#377dff",
+                                "pointBorderColor": "#fff",
+                                "pointHoverRadius": 0
+                              },
+                              {
+                                "data": [],
+                                "backgroundColor": "transparent",
+                                "borderColor": "#e7eaf3",
+                                "borderWidth": 2,
+                                "pointRadius": 0,
+                                "hoverBorderColor": "#e7eaf3",
+                                "pointBackgroundColor": "#e7eaf3",
+                                "pointBorderColor": "#fff",
+                                "pointHoverRadius": 0
+                              }]
+                            },
+                            "options": {
+                               "scales": {
+                                  "yAxes": [{
+                                    "gridLines": {
+                                      "color": "#e7eaf3",
+                                      "drawBorder": false,
+                                      "zeroLineColor": "#e7eaf3"
+                                    },
+                                    "ticks": {
+                                      "beginAtZero": true,
+                                      "stepSize": 10,
+                                      "fontSize": 12,
+                                      "fontColor": "#97a4af",
+                                      "fontFamily": "Open Sans, sans-serif",
+                                      "padding": 10,
+                                      "postfix": ""
+                                    }
+                                  }],
+                                  "xAxes": [{
+                                    "gridLines": {
+                                      "display": false,
+                                      "drawBorder": false
+                                    },
+                                    "ticks": {
+                                      "fontSize": 12,
+                                      "fontColor": "#97a4af",
+                                      "fontFamily": "Open Sans, sans-serif",
+                                      "padding": 5
+                                    }
+                                  }]
+                              },
+                              "tooltips": {
+                                "postfix": "",
+                                "hasIndicator": true,
+                                "mode": "index",
+                                "intersect": false,
+                                "lineMode": true,
+                                "lineWithLineColor": "rgba(19, 33, 68, 0.075)"
+                              },
+                              "hover": {
+                                "mode": "nearest",
+                                "intersect": true
+                              }
+                            }
+                          }'>
+                            </canvas>
+                        </div>
+                        <!-- End Bar Chart -->
+
+                        <!-- Legend Indicators -->
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <span class="legend-indicator"></span> Hôm Qua
+                            </div>
+                            <div class="col-auto">
+                                <span class="legend-indicator bg-primary"></span> Hôm Nay
+                            </div>
+                        </div>
+                        <!-- End Legend Indicators -->
+                    </div>
+                    <!-- End Body -->
+
+                    <div class="d-lg-none">
+                        <hr>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-6 column-divider-lg pl-0">
+                    <div class="card-header">
+                        <h4 class="card-header-title">Sản phẩm sắp hết</h4>
+                    </div>
+                    <!-- Body -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">SẢN PHẨM</th>
+                                    <th scope="col">GIÁ BÁN</th>
+                                    <th scope="col">SỐ LƯỢNG TỒN</th>
+                                </tr>
+                                </thead>
+                                <tbody id="show-less-product">
+                                <tr th:each="pro,iter:${product_less}">
+                                    <td th:text="${iter.index+1}"></td>
+                                    <td>
+                                        <!-- Media -->
+                                        <a class="media align-items-center"
+                                           th:href="${'/cms/view-product?id='+pro.getId()}">
+                                            <img class="avatar mr-3" th:src="${pro.getMainImage().getUrl()}"
+                                                 alt="Image Description">
+
+                                            <div class="media-body">
+                                                <h5 class="text-hover-primary mb-0" th:text="${pro.getTen()}"></h5>
+                                            </div>
+                                        </a>
+                                        <!-- End Media -->
+                                    </td>
+                                    <!--                                    <td><i class="tio-trending-down text-danger mr-1"></i> 72%</td>-->
+                                    <td th:text="${#numbers.formatDecimal (pro.getChiTietSanPham().get(0).getGiaBan(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'">
+                                        $65
+                                    </td>
+                                    <td th:text="${#numbers.formatDecimal (pro.getTotalSoLuongTon(), 1, 'DEFAULT', 0, 'DEFAULT')}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Body  -->
                 </div>
             </div>
             <!-- End Row -->

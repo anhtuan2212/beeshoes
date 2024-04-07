@@ -86,6 +86,17 @@ public class SanPham {
 
         return null; // Trả về null nếu không tìm thấy ảnh chính
     }
+    public int getTotalSoLuongTon() {
+        if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
+            return 0; // Trả về 0 nếu không có chi tiết sản phẩm nào
+        }
+
+        int total = 0;
+        for (ChiTietSanPham chiTiet : chiTietSanPham) {
+            total += chiTiet.getSoLuongTon();
+        }
+        return total;
+    }
     public boolean isSales() {
         if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
             return false;

@@ -3,6 +3,7 @@ package com.poly.BeeShoes.controller.cms;
 import com.poly.BeeShoes.model.HoaDon;
 import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.service.HoaDonService;
+import com.poly.BeeShoes.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import static com.poly.BeeShoes.library.LibService.calculatePercentageChange;
 @RequiredArgsConstructor
 public class DashboardController {
     private final HoaDonService hoaDonService;
+    private final SanPhamService sanPhamService;
 
     @GetMapping({"/", "", "/index"})
     public String indexDashboard(Model model) {
@@ -66,7 +68,7 @@ public class DashboardController {
         });
         List<Map<String, Object>> top6Products = productMap.values().stream()
                 .sorted((p1, p2) -> Integer.compare((int) p2.get("soLuong"), (int) p1.get("soLuong")))
-                .limit(6)
+                .limit(10)
                 .collect(Collectors.toList());
 
         System.out.println(top6Products);
@@ -109,6 +111,8 @@ public class DashboardController {
         Map<String, Object> in_store_data = createDataMap(total_store, num_oder_store, calculatePercentageChange(quantity_store_oder_yesterday, quantity_store_oder_today), quantity_store_oder_today > quantity_store_oder_yesterday);
         Map<String, Object> discount_data = createDataMap(total_discount, num_oder_discount, 0, false);
 
+        List<SanPham> prList = sanPhamService.findByChiTietSanPham_SoLuongTonLessThan();
+        model.addAttribute("product_less", prList);
         model.addAttribute("top_products", top6Products);
         model.addAttribute("online_data", online_data);
         model.addAttribute("discount_data", discount_data);

@@ -13,6 +13,7 @@ import java.util.Map;
 public interface SanPhamService {
     List<String> getListKichCo(Long id);
     SanPham save(SanPham sanPham);
+    List<SanPham> findByChiTietSanPham_SoLuongTonLessThan();
     SanPham getById(Long id);
     SanPham getByIdcms(Long id);
     SanPham getByTen(String name);

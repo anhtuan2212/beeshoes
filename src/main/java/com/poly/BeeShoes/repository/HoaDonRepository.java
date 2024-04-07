@@ -38,6 +38,58 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
     HoaDon findByMaHoaDon(String maHoaDon);
 
+    @Query(value = "SELECT all_days.date_of_day, COALESCE(SUM(hd.thuc_thu), 0) AS total_revenue\n" +
+            "FROM (\n" +
+            "    SELECT ?1 + INTERVAL t.n DAY AS date_of_day\n" +
+            "    FROM (\n" +
+            "        SELECT n * 10 + m AS n\n" +
+            "        FROM (\n" +
+            "            SELECT 0 n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 \n" +
+            "            UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 \n" +
+            "            UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9\n" +
+            "        ) t\n" +
+            "        CROSS JOIN (\n" +
+            "            SELECT 0 m UNION ALL SELECT 1 UNION ALL SELECT 2 \n" +
+            "            UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 \n" +
+            "            UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 \n" +
+            "            UNION ALL SELECT 9\n" +
+            "        ) t1\n" +
+            "    ) t\n" +
+            "    WHERE ?1 + INTERVAL t.n DAY BETWEEN ?1 AND ?2\n" +
+            ") all_days\n" +
+            "LEFT JOIN hoa_don hd ON DATE(hd.ngay_tao) = all_days.date_of_day\n" +
+            "GROUP BY all_days.date_of_day\n" +
+            "ORDER BY all_days.date_of_day\n", nativeQuery = true)
+    List<Object[]> getAllCountCreatedByDateRange(Date startDate, Date endDate);
+
+    @Query(
+            value = "SELECT hour_of_day, COALESCE(total_revenue, 0) AS total_revenue\n" +
+                    "FROM (\n" +
+                    "    SELECT HOUR(ngay_tao) AS hour_of_day, SUM(thuc_thu) AS total_revenue\n" +
+                    "    FROM hoa_don\n" +
+                    "    WHERE DATE(ngay_tao) = ?1\n" +
+                    "    GROUP BY HOUR(ngay_tao)\n" +
+                    "    UNION\n" +
+                    "    SELECT hour_of_day, NULL AS total_revenue\n" +
+                    "    FROM (\n" +
+                    "        SELECT 0 AS hour_of_day \n" +
+                    "        UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 \n" +
+                    "        UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 \n" +
+                    "        UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 \n" +
+                    "        UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 \n" +
+                    "        UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20 \n" +
+                    "        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23\n" +
+                    "    ) AS all_hours\n" +
+                    "    WHERE all_hours.hour_of_day NOT IN (\n" +
+                    "        SELECT HOUR(ngay_tao) \n" +
+                    "        FROM hoa_don \n" +
+                    "        WHERE DATE(ngay_tao) = ?1\n" +
+                    "    )\n" +
+                    ") AS result\n" +
+                    "ORDER BY hour_of_day\n",
+            nativeQuery = true
+    )
+    List<Object[]> getAllRevenueCreatedByCreatDate(String date);
     @Query(
             value = "SELECT hour_of_day, COALESCE(number_of_invoices, 0) AS number_of_invoices " +
                     "FROM (" +
@@ -60,6 +112,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
             nativeQuery = true
     )
     List<Object[]> getAllCountCreatedByCreatDate(String date);
+
     @Query(
             value = "SELECT hour_of_day, COALESCE(number_of_invoices, 0) AS number_of_invoices " +
                     "FROM (" +
@@ -81,5 +134,5 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
                     "ORDER BY hour_of_day",
             nativeQuery = true
     )
-    List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date,boolean loaiHoaDon);
+    List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date, boolean loaiHoaDon);
 }
