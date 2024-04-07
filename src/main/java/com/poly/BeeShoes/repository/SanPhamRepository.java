@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,15 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     Optional<SanPham> getByIdClient(@Param("id")Long id);
     SanPham getFirstByTen(String name);
     boolean existsByTheLoai(TheLoai theLoai);
+    List<SanPham> findByChiTietSanPham_SoLuongTonLessThan(int soLuongTon);
     boolean existsByThuongHieu(ThuongHieu thuongHieu);
+
+    default List<SanPham> findTop6ByOrderByTotalSoLuongTonAsc() {
+        List<SanPham> allSanPham = findAll();
+        allSanPham.sort(Comparator.comparingInt(SanPham::getTotalSoLuongTon));
+        return allSanPham.subList(0, Math.min(allSanPham.size(), 6));
+    }
+
     boolean existsByTen(String ten);
 
     List<SanPham> findTop4ByTheLoaiAndTrangThaiIsTrueOrderByNgayTaoDesc(TheLoai theLoai);

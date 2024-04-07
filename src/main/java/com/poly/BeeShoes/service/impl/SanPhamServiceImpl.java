@@ -43,6 +43,12 @@ public class SanPhamServiceImpl implements SanPhamService {
         sanPham.setNgaySua(Timestamp.from(Instant.now()));
         return sanPhamRepository.save(sanPham);
     }
+
+    @Override
+    public List<SanPham> findByChiTietSanPham_SoLuongTonLessThan() {
+        return sanPhamRepository.findTop6ByOrderByTotalSoLuongTonAsc();
+    }
+
     @Override
     public SanPham getById(Long id) {
         Optional<SanPham> optionalSanPham = sanPhamRepository.getByIdClient(id);

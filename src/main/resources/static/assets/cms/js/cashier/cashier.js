@@ -1,7 +1,7 @@
 function PrintBillOder(data) {
     let elementToPrint = $('#oder-print');
     elementToPrint.find('#full_name_print').text(data.tenNguoiNhan)
-    elementToPrint.find('#id_hoa_don_print').text(data.maHoaDon);
+    elementToPrint.find('#id_hoa_don_print').text('#'+data.maHoaDon);
     let html = '';
     data.sanPham.forEach((item, index) => {
         html += `
@@ -34,14 +34,19 @@ function PrintBillOder(data) {
 }
 
 window.addEventListener('beforeunload', function (event) {
-    let yourConditionIsTrue = true;
+    let data1 = getListProductLocal(1);
+    let data2 = getListProductLocal(2);
+    let data3 = getListProductLocal(3);
+    let data4 = getListProductLocal(4);
+    let data5 = getListProductLocal(5);
     // Kiểm tra điều kiện
-    if (yourConditionIsTrue) {
+    if (data1.length > 0 || data2.length > 0 || data3.length > 0 || data4.length > 0 || data5.length > 0) {
         let confirmationMessage = 'Bạn có chắc chắn muốn rời trang này?';
         (event || window.event).returnValue = confirmationMessage;
         return confirmationMessage;
     }
 });
+
 
 function showLoader() {
     Swal.fire({
@@ -1982,13 +1987,14 @@ $(document).on('ready', function () {
             });
         }
     });
-    $(document).on('focus', '.form-input-search', function () {
+    $(document).on('focus click input', '.form-input-search', function () {
         let formShow = $(this).closest('.wrapper-form-search').find('.div-form-search');
-        formShow.removeClass('d-none')
+        formShow.removeClass('d-none');
     });
     $(document).on('blur', '.form-input-search', function () {
         let formShow = $(this).closest('.wrapper-form-search').find('.div-form-search');
-        if (!formShow.is(':hover')) {
+        if (!formShow.is(':hover')
+            && !$(this).is('focus')) {
             formShow.addClass('d-none');
         }
     });

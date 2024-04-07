@@ -82,6 +82,7 @@ select2 select2-container select2-container--default select2-container--above
     margin-top: -1px;
     margin-left: 3px;
 }
+
 .btn-add-customer:hover {
     background-color: #cccccc;
 }
@@ -136,8 +137,27 @@ select2 select2-container select2-container--default select2-container--above
     height: 100%;
 }
 
+.div-form-search ul::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    border-radius: 10px;
+}
+
+.div-form-search ul::-webkit-scrollbar {
+    width: 15px;
+    background-color: transparent;
+    border-radius: 10px;
+}
+
+.div-form-search ul::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #989898;
+}
+
 .div-form-search ul li {
-    border-bottom: 0.0625rem solid rgba(231, 234, 243, .7);
+    border-bottom: 0.0625rem solid rgba(209, 209, 211, 0.7);
     padding-bottom: 5px;
     padding-top: 5px;
     cursor: pointer;

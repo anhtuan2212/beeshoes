@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,12 +102,50 @@ public class ThongKeRestController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("/get-revenue-option")
+    public ResponseEntity getRevenue(@RequestParam("start") String start,
+                                     @RequestParam("end") String end) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_FORMATTER);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = dateFormat.parse(start);
+            endDate = dateFormat.parse(end);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (startDate.equals(endDate)) {
+            Map<Object, Object> response = new HashMap<>();
+            String date = sdf.format(startDate);
+            List<Object[]> data = hoaDonService.getAllRevenueCreatedByCreatDate(date);
+            data.forEach(inv ->{
+                BigDecimal money = (BigDecimal) inv[1];
+                int moneyResult = money.intValue() / 1000;
+                response.put(inv[0], moneyResult);
+            });
+            return ResponseEntity.ok().body(response);
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Map<LocalDate, Object> response = new TreeMap<>();
+            List<Object[]> data = hoaDonService.getAllCountCreatedByDateRange(startDate, endDate);
+            data.forEach(inv -> {
+                System.out.println(inv[1]);
+                String dateStr = (String) inv[0];
+                LocalDate date = LocalDate.parse(dateStr.substring(0, 10), formatter);
+                BigDecimal money = (BigDecimal) inv[1];
+                int moneyResult = money.intValue() / 1000;
+                response.put(date, moneyResult);
+            });
+            return ResponseEntity.ok().body(response);
+        }
+    }
+
     @GetMapping("/get-top-product")
     public ResponseEntity getTopPro(@RequestParam(name = "option") String option) {
         if (option.isBlank()) {
             return ResponseEntity.notFound().build();
         }
-        option = "month";
         List<HoaDon> lstHD = null;
 
         if (option.equals("week")) {
@@ -170,8 +212,10 @@ public class ThongKeRestController {
         });
         List<Map<String, Object>> top6Products = productMap.values().stream()
                 .sorted((p1, p2) -> Integer.compare((int) p2.get("soLuong"), (int) p1.get("soLuong")))
-                .limit(6)
+                .limit(10)
                 .collect(Collectors.toList());
+        System.out.println(top6Products);
         return ResponseEntity.ok().body(top6Products);
     }
+
 }

@@ -8,6 +8,9 @@ let total_money_online = 0;
 let total_money_in_store = 0;
 let quantity_online = 0;
 let quantity_in_store = 0;
+let data_month = [];
+let data_week = [];
+let data_day = [];
 
 function getData() {
     return new Promise((resolve, reject) => {
@@ -41,6 +44,40 @@ function addCommasToNumber(number) {
         }
     }
     return parts.join('');
+}
+
+function printTopProduct(data) {
+    let tr = '';
+    if (data.length === 0) {
+        tr = `<tr class="odd">
+            <td valign="top" colspan="8" class="dataTables_empty">
+            <div class="text-center p-4">
+            <img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">
+            <p class="mb-0">Chưa có dữ liệu.</p>
+            </div>
+            </td>
+            </tr>`;
+    }
+    data.forEach((item, index) => {
+        tr +=
+            `<tr>
+                <td>${index + 1}</td>
+                <td>
+                    <a class="media align-items-center" href="/cms/view-product?id=${item.id}">
+                        <img class="avatar mr-3" src="${item.anh}" alt="Image Description">
+                        <div class="media-body">
+                            <h5 class="text-hover-primary mb-0">${item.ten}</h5>
+                        </div>
+                    </a>
+                </td>
+                <td>${addCommasToNumber(item.giaBan)}đ</td>
+                <td>${item.soLuong}</td>
+                <td>
+                    <h4 class="mb-0">${addCommasToNumber(item.tongTien)}đ</h4>
+                </td>
+            </tr>`;
+    })
+    $('#show-top-product').html(tr)
 }
 
 function sumArrays(arr1, arr2) {
@@ -99,6 +136,37 @@ let optionsDomainChart = {
         intersect: true
     }
 };
+
+function updateChartRevenue(response,total_revenue) {
+    let keys = [];
+    let values = [];
+
+    for (let key in response) {
+        if (response.hasOwnProperty(key)) {
+            let regex = /\D/;
+            if (regex.test(key)) {
+                let parts = key.split('-')
+                keys.push(parts[2] + '/' + parts[1]);
+            } else {
+                keys.push(key)
+            }
+            values.push(response[key]);
+        }
+    }
+    total_revenue.data.labels = keys;
+    total_revenue.data.datasets = [{
+        data: values,
+        backgroundColor: "transparent",
+        borderColor: "#377dff",
+        borderWidth: 2,
+        pointRadius: 0,
+        hoverBorderColor: "#377dff",
+        pointBackgroundColor: "#377dff",
+        pointBorderColor: "#fff",
+        pointHoverRadius: 0
+    }]
+    total_revenue.update();
+}
 
 $(document).on('ready', function () {
     let chartToday = $.HSCore.components.HSChartJS.init($('#total-data-today'));
@@ -180,6 +248,49 @@ $(document).on('ready', function () {
     // END ONLY DEV
     // =======================================================
 
+    $('#top-product-option').on('change', function () {
+        let val = $(this).val();
+        console.log(val);
+        if (val === 'month') {
+            if (data_month.length > 0) {
+                printTopProduct(data_month);
+                return;
+            }
+        }
+        if (val === 'week') {
+            if (data_week.length > 0) {
+                printTopProduct(data_week);
+                return;
+            }
+        }
+        if (val === 'day') {
+            if (data_day.length > 0) {
+                printTopProduct(data_day);
+                return;
+            }
+        }
+        $.ajax({
+            url: '/api/get-top-product',
+            type: 'GET',
+            data: {
+                option: val,
+            },
+            success: function (response) {
+                if (val === 'month') {
+                    data_month = response;
+                }
+                if (val === 'week') {
+                    data_week = response;
+                }
+                if (val === 'day') {
+                    data_day = response;
+                }
+                printTopProduct(response);
+            }, error: function (error) {
+                console.log(error)
+            }
+        })
+    })
 
     // BUILDER TOGGLE INVOKER
     // =======================================================
@@ -386,7 +497,7 @@ $(document).on('ready', function () {
     var end = moment();
 
     function cb(start, end) {
-        $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview').html(start.format('MMM D') + ' - ' + end.format('MMM D, YYYY'));
+        $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
     }
 
     $('#js-daterangepicker-predefined').daterangepicker({
@@ -399,11 +510,57 @@ $(document).on('ready', function () {
             '30 Ngày Qua': [moment().subtract(29, 'days'), moment()],
             'Tháng Này': [moment().startOf('month'), moment().endOf('month')],
             'Tháng Trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'dd/MM/yyyy'
         }
     }, cb);
 
     cb(start, end);
 
+    function cbx(start, end) {
+        $('#js-option-revenue .js-daterangepicker-predefined-preview').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+    }
+
+    $('#js-option-revenue').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Hôm Nay': [moment(), moment()],
+            'Hôm Qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '7 Ngày Qua': [moment().subtract(6, 'days'), moment()],
+            '30 Ngày Qua': [moment().subtract(29, 'days'), moment()],
+            'Tháng Này': [moment().startOf('month'), moment().endOf('month')],
+            'Tháng Trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cbx);
+
+    cbx(start, end);
+    $('.js-daterangepicker-predefined-preview').on('click', function () {
+        $('li[data-range-key="Custom Range"]').text('Tùy Chỉnh');
+    })
+
+    let total_revenue = $.HSCore.components.HSChartJS.init($('#total-revenue-chart'));
+
+    $('#js-option-revenue').on('apply.daterangepicker', function (ev, picker) {
+        let startDate = picker.startDate.format('DD-MM-YYYY');
+        let endDate = picker.endDate.format('DD-MM-YYYY');
+        $.ajax({
+            url: '/api/get-revenue-option',
+            type: 'GET',
+            data: {
+                start: startDate,
+                end: endDate
+            },
+            success: function (response) {
+                console.log(response)
+                updateChartRevenue(response,total_revenue)
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    });
 
     // INITIALIZATION OF DATATABLES
     // =======================================================
