@@ -295,6 +295,10 @@ $(document).on('click', '#btn-addAddress', function () {
         tinhThanhPhoDto: newProvinceText,
         idKH: idCustomer
     }
+    houseNumber = newHouseNumber;
+    wardName = newWardText;
+    districtName = newDistrictText;
+    provinceName = newProvinceText;
 
     $.ajax({
         type: "POST",
@@ -550,7 +554,6 @@ $(document).ready(function () {
         phuongXaSelected = phuongXa.val();
         wardName = phuongXa.find("option:selected").text();
         var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
-        var shippingFee = document.getElementById("totalAmount").textContent.replace(/[.,]/g, '');
         if (totalAmount > 2000000) {
             $('#shippingFee').text('Miễn phí');
         } else {
@@ -604,9 +607,8 @@ $(document).ready(function () {
                 ),
                 success: function (response) {
                     orderCode = response.data.order_code;
-                    var shippingFee = response.data.total_fee;
                     $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-                    $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
+                    $('#totalAmount').text(parseFloat(parseFloat(totalAmount) + parseFloat(response.data.total_fee)).toLocaleString('en-US'));
                     $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
                 },
                 error: function (error) {

@@ -90,8 +90,9 @@
                           "dropdownAutoWidth": true
                         }'>
                                 <option value="all" selected>Tất cả</option>
-                                <option th:each="cv:${listCV}" th:value="${cv.getTen()}"
-                                        th:text="${cv.getTen()}"></option>
+                                <option value="Nhân viên">Nhân viên</option>
+                                <option value="Quản lý">Quản lý</option>
+                                <option value="Giám đốc">Giám đốc</option>
                             </select>
                             <!-- End Select -->
                         </div>
