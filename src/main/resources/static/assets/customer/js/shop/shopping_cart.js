@@ -3,15 +3,6 @@ let ShopingCart = [];
 let ListVoucher = []
 let SelectedVoucher = null;
 localStorage.removeItem('checkout_data');
-// window.addEventListener('pageshow', function (event) {
-//     if (event.persisted) {
-//         location.reload()
-//     }
-// });
-// window.addEventListener('popstate', function (event) {
-//     location.reload()
-// });
-
 
 $(document).ready(async function () {
 
@@ -139,6 +130,7 @@ $(document).ready(async function () {
                     });
 
             }
+            updateTotalMoney();
             updateTotalMoney();
         });
         $(document).on('click', '.cart__close i', function () {
@@ -309,6 +301,7 @@ $(document).ready(async function () {
                     }
                 }
                 let arrVoucher = [];
+                let VoucherNot = null;
                 if (ListVoucher !== null && Array.isArray(ListVoucher)) {
                     let html = '';
                     ListVoucher.forEach((voucher) => {
@@ -346,12 +339,54 @@ $(document).ready(async function () {
                                     ele.parent().remove();
                                 });
                             }
+
+                            if (VoucherNot === null) {
+                                VoucherNot = voucher;
+                            } else {
+                                if (VoucherNot.giaTriToiThieu > voucher.giaTriToiThieu) {
+                                    VoucherNot = voucher;
+                                }
+                                if (VoucherNot.giaTriToiThieu == voucher.giaTriToiThieu) {
+                                    if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
+                                        VoucherNot = voucher;
+                                    }
+                                }
+                            }
                         }
-                    })
+                    });
                     let voucher = $('#list-voucher');
                     voucher.append(html);
                 }
-
+                if (VoucherNot !== null) {
+                    let showType = '';
+                    if (VoucherNot.loaiVoucher === '$') {
+                        showType = `<h3 class="col-6 tienmat">${formatNumberMoney(VoucherNot.giaTriToiDa)}</h3>`;
+                    } else {
+                        showType = `<h3 class="col-6 phantram">${VoucherNot.giaTriPhanTram}%</h3>`
+                    }
+                    let mt = Number(VoucherNot.giaTriToiThieu) - Number(totalMoney);
+                    let li = `
+                                <li class="wraper_li">
+                                    <div class="wraper_voucher_not row m-0">
+                                        <div class="col-9 contents p-2">
+                                            <h5 class="text-center voucher_code">${VoucherNot.ma}</h5>
+                                            <label class="express_date">Hạn Đến: ${formatDate(VoucherNot.endDate1)}</label>
+                                            <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(VoucherNot.giaTriToiThieu) + 'đ'}</label>
+                                            <label class="express_date">Tối Đa:${addCommasToNumber(VoucherNot.giaTriToiDa) + 'đ'}/Khách Hàng</label>
+                                            <label class="express_date w-100">Số Lượng : ${VoucherNot.soLuong}</label>
+                                        </div>
+                                        <div class="col-3 p-2 row m-0 card__discount position-relative">
+                                            <label class="col-4">Mã Giảm Giá</label>
+                                            ${showType}
+                                        </div>
+                                    </div>
+                                    <label class="text-danger small w-100 text-suggest">Mua thêm ${addCommasToNumber(mt)}đ để sử dụng voucher</label>
+                                </li>`;
+                    $('#voucher-not').html(li);
+                } else {
+                    $('#voucher-not').empty();
+                }
+                console.log(VoucherNot)
                 let discountAmount;
                 if (SelectedVoucher !== null) {
                     $('#discount_element').removeClass('d-none');
@@ -579,6 +614,7 @@ $(document).ready(async function () {
                 checkoutData.push(product)
                 saveCheckoutDatalocalStorage(checkoutData)
                 updateTotalMoney();
+                updateTotalMoney();
             }
         }
 
@@ -597,6 +633,7 @@ $(document).ready(async function () {
                 data.splice(ind, 1);
                 saveCheckoutDatalocalStorage(data);
                 updateTotalMoney();
+                updateTotalMoney();
             }
         }
 
@@ -610,9 +647,9 @@ $(document).ready(async function () {
                         break;
                     }
                 }
-                console.log('vào')
                 data.splice(ind, 1);
                 saveProductTolocalStorage(data);
+                updateTotalMoney();
                 updateTotalMoney();
             }
         }
@@ -658,6 +695,7 @@ $(document).ready(async function () {
             setQuantityProduct(id, num)
                 .then((data) => {
                     curentInput = ele.val();
+                    updateTotalMoney();
                     updateTotalMoney();
                 }).catch(() => {
             });

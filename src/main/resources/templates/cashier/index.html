@@ -146,8 +146,25 @@
                                     <!-- End Input Group -->
                                     <small class="form-text mb-2"></small>
 
-
                                     <ul id="best_voucher_voucher_hd_1" class="list-voucher">
+                                    </ul>
+                                    <ul id="voucher_not_accept_hd_1" class="list-voucher mt-2">
+                                        <!--                                        <li class="item-voucher">-->
+                                        <!--                                            <div class="wrapper_voucher disabled row m-0">-->
+                                        <!--                                                <div class="col-9 contents p-2">-->
+                                        <!--                                                    <h5 class="text-center voucher_code">VC00004</h5>-->
+                                        <!--                                                    <label class="express_date">Hạn Đến: 15H17 Ngày 30/05/2024</label>-->
+                                        <!--                                                    <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ 1.000.000đ</label>-->
+                                        <!--                                                    <label class="express_date">Tối Đa:150.000đ/Khách Hàng</label>-->
+                                        <!--                                                    <label class="express_date w-100">Số Lượng : 95</label>-->
+                                        <!--                                                </div>-->
+                                        <!--                                                <div class="col-3 p-2 row m-0 card__discount position-relative">-->
+                                        <!--                                                    <label class="text-discount">Mã Giảm Giá</label>-->
+                                        <!--                                                    <h2 class="text-value-discount">20%</h2>-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </div>-->
+                                        <!--                                            <label class="text-danger small w-100 text-voucher-not-accept">Mua thêm 500.000đ để sử dụng voucher</label>-->
+                                        <!--                                        </li>-->
                                     </ul>
                                     <div class="accordion list_voucher mb-5" id="accordionExample">
                                         <button class="btn btn-link btn-show-all-voucher btn-block text-right collapsed"
@@ -557,6 +574,8 @@
                     <small class="form-text mb-2"></small>
                     <ul id="best_voucher_voucher_hd_mau" data-id-hd="best_voucher_voucher_hd_" class="list-voucher">
                     </ul>
+                    <ul id="voucher_not_accept_hd_mau" data-id-hd="voucher_not_accept_hd_" class="list-voucher">
+                    </ul>
                     <div class="accordion list_voucher mb-5" id="accordionExample_mau" data-id-hd="accordionExample_"
                          data-type="collapse">
                         <button class="btn btn-link btn-show-all-voucher btn-block text-right collapsed" type="button"
@@ -855,6 +874,10 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="suggests-money" class="w-100">
+                            <span data-value="100.000"
+                                  class="badge badge-pill badge-light badge-suggests-money">100.000</span>
+                        </div>
                         <div class="w-100 wrapper-money-ck d-none">
                             <label class="w-100 mb-0" for="pay-chuyen-khoan-money">Tiền Chuyển Khoản</label>
                             <div class="input-group input-group-merge mb-2">
@@ -1005,7 +1028,8 @@
                                             <div class="form-control">
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" class="custom-control-input"
-                                                           name="gender_customer" id="userAccountTypeRadio1" value="true" checked>
+                                                           name="gender_customer" id="userAccountTypeRadio1"
+                                                           value="true" checked>
                                                     <label class="custom-control-label"
                                                            for="userAccountTypeRadio1">Nam</label>
                                                 </div>
@@ -1016,7 +1040,8 @@
                                             <div class="form-control">
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" class="custom-control-input"
-                                                           name="gender_customer" id="userAccountTypeRadio2" value="false">
+                                                           name="gender_customer" id="userAccountTypeRadio2"
+                                                           value="false">
                                                     <label class="custom-control-label"
                                                            for="userAccountTypeRadio2">Nữ</label>
                                                 </div>

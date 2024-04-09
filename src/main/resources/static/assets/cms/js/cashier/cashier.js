@@ -165,9 +165,12 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
     showLoader();
     setVariableShipping(oder, null)
     let listProduct = getListProductLocal(oder);
-    console.log(oder)
     let quantity = 0;
     let total = 0;
+    if (listProduct.length === 0) {
+        ToastError('Vui lòng chọn sản phẩm.');
+        return;
+    }
     listProduct.forEach((item) => {
         quantity += item.quantity
         total += Number(item.quantity) * Number(item.giaBan)
@@ -513,11 +516,12 @@ function updateTotalMoney(oder) {
         }
     }
     let arrVoucher = [];
+    let VoucherNot = null;
     let arr = [...ListVoucher]
     if (arr !== null && Array.isArray(arr)) {
         let html = '';
         arr.forEach((voucher) => {
-            let ele = $(`#list_show_voucher_hd_${oder}`).find(`#voucher_${voucher.id}_${oder}`)
+            let ele = $(`#voucher_${voucher.id}_${oder}`);
             if (Number(total) >= Number(voucher.giaTriToiThieu)) {
                 arrVoucher.push(voucher);
                 if (ele.length === 0) {
@@ -545,16 +549,60 @@ function updateTotalMoney(oder) {
                 }
             } else {
                 if (ele.length !== 0) {
-                    ele.removeClass('scaleIn').addClass('scaleOut');
-                    ele.on('animationend', function () {
+                    ele.parent().removeClass('scaleIn').addClass('scaleOut');
+                    ele.parent().on('animationend', function () {
                         ele.parent().remove();
                     });
+                }
+                if (VoucherNot === null) {
+                    VoucherNot = voucher;
+                } else {
+                    if (VoucherNot.giaTriToiThieu > voucher.giaTriToiThieu) {
+                        VoucherNot = voucher;
+                    }
+                    if (VoucherNot.giaTriToiThieu == voucher.giaTriToiThieu) {
+                        if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
+                            VoucherNot = voucher;
+                        }
+                    }
                 }
             }
         })
         let voucher = $(`#list_show_voucher_hd_${oder}`);
         voucher.prepend(html);
     }
+
+    if (VoucherNot !== null) {
+
+        let showPr = '';
+        if (VoucherNot.loaiVoucher === '$') {
+            showPr = `<h2 class="text-value-discount">${formatNumberMoney(VoucherNot.giaTriToiDa)}</h2>`;
+        } else {
+            showPr = `<h2 class="text-value-discount">${VoucherNot.giaTriPhanTram}%</h2>`
+        }
+        let mt = Number(VoucherNot.giaTriToiThieu) - Number(total);
+        let li = `<li class="item-voucher">
+                                  <div class="wrapper_voucher disabled row m-0">
+                                      <div class="col-9 contents p-2">
+                                          <h5 class="text-center voucher_code">${VoucherNot.ma}</h5>
+                                          <label class="express_date">Hạn Đến: ${formatDate(VoucherNot.endDate1)}</label>
+                                          <label class="express_date">Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(VoucherNot.giaTriToiThieu) + 'đ'}</label>
+                                          <label class="express_date">Tối Đa:${addCommasToNumber(VoucherNot.giaTriToiDa) + 'đ'}/Khách Hàng</label>
+                                          <label class="express_date w-100">Số Lượng : ${VoucherNot.soLuong}</label>
+                                      </div>
+                                      <div class="col-3 p-2 row m-0 card__discount position-relative">
+                                          <label class="text-discount">Mã Giảm Giá</label>
+                                          ${showPr}
+                                      </div>
+                                  </div>
+                                  <label class="text-danger small w-100 text-voucher-not-accept">Mua thêm ${addCommasToNumber(mt)}đ để sử dụng voucher</label>
+                              </li>`;
+        $(`#voucher_not_accept_hd_${oder}`).html(li);
+    } else {
+        $(`#voucher_not_accept_hd_${oder}`).empty();
+    }
+
+
     let discountAmount;
     let selectedVoucher = getVoucher(oder);
     if (selectedVoucher !== null) {
@@ -593,9 +641,8 @@ function updateTotalMoney(oder) {
     }
     if (maxDiscountVoucher !== null) {
         let ele_voucher = $(`#item_${maxDiscountVoucher.id}_${oder}`);
-        let clone = ele_voucher.clone();
-        $(`#best_voucher_voucher_hd_${oder}`).html(clone);
-        clone.on('animationend', function () {
+        $(`#best_voucher_voucher_hd_${oder}`).html(ele_voucher);
+        ele_voucher.on('animationend', function () {
             $(this).removeClass('scaleIn');
         })
     }
@@ -908,6 +955,9 @@ $(document).on('ready', function () {
         }
     })
     $(document).on('click', '.wrapper_voucher', function () {
+        if ($(this).hasClass('disabled')) {
+            return;
+        }
         let oder = getOderNum(this);
         let wrapper = $(`#oder_content_${oder}`)
         if ($(this).hasClass('active')) {
@@ -1032,6 +1082,25 @@ $(document).on('ready', function () {
     $(document).on('input', '#pay-cash-money', function () {
         let oder = $('#modal-input-id-oder').val()
         TinhTien(oder);
+        let val = $(this).val();
+        let money1 = val + '00000';
+        let money2 = val + '000000';
+        money1 = Number(money1);
+        money2 = Number(money2);
+        let element = $('#suggests-money');
+        if (money1 <= 1000000000 && val.length !== 0) {
+            element.html(`<span data-value="${addCommasToNumber(money1)}" class="badge badge-pill badge-light badge-suggests-money mr-2">${addCommasToNumber(money1)}</span>`);
+            element.append(`<span data-value="${addCommasToNumber(money2)}" class="badge badge-pill badge-light badge-suggests-money">${addCommasToNumber(money2)}</span>`)
+        } else {
+            element.html(`<span data-value="100.000" class="badge badge-pill badge-light badge-suggests-money">100.000</span>`);
+        }
+
+    });
+    $(document).on('click', '.badge-suggests-money', function () {
+        let val = $(this).data('value');
+        $('#pay-cash-money').val(val);
+        let oder = $('#modal-input-id-oder').val()
+        TinhTien(oder);
     })
 
     $(document).on('change', '#payment-type-card', function () {
@@ -1151,7 +1220,7 @@ $(document).on('ready', function () {
                     return;
                 }
             }
-            if (soNha.length > 0) {
+            if (soNha.replace(/\s/g, "").length > 0) {
                 if (soNha.val().length === 0) {
                     ToastError('Vui lòng nhập số nhà.');
                     return;
@@ -1164,7 +1233,6 @@ $(document).on('ready', function () {
             return;
         }
         $('#form-modal-payment').modal('show');
-        $('#pay-cash-money').focus();
         $('#modal-input-id-oder').val(oder);
         $('#total-money').val(addCommasToNumber(getTotalMoney(oder) == null ? 0 : getTotalMoney(oder)))
         let input = $(`input[name="deliveryOptionCheckbox_hd_${oder}"]:checked`).val();
@@ -1174,6 +1242,13 @@ $(document).on('ready', function () {
             $('#payment-on-delivery').closest('div.form-group').addClass('d-none')
         }
         $('#lack-of-money').val(addCommasToNumber(getTotalMoney(oder)))
+    })
+    $(document).on('shown.bs.modal', '#form-modal-payment', function () {
+        $('#pay-cash-money').val('').focus();
+    })
+    $(document).on('hidden.bs.modal', '#form-modal-payment', function () {
+        $('#pay-cash-money').val('');
+        $('#change-money').val(0);
     })
     $(document).on('input', '.money-input-mask', function () {
         $(this).mask('#.###.###.###', {reverse: true});
@@ -1269,15 +1344,15 @@ $(document).on('ready', function () {
         let gender = $('[name="gender_customer"]:checked').val();
         let regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         let regexPhone = /^0[0-9]{9}$/;
-        if (ho.length === 0) {
+        if (ho.replace(/\s/g, "").length === 0) {
             ToastError('Vui lòng nhập họ.');
             return;
         }
-        if (tenDem.length === 0) {
+        if (tenDem.replace(/\s/g, "").length === 0) {
             ToastError('Vui lòng nhập tên đệm.');
             return;
         }
-        if (ten.length === 0) {
+        if (ten.replace(/\s/g, "").length === 0) {
             ToastError('Vui lòng nhập tên.');
             return;
         }
@@ -1305,19 +1380,20 @@ $(document).on('ready', function () {
             ToastError('Vui lòng chọn ngày sinh.');
             return;
         }
-        if (soNha.length === 0) {
+        if (soNha.replace(/\s/g, "").length === 0) {
             ToastError('Vui lòng nhập số nhà.');
             return;
         }
-        if (phuongXa.length === 0) {
+        console.log(soNha)
+        if ($('#phuongXa').val() === '#') {
             ToastError('Vui lòng chọn phường xã.');
             return;
         }
-        if (quanHuyen.length === 0) {
+        if ($('#quanHuyen').val() === '#') {
             ToastError('Vui lòng chọn quận huyện.');
             return;
         }
-        if (tinh.length === 0) {
+        if ($('#tinhTP').val() === '#') {
             ToastError('Vui lòng chọn tỉnh.');
             return;
         }
@@ -1417,6 +1493,13 @@ $(document).on('ready', function () {
                 return;
             }
         }
+        let transferCode = $('#pay-card-money').val().replace(/\s/g, "");
+        if (hasCK) {
+            if (transferCode.length === 0) {
+                ToastError('Vui lòng nhập mã giao dịch.')
+                return;
+            }
+        }
         let listProduct = getListProductLocal(oder);
         let arrPro = [];
         listProduct.forEach((item) => {
@@ -1467,7 +1550,7 @@ $(document).on('ready', function () {
         if (transfer === null || transfer === undefined) {
             transfer = 0;
         }
-        let transferCode = $('#pay-card-money').val();
+
         let voucher = getVoucher(oder)
         let code = '';
         if (voucher !== null) {
@@ -1603,17 +1686,18 @@ $(document).on('ready', function () {
         }
     })
     $(document).on('change', '.option-select-address', async function () {
+        console.log(123)
         let oder = getOderNum(this);
+        // let data = getListProductLocal(oder);
+        // if (data.length === 0) {
+        //     ToastError('Vui lòng chọn sản phẩm.')
+        //     $(this).prop('checked', false).trigger('change')
+        //     return;
+        // }
         let input = $(`input[name="address_khac_${oder}"]:checked`);
         let val = input.val();
         let wrapper = $(`#oder_content_${oder}`);
         if (val === '#') {
-            let data = getListProductLocal(oder);
-            if (data.length === 0) {
-                ToastError('Vui lòng chọn sản phẩm.')
-                $(this).prop('checked', false).trigger('change')
-                return;
-            }
             let khachhang = wrapper.find('select.customer-selected');
             let val = khachhang.val();
             let hoten = '';
@@ -1714,8 +1798,8 @@ $(document).on('ready', function () {
         let quanHuyen = $('#quanHuyen');
         let phuongXa = $('#phuongXa');
         let val = $(this).val();
-        quanHuyen.html('<option value="">Chọn Quận/Huyện</option>');
-        phuongXa.html('<option value="">Chọn Phường/Xã</option>');
+        quanHuyen.html('<option value="#">Chọn Quận/Huyện</option>');
+        phuongXa.html('<option value="#">Chọn Phường/Xã</option>');
         if (val.length > 0) {
             arrDistrict.forEach(function (item) {
                 if (Number(item.ProvinceID) === Number(val)) {

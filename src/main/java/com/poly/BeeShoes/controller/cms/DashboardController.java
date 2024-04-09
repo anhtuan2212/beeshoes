@@ -40,6 +40,7 @@ public class DashboardController {
         Calendar calendar_today = Calendar.getInstance();
         calendar_today.add(Calendar.DATE, -1);
         Date yesterday = calendar_today.getTime();
+        System.out.println(yesterday);
         List<HoaDon> lstToDay = hoaDonService.getAllByDate(today);
         List<HoaDon> lstYesterDay = hoaDonService.getAllByDate(yesterday);
 
@@ -90,15 +91,6 @@ public class DashboardController {
         int quantity_oder_today = lstToDay.size();
         int quantity_oder_yesterday = lstYesterDay.size();
 
-        int total_all = 0;
-        int total_online = 0;
-        int total_store = 0;
-        int total_discount = 0;
-
-        int num_oder_all = lstHD.size();
-        int num_oder_online = 0;
-        int num_oder_store = 0;
-        int num_oder_discount = 0;
         int total_yesterday = 0;
         int total_Today = 0;
 
@@ -107,34 +99,21 @@ public class DashboardController {
         int total_online_yesterday = 0;
         int total_online_today = 0;
 
-        for (HoaDon hd : lstHD) {
-            total_all += hd.getThucThu().intValue();
-            if (hd.getGiamGia().intValue() > 0) {
-                num_oder_discount++;
-                total_discount += hd.getGiamGia().intValue();
-            }
-            if (hd.isLoaiHoaDon()) {
-                total_store += hd.getThucThu().intValue();
-                num_oder_store++;
-            } else {
-                total_online += hd.getThucThu().intValue();
-                num_oder_online++;
-            }
-
-        }
-
         for (HoaDon hd : lstYesterDay) {
             total_yesterday += hd.getThucThu().intValue();
             if (hd.isLoaiHoaDon()) {
-                total_store_yesterday = hd.getThucThu().intValue();
+                total_store_yesterday += hd.getThucThu().intValue();
             } else {
                 total_online_yesterday += hd.getThucThu().intValue();
             }
         }
+        int quantity_online=0;
+        int quantity_store=0;
         for (HoaDon hd : lstToDay) {
             total_Today += hd.getThucThu().intValue();
             if (hd.isLoaiHoaDon()) {
-                total_store_today = hd.getThucThu().intValue();
+                total_store_today += hd.getThucThu().intValue();
+
             } else {
                 total_online_today += hd.getThucThu().intValue();
             }
@@ -142,10 +121,10 @@ public class DashboardController {
         System.out.println(total_store_today);
         System.out.println(total_store_yesterday);
         List<SanPham> prList = sanPhamService.findByChiTietSanPham_SoLuongTonLessThan();
-        Map<String, Object> online_data = createDataMap(total_online, num_oder_online, calculatePercentageChange(total_online_yesterday, total_online_today), total_online_today >= total_online_yesterday);
-        Map<String, Object> total_all_data = createDataMap(total_all, num_oder_all, calculatePercentageChange(total_yesterday, total_Today), total_Today >= total_yesterday);
-        Map<String, Object> in_store_data = createDataMap(total_store, num_oder_store, calculatePercentageChange(total_store_yesterday, total_store_today), total_store_today >= total_store_yesterday);
-        Map<String, Object> discount_data = createDataMap(total_discount, num_oder_discount, 0, false);
+        Map<String, Object> online_data = createDataMap(total_online_today, quantity_online, calculatePercentageChange(total_online_yesterday, total_online_today), total_online_today >= total_online_yesterday);
+        Map<String, Object> total_all_data = createDataMap(total_Today, lstToDay.size(), calculatePercentageChange(total_yesterday, total_Today), total_Today >= total_yesterday);
+        Map<String, Object> in_store_data = createDataMap(total_store_today, quantity_store, calculatePercentageChange(total_store_yesterday, total_store_today), total_store_today >= total_store_yesterday);
+        Map<String, Object> discount_data = createDataMap(lstToDay.size(),0, 0, false);
 
 
         model.addAttribute("product_less", prList);
