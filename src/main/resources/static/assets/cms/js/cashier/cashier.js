@@ -1,7 +1,7 @@
 function PrintBillOder(data) {
     let elementToPrint = $('#oder-print');
     elementToPrint.find('#full_name_print').text(data.tenNguoiNhan)
-    elementToPrint.find('#id_hoa_don_print').text('#'+data.maHoaDon);
+    elementToPrint.find('#id_hoa_don_print').text('#' + data.maHoaDon);
     let html = '';
     data.sanPham.forEach((item, index) => {
         html += `
@@ -176,9 +176,13 @@ async function getShippingFee(oder, phuongXaSelected, quanHuyenSelected) {
         quantity = 1;
     }
     if (total > 2000000) {
-        let res = 0;
-        res.data.total_fee = 0
-        return res.data.total_fee;
+        let res = {
+            data: {
+                total_fee: 0,
+            }
+        };
+        hideLoader();
+        return res;
     }
     let wrapper = $(`#oder_content_${oder}`);
     try {

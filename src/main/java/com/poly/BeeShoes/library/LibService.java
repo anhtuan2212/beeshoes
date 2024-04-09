@@ -19,20 +19,16 @@ public class LibService {
         return bd;
     }
 
-    public static int calculatePercentageChange(int yesterday, int today) {
-        double percentageChange;
-        if (yesterday > today) {
-            // Tính phần trăm giảm nếu hôm qua lớn hơn hôm nay
-            percentageChange = ((double) (yesterday - today) / yesterday) * 100;
-        } else if (today > yesterday) {
-            // Tính phần trăm tăng nếu hôm nay lớn hơn hôm qua
-            percentageChange = ((double) (today - yesterday) / yesterday) * 100;
-        } else {
-            // Trường hợp không có sự thay đổi
-            percentageChange = 0;
+    public static double calculatePercentageChange(int yesterday, int today) {
+        if (yesterday == 0 || today == 0) {
+            return 100.0;
         }
-        return (int) percentageChange;
+        double percentageChange = ((double) (today - yesterday) / yesterday) * 100;
+        double absoluteValue = Math.abs(percentageChange);
+        absoluteValue = Math.round(absoluteValue * 100.0) / 100.0;
+        return absoluteValue;
     }
+
 
     public static String chuanHoaTen(String ten) {
         return ten.toLowerCase().replaceAll("\\s+", "");

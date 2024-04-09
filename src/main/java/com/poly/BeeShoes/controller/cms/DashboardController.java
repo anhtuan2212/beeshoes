@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.controller.cms;
 
+import com.poly.BeeShoes.constant.Constant;
 import com.poly.BeeShoes.model.HoaDon;
 import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.service.HoaDonService;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.poly.BeeShoes.library.LibService.calculatePercentageChange;
@@ -25,6 +28,7 @@ public class DashboardController {
 
     @GetMapping({"/", "", "/index"})
     public String indexDashboard(Model model) {
+        SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_FORMATTER);
         Date endDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(endDate);
@@ -33,8 +37,9 @@ public class DashboardController {
         System.out.println(startDate.toLocaleString() + "|" + endDate.toLocaleString());
         List<HoaDon> lstHD = hoaDonService.getHoaDonBetwent(startDate, endDate);
         Date today = new Date();
-        calendar.add(Calendar.DATE, -1);
-        Date yesterday = calendar.getTime();
+        Calendar calendar_today = Calendar.getInstance();
+        calendar_today.add(Calendar.DATE, -1);
+        Date yesterday = calendar_today.getTime();
         List<HoaDon> lstToDay = hoaDonService.getAllByDate(today);
         List<HoaDon> lstYesterDay = hoaDonService.getAllByDate(yesterday);
 
@@ -71,14 +76,19 @@ public class DashboardController {
                 .limit(10)
                 .collect(Collectors.toList());
 
-        System.out.println(top6Products);
+        Date date = new Date();
+        String td = sdf.format(date);
+        AtomicInteger total_money_today = new AtomicInteger();
+        List<Object[]> data = hoaDonService.getAllRevenueCreatedByCreatDate(td);
+        data.forEach(inv -> {
+            BigDecimal money = (BigDecimal) inv[1];
+            total_money_today.addAndGet(money.intValue());
+        });
+        int totalMoneyInt = total_money_today.get() / 1000;
+        total_money_today.set(totalMoneyInt);
+
         int quantity_oder_today = lstToDay.size();
         int quantity_oder_yesterday = lstYesterDay.size();
-
-        int quantity_online_oder_today = 0;
-        int quantity_store_oder_today = 0;
-        int quantity_online_oder_yesterday = 0;
-        int quantity_store_oder_yesterday = 0;
 
         int total_all = 0;
         int total_online = 0;
@@ -89,6 +99,13 @@ public class DashboardController {
         int num_oder_online = 0;
         int num_oder_store = 0;
         int num_oder_discount = 0;
+        int total_yesterday = 0;
+        int total_Today = 0;
+
+        int total_store_yesterday = 0;
+        int total_store_today = 0;
+        int total_online_yesterday = 0;
+        int total_online_today = 0;
 
         for (HoaDon hd : lstHD) {
             total_all += hd.getThucThu().intValue();
@@ -103,25 +120,48 @@ public class DashboardController {
                 total_online += hd.getThucThu().intValue();
                 num_oder_online++;
             }
+
         }
 
-
-        Map<String, Object> online_data = createDataMap(total_online, num_oder_online, calculatePercentageChange(quantity_online_oder_yesterday, quantity_online_oder_today), quantity_online_oder_today > quantity_online_oder_yesterday);
-        Map<String, Object> total_all_data = createDataMap(total_all, num_oder_all, calculatePercentageChange(quantity_oder_yesterday, quantity_oder_today), quantity_oder_today > quantity_oder_yesterday);
-        Map<String, Object> in_store_data = createDataMap(total_store, num_oder_store, calculatePercentageChange(quantity_store_oder_yesterday, quantity_store_oder_today), quantity_store_oder_today > quantity_store_oder_yesterday);
+        for (HoaDon hd : lstYesterDay) {
+            total_yesterday += hd.getThucThu().intValue();
+            if (hd.isLoaiHoaDon()) {
+                total_store_yesterday = hd.getThucThu().intValue();
+            } else {
+                total_online_yesterday += hd.getThucThu().intValue();
+            }
+        }
+        for (HoaDon hd : lstToDay) {
+            total_Today += hd.getThucThu().intValue();
+            if (hd.isLoaiHoaDon()) {
+                total_store_today = hd.getThucThu().intValue();
+            } else {
+                total_online_today += hd.getThucThu().intValue();
+            }
+        }
+        System.out.println(total_store_today);
+        System.out.println(total_store_yesterday);
+        List<SanPham> prList = sanPhamService.findByChiTietSanPham_SoLuongTonLessThan();
+        Map<String, Object> online_data = createDataMap(total_online, num_oder_online, calculatePercentageChange(total_online_yesterday, total_online_today), total_online_today >= total_online_yesterday);
+        Map<String, Object> total_all_data = createDataMap(total_all, num_oder_all, calculatePercentageChange(total_yesterday, total_Today), total_Today >= total_yesterday);
+        Map<String, Object> in_store_data = createDataMap(total_store, num_oder_store, calculatePercentageChange(total_store_yesterday, total_store_today), total_store_today >= total_store_yesterday);
         Map<String, Object> discount_data = createDataMap(total_discount, num_oder_discount, 0, false);
 
-        List<SanPham> prList = sanPhamService.findByChiTietSanPham_SoLuongTonLessThan();
+
         model.addAttribute("product_less", prList);
         model.addAttribute("top_products", top6Products);
         model.addAttribute("online_data", online_data);
+        model.addAttribute("total_money_today", total_money_today);
+        model.addAttribute("quantity_oder_today", quantity_oder_today);
+        model.addAttribute("quantity_oder_present", calculatePercentageChange(quantity_oder_yesterday, quantity_oder_today));
+        model.addAttribute("quantity_oder_direction", quantity_oder_today >= quantity_oder_yesterday);
         model.addAttribute("discount_data", discount_data);
         model.addAttribute("total_all_data", total_all_data);
         model.addAttribute("in_store_data", in_store_data);
         return "cms/index";
     }
 
-    public Map<String, Object> createDataMap(int total, int numOder, int percent, boolean direction) {
+    public Map<String, Object> createDataMap(int total, int numOder, double percent, boolean direction) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("total", total);
         dataMap.put("numOder", numOder);

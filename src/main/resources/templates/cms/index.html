@@ -498,11 +498,22 @@
                             </div>
 
                             <div class="col-sm-auto">
-                    <span class="h3 text-success">
-                      <i class="tio-trending-up"></i> 25.9%
+
+                    <span class="h3 text-success" th:if="${total_all_data.direction}">
+                      <i class="tio-trending-up"></i>
+                        <th:block th:text="${total_all_data.percent}+'%'"></th:block>
                     </span>
-                                <span class="d-block">&mdash; 1,347,935,234đ <span
-                                        class="badge badge-soft-dark badge-pill ml-1">+$97k Hôm Nay</span></span>
+                                <span class="h3 text-danger" th:if="${total_all_data.direction==false}">
+                      <i class="tio-trending-down"></i>
+                        <th:block th:text="${total_all_data.percent}+'%'"></th:block>
+                    </span>
+
+                                <span class="d-block">
+                                   &mdash; <th:block
+                                        th:text="${#numbers.formatDecimal(total_all_data.total,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></th:block>
+                                    <span
+                                            class="badge badge-soft-dark badge-pill ml-1"
+                                            th:text="'+'+${#numbers.formatDecimal (total_money_today, 1, 'DEFAULT', 0, 'DEFAULT')}+'k Hôm Nay'"></span></span>
                             </div>
                         </div>
                         <!-- End Row -->
@@ -729,11 +740,21 @@
                             </div>
 
                             <div class="col-sm-auto">
-                    <span class="h3 text-success">
-                      <i class="tio-trending-up"></i> 4.7%
+
+                                    <span class="h3 text-success" th:if="${quantity_oder_direction}">
+                      <i class="tio-trending-up"></i>
+                                        <th:block th:text="${quantity_oder_present}+'%'"></th:block>
                     </span>
+
+
+                                <span class="h3 text-danger" th:if="${quantity_oder_direction==false}">
+                      <i class="tio-trending-down"></i>
+                                    <th:block th:text="${quantity_oder_present}+'%'"></th:block>
+                    </span>
+
                                 <span class="d-block">&mdash; đơn hàng theo thời gian <span
-                                        class="badge badge-soft-dark badge-pill ml-1">+5k Hôm Nay</span></span>
+                                        class="badge badge-soft-dark badge-pill ml-1"
+                                        th:text="'+'+${quantity_oder_today}+' Hôm Nay'"></span></span>
                             </div>
                         </div>
                         <!-- End Row -->

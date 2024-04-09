@@ -1,9 +1,7 @@
 package com.poly.BeeShoes.api;
 
 import com.poly.BeeShoes.constant.Constant;
-import com.poly.BeeShoes.model.HinhThucThanhToan;
 import com.poly.BeeShoes.model.HoaDon;
-import com.poly.BeeShoes.service.HinhThucThanhToanService;
 import com.poly.BeeShoes.service.HoaDonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +15,9 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -109,22 +107,48 @@ public class ThongKeRestController {
         SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_FORMATTER);
         Date startDate = null;
         Date endDate = null;
+        Date yesterday = null;
+
         try {
             startDate = dateFormat.parse(start);
             endDate = dateFormat.parse(end);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startDate);
+            calendar.add(Calendar.DATE, -1);
+            yesterday = calendar.getTime();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        System.out.println(yesterday);
+        AtomicInteger total_money = new AtomicInteger();
         if (startDate.equals(endDate)) {
             Map<Object, Object> response = new HashMap<>();
+            Map<Object, Object> yesterday_map = new HashMap<>();
             String date = sdf.format(startDate);
+            String yester_day = sdf.format(yesterday);
             List<Object[]> data = hoaDonService.getAllRevenueCreatedByCreatDate(date);
-            data.forEach(inv ->{
+            List<Object[]> yesterday_data = hoaDonService.getAllRevenueCreatedByCreatDate(yester_day);
+            data.forEach(inv -> {
                 BigDecimal money = (BigDecimal) inv[1];
+                total_money.addAndGet(money.intValue());
                 int moneyResult = money.intValue() / 1000;
                 response.put(inv[0], moneyResult);
             });
-            return ResponseEntity.ok().body(response);
+
+            yesterday_data.forEach(inv -> {
+                BigDecimal money = (BigDecimal) inv[1];
+                int moneyResult = money.intValue() / 1000;
+                yesterday_map.put(inv[0], moneyResult);
+            });
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("data", response);
+            result.put("yesterday_data", yesterday_map);
+            result.put("today_date", date);
+            result.put("yesterday_date", yester_day);
+            result.put("total_money", total_money.get());
+            return ResponseEntity.ok().body(result);
         } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Map<LocalDate, Object> response = new TreeMap<>();
@@ -134,10 +158,14 @@ public class ThongKeRestController {
                 String dateStr = (String) inv[0];
                 LocalDate date = LocalDate.parse(dateStr.substring(0, 10), formatter);
                 BigDecimal money = (BigDecimal) inv[1];
+                total_money.addAndGet(money.intValue());
                 int moneyResult = money.intValue() / 1000;
                 response.put(date, moneyResult);
             });
-            return ResponseEntity.ok().body(response);
+            Map<String, Object> result = new HashMap<>();
+            result.put("data", response);
+            result.put("total_money", total_money.get());
+            return ResponseEntity.ok().body(result);
         }
     }
 
