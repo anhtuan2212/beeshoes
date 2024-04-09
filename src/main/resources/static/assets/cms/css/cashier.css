@@ -202,6 +202,29 @@ select2 select2-container select2-container--default select2-container--above
 .list-voucher {
     padding: 0;
     margin-bottom: 0;
+    max-height: 515px;
+    overflow-y: auto;
+}
+
+/* custom scrollbar */
+.list-voucher::-webkit-scrollbar {
+    width: 2px;
+    /*display: none;*/
+}
+
+.list-voucher::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.list-voucher::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border-radius: 20px;
+    border: 0;
+    background-clip: content-box;
+}
+
+.list-voucher::-webkit-scrollbar-thumb:hover {
+    background-color: #a8bbbf;
 }
 
 .list-voucher li {
@@ -209,6 +232,10 @@ select2 select2-container select2-container--default select2-container--above
     cursor: pointer;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
+}
+
+.text-voucher-not-accept {
+    background-color: #dcdcdc;
 }
 
 .btn-show-all-voucher {
@@ -220,6 +247,12 @@ select2 select2-container select2-container--default select2-container--above
 .list-voucher li .wrapper_voucher {
     border-radius: 10px;
     border: solid 1px #ededed;
+}
+
+.badge-suggests-money {
+    font-size: 14px;
+    cursor: pointer;
+    border: .0625rem solid #e7eaf3;
 }
 
 .list-voucher li .wrapper_voucher.active {
@@ -247,8 +280,8 @@ select2 select2-container select2-container--default select2-container--above
     position: absolute;
     transform: rotate(270deg);
     justify-content: center;
-    left: 35px;
-    height: 100%;
+    top: 67px;
+    right: 30px;
     width: 100%;
 }
 
@@ -259,7 +292,7 @@ select2 select2-container select2-container--default select2-container--above
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100%;
+    top: 60px;
     font-size: 30px;
     font-weight: 800;
 }

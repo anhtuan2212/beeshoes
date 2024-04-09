@@ -2589,6 +2589,15 @@ body {
     line-height: 1.2;
     min-height: 120px;
 }
+.list_voucher ul li .wraper_voucher_not .contents {
+     background-color: #f3f2ee;
+     line-height: 1.2;
+     min-height: 120px;
+ }
+.text-suggest {
+    background-color: #ebebeb;
+    border-radius: 0;
+}
 
 .user-avatar img {
     border-radius: 25px;
@@ -2612,6 +2621,12 @@ body {
 .list_voucher ul li .wraper_voucher {
     border: 2px solid transparent;
     transition: border-color 0.3s ease;
+}
+
+.list_voucher ul li .wraper_voucher_not {
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+    border-bottom-width: 0px;
 }
 
 .list_voucher ul li .active {
@@ -2653,8 +2668,17 @@ body {
     font-weight: 900;
     font-size: 26px;
 }
-
+.list_voucher ul li .wraper_voucher_not .contents h5 {
+    font-weight: 900;
+    font-size: 26px;
+}
 .list_voucher ul li .wraper_voucher .contents label {
+    font-size: 10px;
+    margin-bottom: 0;
+    cursor: pointer;
+    width: 100%;
+}
+.list_voucher ul li .wraper_voucher_not .contents label {
     font-size: 10px;
     margin-bottom: 0;
     cursor: pointer;
@@ -2662,6 +2686,9 @@ body {
 }
 
 .list_voucher ul li .wraper_voucher .card__discount {
+    background-color: #0f6674;
+}
+.list_voucher ul li .wraper_voucher_not .card__discount {
     background-color: #0f6674;
 }
 
@@ -2675,18 +2702,39 @@ body {
     top: 77px;
     cursor: pointer;
 }
-
+.list_voucher ul li .wraper_voucher_not .card__discount label {
+    transform: rotate(270deg);
+    font-size: 13px;
+    position: absolute;
+    margin-top: 12px;
+    white-space: nowrap;
+    left: 0;
+    top: 77px;
+    cursor: pointer;
+}
 .list_voucher ul li .wraper_voucher .card__discount h3 {
     transform: rotate(270deg);
     position: absolute;
     font-weight: 800;
     left: 29px;
 }
+.list_voucher ul li .wraper_voucher_not .card__discount h3 {
+    transform: rotate(270deg);
+    position: absolute;
+    font-weight: 800;
+    left: 29px;
+}
 
+.list_voucher ul li .wraper_voucher_not .card__discount .tienmat {
+    top: 74px;
+}
 .list_voucher ul li .wraper_voucher .card__discount .tienmat {
     top: 74px;
 }
 
+.list_voucher ul li .wraper_voucher_not .card__discount .phantram {
+    top: 64px;
+}
 .list_voucher ul li .wraper_voucher .card__discount .phantram {
     top: 64px;
 }
@@ -4314,16 +4362,19 @@ body {
 .btn-edit-tracking:hover {
     background-color: #7b7b7b;
 }
-.title_voucher{
+
+.title_voucher {
     color: black;
     width: 100%;
     border-bottom: 1px solid;
     padding-bottom: 0;
 }
-.title_voucher:hover{
+
+.title_voucher:hover {
     color: #0a1123;
 }
-.title_voucher button{
+
+.title_voucher button {
     padding-bottom: 0;
     padding-left: 0;
 }

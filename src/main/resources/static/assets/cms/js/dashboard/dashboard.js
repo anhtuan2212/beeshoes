@@ -34,6 +34,29 @@ function convertDataToArray(data, name) {
     return dataArray;
 }
 
+
+function getRevenueToday(total_revenue) {
+    const today = moment().format('DD-MM-YYYY');
+    $.ajax({
+        url: '/api/get-revenue-option',
+        type: 'GET',
+        data: {
+            start: today,
+            end: today
+        },
+        success: function (response) {
+            console.log(response)
+
+
+            $('#total-money-today').text(addCommasToNumber(response.total_money) + 'đ')
+            updateChartRevenue(response.data, total_revenue, response.yesterday_data)
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    })
+}
+
 function addCommasToNumber(number) {
     let numberStr = number.toString().replace(/[^\d]/g, '');
     let parts = [];
@@ -137,9 +160,10 @@ let optionsDomainChart = {
     }
 };
 
-function updateChartRevenue(response,total_revenue) {
+function updateChartRevenue(response, total_revenue, yesterday) {
     let keys = [];
     let values = [];
+    let yesterdays = [];
 
     for (let key in response) {
         if (response.hasOwnProperty(key)) {
@@ -153,24 +177,57 @@ function updateChartRevenue(response,total_revenue) {
             values.push(response[key]);
         }
     }
+    if (yesterday !== undefined) {
+        for (let item in yesterday) {
+            yesterdays.push(yesterday[item])
+        }
+    }
+
     total_revenue.data.labels = keys;
-    total_revenue.data.datasets = [{
-        data: values,
-        backgroundColor: "transparent",
-        borderColor: "#377dff",
-        borderWidth: 2,
-        pointRadius: 0,
-        hoverBorderColor: "#377dff",
-        pointBackgroundColor: "#377dff",
-        pointBorderColor: "#fff",
-        pointHoverRadius: 0
-    }]
+    if (yesterday === undefined || yesterday === null) {
+        total_revenue.data.datasets = [{
+            data: values,
+            backgroundColor: "transparent",
+            borderColor: "#377dff",
+            borderWidth: 2,
+            pointRadius: 0,
+            hoverBorderColor: "#377dff",
+            pointBackgroundColor: "#377dff",
+            pointBorderColor: "#fff",
+            pointHoverRadius: 0
+        }]
+    } else {
+        total_revenue.data.datasets = [{
+            data: values,
+            backgroundColor: "transparent",
+            borderColor: "#377dff",
+            borderWidth: 2,
+            pointRadius: 0,
+            hoverBorderColor: "#377dff",
+            pointBackgroundColor: "#377dff",
+            pointBorderColor: "#fff",
+            pointHoverRadius: 0
+        },
+            {
+                data: yesterdays,
+                backgroundColor: "transparent",
+                borderColor: "#e7eaf3",
+                borderWidth: 2,
+                pointRadius: 0,
+                hoverBorderColor: "#e7eaf3",
+                pointBackgroundColor: "#e7eaf3",
+                pointBorderColor: "#fff",
+                pointHoverRadius: 0
+            }]
+    }
     total_revenue.update();
 }
 
 $(document).on('ready', function () {
     let chartToday = $.HSCore.components.HSChartJS.init($('#total-data-today'));
     let oderAll = $.HSCore.components.HSChartJS.init($('#total-oder-all'));
+    let total_revenue = $.HSCore.components.HSChartJS.init($('#total-revenue-chart'));
+    getRevenueToday(total_revenue);
     getData().then((res) => {
         total_money_online = res.data.total_online_revenue;
         total_money_in_store = res.data.total_store_revenue;
@@ -540,7 +597,6 @@ $(document).on('ready', function () {
         $('li[data-range-key="Custom Range"]').text('Tùy Chỉnh');
     })
 
-    let total_revenue = $.HSCore.components.HSChartJS.init($('#total-revenue-chart'));
 
     $('#js-option-revenue').on('apply.daterangepicker', function (ev, picker) {
         let startDate = picker.startDate.format('DD-MM-YYYY');
@@ -553,8 +609,8 @@ $(document).on('ready', function () {
                 end: endDate
             },
             success: function (response) {
-                console.log(response)
-                updateChartRevenue(response,total_revenue)
+                $('#total-money-today').text(addCommasToNumber(response.total_money) + 'đ')
+                updateChartRevenue(response.data, total_revenue, response.yesterday_data)
             },
             error: function (error) {
                 console.log(error)

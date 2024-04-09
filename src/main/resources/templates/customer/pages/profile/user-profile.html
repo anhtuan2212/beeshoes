@@ -283,13 +283,13 @@
                             <div class="form_filter">
                                 <select id="select_status_oder" class="select_status" type="text">
                                     <option value="All" selected>Tất Cả</option>
-                                    <option value="ChoXacNhan">Chờ Xác Nhận</option>
-                                    <option value="ChuanBiHang">Chuẩn Bị Hàng</option>
-                                    <option value="ChoGiao">Chờ Giao Hàng</option>
-                                    <option value="DangGiao">Đang Vận Chuyển</option>
-                                    <option value="Huy">Đã Hủy</option>
-                                    <option value="DaGiao">Đã Giao Hàng</option>
-                                    <option value="ThanhCong">Thành Công</option>
+                                    <option value="Chờ Xác Nhận">Chờ Xác Nhận</option>
+                                    <option value="Chuẩn Bị Hàng">Chuẩn Bị Hàng</option>
+                                    <option value="Chờ Giao">Chờ Giao Hàng</option>
+                                    <option value="Đang Giao">Đang Vận Chuyển</option>
+                                    <option value="Hủy">Đã Hủy</option>
+                                    <option value="Đã Giao">Đã Giao Hàng</option>
+                                    <option value="Thành Công">Thành Công</option>
                                 </select>
                                 <input id="input-search-oder" class="search_input mr-2" type="text"
                                        placeholder="Tìm kiếm mã hóa đơn.">
@@ -308,35 +308,9 @@
                                     </div>
                                     <div class="status">
                                         <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='Huy'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Đã Hủy</label>
-                                        <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='ChuanBiHang'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Chuẩn Bị
-                                            Hàng</label>
-                                        <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='ChoXacNhan'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Chờ Xác
-                                            Nhận</label>
-                                        <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='ChoGiao'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Chờ Giao</label>
-                                        <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='DangGiao'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Đang Giao</label>
-                                        <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='HoanTra'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Hoàn Trả</label>
-                                        <label th:id="'trangthai_'+${hoadon.getId()}"
-                                               th:if="${hoadon.getTrangThai().name()=='ThanhCong'}"
-                                               th:attr="data-status=${hoadon.getTrangThai().name()}"
-                                        >Thành Công</label>
+                                               th:attr="data-status=${hoadon.getTrangThai()}"
+                                        th:text="${hoadon.getTrangThai()}">
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -382,14 +356,14 @@
                                             Đơn hàng được tạo bởi bạn.
                                         </div>
                                         <div class="card-btn-group">
-                                            <button th:if="${hoadon.getTrangThai().name() == 'Huy' or hoadon.getTrangThai().name() == 'ThanhCong' or  hoadon.getTrangThai().name() == 'HoanTra'}"
+                                            <button th:if="${hoadon.getTrangThai() == 'Hủy' or hoadon.getTrangThai() == 'Thành Công'}"
                                                     class="primary-btn" type="button">Mua Lại
                                             </button>
                                             <a th:href="'/oder-tracking?oder='+${hoadon.getMaHoaDon()}"
                                                class="info-btn">Xem
                                                 Chi Tiết</a>
                                             <button th:id="'btn-cancel-'+${hoadon.getId()}"
-                                                    th:if="${hoadon.getTrangThai().name() == 'ChoXacNhan'}"
+                                                    th:if="${hoadon.getTrangThai() == 'Chờ Xác Nhận'}"
                                                     th:attr="data-id=${hoadon.getId()}"
                                                     class="info-btn btn-cancel-oders"
                                                     type="button">Hủy Đơn

@@ -119,18 +119,17 @@
                 <div class="col-sm-6 col-lg-3 column-divider-lg">
                     <div class="media">
                         <div class="media-body">
-                            <h6 class="card-subtitle">Giảm Giá</h6>
+                            <h6 class="card-subtitle">Đơn Hàng</h6>
                             <span class="card-title h3"
-                                  th:text="${#numbers.formatDecimal(discount_data.total,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></span>
+                                  th:text="${#numbers.formatDecimal(discount_data.total,  1, 'DEFAULT', 0, 'DEFAULT')}+' đơn'"></span>
 
                             <div class="d-flex align-items-center">
-                                <span class="d-block font-size-sm"
-                                      th:text="${discount_data.numOder}+' đơn'"></span>
+                                <span class="d-block font-size-sm"></span>
                             </div>
                         </div>
 
                         <span class="icon icon-sm icon-soft-secondary icon-circle ml-3">
-                  <i class="tio-label-off"></i>
+                  <i class="tio-receipt"></i>
                 </span>
                     </div>
 
@@ -160,7 +159,7 @@
                         </div>
 
                         <span class="icon icon-sm icon-soft-secondary icon-circle ml-3">
-                  <i class="tio-users-switch"></i>
+                  <i class="tio-wallet"></i>
                 </span>
                     </div>
                 </div>
@@ -498,11 +497,22 @@
                             </div>
 
                             <div class="col-sm-auto">
-                    <span class="h3 text-success">
-                      <i class="tio-trending-up"></i> 25.9%
+
+                    <span class="h3 text-success" th:if="${total_all_data.direction}">
+                      <i class="tio-trending-up"></i>
+                        <th:block th:text="${total_all_data.percent}+'%'"></th:block>
                     </span>
-                                <span class="d-block">&mdash; 1,347,935,234đ <span
-                                        class="badge badge-soft-dark badge-pill ml-1">+$97k Hôm Nay</span></span>
+                                <span class="h3 text-danger" th:if="${total_all_data.direction==false}">
+                      <i class="tio-trending-down"></i>
+                        <th:block th:text="${total_all_data.percent}+'%'"></th:block>
+                    </span>
+
+                                <span class="d-block">
+                                   &mdash; <th:block
+                                        th:text="${#numbers.formatDecimal(total_all_data.total,  1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></th:block>
+                                    <span
+                                            class="badge badge-soft-dark badge-pill ml-1"
+                                            th:text="'+'+${#numbers.formatDecimal (total_money_today, 1, 'DEFAULT', 0, 'DEFAULT')}+'k Hôm Nay'"></span></span>
                             </div>
                         </div>
                         <!-- End Row -->
@@ -729,11 +739,21 @@
                             </div>
 
                             <div class="col-sm-auto">
-                    <span class="h3 text-success">
-                      <i class="tio-trending-up"></i> 4.7%
+
+                                    <span class="h3 text-success" th:if="${quantity_oder_direction}">
+                      <i class="tio-trending-up"></i>
+                                        <th:block th:text="${quantity_oder_present}+'%'"></th:block>
                     </span>
+
+
+                                <span class="h3 text-danger" th:if="${quantity_oder_direction==false}">
+                      <i class="tio-trending-down"></i>
+                                    <th:block th:text="${quantity_oder_present}+'%'"></th:block>
+                    </span>
+
                                 <span class="d-block">&mdash; đơn hàng theo thời gian <span
-                                        class="badge badge-soft-dark badge-pill ml-1">+5k Hôm Nay</span></span>
+                                        class="badge badge-soft-dark badge-pill ml-1"
+                                        th:text="'+'+${quantity_oder_today}+' Hôm Nay'"></span></span>
                             </div>
                         </div>
                         <!-- End Row -->
