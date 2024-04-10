@@ -31,7 +31,7 @@ public class QuanTriServiceImpl implements QuanTriService {
 
     @Override
     public QuanTri getById(Long id) {
-        return quanTriReponsitory.findById(id).get();
+        return quanTriReponsitory.findById(id).orElse(null);
     }
 
     @Override

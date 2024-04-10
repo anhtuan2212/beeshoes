@@ -460,13 +460,13 @@
 }
 
 
-
 .wraper_user {
     display: inline-flex;
     justify-content: center;
     position: relative;
 }
-.wraper_user label{
+
+.wraper_user label {
     width: 30px;
     height: 30px;
     background-color: #ffffff;
@@ -483,4 +483,14 @@
     width: 150px;
     height: 150px;
     object-fit: cover;
+}
+
+.img-main-product {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-banner {
+    background-color: #adadad;
 }

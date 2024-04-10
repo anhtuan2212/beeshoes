@@ -617,6 +617,193 @@ $(document).on('ready', function () {
             }
         })
     });
+    $('#js-daterangepicker-predefined').on('apply.daterangepicker', function (ev, picker) {
+        let startDate = picker.startDate.format('DD-MM-YYYY');
+        let endDate = picker.endDate.format('DD-MM-YYYY');
+        $.ajax({
+            url: '/api/get-quantity-oder-option',
+            type: 'GET',
+            data: {
+                start: startDate,
+                end: endDate
+            },
+            success: function (response) {
+                console.log(response)
+                if (response.check) {
+                    let option = $('#total-oder-today-type').val();
+                    let data_online = response.online_today;
+                    let data_online_yes = response.online_yesterday;
+                    let keys = [];
+                    let values_today_online = [];
+                    let values_yesterday_online = [];
+                    for (let key in data_online) {
+                        if (data_online.hasOwnProperty(key)) {
+                            keys.push(key)
+                            values_today_online.push(data_online[key]);
+                        }
+                    }
+                    for (let key in data_online_yes) {
+                        if (data_online_yes.hasOwnProperty(key)) {
+                            values_yesterday_online.push(data_online_yes[key]);
+                        }
+                    }
+                    let data_store = response.store_today;
+                    let data_store_yes = response.store_yesterday;
+                    let values_store_today = [];
+                    let values_store_yesterday = [];
+                    for (let key in data_store) {
+                        if (data_store.hasOwnProperty(key)) {
+                            values_store_today.push(data_store[key]);
+                        }
+                    }
+                    for (let key in data_store_yes) {
+                        if (data_store_yes.hasOwnProperty(key)) {
+                            values_store_yesterday.push(data_store_yes[key]);
+                        }
+                    }
+                    let element_today = $('#text-date-today').parent();
+                    let element_yesterday = $('#text-date-yesterday').parent();
+                    let span_today = element_today.find('span').clone();
+                    let span_yesterday = element_yesterday.find('span').clone();
+                    let parts = response.today.split("-");
+                    let newDateString = parts[1] + "-" + parts[0] + "-" + parts[2];
+                    let date = new Date(newDateString);
+                    let today = new Date();
+                    if (date.getDate() === today.getDate() &&
+                        date.getMonth() === today.getMonth() &&
+                        date.getFullYear() === today.getFullYear()) {
+                        element_today.text("Hôm Nay");
+                        element_yesterday.text("Hôm Qua");
+                        element_today.prepend(span_today);
+                        element_yesterday.prepend(span_yesterday);
+                    } else {
+                        element_today.text(response.today);
+                        element_yesterday.text(response.yesterday);
+                        element_today.prepend(span_today);
+                        element_yesterday.prepend(span_yesterday);
+                    }
+
+
+                    data_oder_today_online = values_today_online;
+                    data_oder_yesterday_online = values_yesterday_online;
+                    data_oder_today_in_store = values_store_today;
+                    data_oder_yesterday_in_store = values_store_yesterday;
+                    total_money_online = response.total_online_revenue;
+                    total_money_in_store = response.total_store_revenue;
+                    quantity_online = response.quantity_online;
+                    quantity_in_store = response.quantity_store;
+                    if (option === 'in-website') {
+                        $('#show-total-money').text(addCommasToNumber(response.total_online_revenue) + 'đ')
+                        $('#text-quantity-oder-today').text(addCommasToNumber(response.quantity_online))
+                        chartToday.data.labels = keys;
+                        chartToday.data.datasets = [
+                            {
+                                data: data_oder_today_online,
+                                backgroundColor: "#377dff",
+                                hoverBackgroundColor: "#377dff",
+                                borderColor: "#377dff"
+                            },
+                            {
+                                data: data_oder_yesterday_online,
+                                backgroundColor: "#e7eaf3",
+                                borderColor: "#e7eaf3"
+                            }
+                        ];
+                        chartToday.update();
+                    } else {
+                        $('#show-total-money').text(addCommasToNumber(response.total_store_revenue) + 'đ')
+                        $('#text-quantity-oder-today').text(addCommasToNumber(response.quantity_store))
+                        chartToday.data.labels = keys;
+                        chartToday.data.datasets = [
+                            {
+                                data: data_oder_today_in_store,
+                                backgroundColor: "#377dff",
+                                hoverBackgroundColor: "#377dff",
+                                borderColor: "#377dff"
+                            },
+                            {
+                                data: data_oder_yesterday_in_store,
+                                backgroundColor: "#e7eaf3",
+                                borderColor: "#e7eaf3"
+                            }
+                        ];
+                        chartToday.update();
+                    }
+
+                } else {
+                    let option = $('#total-oder-today-type').val();
+                    let element_today = $('#text-date-today').parent();
+                    let element_yesterday = $('#text-date-yesterday').parent();
+                    let span_today = element_today.find('span').clone();
+                    let span_yesterday = element_yesterday.find('span').clone();
+                    element_today.html(span_today);
+                    element_yesterday.html(span_yesterday);
+
+                    let data_online = response.online_data;
+                    let keys = [];
+                    let values_today_online = [];
+                    let values_yesterday_online = [];
+                    for (let key in data_online) {
+                        if (data_online.hasOwnProperty(key)) {
+                            let parts = key.split('-')
+                            keys.push(parts[2] + '/' + parts[1] + '/' + parts[0]);
+                            values_yesterday_online.push(0);
+                            values_today_online.push(data_online[key]);
+                        }
+                    }
+                    let data_store = response.online_data;
+                    let values_today_store = [];
+                    let values_yesterday_store = [];
+                    for (let key in data_store) {
+                        if (data_store.hasOwnProperty(key)) {
+                            values_yesterday_store.push(0);
+                            values_today_store.push(data_store[key]);
+                        }
+                    }
+
+                    data_oder_today_online = values_today_online;
+                    data_oder_yesterday_online = values_yesterday_online;
+                    data_oder_today_in_store = values_today_store;
+                    data_oder_yesterday_in_store = values_yesterday_store;
+                    total_money_online = response.total_money_online;
+                    total_money_in_store = response.total_money_store;
+                    quantity_online = response.count_online;
+                    quantity_in_store = response.count_store;
+                    if (option === 'in-website') {
+                        $('#show-total-money').text(addCommasToNumber(total_money_online) + 'đ')
+                        $('#text-quantity-oder-today').text(addCommasToNumber(quantity_online))
+                        chartToday.data.labels = keys;
+                        chartToday.data.datasets = [
+                            {
+                                data: data_oder_today_online,
+                                backgroundColor: "#377dff",
+                                hoverBackgroundColor: "#377dff",
+                                borderColor: "#377dff"
+                            }
+                        ];
+                        chartToday.update();
+                    } else {
+                        $('#show-total-money').text(addCommasToNumber(total_money_in_store) + 'đ')
+                        $('#text-quantity-oder-today').text(addCommasToNumber(quantity_in_store))
+                        chartToday.data.labels = keys;
+                        chartToday.data.datasets = [
+                            {
+                                data: data_oder_today_in_store,
+                                backgroundColor: "#377dff",
+                                hoverBackgroundColor: "#377dff",
+                                borderColor: "#377dff"
+                            }
+                        ];
+                        chartToday.update();
+                    }
+
+                }
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+    });
 
     // INITIALIZATION OF DATATABLES
     // =======================================================

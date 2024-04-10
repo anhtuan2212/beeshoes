@@ -63,6 +63,7 @@ function printAllData() {
             let html = `<div class="col-lg-4 col-md-6 col-sm-6 product_wraper mix fadeOut">
                         <div class="product__item sale" data-product-id="${product.id}">
                                 <div class="product__item__pic set-bg susor-pointer" data-setbg="${url}" data-href="/shop-detail?product=${product.id}" style="background-image: url('${url}');">
+                                <img class="img-main-product" src="${url}" alt="">
                                     ${sales}
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png" alt=""></a>

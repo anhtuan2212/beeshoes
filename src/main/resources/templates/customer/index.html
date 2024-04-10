@@ -66,15 +66,14 @@
 <!-- Hero Section Begin -->
 <section class="hero">
     <div class="hero__slider owl-carousel">
-        <div class="hero__items set-bg" data-setbg="/assets/customer/img/hero/banner1.png">
+        <div class="hero__items set-bg" th:attr="data-setbg=${setupData.getBanner1()}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-5 col-lg-7 col-md-8">
                         <div class="hero__text">
                             <h6>Bộ sưu tập mùa hè</h6>
-                            <h2>Bộ sưu tập Thu – Đông 2030</h2>
-                            <p>Một nhãn hiệu chuyên tạo ra những sản phẩm thiết yếu sang trọng. Được tạo ra một cách có đạo đức với một thái độ kiên định
-                                cam kết chất lượng vượt trội.</p>
+                            <h2 th:text="${setupData.getTitle1()}"></h2>
+                            <p th:text="${setupData.getMo_ta2()}"></p>
                             <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
                             <div class="hero__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -87,15 +86,14 @@
                 </div>
             </div>
         </div>
-        <div class="hero__items set-bg" data-setbg="/assets/customer/img/hero/banner2.png">
+        <div class="hero__items set-bg" th:attr="data-setbg=${setupData.getBanner2()}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-5 col-lg-7 col-md-8">
                         <div class="hero__text">
-                            <h6>Bộ sưu tập mùa hè</h6>
-                            <h2>Bộ sưu tập Thu – Đông 2030</h2>
-                            <p>Một nhãn hiệu chuyên tạo ra những sản phẩm thiết yếu sang trọng. Được tạo ra một cách có đạo đức với một thái độ kiên định
-                                cam kết chất lượng vượt trội.</p>
+                            <h6>Bộ sưu tập mùa xuân</h6>
+                            <h2 th:text="${setupData.getTitle2()}"></h2>
+                            <p th:text="${setupData.getMo_ta2()}"></p>
                             <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
                             <div class="hero__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -119,33 +117,39 @@
             <div class="col-lg-7 offset-lg-4">
                 <div class="banner__item">
                     <div class="banner__item__pic">
-                        <img src="/assets/customer/img/banner/banner-1.jpg" alt="">
+                        <img th:if="${setupData.getSan_pham1()==null}" src="/assets/customer/img/banner/banner-1.jpg" alt="">
+                        <img class="img-banner" th:if="${setupData.getSan_pham1()!=null}" th:src="${setupData.getSan_pham1().getMainImage().getUrl()}" alt="">
                     </div>
                     <div class="banner__item__text">
-                        <h2>Bộ sưu tập giày 2030</h2>
-                        <a href="#">Mua ngay</a>
+                        <h2 th:text="${setupData.getTitle_sp1()}">Bộ sưu tập giày 2030</h2>
+                        <a th:if="${setupData.getSan_pham1()==null}" href="/shop">Mua ngay</a>
+                        <a th:if="${setupData.getSan_pham1()!=null}" th:href="'/shop-detail?product='+${setupData.getSan_pham1().getId()}">Mua ngay</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="banner__item banner__item--middle">
                     <div class="banner__item__pic">
-                        <img src="/assets/customer/img/banner/banner-2.jpg" alt="">
+                        <img th:if="${setupData.getSan_pham2()==null}" src="/assets/customer/img/banner/banner-2.jpg" alt="">
+                        <img  class="img-banner" th:if="${setupData.getSan_pham2()!=null}" th:src="${setupData.getSan_pham2().getMainImage().getUrl()}" alt="">
                     </div>
                     <div class="banner__item__text">
-                        <h2>Phụ kiện</h2>
-                        <a href="#">Mua ngay</a>
+                        <h2 th:text="${setupData.getTitle_sp2()}">Phụ kiện</h2>
+                        <a th:if="${setupData.getSan_pham2()==null}" href="/shop">Mua ngay</a>
+                        <a th:if="${setupData.getSan_pham2()!=null}" th:href="'/shop-detail?product='+${setupData.getSan_pham2().getId()}">Mua ngay</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-7">
                 <div class="banner__item banner__item--last">
                     <div class="banner__item__pic">
-                        <img src="/assets/customer/img/banner/banner-3.jpg" alt="">
+                        <img th:if="${setupData.getSan_pham3()==null}" src="/assets/customer/img/banner/banner-3.jpg" alt="">
+                        <img  class="img-banner" th:if="${setupData.getSan_pham3()!=null}" th:src="${setupData.getSan_pham3().getMainImage().getUrl()}" alt="">
                     </div>
                     <div class="banner__item__text">
-                        <h2>Giày Xuân 2030</h2>
-                        <a href="#">Mua ngay</a>
+                        <h2 th:text="${setupData.getTitle_sp3()}">Phụ kiện</h2>
+                        <a th:if="${setupData.getSan_pham3()==null}" href="/shop">Mua ngay</a>
+                        <a th:if="${setupData.getSan_pham3()!=null}" th:href="'/shop-detail?product='+${setupData.getSan_pham3().getId()}">Mua ngay</a>
                     </div>
                 </div>
             </div>
@@ -294,12 +298,13 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="categories__text">
-                    <h2>Giày bán chạy<br /> <span>Bộ sưu tập giày</span> <br /> Phụ kiện</h2>
+                    <h2>Giày bán chạy<br /><span>Bộ sưu tập giày</span> <br /> Phụ kiện</h2>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="categories__hot__deal">
-                    <img src="/assets/customer/img/anh2.jpg" alt="">
+                    <img th:if="${setupData.getSan_pham_sale()==null}" src="/assets/customer/img/anh2.jpg" alt="">
+                    <img th:if="${setupData.getSan_pham_sale()!=null}" th:src="${setupData.getSan_pham_sale().getMainImage().getUrl()}" alt="">
                     <div class="hot__deal__sticker">
                         <span>Giảm giá</span>
                         <h5>$29.99</h5>
@@ -309,7 +314,7 @@
             <div class="col-lg-4 offset-lg-1">
                 <div class="categories__deal__countdown">
                     <span>Giao dịch trong tuần</span>
-                    <h2>Giày thể thao đơn giản</h2>
+                    <h2 th:text="${setupData.getTitle_sp_sale()}">Giày thể thao đơn giản</h2>
                     <div class="categories__deal__countdown__timer" id="countdown">
                         <div class="cd-item">
                             <span>3</span>
@@ -328,7 +333,8 @@
                             <p>Giây</p>
                         </div>
                     </div>
-                    <a href="#" class="primary-btn">Mua ngay</a>
+                    <a th:if="${setupData.getSan_pham_sale()==null}" href="#" class="primary-btn">Mua ngay</a>
+                    <a th:if="${setupData.getSan_pham_sale()!=null}" th:href="'/shop-detail?product='+${setupData.getSan_pham_sale().getId()}" class="primary-btn">Mua ngay</a>
                 </div>
             </div>
         </div>

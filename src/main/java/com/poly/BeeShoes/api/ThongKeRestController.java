@@ -59,8 +59,8 @@ public class ThongKeRestController {
         Map<Object, Object> resultData = new HashMap<>();
 
         List<Object[]> StoreToDay = hoaDonService.getCountCreatedByCreatDateAndTypeHD(sdf.format(new Date()), true);
-        StoreToDay.forEach(inv -> storeToday.put(inv[0], inv[1]));
         List<Object[]> OnlineToday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(sdf.format(new Date()), false);
+        StoreToDay.forEach(inv -> storeToday.put(inv[0], inv[1]));
         OnlineToday.forEach(inv -> onlineToday.put(inv[0], inv[1]));
 
         Calendar calendar = Calendar.getInstance();
@@ -69,7 +69,7 @@ public class ThongKeRestController {
         String yesterday = sdf.format(yesterdayDate);
         List<Object[]> StoreYesterday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(yesterday, true);
         StoreYesterday.forEach(inv -> storeYesterday.put(inv[0], inv[1]));
-        List<Object[]> OnlineYesterday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(yesterday, true);
+        List<Object[]> OnlineYesterday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(yesterday, false);
         OnlineYesterday.forEach(inv -> onlineYesterday.put(inv[0], inv[1]));
 
         int quantity_store = 0;
@@ -100,6 +100,105 @@ public class ThongKeRestController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("/get-quantity-oder-option")
+    public ResponseEntity getQuantity(@RequestParam("start") String start,
+                                      @RequestParam("end") String end) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        if (start.equals(end)) {
+
+            DateTimeFormatter formatterInput = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter formatterOutput = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            LocalDate date = LocalDate.parse(start, formatterInput);
+            String startFormatted = date.format(formatterOutput);
+
+            Map<Object, Object> storeToday = new HashMap<>();
+            Map<Object, Object> onlineToday = new HashMap<>();
+            Map<Object, Object> storeYesterday = new HashMap<>();
+            Map<Object, Object> onlineYesterday = new HashMap<>();
+            Map<Object, Object> resultData = new HashMap<>();
+
+            List<Object[]> StoreToDay = hoaDonService.getCountCreatedByCreatDateAndTypeHD(startFormatted, true);
+            StoreToDay.forEach(item -> storeToday.put(item[0], item[1]));
+            List<Object[]> OnlineToday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(startFormatted, false);
+            OnlineToday.forEach(item -> onlineToday.put(item[0], item[1]));
+
+            LocalDate dateFM = LocalDate.parse(start, formatterInput);
+            LocalDate previousDay = dateFM.minusDays(1);
+            String yesterday = previousDay.format(formatterOutput);
+            List<Object[]> StoreYesterday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(yesterday, true);
+            StoreYesterday.forEach(inv -> storeYesterday.put(inv[0], inv[1]));
+            List<Object[]> OnlineYesterday = hoaDonService.getCountCreatedByCreatDateAndTypeHD(yesterday, false);
+            OnlineYesterday.forEach(inv -> onlineYesterday.put(inv[0], inv[1]));
+
+            int quantity_store = 0;
+            int quantity_online = 0;
+            int total_store_revenue = 0;
+            int total_online_revenue = 0;
+
+            Date today = sdf.parse(start);
+            List<HoaDon> lstToDay = hoaDonService.getAllByDate(today);
+            for (HoaDon hd : lstToDay) {
+                if (hd.isLoaiHoaDon()) {
+                    quantity_store++;
+                    total_store_revenue += hd.getThucThu().intValue();
+                } else {
+                    quantity_online++;
+                    total_online_revenue += hd.getThucThu().intValue();
+                }
+            }
+            resultData.put("online_today", onlineToday);
+            resultData.put("online_yesterday", onlineYesterday);
+            resultData.put("store_today", storeToday);
+            resultData.put("store_yesterday", storeYesterday);
+            resultData.put("quantity_store", quantity_store);
+            resultData.put("quantity_online", quantity_online);
+            resultData.put("total_store_revenue", total_store_revenue);
+            resultData.put("total_online_revenue", total_online_revenue);
+            resultData.put("today", start);
+            resultData.put("yesterday", previousDay.format(formatterInput));
+            resultData.put("check", true);
+            return ResponseEntity.ok().body(resultData);
+        } else {
+            Date startDate = sdf.parse(start);
+            Date endDate = sdf.parse(end);
+
+            List<Object[]> store = hoaDonService.getAllRecordsCreatedByDateRange(startDate, endDate, true);
+            BigDecimal total_store = hoaDonService.getTotalRevenueByDateRangeAndType(startDate, endDate, true);
+            BigDecimal total_online = hoaDonService.getTotalRevenueByDateRangeAndType(startDate, endDate, false);
+            List<Object[]> online = hoaDonService.getAllRecordsCreatedByDateRange(startDate, endDate, false);
+            Map<Object, Object> response = new HashMap<>();
+            Map<LocalDate, Object> store_map = new TreeMap<>();
+            Map<LocalDate, Object> online_map = new TreeMap<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            AtomicInteger allCountStore = new AtomicInteger();
+            store.forEach(item -> {
+                String dateStr = (String) item[0];
+                System.out.println(item[0]);
+                LocalDate date = LocalDate.parse(dateStr.substring(0, 10), formatter);
+                allCountStore.addAndGet(((Long) item[1]).intValue());
+                store_map.put(date, ((Long) item[1]).intValue());
+            });
+            AtomicInteger allCountOnline = new AtomicInteger();
+            online.forEach(item -> {
+                String dateStr = (String) item[0];
+                LocalDate date = LocalDate.parse(dateStr.substring(0, 10), formatter);
+                allCountOnline.addAndGet(((Long) item[1]).intValue());
+                online_map.put(date, ((Long) item[1]).intValue());
+            });
+            response.put("store_data", store_map);
+            response.put("count_store", allCountStore);
+            response.put("total_money_store", total_store.intValue());
+            response.put("total_money_online", total_online.intValue());
+            response.put("online_data", online_map);
+            response.put("count_online", allCountOnline);
+            response.put("check", false);
+            System.out.println(response);
+            return ResponseEntity.ok().body(response);
+        }
+
+    }
+
     @GetMapping("/get-revenue-option")
     public ResponseEntity getRevenue(@RequestParam("start") String start,
                                      @RequestParam("end") String end) {
@@ -120,7 +219,7 @@ public class ThongKeRestController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(yesterday);
+//        System.out.println(yesterday);
         AtomicInteger total_money = new AtomicInteger();
         if (startDate.equals(endDate)) {
             Map<Object, Object> response = new HashMap<>();
@@ -152,9 +251,9 @@ public class ThongKeRestController {
         } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Map<LocalDate, Object> response = new TreeMap<>();
-            List<Object[]> data = hoaDonService.getAllCountCreatedByDateRange(startDate, endDate);
+            List<Object[]> data = hoaDonService.getAllRevenueCreatedByDateRange(startDate, endDate);
             data.forEach(inv -> {
-                System.out.println(inv[1]);
+//                System.out.println(inv[1]);
                 String dateStr = (String) inv[0];
                 LocalDate date = LocalDate.parse(dateStr.substring(0, 10), formatter);
                 BigDecimal money = (BigDecimal) inv[1];
@@ -242,7 +341,7 @@ public class ThongKeRestController {
                 .sorted((p1, p2) -> Integer.compare((int) p2.get("soLuong"), (int) p1.get("soLuong")))
                 .limit(10)
                 .collect(Collectors.toList());
-        System.out.println(top6Products);
+//        System.out.println(top6Products);
         return ResponseEntity.ok().body(top6Products);
     }
 

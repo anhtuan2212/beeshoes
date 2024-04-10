@@ -12,6 +12,9 @@ import com.poly.BeeShoes.service.UserService;
 import com.poly.BeeShoes.utility.MailUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -114,12 +117,12 @@ public class KhachHangRestController {
             String body = "<h1>Đăng Ký Thành Công !</h1><h2>email đăng nhập là : " + user.getEmail() + "</h2><h2>Mật Khẩu là : " + password + "</h2>";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
-        Map<String,Object> res = new HashMap<>();
-        res.put("mail",u.getEmail());
-        res.put("ma",u.getKhachHang().getMaKhachHang());
-        res.put("ten",u.getKhachHang().getHoTen());
-        res.put("id",u.getKhachHang().getId());
-        res.put("phone",u.getKhachHang().getSdt());
+        Map<String, Object> res = new HashMap<>();
+        res.put("mail", u.getEmail());
+        res.put("ma", u.getKhachHang().getMaKhachHang());
+        res.put("ten", u.getKhachHang().getHoTen());
+        res.put("id", u.getKhachHang().getId());
+        res.put("phone", u.getKhachHang().getSdt());
         return ResponseEntity.ok().body(res);
     }
 
@@ -133,4 +136,14 @@ public class KhachHangRestController {
         return khachHangService.existsBySdt(phone);
     }
 
+    @GetMapping("/get-avatar")
+    public ResponseEntity avatar() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            User user = userService.getByUsername(userDetails.getUsername());
+            return ResponseEntity.ok().body(user.getAvatar());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

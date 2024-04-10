@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -27,12 +29,15 @@ public class UTest {
     private HoaDonRepository hoaDonRepository;
 
     @Test
-    public void invoice() {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.DAY_OF_YEAR, -1);
-//        Date date = calendar.getTime();
-//        List<int[]> invList = hoaDonRepository.cntInvoiceInHourByCreatedDate(date);
-//        invList.forEach(inv -> System.out.println(inv[0] + "-" + inv[1]));
+    public void invoice() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date start =sdf.parse("01-04-2024");
+        Date end = new Date();
+        List<Object[]> data = hoaDonRepository.getAllRecordsCreatedByDateRange(start,end,true);
+        data.forEach(item->{
+            System.out.println(item[0]);
+            System.out.println(item[1]);
+        });
     }
 
     @Test

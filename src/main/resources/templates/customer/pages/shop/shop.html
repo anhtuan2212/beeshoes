@@ -246,7 +246,7 @@
                             <th:block th:each="anh:${sp.getAnh()}" th:if="${anh.isMain == true}">
                                 <div class="product__item__pic set-bg susor-pointer"
                                      th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-detail(product=${sp.getId()})}">
-                                    <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="">
+                                    <img class="img-main-product" th:src="${anh.getUrl()}" alt="">
                                     <span class="label" th:if="${sp.isSale()}">SALE</span>
                                     <ul class="product__hover">
                                         <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png"
