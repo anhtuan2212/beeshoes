@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,15 +24,42 @@ public class QuanTriController {
 
     @GetMapping("")
     public String quanTri(Model model) {
-        QuanTri qtri = quanTriService.getById(1L);
-        qtri.setThoi_gian(Timestamp.valueOf(qtri.getThoi_gian_sale()));
-        model.addAttribute("quanTri", qtri);
+        List<QuanTri> list = quanTriService.getAll();
+
+        QuanTri strip;
+        if (list.isEmpty()) {
+            strip = new QuanTri();
+            strip.setId(1L);
+            strip.setMo_ta1("Một nhãn hiệu chuyên tạo ra những sản phẩm thiết yếu sang trọng. Được tạo ra một cách có đạo đức với một thái độ kiên định\n"
+                    + " cam kết chất lượng vượt trội.");
+            strip.setMo_ta2("Một nhãn hiệu chuyên tạo ra những sản phẩm thiết yếu sang trọng. Được tạo ra một cách có đạo đức với một thái độ kiên định\n"
+                    + " cam kết chất lượng vượt trội.");
+            strip.setTitle1("Bộ sưu tập Thu-Đông 2030");
+            strip.setTitle2("Bộ sưu tập Xuân-Hạ 2030");
+            strip.setTitle_sp1("Bộ sưu tập giày 2030");
+            strip.setTitle_sp2("Giày Xuân 2030");
+            strip.setTitle_sp3("Phụ kiện");
+            strip.setTitle_sp_sale("Giày thể thao đơn giản");
+            strip.setBanner1("/assets/customer/img/hero/banner1.png");
+            strip.setBanner2("/assets/customer/img/hero/banner2.png");
+            strip.setSan_pham1(null);
+            strip.setSan_pham2(null);
+            strip.setSan_pham3(null);
+            strip.setSan_pham_sale(null);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime oneMonthLater = now.plusMonths(1);
+            strip.setThoi_gian_sale(oneMonthLater);
+            quanTriService.save(strip);
+        }
+        QuanTri quantri = quanTriService.getById(1L);
+        quantri.setThoi_gian(Timestamp.valueOf(quantri.getThoi_gian_sale()));
+        model.addAttribute("quanTri", quantri);
         model.addAttribute("listSP", sanPhamService.findByTrangThaiEquals(true));
         return "cms/pages/quantri/quan-tri";
     }
 
     @PostMapping("/update")
-    public String update(Model model,@ModelAttribute("quanTri") QuanTri quanTri){
+    public String update(Model model, @ModelAttribute("quanTri") QuanTri quanTri) {
         System.out.println(quanTri.toString());
         QuanTri updatedQuanTri = quanTriService.getById(1L);
         updatedQuanTri.setBanner1(quanTri.getBanner1());

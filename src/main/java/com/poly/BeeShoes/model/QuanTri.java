@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @ToString
 public class QuanTri {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String banner1;
     String title1;
@@ -46,6 +45,7 @@ public class QuanTri {
     String title_sp_sale;
 
     LocalDateTime thoi_gian_sale;
+
     @Transient
     Timestamp thoi_gian;
 }

@@ -67,7 +67,7 @@
                             <th:block sec:authorize="isAuthenticated()">
                                 <a class="user-avatar" href="/user-profile">
                                     <img th:src="${#authentication.getPrincipal().avatar == null ?'/assets/customer/img/icon/user.png':#authentication.getPrincipal().avatar}"
-                                         width="28" height="28" alt="">
+                                         width="28" height="28" onerror="avatarError(this,event)">
                                 </a>
                                 <label class="user-name mb-0"
                                        th:if="${#authentication.getPrincipal().khachHang!= null and #authentication.getPrincipal().khachHang.hoTen!=null}"

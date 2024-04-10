@@ -281,8 +281,8 @@ select2 select2-container select2-container--default select2-container--above
     transform: rotate(270deg);
     justify-content: center;
     top: 67px;
-    right: 30px;
-    width: 100%;
+    right: 2px;
+    width: 168%;
 }
 
 .text-value-discount {

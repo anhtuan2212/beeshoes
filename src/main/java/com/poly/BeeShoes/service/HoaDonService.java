@@ -3,12 +3,15 @@ package com.poly.BeeShoes.service;
 import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 public interface HoaDonService {
-    List<Object[]> getAllCountCreatedByDateRange(Date start , Date end);
+    List<Object[]> getAllRevenueCreatedByDateRange(Date start , Date end);
+    List<Object[]> getAllRecordsCreatedByDateRange(Date start , Date end,boolean LoaiHD);
+    BigDecimal getTotalRevenueByDateRangeAndType(Date start , Date end, boolean LoaiHD);
     List<Object[]> getAllCountCreatedByCreatDate(String date);
     List<Object[]> getAllRevenueCreatedByCreatDate(String date);
     List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date,boolean loaiHD);
