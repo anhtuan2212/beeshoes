@@ -552,17 +552,17 @@ $(document).on('ready', function () {
                         product_details[i].id = 0;
                     }
                     if (convertToNumber(product_details[i].giaGoc) < 0) {
-                        message = "Vui lòng nhập giá gốc của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        message = "Vui lòng nhập giá gốc của mã :"  + product_details[i].maSanPham;
                         check = false;
                         break;
                     }
                     if (convertToNumber(product_details[i].giaBan) < 0) {
-                        message = "Vui lòng nhập giá bán của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                        message = "Vui lòng nhập giá bán của mã :"  + product_details[i].maSanPham;
                         check = false;
                         break;
                     }
-                    if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 1) {
-                        message = "Vui lòng số lượng của Cỡ :" + product_details[i].kichCo + " Màu :" + product_details[i].maMauSac;
+                    if (isEmpty(product_details[i].soLuong) || Number(product_details[i].soLuong) < 0) {
+                        message = "Vui lòng số lượng của mã :" + product_details[i].maSanPham;
                         check = false;
                         break;
                     }
@@ -586,7 +586,7 @@ $(document).on('ready', function () {
                             product_details: JSON.stringify(product_details)
                         }, success: (data, status, xhr) => {
                             ToastSuccess('Lưu Thành Công !')
-                            redirectToProductPage()
+                            // redirectToProductPage()
                         }, error: (e) => {
                             ToastError(e.getResponseHeader('error'));
                         }

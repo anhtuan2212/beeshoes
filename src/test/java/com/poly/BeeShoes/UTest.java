@@ -30,11 +30,15 @@ public class UTest {
 
     @Test
     public void invoice() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Date start =sdf.parse("01-04-2024");
-        Date end = new Date();
-        List<Object[]> data = hoaDonRepository.getAllRecordsCreatedByDateRange(start,end,true);
-        data.forEach(item->{
+        String date = "2024-04-12";
+        String date2 = "2024-04-11";
+        List<Object[]> data = hoaDonRepository.getTotalDiscountByHourOfDay(date);
+        List<Object[]> data2 = hoaDonRepository.getTotalDiscountByHourOfDay(date2);
+        data.forEach(item -> {
+            System.out.println(item[0]);
+            System.out.println(item[1]);
+        });
+        data2.forEach(item -> {
             System.out.println(item[0]);
             System.out.println(item[1]);
         });
@@ -53,12 +57,13 @@ public class UTest {
         boolean phoneNumberExists = nhanVienRepository.existsBySdt(phoneNumber);
         boolean cccdExists = nhanVienRepository.existsByCccd(cccd);
         System.out.println(emailExists + " " + phoneNumberExists + " " + cccdExists);
-        if(user.getEmail().equalsIgnoreCase(email)){
+        if (user.getEmail().equalsIgnoreCase(email)) {
             emailExists = false;
         }
-        if(nhanVien.getSdt().equalsIgnoreCase(phoneNumber)){
+        if (nhanVien.getSdt().equalsIgnoreCase(phoneNumber)) {
             phoneNumberExists = false;
-        }if(nhanVien.getCccd().equalsIgnoreCase(cccd)){
+        }
+        if (nhanVien.getCccd().equalsIgnoreCase(cccd)) {
             cccdExists = false;
         }
         System.out.println(emailExists + " " + phoneNumberExists + " " + cccdExists);

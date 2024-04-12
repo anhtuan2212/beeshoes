@@ -107,16 +107,20 @@ public class DashboardController {
                 total_online_yesterday += hd.getThucThu().intValue();
             }
         }
-        int quantity_online=0;
-        int quantity_store=0;
+        int quantity_online = 0;
+        int quantity_store = 0;
+        int quantity_numoder_discount = 0;
         for (HoaDon hd : lstToDay) {
             total_Today += hd.getThucThu().intValue();
             if (hd.isLoaiHoaDon()) {
                 total_store_today += hd.getThucThu().intValue();
-
             } else {
                 total_online_today += hd.getThucThu().intValue();
             }
+            if (hd.getVoucher() != null) {
+                quantity_numoder_discount++;
+            }
+
         }
         System.out.println(total_store_today);
         System.out.println(total_store_yesterday);
@@ -124,9 +128,52 @@ public class DashboardController {
         Map<String, Object> online_data = createDataMap(total_online_today, quantity_online, calculatePercentageChange(total_online_yesterday, total_online_today), total_online_today >= total_online_yesterday);
         Map<String, Object> total_all_data = createDataMap(total_Today, lstToDay.size(), calculatePercentageChange(total_yesterday, total_Today), total_Today >= total_yesterday);
         Map<String, Object> in_store_data = createDataMap(total_store_today, quantity_store, calculatePercentageChange(total_store_yesterday, total_store_today), total_store_today >= total_store_yesterday);
-        Map<String, Object> discount_data = createDataMap(lstToDay.size(),0, 0, false);
 
 
+        String dateToDay = sdf.format(today);
+        String dateYesterday = sdf.format(yesterday);
+        System.out.println(dateToDay);
+        System.out.println(dateYesterday);
+        List<Object[]> discount = hoaDonService.getTotalDiscountByHourOfDay(dateToDay);
+        List<Object[]> discount_yesterday = hoaDonService.getTotalDiscountByHourOfDay(dateYesterday);
+        StringBuilder Labels = new StringBuilder();
+        StringBuilder Values_today = new StringBuilder();
+        StringBuilder Values_yesterday = new StringBuilder();
+        int total_discount = 0;
+        for (int i = 0; i < discount.size(); i++) {
+            if (i > 0) {
+                Labels.append("-");
+                Values_today.append("-");
+            }
+            Object[] item = discount.get(i);
+            BigDecimal money = (BigDecimal) item[1];
+            System.out.println("Today :"+money);
+            total_discount += money.intValue();
+            Labels.append(item[0]);
+            Values_today.append(money.intValue() / 1000);
+        }
+        int total_yester = 0;
+        for (int i = 0; i < discount_yesterday.size(); i++) {
+            if (i > 0) {
+                Values_yesterday.append("-");
+            }
+            Object[] item = discount_yesterday.get(i);
+            BigDecimal money = (BigDecimal) item[1];
+            System.out.println("Yesterday :"+money);
+            total_yester += money.intValue();
+            Values_yesterday.append(money.intValue() / 1000);
+        }
+        Map<Object, Object> discountChart = new HashMap<>();
+        discountChart.put("value_yesterday", Values_yesterday);
+        discountChart.put("value_today", Values_today);
+        discountChart.put("number_discount", quantity_numoder_discount);
+        discountChart.put("present", calculatePercentageChange(total_yester, total_discount));
+        discountChart.put("direction", total_discount >= total_yester);
+        discountChart.put("label", Labels);
+        discountChart.put("total", total_discount);
+        System.out.println(Values_today);
+        System.out.println(Values_yesterday);
+        model.addAttribute("discount_chart", discountChart);
         model.addAttribute("product_less", prList);
         model.addAttribute("top_products", top6Products);
         model.addAttribute("online_data", online_data);
@@ -134,7 +181,6 @@ public class DashboardController {
         model.addAttribute("quantity_oder_today", quantity_oder_today);
         model.addAttribute("quantity_oder_present", calculatePercentageChange(quantity_oder_yesterday, quantity_oder_today));
         model.addAttribute("quantity_oder_direction", quantity_oder_today >= quantity_oder_yesterday);
-        model.addAttribute("discount_data", discount_data);
         model.addAttribute("total_all_data", total_all_data);
         model.addAttribute("in_store_data", in_store_data);
         return "cms/index";

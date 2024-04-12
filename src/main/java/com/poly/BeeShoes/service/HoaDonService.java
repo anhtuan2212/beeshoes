@@ -13,6 +13,7 @@ public interface HoaDonService {
     List<Object[]> getAllRecordsCreatedByDateRange(Date start , Date end,boolean LoaiHD);
     BigDecimal getTotalRevenueByDateRangeAndType(Date start , Date end, boolean LoaiHD);
     List<Object[]> getAllCountCreatedByCreatDate(String date);
+    List<Object[]> getTotalDiscountByHourOfDay(String date);
     List<Object[]> getAllRevenueCreatedByCreatDate(String date);
     List<Object[]> getCountCreatedByCreatDateAndTypeHD(String date,boolean loaiHD);
 

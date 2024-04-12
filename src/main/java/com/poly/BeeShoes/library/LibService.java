@@ -20,8 +20,14 @@ public class LibService {
     }
 
     public static double calculatePercentageChange(int yesterday, int today) {
-        if (yesterday == 0 || today == 0) {
+        if (yesterday == 0 && today != 0) {
             return 100.0;
+        }
+        if (yesterday != 0 && today == 0) {
+            return 100.0;
+        }
+        if (yesterday + today == 0) {
+            return 0.0;
         }
         double percentageChange = ((double) (today - yesterday) / yesterday) * 100;
         double absoluteValue = Math.abs(percentageChange);

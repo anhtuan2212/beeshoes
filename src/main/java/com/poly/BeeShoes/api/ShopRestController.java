@@ -106,7 +106,7 @@ public class ShopRestController {
             }
             return ResponseEntity.ok().body(lst_res);
         } else {
-            return ResponseEntity.ok().body(null);
+            return ResponseEntity.notFound().header("status","NotAuth").build();
         }
     }
 

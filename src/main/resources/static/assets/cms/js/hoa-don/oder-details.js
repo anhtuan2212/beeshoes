@@ -240,7 +240,7 @@ function setQuantity(id, num) {
                         $('#payment-money').text(addCommasToNumber(total.thucThu))
                     }
                 }
-                printHistory(formatDateTime(response.times),response.user,response.message)
+                printHistory(formatDateTime(response.times), response.user, response.message)
                 resolve(response);
             }, error: function (xhr) {
                 console.log(xhr.getResponseHeader('status'));
@@ -250,6 +250,9 @@ function setQuantity(id, num) {
                         break;
                     case 'quantityZero':
                         ToastError('Số lượng phải lớn hơn 0.')
+                        break;
+                    case 'NotAcceptStatus':
+                        ToastError('Trạng thái hiện không thể sửa.')
                         break;
                     case 'HDCTisNull':
                         ToastError('Vui lòng chọn lại sản phẩm.')
@@ -371,6 +374,9 @@ function UpdateQuantity(id, calcu, num) {
                         break;
                     case 'HDCTisNull':
                         ToastError('Vui lòng chọn lại sản phẩm.')
+                        break;
+                    case 'NotAcceptStatus':
+                        ToastError('Trạng thái hiện tại không thể sửa.')
                         break;
                     case 'minQuantity':
                         ToastError('Số lượng không được nhỏ hơn 0.')
@@ -635,6 +641,9 @@ $(document).on('ready', function () {
                         break;
                     case 'numMin':
                         ToastError('Số lượng phải lớn hơn 1.');
+                        break;
+                    case 'NotAcceptStatus':
+                        ToastError('Trạng thái hiện không thể sửa.');
                         break;
                     case 'MaxQuantity':
                         ToastError('Số lượng sản phẩm lớn hơn số lượng tồn.');

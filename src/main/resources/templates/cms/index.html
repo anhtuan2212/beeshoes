@@ -121,7 +121,7 @@
                         <div class="media-body">
                             <h6 class="card-subtitle">Đơn Hàng</h6>
                             <span class="card-title h3"
-                                  th:text="${#numbers.formatDecimal(discount_data.total,  1, 'DEFAULT', 0, 'DEFAULT')}+' đơn'"></span>
+                                  th:text="${#numbers.formatDecimal(quantity_oder_today,  1, 'DEFAULT', 0, 'DEFAULT')}+' đơn'"></span>
 
                             <div class="d-flex align-items-center">
                                 <span class="d-block font-size-sm"></span>
@@ -189,8 +189,8 @@
                           "dropdownAutoWidth": true,
                           "width": true
                         }'>
-                            <option value="in-website">Bán Online</option>
                             <option value="in-store" selected>Tại Quầy</option>
+                            <option value="in-website">Bán Online</option>
                         </select>
                         <!-- End Select -->
 
@@ -319,9 +319,9 @@
                                     <h6 class="card-subtitle">Số lượng đơn</h6>
                                     <span id="text-quantity-oder-today"
                                           class="d-block display-4 text-dark mb-1 mr-3"></span>
-                                    <span class="d-block text-danger">
-                                        <i class="tio-trending-down mr-1"></i> +3,301 (1.2%)
-                                    </span>
+                                    <!--                                    <span class="d-block text-danger">-->
+                                    <!--                                        <i class="tio-trending-down mr-1"></i> +3,301 (1.2%)-->
+                                    <!--                                    </span>-->
                                     <!--                             git add -->
                                 </div>
                                 <!-- End Stats -->
@@ -620,22 +620,25 @@
 
                         <div class="row align-items-sm-center mb-5">
                             <div class="col-sm">
-                                <span class="display-4 text-dark mr-2">52,441</span>
+                                <span class="display-4 text-dark mr-2" th:text="${#numbers.formatDecimal(discount_chart.total,  1, 'DEFAULT', 0, 'DEFAULT')+'đ'}"></span>
                             </div>
 
                             <div class="col-sm-auto">
-                    <span class="h3 text-success">
-                      <i class="tio-trending-up"></i> 11%
+                    <span class="h3 text-success" th:if="${discount_chart.direction}">
+                      <i class="tio-trending-up"></i> <th:block th:text="${discount_chart.present}+'%'"></th:block>
                     </span>
-                                <span class="d-block">&mdash; 1000 Đơn<span
-                                        class="badge badge-soft-dark badge-pill ml-1">+21 Hôm Nay</span></span>
+                                <span class="h3 text-danger" th:if="${discount_chart.direction==false}">
+                      <i class="tio-trending-down"></i>  <th:block th:text="${discount_chart.present}+'%'"></th:block>
+                    </span>
+                                <span class="d-block"><span
+                                        class="badge badge-soft-dark badge-pill ml-1" th:text="'+'+${discount_chart.number_discount}+' Hôm Nay'"></span></span>
                             </div>
                         </div>
                         <!-- End Row -->
 
                         <!-- Bar Chart -->
                         <div class="chartjs-custom mb-4" style="height: 18rem;">
-                            <canvas class="js-chart" data-hs-chartjs-options='{
+                            <canvas id="chart-discount" th:attr="data-label=${discount_chart.label},data-value_today=${discount_chart.value_today},data-value_yesterday=${discount_chart.value_yesterday}" data-hs-chartjs-options='{
                             "type": "line",
                             "data": {
                                "labels": ["1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM"],
@@ -676,7 +679,8 @@
                                       "fontSize": 12,
                                       "fontColor": "#97a4af",
                                       "fontFamily": "Open Sans, sans-serif",
-                                      "padding": 10
+                                      "padding": 10,
+                                      "postfix": "k"
                                     }
                                   }],
                                   "xAxes": [{
@@ -693,6 +697,7 @@
                                   }]
                               },
                               "tooltips": {
+                                "postfix": "k",
                                 "hasIndicator": true,
                                 "mode": "index",
                                 "intersect": false,

@@ -200,33 +200,33 @@
                     </article>
                     <div class="track">
                         <th:block th:each="st:${strack}">
-                            <div th:if="${st.getTrangThaiSauUpdate()=='ChoXacNhan'}" class="step active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Chờ Xác Nhận'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-check"></i> </span>
                                 <span class="text">Chờ Xác Nhận</span>
                             </div>
-                            <div th:if="${st.getTrangThaiSauUpdate()=='ChuanBiHang'}" class="step active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Chuẩn Bị Hàng'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-user"></i>
                             </span>
                                 <span class="text">Chuẩn Bị Hàng</span>
                             </div>
 
-                            <div th:if="${st.getTrangThaiSauUpdate()=='ChoGiao'}" class="step active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Chờ Giao'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-ambulance" aria-hidden="true"></i>
                             </span>
                                 <span class="text">Chờ Giao</span>
                             </div>
 
-                            <div th:if="${st.getTrangThaiSauUpdate()=='DangGiao'}" class="step active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Đang Giao'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-truck"></i>
                             </span>
                                 <span class="text">Đang Giao</span>
                             </div>
 
-                            <div th:if="${st.getTrangThaiSauUpdate()=='ThanhCong'}" class="step active">
+                            <div th:if="${st.getTrangThaiSauUpdate()=='Thành Công'}" class="step active">
                             <span class="icon">
                                 <i class="fa fa-archive"></i>
                             </span>
@@ -240,7 +240,7 @@
                                 <span class="text">Thất Bại</span>
                             </div>
                         </th:block>
-                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoXacNhan'}">
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='Chờ Xác Nhận'}">
                             <div class="step ">
                             <span class="icon">
                                 <i class="fa fa-user"></i>
@@ -275,7 +275,7 @@
                                 <span class="text">Thất Bại</span>
                             </div>
                         </th:block>
-                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChuanBiHang'}">
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='Chuẩn Bị Hàng'}">
                             <div class="step">
                             <span class="icon">
                                 <i class="fa fa-ambulance" aria-hidden="true"></i>
@@ -295,7 +295,7 @@
                                 <span class="text">Thành Công</span>
                             </div>
                         </th:block>
-                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='ChoGiao'}">
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='Chờ Giao'}">
                             <div class="step">
                             <span class="icon">
                                 <i class="fa fa-truck"></i>
@@ -309,7 +309,7 @@
                                 <span class="text">Thành Công</span>
                             </div>
                         </th:block>
-                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='DangGiao'}">
+                        <th:block th:if="${strack.get(#lists.size(strack)-1).getTrangThaiSauUpdate()=='Đang Giao'}">
                             <div class="step">
                             <span class="icon">
                                 <i class="fa fa-archive"></i>
