@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
@@ -36,6 +37,8 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
 
     default List<SanPham> findTop6ByOrderByTotalSoLuongTonAsc() {
         List<SanPham> allSanPham = findAll();
+        Predicate<SanPham> trangThaiTrue = SanPham::isTrangThai;
+        allSanPham.removeIf(trangThaiTrue.negate());
         allSanPham.sort(Comparator.comparingInt(SanPham::getTotalSoLuongTon));
         return allSanPham.subList(0, Math.min(allSanPham.size(), 6));
     }
