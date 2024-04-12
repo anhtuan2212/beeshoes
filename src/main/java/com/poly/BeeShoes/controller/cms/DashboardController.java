@@ -34,13 +34,11 @@ public class DashboardController {
         calendar.setTime(endDate);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Date startDate = calendar.getTime();
-        System.out.println(startDate.toLocaleString() + "|" + endDate.toLocaleString());
         List<HoaDon> lstHD = hoaDonService.getHoaDonBetwent(startDate, endDate);
         Date today = new Date();
         Calendar calendar_today = Calendar.getInstance();
         calendar_today.add(Calendar.DATE, -1);
         Date yesterday = calendar_today.getTime();
-        System.out.println(yesterday);
         List<HoaDon> lstToDay = hoaDonService.getAllByDate(today);
         List<HoaDon> lstYesterDay = hoaDonService.getAllByDate(yesterday);
 
@@ -122,8 +120,6 @@ public class DashboardController {
             }
 
         }
-        System.out.println(total_store_today);
-        System.out.println(total_store_yesterday);
         List<SanPham> prList = sanPhamService.findByChiTietSanPham_SoLuongTonLessThan();
         Map<String, Object> online_data = createDataMap(total_online_today, quantity_online, calculatePercentageChange(total_online_yesterday, total_online_today), total_online_today >= total_online_yesterday);
         Map<String, Object> total_all_data = createDataMap(total_Today, lstToDay.size(), calculatePercentageChange(total_yesterday, total_Today), total_Today >= total_yesterday);
@@ -132,8 +128,6 @@ public class DashboardController {
 
         String dateToDay = sdf.format(today);
         String dateYesterday = sdf.format(yesterday);
-        System.out.println(dateToDay);
-        System.out.println(dateYesterday);
         List<Object[]> discount = hoaDonService.getTotalDiscountByHourOfDay(dateToDay);
         List<Object[]> discount_yesterday = hoaDonService.getTotalDiscountByHourOfDay(dateYesterday);
         StringBuilder Labels = new StringBuilder();
