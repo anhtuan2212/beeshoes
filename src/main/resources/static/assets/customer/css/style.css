@@ -1224,9 +1224,9 @@ body {
 .product__item__text .product__color__select label:after {
     position: absolute;
     left: -2px;
-    top: -2.1px;
-    height: 18px;
-    width: 19px;
+    top: -2px;
+    height: 130%;
+    width: 128%;
     border: 1.8px solid #000000;
     content: "";
     border-radius: 50%;

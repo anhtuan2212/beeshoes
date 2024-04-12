@@ -177,7 +177,7 @@
                         <div class="product__item__pic set-bg susor-pointer"
                              th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-detail(product=${sp.getId()})}">
                             <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="">
-                            <span class="label" th:if="${sp.isSale()}">SALE</span>
+                            <span class="label" th:if="${sp.hasSale()}">SALE</span>
                             <ul class="product__hover">
                                 <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png"
                                                                 alt=""></a>
@@ -235,7 +235,7 @@
                         <div class="product__item__pic set-bg susor-pointer"
                              th:attr="data-setbg=${anh.getUrl()}, data-href=@{/shop-detail(product=${sp.getId()})}">
                             <img class="img-main-product d-none" th:src="${anh.getUrl()}" alt="">
-                            <span class="label" th:if="${sp.isSale()}">SALE</span>
+                            <span class="label" th:if="${sp.hasSale()}">SALE</span>
                             <ul class="product__hover">
                                 <li><a href="javascript:;"><img src="/assets/customer/img/icon/heart.png"
                                                                 alt=""></a>
@@ -315,7 +315,7 @@
                 <div class="categories__deal__countdown">
                     <span>Giao dịch trong tuần</span>
                     <h2 th:text="${setupData.getTitle_sp_sale()}">Giày thể thao đơn giản</h2>
-                    <div class="categories__deal__countdown__timer" id="countdown">
+                    <div class="categories__deal__countdown__timer" id="countdown" th:attr="data-time=${setupData.getThoi_gian_sale()}">
                         <div class="cd-item">
                             <span>3</span>
                             <p>Ngày</p>

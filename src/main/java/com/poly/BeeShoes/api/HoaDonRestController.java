@@ -145,6 +145,9 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
+        if (!hdct.getHoaDon().getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)){
+            return  ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
+        }
         if (hdct == null) {
             return ResponseEntity.notFound().header("status", "HDCTisNull").build();
         }
@@ -209,6 +212,9 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
+        if (!hdct.getHoaDon().getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)){
+            return  ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
+        }
         if (hdct == null) {
             return ResponseEntity.notFound().header("status", "HDCTisNull").build();
         }
@@ -589,7 +595,7 @@ public class HoaDonRestController {
             lshd.setHanhDong("Đơn Hàng Tạo Bởi :" + ten);
             lshd.setThoiGian(Timestamp.from(Instant.now()));
             lshd.setNguoiThucHien(userTH);
-            lshd.setTrangThaiSauUpdate("ThanhCong");
+            lshd.setTrangThaiSauUpdate(TrangThaiHoaDon.ThanhCong);
             lshd = lichSuHoaDonService.save(lshd);
             listLshd.add(lshd);
         } else {
@@ -598,14 +604,14 @@ public class HoaDonRestController {
             tao.setHanhDong("Đơn Hàng Tạo Bởi " + ten + "Tại Quầy.");
             tao.setThoiGian(Timestamp.from(Instant.now()));
             tao.setNguoiThucHien(userTH);
-            tao.setTrangThaiSauUpdate("ChoXacNhan");
+            tao.setTrangThaiSauUpdate(TrangThaiHoaDon.ChoXacNhan);
             tao = lichSuHoaDonService.save(tao);
             LichSuHoaDon cb = new LichSuHoaDon();
             cb.setHoaDon(hd);
             cb.setHanhDong("Đơn Hàng được xác nhận bởi : " + ten);
             cb.setThoiGian(Timestamp.from(Instant.now()));
             cb.setNguoiThucHien(userTH);
-            cb.setTrangThaiSauUpdate("ChuanBiHang");
+            cb.setTrangThaiSauUpdate(TrangThaiHoaDon.ChuanBiHang);
             cb = lichSuHoaDonService.save(cb);
             listLshd.add(cb);
             listLshd.add(tao);
@@ -866,6 +872,9 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDon hoaDon = hoaDonService.getHoaDonById(dt.getId());
+        if (!hoaDon.getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)){
+            return  ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
+        }
         if (hoaDon == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "HoaDonNull").build();
         }

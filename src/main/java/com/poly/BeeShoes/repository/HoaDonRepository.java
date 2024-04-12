@@ -145,6 +145,35 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     List<Object[]> getAllCountCreatedByCreatDate(String date);
 
     @Query(
+            value = "SELECT hour_of_day, COALESCE(total_discount, 0) AS total_discount\n" +
+                    "FROM (\n" +
+                    "    SELECT HOUR(ngay_tao) AS hour_of_day, SUM(giam_gia) AS total_discount\n" +
+                    "    FROM hoa_don\n" +
+                    "    WHERE DATE(ngay_tao) = ?1\n" +
+                    "    GROUP BY HOUR(ngay_tao)\n" +
+                    "    UNION\n" +
+                    "    SELECT hour_of_day, NULL AS total_discount\n" +
+                    "    FROM (\n" +
+                    "        SELECT 0 AS hour_of_day \n" +
+                    "        UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 \n" +
+                    "        UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 \n" +
+                    "        UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 \n" +
+                    "        UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 \n" +
+                    "        UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20 \n" +
+                    "        UNION SELECT 21 UNION SELECT 22 UNION SELECT 23\n" +
+                    "    ) AS all_hours\n" +
+                    "    WHERE all_hours.hour_of_day NOT IN (\n" +
+                    "        SELECT HOUR(ngay_tao) \n" +
+                    "        FROM hoa_don \n" +
+                    "        WHERE DATE(ngay_tao) = ?1\n" +
+                    "    )\n" +
+                    ") AS result\n" +
+                    "ORDER BY hour_of_day\n",
+            nativeQuery = true
+    )
+    List<Object[]> getTotalDiscountByHourOfDay(String date);
+
+    @Query(
             value = "SELECT hour_of_day, COALESCE(number_of_invoices, 0) AS number_of_invoices " +
                     "FROM (" +
                     "   SELECT HOUR(ngay_tao) AS hour_of_day, COUNT(*) AS number_of_invoices " +

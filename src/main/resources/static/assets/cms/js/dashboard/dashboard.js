@@ -283,6 +283,44 @@ $(document).on('ready', function () {
         $("#total-quantity-today").text(quantity_in_store + quantity_online);
         $("#total-money-today").text(addCommasToNumber(total_money_online + total_money_in_store) + 'đ');
     })
+
+
+    let discount = $('#chart-discount');
+    let labels = discount.data('label');
+    let value_today = discount.data('value_today');
+    let value_yesterday = discount.data('value_yesterday');
+    let chartDiscount = $.HSCore.components.HSChartJS.init(discount);
+    console.log(value_yesterday)
+    console.log(value_today)
+    labels = labels.split("-");
+    value_today = value_today.split("-");
+    value_yesterday = value_yesterday.split("-");
+    console.log(value_yesterday)
+    console.log(value_today)
+    chartDiscount.data.labels = labels;
+    chartDiscount.data.datasets = [{
+        data: value_today,
+        backgroundColor: "transparent",
+        borderColor: "#377dff",
+        borderWidth: 2,
+        pointRadius: 0,
+        hoverBorderColor: "#377dff",
+        pointBackgroundColor: "#377dff",
+        pointBorderColor: "#fff",
+        pointHoverRadius: 0
+    },
+        {
+            data: value_yesterday,
+            backgroundColor: "transparent",
+            borderColor: "#e7eaf3",
+            borderWidth: 2,
+            pointRadius: 0,
+            hoverBorderColor: "#e7eaf3",
+            pointBackgroundColor: "#e7eaf3",
+            pointBorderColor: "#fff",
+            pointHoverRadius: 0
+        }]
+    chartDiscount.update();
     // ONLY DEV
     // =======================================================
 

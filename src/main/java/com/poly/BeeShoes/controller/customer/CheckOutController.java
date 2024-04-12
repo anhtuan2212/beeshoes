@@ -47,15 +47,16 @@ public class CheckOutController {
     private final SimpMessagingTemplate messagingTemplate;
 
     Gson gson = new Gson();
+
     @PostMapping("/checkout")
-    public String getCheckout (
-            @RequestParam("maGiamGia")String ma,
-            @RequestParam("listData")String list,
+    public String getCheckout(
+            @RequestParam("maGiamGia") String ma,
+            @RequestParam("listData") String list,
             HttpServletRequest request,
             Model model
-    ){
+    ) {
         User user = new User();
-        if(request.getUserPrincipal() != null) {
+        if (request.getUserPrincipal() != null) {
             user = userService.getByUsername(request.getUserPrincipal().getName());
             System.out.println(request.getUserPrincipal().getName());
             model.addAttribute("userLogged", user);
@@ -69,25 +70,25 @@ public class CheckOutController {
         System.out.println(ma);
         Map<ChiTietSanPham, Integer> productDetailMap = new HashMap<>();
         listData.forEach(data ->
-            productDetailMap.put(chiTietSanPhamService.getById(data.getId_product_detail()), data.getQuantity())
+                productDetailMap.put(chiTietSanPhamService.getById(data.getId_product_detail()), data.getQuantity())
         );
-        for(Map.Entry<ChiTietSanPham, Integer> entry : productDetailMap.entrySet()) {
+        for (Map.Entry<ChiTietSanPham, Integer> entry : productDetailMap.entrySet()) {
             total += (entry.getKey().getGiaBan().floatValue() * entry.getValue());
         }
-        if(ma != null) {
+        if (ma != null) {
             Voucher voucher = voucherService.getByMa(ma);
-            if(voucher != null && voucher.getLoaiVoucher().equals("$")) {
+            if (voucher != null && voucher.getLoaiVoucher().equals("$")) {
                 float maxValueOfVoucher = voucher.getGiaTriToiDa().floatValue();
-                if(maxValueOfVoucher >= total) {
+                if (maxValueOfVoucher >= total) {
                     totalAmount = 0;
                     model.addAttribute("voucherValue", total);
                 }
                 totalAmount = total - maxValueOfVoucher;
                 model.addAttribute("voucherValue", maxValueOfVoucher);
-            } else if(voucher != null && voucher.getLoaiVoucher().equals("%")) {
+            } else if (voucher != null && voucher.getLoaiVoucher().equals("%")) {
                 float percentOfVoucher = voucher.getGiaTriPhanTram();
                 float maxValueOfVoucher = total / 100 * percentOfVoucher;
-                if(maxValueOfVoucher > voucher.getGiaTriToiDa().floatValue()) {
+                if (maxValueOfVoucher > voucher.getGiaTriToiDa().floatValue()) {
                     maxValueOfVoucher = voucher.getGiaTriToiDa().floatValue();
                 }
                 totalAmount = total - maxValueOfVoucher;
@@ -102,32 +103,33 @@ public class CheckOutController {
         model.addAttribute("totalAmount", totalAmount);
         return "customer/pages/shop/checkout";
     }
+
     @GetMapping("/vnpay-payment")
     @Transactional
     public String GetMapping(
             HttpServletRequest request,
             HttpSession session,
             Model model
-    ){
+    ) {
         int paymentStatus = vnPayService.orderReturn(request);
         int total = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
         String[] invoiceCode = request.getParameter("vnp_TxnRef").split("-");
         model.addAttribute("total", total);
         model.addAttribute("invoiceCode", invoiceCode[0]);
-        if(paymentStatus == 1) {
+        if (paymentStatus == 1) {
             User user = new User();
-            if(request.getUserPrincipal() != null) {
+            if (request.getUserPrincipal() != null) {
                 user = userService.getByUsername(request.getUserPrincipal().getName());
                 System.out.println(request.getUserPrincipal().getName());
                 GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
                 Long idHoaDon = hoaDonService.getHoaDonByMa(invoiceCode[0]).getId();
                 List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
-                if(gioHang != null) {
+                if (gioHang != null) {
                     hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
                 }
             }
 
-            if(hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
+            if (hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
                 HoaDon hoaDon = (HoaDon) session.getAttribute(invoiceCode[0]);
                 Voucher voucher = hoaDon.getVoucher();
                 HoaDon savedHoaDon = hoaDonService.save(hoaDon);
@@ -146,6 +148,17 @@ public class CheckOutController {
                 httt.add(ht);
                 savedHoaDon.setHinhThucThanhToans(httt);
                 HoaDon savedHoaDon2 = hoaDonService.save(savedHoaDon);
+
+
+                StringBuilder listProduct = new StringBuilder();
+                for (int i = 0; i < savedHoaDon2.getHoaDonChiTiets().size(); i++) {
+                    HoaDonChiTiet hdct = savedHoaDon2.getHoaDonChiTiets().get(i);
+                    if (i > 0) {
+                        listProduct.append(",");
+                    }
+                    listProduct.append(hdct.getChiTietSanPham().getId());
+                }
+                model.addAttribute("listData", listProduct);
 
                 HoaDonDto hoaDonDto = new HoaDonDto();
                 hoaDonDto.setId(savedHoaDon2.getId());
@@ -187,7 +200,6 @@ public class CheckOutController {
                 messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
                 mailUtility.sendMail(hoaDon.getEmailNguoiNhan(), "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
             }
-
             return "payment/vnpay/order-success";
         } else {
             return "payment/vnpay/order-failed";
@@ -203,16 +215,25 @@ public class CheckOutController {
             Model model
     ) {
         User user = new User();
-        if(request.getUserPrincipal() != null) {
+        Long idHoaDon = hoaDonService.getHoaDonByMa(invoiceCode).getId();
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
+        if (request.getUserPrincipal() != null) {
             user = userService.getByUsername(request.getUserPrincipal().getName());
             System.out.println(request.getUserPrincipal().getName());
             GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
-            Long idHoaDon = hoaDonService.getHoaDonByMa(invoiceCode).getId();
-            List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
-            if(gioHang != null) {
+            if (gioHang != null) {
                 hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
             }
         }
+        StringBuilder listProduct = new StringBuilder();
+        for (int i = 0; i < hoaDonChiTietList.size(); i++) {
+            HoaDonChiTiet hdct = hoaDonChiTietList.get(i);
+            if (i > 0) {
+                listProduct.append(",");
+            }
+            listProduct.append(hdct.getChiTietSanPham().getId());
+        }
+        model.addAttribute("listData", listProduct);
         model.addAttribute("invoiceCode", invoiceCode);
         model.addAttribute("total", totalAmount);
         return "payment/vnpay/order-success";

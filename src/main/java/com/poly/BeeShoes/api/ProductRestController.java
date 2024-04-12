@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -287,6 +286,7 @@ public class ProductRestController {
                 ctspRq.setSale(ctsp.isSale());
                 lstct.add(ctspRq);
             }
+            sp.setSale(spx.hasSale());
             sp.setChiTietSanPham(lstct);
             lst.add(sp);
         }
@@ -299,6 +299,10 @@ public class ProductRestController {
         if (ctsp == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(ctsp.getGiaBan().intValue());
+        Map<String, Integer> res = new HashMap<>();
+        res.put("id",ctsp.getId().intValue());
+        res.put("giaBan",ctsp.getGiaBan().intValue());
+        res.put("soLuong",ctsp.getSoLuongTon());
+        return ResponseEntity.ok().body(res);
     }
 }

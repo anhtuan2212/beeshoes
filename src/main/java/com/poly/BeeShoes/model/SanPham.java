@@ -86,6 +86,14 @@ public class SanPham {
 
         return null; // Trả về null nếu không tìm thấy ảnh chính
     }
+    public boolean hasSale() {
+        if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
+            return false; // Trả về false nếu không có chi tiết sản phẩm nào
+        }
+        // Sử dụng Java Stream để kiểm tra xem có chi tiết sản phẩm nào có trường isSale là true không
+        return chiTietSanPham.stream().anyMatch(ChiTietSanPham::isSale);
+    }
+
     public int getTotalSoLuongTon() {
         if (chiTietSanPham == null || chiTietSanPham.isEmpty()) {
             return 0; // Trả về 0 nếu không có chi tiết sản phẩm nào

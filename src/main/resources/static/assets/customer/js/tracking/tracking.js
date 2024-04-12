@@ -213,7 +213,7 @@ function UpdateQuantity(id, calcu, num) {
                 num: num
             }, success: async function (data) {
                 console.log(data);
-                printHistory(data[0].times,data[0].message)
+                printHistory(data[0].times, data[0].message)
                 $('#total-money').text(addCommasToNumber(data[0].tongTien) + 'đ')
                 $('#shipping-money').text(Number(data[0].phiShip) > 1 ? addCommasToNumber(data[0].phiShip) + 'đ' : 'Miễn Phí');
                 $('#payment-money').text(addCommasToNumber(data[0].thucThu) + 'đ')
@@ -280,6 +280,9 @@ function UpdateQuantity(id, calcu, num) {
                         break;
                     case 'HDCTisNull':
                         ToastError('Vui lòng chọn lại sản phẩm.')
+                        break;
+                    case 'NotAcceptStatus':
+                        ToastError('Trạng thái hiện không thể sửa.')
                         break;
                     case 'minQuantity':
                         ToastError('Số lượng không được nhỏ hơn 0.')
@@ -422,7 +425,7 @@ $(document).ready(function () {
                 $(`.show_trang_thai`).text('Đã Hủy');
                 $(`.btn-cancel-oders`).remove();
                 $(`#btn-show-update`).remove();
-                printHistory(data.thoiGian,data.hanhDong);
+                printHistory(data.thoiGian, data.hanhDong);
                 $('.step').each((index, ele) => {
                     if (!$(ele).hasClass('active')) {
                         $(ele).remove();
@@ -529,7 +532,7 @@ $(document).ready(function () {
                     }, success: async function (data) {
                         console.log(data);
                         li.remove();
-                        printHistory(data.times,data.message)
+                        printHistory(data.times, data.message)
                         $('#total-money').text(addCommasToNumber(data.tongTien) + 'đ')
                         $('#discount-money').text(addCommasToNumber(data.giamGia == null ? 0 : data.giamGia) + 'đ')
                         $('#payment-money').text(addCommasToNumber(data.thucThu) + 'đ')
@@ -643,7 +646,7 @@ $(document).ready(function () {
                     </li>
                     `;
                     $('#show-all-product').append(html);
-                    printHistory(data.times,data.message)
+                    printHistory(data.times, data.message)
                 } else {
                     let element = $(`#product-detail-${data.id_hdct}`);
                     element.find('.quantity-product').text('Số Lượng :' + data.soLuong)
@@ -661,6 +664,9 @@ $(document).ready(function () {
                         break;
                     case 'numMin':
                         ToastError('Số lượng phải lớn hơn 1.');
+                        break;
+                    case 'NotAcceptStatus':
+                        ToastError('Trạng thái hiện không thể sửa.');
                         break;
                     case 'MaxQuantity':
                         ToastError('Số lượng sản phẩm lớn hơn số lượng tồn.');
@@ -744,7 +750,7 @@ $(document).ready(function () {
                 $('.invCusName').text(response.tenNguoiNhan);
                 $('.invCusPhone').text(response.sdtNguoiNhan);
                 $('.invAddress').text(response.diaChi);
-                printHistory(response.times,response.message);
+                printHistory(response.times, response.message);
                 $('#updateInformationModal').modal('hide');
                 ToastSuccess('Cập nhật thành công thông tin nhận hàng');
             },

@@ -21,8 +21,8 @@ public class HomeController {
 
     @GetMapping({"", "/", "/index", "/light-bee/"})
     public String indexLightBee(Model model) {
-        List<SanPham> lst1 = sanPhamService.findTop4OrderByNgayTaoDesc();
         List<SanPham> lst2 = sanPhamService.findTop4GiamGia();
+        List<SanPham> lst1 = sanPhamService.findTop4OrderByNgayTaoDesc(lst2);
         int size = Math.min(lst2.size(), 4);
         List<SanPham> firstFourItems = lst2.subList(0, size);
         List<QuanTri> list = quanTriService.getAll();

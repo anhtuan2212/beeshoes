@@ -46,9 +46,16 @@ public interface SanPhamRepository extends JpaRepository<SanPham,Long> {
     @Query("SELECT DISTINCT sp FROM SanPham sp " +
             "JOIN FETCH sp.chiTietSanPham cts " +
             "WHERE cts.giaGoc > cts.giaBan AND sp.trangThai = true " +
-            "ORDER BY (cts.giaGoc - cts.giaBan) DESC")
+            "ORDER BY (cts.giaGoc - cts.giaBan) DESC LIMIT 4")
     List<SanPham> findTop4ByGiaGocMinusGiaBanOrderByGiaGocMinusGiaBanDesc();
-    List<SanPham> findFirst4ByTrangThaiTrueOrderByNgayTaoDesc();
+
+    @Query("SELECT sp FROM SanPham sp " +
+            "WHERE sp.trangThai = true " +
+            "AND sp NOT IN :topProducts " +  // Sử dụng NOT IN để loại bỏ sản phẩm trùng
+            "ORDER BY sp.ngayTao DESC " +
+            "LIMIT 4")
+    List<SanPham> findFirst4ByTrangThaiTrueOrderByNgayTaoDesc(@Param("topProducts") List<SanPham> topProducts);
+
     Integer countByTrangThaiIsTrue();
 
     List<SanPham> findByTrangThaiEquals(Boolean trangThai);

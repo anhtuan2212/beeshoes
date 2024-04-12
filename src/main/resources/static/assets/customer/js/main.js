@@ -176,6 +176,7 @@ function startUp() {
         }
     } else {
         let data = getProductInLocalStorage();
+        let arrayDelete = []
         if (data !== null && Array.isArray(data)) {
             let promises = data.map(product => {
                 return new Promise((resolve, reject) => {
@@ -186,7 +187,10 @@ function startUp() {
                             id: product.pro.id,
                         },
                         success: function (data) {
-                            product.pro.gia_ban = addCommasToNumber(data);
+                            product.pro.gia_ban = addCommasToNumber(data.giaBan);
+                            if (data.soLuong < 1) {
+                                arrayDelete.push(data.id)
+                            }
                             resolve();
                         },
                         error: function (xhr) {
@@ -198,6 +202,24 @@ function startUp() {
             });
             Promise.all(promises).then(() => {
                 saveProductTolocalStorage(data);
+                let element = $('input#listData')
+                if (element.length !== 0) {
+                    let list = element.val();
+                    let numbers = list.split(",").map(Number);
+                    console.log(numbers)
+                    numbers.forEach(item => {
+                        deleteByIdProductLocal(item);
+                    });
+                }
+                if (arrayDelete.length > 0) {
+                    Confirm("Tạm hết hàng !", `Có ${arrayDelete.length} sản phẩm trong giỏ hàng hiện đang hết hàng.`, "Không", "Xóa").then((res) => {
+                        if (res) {
+                            arrayDelete.forEach(item => {
+                                deleteByIdProductLocal(item);
+                            });
+                        }
+                    })
+                }
                 printProductwithStartup();
             }).catch(error => {
                 console.error('Có lỗi xảy ra khi cập nhật dữ liệu sản phẩm:', error);
@@ -235,6 +257,9 @@ function saveProductToServer(product_id, quantity, update) {
             switch (xhr.getResponseHeader('status')) {
                 case 'ProductNull':
                     ToastError('Sản phẩm trống.');
+                    break;
+                case 'NotAuth':
+                    ToastError('Vui lòng đăng nhập để thực hiện.');
                     break;
                 case 'MinQuantity':
                     ToastError('Số lượng phải lớn hơn 0.');
@@ -418,6 +443,17 @@ function deleteGHCT(id) {
     return bool;
 }
 
+function deleteByIdProductLocal(id) {
+    let data = getProductInLocalStorage();
+    if (data !== null && Array.isArray(data)) {
+        const index = data.findIndex(item => Number(item.pro.id) === Number(id));
+        if (index !== -1) {
+            data.splice(index, 1);
+            saveProductTolocalStorage(data);
+        }
+    }
+}
+
 // hàm in dữ liệu nếu không đăng nhập
 function printProductwithStartup() {
     let products = getProductInLocalStorage();
@@ -475,6 +511,46 @@ function addCommasToNumber(number) {
     }
     return parts.join('');
 }
+
+$('#btn-checkout-header').on('click', function () {
+    let data = getProductInLocalStorage();
+    if (data !== null && Array.isArray(data) && data.length > 0) {
+        let datasubmit = [];
+        let total = 0;
+        data.forEach((product) => {
+            total += extractNumberFromString(product.pro.gia_ban) * product.quantity
+            datasubmit.push({
+                quantity: product.quantity,
+                id_product_detail: product.pro.id
+            });
+        });
+        if (total > 50000000) {
+            ToastError('Tổng tiền không được lớn hơn 50 triệu !')
+            return;
+        }
+
+        let jsonData = JSON.stringify(datasubmit);
+        let form = $('<form>', {
+            action: '/checkout',
+            method: 'POST',
+            style: 'display: none;'
+        });
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'listData',
+            value: jsonData
+        }).appendTo(form);
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'maGiamGia',
+            value: SelectedVoucher === null ? '' : SelectedVoucher.ma
+        }).appendTo(form);
+        form.appendTo('body');
+        form.submit();
+    } else {
+        ToastError('Vui lòng chọn sản phẩm.')
+    }
+})
 
 function Confirm(title, message, txt_cancel, txt_confirm) {
     return new Promise((resolve, reject) => {
@@ -593,7 +669,10 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
     /*--------------------------
         Select
     ----------------------------*/
-    $("select").niceSelect();
+    let select = $("select");
+    if (select.length > 0) {
+        select.niceSelect();
+    }
 
     /*-------------------
 		Radio Btn
@@ -742,10 +821,12 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
         CountDown
     --------------------*/
     // For demo preview start
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
+    let CountDown = $("#countdown");
+    let times = CountDown.data('time');
+    let today = new Date(times);
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth()).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
 
     if (mm == 12) {
         mm = '01';
@@ -754,7 +835,7 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
         mm = parseInt(mm) + 1;
         mm = String(mm).padStart(2, '0');
     }
-    var timerdate = mm + '/' + dd + '/' + yyyy;
+    let timerdate = mm + '/' + dd + '/' + yyyy;
     // For demo preview end
 
 
@@ -762,7 +843,7 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
 
     /* var timerdate = "2020/12/30" */
 
-    $("#countdown").countdown(timerdate, function (event) {
+    CountDown.countdown(timerdate, function (event) {
         $(this).html(event.strftime("<div class='cd-item'><span>%D</span> <p>Days</p> </div>" + "<div class='cd-item'><span>%H</span> <p>Hours</p> </div>" + "<div class='cd-item'><span>%M</span> <p>Minutes</p> </div>" + "<div class='cd-item'><span>%S</span> <p>Seconds</p> </div>"));
     });
 

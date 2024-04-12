@@ -43,6 +43,11 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
+    public List<Object[]> getTotalDiscountByHourOfDay(String date) {
+        return hoaDonRepository.getTotalDiscountByHourOfDay(date);
+    }
+
+    @Override
     public List<Object[]> getAllRevenueCreatedByCreatDate(String date) {
         return hoaDonRepository.getAllRevenueCreatedByCreatDate(date);
     }

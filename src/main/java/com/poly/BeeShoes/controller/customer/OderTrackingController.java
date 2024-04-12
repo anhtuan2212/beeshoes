@@ -53,8 +53,12 @@ public class OderTrackingController {
                 if (hoaDon != null && hoaDon.getKhachHang() != null) {
                     hoaDon = null;
                 }
+                if (hoaDon != null && hoaDon.getDiaChiNhan().equals("Tại Quầy")) {
+                    hoaDon = null;
+                }
             }
         }
+
         List<LichSuHoaDon> list = null;
         if (hoaDon != null) {
             lsHD = hoaDon.getLichSuHoaDons();
