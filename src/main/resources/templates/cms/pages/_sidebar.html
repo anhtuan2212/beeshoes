@@ -161,7 +161,7 @@
                         </li>
                         <!-- End User -->
                         <!-- Voucher -->
-                        <li class="nav-item">
+                        <li id="phieu_giam_giam" class="nav-item">
                             <a class="js-nav-tooltip-link nav-link" href="/cms/voucher" title=""
                                data-placement="left" data-original-title="Phiếu Giảm Giá">
                                 <i class="tio-ticket nav-icon"></i>
@@ -224,6 +224,10 @@
     </aside>
 </div>
 <script>
+    function activeSiderbar1EXXP(id) {
+        $('#' + id).addClass('active');
+    }
+
     function activeSiderbar(id, idCha, idOng) {
         $('#' + id).addClass('active').closest('li.nav-item').addClass('show')
         if (idCha.length > 0) {

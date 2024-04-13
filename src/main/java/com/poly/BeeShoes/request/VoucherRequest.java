@@ -17,16 +17,15 @@ import java.time.LocalDateTime;
 @ToString
 public class VoucherRequest {
     Long id;
-    String ma;
-    String ten;
-    LocalDateTime ngayBatDau;
-    LocalDateTime ngayKetThuc;
-    BigDecimal giaTriTienMat;
-    Integer giaTriPhanTram;
-    BigDecimal giaTriToiDa;
-    BigDecimal giaTriToiThieu;
-    Integer  soLuong;
-    String moTa;
-    String loaiVoucher;
-
+    String name;
+    String type;
+    LocalDateTime start_time;
+    LocalDateTime end_time;
+    BigDecimal money;
+    Integer percent;
+    BigDecimal condition;
+    BigDecimal max_discount;
+    Integer quantity;
+    String description;
+    Integer status;
 }

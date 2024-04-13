@@ -36,6 +36,19 @@ public class VoucherImpl implements VoucherService {
     }
 
     @Override
+    public String genVoucherCode() {
+        long count = voucherResponsitory.count();
+        int numberOfDigits = (int) Math.log10(count + 1) + 1;
+        int numberOfZeros = Math.max(0, 5 - numberOfDigits);
+        String invoiceCode;
+        do {
+            invoiceCode = String.format("VC%0" + (numberOfDigits + numberOfZeros) + "d", count + 1);
+            count++;
+        } while (voucherResponsitory.existsByMa(invoiceCode));
+        return invoiceCode;
+    }
+
+    @Override
     public List<Voucher> getAll() {
         return voucherResponsitory.findAll();
     }
@@ -51,9 +64,8 @@ public class VoucherImpl implements VoucherService {
     }
 
     @Override
-    public Voucher detail(Long id) {
-        Voucher voucher = voucherResponsitory.findById(id).get();
-        return voucher;
+    public Voucher getById(Long id) {
+        return voucherResponsitory.findById(id).orElse(null);
     }
 
 
@@ -196,12 +208,15 @@ public class VoucherImpl implements VoucherService {
     }
 
     @Override
-    public boolean existsByTen(String name) {
+    public boolean existsByTen(String name, Long id) {
         String tenChuanHoa = chuanHoaTen(name);
         List<Voucher> vc = voucherResponsitory.findAll();
         List<Voucher> tenvc = vc.stream()
                 .filter(cg -> chuanHoaTen(cg.getTen()).equals(tenChuanHoa))
                 .collect(Collectors.toList());
+        if (id != null) {
+            tenvc.removeIf(item -> item.getId().equals(id));
+        }
         return !tenvc.isEmpty();
     }
 
