@@ -95,7 +95,7 @@
                         <input id="id_user_customer" type="text" th:value="${user.getKhachHang().getId()}"
                                hidden="hidden">
                         <img id="avatar_preview" class="rounded-circle img_avatar"
-                             th:src="${user.getAvatar()==null?'/assets/customer/img/about/ludeptrai.jpg':user.getAvatar()}"
+                             th:src="${user.getAvatar()==null?'/assets/customer/img/icon/user.png':user.getAvatar()}"
                              width="150" height="150">
                     </div>
                     <div class="info text-center mt-2">
@@ -214,7 +214,7 @@
                             </div>
                             <div class="col-4 wraper_img pt-3">
                                 <img id="show_avatar_slected" class="rounded-circle img_avatar"
-                                     th:src="${user.getAvatar()==null?'/assets/customer/img/about/ludeptrai.jpg':user.getAvatar()}"
+                                     th:src="${user.getAvatar()==null?'/assets/customer/img/icon/user.png':user.getAvatar()}"
                                      width="150" height="150">
                                 <label for="avatar_selected" class="select-img-btn mt-2"> Chọn Ảnh
                                     <input id="avatar_selected" type="file" accept="image/*" hidden="hidden">
@@ -296,7 +296,7 @@
                             </div>
                         </div>
                         <div class="w-100" id="show-all-oder">
-                            <div id="show-no-data-oder" class="w-100 mt-5 hidden">
+                            <div id="show-no-data-oder" th:class="'w-100 mt-5 '+${#lists.size(lsthoadon)==0?'':'hidden'}">
                                 <h4 class="text-center">Không có dữ liệu.</h4>
                             </div>
                             <div class="card w-100 mb-3 oder_wrapper" th:each="hoadon,iter:${lsthoadon}">

@@ -379,6 +379,7 @@ function Toast(status, message) {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
+        showCloseButton: true,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {

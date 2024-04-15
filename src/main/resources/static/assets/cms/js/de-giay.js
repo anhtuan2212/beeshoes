@@ -1,5 +1,5 @@
 var datatable = null;
-activeSiderbar('de_giay',"li_thuoc_tinh",'li_san_pham')
+activeSiderbar('de_giay', "li_thuoc_tinh", 'li_san_pham')
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
@@ -167,6 +167,7 @@ $(document).on('ready', function () {
                 '</div>'
         }
     });
+
     function updateShowNum() {
         let pageInfo = datatable.page.info();
         let displayedRows = pageInfo.end - pageInfo.start;
@@ -178,15 +179,16 @@ $(document).on('ready', function () {
             if (show.find('option[value="10"]').length === 0) {
                 show.append(`<option value="10" selected>10</option>`)
             }
-            if (show.val()>displayedRows){
-                if (show.find(`option[value="${displayedRows}"]`).length === 0){
+            if (show.val() > displayedRows) {
+                if (show.find(`option[value="${displayedRows}"]`).length === 0) {
                     show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
-                }else{
+                } else {
                     show.val(displayedRows);
                 }
             }
         }
     }
+
     datatable.on('draw.dt', function () {
         updateShowNum();
     })
@@ -269,7 +271,7 @@ $(document).on('ready', function () {
             ToastError("Tên không được trống.");
             return;
         }
-        if (trangThai===null){
+        if (trangThai === null) {
             ToastError("Trạng thái không được trống.");
             return;
         }
@@ -279,7 +281,7 @@ $(document).on('ready', function () {
             data: {
                 id: id,
                 ten: name,
-                trangThai:trangThai
+                trangThai: trangThai
             },
             success: function (data, status, xhr) {
                 console.log(data)
@@ -288,7 +290,7 @@ $(document).on('ready', function () {
                 let updated = convertTime(data.ngaySua)
                 let create = data.create == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.create}</a>`;
                 let update = data.update == 'N/A' ? 'N/A' : `<a href="javascript:;">${data.update}</a>`;
-                let trangthai = data.trangThai == true ?' <span class="legend-indicator bg-success"></span>Hiển Thị':' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
+                let trangthai = data.trangThai == true ? ' <span class="legend-indicator bg-success"></span>Hiển Thị' : ' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
                 if (data != null) {
                     var rowData = [
                         `<div class="custom-control custom-checkbox">
@@ -301,15 +303,15 @@ $(document).on('ready', function () {
                         `${create}`,
                         `${update}`,
                         `${trangthai}`,
-                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true?1:0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
+                        `<a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#editUserModal" data-status="${data.trangThai == true ? 1 : 0}" data-name="${data.ten}" data-id="${data.id}" onclick="edit(this)">
                                 <i class="tio-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-id="${data.id}" onclick="deleteCategory(this)">
                                 <i class="tio-delete"></i>
                             </a>`];
 
-                    if (id !== ''){
-                        let rowIndex = datatable.row($('h5[data-id='+id+']').closest('tr')).index();
+                    if (id !== '') {
+                        let rowIndex = datatable.row($('h5[data-id=' + id + ']').closest('tr')).index();
                         datatable.row(rowIndex).remove();
                     }
                     let newdata = Array.from(datatable.data());
@@ -373,7 +375,7 @@ function edit(element) {
     let name = element.getAttribute('data-name');
     let st = element.getAttribute('data-status');
     let id = element.getAttribute('data-id');
-    if (st==null){
+    if (st == null) {
         $('#selectedStaus').val(1);
     }
     $('#inputData').val(name).focus();
@@ -386,6 +388,7 @@ function Toast(status, message) {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
+        showCloseButton: true,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {

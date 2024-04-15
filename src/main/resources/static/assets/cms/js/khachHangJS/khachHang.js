@@ -3,6 +3,7 @@ function Toast(status, message) {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
+        showCloseButton: true,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
@@ -90,7 +91,7 @@ function checkDuplicateKH1() {
         let phone = $('#sdt').val();
         let id = $('#idKhachHang').val();
         $.ajax({
-            url: '/cms/khach-hang/check-duplicate',
+            url: '/api/check-duplicate',
             type: 'POST',
             data: {email: email, phoneNumber: phone, id: id},
             success: function (response) {
@@ -113,7 +114,7 @@ $(document).on('change', 'input.addressDefaultSwitch[name="addressDefault"]', fu
     let idDiaChi = $(this).val()
     let idKhachHang = $('#idKhachHang').val();
     $.ajax({
-        url: '/cms/khach-hang/set-default-address',
+        url: '/api/set-default-address',
         type: 'POST',
         data: {
             idDiaChi: idDiaChi,
@@ -262,7 +263,7 @@ $(document).on('ready', function () {
         let selectedHuyen = huyen.find(":selected").text();
         let selectedTinh = tinh.find(":selected").text();
         $.ajax({
-            url: '/cms/khach-hang/update/update-diachi',
+            url: '/api/update/update-diachi',
             type: 'POST',
             data: {
                 soNhaDto: soNha,
@@ -330,7 +331,7 @@ $(document).on('ready', function () {
         }
         let idKhachHang = $('#idKhachHang').val();
         $.ajax({
-            url: '/cms/khach-hang/update/add-diachi',
+            url: '/api/update/add-diachi',
             type: 'POST',
             data: {
                 idKH: idKhachHang,

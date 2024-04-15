@@ -26,6 +26,10 @@
     }
 }
 
+#list_product_items {
+    min-height: 1000px;
+}
+
 /* Định nghĩa animation cho hiệu ứng biến mất */
 @keyframes fadeOut {
     0% {
@@ -53,12 +57,15 @@
 .fadeOut {
     animation: fadeOut 0.7s ease-in-out; /* Sử dụng animation fadeOut */
 }
+
 .mix.fadeOut {
     display: none;
 }
-.product_wraper{
+
+.product_wraper {
     transition: transform 0.7s ease-in-out;
 }
+
 /*!* CSS cho hiệu ứng chuyển động *!*/
 /*.mixitup-transitions-enabled .product_wraper {*/
 /*    transition: opacity 0.7s ease-in-out; !* Hiệu ứng chuyển động *!*/

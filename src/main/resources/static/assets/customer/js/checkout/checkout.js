@@ -206,7 +206,7 @@ $(document).on('click', '#btn-update', function () {
     let quanHuyen = $('#quanHuyen_cu').find('option:selected').text();
     let tinhTP = $('#tinhTP_cu').find('option:selected').text();
     $.ajax({
-        url: '/cms/khach-hang/update/update-diachi',
+        url: '/api/update/update-diachi',
         type: 'POST',
         data: {
             id: id,
@@ -302,7 +302,7 @@ $(document).on('click', '#btn-addAddress', function () {
 
     $.ajax({
         type: "POST",
-        url: "/cms/khach-hang/update/add-diachi",
+        url: "/api/update/add-diachi",
         data: {
             soNhaDto: newHouseNumber,
             phuongXaDto: newWardText,
@@ -361,7 +361,7 @@ $(document).on('click', '#btn-addAddress', function () {
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "/cms/khach-hang/set-default-address",
+                    url: "/api/set-default-address",
                     data: {
                         idDiaChi: response.id,
                         idKhachHang: idCustomer
