@@ -450,6 +450,26 @@ CREATE TABLE gio_hang_chi_tiet
     primary key(id)
 )engine=INNODB;
 
+CREATE TABLE quan_tri
+(
+    id bigint default 1,
+    banner1 nvarchar(256),
+    title1 nvarchar(256),
+    mo_ta1 nvarchar(256),
+    banner2 nvarchar(256),
+    title2 nvarchar(256),
+    mo_ta2 nvarchar(256),
+    san_pham1 bigint,
+    title_sp1 nvarchar(256),
+    san_pham2 bigint,
+    title_sp2 nvarchar(256),
+    san_pham3 bigint,
+    title_sp3 nvarchar(256),
+    san_pham_sale bigint,
+    title_sp_sale nvarchar(256),
+    thoi_gian_sale datetime,
+    primary key(id)
+)engine=INNODB;
 -- Ràng Buộc, Liên Kết
 -- Sản Phẩm (nguoi_tao, nguoi_sua)
 ALTER TABLE san_pham ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);

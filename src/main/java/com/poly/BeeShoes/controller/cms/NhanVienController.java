@@ -1,6 +1,7 @@
 package com.poly.BeeShoes.controller.cms;
 
 import com.poly.BeeShoes.library.LibService;
+import com.poly.BeeShoes.model.ChucVu;
 import com.poly.BeeShoes.model.NhanVien;
 import com.poly.BeeShoes.model.Role;
 import com.poly.BeeShoes.model.User;
@@ -35,7 +36,7 @@ public class NhanVienController {
     private final MailUtility mailUtility;
 
     @GetMapping("")
-    public String nhanVien(Model model){
+    public String nhanVien(Model model) {
         List<NhanVien> nv = nhanVienService.getAll();
 //        model.addAttribute("listCV", chucVuService.getAll());
         model.addAttribute("listNV", nv);
@@ -57,45 +58,53 @@ public class NhanVienController {
                         @RequestParam("email") String email) {
         boolean check = false;
         System.out.println(nhanVien.toString());
-        if(nhanVien.getHoTen().isBlank()){
+        if (nhanVien.getHoTen().isBlank()) {
             model.addAttribute("errorHoTen", "Họ tên không được để trống");
-            check=true;
-        }if(nhanVien.getSdt().isBlank()){
+            check = true;
+        }
+        if (nhanVien.getSdt().isBlank()) {
             model.addAttribute("errorSdt", "Sdt không được để trống");
-            check=true;
+            check = true;
         }
-        if(nhanVienService.existsBySdt(sdt)){
+        if (nhanVienService.existsBySdt(sdt)) {
             model.addAttribute("messageSdt", "Số điện thoại đã tồn tại");
-            check=true;
+            check = true;
         }
-        if(nhanVien.getCccd().isBlank()){
+        if (nhanVien.getCccd().isBlank()) {
             model.addAttribute("errorCCCD", "CCCD không được để trống");
-            check=true;
-        }if(nhanVien.getEmail().isBlank()){
+            check = true;
+        }
+        if (nhanVien.getEmail().isBlank()) {
             model.addAttribute("errorEmail", "Email không được để trống");
-            check=true;
+            check = true;
         }
-        if(userService.existsByEmail(email)){
+        if (userService.existsByEmail(email)) {
             model.addAttribute("errorEmail_", "Email đã tồn tại");
-            check=true;
-        }if(nhanVien.getSoNha().isBlank()){
-            model.addAttribute("errorSoNha", "Số nhà không được để trống");
-            check=true;
-        }if(nhanVien.getPhuongXa().isBlank()){
-            model.addAttribute("errorPhuongXa", "Phường xã không được để trống");
-            check=true;
-        }if(nhanVien.getQuanHuyen().isBlank()){
-            model.addAttribute("errorQuanHuyen", "Quận huyện không được để trống");
-            check=true;
-        }if(nhanVien.getTinhThanhPho().isBlank()){
-            model.addAttribute("errorTinhTP", "Tỉnh tp không được để trống");
-            check=true;
+            check = true;
         }
-        if(check){
+        if (nhanVien.getSoNha().isBlank()) {
+            model.addAttribute("errorSoNha", "Số nhà không được để trống");
+            check = true;
+        }
+        if (nhanVien.getPhuongXa().isBlank()) {
+            model.addAttribute("errorPhuongXa", "Phường xã không được để trống");
+            check = true;
+        }
+        if (nhanVien.getQuanHuyen().isBlank()) {
+            model.addAttribute("errorQuanHuyen", "Quận huyện không được để trống");
+            check = true;
+        }
+        if (nhanVien.getTinhThanhPho().isBlank()) {
+            model.addAttribute("errorTinhTP", "Tỉnh tp không được để trống");
+            check = true;
+        }
+        if (check) {
+//            nhanVien.setAvatar(null);
             model.addAttribute("nhanVien", nhanVien);
             model.addAttribute("listCV", chucVuService.getAll());
             return "cms/pages/users/add-nhanVien";
         }
+        ChucVu chucVu = chucVuService.getById(nhanVien.getIdCV());
         NhanVien nv = new NhanVien();
         nv.setHoTen(nhanVien.getHoTen());
         nv.setGioiTinh(nhanVien.isGioiTinh());
@@ -105,7 +114,7 @@ public class NhanVienController {
         nv.setMaNhanVien(nhanVienService.generateEmployeeCode());
         nv.setTrangThai(nhanVien.isTrangThai());
         nv.setCccd(nhanVien.getCccd());
-        nv.setChucVu(chucVuService.getById(nhanVien.getIdCV()));
+        nv.setChucVu(chucVu);
         nv.setSoNha(nhanVien.getSoNha());
         nv.setPhuongXa(nhanVien.getPhuongXa());
         nv.setQuanHuyen(nhanVien.getQuanHuyen());
@@ -114,21 +123,27 @@ public class NhanVienController {
         User user = new User();
         user.setEmail(nhanVien.getEmail());
         user.setAvatar(nhanVien.getAvatar());
-        user.setRole(Role.CUSTOMER);
+        if (chucVu.getTen().equals("Nhân Viên")) {
+            user.setRole(Role.USER);
+        } else if (chucVu.getTen().equals("Quản Lý")) {
+            user.setRole(Role.MANAGER);
+        } else {
+            user.setRole(Role.ADMIN);
+        }
         String password = LibService.generateRandomString(10);
         user.setPassword(passwordEncoder.encode(password));
         user.setNhanVien(nhanVien1);
-        User u =  userService.createNewUser(user);
-        if(u!=null){
+        User u = userService.createNewUser(user);
+        if (u != null) {
             String tb = "Chúc mừng bạn đã tạo tài khoản thành công!";
-            String body = "<h1>Đăng Ký Thành Công !</h1><h2>email đăng nhập là : "+user.getEmail() +"</h2><h2>Mật Khẩu là : "+password+"</h2>";
+            String body = "<h1>Đăng Ký Thành Công !</h1><h2>email đăng nhập là : " + user.getEmail() + "</h2><h2>Mật Khẩu là : " + password + "</h2>";
             mailUtility.sendMail(user.getEmail(), tb, body);
         }
         return "redirect:/cms/nhan-vien";
     }
 
     @GetMapping("/view-detail/{id}")
-    public String viewDetail(@PathVariable Long id, Model model){
+    public String viewDetail(@PathVariable Long id, Model model) {
         NhanVien nhanVien = nhanVienService.detail(id);
         User user = userService.findByNhanVien_Id(nhanVien.getId());
         NhanVienRequest nv = new NhanVienRequest();
@@ -148,13 +163,13 @@ public class NhanVienController {
         nv.setQuanHuyen(nhanVien.getQuanHuyen());
         nv.setTinhThanhPho(nhanVien.getTinhThanhPho());
         model.addAttribute("nhanVien", nv);
-        model.addAttribute("listCV",chucVuService.getAll());
+        model.addAttribute("listCV", chucVuService.getAll());
         return "cms/pages/users/detail-nhanVien";
     }
 
     @PostMapping("/update/{id}")
     public String updateNV(@PathVariable Long id, Model model,
-                           @ModelAttribute("nhanVien") NhanVienRequest nhanVien){
+                           @ModelAttribute("nhanVien") NhanVienRequest nhanVien) {
         System.out.println(nhanVien.toString());
         NhanVien updatedNhanVien = nhanVienService.detail(id);
         User user = userService.findByNhanVien_Id(nhanVien.getId());
@@ -198,13 +213,13 @@ public class NhanVienController {
         boolean emailExists = userService.existsByEmail(email);
         boolean phoneNumberExists = nhanVienService.existsBySdt(phoneNumber);
         boolean cccdExists = nhanVienService.existsByCccd(cccd);
-        if(user.getEmail().equalsIgnoreCase(email)){
+        if (user.getEmail().equalsIgnoreCase(email)) {
             emailExists = false;
         }
-        if(nhanVien.getSdt().equalsIgnoreCase(phoneNumber)){
+        if (nhanVien.getSdt().equalsIgnoreCase(phoneNumber)) {
             phoneNumberExists = false;
         }
-        if(nhanVien.getCccd().equalsIgnoreCase(cccd)){
+        if (nhanVien.getCccd().equalsIgnoreCase(cccd)) {
             cccdExists = false;
         }
 
@@ -218,8 +233,8 @@ public class NhanVienController {
     @PostMapping("/check-duplicateAddNV")
     @ResponseBody
     public Map<String, Boolean> checkDuplicateAddNV(@RequestParam("email") String email,
-                                               @RequestParam("phoneNumber") String phoneNumber,
-                                               @RequestParam("cccd") String cccd) {
+                                                    @RequestParam("phoneNumber") String phoneNumber,
+                                                    @RequestParam("cccd") String cccd) {
         boolean emailExists = userService.existsByEmail(email);
         boolean phoneNumberExists = nhanVienService.existsBySdt(phoneNumber);
         boolean cccdExists = nhanVienService.existsByCccd(cccd);

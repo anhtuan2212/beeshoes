@@ -39,6 +39,26 @@
     <!-- Content -->
     <div class="content container-fluid">
         <!-- Step Form -->
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-sm mb-2 mb-sm-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-no-gutter">
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Nhân viên</a>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="page-header-title">Cập Nhật Thông Tin</h1>
+                </div>
+
+                <div class="col-sm-auto">
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+
         <form th:action="@{/cms/nhan-vien/update/{id}(id=${nhanVien.id})}" method="post"
               th:object="${nhanVien}" id="btn-update-nhan-vien"
               class="js-step-form py-md-1" data-hs-step-form-options='{
@@ -50,21 +70,6 @@
             <input type="text" id="idNhanVien" th:value="${nhanVien.getId()}" hidden>
             <div class="row justify-content-lg-center">
                 <div class="col">
-                    <!-- Step -->
-                    <ul id="addUserStepFormProgress"
-                        class="js-step-progress step step-sm step-icon-sm step step-inline step-item-between mb-3 mb-md-5">
-                        <li class="step-item">
-                            <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
-                      "targetSelector": "#addUserStepProfile"
-                    }'>
-                                <div class="step-content">
-                                    <span class="step-title">Thông tin</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- End Step -->
-
                     <!-- Content Step Form -->
                     <div id="addUserStepFormContent">
                         <!-- Card -->
@@ -81,7 +86,7 @@
                                                 <!-- Avatar -->
                                                 <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
                                                        for="avatarUploader">
-                                                    <img id="avatarImg" class="avatar-img"
+                                                    <img id="avatarImg" class="avatar-img w-100"
                                                          th:src="${nhanVien.getAvatar()==''?'/assets/cms/img/160x160/img1.jpg':nhanVien.getAvatar()}"
                                                          alt="Image Description">
 

@@ -145,8 +145,8 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
-        if (!hdct.getHoaDon().getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)){
-            return  ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
+        if (!hdct.getHoaDon().getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)) {
+            return ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
         }
         if (hdct == null) {
             return ResponseEntity.notFound().header("status", "HDCTisNull").build();
@@ -212,8 +212,8 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDonChiTiet hdct = hoaDonChiTietService.getById(id);
-        if (!hdct.getHoaDon().getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)){
-            return  ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
+        if (!hdct.getHoaDon().getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)) {
+            return ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
         }
         if (hdct == null) {
             return ResponseEntity.notFound().header("status", "HDCTisNull").build();
@@ -525,7 +525,10 @@ public class HoaDonRestController {
             }
         }
         hd = hoaDonService.save(hd);
-        int tienThua = request.getCash() + request.getTransfer() - hd.getThucThu().intValue();
+        int tienThua = 0;
+        if (request.getCash() != null) {
+             tienThua = request.getCash() + request.getTransfer() - hd.getThucThu().intValue();
+        }
         if (typePayment.isChuyenKhoan()) {
             HinhThucThanhToan ht = new HinhThucThanhToan();
             ht.setHinhThuc("Chuyển Khoản");
@@ -872,8 +875,8 @@ public class HoaDonRestController {
             return ResponseEntity.notFound().header("status", "NotAuth").build();
         }
         HoaDon hoaDon = hoaDonService.getHoaDonById(dt.getId());
-        if (!hoaDon.getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)){
-            return  ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
+        if (!hoaDon.getTrangThai().equals(TrangThaiHoaDon.ChoXacNhan)) {
+            return ResponseEntity.notFound().header("status", "NotAcceptStatus").build();
         }
         if (hoaDon == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "HoaDonNull").build();

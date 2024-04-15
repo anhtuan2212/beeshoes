@@ -242,9 +242,9 @@
                     </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="show-all-voucher">
                     <th:block th:each="voucher,loop : ${lstvoucher}">
-                        <tr>
+                        <tr th:attr="data-voucher-id=${voucher.getId()}">
                             <td>[[${loop.index + 1}]]</td>
                             <td>[[${voucher.ma}]]</td>
                             <td>[[${voucher.ten}]]</td>
@@ -262,13 +262,13 @@
                                 th:text="${#dates.format(voucher.ngayBatDau, 'yyyy-MM-dd | HH:mm')}"></td>
                             <td th:if="${voucher != null}"
                                 th:text="${#dates.format(voucher.ngayKetThuc, 'yyyy-MM-dd | HH:mm')}"></td>
-                            <td>
-                             <span th:switch="${voucher.trangThai}" th:classappend="${'status-' + voucher.trangThai}">
+                            <td class="status-voucher">
+                             <th:block th:switch="${voucher.trangThai}">
                                 <span th:case="1" class="badge badge-pill badge-light">Sắp Diễn Ra</span>
                                 <span th:case="2" class="badge badge-pill badge-success">Đang Diễn Ra</span>
                                 <span th:case="3" class="badge badge-pill badge-warning">Đã Kết Thúc</span>
                                 <span th:case="4" class="badge badge-pill badge-dark">Hủy</span>
-                             </span>
+                             </th:block>
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
@@ -280,7 +280,7 @@
 
                                     <a class="btn cancel-voucher" data-toggle="tooltip"
                                        data-placement="top"
-                                       title="Hủy" th:attr="data-id=${voucher.id}">
+                                       title="Kết Thúc" th:attr="data-id=${voucher.id}">
                                         <i class="tio-clear"></i>
                                     </a>
                                     <!-- End Unfold -->

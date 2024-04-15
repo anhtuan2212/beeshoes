@@ -40,6 +40,26 @@ public class VoucherController {
         return "/cms/pages/vouchers/form-voucher";
     }
 
+
+    @PostMapping("/cancel-voucher")
+    public ResponseEntity<Voucher> cancel(@RequestParam("id") Long id) {
+        if (id != null) {
+            Voucher voucher = voucherService.getById(id);
+            if (voucher == null) {
+                return ResponseEntity.notFound().header("status", "voucherNull").build();
+            }
+            voucher.setTrangThai(3);
+            voucher.setNgaySua(Timestamp.from(Instant.now()));
+            voucherService.save(voucher);
+            voucher.setEndDate1(voucher.getNgayKetThuc().toLocalDateTime());
+            voucher.setStartDate1(voucher.getNgayBatDau().toLocalDateTime());
+            voucher.setNguoiTao(null);
+            voucher.setNguoiSua(null);
+            return ResponseEntity.ok().body(voucher);
+        }
+        return ResponseEntity.notFound().header("status", "idNull").build();
+    }
+
     @PostMapping({"/add-voucher", "/add-voucher/"})
     public ResponseEntity save(@ModelAttribute VoucherRequest voucher) {
         if (voucher.getName().isBlank()) {

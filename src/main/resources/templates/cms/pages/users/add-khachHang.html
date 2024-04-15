@@ -31,6 +31,25 @@
 <main id="content" role="main" class="main">
     <!-- Content -->
     <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-sm mb-2 mb-sm-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-no-gutter">
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Tài Khoản</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Khách Hàng</a>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="page-header-title">Thêm Khách Hàng</h1>
+                </div>
+
+                <div class="col-sm-auto">
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
         <!-- Step Form -->
         <form th:action="@{/cms/khach-hang/add}" method="post" th:object="${khachHang}"
               id="btn-submit-khach-hang"
