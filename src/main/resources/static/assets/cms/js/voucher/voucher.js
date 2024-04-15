@@ -14,6 +14,42 @@ function formatNumberMoney(input) {
     }
 }
 
+function addCommasToNumber(number) {
+    let numberStr = number.toString().replace(/[^\d]/g, '');
+    let parts = [];
+    for (let i = numberStr.length, j = 0; i >= 0; i--, j++) {
+        parts.unshift(numberStr[i]);
+        if (j > 0 && j % 3 === 0 && i > 0) {
+            parts.unshift('.');
+        }
+    }
+    return parts.join('');
+}
+
+function Confirm(title, message, txt_cancel, txt_confirm) {
+    return new Promise((resolve, reject) => {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: txt_cancel,
+            confirmButtonText: txt_confirm,
+            customClass: {
+                confirmButton: 'btn-custom-black',
+                cancelButton: 'btn-custom-info'
+            },
+            didRender: () => {
+                $('.swal2-select').remove();
+            }
+        }).then((result) => {
+            resolve(result.isConfirmed);
+        });
+    })
+}
+
 $(document).on('ready', function () {
     // ONLY DEV
     // =======================================================
@@ -190,6 +226,44 @@ $(document).on('ready', function () {
                 '</div>'
         }
     });
+    console.log(datatable.data());
+    $('#loaiVoucher').on('change', function () {
+        let val = $(this).val();
+        if (val === 'all') {
+            datatable.column(3).search('').draw(); // Lọc tất cả
+        } else if (val === '%') {
+            datatable.column(3).search('Phần trăm').draw(); // Lọc 'Phần trăm'
+        } else {
+            datatable.column(3).search('Tiền mặt').draw(); // Lọc 'Tiền mặt'
+        }
+    });
+
+    const quantityFromInput = document.querySelector('#quantity_from');
+    const quantityToInput = document.querySelector('#quantity_to');
+
+    let table = $('#datatable').DataTable();
+
+    function applyFilters() {
+        const priceSortSlider = document.querySelector('#price_sort');
+        let quantityFrom = parseInt(quantityFromInput.value, 10) || 0;
+        let quantityTo = parseInt(quantityToInput.value, 10) || Infinity; // Sử dụng Infinity cho giá trị tới vô cực
+        // Xóa bất kỳ hàm lọc nào đã được thêm trước đó để tránh việc thêm nhiều lần
+        $.fn.dataTable.ext.search.pop();
+
+        // Thêm hàm lọc mới
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+            let quantity = parseFloat(data[4]) || 0; // Sử dụng data cho cột số lượng
+            return ((isNaN(quantityFrom) && isNaN(quantityTo)) ||
+                    (isNaN(quantityFrom) && quantity <= quantityTo) ||
+                    (quantityFrom <= quantity && isNaN(quantityTo)) ||
+                    (quantityFrom <= quantity && quantity <= quantityTo));
+        });
+        table.draw();
+    }
+
+    quantityFromInput.addEventListener('input', applyFilters);
+    quantityToInput.addEventListener('input', applyFilters);
+
 
     function updateShowNum() {
         let pageInfo = datatable.page.info();
@@ -212,9 +286,6 @@ $(document).on('ready', function () {
         }
     }
 
-    // datatable.on('draw.dt', function () {
-    //     updateShowNum();
-    // })
     $('#export-copy').click(function () {
         datatable.button('.buttons-copy').trigger()
     });
@@ -281,15 +352,148 @@ $(document).on('ready', function () {
     //===============================================================================================
     $('#voucher_type').on('change', function () {
         let val = $(this).val();
-        console.log(val)
+        let ele_money = $('#discount_money');
+        let ele_percent = $('#discount_percent');
+        let money = ele_money.val();
+        let percent = ele_percent.val();
         if (val === '%') {
-            $('#discount_percent').closest('div.col-sm-12.col-md-6').removeClass('d-none');
-            $('#discount_money').closest('div.col-sm-12.col-md-6').addClass('d-none');
+            ele_percent.closest('div.col-sm-12.col-md-6').removeClass('d-none');
+            ele_money.closest('div.col-sm-12.col-md-6').addClass('d-none');
+            $('.text-discount-value').text(percent + '%');
         } else {
-            $('#discount_percent').closest('div.col-sm-12.col-md-6').addClass('d-none');
-            $('#discount_money').closest('div.col-sm-12.col-md-6').removeClass('d-none');
+            ele_percent.closest('div.col-sm-12.col-md-6').addClass('d-none');
+            ele_money.closest('div.col-sm-12.col-md-6').removeClass('d-none');
+            $('.text-discount-value').text(formatNumberMoney(money));
         }
     })
+    $('#discount_percent').on('input', function () {
+        let val = Number($(this).val());
+        let text = $('#text_error_discount_percent');
+        if (val > 100) {
+            text.text('Phần trăm giảm tối đa là 100.')
+            return;
+        }
+        if (val < 0) {
+            text.text('Phần trăm giảm tối thiểu là 0.')
+            return;
+        }
+        text.text('')
+        if (val > -1 || val < 101) {
+            $('.text-discount-value').text(val + '%');
+        }
+    })
+    $('#discount_money').on('input', function () {
+        let val = Number($(this).val());
+        let text = $('#text_error_discount_money');
+        if (val > 1000000000) {
+            text.text('Số tiền giảm tối đa là 1 tỷ.')
+            return;
+        }
+        if (val < 1000 || isNaN(val)) {
+            text.text('Số tiền giảm tối thiểu là 1.000đ.')
+            return;
+        }
+        text.text('')
+        if (val > 0 || !isNaN(val)) {
+            $('.text-discount-value').text(formatNumberMoney($(this).val()));
+        } else {
+            $('.text-discount-value').text('');
+        }
+    })
+    $('#quantity_discount').on('input', function () {
+        let val = Number($(this).val());
+        let text = $('#text_error_quantity_discount');
+        let quantity = $('label.express_date.quantity');
+        if (val < 0 || isNaN(val)) {
+            text.text('Số lượng không được nhỏ hơn 0.')
+            return;
+        }
+        if ($(this).val().length === 0) {
+            text.text('Vui lòng nhập số lượng.')
+            return;
+        }
+        text.text('');
+        quantity.text(`Số Lượng: ${addCommasToNumber(val)}`)
+    })
+    $('#max_discount').on('input', function () {
+        let val = Number($(this).val());
+        let text = $('#text_error_max_discount');
+        let max = $('label.express_date.max_discount');
+        if (val > 1000000000) {
+            text.text('Số tiền giảm tối đa là 1 tỷ.')
+            return;
+        }
+        if (val < 0 || isNaN(val)) {
+            text.text('Số tiền giảm không được nhỏ hơn 0.')
+            return;
+        }
+        if ($(this).val().length === 0) {
+            text.text('Vui lòng nhập số tiền giảm.')
+            return;
+        }
+        text.text('');
+        max.text(`Tối Đa: ${addCommasToNumber(val)}đ/Khách Hàng`);
+    })
+    $('#discount_end_time,#discount_start_time').on('change', function () {
+        let end = new Date($(this).val());
+        let start = new Date($('#discount_start_time').val());
+        let text_start = $('#text_error_discount_start_time');
+        let text_end = $('#text_error_discount_end_time');
+        let voucher = $('label.express_date.end_date');
+        if (!end || isNaN(end)) {
+            text_end.text("Vui lòng chọn thời gian kết thúc.");
+            return;
+        }
+        if (!start || isNaN(start)) {
+            text_start.text("Vui lòng chọn thời gian bắt đầu.");
+            return;
+        }
+        text_start.text('');
+        if (end <= start) {
+            text_end.text("Thời gian kết thúc phải sau thời gian bắt đầu.");
+            return;
+        }
+        text_end.text('');
+        let time = `${end.getHours().toString().padStart(2, '0') + ':' + end.getMinutes().toString().padStart(2, '0')} Ngày ${end.getDay().toString().padStart(2, '0') + '-' + end.getMonth().toString().padStart(2, '0') + '-' + end.getFullYear()}`;
+        voucher.text(`Hạn Đến :${time}`);
+    })
+    $('#discount_condition').on('input', function () {
+        let val = Number($(this).val());
+        let text = $('#text_error_discount_condition');
+        let voucher = $('label.express_date.condition');
+        if (val < 0 || isNaN(val)) {
+            text.text('Giá trị tối thiểu là 0đ.')
+            return;
+        }
+        if ($(this).val().length === 0) {
+            text.text('Vui lòng nhập giá trị đơn.')
+            return;
+        }
+        text.text('');
+        voucher.text(`Điều Kiện: Áp dụng cho đơn hàng từ ${addCommasToNumber(val)}đ`)
+    })
+
+    $(document).on('click', '.cancel-voucher', function () {
+        let id = $(this).data('id');
+        Confirm("Kết thúc giảm giá?", "Khi kết thúc phiếu sẽ không thể sử dụng.", "Không", "Đồng Ý").then((check) => {
+            if (check) {
+                $.ajax({
+                    url: '/cms/voucher/cancel-voucher',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    }, success: function (data) {
+                        console.log(data)
+                        ToastSuccess("Thay đổi đã được áp dụng.")
+                        $('#show-all-voucher').find(`tr[data-voucher-id="${data.id}"] td.status-voucher`).html('<span class="badge badge-pill badge-warning">Đã Kết Thúc</span>')
+                    }, error: function (e) {
+                        console.log(e)
+                    }
+                })
+            }
+        })
+    })
+
     $('#btn-save-voucher').on('click', function () {
         let id = $('#id-voucher').val();
         let name = $('#voucher_name').val();
@@ -302,7 +506,7 @@ $(document).on('ready', function () {
         let description = $('#description').val();
         let quantity = $('#quantity_discount').val().replace(/\D/g, '');
         let status = $('#discount_status').val();
-        let max = $('#max_discount').val().replace(/\D/g, '');
+        let max = $('#max_discount').val();
 
         if (name.replace(/\s/g, '').length === 0) {
             ToastError('Vui lòng nhập tên.');
@@ -321,18 +525,32 @@ $(document).on('ready', function () {
                 ToastError('Vui lòng nhập phần trăm giảm.');
                 return;
             }
+            if (Number(percent) < 0 || Number(percent) > 100) {
+                ToastError('Phần trăm giảm không hợp lệ.');
+                return;
+            }
         } else {
             if (money.length === 0) {
                 ToastError('Vui lòng nhập phần số tiền giảm.');
                 return;
             }
+            if (Number(money) < 1000 || Number(money) > 1000000000) {
+                ToastError('Số tiền giảm không hợp lệ.');
+                return;
+            }
         }
-        if (start_time.length===0){
+        if (start_time.length === 0) {
             ToastError("Vui lòng chọn thời gian bắt đầu");
             return;
         }
-        if (end_time.length===0){
+        if (end_time.length === 0) {
             ToastError("Vui lòng chọn thời gian kết thúc");
+            return;
+        }
+        let start = new Date(start_time);
+        let end = new Date(end_time);
+        if (start >= end) {
+            ToastError("Thời gian không hợp lệ.");
             return;
         }
         if (quantity.replace(/\s/g, '').length === 0) {
@@ -341,6 +559,10 @@ $(document).on('ready', function () {
         }
         if (max.replace(/\s/g, '').length === 0) {
             ToastError('Vui lòng nhập giá trị tối đa.');
+            return;
+        }
+        if (Number(max) > 1000000000 || Number(max) < 0) {
+            ToastError('Giá trị tối đa không hợp lệ.');
             return;
         }
         if (id.length !== 0) {
@@ -368,6 +590,9 @@ $(document).on('ready', function () {
                 description: description,
             }, success: function (data) {
                 ToastSuccess("Lưu Thành Công.")
+                setTimeout(() => {
+                    location.href = '/cms/voucher'
+                }, 3000)
                 console.log(data);
             }, error: function (e) {
                 console.log(e)

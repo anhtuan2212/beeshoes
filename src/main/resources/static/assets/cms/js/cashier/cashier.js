@@ -360,7 +360,7 @@ function findProductById(id) {
 }
 
 function saveProductToOder(product, numOder, quantity) {
-    product.quantity = quantity;
+    product.quantity = Number(quantity);
     let data = getListProductLocal(numOder);
     let index = null;
     let found = false;
@@ -1220,7 +1220,7 @@ $(document).on('ready', function () {
                     return;
                 }
             }
-            if (soNha.replace(/\s/g, "").length > 0) {
+            if (soNha.length > 0) {
                 if (soNha.val().length === 0) {
                     ToastError('Vui lòng nhập số nhà.');
                     return;
@@ -1249,6 +1249,9 @@ $(document).on('ready', function () {
     $(document).on('hidden.bs.modal', '#form-modal-payment', function () {
         $('#pay-cash-money').val('');
         $('#change-money').val(0);
+        $('#payment-type-card').prop('checked', false);
+        $('#payment-on-delivery').prop('checked', false);
+        $('#payment-type-cash').prop('checked', true).trigger('change');
     })
     $(document).on('input', '.money-input-mask', function () {
         $(this).mask('#.###.###.###', {reverse: true});

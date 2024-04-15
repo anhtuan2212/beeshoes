@@ -165,6 +165,7 @@
                                         <div class="input-group-text">VND</div>
                                     </div>
                                 </div>
+                                <span id="text_error_discount_condition" class="text-danger small"></span>
                             </div>
                         </div>
                         <div th:class="'col-sm-12 col-md-6 '+${voucher==null or voucher!=null and voucher.getLoaiVoucher()=='%'?'':'d-none'}">
@@ -178,6 +179,7 @@
                                         <div class="input-group-text">%</div>
                                     </div>
                                 </div>
+                                <span id="text_error_discount_percent" class="text-danger small"></span>
                             </div>
                         </div>
                         <div th:class="'col-sm-12 col-md-6 '+${voucher!=null and voucher.getLoaiVoucher()=='$'?'':'d-none'}">
@@ -186,11 +188,12 @@
                                 <div class="input-group input-group-merge">
                                     <input type="number" id="discount_money" class="form-control"
                                            placeholder="Số tiền giảm giá..."
-                                           th:value="${voucher!=null?voucher.getGiaTriTienMat().intValue():''}">
+                                           th:value="${voucher!=null and voucher.getGiaTriTienMat() !=null ? voucher.getGiaTriTienMat().intValue():''}">
                                     <div class="input-group-prepend money-dv">
                                         <div class="input-group-text">VND</div>
                                     </div>
                                 </div>
+                                <span id="text_error_discount_money" class="text-danger small"></span>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -199,6 +202,7 @@
                                 <input type="datetime-local" id="discount_start_time" class="form-control"
                                        placeholder="Số tiền giảm giá..."
                                        th:value="${voucher!=null?voucher.getNgayBatDau():null}">
+                                <span id="text_error_discount_start_time" class="text-danger small"></span>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -207,6 +211,7 @@
                                 <input type="datetime-local" id="discount_end_time" class="form-control"
                                        placeholder="Số tiền giảm giá..."
                                        th:value="${voucher!=null?voucher.getNgayKetThuc():null}">
+                                <span id="text_error_discount_end_time" class="text-danger small"></span>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -215,6 +220,7 @@
                                 <input type="number" id="quantity_discount" class="form-control"
                                        placeholder="Số lượng phiếu..."
                                        th:value="${voucher!=null?voucher.getSoLuong():''}">
+                                <span id="text_error_quantity_discount" class="text-danger small"></span>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -228,6 +234,7 @@
                                         <div class="input-group-text">VND</div>
                                     </div>
                                 </div>
+                                <span id="text_error_max_discount" class="text-danger small"></span>
                             </div>
                         </div>
                         <div th:class="'col-sm-12 '+ ${voucher==null?'':'col-md-6'}">
@@ -275,13 +282,13 @@
                                     <div class="col-9 contents p-2">
                                         <h5 class="text-center voucher_code"
                                             th:text="${voucher==null?'VCXXXXX':voucher.getMa()}"></h5>
-                                        <label class="express_date"
+                                        <label class="express_date end_date"
                                                th:text="${voucher==null?'Hạn Đến : ':'Hạn Đến :'+#dates.format(voucher.ngayKetThuc, ' HH:mm') +' Ngày '+#dates.format(voucher.ngayKetThuc, 'dd-MM-yyyy')}"></label>
-                                        <label class="express_date"
+                                        <label class="express_date condition"
                                                th:text="'Điều Kiện: Áp dụng cho đơn hàng từ '+${voucher==null?'0':#numbers.formatDecimal(voucher.getGiaTriToiThieu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></label>
-                                        <label class="express_date"
+                                        <label class="express_date max_discount"
                                                th:text="'Tối Đa:'+${voucher==null?'0':#numbers.formatDecimal(voucher.giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ/Khách Hàng'"></label>
-                                        <label class="express_date w-100"
+                                        <label class="express_date quantity w-100"
                                                th:text="'Số Lượng :'+${voucher==null?'0':#numbers.formatDecimal(voucher.getSoLuong(), 1, 'DEFAULT', 0, 'DEFAULT')}"></label>
                                     </div>
                                     <div class="col-3 p-2 row m-0 card__discount position-relative">
@@ -301,13 +308,13 @@
                                         <div class="col-9 contents p-2">
                                             <h5 class="text-center voucher_code"
                                                 th:text="${voucher==null?'VCXXXXX':voucher.getMa()}"></h5>
-                                            <label class="express_date"
+                                            <label class="express_date end_date"
                                                    th:text="${voucher==null?'Hạn Đến : ':'Hạn Đến :'+#dates.format(voucher.ngayKetThuc, ' HH:mm') +' Ngày '+#dates.format(voucher.ngayKetThuc, 'dd-MM-yyyy')}"></label>
-                                            <label class="express_date"
+                                            <label class="express_date condition"
                                                    th:text="'Điều Kiện: Áp dụng cho đơn hàng từ '+${voucher==null?'0':#numbers.formatDecimal(voucher.getGiaTriToiThieu(), 1, 'DEFAULT', 0, 'DEFAULT')}+'đ'"></label>
-                                            <label class="express_date"
+                                            <label class="express_date max_discount"
                                                    th:text="'Tối Đa:'+${voucher==null?'0':#numbers.formatDecimal(voucher.giaTriToiDa, 1, 'DEFAULT', 0, 'DEFAULT')}+'đ/Khách Hàng'"></label>
-                                            <label class="express_date w-100"
+                                            <label class="express_date quantity w-100"
                                                    th:text="'Số Lượng :'+${voucher==null?'0':#numbers.formatDecimal(voucher.getSoLuong(), 1, 'DEFAULT', 0, 'DEFAULT')}"></label>
                                         </div>
                                         <div class="col-3 p-2 row m-0 card__discount position-relative">

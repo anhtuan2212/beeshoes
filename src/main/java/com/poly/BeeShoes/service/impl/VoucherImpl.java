@@ -7,10 +7,7 @@ import com.poly.BeeShoes.repository.ThuongHieuRepository;
 import com.poly.BeeShoes.repository.VoucherResponsitory;
 import com.poly.BeeShoes.service.VoucherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +47,7 @@ public class VoucherImpl implements VoucherService {
 
     @Override
     public List<Voucher> getAll() {
-        return voucherResponsitory.findAll();
+        return voucherResponsitory.findAll(Sort.by(Sort.Direction.DESC, "ngaySua"));
     }
 
     @Override
