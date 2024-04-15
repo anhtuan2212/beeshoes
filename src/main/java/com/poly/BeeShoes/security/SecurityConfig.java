@@ -24,7 +24,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> {
                     req
-//                            .requestMatchers("/cms/**").hasAnyAuthority("USER","MANAGER", "ADMIN")
+                            .requestMatchers("/cms/**").hasAnyAuthority("USER","MANAGER", "ADMIN")
+                            .requestMatchers("/user-profile").hasAnyAuthority("CUSTOMER")
                             .anyRequest().permitAll();
                 })
                 .exceptionHandling(ex -> {

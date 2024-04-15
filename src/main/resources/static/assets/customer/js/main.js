@@ -12,8 +12,6 @@ let dataShop = [];
 let username = $('#authentication_username').val();
 let dataShopingCart = [];
 
-$('#email').val('lutan2212@gmail.com')
-$('#password').val('22122001Lu$')
 /**
  * hàm kiểm tra xem có đăng nhập không , nếu đăng nhập thì hỏi khách hàng
  * có cập nhật dữ liệu giỏ hàng từ local về server
@@ -324,6 +322,7 @@ function Toast(status, message) {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
+        showCloseButton: true,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {

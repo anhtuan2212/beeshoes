@@ -3,6 +3,7 @@ function Toast(status, message) {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
+        showCloseButton: true,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
@@ -268,6 +269,7 @@ $(document).on('ready', function () {
             datatable.columns(2).search(value).draw();
         }
     });
+
     function getArrIndex() {
         let arrIndexRow = [];
         $('.custom-control-input:checked').each(function () {
@@ -441,8 +443,8 @@ $(document).on('ready', function () {
             }
         }
         $("td.row-show-img[status-remove='true']").each(function (index, element) {
-                $(element).addClass('d-none');
-                console.log(element)
+            $(element).addClass('d-none');
+            console.log(element)
         });
         img.removeAttr('status-remove');
         for (let i = 0; i < arr.length; i++) {
@@ -472,6 +474,7 @@ $(document).on('ready', function () {
         var number = Number(text);
         return number;
     }
+
     function redirectToProductPage() {
         setTimeout(() => {
             window.location.href = "/cms/product";
@@ -552,12 +555,12 @@ $(document).on('ready', function () {
                         product_details[i].id = 0;
                     }
                     if (convertToNumber(product_details[i].giaGoc) < 0) {
-                        message = "Vui lòng nhập giá gốc của mã :"  + product_details[i].maSanPham;
+                        message = "Vui lòng nhập giá gốc của mã :" + product_details[i].maSanPham;
                         check = false;
                         break;
                     }
                     if (convertToNumber(product_details[i].giaBan) < 0) {
-                        message = "Vui lòng nhập giá bán của mã :"  + product_details[i].maSanPham;
+                        message = "Vui lòng nhập giá bán của mã :" + product_details[i].maSanPham;
                         check = false;
                         break;
                     }

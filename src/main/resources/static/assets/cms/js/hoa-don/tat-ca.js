@@ -4,6 +4,7 @@ $(document).on('ready', function () {
             toast: true,
             position: "top-end",
             showConfirmButton: false,
+            showCloseButton: true,
             timer: 3000,
             timerProgressBar: true,
             didOpen: (toast) => {

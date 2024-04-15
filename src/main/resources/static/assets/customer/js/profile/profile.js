@@ -277,7 +277,7 @@ $(document).ready(function () {
         let id_address = $(this).data('id');
         let element = $(this);
         $.ajax({
-            url: '/cms/khach-hang/set-default-address',
+            url: '/api/set-default-address',
             type: 'POST',
             data: {
                 idDiaChi: id_address,
@@ -358,7 +358,7 @@ $(document).ready(function () {
         let quanHuyen = $('#quanHuyen').find('option:selected').text();
         let tinhTP = $('#tinhTP').find('option:selected').text();
         $.ajax({
-            url: '/cms/khach-hang/update/update-diachi',
+            url: '/api/update/update-diachi',
             type: 'POST',
             data: {
                 id: id,
@@ -495,7 +495,6 @@ $(document).ready(function () {
                         id: id
                     },
                     success: function () {
-                        ToastSuccess('Lưu thành công.')
                         let current = $('#pro_email').text();
                         if (current == email) {
                             $('#avatar_preview').attr('src', avatar);
@@ -518,6 +517,7 @@ $(document).ready(function () {
                                     hideLoading()
                                 }
                             });
+                            ToastSuccess('Lưu thành công.');
                             let parts = birthDate.split('-');
                             if (parts.length === 3) {
                                 birthDate = parts[2] + '/' + parts[1] + '/' + parts[0];
@@ -546,7 +546,6 @@ $(document).ready(function () {
                         hideLoading()
                     }
                 })
-                hideLoading()
             }
         })
 
@@ -573,7 +572,7 @@ $(document).ready(function () {
 function checkDuplicate(email, phone, id) {
     return new Promise(function (resolve, reject) {
         $.ajax({
-            url: '/cms/khach-hang/check-duplicate',
+            url: '/api/check-duplicate',
             type: 'POST',
             data: {email: email, phoneNumber: phone, id: id},
             success: function (response) {
