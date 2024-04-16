@@ -148,7 +148,7 @@ function printTimeline(status, type, action) {
                             </div>
                         </div>`;
     li.innerHTML = html;
-    ul.prepend(li);
+    ul.append(li);
 }
 
 function printHistory(thoiGian, nguoiThucHien, hanhDong) {
@@ -931,26 +931,32 @@ $(document).on('ready', function () {
                         if (status == 'Hủy') {
                             type = 'danger';
                             typeOfColor = 'danger';
+                            $('#btn-edit-product').addClass('d-none');
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#printOrder').removeClass('d-none');
                         } else if (status == 'Chờ Xác Nhận') {
                             typeOfColor = 'danger';
+                            $('#btn-edit-product').removeClass('d-none');
                             $('#hoanTacFromDetail').hide();
                         } else if (status == 'Chuẩn Bị Hàng') {
                             typeOfColor = 'warning';
+                            $('#btn-edit-product').addClass('d-none');
                             $('#getAttrToHuyFromDetail').removeClass('d-none');
                             $('#hoanTacFromDetail').removeClass('d-none');
                             $('#printOrder').removeClass('d-none');
                         } else if (status == 'Chờ Giao') {
                             typeOfColor = 'danger';
+                            $('#btn-edit-product').addClass('d-none');
                             $('#getAttrToHuyFromDetail').addClass('d-none');
                             $('#hoanTacFromDetail').hide();
                             $('.fixInvoice').hide();
                         } else if (status == 'Đang Giao') {
                             typeOfColor = 'danger';
+                            $('#btn-edit-product').addClass('d-none');
                             $('#hoanTacFromDetail').hide();
                         } else if (status == 'Thành Công') {
+                            $('#btn-edit-product').addClass('d-none');
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#hoanTacFromDetail').hide();
@@ -998,6 +1004,7 @@ $(document).on('ready', function () {
                         let action = response.hanhDong;
                         $('#hoanTacFromDetail').hide();
                         $('#printOrder').hide();
+                        $('#btn-edit-product').removeClass('d-none');
                         printStatusHeader(type, status);
                         printTimeline(status, type, action);
                         printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);

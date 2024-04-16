@@ -28,7 +28,6 @@
 <body class="   footer-offset">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 <!-- ========== HEADER ========== -->
 <div th:replace="~{/cms/pages/_header.html}"></div>
@@ -2073,89 +2072,90 @@
     // end đang giao
   })
 
-
-  const socket = new SockJS('/notification'); // Thay đổi '/websocket-endpoint' thành endpoint của WebSocket trên server của bạn
-  const stompClient = Stomp.over(socket);
-
-  stompClient.connect({}, function(frame) {
-    console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/newInvoice', function(invoice) {
-      const newInvoice = JSON.parse(invoice.body);
-      updateDataTable(newInvoice);
-    });
-  });
-
-  function updateDataTable(hoaDon) {
-    const invoiceTable = document.getElementById('myBodyAll');
-    const newInvoiceRow = document.createElement('tr');
-    newInvoiceRow.innerHTML = `
-           <td data-ma-hoa-don=${hoaDon.maHoaDon}>
-                    <span>0</span>
-                </td>
-                <td><a href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">${hoaDon.maHoaDon}</a></td>
-                <td>
-                    <span>${hoaDon.tenNguoiNhan == null ? 'N/A' : hoaDon.tenNguoiNhan}</span>
-                </td>
-                <td>
-                    <span>${hoaDon.sdtNhan == null ? 'N/A' : hoaDon.sdtNhan}</span>
-                </td>
-                <td>
-                    <span>${hoaDon.thucThu.toLocaleString('en-US')}</span>
-                </td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <span class="text-dark">${hoaDon.loaiHoaDon ? 'Bán Tại Quầy' : 'Bán Giao Hàng'}</span>
-                    </div>
-                </td>
-                <td>
-                    <span class="${hoaDon.trangThai == 'Thành Công' ? 'badge badge-soft-success' :
-            (hoaDon.trangThai == 'Chờ Giao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}">${hoaDon.trangThai}
-                    </span>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-ghost-info dropdown-toggle" type="button" data-toggle="dropdown">Thao tác
-                            <span class="caret"></span></button>
-                            ${hoaDon.trangThai == 'Chờ Xác Nhận' ? `<ul class="text-center dropdown-menu">
-      <li>
-        <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
-           data-original-title="Xem Chi Tiết" href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">
-          <i class="tio-visible-outlined"></i></a>
-      </li>
-      <li>
-        <a data-toggle="tooltip"
-           data-original-title="Xác Nhận Đơn" class="btn btn-sm btn-outline-success xacNhanFromAction">
-          <i class="tio-checkmark-circle-outlined"></i></a>
-      </li>
-      <li>
-        <a data-toggle="tooltip"
-           data-original-title="Hủy Đơn" class="btn btn-sm btn-outline-danger huyFromAction">
-          <i class="tio-delete-outlined"></i></a>
-      </li>
-    </ul>` : (hoaDon.trangThai == 'Chuẩn Bị Hàng' ? `<ul class="text-center dropdown-menu">
-      <li>
-        <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
-           data-original-title="Xem Chi Tiết" href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">
-          <i class="tio-visible-outlined"></i></a>
-      </li>
-      <li>
-        <a data-toggle="tooltip"
-           data-original-title="Xác Nhận Đơn" class="btn btn-sm btn-outline-success xacNhanFromAction">
-          <i class="tio-checkmark-circle-outlined"></i></a>
-      </li></ul>` : `<ul class="text-center dropdown-menu">
-      <li>
-        <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
-           data-original-title="Xem Chi Tiết" href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">
-          <i class="tio-visible-outlined"></i></a>
-      </li></ul>`)}
-                    </div>
-                </td>
-        `;
-    invoiceTable.insertBefore(newInvoiceRow, invoiceTable.firstChild);
-  }
+  // const socket = new SockJS('/notification');
+  // const stompClient = Stomp.over(socket);
+  //
+  // stompClient.connect({}, function(frame) {
+  //   console.log('Connected: ' + frame);
+  //   stompClient.subscribe('/topic/newInvoice', function(invoice) {
+  //     const newInvoice = JSON.parse(invoice.body);
+  //     updateDataTable(newInvoice);
+  //   });
+  // });
+  //
+  // function updateDataTable(hoaDon) {
+  //   console.log(DataTable.page.info());
+  //   const invoiceTable = document.getElementById('myBodyAll');
+  //   const newInvoiceRow = document.createElement('tr');
+  //   newInvoiceRow.innerHTML = `
+  //          <td data-ma-hoa-don=${hoaDon.maHoaDon}>
+  //                   <span>0</span>
+  //               </td>
+  //               <td><a href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">${hoaDon.maHoaDon}</a></td>
+  //               <td>
+  //                   <span>${hoaDon.tenNguoiNhan == null ? 'N/A' : hoaDon.tenNguoiNhan}</span>
+  //               </td>
+  //               <td>
+  //                   <span>${hoaDon.sdtNhan == null ? 'N/A' : hoaDon.sdtNhan}</span>
+  //               </td>
+  //               <td>
+  //                   <span>${hoaDon.thucThu.toLocaleString('en-US')}</span>
+  //               </td>
+  //               <td>
+  //                   <div class="d-flex align-items-center">
+  //                       <span class="text-dark">${hoaDon.loaiHoaDon ? 'Bán Tại Quầy' : 'Bán Giao Hàng'}</span>
+  //                   </div>
+  //               </td>
+  //               <td>
+  //                   <span class="${hoaDon.trangThai == 'Thành Công' ? 'badge badge-soft-success' :
+  //           (hoaDon.trangThai == 'Chờ Giao' ? 'badge badge-soft-warning' : 'badge badge-soft-danger')}">${hoaDon.trangThai}
+  //                   </span>
+  //               </td>
+  //               <td>
+  //                   <div class="dropdown">
+  //                       <button class="btn btn-ghost-info dropdown-toggle" type="button" data-toggle="dropdown">Thao tác
+  //                           <span class="caret"></span></button>
+  //                           ${hoaDon.trangThai == 'Chờ Xác Nhận' ? `<ul class="text-center dropdown-menu">
+  //     <li>
+  //       <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+  //          data-original-title="Xem Chi Tiết" href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">
+  //         <i class="tio-visible-outlined"></i></a>
+  //     </li>
+  //     <li>
+  //       <a data-toggle="tooltip"
+  //          data-original-title="Xác Nhận Đơn" class="btn btn-sm btn-outline-success xacNhanFromAction">
+  //         <i class="tio-checkmark-circle-outlined"></i></a>
+  //     </li>
+  //     <li>
+  //       <a data-toggle="tooltip"
+  //          data-original-title="Hủy Đơn" class="btn btn-sm btn-outline-danger huyFromAction">
+  //         <i class="tio-delete-outlined"></i></a>
+  //     </li>
+  //   </ul>` : (hoaDon.trangThai == 'Chuẩn Bị Hàng' ? `<ul class="text-center dropdown-menu">
+  //     <li>
+  //       <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+  //          data-original-title="Xem Chi Tiết" href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">
+  //         <i class="tio-visible-outlined"></i></a>
+  //     </li>
+  //     <li>
+  //       <a data-toggle="tooltip"
+  //          data-original-title="Xác Nhận Đơn" class="btn btn-sm btn-outline-success xacNhanFromAction">
+  //         <i class="tio-checkmark-circle-outlined"></i></a>
+  //     </li></ul>` : `<ul class="text-center dropdown-menu">
+  //     <li>
+  //       <a class="btn btn-sm btn-outline-dark" data-toggle="tooltip"
+  //          data-original-title="Xem Chi Tiết" href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">
+  //         <i class="tio-visible-outlined"></i></a>
+  //     </li></ul>`)}
+  //                   </div>
+  //               </td>
+  //       `;
+  //   invoiceTable.insertBefore(newInvoiceRow, invoiceTable.firstChild);
+  // }
 </script>
+<script src="/assets/socket/socket-config.js"></script>
+<script src="/assets/cms/js/header/_header.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
-
 <!-- IE Support -->
 <div th:replace="~{/cms/pages/_IE-suport.html}"></div>
 </body>

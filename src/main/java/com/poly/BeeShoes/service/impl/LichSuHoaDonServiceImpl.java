@@ -24,4 +24,9 @@ public class LichSuHoaDonServiceImpl implements LichSuHoaDonService {
     public LichSuHoaDon save(LichSuHoaDon lichSuHoaDon) {
         return lichSuHoaDonRepository.save(lichSuHoaDon);
     }
+
+    @Override
+    public List<LichSuHoaDon> getAllLichSuHoaDonNotSort(Long id) {
+        return lichSuHoaDonRepository.findByHoaDon_Id(id);
+    }
 }

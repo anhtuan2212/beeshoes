@@ -9,4 +9,6 @@ public interface LichSuHoaDonService {
 
     LichSuHoaDon save(LichSuHoaDon lichSuHoaDon);
 
+    List<LichSuHoaDon> getAllLichSuHoaDonNotSort(Long id);
+
 }

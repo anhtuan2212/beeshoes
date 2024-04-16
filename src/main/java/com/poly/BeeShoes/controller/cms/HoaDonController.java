@@ -52,7 +52,7 @@ public class HoaDonController {
     ) {
         HoaDon hoaDon = hoaDonService.getHoaDonByMa(maHoaDon);
         List<LichSuHoaDon> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDonByIdHoaDon(hoaDon.getId());
-
+        List<LichSuHoaDon> lichSuHoaDonListNotSort = lichSuHoaDonService.getAllLichSuHoaDonNotSort(hoaDon.getId());
         List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(hoaDon.getId());
         if(hoaDon.getKhachHang() != null) {
             Long countHoaDonCuaKhachHang = hoaDonService.countHoaDonCuaKhachHang(hoaDon.getKhachHang().getId());
@@ -63,6 +63,7 @@ public class HoaDonController {
             tongTien = (hdct.getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
         }
         model.addAttribute("lichSuHoaDonList", lichSuHoaDonList);
+        model.addAttribute("lichSuHoaDonListNotSort", lichSuHoaDonListNotSort);
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);
         model.addAttribute("hoaDon", hoaDon);
         return "cms/pages/orders/order-details";

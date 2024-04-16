@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-md-12">
             <div style="display:inline-block;width:100%;overflow-x:auto;white-space:nowrap;">
-                <ul class="timeline timeline-horizontal" id="myTimeline" >
-                    <li class="timeline-item" th:each="lshd : ${lichSuHoaDonList}">
+                <ul class="timeline timeline-horizontal" id="myTimeline">
+                    <li class="timeline-item" th:each="lshd : ${lichSuHoaDonListNotSort}">
                         <div th:class="'timeline-badge ' + ${lshd.trangThaiSauUpdate == 'Hủy' ? 'danger' : 'success'}">
                             <i class="tio-checkmark-square-outlined"></i></div>
                         <div class="timeline-panel">

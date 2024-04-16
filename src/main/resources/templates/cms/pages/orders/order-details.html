@@ -105,7 +105,7 @@
                         data-toggle="modal" data-target="#staticBackdrop">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
-                <button th:class="'btn btn-sm btn-outline-primary ' + ${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng' ? 'd-none' : ''}"
+                <button th:if="${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng'}" th:class="'btn btn-sm btn-outline-primary ' + ${hoaDon.trangThai == 'Chờ Xác Nhận' || hoaDon.trangThai == 'Chuẩn Bị Hàng' ? 'd-none' : ''}"
                         id="hoanTacFromDetail">
                     <i class="tio-history"></i> Hoàn Tác
                 </button>

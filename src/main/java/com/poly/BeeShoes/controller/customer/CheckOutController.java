@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.*;
 
 @Controller
@@ -44,6 +45,7 @@ public class CheckOutController {
     private final MailUtility mailUtility;
     private final HinhThucThanhToanService hinhThucThanhToanService;
     private final LichSuHoaDonService lichSuHoaDonService;
+    private final NotificationService notificationService;
     private final SimpMessagingTemplate messagingTemplate;
 
     Gson gson = new Gson();
@@ -118,18 +120,7 @@ public class CheckOutController {
         model.addAttribute("invoiceCode", invoiceCode[0]);
         if (paymentStatus == 1) {
             User user = new User();
-            if (request.getUserPrincipal() != null) {
-                user = userService.getByUsername(request.getUserPrincipal().getName());
-                System.out.println(request.getUserPrincipal().getName());
-                GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
-                Long idHoaDon = hoaDonService.getHoaDonByMa(invoiceCode[0]).getId();
-                List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
-                if (gioHang != null) {
-                    hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
-                }
-            }
-
-            if (hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
+            if(hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
                 HoaDon hoaDon = (HoaDon) session.getAttribute(invoiceCode[0]);
                 Voucher voucher = hoaDon.getVoucher();
                 HoaDon savedHoaDon = hoaDonService.save(hoaDon);
@@ -197,7 +188,33 @@ public class CheckOutController {
                 session.removeAttribute("jsonArray");
                 session.removeAttribute(invoiceCode[0]);
 
+                if(request.getUserPrincipal() != null) {
+                    user = userService.getByUsername(request.getUserPrincipal().getName());
+                    System.out.println(request.getUserPrincipal().getName());
+                    GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
+                    Long idHoaDon = hoaDonService.getHoaDonByMa(savedHoaDon2.getMaHoaDon()).getId();
+                    List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
+                    if(gioHang != null) {
+                        hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
+                    }
+                }
+                Notification notification = new Notification();
+                notification.setCreatedBy("N/A");
+                notification.setCreatorAvatarUrl("/assets/cms/img/160x160/img1.jpg");
+                if(user != null && user.getNhanVien() != null) {
+                    notification.setCreatedBy(user.getNhanVien().getHoTen());
+                    notification.setCreatorAvatarUrl(user.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : user.getAvatar());
+                } else if (user != null && user.getKhachHang() != null) {
+                    notification.setCreatedBy(user.getKhachHang().getHoTen());
+                    notification.setCreatorAvatarUrl(user.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : user.getAvatar());
+                }
+                notification.setTitle("Đặt đơn hàng");
+                notification.setDescription("Vừa đặt đơn hàng " + savedHoaDon2.getMaHoaDon());
+                LocalTime now = LocalTime.now();
+                notification.setCreatedTime(now.getHour() + ":" + now.getMinute());
+                Notification savedNoti = notificationService.save(notification);
                 messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
+                messagingTemplate.convertAndSend("/topic/noti", notification);
                 mailUtility.sendMail(hoaDon.getEmailNguoiNhan(), "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
             }
             return "payment/vnpay/order-success";

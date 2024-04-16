@@ -621,10 +621,17 @@ $(document).ready(function () {
     })
 
     $('.selected_product').on('change', function () {
-        var totalAmount = $('#totalAmount').text().replace(/[,.]/g, '');
-        var shippingFee = $('#shippingFee').text().replace(/[,.]/g, '');
-        totalAmount = parseInt(totalAmount) - parseInt(shippingFee);
-        var customerAddress = $(this).closest('.customerAddress')
+        let totalAmount = parseInt($('#totalAmount').text().replace(/[,.]/g, ''));
+        let shippingFee = $('#shippingFee').text().replace(/[,.]/g, '');
+        console.log(totalAmount + '--' + shippingFee)
+        if(shippingFee === undefined || isNaN(shippingFee) || shippingFee == 'Không hỗ trợ giao') {
+            shippingFee = 0;
+        } else {
+            shippingFee = parseInt(shippingFee);
+        }
+        totalAmount = totalAmount - shippingFee;
+        console.log(totalAmount + '++' + shippingFee)
+        let customerAddress = $(this).closest('.customerAddress')
         houseNumber = customerAddress.find('.customerHouseNumber').text().replace(/[,.]/g, '');
         wardName = customerAddress.find('.customerWard').text().replace(/[,.]/g, '');
         districtName = customerAddress.find('.customerDistrict').text().replace(/[,.]/g, '');
@@ -699,16 +706,20 @@ $(document).ready(function () {
                     }
                 ),
                 success: function (response) {
+                    totalAmount = totalAmount - shippingFee;
                     orderCode = response.data.order_code;
-                    var shippingFee = response.data.total_fee;
+                    shippingFee = parseInt(response.data.total_fee);
+                    totalAmount = totalAmount + shippingFee;
                     $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-                    $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
+                    $('#totalAmount').text(parseFloat(totalAmount).toLocaleString('en-US'));
                     $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
                 },
                 error: function (error) {
                     console.error('Xảy ra lỗi: ', error)
                     ToastError(error.responseJSON.code_message_value);
+                    shippingFee = 0;
                     $('#shippingFee').text('Không hỗ trợ giao');
+                    $('#totalAmount').text(parseFloat(totalAmount).toLocaleString('en-US'));
                 }
             })
         }
