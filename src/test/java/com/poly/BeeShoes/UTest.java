@@ -4,6 +4,7 @@ import com.poly.BeeShoes.constant.TrangThaiHoaDon;
 import com.poly.BeeShoes.model.*;
 import com.poly.BeeShoes.repository.HoaDonRepository;
 import com.poly.BeeShoes.repository.NhanVienRepository;
+import com.poly.BeeShoes.repository.NotificationRepository;
 import com.poly.BeeShoes.repository.UserRepository;
 import com.poly.BeeShoes.utility.ConvertUtility;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ public class UTest {
 
     @Autowired
     private HoaDonRepository hoaDonRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Test
     public void invoice() throws ParseException {

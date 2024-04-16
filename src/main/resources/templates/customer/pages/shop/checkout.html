@@ -104,7 +104,7 @@
                                 <div class="checkout__input">
                                     <p>Tên người nhận<span>*</span></p>
                                     <input type="text" id="customerName" th:value="${userLogged != null ? userLogged.khachHang.hoTen : ''}"
-                                           placeholder="Ngô Trung Tuyến">
+                                           placeholder="Nhập vào họ tên">
                                     <span class="error-customerName text-danger"></span>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                                 <div class="checkout__input">
                                     <p>Số điện thoại<span>*</span></p>
                                     <input type="text" id="customerPhone" th:value="${userLogged != null ? userLogged.khachHang.sdt : ''}"
-                                           placeholder="035xxxxxxx">
+                                           placeholder="Nhập vào số điện thoại">
                                     <span class="error-customerPhone text-danger"></span>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                                 <div class="checkout__input">
                                     <p>Email<span>*</span></p>
                                     <input type="text" id="customerEmail" th:value="${userLogged != null ? userLogged.email : ''}"
-                                           placeholder="example@gmail.com">
+                                           placeholder="Nhập vào email">
                                     <span class="error-customerEmail text-danger"></span>
                                 </div>
                             </div>

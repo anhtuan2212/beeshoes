@@ -75,6 +75,10 @@ public class LoginRegisterController {
             securityContext.setAuthentication(authentication);
             session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+            User user = userService.getByUsername(authentication.getName());
+            if(user.getRole() != Role.CUSTOMER) {
+                return "redirect:/cms";
+            }
             return "redirect:/";
         } catch (AuthenticationException ex) {
             ex.printStackTrace();

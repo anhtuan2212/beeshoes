@@ -284,11 +284,13 @@ $(document).on('ready', function () {
         let id = $(this).find('option:selected').data('id');
         let dis = $('#quanHuyen');
         $('#phuongXa').html('')
+        $('#quanHuyen').html('');
         handleData(district_list.filter(district => district.ProvinceId === parseInt(id)), dis, 'Id', 'Name');
     });
 
     // Xử lý sự kiện khi thay đổi quận/huyện
     $('#quanHuyen').on('change', function () {
+        $('#phuongXa').html('');
         let id = $(this).find('option:selected').data('id');
         let war = $('#phuongXa');
         handleData(ward_list.filter(ward => ward.DistrictId === parseInt(id)), war, 'Id', 'Name');

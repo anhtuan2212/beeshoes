@@ -10,4 +10,6 @@ public interface LichSuHoaDonRepository extends JpaRepository<LichSuHoaDon, Long
 
     List<LichSuHoaDon> findByHoaDon_Id(Long id, Sort sort);
 
+    List<LichSuHoaDon> findByHoaDon_Id(Long id);
+
 }
