@@ -1,3 +1,22 @@
+$(document).ready(function () {
+    $(document).on('click', '.js-plus, .js-minus', function () {
+        var quantityInput = $(this).closest('.js-quantity-counter').find('.js-result');
+        var currentQuantity = parseInt(quantityInput.val(), 10);
+        if ($(this).hasClass('js-plus')) {
+            quantityInput.val(currentQuantity + 1);
+        } else if ($(this).hasClass('js-minus')) {
+            quantityInput.val(Math.max(currentQuantity - 1, 0));
+        }
+        quantityInput.change(); // Sử dụng .change() thay vì .trigger('change')
+    });
+
+    $(document).on('input', '.money-input-mask', function () {
+        $(this).mask('#.###.###.###đ', {reverse: true});
+    });
+    $(document).on('input', '.money-input-mask-num', function () {
+        $(this).mask('#.###.###.###', {reverse: true});
+    });
+});
 
 function Toast(status, message) {
     const Toast = Swal.mixin({
@@ -61,81 +80,6 @@ function setFormSendData(url, name, id) {
 }
 
 $(document).on('ready', function () {
-    //generate version product
-    /*
-    $('#mauSac, #kichCo').on('change', function () {
-        let mausac = $('#mauSac').val();
-        let giaban = $('#giaBan').val();
-        let kichco = $('#kichCo').val();
-        let soLuong = $('#soLuong').val();
-        let html = '';
-        mausac.forEach((mau, index1) => {
-            kichco.forEach((co, index2) => {
-                let size = kichco.length;
-                let img = `<th rowspan="${size}">
-                                    <div class="spinner-border text-primary d-none" role="status">
-                                      <span class="sr-only">Loading...</span>
-                                    </div>
-                                    <label for="fileimgselected${index1 + '' + index2}">
-                                         <img class="avatar" src="/assets/cms/img/400x400/img2.jpg" alt="Image Description">
-                                    </label>
-                                         <i class="tio-delete btn-del-img" ></i>
-                                    <input class="formAddImg form-control"  type="file" name="img" id="fileimgselected${index1 + '' + index2}" hidden="">
-                                  </th>`;
-                html += `
-                <tr class="row-data-detail">
-                    <td class="table-column-pr-0">
-                        <div class="custom-control custom-checkbox">
-                                <input type="text" class="form-control" name="id" value="0" hidden="">
-                                <input type="checkbox" class="custom-control-input"
-                                       id="productVariationsCheck${index1 + '' + index2}">
-                                <label class="custom-control-label" for="productVariationsCheck${index1 + '' + index2}"></label>
-                            </div>
-                        </td>
-                        ${index2 == 0 ? img : ''}
-                        <th class="table-column-pl-0 width-100">
-                            <input type="text" class="form-control" name="kichCo" value="${co}">
-                        </th>
-                        <th class="table-column-pl-0 width-100">
-                            <label class="form-control-label" style="background-color: ${mau}"></label>
-                            <input type="text" class="form-control" name="mauSac" value="${mau}" hidden="">
-                        </th>
-                        <th class="table-column-pl-0">
-                             <input type="text" class="form-control" name="giaBan" value="${giaban}">
-                        </th>
-                        <th class="table-column-pl-0">
-                            <!-- Quantity Counter -->
-                            <div class="js-quantity-counter input-group-quantity-counter">
-                                <input type="number" name="soLuong"
-                                       class="js-result form-control input-group-quantity-counter-control"
-                                       value="${soLuong}">
-
-                                <div class="input-group-quantity-counter-toggle">
-                                    <a class="js-minus input-group-quantity-counter-btn"
-                                       href="javascript:;">
-                                        <i class="tio-remove"></i>
-                                    </a>
-                                    <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
-                                        <i class="tio-add"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- End Quantity Counter -->
-                        </th>
-                        <th class="table-column-pl-0">
-                            <div class="btn-group" role="group" aria-label="Edit group">
-                               <a class="btn btn-white" href="#">
-                                    <i class="tio-delete-outlined"></i>
-                                </a>
-                            </div>
-                        </th>
-                    </tr>
-                `;
-            })
-        })
-        $('#addVariantsContainer').empty().append(html);
-    });
-*/
 
     $('#btn-add-new-product').on('click', () => {
         let ten = $('#product-name-modal').val();
@@ -210,7 +154,6 @@ $(document).on('ready', function () {
         changeNameToColor();
 
     });
-
     // thêm màu sắc
     $('#btn-add-new-color').on('click', () => {
         let coloCode = $('#colorChoice').val();
