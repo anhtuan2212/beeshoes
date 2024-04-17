@@ -163,7 +163,7 @@ $(document).on('ready', function () {
         language: {
             zeroRecords: '<div class="text-center p-4">' +
                 '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
-                '<p class="mb-0">No data to show</p>' +
+                '<p class="mb-0">Không có dữ liệu</p>' +
                 '</div>'
         },
         columnDefs: [{
@@ -307,7 +307,7 @@ $(document).on('ready', function () {
                 let trangthai = data.trangThai == true ? ' <span class="legend-indicator bg-success"></span>Hiển Thị' : ' <span class="legend-indicator bg-danger"></span> Không Hiển Thị';
                 if (data != null) {
                     var rowData = [
-                        `<div class="custom-control custom-checkbox">
+                        `<div class="custom-control custom-checkbox d-none">
                                 <input type="checkbox" class="custom-control-input" id="usersDataCheck${data.id}">
                                 <label class="custom-control-label" for="usersDataCheck${data.id}"></label>
                         </div>`,

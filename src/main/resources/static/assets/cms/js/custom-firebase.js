@@ -22,6 +22,7 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 let fileInStorages = [];
 let fileImgCurent = [];
+let trDataInDatatable = [];
 
 function randomString(n) {
     var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -72,6 +73,23 @@ async function ClearMultipleImages(imagePaths) {
     }
 }
 
+function Confirm(title, message, txt_cancel, txt_confirm) {
+    return new Promise((resolve, reject) => {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: txt_cancel,
+            confirmButtonText: txt_confirm,
+        }).then((result) => {
+            resolve(result.isConfirmed);
+        });
+    })
+}
+
 window.addEventListener('beforeunload', function (event) {
     if (fileInStorages.length > 0) {
         ClearMultipleImages(fileInStorages).then(r => {
@@ -113,7 +131,7 @@ $(document).ready(function () {
             }
         },
         language: {
-            zeroRecords: '<div class="text-center p-4">' + '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' + '<p class="mb-0">No data to show</p>' + '</div>'
+            zeroRecords: '<div class="text-center p-4">' + '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' + '<p class="mb-0">Không có dữ liệu</p>' + '</div>'
         },
         createdRow: function (row, data, dataIndex) {
             let customHTML = `
@@ -228,6 +246,7 @@ $(document).ready(function () {
         }
     });
     setIMG();
+
     function setIMG() {
         let mauSac = null;
         let arr = [];
@@ -256,6 +275,7 @@ $(document).ready(function () {
             $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length).removeClass('d-none');
         }
     }
+
     function resetRowData() {
         let data = datatable.data();
         datatable.clear().draw();
@@ -283,16 +303,11 @@ $(document).ready(function () {
         }, 1);
     });
 
-    function checkColor(mau) {
-        return datatable.rows().data().toArray().some(function (item) {
-            return item.maMauSac === mau;
+    function checkColorAndSize(mau, co) {
+        let foundItem = trDataInDatatable.find(function (item) {
+            return item.maMauSac === mau && item.kichCo === co;
         });
-    }
-
-    function checkSize(co) {
-        return datatable.rows().data().toArray().some(function (item) {
-            return item.kichCo === co;
-        });
+        return foundItem !== undefined ? foundItem : null;
     }
 
     function getImgByColor(color) {
@@ -314,11 +329,13 @@ $(document).ready(function () {
     $('#mauSac, #kichCo').on('change', function () {
         let mausac = $('#mauSac').val();
         let kichco = $('#kichCo').val();
-        let arrData = [];
-        mausac.forEach((mau, index1) => {
-            kichco.forEach((co, index2) => {
-                if (!checkColor(mau) || !checkSize(co)) {
-                    let newData = {
+        let newData = [];
+        trDataInDatatable = datatable.data().toArray();
+        mausac.forEach((mau) => {
+            kichco.forEach((co) => {
+                let data = checkColorAndSize(mau, co);
+                if (data === null) {
+                    let tr = {
                         id: randomString(10),
                         img: getImgByColor(mau),
                         kichCo: co,
@@ -328,21 +345,42 @@ $(document).ready(function () {
                         giaBan: "",
                         soLuong: "",
                     };
-                    arrData.push(newData);
+                    newData.push(tr);
+                } else {
+                    newData.push(data);
                 }
             })
         })
-        datatable.rows.add(arrData);
+        datatable.clear();
+        datatable.rows.add(newData);
+        trDataInDatatable = datatable.data().toArray();
         datatable.order([3, 'asc']).draw();
-        datatable.draw();
-        resetRowData()
-        console.log("draw in add")
+        updateShowNum();
+        resetRowData();
+    });
+    $(document).on('click', '#wraperKichCo .select2-selection__choice__remove', function (e) {
+        e.preventDefault();
+        console.log(e)
+        let removeElement = $(this);
+        Confirm('Bạn chắc chứ ?', 'Bạn đang xóa một phiên bản sản phẩm.', 'Hủy', 'Xác Nhận').then((check) => {
+            if (check) {
+                removeElement.trigger('click');
+            }
+        });
     });
 
     function containsAlphabetic(str) {
         return /[a-zA-Z]/.test(str);
     }
 
+    function updateShowNum() {
+        let pageInfo = datatable.page.info();
+        let displayedRows = pageInfo.end - pageInfo.start;
+        $('#select2-datatableEntries-container').attr('title', displayedRows).find('span').text(displayedRows);
+        let select = $('#datatableEntries');
+        select.find('option:selected').text(displayedRows).attr('value', displayedRows);
+        // select.trigger('change');
+    }
 
     $(document).on('click', '.remove-item', async function () {
         Swal.fire({
@@ -356,69 +394,78 @@ $(document).ready(function () {
             confirmButtonText: "Xác Nhận"
         }).then((result) => {
             if (result.isConfirmed) {
-                let id = $(this).data('id');
-                let dtColor = $(this).data('color-code-remove');
-                let dtSize = $(this).data('size-remove');
-                console.log(this)
-                let mau = $(this).data('color-code-remove');
+                let element = $(this)
+                let id = element.data('id');
+                let dtColor = element.data('color-code-remove');
+                let dtSize = element.data('size-remove');
+                let mau = element.data('color-code-remove');
                 let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
-                if (size > 1) {
-                    let num = $(this).closest('tr').find('th.row-show-img').length;
-                    if (num === 1) {
-                        let th = $(this).closest('tr').find('th.row-show-img');
-                        let rowspan = th.attr('rowspan')
-                        let arrElement = $('.id-version-shoe[data-color-code-id=' + mau + ']');
-                        th.attr('rowspan', Number(rowspan) - 1);
-                        arrElement[1].after(th[0]);
-                        let rowIndex = datatable.row($(this).closest('tr')).index();
-                        datatable.row(rowIndex).remove().draw();
-                        $(this).closest('tr').remove();
-                    } else {
-                        let th = $('th.row-show-img[data-color=' + mau + ']');
-                        console.log(th)
-                        let rowspan = th.attr('rowspan')
-                        th.attr('rowspan', Number(rowspan) - 1);
-                        let rowIndex = datatable.row($(this).closest('tr')).index();
-                        datatable.row(rowIndex).remove().draw();
-                        $(this).closest('tr').remove();
+                DeleteCTSP(id, dtColor, dtSize).then((check) => {
+                    if (check) {
+                        if (size > 1) {
+                            let num = element.closest('tr').find('th.row-show-img').length;
+                            if (num === 1) {
+                                let th = element.closest('tr').find('th.row-show-img');
+                                let rowspan = th.attr('rowspan')
+                                let arrElement = $('.id-version-shoe[data-color-code-id=' + mau + ']');
+                                th.attr('rowspan', Number(rowspan) - 1);
+                                arrElement[1].after(th[0]);
+                                let rowIndex = datatable.row(element.closest('tr')).index();
+                                datatable.row(rowIndex).remove().draw();
+                                element.closest('tr').remove();
+                            } else {
+                                let th = $('th.row-show-img[data-color=' + mau + ']');
+                                let rowspan = th.attr('rowspan')
+                                th.attr('rowspan', Number(rowspan) - 1);
+                                let rowIndex = datatable.row(element.closest('tr')).index();
+                                datatable.row(rowIndex).remove().draw();
+                                element.closest('tr').remove();
+                            }
+                        } else {
+                            let rowIndex = datatable.row(element.closest('tr')).index();
+                            datatable.row(rowIndex).remove().draw();
+                            element.closest('tr').remove();
+                        }
                     }
+                })
 
-                } else {
-                    let rowIndex = datatable.row($(this).closest('tr')).index();
-                    datatable.row(rowIndex).remove().draw();
-                    $(this).closest('tr').remove();
-                }
-                DeleteCTSP(id, dtColor, dtSize)
                 resetRowData()
             }
         });
     });
 
     function DeleteCTSP(id, color, size) {
-        let id_sp = $('#sanPham').val();
-        $.ajax({
-            url: "/api/xoa-chi-tiet-san-pham",
-            type: "DELETE",
-            data: {
-                sanPham: id_sp,
-                id: id,
-                color: color,
-                size: size
-            },
-            success: function () {
-                ToastSuccess("Xóa thành công.")
-            }, error: function (e) {
-                switch (e.getResponseHeader('status')) {
-                    case "IdNull":
-                        ToastError("ID không được trống.")
-                        break;
-                    case "NotExits":
-                        ToastError("CTSP không tồn tại.")
-                        break;
-                    default:
-                        ToastError("Lỗi !")
+        return new Promise((resolve, reject) => {
+            let id_sp = $('#sanPham').val();
+            $.ajax({
+                url: "/api/xoa-chi-tiet-san-pham",
+                type: "DELETE",
+                data: {
+                    sanPham: id_sp,
+                    id: id,
+                    color: color,
+                    size: size
+                },
+                success: function () {
+                    ToastSuccess("Xóa thành công.")
+                    resolve(true)
+                }, error: function (e) {
+                    switch (e.getResponseHeader('status')) {
+                        case "IdNull":
+                            ToastError("ID không được trống.")
+                            break;
+                        case "NotExits":
+                            ToastError("CTSP không tồn tại.")
+                            break;
+                        case "constraint":
+                            ToastError("Không thể xóa phiên bản đã phát sinh hóa đơn.")
+                            break;
+                        default:
+                            ToastError("Lỗi !")
+                    }
+                    resolve(false);
                 }
-            }
+            })
         })
     }
 
@@ -539,7 +586,7 @@ $(document).ready(function () {
                 }).get();
                 let product_details = datatable.rows().data().toArray();
 
-                if (sanPham==='#') {
+                if (sanPham === '#') {
                     ToastError("Vui lòng chọn Sản Phẩm !")
                     $('#sanPham').focus();
                     return;
@@ -549,32 +596,32 @@ $(document).ready(function () {
                     $('#sanPham_input').focus();
                     return;
                 }
-                if (theLoai==='#') {
+                if (theLoai === '#') {
                     ToastError("Vui lòng chọn Thể Loại !")
                     $('#theLoai').focus();
                     return;
                 }
-                if (thuongHieu==='#') {
+                if (thuongHieu === '#') {
                     ToastError("Vui lòng chọn Thương Hiệu !")
                     $('#thuongHieu').focus();
                     return;
                 }
-                if (chatLieu==='#') {
+                if (chatLieu === '#') {
                     ToastError("Vui lòng chọn Chất Liệu !")
                     $('#chatLieu').focus();
                     return;
                 }
-                if (deGiay==='#') {
+                if (deGiay === '#') {
                     ToastError("Vui lòng chọn Đế Giày !")
                     $('#deGiay').focus();
                     return;
                 }
-                if (coGiay==='#') {
+                if (coGiay === '#') {
                     ToastError("Vui lòng chọn Cổ Giày !")
                     $('#coGiay').focus();
                     return;
                 }
-                if (muiGiay==='#') {
+                if (muiGiay === '#') {
                     ToastError("Vui lòng nhập Mũi Giày !")
                     $('#muiGiay').focus();
                     return;

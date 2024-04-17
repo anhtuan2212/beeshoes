@@ -303,7 +303,7 @@
                                             </label>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="mr-2">Giá Nhập</span>
+                                            <span class="mr-2">Giá Bán</span>
                                             <label class="toggle-switch toggle-switch-sm" for="toggleColumn_price">
                                                 <input type="checkbox" class="toggle-switch-input"
                                                        id="toggleColumn_price" checked="">
@@ -370,7 +370,7 @@
                    }' style="width: 100%">
                     <thead class="thead-light">
                     <tr>
-                        <th scope="col" class="table-column-pr-0">
+                        <th scope="col" class="table-column-pr-0 d-none">
                             <div class="custom-control custom-checkbox">
                                 <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
                                 <label class="custom-control-label" for="datatableCheckAll"></label>
@@ -391,7 +391,7 @@
                     <tbody id="dataInTable">
                     <tr th:each="sp,iter:${lstsanpham}"
                         th:attr="data-brand=${sp.getThuongHieu()== null ? 'N/A':sp.getThuongHieu().getTen()}">
-                        <td class="table-column-pr-0">
+                        <td class="table-column-pr-0 d-none">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
                                        th:id="'productsCheck' + ${iter.index}" th:attr="data-id-product=${sp.getId()}">
@@ -456,7 +456,7 @@
                 <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
                     <div class="col-sm mb-2 mb-sm-0">
                         <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                            <span class="mr-2">Showing:</span>
+                            <span class="mr-2">Hiển Thị:</span>
 
                             <!-- Select -->
                             <select id="datatableEntries" class="js-select2-custom" data-hs-select2-options='{
@@ -474,7 +474,7 @@
                             </select>
                             <!-- End Select -->
 
-                            <span class="text-secondary mr-2">of</span>
+                            <span class="text-secondary mr-2">/</span>
 
                             <!-- Pagination Quantity -->
                             <span id="datatableWithPaginationInfoTotalQty"></span>

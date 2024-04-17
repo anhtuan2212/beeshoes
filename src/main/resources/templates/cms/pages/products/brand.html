@@ -193,7 +193,7 @@
                     <thead class="thead-light">
                     <tr>
                         <th class="table-column-pr-0">
-                            <div class="custom-control custom-checkbox">
+                            <div class="custom-control custom-checkbox d-none">
                                 <input id="datatableCheckAll" type="checkbox" class="custom-control-input">
                                 <label class="custom-control-label" for="datatableCheckAll"></label>
                             </div>
@@ -210,7 +210,7 @@
                     <tbody id="dataInTable">
                     <tr th:each="tl,iter:${lstthuonghieu}" th:id="'shoes'+${tl.getId()}">
                         <td class="table-column-pr-0">
-                            <div class="custom-control custom-checkbox">
+                            <div class="custom-control custom-checkbox d-none">
                                 <input type="checkbox" class="custom-control-input"
                                        th:id="'usersDataCheck2'+${iter.index}">
                                 <label class="custom-control-label" th:for="'usersDataCheck2'+${iter.index}"></label>
@@ -268,7 +268,7 @@
                 <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
                     <div class="col-sm mb-2 mb-sm-0">
                         <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                            <span class="mr-2">Showing:</span>
+                            <span class="mr-2">Hiển Thị:</span>
 
                             <!-- Select -->
                             <select id="datatableEntries" class="js-select2-custom" data-hs-select2-options='{
@@ -285,7 +285,7 @@
                             </select>
                             <!-- End Select -->
 
-                            <span class="text-secondary mr-2">of</span>
+                            <span class="text-secondary mr-2">/</span>
 
                             <!-- Pagination Quantity -->
                             <span id="datatableWithPaginationInfoTotalQty"></span>

@@ -31,6 +31,11 @@ public class HoaDonChiTietServiceImpl implements HoaDonChiTietService {
     }
 
     @Override
+    public HoaDonChiTiet getByCTSP(ChiTietSanPham ctsp) {
+        return hoaDonChiTietRepository.findFirstByChiTietSanPham(ctsp);
+    }
+
+    @Override
     public HoaDonChiTiet getById(Long id) {
         return hoaDonChiTietRepository.findById(id).orElse(null);
     }

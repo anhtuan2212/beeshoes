@@ -1,4 +1,4 @@
- function printHtmlToCart(product, quantity, totalMoney) {
+function printHtmlToCart(product, quantity, totalMoney) {
     console.log(product)
     let element = $('#list_product_items_cart').find(`div.cart_product_item[data-id-product="${product.id}"]`);
     if (element.length === 1) {
@@ -31,6 +31,10 @@
     $('#total-money-cart').text(totalMoney);
 }
 
+function removeNonNumericCharacters(str) {
+    return str.toString().replace(/\D/g, '');
+}
+
 $(document).ready(function () {
     let data_product_details = [];
 
@@ -49,7 +53,7 @@ $(document).ready(function () {
                     element.closest('label.label_select_color').removeClass('hidden');
                 }
             })
-            let ele_size = parent.find('.product__details__option__color label.activeSelected"');
+            let ele_size = parent.find('.product__details__option__color label.activeSelected');
             if (ele_size.length > 0 && ele_size.hasClass('hidden')) {
                 ele_size.removeClass('activeSelected');
                 ele_size.find('input').prop('checked', false);
@@ -171,7 +175,13 @@ $(document).ready(function () {
             let product = data_product_details[i];
             if (product.size == kichThuoc && product.color_code == color) {
                 console.log(product);
-                $('#show-price').html(`${product.gia_ban}đ <span>${product.gia_goc}đ</span>`)
+                let giaBan = removeNonNumericCharacters(product.gia_ban)
+                let giaGoc = removeNonNumericCharacters(product.gia_goc)
+                if (Number(giaBan) >= Number(giaGoc)) {
+                    $('#show-price').html(`${product.gia_ban}đ`)
+                } else {
+                    $('#show-price').html(`${product.gia_ban}đ <span>${product.gia_goc}đ</span>`)
+                }
                 $('#product-sku').html(`<span>SKU:</span> ${product.detail_code}`);
 
                 $('#total-num-product').html(`Số lượng mẫu : ${Number(product.so_luong_ton) === 0 ? 'TẠM HẾT HÀNG' : product.so_luong_ton}`);

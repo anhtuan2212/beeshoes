@@ -154,7 +154,7 @@ $(document).on('ready', function () {
         language: {
             zeroRecords: '<div class="text-center p-4">' +
                 '<img class="mb-3" src="/assets/cms/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
-                '<p class="mb-0">No data to show</p>' +
+                '<p class="mb-0">Không có dữ liệu</p>' +
                 '</div>'
         },
         createdRow: function (row, data, dataIndex) {

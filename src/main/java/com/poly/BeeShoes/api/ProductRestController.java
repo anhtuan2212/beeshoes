@@ -31,6 +31,7 @@ public class ProductRestController {
     private final MuiGiayService muiGiayService;
     private final CoGiayService coGiayService;
     private final SanPhamService sanPhamService;
+    private final HoaDonChiTietService hoaDonChiTietService;
     private final ChiTietSanPhamService chiTietSanPhamService;
     private final TagsService tagsService;
     Gson gs = new Gson();
@@ -192,7 +193,7 @@ public class ProductRestController {
                                               @RequestParam("color") String color,
                                               @RequestParam("size") String size) {
         if (id.isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "IdNull").build();
         }
         ChiTietSanPham chiTietSanPham = null;
         if (!LibService.containsAlphabetic(id)) {
@@ -211,11 +212,15 @@ public class ProductRestController {
             chiTietSanPham.getSanPham().setTrangThai(false);
             sanPhamService.save(chiTietSanPham.getSanPham());
         }
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietService.getByCTSP(chiTietSanPham);
+        if (hoaDonChiTiet != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "constraint").build();
+        }
         boolean st = chiTietSanPhamService.delete(chiTietSanPham.getId());
         if (st) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotExits").body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("status", "NotExits").build();
         }
     }
 
@@ -300,9 +305,9 @@ public class ProductRestController {
             return ResponseEntity.notFound().build();
         }
         Map<String, Integer> res = new HashMap<>();
-        res.put("id",ctsp.getId().intValue());
-        res.put("giaBan",ctsp.getGiaBan().intValue());
-        res.put("soLuong",ctsp.getSoLuongTon());
+        res.put("id", ctsp.getId().intValue());
+        res.put("giaBan", ctsp.getGiaBan().intValue());
+        res.put("soLuong", ctsp.getSoLuongTon());
         return ResponseEntity.ok().body(res);
     }
 }
