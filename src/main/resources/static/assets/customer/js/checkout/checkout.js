@@ -340,7 +340,6 @@ $(document).on('click', '#btn-addAddress', function () {
                                                     <label class="txt_address customerProvince">${newProvinceText}</label>
                                                 </div>
                                                 <div>
-                                                    <span class="address_default">Mặc Định</span>
                                                 </div>
                                             </div>
                                             <div class="btn-action-address">
@@ -348,7 +347,6 @@ $(document).on('click', '#btn-addAddress', function () {
                                                     <a class="mr-2" href="javascript:;">Cập Nhật</a>
                                                     <a href="javascript:;">Xóa</a>
                                                 </div>
-                                                <button type="button" class="info-btn disabled">Đặt Mặc Định</button>
                                             </div>
                                         </div>
 

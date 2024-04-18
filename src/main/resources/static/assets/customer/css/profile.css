@@ -25,6 +25,17 @@
     display: inline-block;
 }
 
+a.btn-link-address {
+    background: none !important;;
+    border: 0 !important;;
+    color: #05a !important;
+    outline: none !important;;
+    -webkit-text-decoration: underline !important;;
+    text-decoration: underline !important;;
+    text-transform: capitalize !important;;
+    cursor: pointer;
+}
+
 .info-btn:hover {
     border: 1px solid #000000;
     color: #000;

@@ -539,10 +539,11 @@ $('#btn-checkout-header').on('click', function () {
             name: 'listData',
             value: jsonData
         }).appendTo(form);
+        let ma = typeof SelectedVoucher !== 'undefined' ? SelectedVoucher.ma : '';
         $('<input>').attr({
             type: 'hidden',
             name: 'maGiamGia',
-            value: SelectedVoucher === null ? '' : SelectedVoucher.ma
+            value: ma,
         }).appendTo(form);
         form.appendTo('body');
         form.submit();

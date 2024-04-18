@@ -18,6 +18,18 @@ function PrintBillOder(data) {
     $('#da_thanh_toan_print').text(addCommasToNumber(data.daThanhToan) + 'đ');
     $('#shipping_fee_print').text(addCommasToNumber(data.phiShip) + 'đ');
     $('#discount_money_print').text(addCommasToNumber(data.giamGia) + 'đ');
+    const date = new Date(data.ngayTao);
+    const options = {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    };
+    const formattedDate = date.toLocaleString('en-US', options);
+    $('#createdDate').text(formattedDate);
+    $('#typePayment').text(data.hinhThucThanhToan);
     $('#thuc_thu_print').text(addCommasToNumber(data.thucthu) + 'đ');
     if (data.type === 'CP') {
         let adress = extracAddress(data.diaChi)

@@ -711,12 +711,8 @@ $(document).on('ready', function () {
         $('#preview-img').attr('src', '/assets/customer/img/icon/user.png');
     })
     $('#select_product').on('show.bs.modal', function () {
-        let mauSac = $('#mauSac');
-        let kichCo = $('#kichCo');
         let element = $('#tenSanPham');
-        element.val('#');
-        kichCo.html('<option value="#" selected>Chọn Cỡ</option>');
-        mauSac.html('<option value="#" selected>Chọn Màu</option>')
+        element.val('#').trigger('change');
         $('#soLuong').val(1);
 
     });

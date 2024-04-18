@@ -112,8 +112,10 @@ public class DashboardController {
             total_Today += hd.getThucThu().intValue();
             if (hd.isLoaiHoaDon()) {
                 total_store_today += hd.getThucThu().intValue();
+                quantity_store++;
             } else {
                 total_online_today += hd.getThucThu().intValue();
+                quantity_online++;
             }
             if (hd.getVoucher() != null) {
                 quantity_numoder_discount++;
@@ -141,7 +143,7 @@ public class DashboardController {
             }
             Object[] item = discount.get(i);
             BigDecimal money = (BigDecimal) item[1];
-            System.out.println("Today :"+money);
+            System.out.println("Today :" + money);
             total_discount += money.intValue();
             Labels.append(item[0]);
             Values_today.append(money.intValue() / 1000);
@@ -153,7 +155,7 @@ public class DashboardController {
             }
             Object[] item = discount_yesterday.get(i);
             BigDecimal money = (BigDecimal) item[1];
-            System.out.println("Yesterday :"+money);
+            System.out.println("Yesterday :" + money);
             total_yester += money.intValue();
             Values_yesterday.append(money.intValue() / 1000);
         }
