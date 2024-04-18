@@ -637,8 +637,16 @@ $(document).on('ready', function () {
 
 
     $('#js-option-revenue').on('apply.daterangepicker', function (ev, picker) {
-        let startDate = picker.startDate.format('DD-MM-YYYY');
-        let endDate = picker.endDate.format('DD-MM-YYYY');
+        const startDate = picker.startDate.format('DD-MM-YYYY');
+        const endDate = picker.endDate.format('DD-MM-YYYY');
+
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const yyyy = today.getFullYear();
+        const todayFormatted = dd + '-' + mm + '-' + yyyy;
+        const isToday = startDate === todayFormatted;
+
         $.ajax({
             url: '/api/get-revenue-option',
             type: 'GET',
@@ -654,6 +662,13 @@ $(document).on('ready', function () {
                 console.log(error)
             }
         })
+        if (isToday) {
+            $('#text-revenue-today').text('Hôm Nay');
+            $('#text-revenue-yesterday').text('Hôm Qua');
+        } else {
+            $('#text-revenue-today').text('');
+            $('#text-revenue-yesterday').text('');
+        }
     });
     $('#js-daterangepicker-predefined').on('apply.daterangepicker', function (ev, picker) {
         let startDate = picker.startDate.format('DD-MM-YYYY');
@@ -789,7 +804,7 @@ $(document).on('ready', function () {
                             values_today_online.push(data_online[key]);
                         }
                     }
-                    let data_store = response.online_data;
+                    let data_store = response.store_data;
                     let values_today_store = [];
                     let values_yesterday_store = [];
                     for (let key in data_store) {
