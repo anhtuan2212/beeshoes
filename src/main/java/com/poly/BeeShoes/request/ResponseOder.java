@@ -12,6 +12,7 @@ public class ResponseOder {
     List<ProductInResponse> sanPham;
     String maHoaDon;
     String tenNguoiNhan;
+    String hinhThucThanhToan;
     String type;
     String sDT;
     String diaChi;

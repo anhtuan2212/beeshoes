@@ -226,7 +226,10 @@
                                 </div>
                             </div>
                         </div>
-                        <h5 class="title_card w-100 border-bottom pb-1 mt-4">Địa Chỉ Giao Hàng</h5>
+                        <div class="border-bottom d-flex justify-content-between mt-4">
+                            <h5 class="font-weight-bold pb-1">Địa Chỉ Giao Hàng</h5>
+                            <a class="ml-2 btn-link-address">Thêm</a>
+                        </div>
                         <div class="wrapper_address row m-0 mt-3">
                             <div class="item_address mb-1 col-12 col-xl-6 p-0 pr-1"
                                  th:each="diachi:${user.getKhachHang().getDiaChi()}">
@@ -296,7 +299,8 @@
                             </div>
                         </div>
                         <div class="w-100" id="show-all-oder">
-                            <div id="show-no-data-oder" th:class="'w-100 mt-5 '+${#lists.size(lsthoadon)==0?'':'hidden'}">
+                            <div id="show-no-data-oder"
+                                 th:class="'w-100 mt-5 '+${#lists.size(lsthoadon)==0?'':'hidden'}">
                                 <h4 class="text-center">Không có dữ liệu.</h4>
                             </div>
                             <div class="card w-100 mb-3 oder_wrapper" th:each="hoadon,iter:${lsthoadon}">
@@ -309,7 +313,7 @@
                                     <div class="status">
                                         <label th:id="'trangthai_'+${hoadon.getId()}"
                                                th:attr="data-status=${hoadon.getTrangThai()}"
-                                        th:text="${hoadon.getTrangThai()}">
+                                               th:text="${hoadon.getTrangThai()}">
                                         </label>
                                     </div>
                                 </div>
@@ -357,7 +361,7 @@
                                         </div>
                                         <div class="card-btn-group">
                                             <button th:if="${hoadon.getTrangThai() == 'Hủy' or hoadon.getTrangThai() == 'Thành Công'}"
-                                                    class="primary-btn" type="button">Mua Lại
+                                                    class="primary-btn btn-repurchase" type="button">Mua Lại
                                             </button>
                                             <a th:href="'/oder-tracking?oder='+${hoadon.getMaHoaDon()}"
                                                class="info-btn">Xem
@@ -385,7 +389,8 @@
                                         <option value="%">Phần Trăm</option>
                                         <option value="$">Tiền Mặt</option>
                                     </select>
-                                    <input id="input_search_voucher" class="search_input" type="text" placeholder="Tìm kiếm mã giảm giá.">
+                                    <input id="input_search_voucher" class="search_input" type="text"
+                                           placeholder="Tìm kiếm mã giảm giá.">
                                 </div>
                             </div>
                             <div class="list_voucher">
@@ -410,9 +415,11 @@
                                             </div>
                                             <div class="col-3 p-2 row m-0 card__discount position-relative">
                                                 <label class="col-4">Mã Giảm Giá</label>
-                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}" class="col-6 voucher_type tienmat"
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '$'}"
+                                                    class="col-6 voucher_type tienmat"
                                                     th:text="${#strings.substring(voucher.getGiaTriTienMat().intValue(), 0, #strings.length(voucher.getGiaTriTienMat().intValue()) - 3) + 'K'}"></h3>
-                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}" class="col-6 voucher_type phantram"
+                                                <h3 th:if="${voucher.getLoaiVoucher() == '%'}"
+                                                    class="col-6 voucher_type phantram"
                                                     th:text="${voucher.getGiaTriPhanTram()}+'%'"></h3>
                                             </div>
                                         </div>

@@ -527,7 +527,7 @@ public class HoaDonRestController {
         hd = hoaDonService.save(hd);
         int tienThua = 0;
         if (request.getCash() != null) {
-             tienThua = request.getCash() + request.getTransfer() - hd.getThucThu().intValue();
+            tienThua = request.getCash() + request.getTransfer() - hd.getThucThu().intValue();
         }
         if (typePayment.isChuyenKhoan()) {
             HinhThucThanhToan ht = new HinhThucThanhToan();
@@ -567,6 +567,14 @@ public class HoaDonRestController {
             ht.setMoTa("Thanh Toán Khi Nhận Hàng");
             ht = hinhThucThanhToanService.save(ht);
             httt.add(ht);
+        }
+        StringBuilder strPayment = new StringBuilder();
+        for (int i = 0; i < httt.size(); i++) {
+            HinhThucThanhToan ht = httt.get(i);
+            if (i > 0) {
+                strPayment.append(",");
+            }
+            strPayment.append(ht.getHinhThuc());
         }
         if (hd.getVoucher() != null) {
             Voucher voucher = hd.getVoucher();
@@ -651,6 +659,7 @@ public class HoaDonRestController {
         response.setGiamGia(hd.getGiamGia().intValue());
         response.setPhiShip(hd.getPhiShip().intValue());
         response.setTenNguoiNhan(hd.getTenNguoiNhan());
+        response.setHinhThucThanhToan(strPayment.toString());
         response.setSDT(hd.getSdtNhan());
         response.setMaHoaDon(hd.getMaHoaDon());
         response.setDiaChi(hd.getDiaChiNhan());
