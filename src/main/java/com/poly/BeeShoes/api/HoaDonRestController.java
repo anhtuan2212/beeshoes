@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,7 @@ public class HoaDonRestController {
     private final KhachHangService khachHangService;
     private final MailUtility mailUtility;
     private final HinhThucThanhToanService hinhThucThanhToanService;
+    private final NotificationService notificationService;
     private final SimpMessagingTemplate messagingTemplate;
     Gson gson = new Gson();
 
@@ -636,7 +638,20 @@ public class HoaDonRestController {
         hoaDonDto.setSdtNhan(hd.getSdtNhan());
         hoaDonDto.setThucThu(hd.getThucThu());
         hoaDonDto.setTrangThai(hd.getTrangThai());
+        Notification notification = new Notification();
+        notification.setCreatedBy("N/A");
+        notification.setCreatorAvatarUrl("/assets/cms/img/160x160/img1.jpg");
+        if(userTH != null && userTH.getNhanVien() != null) {
+            notification.setCreatedBy(userTH.getNhanVien().getHoTen());
+            notification.setCreatorAvatarUrl(userTH.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : userTH.getAvatar());
+        }
+        notification.setTitle("Tạo đơn hàng");
+        notification.setDescription("Vừa tạo đơn hàng " + hd.getMaHoaDon());
+        LocalTime now = LocalTime.now();
+        notification.setCreatedTime(now.getHour() + ":" + now.getMinute());
+        Notification savedNoti = notificationService.save(notification);
         messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
+        messagingTemplate.convertAndSend("/topic/noti", savedNoti);
         ResponseOder response = new ResponseOder();
         List<ProductInResponse> lstPro = new ArrayList<>();
         for (int i = 0; i < hd.getHoaDonChiTiets().size(); i++) {

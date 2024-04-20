@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface NotificationService {
     Notification save(Notification notification);
-    List<Notification> getTop5();
+    List<Notification> getTop10();
 }
