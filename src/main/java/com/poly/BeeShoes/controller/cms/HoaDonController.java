@@ -62,6 +62,12 @@ public class HoaDonController {
         for(HoaDonChiTiet hdct : hoaDonChiTietList) {
             tongTien = (hdct.getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
         }
+        List<HinhThucThanhToan> hinhThucThanhToans = hoaDon.getHinhThucThanhToans();
+        hinhThucThanhToans.forEach(hinhThucThanhToan -> {
+            if(hinhThucThanhToan.getMaGiaoDich().equals("VNPAY")) {
+                model.addAttribute("hinhThuc", hinhThucThanhToan.getMaGiaoDich());
+            }
+        });
         model.addAttribute("lichSuHoaDonList", lichSuHoaDonList);
         model.addAttribute("lichSuHoaDonListNotSort", lichSuHoaDonListNotSort);
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);

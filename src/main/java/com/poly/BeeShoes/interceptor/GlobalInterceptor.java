@@ -22,6 +22,6 @@ public class GlobalInterceptor implements HandlerInterceptor {
             String userEmail = request.getUserPrincipal().getName();
             request.setAttribute("userCMS", userService.getByUsername(userEmail));
         }
-        request.setAttribute("notifications", notificationService.getTop5());
+        request.setAttribute("notifications", notificationService.getTop10());
     }
 }

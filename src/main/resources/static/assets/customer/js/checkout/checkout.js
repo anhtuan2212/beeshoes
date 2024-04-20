@@ -339,8 +339,6 @@ $(document).on('click', '#btn-addAddress', function () {
                                                     <label class="txt_address customerDistrict">${newDistrictText},</label>
                                                     <label class="txt_address customerProvince">${newProvinceText}</label>
                                                 </div>
-                                                <div>
-                                                </div>
                                             </div>
                                             <div class="btn-action-address">
                                                 <div class="d-flex justify-content-center">

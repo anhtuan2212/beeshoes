@@ -19,7 +19,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> getTop5() {
-        return notificationRepository.getTop5Noti();
+    public List<Notification> getTop10() {
+        return notificationRepository.getTop10Noti();
     }
 }

@@ -928,31 +928,43 @@ $(document).on('ready', function () {
                             type = 'danger';
                             typeOfColor = 'danger';
                             $('#btn-edit-product').addClass('d-none');
+                            $('#btn-add-product').addClass('d-none');
+                            $('#btn-edit-address').addClass('d-none');
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#printOrder').removeClass('d-none');
                         } else if (status == 'Chờ Xác Nhận') {
                             typeOfColor = 'danger';
                             $('#btn-edit-product').removeClass('d-none');
+                            $('#btn-add-product').removeClass('d-none');
+                            $('#btn-edit-address').removeClass('d-none');
                             $('#hoanTacFromDetail').hide();
                         } else if (status == 'Chuẩn Bị Hàng') {
                             typeOfColor = 'warning';
                             $('#btn-edit-product').addClass('d-none');
+                            $('#btn-add-product').addClass('d-none');
+                            $('#btn-edit-address').addClass('d-none');
                             $('#getAttrToHuyFromDetail').removeClass('d-none');
                             $('#hoanTacFromDetail').removeClass('d-none');
                             $('#printOrder').removeClass('d-none');
                         } else if (status == 'Chờ Giao') {
                             typeOfColor = 'danger';
                             $('#btn-edit-product').addClass('d-none');
+                            $('#btn-add-product').addClass('d-none');
+                            $('#btn-edit-address').addClass('d-none');
                             $('#getAttrToHuyFromDetail').addClass('d-none');
                             $('#hoanTacFromDetail').hide();
                             $('.fixInvoice').hide();
                         } else if (status == 'Đang Giao') {
                             typeOfColor = 'danger';
                             $('#btn-edit-product').addClass('d-none');
+                            $('#btn-add-product').addClass('d-none');
+                            $('#btn-edit-address').addClass('d-none');
                             $('#hoanTacFromDetail').hide();
                         } else if (status == 'Thành Công') {
                             $('#btn-edit-product').addClass('d-none');
+                            $('#btn-add-product').addClass('d-none');
+                            $('#btn-edit-address').addClass('d-none');
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#hoanTacFromDetail').hide();
@@ -1001,6 +1013,8 @@ $(document).on('ready', function () {
                         $('#hoanTacFromDetail').hide();
                         $('#printOrder').hide();
                         $('#btn-edit-product').removeClass('d-none');
+                        $('#btn-add-product').removeClass('d-none');
+                        $('#btn-edit-address').removeClass('d-none');
                         printStatusHeader(type, status);
                         printTimeline(status, type, action);
                         printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
