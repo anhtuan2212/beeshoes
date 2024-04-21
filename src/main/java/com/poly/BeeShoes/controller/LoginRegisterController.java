@@ -64,39 +64,36 @@ public class LoginRegisterController {
 
     @GetMapping("/change-password")
     public String change(Model model) {
-        model.addAttribute("new", "   ");
-        model.addAttribute("confirm", "   ");
+        model.addAttribute("newMessage", "");
+        model.addAttribute("confirmMessage", "");
         model.addAttribute("changePassword", new ChangePasswordDto());
         return "customer/auth/change-password";
     }
 
     @PostMapping("/change-password")
-    public String changePas(@ModelAttribute ChangePasswordDto dto, BindingResult bindingResult, Model model) {
+    public String changePas(@ModelAttribute ChangePasswordDto dto, Model model) {
         String regex = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$";
         if (!dto.getNewPassword().matches(regex)) {
-            model.addAttribute("new", "Mật khẩu mới không hợp lệ.");
+            model.addAttribute("newMessage", "Mật khẩu mới không hợp lệ.");
+            return "customer/auth/change-password";
         }
         System.out.println(dto);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            User user = userService.getByUsername(userDetails.getUsername());
-            if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
-                model.addAttribute("confirm", "Nhập lại mật khẩu không khớp.");
-                return "customer/auth/change-password";
-            }
-            String encodedOldPassword = user.getPassword();
-            String encodedEnteredOldPassword = passwordEncoder.encode(dto.getPassword());
-            if (passwordEncoder.matches(encodedEnteredOldPassword, encodedOldPassword)) {
-                user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-                userService.update(user);
-                return "redirect:/";
-            } else {
-                model.addAttribute("message", "Mật khẩu cũ không đúng.");
-                return "customer/auth/change-password";
-            }
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        User user = userService.getByUsername(userDetails.getUsername());
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            model.addAttribute("confirmMessage", "Nhập lại mật khẩu không khớp.");
+            return "customer/auth/change-password";
         }
-        return "redirect:/login";
+        String encodedOldPassword = user.getPassword();
+        if (passwordEncoder.matches(dto.getPassword(), encodedOldPassword)) {
+            user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+            userService.update(user);
+            return "redirect:/";
+        } else {
+            model.addAttribute("message", "Mật khẩu cũ không đúng.");
+            return "customer/auth/change-password";
+        }
     }
 
     @GetMapping("/forgot-password")

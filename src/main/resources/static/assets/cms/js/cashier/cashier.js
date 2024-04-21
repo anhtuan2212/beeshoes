@@ -1,3 +1,4 @@
+activeSiderbar1EXXP("ban_hang");
 function PrintBillOder(data) {
     let elementToPrint = $('#oder-print');
     elementToPrint.find('#full_name_print').text(data.tenNguoiNhan)

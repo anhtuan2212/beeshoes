@@ -496,7 +496,7 @@
                     <!-- Pagination -->
                     <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
                         <div class="col-sm mb-2 mb-sm-0">
-                            <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
+                            <div id="showNumWrap" class="d-flex justify-content-center justify-content-sm-start align-items-center">
                                 <span class="mr-2">Hiển Thị:</span>
 
                                 <!-- Select -->
@@ -506,12 +506,11 @@
                             "dropdownAutoWidth": true,
                             "width": true
                           }'>
-                                    <option th:if="${sanPham==null}" value="o">0</option>
+                                    <option th:if="${sanPham==null}" value="0">0</option>
                                     <option th:if="${sanPham != null and #lists.size(sanPham.getChiTietSanPham()) < 10}"
                                             th:value="${#lists.size(sanPham.getChiTietSanPham())}" selected
                                             th:text="${#lists.size(sanPham.getChiTietSanPham())}"></option>
-                                    <option th:if="${sanPham != null and #lists.size(sanPham.getChiTietSanPham()) >= 10}" th:value="6" selected>6</option>
-<!--                                    <option value="10">10</option>-->
+                                    <option th:if="${sanPham != null and #lists.size(sanPham.getChiTietSanPham()) >= 10}" th:value="10" selected>10</option>
                                     <option value="20">20</option>
                                     <option value="40">40</option>
                                 </select>
@@ -672,8 +671,6 @@
     </tr>
 </table>
 <!-- ========== END SECONDARY CONTENTS ========== -->
-<script src="/assets/socket/socket-config.js"></script>
-<script src="/assets/cms/js/header/_header.js"></script>
 <!-- JS Implementing Plugins -->
 <script src="/assets/cms/js/vendor.min.js"></script>
 <!-- JS Front -->
@@ -689,6 +686,8 @@
 <script src="/assets/cms/js/add-product.js"></script>
 <script src="/assets/cms/js/custom-firebase.js" type="module"></script>
 <script src="/assets/cms/js/custom.js"></script>
+<script src="/assets/socket/socket-config.js"></script>
+<script src="/assets/cms/js/header/_header.js"></script>
 <!-- JS Plugins Init. -->
 
 <!-- IE Support -->

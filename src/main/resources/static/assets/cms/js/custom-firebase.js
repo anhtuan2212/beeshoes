@@ -118,7 +118,7 @@ $(document).ready(function () {
             {targets: 0, data: 'id', orderable: false, searchable: false},
             {targets: 1, data: 'img', orderable: false, searchable: false},
             {targets: 2, data: 'kichCo', orderable: false, searchable: true},
-            {targets: 3, data: 'maMauSac', orderable: true, searchable: true},
+            {targets: 3, data: 'maMauSac', orderable: false, searchable: true},
             {targets: 4, data: 'giaGoc', orderable: false, searchable: true},
             {targets: 5, data: 'giaBan', orderable: false, searchable: true},
             {targets: 6, data: 'soLuong', orderable: false, searchable: true},
@@ -278,12 +278,15 @@ $(document).ready(function () {
 
     function resetRowData() {
         let data = datatable.data();
+        let currentPage = datatable.page.info().page;
         datatable.clear().draw();
         datatable.rows.add(data).draw();
+        datatable.page(currentPage).draw('page');
         setIMG();
     }
 
     datatable.on('draw.dt', function () {
+        updateShowNum();
         setIMG();
     });
 
@@ -355,7 +358,6 @@ $(document).ready(function () {
         datatable.rows.add(newData);
         trDataInDatatable = datatable.data().toArray();
         datatable.order([3, 'asc']).draw();
-        updateShowNum();
         resetRowData();
     });
     $(document).on('click', '#wraperKichCo .select2-selection__choice__remove', function (e) {
@@ -376,13 +378,25 @@ $(document).ready(function () {
     function updateShowNum() {
         let pageInfo = datatable.page.info();
         let displayedRows = pageInfo.end - pageInfo.start;
-        $('#select2-datatableEntries-container').attr('title', displayedRows).find('span').text(displayedRows);
-        let select = $('#datatableEntries');
-        select.find('option:selected').text(displayedRows).attr('value', displayedRows);
-        // select.trigger('change');
+        let show = $('#datatableEntries')
+        if (Number(show.val()) < 10) {
+            show.find('option:selected').remove();
+            show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+        } else {
+            if (show.find('option[value="10"]').length === 0) {
+                show.append(`<option value="10" selected>10</option>`)
+            }
+            if (show.val()>displayedRows){
+                if (show.find(`option[value="${displayedRows}"]`).length === 0){
+                    show.append(`<option value="${displayedRows}" selected>${displayedRows}</option>`)
+                }else{
+                    show.val(displayedRows);
+                }
+            }
+        }
     }
-
     $(document).on('click', '.remove-item', async function () {
+        let element = $(this);
         Swal.fire({
             title: "Bạn chắc chứ?",
             text: "Sau khi xóa sẽ không thể khôi phục lại!",
@@ -394,41 +408,17 @@ $(document).ready(function () {
             confirmButtonText: "Xác Nhận"
         }).then((result) => {
             if (result.isConfirmed) {
-                let element = $(this)
                 let id = element.data('id');
                 let dtColor = element.data('color-code-remove');
                 let dtSize = element.data('size-remove');
-                let mau = element.data('color-code-remove');
-                let size = $('a.remove-item[data-color-code-remove=' + mau + ']').length;
                 DeleteCTSP(id, dtColor, dtSize).then((check) => {
                     if (check) {
-                        if (size > 1) {
-                            let num = element.closest('tr').find('th.row-show-img').length;
-                            if (num === 1) {
-                                let th = element.closest('tr').find('th.row-show-img');
-                                let rowspan = th.attr('rowspan')
-                                let arrElement = $('.id-version-shoe[data-color-code-id=' + mau + ']');
-                                th.attr('rowspan', Number(rowspan) - 1);
-                                arrElement[1].after(th[0]);
-                                let rowIndex = datatable.row(element.closest('tr')).index();
-                                datatable.row(rowIndex).remove().draw();
-                                element.closest('tr').remove();
-                            } else {
-                                let th = $('th.row-show-img[data-color=' + mau + ']');
-                                let rowspan = th.attr('rowspan')
-                                th.attr('rowspan', Number(rowspan) - 1);
-                                let rowIndex = datatable.row(element.closest('tr')).index();
-                                datatable.row(rowIndex).remove().draw();
-                                element.closest('tr').remove();
-                            }
-                        } else {
-                            let rowIndex = datatable.row(element.closest('tr')).index();
-                            datatable.row(rowIndex).remove().draw();
-                            element.closest('tr').remove();
-                        }
+                        let rowIndex = element.closest('tr')[0]._DT_RowIndex
+                        let currentPage = datatable.page.info().page;
+                        datatable.row(rowIndex).remove().draw();
+                        datatable.page(currentPage).draw('page');
                     }
                 })
-
                 resetRowData()
             }
         });

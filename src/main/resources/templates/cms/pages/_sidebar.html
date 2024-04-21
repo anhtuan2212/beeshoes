@@ -24,8 +24,8 @@
                 <div class="navbar-vertical-content">
                     <ul id="siderbar" class="navbar-nav navbar-nav-lg nav-tabs">
                         <!-- Dashboards -->
-                        <li class="nav-item">
-                            <a id="dashboards" class="js-nav-tooltip-link nav-link" href="/cms/"
+                        <li id="dashboards"  class="nav-item">
+                            <a class="js-nav-tooltip-link nav-link" href="/cms/"
                                title="Dashboards">
                                 <i class="tio-home-vs-1-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Trang chủ</span>
@@ -37,15 +37,15 @@
                             <small class="nav-subtitle" title="Pages">Quản Trị</small>
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
-                        <li class="nav-item">
-                            <a id="ban_hang" class="js-nav-tooltip-link nav-link" href="/cms/cashier" title=""
+                        <li id="ban_hang" class="nav-item">
+                            <a class="js-nav-tooltip-link nav-link" href="/cms/cashier" title=""
                                data-placement="left" data-original-title="Bán Hàng">
                                 <i class="tio-shop-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Bán Hàng</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a id="quan_ly_don_hang" class="js-nav-tooltip-link nav-link" href="/cms/hoa-don" title=""
+                        <li id="quan_ly_don_hang" class="nav-item">
+                            <a class="js-nav-tooltip-link nav-link" href="/cms/hoa-don" title=""
                                data-placement="left" data-original-title="Quản Lý Đơn Hàng">
                                 <i class="tio-receipt-outlined nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Quản Lý Đơn Hàng</span>
@@ -169,7 +169,7 @@
                             </a>
                         </li>
                         <!-- End Voucher -->
-                        <li class="navbar-vertical-aside-has-menu ">
+                        <li id="li_bao_cao" class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
                                title="Pages">
                                 <i class="tio-document-text-outlined nav-icon"></i>
@@ -177,26 +177,26 @@
                             </a>
 
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+<!--                                <li class="nav-item">-->
+<!--                                    <a class="nav-link " th:href="@{/cms/revenue}" title="Doanh Thu">-->
+<!--                                        <span class="tio-circle nav-indicator-icon"></span>-->
+<!--                                        <span class="text-truncate">Doanh Thu</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item">-->
+<!--                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Sản Phẩm">-->
+<!--                                        <span class="tio-circle nav-indicator-icon"></span>-->
+<!--                                        <span class="text-truncate">Sản Phẩm</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item">-->
+<!--                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Phiếu Giảm Giá">-->
+<!--                                        <span class="tio-circle nav-indicator-icon"></span>-->
+<!--                                        <span class="text-truncate">Phiếu Giảm Giá</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
                                 <li class="nav-item">
-                                    <a class="nav-link " th:href="@{/cms/revenue}" title="Doanh Thu">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">Doanh Thu</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Sản Phẩm">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">Sản Phẩm</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Phiếu Giảm Giá">
-                                        <span class="tio-circle nav-indicator-icon"></span>
-                                        <span class="text-truncate">Phiếu Giảm Giá</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link " th:href="@{/cms/history-payment}" title="Lịch Sử Thanh Toán">
+                                    <a id="lich_su_thanh_toan" class="nav-link " th:href="@{/cms/history-payment}" title="Lịch Sử Thanh Toán">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">Lịch Sử Thanh Toán</span>
                                     </a>

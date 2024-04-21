@@ -191,7 +191,7 @@
                                 <br>
                                 <label id="invAddress" class="invAddress" th:text="${hoadon!= null and hoadon.getDiaChiNhan() !=null ?hoadon.getDiaChiNhan():''}"></label>
                                 <th:block
-                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai()=='Chờ Xác Nhận'}">
+                                        th:if="${user != null and user.getKhachHang()!=null and hoadon.getTrangThai()=='Chờ Xác Nhận' and hoadon.getHinhThucThanhToans().get(0).getMaGiaoDich()=='COD'}">
                                     <button data-toggle="modal" data-target="#updateInformationModal"
                                             class="btn-edit-tracking"><i class="ml-2 fa fa-pencil"></i></button>
                                 </th:block>
@@ -389,7 +389,7 @@
                         </div>
                         <th:block th:if="${user != null}">
                             <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
-                                <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận' and hoadon.getHinhThucThanhToan().getHinhThuc()=='Khi Nhận Hàng'}"
+                                <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận' and hoadon.getHinhThucThanhToans().get(0).getMaGiaoDich()=='COD'}"
                                    th:attr="data-id=${hoadon.getId()}"
                                    id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
                                 <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận'}"

@@ -9,7 +9,7 @@ let worker = new Worker('/assets/customer/js/work_get_all_product.js');
 window.onload = function () {
     worker.postMessage('start');
 };
-
+activeSiderbar1EXXP("quan_ly_don_hang");
 worker.onmessage = function (e) {
     console.log(e.data);
     dataShop = e.data;
