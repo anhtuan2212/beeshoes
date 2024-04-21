@@ -311,7 +311,7 @@ $(document).ready(async function () {
                             if (ele.length === 0) {
                                 let showPr = '';
                                 if (voucher.loaiVoucher === '$') {
-                                    showPr = `<h3 class="col-6 tienmat">${formatNumberMoney(voucher.giaTriToiDa)}</h3>`;
+                                    showPr = `<h3 class="col-6 tienmat">${formatNumberMoney(voucher.giaTriTienMat)}</h3>`;
                                 } else {
                                     showPr = `<h3 class="col-6 phantram">${voucher.giaTriPhanTram}%</h3>`
                                 }
@@ -343,13 +343,8 @@ $(document).ready(async function () {
                             if (VoucherNot === null) {
                                 VoucherNot = voucher;
                             } else {
-                                if (VoucherNot.giaTriToiThieu > voucher.giaTriToiThieu) {
+                                if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
                                     VoucherNot = voucher;
-                                }
-                                if (VoucherNot.giaTriToiThieu == voucher.giaTriToiThieu) {
-                                    if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
-                                        VoucherNot = voucher;
-                                    }
                                 }
                             }
                         }
@@ -360,7 +355,7 @@ $(document).ready(async function () {
                 if (VoucherNot !== null) {
                     let showType = '';
                     if (VoucherNot.loaiVoucher === '$') {
-                        showType = `<h3 class="col-6 tienmat">${formatNumberMoney(VoucherNot.giaTriToiDa)}</h3>`;
+                        showType = `<h3 class="col-6 tienmat">${formatNumberMoney(VoucherNot.giaTriTienMat)}</h3>`;
                     } else {
                         showType = `<h3 class="col-6 phantram">${VoucherNot.giaTriPhanTram}%</h3>`
                     }

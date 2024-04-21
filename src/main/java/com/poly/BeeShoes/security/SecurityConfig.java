@@ -26,6 +26,7 @@ public class SecurityConfig {
                     req
                             .requestMatchers("/cms/**").hasAnyAuthority("USER","MANAGER", "ADMIN")
                             .requestMatchers("/user-profile").hasAnyAuthority("CUSTOMER")
+                            .requestMatchers("/change-password").authenticated()
                             .anyRequest().permitAll();
                 })
                 .exceptionHandling(ex -> {

@@ -18,6 +18,6 @@ public class CashierController {
     public String index (Model model){
         model.addAttribute("customer",khachHangService.getAll());
         model.addAttribute("listsanpham",sanPhamService.getAllApi());
-        return "/cashier/index";
+        return "cashier/index";
     }
 }

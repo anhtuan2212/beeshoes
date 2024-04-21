@@ -63,7 +63,7 @@
 <!-- Offcanvas Menu End -->
 
 <!-- Header Section Begin -->
-<div th:replace="~{/customer/pages/_header.html}"></div>
+<div th:replace="~{customer/pages/_header.html}"></div>
 <!-- Header Section End -->
 
 <!-- Breadcrumb Section Begin -->
@@ -389,7 +389,7 @@
                         </div>
                         <th:block th:if="${user != null}">
                             <div th:if="${user.getKhachHang()!= null and hoadon.getKhachHang() != null and  user.getKhachHang().getId()== hoadon.getKhachHang().getId()}">
-                                <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận'}"
+                                <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận' and hoadon.getHinhThucThanhToan().getHinhThuc()=='Khi Nhận Hàng'}"
                                    th:attr="data-id=${hoadon.getId()}"
                                    id="btn-show-update" class="info-btn" data-update="0">Cập Nhật</a>
                                 <a th:if="${hoadon.getTrangThai()=='Chờ Xác Nhận'}"
@@ -421,7 +421,7 @@
 
 
 <!-- Footer Section Begin -->
-<div th:replace="~{/customer/pages/_footer.html}"></div>
+<div th:replace="~{customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->
 <div class="modal fade" id="select_product" data-backdrop="static" data-keyboard="false" tabindex="-1"
      aria-labelledby="select_productLabel" aria-hidden="true">

@@ -539,7 +539,7 @@ function updateTotalMoney(oder) {
                 if (ele.length === 0) {
                     let showPr = '';
                     if (voucher.loaiVoucher === '$') {
-                        showPr = `<h2 class="text-value-discount">${formatNumberMoney(voucher.giaTriToiDa)}</h2>`;
+                        showPr = `<h2 class="text-value-discount">${formatNumberMoney(voucher.giaTriTienMat)}</h2>`;
                     } else {
                         showPr = `<h2 class="text-value-discount">${voucher.giaTriPhanTram}%</h2>`
                     }
@@ -569,13 +569,8 @@ function updateTotalMoney(oder) {
                 if (VoucherNot === null) {
                     VoucherNot = voucher;
                 } else {
-                    if (VoucherNot.giaTriToiThieu > voucher.giaTriToiThieu) {
+                    if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
                         VoucherNot = voucher;
-                    }
-                    if (VoucherNot.giaTriToiThieu == voucher.giaTriToiThieu) {
-                        if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
-                            VoucherNot = voucher;
-                        }
                     }
                 }
             }
@@ -588,7 +583,7 @@ function updateTotalMoney(oder) {
 
         let showPr = '';
         if (VoucherNot.loaiVoucher === '$') {
-            showPr = `<h2 class="text-value-discount">${formatNumberMoney(VoucherNot.giaTriToiDa)}</h2>`;
+            showPr = `<h2 class="text-value-discount">${formatNumberMoney(VoucherNot.giaTriTienMat)}</h2>`;
         } else {
             showPr = `<h2 class="text-value-discount">${VoucherNot.giaTriPhanTram}%</h2>`
         }
