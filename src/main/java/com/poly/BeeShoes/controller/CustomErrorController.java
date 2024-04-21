@@ -16,7 +16,7 @@ public class CustomErrorController implements ErrorController {
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                return "/error/404";
+                return "error/404";
             }
         }
         return "error/404";

@@ -11,7 +11,7 @@ let quantity_in_store = 0;
 let data_month = [];
 let data_week = [];
 let data_day = [];
-
+activeSiderbar1EXXP("dashboards");
 function getData() {
     return new Promise((resolve, reject) => {
         $.ajax({

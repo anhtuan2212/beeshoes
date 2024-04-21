@@ -44,11 +44,11 @@
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 
 <!-- ========== HEADER ========== -->
-<div th:replace="~{/cms/pages/_header.html}"></div>
+<div th:replace="~{cms/pages/_header.html}"></div>
 <!-- ========== END HEADER ========== -->
 
 <!-- ========== SIDEBAR ========== -->
-<div th:replace="~{/cms/pages/_sidebar.html}"></div>
+<div th:replace="~{cms/pages/_sidebar.html}"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
 
@@ -114,7 +114,7 @@
                                             <th:block th:each="cus:${customer}">
                                                 <option th:value="${cus.getId()}"
                                                         th:attr="data-phone=${cus.getSdt()},data-email=${cus.getUser().getEmail()}"
-                                                        th:text="${cus.getHoTen()+'-'+cus.getMaKhachHang()}"></option>
+                                                        th:text="${cus.getHoTen()+'-'+cus.getSdt()}"></option>
                                             </th:block>
                                         </select>
                                         <a data-toggle="tooltip" class="btn-add-customer"
@@ -415,7 +415,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="~{/cms/pages/_footer.html}"></div>
+    <div th:replace="~{cms/pages/_footer.html}"></div>
     <!-- End Footer -->
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
@@ -543,7 +543,7 @@
                             <th:block th:each="cus:${customer}">
                                 <option th:value="${cus.getId()}"
                                         th:attr="data-phone=${cus.getSdt()},data-email=${cus.getUser().getEmail()}"
-                                        th:text="${cus.getHoTen()+'-'+cus.getMaKhachHang()}"></option>
+                                        th:text="${cus.getHoTen()+'-'+cus.getSdt()}"></option>
                             </th:block>
                         </select>
                         <a class="btn-add-customer" data-toggle="tooltip"

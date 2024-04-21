@@ -143,7 +143,6 @@ public class DashboardController {
             }
             Object[] item = discount.get(i);
             BigDecimal money = (BigDecimal) item[1];
-            System.out.println("Today :" + money);
             total_discount += money.intValue();
             Labels.append(item[0]);
             Values_today.append(money.intValue() / 1000);
@@ -155,7 +154,6 @@ public class DashboardController {
             }
             Object[] item = discount_yesterday.get(i);
             BigDecimal money = (BigDecimal) item[1];
-            System.out.println("Yesterday :" + money);
             total_yester += money.intValue();
             Values_yesterday.append(money.intValue() / 1000);
         }
@@ -167,8 +165,6 @@ public class DashboardController {
         discountChart.put("direction", total_discount >= total_yester);
         discountChart.put("label", Labels);
         discountChart.put("total", total_discount);
-        System.out.println(Values_today);
-        System.out.println(Values_yesterday);
         model.addAttribute("discount_chart", discountChart);
         model.addAttribute("product_less", prList);
         model.addAttribute("top_products", top6Products);

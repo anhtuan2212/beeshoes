@@ -203,9 +203,9 @@ public class ProductRestController {
             KichCo kichCo = kichCoService.getByTen(size);
             SanPham sanPham = sanPhamService.getById(sp);
             chiTietSanPham = chiTietSanPhamService.getBySizeAndColorAndProduct(kichCo, mauSac, sanPham);
-            if (chiTietSanPham == null) {
-                return ResponseEntity.status(HttpStatus.OK).body(null);
-            }
+        }
+        if (chiTietSanPham == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
         int num = chiTietSanPham.getSanPham().getChiTietSanPham().size();
         if (num == 1) {

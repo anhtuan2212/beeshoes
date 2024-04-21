@@ -32,11 +32,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 <!-- ========== HEADER ========== -->
-<div th:replace="~{/cms/pages/_header.html}"></div>
+<div th:replace="~{cms/pages/_header.html}"></div>
 <!-- ========== END HEADER ========== -->
 
 <!-- ========== SIDEBAR ========== -->
-<div th:replace="~{/cms/pages/_sidebar.html}"></div>
+<div th:replace="~{cms/pages/_sidebar.html}"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
 
@@ -93,7 +93,7 @@
         </div>
         <!-- End Page Header -->
 
-        <div class="row col-12" th:insert="~{/cms/pages/orders/_timeline.html}"></div>
+        <div class="row col-12" th:insert="~{cms/pages/orders/_timeline.html}"></div>
 
         <div class="row mt-2 mb-2">
             <div th:attr="id-hoa-don=${hoaDon.id}" class="col-6 justify-content-start" id="myButton">
@@ -1048,6 +1048,6 @@
 <script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <script src="/assets/cms/js/hoa-don/oder-details.js"></script>
 <!-- IE Support -->
-<div th:replace="~{/cms/pages/_IE-suport.html}"></div>
+<div th:replace="~{cms/pages/_IE-suport.html}"></div>
 </body>
 </html>

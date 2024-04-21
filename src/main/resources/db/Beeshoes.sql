@@ -470,6 +470,16 @@ CREATE TABLE quan_tri
     thoi_gian_sale datetime,
     primary key(id)
 )engine=INNODB;
+create table notification
+(
+    id bigint auto_increment,
+    created_by nvarchar(256),
+    created_time varchar(20),
+    title nvarchar(256),
+    description nvarchar(256),
+    creator_avatar_url varchar(999),
+    primary key (id)
+)engine=INNODB;
 -- Ràng Buộc, Liên Kết
 -- Sản Phẩm (nguoi_tao, nguoi_sua)
 ALTER TABLE san_pham ADD FOREIGN KEY(nguoi_tao) REFERENCES user(id);

@@ -26,7 +26,7 @@ public class VoucherController {
     @GetMapping({"", "/"})
     public String index(Model model) {
         model.addAttribute("lstvoucher", voucherService.getAll());
-        return "/cms/pages/vouchers/voucher";
+        return "cms/pages/vouchers/voucher";
     }
 
     @GetMapping({"/add-voucher", "/add-voucher/"})
@@ -37,7 +37,7 @@ public class VoucherController {
             voucher.setStartDate1(voucher.getNgayBatDau().toLocalDateTime());
             model.addAttribute("voucher", voucher);
         }
-        return "/cms/pages/vouchers/form-voucher";
+        return "cms/pages/vouchers/form-voucher";
     }
 
 

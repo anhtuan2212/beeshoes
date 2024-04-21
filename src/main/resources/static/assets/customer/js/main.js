@@ -1070,11 +1070,17 @@ $(document).ready(function () {
             var email = $('#email').val();
             var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (emailRegex.test(email)) {
-                // Nếu email đúng định dạng, không hiển thị gì
                 $('#text_error_email').text('');
             } else {
-                // Nếu email không đúng định dạng, hiển thị thông báo
                 $('#text_error_email').text('Email không đúng định dạng.');
+            }
+            if (email.length === 0) {
+                $('#text_error_email').text('Vui lòng nhập email.');
+            } else {
+                let text_df = $('#text_email_default');
+                if (text_df.length > 0) {
+                    text_df.text('');
+                }
             }
         }, 300); // Độ trễ 300 mili giây
     });

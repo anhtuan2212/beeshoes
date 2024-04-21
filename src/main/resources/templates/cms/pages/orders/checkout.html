@@ -26,11 +26,11 @@
 <body class="   footer-offset">
 <script src="/assets/cms/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
 <!-- ========== HEADER ========== -->
-<div th:replace="/cms/pages/_header.html"></div>
+<div th:replace="cms/pages/_header.html"></div>
 <!-- ========== END HEADER ========== -->
 
 <!-- ========== SIDEBAR ========== -->
-<div th:replace="/cms/pages/_sidebar.html"></div>
+<div th:replace="cms/pages/_sidebar.html"></div>
 <!-- ========== END SIDEBAR ========== -->
 <script src="/assets/cms/js/demo.js"></script>
 <!-- ========== MAIN CONTENT ========== -->
@@ -1060,6 +1060,7 @@
 
 <!-- JS Plugins Init. -->
 <script>
+    activeSiderbar1EXXP("quan_ly_don_hang");
     $(document).on('ready', function () {
         // ONLY DEV
         // =======================================================
