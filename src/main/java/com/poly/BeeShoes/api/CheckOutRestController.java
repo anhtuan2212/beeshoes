@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,8 @@ public class CheckOutRestController {
     private MailUtility mailUtility;
     @Autowired
     private HinhThucThanhToanService hinhThucThanhToanService;
+    @Autowired
+    private NotificationService notificationService;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
@@ -179,8 +182,9 @@ public class CheckOutRestController {
             orderCode = jsonObject.get("orderCode").getAsString();
         }
         HoaDon hoaDon = new HoaDon();
+        User user = new User();
         if (request.getUserPrincipal() != null) {
-            User user = userService.getByUsername(request.getUserPrincipal().getName());
+            user = userService.getByUsername(request.getUserPrincipal().getName());
             if (user.getNhanVien() == null) {
                 KhachHang khachHang = khachHangService.getByMa(user.getKhachHang().getMaKhachHang());
                 hoaDon.setKhachHang(khachHang);
@@ -257,6 +261,24 @@ public class CheckOutRestController {
             System.out.println(e.getAsJsonObject().get("quantity").getAsInt());
             System.out.println(notes + " " + totalAmount + " " + voucherCode);
         }
+        Notification notification = new Notification();
+        notification.setCreatedBy("N/A");
+        notification.setCreatorAvatarUrl("/assets/cms/img/160x160/img1.jpg");
+        if(user != null && user.getNhanVien() != null) {
+            notification.setCreatedBy(user.getNhanVien().getHoTen());
+            notification.setCreatorAvatarUrl(user.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : user.getAvatar());
+        } else if (user != null && user.getKhachHang() != null) {
+            notification.setCreatedBy(user.getKhachHang().getHoTen());
+            notification.setCreatorAvatarUrl(user.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : user.getAvatar());
+        }
+        notification.setTitle("Đặt đơn hàng");
+        notification.setDescription("Vừa đặt đơn hàng " + savedHoaDon2.getMaHoaDon());
+        LocalTime now = LocalTime.now();
+        notification.setCreatedTime(now.getHour() + ":" + now.getMinute());
+        Notification savedNoti = notificationService.save(notification);
+
+        messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
+        messagingTemplate.convertAndSend("/topic/noti", savedNoti);
         mailUtility.sendMail(customerEmail, "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
         String urlRedirect = "/orderSuccess?invoiceCode=" + savedHoaDon.getMaHoaDon() + "&totalAmount=" + savedHoaDon.getThucThu();
         return new ResponseEntity<>(urlRedirect, HttpStatus.OK);

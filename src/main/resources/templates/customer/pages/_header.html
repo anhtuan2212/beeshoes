@@ -99,7 +99,18 @@
                                         <a href="/change-password">Đổi mật khẩu</a>
                                     </li>
                                     <li>
-                                        <a th:href="@{/logout}" onclick="return confirm('Are you sure?')">Đăng xuất</a>
+                                        <a onclick="Swal.fire({
+                                        title: 'Bạn chắc chứ?',
+                                        text: 'Bạn muốn đăng xuất?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        cancelButtonText: 'Hủy',
+                                        confirmButtonText: 'Đăng Xuất'
+                                        }).then((result) => {
+                                        if(result.isConfirmed) location.href = '/logout';
+                                        })">Đăng xuất</a>
                                     </li>
                                 </th:block>
                             </ul>

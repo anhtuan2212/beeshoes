@@ -189,39 +189,6 @@
                                 <!-- Header -->
                                 <div class="card-header">
                                     <span class="card-title h4">Notifications</span>
-
-                                    <!-- Unfold -->
-                                    <div class="hs-unfold">
-                                        <a class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary rounded-circle"
-                                           href="javascript:;" data-hs-unfold-options='{
-                       "target": "#notificationSettingsOneDropdown",
-                       "type": "css-animation"
-                     }'>
-                                            <i class="tio-more-vertical"></i>
-                                        </a>
-                                        <div id="notificationSettingsOneDropdown"
-                                             class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right">
-                                            <span class="dropdown-header">Settings</span>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="tio-archive dropdown-item-icon"></i> Archive all
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="tio-all-done dropdown-item-icon"></i> Mark all as read
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="tio-toggle-off dropdown-item-icon"></i> Disable notifications
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="tio-gift dropdown-item-icon"></i> What's new?
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <span class="dropdown-header">Feedback</span>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="tio-chat-outlined dropdown-item-icon"></i> Report
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- End Unfold -->
                                 </div>
                                 <!-- End Header -->
 
@@ -231,11 +198,6 @@
                                         <a class="nav-link active" id="notificationNavOne-tab" data-toggle="tab"
                                            href="#notificationNavOne" role="tab" aria-controls="notificationNavOne"
                                            aria-selected="true">Messages (3)</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="notificationNavTwo-tab" data-toggle="tab"
-                                           href="#notificationNavTwo" role="tab" aria-controls="notificationNavTwo"
-                                           aria-selected="false">Archived</a>
                                     </li>
                                 </ul>
                                 <!-- End Nav -->
@@ -287,6 +249,7 @@
                                                 <!-- End Item -->
                                             </ul>
                                         </div>
+<<<<<<< HEAD
 
                                         <div class="tab-pane fade" id="notificationNavTwo" role="tabpanel"
                                              aria-labelledby="notificationNavTwo-tab">
@@ -323,6 +286,8 @@
                                                 <!-- End Item -->
                                             </ul>
                                         </div>
+=======
+>>>>>>> ecbace8626e12136693d574389964759ef5f3357
                                     </div>
                                     <!-- End Tab Content -->
                                 </div>
@@ -393,7 +358,7 @@
 
                                 <div class="dropdown-divider"></div>
 
-                                <a class="dropdown-item" onclick="return confirm('Bạn muốn đăng xuất?')" href="/logout">
+                                <a id="logout" class="dropdown-item">
                                     <span class="text-truncate pr-2" title="Sign out">Sign out</span>
                                 </a>
                             </div>
