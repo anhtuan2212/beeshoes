@@ -146,7 +146,7 @@ public class CheckOutRestController {
         session.setAttribute(invoiceCode, hoaDon);
 
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
-        String vnpUrl = vnPayService.createOrder(invoiceCode, total, notes, baseUrl);
+        String vnpUrl = vnPayService.createOrder(invoiceCode, totalAmount, notes, baseUrl);
         return new ResponseEntity<>(vnpUrl, HttpStatus.OK);
     }
 

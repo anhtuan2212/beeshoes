@@ -651,6 +651,7 @@ $(document).ready(function () {
 
         if (totalAmount > 2000000) {
             $('#shippingFee').text('Miễn phí');
+            $('#totalAmount').text(parseFloat(totalAmount - shippingFee).toLocaleString('en-US'));
             shippingFee = 0;
         } else {
             $.ajax({
