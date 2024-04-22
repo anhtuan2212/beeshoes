@@ -678,9 +678,9 @@
 <script src="/assets/cms/js/sweetalert2.all.min.js"></script>
 <th:block th:if="${editproduct!=null and editproduct==1}">
     <script>
-        $('#showSelectedProduct').addClass('d-none');
-        $('#btn_add_new_product').addClass('d-none');
-        $('#showInputProduct').removeClass('d-none');
+    $('#showSelectedProduct').addClass('d-none');
+    $('#btn_add_new_product').addClass('d-none');
+    $('#showInputProduct').removeClass('d-none');
     </script>
 </th:block>
 <script src="/assets/cms/js/add-product.js"></script>
@@ -690,6 +690,8 @@
 <script src="/assets/cms/js/header/_header.js"></script>
 <!-- JS Plugins Init. -->
 
+<script src="/assets/socket/socket-config.js"></script>
+<script src="/assets/cms/js/header/_header.js"></script>
 <!-- IE Support -->
 <div th:replace="~{cms/pages/_IE-suport.html}"></div>
 </body>
