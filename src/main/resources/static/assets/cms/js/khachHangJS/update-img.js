@@ -44,7 +44,6 @@ async function deleteImageFromFirebaseStorage() {
     try {
         const fileName = urlDelete.substring(urlDelete.lastIndexOf('/') + 1, urlDelete.indexOf('?'));
         const correctedFileName = fileName.replace(/%2F/g, '/');
-        console.log(correctedFileName);
         const imageRef = ref(storage, correctedFileName);
         await deleteObject(imageRef);
         ToastSuccess("Xóa thành công.")
@@ -88,15 +87,12 @@ $(document).ready(function () {
             return;
         }
         if (check.email) {
-            console.log(check)
             return;
         }
         if (check.sdt) {
-            console.log(check)
             return;
         }
         if (check.cccd) {
-            console.log(check)
             return;
         }
         showLoader();
@@ -106,11 +102,9 @@ $(document).ready(function () {
             let input = document.getElementById('avatarUploader');
             let img = $('#avatarImg');
             const file = renameFile(input.files[0]);
-            console.log(file)
             const storageRef = ref(storage, `avatars/${file.name}`);
             try {
                 const snapshot = await uploadBytes(storageRef, file);
-                console.log(snapshot)
                 const url = await getDownloadURL(snapshot.ref);
                 img.attr('src', url);
                 form.append(`<input id="urlImgAvatar" type="hidden" name="avatar" value="${url}">`);

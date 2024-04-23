@@ -30,7 +30,6 @@ $(document).on('ready', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don]").attr("data-ma-hoa-don");
         selectedValue.push(String(maHoaDon));
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -65,7 +64,6 @@ $(document).on('ready', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don]").attr("data-ma-hoa-don");
         selectedValue.push(String(maHoaDon));
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -102,10 +100,8 @@ $(document).on('ready', function () {
         var selectedValue = [];
         $('#myBodyAllCXN').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cxn');
-            console.log(dataMaHoaDon);
             selectedValue.push(String(dataMaHoaDon));
         });
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -140,7 +136,6 @@ $(document).on('ready', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cxn]").attr("data-ma-hoa-don-cxn");
         selectedValue.push(String(maHoaDon));
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -175,11 +170,8 @@ $(document).on('ready', function () {
         var selectedValue = [];
         $('#myBodyAllCXN').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cxn');
-            console.log(dataMaHoaDon);
             selectedValue.push(String(dataMaHoaDon));
         });
-
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -214,7 +206,6 @@ $(document).on('ready', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cxn]").attr("data-ma-hoa-don-cxn");
         selectedValue.push(String(maHoaDon));
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -251,10 +242,8 @@ $(document).on('ready', function () {
         var selectedValue = [];
         $('#myBodyAllCG').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-cg');
-            console.log(dataMaHoaDon);
             selectedValue.push(String(dataMaHoaDon));
         });
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -289,7 +278,6 @@ $(document).on('ready', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-cg]").attr("data-ma-hoa-don-cg");
         selectedValue.push(String(maHoaDon));
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -326,10 +314,8 @@ $(document).on('ready', function () {
         var selectedValue = [];
         $('#myBodyAllDG').find('input[type=checkbox]:checked').each(function () {
             var dataMaHoaDon = $(this).closest('td').attr('data-ma-hoa-don-dg');
-            console.log(dataMaHoaDon);
             selectedValue.push(String(dataMaHoaDon));
         });
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",
@@ -364,7 +350,6 @@ $(document).on('ready', function () {
         var selectedValue = [];
         var maHoaDon = $(this).closest("tr").find("td[data-ma-hoa-don-dg]").attr("data-ma-hoa-don-dg");
         selectedValue.push(String(maHoaDon));
-        console.log(selectedValue);
 
         Swal.fire({
             title: "Bạn chắc chứ?",

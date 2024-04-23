@@ -131,7 +131,6 @@ $(document).on('ready', function () {
         const priceSortSlider = document.querySelector('#price_sort');
         let quantityFrom = parseInt(quantityFromInput.value, 10) || 0;
         let quantityTo = parseInt(quantityToInput.value, 10) || Infinity; // Sử dụng Infinity cho giá trị tới vô cực
-        console.log(123)
         let minPrice = 0;
         let maxPrice = Infinity;
 

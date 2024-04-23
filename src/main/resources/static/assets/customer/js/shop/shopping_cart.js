@@ -6,6 +6,26 @@ localStorage.removeItem('checkout_data');
 
 $(document).ready(async function () {
 
+        function tinhTienGiamGia(voucher, tongTien) {
+            if (!voucher || !tongTien) {
+                return 0;
+            }
+
+            if (voucher.loaiVoucher === '$') {
+                if (voucher.giaTriTienMat && voucher.giaTriTienMat <= voucher.giaTriToiDa) {
+                    return voucher.giaTriTienMat;
+                } else {
+                    return voucher.giaTriToiDa;
+                }
+            } else {
+                let giamGiaPhanTram = (tongTien * voucher.giaTriPhanTram) / 100;
+                if (giamGiaPhanTram <= voucher.giaTriToiDa) {
+                    return giamGiaPhanTram;
+                } else {
+                    return voucher.giaTriToiDa;
+                }
+            }
+        }
 
         let NumDataLength = 0;
         if (username === undefined) {
@@ -41,7 +61,6 @@ $(document).ready(async function () {
                             ShopingCart.push(oj);
                         })
                     }
-                    console.log(ShopingCart);
                 })
                 .catch(function (error) {
                     console.log('Có lỗi xảy ra khi lấy dữ liệu giỏ hàng từ máy chủ.');
@@ -80,7 +99,6 @@ $(document).ready(async function () {
             }
             if (data !== null && Array.isArray(data)) {
                 let voucher = data.find(item => item.ma === value.toUpperCase());
-                console.log(voucher)
                 if (voucher === undefined) {
                     ToastError('Mã không tồn tại.');
                 } else {
@@ -301,6 +319,7 @@ $(document).ready(async function () {
                     }
                 }
                 let arrVoucher = [];
+                let arrNotAccept = [];
                 let VoucherNot = null;
                 if (ListVoucher !== null && Array.isArray(ListVoucher)) {
                     let html = '';
@@ -339,19 +358,35 @@ $(document).ready(async function () {
                                     ele.parent().remove();
                                 });
                             }
-
-                            if (VoucherNot === null) {
-                                VoucherNot = voucher;
-                            } else {
-                                if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
-                                    VoucherNot = voucher;
-                                }
-                            }
+                            arrNotAccept.push(voucher);
                         }
                     });
                     let voucher = $('#list-voucher');
                     voucher.append(html);
                 }
+
+                let discountAmount;
+                if (SelectedVoucher !== null) {
+                    $('#discount_element').removeClass('d-none');
+                    discountAmount = tinhTienGiamGia(SelectedVoucher, totalMoney);
+                    $('#discount_money').text(addCommasToNumber(discountAmount) + 'đ')
+                } else {
+                    discountAmount = 0;
+                    $('#discount_element').addClass('d-none');
+                }
+
+                if (Array.isArray(arrNotAccept)) {
+                    arrNotAccept.sort((a, b) => a.giaTriToiThieu - b.giaTriToiThieu);
+                    for (let i = 0; i < arrNotAccept.length; i++) {
+                        let discount = tinhTienGiamGia(arrNotAccept[i], totalMoney);
+                        if (discount > discountAmount) {
+                            VoucherNot = arrNotAccept[i];
+
+                            break;
+                        }
+                    }
+                }
+
                 if (VoucherNot !== null) {
                     let showType = '';
                     if (VoucherNot.loaiVoucher === '$') {
@@ -381,39 +416,11 @@ $(document).ready(async function () {
                 } else {
                     $('#voucher-not').empty();
                 }
-                console.log(VoucherNot)
-                let discountAmount;
-                if (SelectedVoucher !== null) {
-                    $('#discount_element').removeClass('d-none');
-                    $('#discount_money').text(addCommasToNumber(SelectedVoucher.giaTriToiDa) + 'đ')
-                    if (SelectedVoucher.loaiVoucher === '%') {
-                        if (Number(SelectedVoucher.giaTriToiDa) < Number(totalMoney) * (Number(SelectedVoucher.giaTriPhanTram) / 100)) {
-                            discountAmount = Number(SelectedVoucher.giaTriToiDa);
-                        } else {
-                            discountAmount = Number(totalMoney) * (Number(SelectedVoucher.giaTriPhanTram) / 100);
-                        }
-                    } else {
-                        discountAmount = SelectedVoucher.giaTriTienMat;
-                    }
-                } else {
-                    discountAmount = 0;
-                    $('#discount_element').addClass('d-none');
-                }
-
                 let maxDiscountAmount = -Infinity; // Giả sử giá trị lớn nhất ban đầu là âm vô cùng
                 let maxDiscountVoucher = null; // Biến để lưu trữ voucher có discountAmount lớn nhất
                 if (Array.isArray(arrVoucher)) {
                     arrVoucher.forEach((voucher) => {
-                        let discountAmount;
-                        if (voucher.loaiVoucher === '%') {
-                            if (Number(voucher.giaTriToiDa) < Number(totalMoney) * (Number(voucher.giaTriPhanTram) / 100)) {
-                                discountAmount = Number(voucher.giaTriToiDa);
-                            } else {
-                                discountAmount = Number(totalMoney) * (Number(voucher.giaTriPhanTram) / 100);
-                            }
-                        } else {
-                            discountAmount = voucher.giaTriTienMat;
-                        }
+                        let discountAmount = tinhTienGiamGia(voucher, totalMoney);
                         if (discountAmount > maxDiscountAmount) {
                             maxDiscountAmount = discountAmount;
                             maxDiscountVoucher = voucher;
@@ -469,7 +476,6 @@ $(document).ready(async function () {
             if (Array.isArray(data)) {
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].pro.id == id) {
-                        console.log(data[i])
                         data[i].quantity = Math.max(Number(num), 1);
                         if (Number(data[i].quantity) > Number(data[i].pro.so_luong_ton)) {
                             ToastError('Số lượng không thể lơn hơn số lượng tồn')
@@ -569,7 +575,6 @@ $(document).ready(async function () {
                             success: function (data) {
                                 setProductQuantity(id, num, ShopingCart);
                                 ToastSuccess("Lưu thành công.");
-                                console.log(data)
                                 resolve(data);
                             },
                             error: function (e, x, h) {
@@ -699,7 +704,6 @@ $(document).ready(async function () {
 
         function printAllProductInServer(data) {
             if (Array.isArray(data)) {
-                console.log(data)
                 let html = '';
                 let totalMoney = 0;
                 data.forEach((product) => {
@@ -806,7 +810,6 @@ $(document).ready(async function () {
         try {
             let data = await getAllVoucher();
             ListVoucher = data;
-            console.log(data);
         } catch (error) {
             console.log(error);
         }

@@ -282,7 +282,6 @@ $(document).on('ready', function () {
                 trangThai: trangThai
             },
             success: function (data, status, xhr) {
-                console.log(data)
                 let st = xhr.getResponseHeader('status');
                 let created = convertTime(data.ngayTao)
                 let updated = convertTime(data.ngaySua)

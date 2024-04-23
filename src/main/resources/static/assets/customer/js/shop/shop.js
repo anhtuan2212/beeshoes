@@ -1,6 +1,12 @@
 var displayNumShow = 9;
 var NumAddShowDisplay = 6;
 
+function reGetImgError(element) {
+    element.onerror = function () {
+        let originalSrc = this.src;
+        this.src = originalSrc;
+    };
+}
 
 function printAllData() {
     let arr = [];

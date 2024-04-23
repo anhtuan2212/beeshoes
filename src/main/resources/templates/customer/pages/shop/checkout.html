@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zxx" xmlns:th="http://www.thymeleaf.org"
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
@@ -290,7 +290,11 @@
     </div>
 </section>
 <!-- Checkout Section End -->
-
+<div class="d-none">
+    <th:block th:each="pro:${productDetailMap}">
+        <input type="number" class="quantityProDuct" hidden="hidden" th:value="${pro.value}">
+    </th:block>
+</div>
 <!-- Footer Section Begin -->
 <div th:replace="~{customer/pages/_footer.html}"></div>
 <!-- Footer Section End -->

@@ -43,7 +43,6 @@ async function deleteImageFromFirebaseStorage() {
     try {
         const fileName = urlDelete.substring(urlDelete.lastIndexOf('/') + 1, urlDelete.indexOf('?'));
         const correctedFileName = fileName.replace(/%2F/g, '/');
-        console.log(correctedFileName);
         const imageRef = ref(storage, correctedFileName);
         await deleteObject(imageRef);
         ToastSuccess("Xóa thành công.")
@@ -71,39 +70,6 @@ function hideLoader() {
 
 $(document).ready(function () {
     $('#submitBtn').on('click', async function () { // Sử dụng async function để sử dụng await
-        //     let check = true;
-        //     if (validate()) {
-        //         check = await checkDuplicate();
-        //     }else{
-        //         return;
-        //     }
-        //     if (check) {
-        //         console.log(check)
-        //         return;
-        //     }
-        //     let urlImg = $('#url-avatar-user').val();
-        //     let form = $('#btn-submit-nhan-vien');
-        //     if (urlImg === undefined) {
-        //         let input = document.getElementById('avatarUploader');
-        //         let img = $('#avatarImg');
-        //         const file = renameFile(input.files[0]);
-        //         console.log(file)
-        //         const storageRef = ref(storage, `avatars/${file.name}`);
-        //         try {
-        //             const snapshot = await uploadBytes(storageRef, file);
-        //             console.log(snapshot)
-        //             const url = await getDownloadURL(snapshot.ref);
-        //             img.attr('src', url);
-        //             form.append(`<input id="url-avatar-user" type="hidden" name="avatar" value="${url}">`);
-        //             form.submit();
-        //         } catch (error) {
-        //             console.error(error);
-        //         }
-        //     } else {
-        //         form.submit();
-        //     }
-        // })
-
         let check = true;
         if (validate()) {
             check = await checkDuplicate();
@@ -111,15 +77,12 @@ $(document).ready(function () {
             return;
         }
         if (check.email) {
-            console.log(check)
             return;
         }
         if (check.sdt) {
-            console.log(check)
             return;
         }
         if (check.cccd) {
-            console.log(check)
             return;
         }
         showLoader();
@@ -129,11 +92,9 @@ $(document).ready(function () {
             let input = document.getElementById('avatarUploader');
             let img = $('#avatarImg');
             const file = renameFile(input.files[0]);
-            console.log(file)
             const storageRef = ref(storage, `avatars/${file.name}`);
             try {
                 const snapshot = await uploadBytes(storageRef, file);
-                console.log(snapshot)
                 const url = await getDownloadURL(snapshot.ref);
                 img.attr('src', url);
                 form.append(`<input id="urlImgAvatar" type="hidden" name="avatar" value="${url}">`);

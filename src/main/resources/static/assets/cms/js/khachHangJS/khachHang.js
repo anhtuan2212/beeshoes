@@ -147,7 +147,6 @@ function fillAllTinh() {
         tinh_TP.each((index, element) => {
             let select = $(element).find('select');
             let tinh = $(element).find('input[type="text"]').val();
-            console.log(tinh)
             select.append(`<option value="" >Chọn Tỉnh</option>`);
             province_list.forEach(data => {
                 select.append(`<option value="${data.ProvinceID}" ${tinh === data.ProvinceName ? 'selected' : ''}>${data.ProvinceName}</option>`);
@@ -198,7 +197,6 @@ fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
         province_list = data;
-        console.log(data)
         handleData(province_list, $('#tinhTPMoi'), 'ProvinceID', 'ProvinceName');
         return fillAllTinh();
     })
@@ -229,11 +227,9 @@ $(document).on('ready', function () {
             return;
         }
         if (check.email) {
-            console.log(check)
             return;
         }
         if (check.sdt) {
-            console.log(check)
             return;
         }
         let form = $('#form-data-cus');
@@ -341,7 +337,6 @@ $(document).on('ready', function () {
                 tinhThanhPhoDto: tinhTP
             },
             success: function (data, status, xhr) {
-                console.log(data)
                 let html = `     <div class="card-body form-address row position-relative">
                                           <button type="button" data-id-address="${data.id}" class="btn btn-primary position-absolute btn_save_address d-none"><i class="tio-save"></i></button>
                                           <div class="col-sm-6">

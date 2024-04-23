@@ -211,7 +211,6 @@ function startQRCodeScanner() {
             if (code) {
                 var data = code.data;
                 result = data.split("|");
-                console.log(result);
                 playBeepSound();
                 closeCamera();
                 $('#hoTen').val(result[2])

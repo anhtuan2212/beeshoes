@@ -157,11 +157,14 @@ public class HoaDonRestController {
         if (hdct.getGiaBan().intValue() != ctsp.getGiaBan().intValue()) {
             return ResponseEntity.notFound().header("status", "ChangePrice").build();
         }
-        if (hdct.getChiTietSanPham().getSoLuongTon() - num < 0) {
+        int total = ctsp.getSoLuongTon() + hdct.getSoLuong();
+        ctsp.setSoLuongTon(total - num);
+        System.out.println(total);
+        System.out.println(ctsp.getSoLuongTon());
+        System.out.println(num);
+        if (ctsp.getSoLuongTon() < 0) {
             return ResponseEntity.notFound().header("status", "maxQuantity").build();
         }
-        int quantityChange = num - hdct.getSoLuong();
-        ctsp.setSoLuongTon(ctsp.getSoLuongTon() + quantityChange);
         hdct.setSoLuong(num);
         chiTietSanPhamService.save(ctsp);
         hdct = hoaDonChiTietService.save(hdct);
@@ -401,10 +404,11 @@ public class HoaDonRestController {
         List<ProductCashierRequest> listProduct = gson.fromJson(request.getProduct(), listType);
         for (ProductCashierRequest pcr : listProduct) {
             ChiTietSanPham ctsp = chiTietSanPhamService.getById(pcr.getId());
+            if (ctsp.getSoLuongTon()<=0){
+                return ResponseEntity.notFound().header("status", "zeroQuantityPro").build();
+            }
             if (ctsp.getSoLuongTon() < pcr.getQuantity()) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .header("status", "error")
-                        .body(String.format("Số lượng sản phẩm %s vượt quá số lượng tồn", ctsp.getSanPham().getTen()));
+                return ResponseEntity.notFound().header("status", "minQuantityPro").build();
             }
         }
         int total = 0;
@@ -423,6 +427,9 @@ public class HoaDonRestController {
         HoaDon hd = new HoaDon();
         if (request.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(request.getVoucher());
+            if (voucher.getSoLuong() <= 0) {
+                return ResponseEntity.notFound().header("status", "ZeroVoucher").build();
+            }
             if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
                 if (voucher.getLoaiVoucher().equals("$")) {
                     if (voucher.getGiaTriTienMat().intValue() > total) {
@@ -641,7 +648,7 @@ public class HoaDonRestController {
         Notification notification = new Notification();
         notification.setCreatedBy("N/A");
         notification.setCreatorAvatarUrl("/assets/cms/img/160x160/img1.jpg");
-        if(userTH != null && userTH.getNhanVien() != null) {
+        if (userTH != null && userTH.getNhanVien() != null) {
             notification.setCreatedBy(userTH.getNhanVien().getHoTen());
             notification.setCreatorAvatarUrl(userTH.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : userTH.getAvatar());
         }
