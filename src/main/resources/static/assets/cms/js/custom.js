@@ -63,7 +63,6 @@ function Confirm() {
             ToastSuccess("Thành Công !");
             return true;
         } else {
-            console.log(result)
             return false;
         }
     });
@@ -80,7 +79,6 @@ function setFormSendData(url, name, id) {
 }
 
 $(document).on('ready', function () {
-
     $('#btn-add-new-product').on('click', () => {
         let ten = $('#product-name-modal').val();
         let url = $('#url-post-data').val();
@@ -103,8 +101,6 @@ $(document).on('ready', function () {
                     if (id == 'sanPham') {
                         $('#sanPham_input').val(data.ten);
                     }
-                    console.log($('#sanPham_input').val())
-                    console.log(id)
                     $('#' + id).append(html);
                     Toast('success', 'Thêm Thành Công !');
                     $('#product-name-modal').val('');

@@ -11,6 +11,11 @@ var districtName;
 var provinceName;
 var houseNumber;
 var orderCode;
+
+let quantityProduct = 0;
+$('.quantityProDuct').each((index, element) => {
+    quantityProduct += $(element).val();
+})
 fetch('/assets/address-json/province.json')
     .then(response => response.json())
     .then(data => {
@@ -84,6 +89,12 @@ function callApiShippingFee() {
         $('#shippingFee').text('Miễn phí');
         shippingFee = 0;
     } else {
+        let weight = 0;
+        if (quantityProduct === 0) {
+            weight = 500;
+        } else {
+            weight = 500 * quantityProduct;
+        }
         $.ajax({
             type: "POST",
             url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
@@ -126,7 +137,7 @@ function callApiShippingFee() {
                                 }
                         }
                     ],
-                    weight: 2000,
+                    weight: weight,
                     length: 1,
                     width: 19,
                     height: 10
@@ -315,11 +326,11 @@ $(document).on('click', '#btn-addAddress', function () {
             ToastSuccess('Thêm mới địa chỉ thành công');
             $('#newAddress').modal('hide');
             let wrapper_address = $('.wrapper_address');
-            wrapper_address.append(`<div class="item_address mb-1">
+            wrapper_address.append(`<div class="item_address mb-1" id="${response.id}">
                                     <div class="content_dress row m-0 customerAddress">
                                         <div class="checkbox-wrapper-30 col-1">
                                    <span class="checkbox">
-                                     <input class="selected_product" type="radio" name="address" data-cart-id=""/>
+                                     <input class="selected_product" type="radio" name="address" id="product_${response.id}"/>
                                      <svg>
                                        <use xlink:href="#checkbox-30" class="checkbox"></use>
                                      </svg>
@@ -350,86 +361,6 @@ $(document).on('click', '#btn-addAddress', function () {
 
                                     </div>
                                 </div>`);
-            var totalAmount = parseFloat(document.getElementById("totalAmount").textContent.replace(/[.,]/g, ''));
-            if (totalAmount > 2000000) {
-                $('#shippingFee').text('Miễn phí');
-                shippingFee = 0;
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/api/set-default-address",
-                    data: {
-                        idDiaChi: response.id,
-                        idKhachHang: idCustomer
-                    },
-                    success: function (response) {
-                        $.ajax({
-                            type: "POST",
-                            url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
-                            contentType: "application/json",
-                            headers: {
-                                "Token": "68b8b44f-a88d-11ee-8bfa-8a2dda8ec551"
-                            },
-                            data: JSON.stringify(
-                                {
-                                    shop_id: "190713",
-                                    from_name: "LightBee Shop",
-                                    from_phone: "0359966461",
-                                    from_address: "Trường Cao Đẳng FPT Polytechnic",
-                                    from_ward_name: "Phường Xuân Phương",
-                                    from_district_name: "Nam Từ Liêm",
-                                    from_province_name: "Hà Nội",
-                                    to_name: "test",
-                                    to_phone: "0359966461",
-                                    to_address: "Nam Đinh",
-                                    to_ward_code: newWardCode,
-                                    to_district_id: newDistrictId,
-                                    service_id: 55320,
-                                    service_type_id: 2,
-                                    payment_type_id: 2,
-                                    cod_amount: parseInt(200000),
-                                    required_note: "CHOXEMHANGKHONGTHU",
-                                    items: [
-                                        {
-                                            name: "Áo Polo",
-                                            code: "Polo123",
-                                            quantity: 1,
-                                            price: 200000,
-                                            length: 12,
-                                            width: 12,
-                                            height: 12,
-                                            weight: 1200,
-                                            category:
-                                                {
-                                                    level1: "Áo"
-                                                }
-                                        }
-                                    ],
-                                    weight: 2000,
-                                    length: 1,
-                                    width: 19,
-                                    height: 10
-                                }
-                            ),
-                            success: function (response) {
-                                orderCode = response.data.order_code;
-                                var shippingFee = response.data.total_fee;
-                                $('#shippingFee').text(parseFloat(response.data.total_fee).toLocaleString('en-US'));
-                                $('#totalAmount').text(parseFloat(parseInt(totalAmount) + parseInt(shippingFee)).toLocaleString('en-US'));
-                                $('#leadTime').text(new Date(response.data.expected_delivery_time).toLocaleDateString('vi-VN'));
-                            },
-                            error: function (error) {
-                                console.error('Xảy ra lỗi: ', error)
-                                ToastError(error.responseJSON.code_message_value);
-                                $('#shippingFee').text('Không hỗ trợ giao');
-                            }
-                        })
-                    },
-                    error: function (error) {
-                        console.error('Xảy ra lỗi: ', error)
-                    }
-                })
-            }
         },
         error: function (error) {
             console.error('Xảy ra lỗi: ', error)
@@ -553,6 +484,12 @@ $(document).ready(function () {
         if (totalAmount > 2000000) {
             $('#shippingFee').text('Miễn phí');
         } else {
+            let weight = 0;
+            if (quantityProduct === 0) {
+                weight = 500;
+            } else {
+                weight = 500 * quantityProduct;
+            }
             $.ajax({
                 type: "POST",
                 url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
@@ -595,7 +532,7 @@ $(document).ready(function () {
                                     }
                             }
                         ],
-                        weight: 2000,
+                        weight: weight,
                         length: 1,
                         width: 19,
                         height: 10
@@ -616,11 +553,11 @@ $(document).ready(function () {
         }
     })
 
-    $('.selected_product').on('change', function () {
+    $(document).on('change', '.selected_product', function () {
         let totalAmount = parseInt($('#totalAmount').text().replace(/[,.]/g, ''));
         let shippingFee = $('#shippingFee').text().replace(/[,.]/g, '');
         console.log(totalAmount + '--' + shippingFee)
-        if(shippingFee === undefined || isNaN(shippingFee) || shippingFee == 'Không hỗ trợ giao') {
+        if (shippingFee === undefined || isNaN(shippingFee) || shippingFee == 'Không hỗ trợ giao') {
             shippingFee = 0;
         } else {
             shippingFee = parseInt(shippingFee);
@@ -654,6 +591,12 @@ $(document).ready(function () {
             $('#totalAmount').text(parseFloat(totalAmount - shippingFee).toLocaleString('en-US'));
             shippingFee = 0;
         } else {
+            let weight = 0;
+            if (quantityProduct === 0) {
+                weight = 500;
+            } else {
+                weight = 500 * quantityProduct;
+            }
             $.ajax({
                 type: "POST",
                 url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
@@ -696,7 +639,7 @@ $(document).ready(function () {
                                     }
                             }
                         ],
-                        weight: 2000,
+                        weight: weight,
                         length: 1,
                         width: 19,
                         height: 10

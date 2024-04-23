@@ -201,7 +201,6 @@ $(document).ready(function () {
     datatable.rows.add(dataArray).draw();
     $('#sanPham').on('change', function () {
         let selectedText = $(this).find('option:selected').text();
-        console.log(selectedText);
         $('#sanPham_input').val(selectedText)
         $('#kichCo').val(null).trigger('change');
         $('#mauSac').val(null).trigger('change');
@@ -226,7 +225,6 @@ $(document).ready(function () {
         let rowIndex = datatable.row($(this).closest('tr')).index();
         let name = $(this).attr('name');
         let columnIndex = $(this).closest('th').data('colum-index');
-        console.log(columnIndex)
         var newValue = $(this).val();
         let arr = getArrIndex();
         if (columnIndex > 1) {
@@ -362,7 +360,6 @@ $(document).ready(function () {
     });
     $(document).on('click', '#wraperKichCo .select2-selection__choice__remove', function (e) {
         e.preventDefault();
-        console.log(e)
         let removeElement = $(this);
         Confirm('Bạn chắc chứ ?', 'Bạn đang xóa một phiên bản sản phẩm.', 'Hủy', 'Xác Nhận').then((check) => {
             if (check) {
@@ -460,7 +457,6 @@ $(document).ready(function () {
     }
 
     $('#addVariantsContainer').on('change', '.formAddImg', async function (e) {
-        // console.log(this)
         const files = e.target.files;
         let img = $(this).parent().find('.img-shoe')[0];
         let snip = $(this).parent().find('.spinner-border')[0];
@@ -482,7 +478,6 @@ $(document).ready(function () {
             const url = await getDownloadURL(snapshot.ref);
             let imgOJ = {path: storageRef._location.path_, url: url}
             fileInStorages.push(imgOJ);
-            console.log(fileInStorages)
             let rowIndex = datatable.row($(this).closest('tr')).index();
             let ColumnIndex = 1;
             let mauSacToUpdate = $(this).closest('th').attr('data-color');
@@ -517,9 +512,6 @@ $(document).ready(function () {
             }
         });
     });
-    $('.btn-del-img').on('click', function () {
-        console.log(this);
-    })
 
     function containsLetter(str) {
         return /[a-zA-Z]/.test(str);
@@ -658,7 +650,6 @@ $(document).ready(function () {
                 }
                 if (Number($('#soLuong').val()) <= 0) {
                     ToastError("Vui lòng nhập Số Lượng !")
-                    console.log($('#soLuong').val())
                     $('#soLuong').focus();
                     return;
                 }

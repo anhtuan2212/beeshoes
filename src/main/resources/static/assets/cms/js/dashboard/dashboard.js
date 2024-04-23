@@ -45,9 +45,6 @@ function getRevenueToday(total_revenue) {
             end: today
         },
         success: function (response) {
-            console.log(response)
-
-
             $('#total-money-today').text(addCommasToNumber(response.total_money) + 'đ')
             updateChartRevenue(response.data, total_revenue, response.yesterday_data)
         },
@@ -290,13 +287,9 @@ $(document).on('ready', function () {
     let value_today = discount.data('value_today');
     let value_yesterday = discount.data('value_yesterday');
     let chartDiscount = $.HSCore.components.HSChartJS.init(discount);
-    console.log(value_yesterday)
-    console.log(value_today)
     labels = labels.split("-");
     value_today = value_today.split("-");
     value_yesterday = value_yesterday.split("-");
-    console.log(value_yesterday)
-    console.log(value_today)
     chartDiscount.data.labels = labels;
     chartDiscount.data.datasets = [{
         data: value_today,
@@ -345,7 +338,6 @@ $(document).on('ready', function () {
 
     $('#top-product-option').on('change', function () {
         let val = $(this).val();
-        console.log(val);
         if (val === 'month') {
             if (data_month.length > 0) {
                 printTopProduct(data_month);
@@ -681,7 +673,6 @@ $(document).on('ready', function () {
                 end: endDate
             },
             success: function (response) {
-                console.log(response)
                 if (response.check) {
                     let option = $('#total-oder-today-type').val();
                     let data_online = response.online_today;

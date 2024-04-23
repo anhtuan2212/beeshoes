@@ -11,7 +11,6 @@ window.onload = function () {
 };
 activeSiderbar1EXXP("quan_ly_don_hang");
 worker.onmessage = function (e) {
-    console.log(e.data);
     dataShop = e.data;
     let dataS = [...dataShop];
     let element = $('#tenSanPham');
@@ -29,8 +28,6 @@ $.ajax({
     contentType: "application/json",
     success: function (response) {
         provinceArr = response;
-        console.log(response)
-        console.log(123)
         $.each(response, function (index, item) {
             let html = `<option value="${item.ProvinceID}">${String(item.ProvinceName)}</option>`;
             province.append(html);
@@ -215,7 +212,6 @@ function setQuantity(id, num) {
                 id: id,
                 quantity: num
             }, success: async function (response) {
-                console.log(response)
                 let money = Number(response.giaBan) * Number(response.soLuong);
                 $(`.wrapper_product_detail[data-id-hdct="${response.idHDCT}"]`).find('.text-quantity-product').text(addCommasToNumber(money));
                 $('#shippingFee').text(addCommasToNumber(response.phiShip));
@@ -283,7 +279,6 @@ function UpdateQuantity(id, calcu, num) {
                 calcu: calcu,
                 num: num
             }, success: async function (data) {
-                console.log(data);
                 let count = 0;
                 let id_hd = null;
                 for (let i = 0; i < data.length; i++) {
@@ -507,7 +502,6 @@ async function updateShippingFee(id, shippingFee) {
                     shippingfee: shippingFee,
                 },
                 success: function (data) {
-                    console.log(data)
                     resolve(data)
                 },
                 error: function (xhr, textStatus, errorThrown) {
@@ -727,6 +721,7 @@ $(document).on('ready', function () {
         }
         setQuantity(id, val).then((res) => {
             element.val(res.quantity);
+            $(this).closest('.wrapper-quantity').find('h6.productQuantity').text(res.quantity);
         });
     })
     $(document).on('click', '.wrapper-quantity .btn-quantity', function () {
@@ -756,7 +751,6 @@ $(document).on('ready', function () {
                     data: {
                         id: id
                     }, success: async function (data) {
-                        console.log(data);
                         ToastSuccess('Xóa thành công.')
                         element.closest('div.product').remove()
                         $('#total-money').text(addCommasToNumber(data.tongTien))
@@ -895,7 +889,6 @@ $(document).on('ready', function () {
     // handle timeline
     $('#xacNhanFromDetail').on('click', function () {
         var idHoaDon = String($(this).closest("div").attr("id-hoa-don"));
-        console.log(idHoaDon);
         Swal.fire({
             title: "Bạn chắc chứ?",
             text: "Bạn đang xác nhận đơn hàng!",
@@ -913,7 +906,6 @@ $(document).on('ready', function () {
                     contentType: "application/json",
                     data: JSON.stringify(idHoaDon),
                     success: function (response) {
-                        console.log(response);
                         ToastSuccess('Xác nhận đơn hàng thành công');
                         let type = 'success';
                         let status = response.trangThaiSauUpdate;
@@ -973,7 +965,6 @@ $(document).on('ready', function () {
                         printStatusHeader(typeOfColor, status);
                         printTimeline(status, type, action);
                         printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
-                        console.log(response);
                     },
                     error: function (error) {
                         ToastError('Xác nhận đơn hàng thất bại');
@@ -1004,7 +995,6 @@ $(document).on('ready', function () {
                     contentType: "application/json",
                     data: JSON.stringify(idHoaDon),
                     success: function (response) {
-                        console.log(response);
                         ToastSuccess('Hoàn tác đơn hàng thành công');
                         $('#getAttrToHuyFromDetail').removeClass('d-none');
                         let type = 'success';
@@ -1018,7 +1008,6 @@ $(document).on('ready', function () {
                         printStatusHeader(type, status);
                         printTimeline(status, type, action);
                         printHistory(response.thoiGian, response.nguoiThucHien, response.hanhDong);
-                        console.log(response);
                     },
                     error: function (error) {
                         ToastError('Xảy ra lỗi khi hoàn tác đơn hàng, vui lòng thử lại!');
@@ -1036,7 +1025,6 @@ $(document).on('ready', function () {
         var customerName = document.querySelector('.customerName').textContent;
         var customerPhone = document.querySelector('.customerPhone').textContent;
         var customerAddress = document.querySelector('.customerAddress').textContent;
-        console.log(customerName + " - " + customerPhone + " - " + customerAddress);
         var productElements = document.querySelectorAll('.product');
         productElements.forEach(function (productElement) {
             var productName = productElement.querySelector('.productName').textContent;
@@ -1063,7 +1051,6 @@ $(document).on('ready', function () {
             }
             items.push(gItem);
         })
-        console.log(codAmount);
 
         $.ajax({
             type: "POST",
@@ -1099,7 +1086,6 @@ $(document).on('ready', function () {
                 }
             ),
             success: function (responseFirst) {
-                console.log(responseFirst);
                 $.ajax({
                     type: "POST",
                     url: "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/a5/gen-token",
@@ -1114,14 +1100,12 @@ $(document).on('ready', function () {
                     ),
                     success: function (responseSecond) {
                         hideLoader();
-                        console.log(responseSecond);
                         var token = responseSecond.data.token;
                         $.ajax({
                             type: "GET",
                             url: "/api/hoa-don/printOrder?token=" + token,
                             contentType: "application/json",
                             success: function (responseThird) {
-                                console.log(responseThird);
                                 printHTML(responseThird);
                             },
                             error: function (error) {
@@ -1191,7 +1175,6 @@ $(document).on('click', '#huyFromDetail', function () {
             lydo: lydo
         },
         success: function (response) {
-            console.log(response);
             ToastSuccess('Hủy đơn hàng thành công');
             let type = 'danger';
             let status = 'Hủy';

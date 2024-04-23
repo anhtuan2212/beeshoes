@@ -53,11 +53,9 @@ document.getElementById('chooseImg').addEventListener("change", function (e) {
     });
     for (let i = 0; i < files.length; i++) {
         let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]');
-        // console.log(num.length)
         const file = files[i];
         if (num.length < 4) {
             let filename = $('a.js-fancybox-item[data-caption]');
-            // console.log(filename)
             let found = false;
             for (let j = 0; j < filename.length; j++) {
                 if (file.name == $(filename[j]).data('caption')) {
@@ -111,7 +109,6 @@ document.getElementById('chooseImg').addEventListener("change", function (e) {
                         }
                     });
                 }
-                // console.log(filesStorage);
             });
             const deleteButton = div.querySelector(".btn-delete-img");
             deleteButton.addEventListener("click", function () {
@@ -165,8 +162,6 @@ $(document).on('click', '#btn-save-img', function () {
                     return getDownloadURL(snapshot.ref).then((url) => {
                         let img = $('a.js-fancybox-item[data-caption="' + files[i].file.name + '"]').closest('div[data-index="show-img-in-form"]').find('img.card-img-top');
                         img.attr('src', url);
-                        // console.log(img)
-                        // console.log(files[i].file.name)
                         let object = {url: url, main: false}
                         if (files[i].isMain) {
                             NotExitMain = false;
@@ -177,14 +172,12 @@ $(document).on('click', '#btn-save-img', function () {
                 });
                 let index = filesStorage.indexOf(files[i]);
                 filesStorage[index].deleted = true;
-                console.log(filesStorage)
                 promises.push(promise); // Thêm promise vào mảng
             }
 
             Promise.all(promises).then(() => { // Chờ tất cả các promise hoàn thành
                 if (NotExitMain) {
                     let checkedURL = $('input.check-main-radio[name="main-img"]:checked').closest('div[data-index="show-img-in-form"]').find('img.card-img-top').attr("src");
-                    // console.log(checkedURL);
                     let object = {url: checkedURL, main: true}
                     lstURL.push(object)
                 }
@@ -213,7 +206,6 @@ async function deleteImageFromFirebaseStorage(imageUrl) {
     try {
         const fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1, imageUrl.indexOf('?'));
         const correctedFileName = fileName.replace(/%2F/g, '/');
-        console.log(correctedFileName);
         const imageRef = ref(storage, correctedFileName);
         await deleteObject(imageRef);
         ToastSuccess("Xóa thành công.")
@@ -248,7 +240,6 @@ $(document).on('click', '.btn-delete-img', function () {
                     deleteImageFromFirebaseStorage(url).then();
                     element.remove();
                     let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]').length;
-                    // console.log(num);
                     if (num > 3) {
                         $('label[for="chooseImg"]').addClass('d-none');
                     } else {
@@ -275,7 +266,6 @@ $(document).on('click', '.btn-delete-img', function () {
 });
 $(document).ready(function () {
     let num = $('#fancyboxGallery').find('div[data-index="show-img-in-form"]').length;
-    // console.log(num);
     if (num > 3) {
         $('label[for="chooseImg"]').addClass('d-none');
     } else {

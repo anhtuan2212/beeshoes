@@ -178,10 +178,8 @@ function fillAllHuyen() {
         let element = quan_huyen;
         let select = $('#quanHuyen_input').val();
         let idTinh = $('#tinhTP option:selected').data('value');
-        console.log(idTinh)
         district_list.forEach(data => {
             if (data.ProvinceId == idTinh) {
-                console.log(data)
                 element.append(`<option data-value="${data.Id}" value="${data.Name}" ${select === data.Name ? 'selected' : ''}>${data.Name}</option>`);
             }
         });
@@ -193,10 +191,8 @@ function fillAllXa() {
         let element = phuong_xa;
         let select = $('#phuongXa_input').val();
         let idPhuong = $('#quanHuyen option:selected').data('value');
-        console.log(idPhuong)
         ward_list.forEach(data => {
             if (data.DistrictId == idPhuong) {
-                console.log(data)
                 element.append(`<option value="${data.Name}" ${select === data.Name ? 'selected' : ''}>${data.Name}</option>`);
             }
         });
@@ -207,7 +203,6 @@ fetch('/assets/cms/json/TinhTP.json')
     .then(response => response.json())
     .then(data => {
         province_list = data;
-        console.log(province_list)
         return fillAllTinh();
     })
     .then(() => {

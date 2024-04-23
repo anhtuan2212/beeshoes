@@ -146,11 +146,9 @@ $(document).on('ready', function () {
             return;
         }
         if (check.email) {
-            console.log(check)
             return;
         }
         if (check.sdt) {
-            console.log(check)
             return;
         }
         let form = $('#btn-submit-khach-hang');
@@ -180,22 +178,16 @@ $(document).on('ready', function () {
     fetchData('/assets/address-json/province.json', function (data) {
         province_list = data;
         handleData(data, $('#tinhTP'), 'ProvinceID', 'ProvinceName');
-        console.log('Tỉnh')
-        console.log(data)
     });
 
     // Gọi API và xử lý dữ liệu cho các quận/huyện
     fetchData('/assets/address-json/district.json', function (data) {
         district_list = data;
-        console.log('Huyện')
-        console.log(data)
     });
 
     // Gọi API và xử lý dữ liệu cho các phường/xã
     fetchData('/assets/address-json/ward.json', function (data) {
         ward_list = data;
-        console.log('Xã')
-        console.log(data)
     });
 
     // Xử lý sự kiện khi thay đổi tỉnh/thành phố

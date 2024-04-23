@@ -335,7 +335,6 @@ $(document).on('ready', function () {
                     data: {
                         id: id
                     }, success: function (data) {
-                        console.log(data)
                         ToastSuccess("Thay đổi đã được áp dụng.")
                         $('#show-all-voucher').find(`tr[data-voucher-id="${data.id}"] td.status-voucher`).html('<span class="badge badge-pill badge-warning">Đã Kết Thúc</span>')
                     }, error: function (e) {
@@ -445,7 +444,6 @@ $(document).on('ready', function () {
                 setTimeout(() => {
                     location.href = '/cms/voucher'
                 }, 3000)
-                console.log(data);
             }, error: function (e) {
                 console.log(e)
                 switch (e.getResponseHeader("status")) {

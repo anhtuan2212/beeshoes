@@ -106,7 +106,8 @@
                         data-toggle="modal" data-target="#staticBackdrop">
                     <i class="tio-delete-outlined"></i> Hủy
                 </button>
-                <button th:class="'btn btn-sm btn-outline-primary ' + ${hoaDon.trangThai != 'Chuẩn Bị Hàng' ? 'd-none' : ''}" id="hoanTacFromDetail">
+                <button th:class="'btn btn-sm btn-outline-primary ' + ${hoaDon.trangThai != 'Chuẩn Bị Hàng' ? 'd-none' : ''}"
+                        id="hoanTacFromDetail">
                     <i class="tio-history"></i> Hoàn Tác
                 </button>
             </div>
@@ -146,7 +147,8 @@
                              th:each="hdct, productInfo : ${hoaDonChiTietList}"
                              th:data-productId="${productInfo.index}" th:attr="data-id-hdct=${hdct.getId()}">
                             <div class="avatar avatar-xl mr-3">
-                            <img class="img-fluid" style="max-height: 78.75px; max-width: 78.75px" th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
+                                <img class="img-fluid" style="max-height: 78.75px; max-width: 78.75px"
+                                     th:src="${hdct.chiTietSanPham.anh.url}" alt="Image Description">
                             </div>
                             <div class="media-body">
                                 <div class="row">
@@ -175,7 +177,7 @@
                                         <h6 class="productQuantity text-center" th:text="${hdct.getSoLuong()}"></h6>
                                         <div class="js-quantity-counter form-edit-quantity input-group-quantity-counter d-none"
                                              th:attr="data-id=${hdct.getId()}">
-                                            <input type="number"
+                                            <input type="number" th:attr="data-previous-value=${hdct.getSoLuong()}"
                                                    class="js-result form-quantity form-control input-group-quantity-counter-control"
                                                    th:value="${hdct.getSoLuong()}">
                                             <div class="input-group-quantity-counter-toggle">
@@ -291,7 +293,8 @@
                     <!-- Header -->
                     <div class="card-header">
                         <h4 class="card-header-title">Thông tin nhận hàng</h4>
-                        <button id="btn-edit-address" th:if="${hoaDon.trangThai == 'Chờ Xác Nhận' && hinhThuc != 'VNPAY'}"
+                        <button id="btn-edit-address"
+                                th:if="${hoaDon.trangThai == 'Chờ Xác Nhận' && hinhThuc != 'VNPAY'}"
                                 class="btn btn-outline-primary fixInvoice">Chỉnh sửa
                         </button>
                     </div>

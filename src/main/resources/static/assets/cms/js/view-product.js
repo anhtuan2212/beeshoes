@@ -240,7 +240,6 @@ $(document).on('ready', function () {
         let id = $(this).data('id');
         JsBarcode("#barcode" + id, code);
     })
-    console.log(datatable.data())
     $('#datatableSearch').on('mouseup', function (e) {
         let $input = $(this),
             oldValue = $input.val();
@@ -444,8 +443,8 @@ $(document).on('ready', function () {
         }
         $("td.row-show-img[status-remove='true']").each(function (index, element) {
             $(element).addClass('d-none');
-            console.log(element)
         });
+
         img.removeAttr('status-remove');
         for (let i = 0; i < arr.length; i++) {
             $(arr[i].ele).attr('rowspan', $('tr[color-code=' + arr[i].color + ']').length).removeClass('d-none');
@@ -504,7 +503,6 @@ $(document).on('ready', function () {
                 let trangThai = $('#trangThai').val();
                 let mota = $('.ql-editor').html();
                 let product_details = datatable.rows().data().toArray();
-                console.log(product_details);
                 if (isEmpty(sanPham)) {
                     ToastError("Vui lòng chọn Sản Phẩm !")
                     $('#product-id').focus();

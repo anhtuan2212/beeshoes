@@ -1,4 +1,5 @@
 activeSiderbar1EXXP("ban_hang");
+
 function PrintBillOder(data) {
     let elementToPrint = $('#oder-print');
     elementToPrint.find('#full_name_print').text(data.tenNguoiNhan)
@@ -60,6 +61,26 @@ window.addEventListener('beforeunload', function (event) {
     }
 });
 
+function tinhTienGiamGia(voucher, tongTien) {
+    if (!voucher || !tongTien) {
+        return 0;
+    }
+
+    if (voucher.loaiVoucher === '$') {
+        if (voucher.giaTriTienMat && voucher.giaTriTienMat <= voucher.giaTriToiDa) {
+            return voucher.giaTriTienMat;
+        } else {
+            return voucher.giaTriToiDa;
+        }
+    } else {
+        let giamGiaPhanTram = (tongTien * voucher.giaTriPhanTram) / 100;
+        if (giamGiaPhanTram <= voucher.giaTriToiDa) {
+            return giamGiaPhanTram;
+        } else {
+            return voucher.giaTriToiDa;
+        }
+    }
+}
 
 function showLoader() {
     Swal.fire({
@@ -141,7 +162,6 @@ window.onload = function () {
         url: '/api/get-all-san-pham', type: 'GET', success: function (data) {
             dataShop = [...data];
             dataProductDetails = data.flatMap(obj => obj.chiTietSanPham);
-            console.log(dataShop)
         }, error: function (jqXHR, textStatus, errorThrown) {
             console.error("Lỗi khi gọi API: " + textStatus, errorThrown);
         }
@@ -463,7 +483,6 @@ function resetData() {
     localStorage.setItem('List_product_oder_5', JSON.stringify([]))
     getAllVoucher(0).then((res) => {
         ListVoucher = res;
-        console.log(res)
     })
 }
 
@@ -529,6 +548,7 @@ function updateTotalMoney(oder) {
         }
     }
     let arrVoucher = [];
+    let arrNotAccept = [];
     let VoucherNot = null;
     let arr = [...ListVoucher]
     if (arr !== null && Array.isArray(arr)) {
@@ -567,17 +587,28 @@ function updateTotalMoney(oder) {
                         ele.parent().remove();
                     });
                 }
-                if (VoucherNot === null) {
-                    VoucherNot = voucher;
-                } else {
-                    if (VoucherNot.giaTriToiDa < voucher.giaTriToiDa) {
-                        VoucherNot = voucher;
-                    }
-                }
+                arrNotAccept.push(voucher);
             }
         })
         let voucher = $(`#list_show_voucher_hd_${oder}`);
         voucher.prepend(html);
+    }
+    let discountAmount;
+    let selectedVoucher = getVoucher(oder);
+    if (selectedVoucher !== null) {
+        discountAmount = tinhTienGiamGia(selectedVoucher, total);
+    } else {
+        discountAmount = 0;
+    }
+    if (Array.isArray(arrNotAccept)) {
+        arrNotAccept.sort((a, b) => a.giaTriToiThieu - b.giaTriToiThieu);
+        for (let i = 0; i < arrNotAccept.length; i++) {
+            let discount = tinhTienGiamGia(arrNotAccept[i], total);
+            if (discount > discountAmount) {
+                VoucherNot = arrNotAccept[i];
+                break;
+            }
+        }
     }
 
     if (VoucherNot !== null) {
@@ -611,36 +642,11 @@ function updateTotalMoney(oder) {
     }
 
 
-    let discountAmount;
-    let selectedVoucher = getVoucher(oder);
-    if (selectedVoucher !== null) {
-        if (selectedVoucher.loaiVoucher === '%') {
-            if (Number(selectedVoucher.giaTriToiDa) < Number(total) * (Number(selectedVoucher.giaTriPhanTram) / 100)) {
-                discountAmount = Number(selectedVoucher.giaTriToiDa);
-            } else {
-                discountAmount = Number(total) * (Number(selectedVoucher.giaTriPhanTram) / 100);
-            }
-        } else {
-            discountAmount = selectedVoucher.giaTriTienMat;
-        }
-    } else {
-        discountAmount = 0;
-    }
-
     let maxDiscountAmount = -Infinity;
     let maxDiscountVoucher = null;
     if (Array.isArray(arrVoucher)) {
         arrVoucher.forEach((voucher) => {
-            let discountAmount;
-            if (voucher.loaiVoucher === '%') {
-                if (Number(voucher.giaTriToiDa) < Number(total) * (Number(voucher.giaTriPhanTram) / 100)) {
-                    discountAmount = Number(voucher.giaTriToiDa);
-                } else {
-                    discountAmount = Number(total) * (Number(voucher.giaTriPhanTram) / 100);
-                }
-            } else {
-                discountAmount = voucher.giaTriTienMat;
-            }
+            let discountAmount = tinhTienGiamGia(voucher, total);
             if (discountAmount > maxDiscountAmount) {
                 maxDiscountAmount = discountAmount;
                 maxDiscountVoucher = voucher;
@@ -832,7 +838,6 @@ let Detection = true;
 
 function addProductByBarcode(code) {
     if (Detection) {
-        console.log(code)
         let product = findProductByCode(code);
         if (num_oder_add !== null && product !== null) {
             saveProductToOder(product, num_oder_add, 1);
@@ -1396,7 +1401,6 @@ $(document).on('ready', function () {
             ToastError('Vui lòng nhập số nhà.');
             return;
         }
-        console.log(soNha)
         if ($('#phuongXa').val() === '#') {
             ToastError('Vui lòng chọn phường xã.');
             return;
@@ -1587,24 +1591,29 @@ $(document).on('ready', function () {
                 email: emailCus,
                 sdt: phoneCus,
             }, success: function (data) {
-                console.log(data)
                 PrintBillOder(data);
                 resetBill(oder)
                 ToastSuccess('Thành công.');
                 $('#form-modal-payment').modal('hide');
             }, error: function (error) {
                 console.log(error)
+                console.log(error.getResponseHeader("status"))
                 switch (error.getResponseHeader("status")) {
-                    case 'error':
+                    case 'minQuantityPro':
                         ToastError('Số lượng sản phẩm vượt quá số lượng tồn');
+                        break;
+                    case 'zeroQuantityPro':
+                        ToastError('Sản phẩm hiện đang hết hàng.');
+                        break;
+                    case 'ZeroVoucher':
+                        ToastError('Số lượng mã giảm giá đã hết.');
                         break;
                     case 'paymentError':
                         ToastError('Đơn tại quầy không thể thiếu.');
                         break;
                     default:
-                        ToastError('Lỗi.')
+                        ToastError(error.getResponseHeader("status"))
                 }
-                ToastError(error.responseText)
             }
         })
     })
@@ -1698,7 +1707,6 @@ $(document).on('ready', function () {
         }
     })
     $(document).on('change', '.option-select-address', async function () {
-        console.log(123)
         let oder = getOderNum(this);
         // let data = getListProductLocal(oder);
         // if (data.length === 0) {
@@ -1931,7 +1939,6 @@ $(document).on('ready', function () {
         setVoucher(oder, null);
         getAllVoucher(val).then((res) => {
             ListVoucher = res;
-            console.log(res)
             wrapper.find('.input_voucher').val('');
             $(`#best_voucher_voucher_hd_${oder}`).empty();
             $(`#list_show_voucher_hd_${oder}`).empty();
@@ -2033,7 +2040,6 @@ $(document).on('ready', function () {
             } else {
                 $(ele).attr('id', id)
             }
-            // console.log(ele)
         })
         let navContent = `<div class="tab-pane fade" id="nav-content-tab-${numId}" role="tabpanel" aria-labelledby="nav-link-tab-${numId}">
              <div id="oder_content_${numId}" class="row oder-wraper-content" data-id-num-hd="${numId}">
