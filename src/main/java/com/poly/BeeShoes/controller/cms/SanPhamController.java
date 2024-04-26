@@ -69,16 +69,16 @@ public class SanPhamController {
 
     @GetMapping("/add-product")
     public String addProduct(Model model) {
-        model.addAttribute("lsttags", tagsService.getAll());
-        model.addAttribute("lsttheloai", theLoaiService.getAll());
-        model.addAttribute("lstchatlieu", chatLieuService.getAll());
-        model.addAttribute("lstthuonghieu", thuongHieuService.getAll());
-        model.addAttribute("lstmausac", mauSacService.getAll());
-        model.addAttribute("lstdegiay", deGiayService.getAll());
-        model.addAttribute("lstmuigiay", muiGiayService.getAll());
-        model.addAttribute("lstcogiay", coGiayService.getAll());
+        model.addAttribute("lsttags", tagsService.getAllClient());
+        model.addAttribute("lsttheloai", theLoaiService.getAllClient());
+        model.addAttribute("lstchatlieu", chatLieuService.getAllClient());
+        model.addAttribute("lstthuonghieu", thuongHieuService.getAllClient());
+        model.addAttribute("lstmausac", mauSacService.getAllClient());
+        model.addAttribute("lstdegiay", deGiayService.getAllClient());
+        model.addAttribute("lstmuigiay", muiGiayService.getAllClient());
+        model.addAttribute("lstcogiay", coGiayService.getAllClient());
         model.addAttribute("lstsanpham", sanPhamService.getSanPhamEmtyCTSP());
-        model.addAttribute("lstkichco", kichCoService.getAll());
+        model.addAttribute("lstkichco", kichCoService.getAllClient());
         return "cms/pages/products/add-product";
     }
 }
