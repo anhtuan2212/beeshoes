@@ -1957,6 +1957,7 @@ $(document).on('ready', function () {
             content.find('strong.code-customer').text(cusCode)
             getOptionAddress(val, oder);
         } else {
+            $(`#oder_content_${oder}`).find('.wrapper-address-user .show-list-user').html('');
             content.find('strong.fullName-customer').text('')
             content.find('strong.email-customer').text('')
             content.find('strong.phone-customer').text('')
@@ -2047,6 +2048,7 @@ $(document).on('ready', function () {
               </div>
              </div>`;
         tabContent.append(navContent);
+        initializeHSFormSearch();
         $('.js-select2-custom').each(function () {
             initSelect2($(this));
         });
@@ -2178,9 +2180,12 @@ $(document).on('ready', function () {
 
     // INITIALIZATION OF FORM SEARCH
     // =======================================================
-    $('.js-form-search').each(function () {
-        new HSFormSearch($(this)).init()
-    });
+    function initializeHSFormSearch() {
+        $('.js-form-search').each(function () {
+            new HSFormSearch($(this)).init();
+        });
+    }
+    initializeHSFormSearch();
 
 
     // INITIALIZATION OF SELECT2

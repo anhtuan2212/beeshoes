@@ -9,6 +9,7 @@ public interface CoGiayService {
     CoGiay getById(Long id);
     CoGiay getByTen(String ten);
     List<CoGiay> getAll();
+    List<CoGiay> getAllClient();
     boolean delete(Long id);
     boolean existsByTen(String ten ,Long id);
 }

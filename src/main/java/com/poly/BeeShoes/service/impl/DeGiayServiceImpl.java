@@ -37,6 +37,11 @@ public class DeGiayServiceImpl implements DeGiayService {
     }
 
     @Override
+    public List<DeGiay> getAllClient() {
+        return deGiayRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         DeGiay dg = deGiayRepository.findById(id).get();
         if (dg.getId()!=null){

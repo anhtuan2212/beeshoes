@@ -37,6 +37,11 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     }
 
     @Override
+    public List<ChatLieu> getAllClient() {
+        return chatLieuRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         ChatLieu cl = chatLieuRepository.findById(id).get();
         if (cl.getId()!=null){

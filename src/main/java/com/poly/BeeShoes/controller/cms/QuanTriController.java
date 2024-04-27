@@ -55,6 +55,7 @@ public class QuanTriController {
         quantri.setThoi_gian(Timestamp.valueOf(quantri.getThoi_gian_sale()));
         model.addAttribute("quanTri", quantri);
         model.addAttribute("listSP", sanPhamService.findByTrangThaiEquals(true));
+        model.addAttribute("listSPSales", sanPhamService.getAllDiscount());
         return "cms/pages/quantri/quan-tri";
     }
 

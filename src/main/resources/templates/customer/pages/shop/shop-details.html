@@ -31,36 +31,6 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-    <div class="offcanvas__option">
-        <div class="offcanvas__links">
-            <a href="#">Đăng nhập</a>
-            <a href="#">FAQs</a>
-        </div>
-        <div class="offcanvas__top__hover">
-            <span>Usd <i class="arrow_carrot-down"></i></span>
-            <ul>
-                <li>USD</li>
-                <li>EUR</li>
-                <li>USD</li>
-            </ul>
-        </div>
-    </div>
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
-        <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
-        <a href="#"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
-        <div class="price">$0.00</div>
-    </div>
-    <div id="mobile-menu-wrap"></div>
-    <div class="offcanvas__text">
-        <p>Miễn phí vận chuyển, đảm bảo hoàn trả hoặc hoàn tiền trong 30 ngày.</p>
-    </div>
-</div>
-<!-- Offcanvas Menu End -->
-
 <!-- Header Section Begin -->
 <div th:replace="~{customer/pages/_header.html}"></div>
 <!-- Header Section End -->
@@ -79,7 +49,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-11 col-md-9 product-img-show">
+                    <div class="tab-content">
+                        <th:block th:each="img:${sanPham.getAnh()}">
+                            <div th:attr="class='tab-pane '+${img.getId()==sanPham.getMainImage().getId()?'active':''} "
+                                 th:id="'tabs-'+${img.getId()}" role="tabpanel">
+                                <div class="product__details__pic__item">
+                                    <img class="product-img-show" th:src="${img.getUrl()}" alt="">
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-3">
                     <ul class="nav nav-tabs mini_img " role="tablist">
                         <th:block th:each="img:${sanPham.getAnh()}">
                             <li class="nav-item open-fancybox">
@@ -91,18 +73,6 @@
                             </li>
                         </th:block>
                     </ul>
-                </div>
-                <div class="col-lg-6 col-md-9 product-img-show">
-                    <div class="tab-content">
-                        <th:block th:each="img:${sanPham.getAnh()}">
-                            <div th:attr="class='tab-pane '+${img.getId()==sanPham.getMainImage().getId()?'active':''} "
-                                 th:id="'tabs-'+${img.getId()}" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img class="product-img-show" th:src="${img.getUrl()}" alt="">
-                                </div>
-                            </div>
-                        </th:block>
-                    </div>
                 </div>
             </div>
         </div>

@@ -215,7 +215,7 @@ public class CheckOutController {
                 Notification savedNoti = notificationService.save(notification);
                 messagingTemplate.convertAndSend("/topic/newInvoice", hoaDonDto);
                 messagingTemplate.convertAndSend("/topic/noti", savedNoti);
-                mailUtility.sendMail(hoaDon.getEmailNguoiNhan(), "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='http://localhost:8080/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
+                mailUtility.sendMail(hoaDon.getEmailNguoiNhan(), "[LightBee Shop - Đặt hàng thành công]", "Đặt đơn hàng thành công, cảm ơn bạn đã tin tưởng chúng mình! <a href='/oder-tracking?oder=" + savedHoaDon.getMaHoaDon() + "'>Xem chi tiết đơn hàng</a>");
             }
             return "payment/vnpay/order-success";
         } else {

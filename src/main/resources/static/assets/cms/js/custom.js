@@ -104,6 +104,7 @@ $(document).on('ready', function () {
                     $('#' + id).append(html);
                     Toast('success', 'Thêm Thành Công !');
                     $('#product-name-modal').val('');
+                    $('#form-add-product-attr').modal('hide')
                 },
                 error: (xhr) => {
                     let mess = xhr.getResponseHeader('status');
@@ -168,6 +169,7 @@ $(document).on('ready', function () {
                 success: (data, status, xhr) => {
                     let html = `<option value="${data.maMauSac}" data-name="${data.ten}">${data.ten}</option>`;
                     $('#mauSac').append(html);
+                    $('#form-add-product-attr').modal('show')
                     Toast('success', 'Thêm Thành Công !');
                     Swal.fire({
                         title: "Bạn muốn thêm tiếp?",

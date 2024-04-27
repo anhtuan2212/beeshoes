@@ -28,6 +28,7 @@ public interface SanPhamService {
     List<SanPham> findTop4ByTheLoaiOrderByNgayTaoDesc(TheLoai theLoai);
     List<SanPham> findTop4OrderByNgayTaoDesc(List<SanPham> lst);
     List<SanPham> findTop4GiamGia();
+    List<SanPham> getAllDiscount();
 //    Map<String, Map<String, Long>> getKichCoCountByMauSac(Long id);
     Integer getCount();
 

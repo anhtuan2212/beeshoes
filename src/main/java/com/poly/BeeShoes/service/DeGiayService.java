@@ -8,6 +8,7 @@ public interface DeGiayService {
     DeGiay getById(Long id);
     DeGiay getByTen(String ten);
     List<DeGiay> getAll();
+    List<DeGiay> getAllClient();
     boolean delete(Long id);
 
     boolean existsByTen(String ten,Long id);

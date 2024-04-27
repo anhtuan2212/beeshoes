@@ -56,13 +56,13 @@ public class SanPhamServiceImpl implements SanPhamService {
             SanPham sanPham = optionalSanPham.get();
             List<ChiTietSanPham> ctsp = sanPham.getChiTietSanPham();
             int num = 0;
-            BigDecimal gn =null;
+            BigDecimal gn = null;
             List<MauSac> lst = new ArrayList<>();
             for (int j = 0; j < ctsp.size(); j++) {
                 ChiTietSanPham ct = ctsp.get(j);
                 num += ct.getSoLuongTon();
-                gn=ct.getGiaBan();
-                if (!lst.contains(ct.getMauSac())){
+                gn = ct.getGiaBan();
+                if (!lst.contains(ct.getMauSac())) {
                     lst.add(ct.getMauSac());
                 }
             }
@@ -84,13 +84,13 @@ public class SanPhamServiceImpl implements SanPhamService {
             SanPham sanPham = optionalSanPham.get();
             List<ChiTietSanPham> ctsp = sanPham.getChiTietSanPham();
             int num = 0;
-            BigDecimal gn =null;
+            BigDecimal gn = null;
             List<MauSac> lst = new ArrayList<>();
             for (int j = 0; j < ctsp.size(); j++) {
                 ChiTietSanPham ct = ctsp.get(j);
                 num += ct.getSoLuongTon();
-                gn=ct.getGiaBan();
-                if (!lst.contains(ct.getMauSac())){
+                gn = ct.getGiaBan();
+                if (!lst.contains(ct.getMauSac())) {
                     lst.add(ct.getMauSac());
                 }
             }
@@ -156,13 +156,13 @@ public class SanPhamServiceImpl implements SanPhamService {
             SanPham s = sp.get(i);
             List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
             int num = 0;
-            BigDecimal gn =null;
+            BigDecimal gn = null;
             List<MauSac> lst = new ArrayList<>();
             for (int j = 0; j < ctsp.size(); j++) {
                 ChiTietSanPham ct = ctsp.get(j);
                 num += ct.getSoLuongTon();
-                gn=ct.getGiaBan();
-                if (!lst.contains(ct.getMauSac())){
+                gn = ct.getGiaBan();
+                if (!lst.contains(ct.getMauSac())) {
                     lst.add(ct.getMauSac());
                 }
             }
@@ -175,7 +175,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPham> getAllApi() {
-        List<SanPham> lst =sanPhamRepository.findAllWithChiTietSanPham(1);
+        List<SanPham> lst = sanPhamRepository.findAllWithChiTietSanPham(1);
         return lst;
     }
 
@@ -193,22 +193,22 @@ public class SanPhamServiceImpl implements SanPhamService {
     public Page<SanPham> getAllShop(Pageable pageable) {
         Page<SanPham> sp = sanPhamRepository.getAllByChiTietSanPhamExists(pageable);
         List<SanPham> spx = sp.getContent();
-        if (!spx.isEmpty()){
+        if (!spx.isEmpty()) {
             for (int i = 0; i < spx.size(); i++) {
                 SanPham s = spx.get(i);
                 List<ChiTietSanPham> ctsp = s.getChiTietSanPham();
                 int num = 0;
-                BigDecimal gn =null;
-                boolean sale =false;
+                BigDecimal gn = null;
+                boolean sale = false;
                 List<MauSac> lst = new ArrayList<>();
                 for (int j = 0; j < ctsp.size(); j++) {
                     ChiTietSanPham ct = ctsp.get(j);
-                    if (ct.isSale()){
-                        sale=true;
+                    if (ct.isSale()) {
+                        sale = true;
                     }
                     num += ct.getSoLuongTon();
-                    gn=ct.getGiaNhap();
-                    if (!lst.contains(ct.getMauSac())){
+                    gn = ct.getGiaNhap();
+                    if (!lst.contains(ct.getMauSac())) {
                         lst.add(ct.getMauSac());
                     }
                 }
@@ -225,7 +225,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public boolean delete(Long id) {
         SanPham sp = sanPhamRepository.findById(id).get();
-        if (sp.getId()!=null){
+        if (sp.getId() != null) {
             sanPhamRepository.deleteById(sp.getId());
             return true;
         }
@@ -250,5 +250,10 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public List<SanPham> findTop4GiamGia() {
         return sanPhamRepository.findTop4ByGiaGocMinusGiaBanOrderByGiaGocMinusGiaBanDesc();
+    }
+
+    @Override
+    public List<SanPham> getAllDiscount() {
+        return sanPhamRepository.findByGiaGocMinusGiaBanOrderByGiaGocMinusGiaBanDesc();
     }
 }
