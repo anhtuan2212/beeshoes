@@ -33,9 +33,9 @@
                                     <i class="tio-search"></i>
                                 </div>
                             </div>
-                            <input type="search" class="js-form-search form-control"
+                            <input type="search" class="js-form-search form-control" id="form-search-global"
                                    placeholder="Tìm kiếm trong hệ thống"
-                                   aria-label="Search in front" data-hs-form-search-options='{
+                                   aria-label="Tìm kiếm" data-hs-form-search-options='{
                      "clearIcon": "#clearSearchResultsIcon",
                      "dropMenuElement": "#searchDropdownMenu",
                      "dropMenuOffset": 20,
@@ -57,92 +57,32 @@
                             <div class="card-body-height py-3">
                                 <small class="dropdown-header mb-n2">Tìm kiếm gần đây</small>
 
-                                <div class="dropdown-item bg-transparent text-wrap my-2">
-                                    <span class="h4 mr-1">
-                                        <a class="btn btn-xs btn-soft-dark btn-pill" href="/admin/">
-                                            Gulp <i class="tio-search ml-1"></i>
-                                        </a>
-                                    </span>
-                                    <span class="h4">
-                                        <a class="btn btn-xs btn-soft-dark btn-pill" href="/admin/">
-                                            Bảng thông báo <i class="tio-search ml-1"></i>
-                                        </a>
-                                    </span>
+                                <div id="recent-searches" class="dropdown-item bg-transparent text-wrap my-2">
+<!--                                    <span class="h4 mr-1">-->
+<!--                                        <a class="btn btn-xs btn-soft-dark btn-pill" href="/admin/">-->
+<!--                                            Gulp <i class="tio-search ml-1"></i>-->
+<!--                                        </a>-->
+<!--                                    </span>-->
                                 </div>
 
                                 <div class="dropdown-divider my-3"></div>
 
-                                <small class="dropdown-header mb-n2">Hướng dẫn</small>
-
-                                <a class="dropdown-item my-2" href="/admin/">
-                                    <div class="media align-items-center">
+                                <small class="dropdown-header mb-n2">Chức Năng</small>
+                                <div id="list-function">
+                                    <a class="dropdown-item my-2" href="/cms">
+                                        <div class="media align-items-center">
                                         <span class="icon icon-xs icon-soft-dark icon-circle mr-2">
-                                            <i class="tio-tune"></i>
+                                            <i class="tio-home-vs-1-outlined"></i>
                                         </span>
 
-                                        <div class="media-body text-truncate">
-                                            <span>Làm cách nào để thiết lập Gulp?</span>
+                                            <div class="media-body text-truncate">
+                                                <span>Trang Chủ</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item my-2" href="/admin/">
-                                    <div class="media align-items-center">
-                                        <span class="icon icon-xs icon-soft-dark icon-circle mr-2">
-                                            <i class="tio-paint-bucket"></i>
-                                        </span>
-
-                                        <div class="media-body text-truncate">
-                                            <span>Làm thế nào để thay đổi màu chủ đề?</span>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <div class="dropdown-divider my-3"></div>
-
-                                <small class="dropdown-header mb-n2">Các thành viên</small>
-
-                                <a class="dropdown-item my-2" href="/admin/">
-                                    <div class="media align-items-center">
-                                        <img class="avatar avatar-xs avatar-circle mr-2"
-                                             src="/assets/cms/img/160x160/img10.jpg" alt="Image Description">
-                                        <div class="media-body text-truncate">
-                                            <span>Amanda Harvey <i class="tio-verified text-primary"
-                                                                   data-toggle="tooltip" data-placement="top"
-                                                                   title="Top endorsed"></i></span>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item my-2" href="/admin/">
-                                    <div class="media align-items-center">
-                                        <img class="avatar avatar-xs avatar-circle mr-2"
-                                             src="/assets/cms/img/160x160/img3.jpg" alt="Image Description">
-                                        <div class="media-body text-truncate">
-                                            <span>David Harrison</span>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item my-2" href="/admin/">
-                                    <div class="media align-items-center">
-                                        <div class="avatar avatar-xs avatar-soft-info avatar-circle mr-2">
-                                            <span class="avatar-initials">A</span>
-                                        </div>
-                                        <div class="media-body text-truncate">
-                                            <span>Anne Richard</span>
-                                        </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
                             </div>
                             <!-- End Body -->
-
-                            <!-- Footer -->
-                            <a class="card-footer text-center" href="/admin/">
-                                See all results
-                                <i class="tio-chevron-right"></i>
-                            </a>
-                            <!-- End Footer -->
                         </div>
                         <!-- End Card Search Content -->
                     </form>
@@ -605,3 +545,52 @@
         <!-- End Body -->
     </div>
 </div>
+<script>
+    let listFunction = [];
+    fetch('/assets/cms/json/ListChucNang.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            listFunction = data;
+            handleData();
+        })
+        .catch(() => {
+            fetch('/assets/cms/json/ListDuPhong.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    listFunction = data;
+                    handleData();
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+
+    function handleData() {
+        if (Array.isArray(listFunction)) {
+            let html = '';
+            listFunction.forEach(item => {
+                html += `<a class="dropdown-item function-item my-2" href="${item.link}">
+                       <div class="media align-items-center">
+                       <span class="icon icon-xs icon-soft-dark icon-circle mr-2">
+                           <i class="${item.icon}"></i>
+                       </span>
+                           <div class="media-body text-truncate">
+                               <span class="funtion-name">${item.name}</span>
+                           </div>
+                       </div>
+                   </a>`;
+            });
+            document.getElementById('list-function').innerHTML = html;
+        }
+    }
+</script>

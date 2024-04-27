@@ -37,6 +37,11 @@ public class MuiGiayServiceImpl implements MuiGiayService {
     }
 
     @Override
+    public List<MuiGiay> getAllClient() {
+        return muiGiayRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         MuiGiay mg = muiGiayRepository.findById(id).get();
         if (mg.getId()!=null){

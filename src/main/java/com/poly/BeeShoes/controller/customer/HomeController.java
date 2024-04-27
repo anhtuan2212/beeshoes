@@ -1,5 +1,6 @@
 package com.poly.BeeShoes.controller.customer;
 
+import com.poly.BeeShoes.model.ChiTietSanPham;
 import com.poly.BeeShoes.model.QuanTri;
 import com.poly.BeeShoes.model.SanPham;
 import com.poly.BeeShoes.service.QuanTriService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +29,24 @@ public class HomeController {
         List<SanPham> firstFourItems = lst2.subList(0, size);
         List<QuanTri> list = quanTriService.getAll();
         if (!list.isEmpty()) {
+            QuanTri quantri = list.get(0);
+            int min = 0;
+            int max = 0;
+            for (ChiTietSanPham item : quantri.getSan_pham_sale().getChiTietSanPham()) {
+                if (item.getGiaGoc().intValue() > max) {
+                    max = item.getGiaGoc().intValue();
+                }
+                if (min == 0) {
+                    min = item.getGiaBan().intValue();
+                } else {
+                    if (min > item.getGiaBan().intValue()) {
+                        min = item.getGiaBan().intValue();
+                    }
+                }
+            }
+            int phanTramGiamGia = (int) Math.floor(((double) (max - min) / max) * 100);
+            System.out.println("Phần Trăm :" + phanTramGiamGia);
+            model.addAttribute("phanTramGiam", phanTramGiamGia);
             model.addAttribute("setupData", list.get(0));
         } else {
             QuanTri qtri = new QuanTri();
@@ -53,6 +73,23 @@ public class HomeController {
             quanTriService.save(qtri);
             QuanTri quantri = quanTriService.getById(1L);
             quantri.setThoi_gian(Timestamp.valueOf(quantri.getThoi_gian_sale()));
+            int min = 0;
+            int max = 0;
+            for (ChiTietSanPham item : quantri.getSan_pham_sale().getChiTietSanPham()) {
+                if (item.getGiaGoc().intValue() > max) {
+                    max = item.getGiaGoc().intValue();
+                }
+                if (min == 0) {
+                    min = item.getGiaBan().intValue();
+                } else {
+                    if (min > item.getGiaBan().intValue()) {
+                        min = item.getGiaBan().intValue();
+                    }
+                }
+            }
+            int phanTramGiamGia = (int) Math.floor(((double) (max - min) / max) * 100);
+            System.out.println("Phần Trăm :" + phanTramGiamGia);
+            model.addAttribute("phanTramGiam", phanTramGiamGia);
             model.addAttribute("setupData", quantri);
         }
         model.addAttribute("newproduct", lst1);

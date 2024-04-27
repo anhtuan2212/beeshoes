@@ -60,7 +60,7 @@
                       "targetSelector": "#addUserStepProfile"
                     }'>
                                 <div class="step-content">
-                                    <span class="step-title">Thông tin</span>
+                                    <h1 class="page-header-title">Quản Trị Trang Chủ</h1>
                                 </div>
                             </a>
                         </li>
@@ -379,7 +379,7 @@
                                         <div class="col">
                                             <select class="js-select2-custom custom-select form-control"
                                                     th:field="*{san_pham_sale}">
-                                                <option th:each="cv:${listSP}" th:value="${cv.getId()}"
+                                                <option th:each="cv:${listSPSales}" th:value="${cv.getId()}"
                                                         th:selected="${quanTri.getSan_pham_sale() == cv.getId()}"
                                                         th:text="${cv.getTen()}"></option>
                                             </select>

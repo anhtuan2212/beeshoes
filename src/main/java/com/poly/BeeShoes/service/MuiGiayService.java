@@ -10,6 +10,7 @@ public interface MuiGiayService {
     MuiGiay getById(Long id);
     MuiGiay getByTen(String ten);
     List<MuiGiay> getAll();
+    List<MuiGiay> getAllClient();
     boolean delete(Long id);
 
     boolean existsByTen(String ten,Long id);

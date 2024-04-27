@@ -29,27 +29,6 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-    <div class="offcanvas__option">
-        <div class="offcanvas__links">
-            <a href="/login">Đăng nhập</a>
-            <a href="/about">About</a>
-        </div>
-    </div>
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="/assets/customer/img/icon/search.png" alt=""></a>
-        <a href="#"><img src="/assets/customer/img/icon/heart.png" alt=""></a>
-        <a href="/shopping-cart"><img src="/assets/customer/img/icon/cart.png" alt=""> <span>0</span></a>
-    </div>
-    <div id="mobile-menu-wrap"></div>
-    <div class="offcanvas__text">
-        <p>Miễn phí vận chuyển, đảm bảo hoàn trả hoặc hoàn tiền trong 30 ngày.</p>
-    </div>
-</div>
-<!-- Offcanvas Menu End -->
-
 <!-- Header Section Begin -->
 <div th:replace="~{customer/pages/_header.html}"></div>
 <!-- Header Section End -->
@@ -289,7 +268,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="categories__text">
-                    <h2>Giày bán chạy<br /><span>Bộ sưu tập giày</span> <br /> Phụ kiện</h2>
+                    <h2>Giày bán chạy<br /><span>Bộ sưu tập giày</span> <br /> Sản phẩm mới</h2>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -298,7 +277,7 @@
                     <img th:if="${setupData.getSan_pham_sale()!=null}" th:src="${setupData.getSan_pham_sale().getMainImage().getUrl()}" alt="">
                     <div class="hot__deal__sticker">
                         <span>Giảm giá</span>
-                        <h5>$29.99</h5>
+                        <h5 th:text="${phanTramGiam}+'%'"></h5>
                     </div>
                 </div>
             </div>

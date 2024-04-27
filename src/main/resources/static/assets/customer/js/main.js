@@ -844,7 +844,7 @@ function Confirm(title, message, txt_cancel, txt_confirm) {
     /* var timerdate = "2020/12/30" */
 
     CountDown.countdown(timerdate, function (event) {
-        $(this).html(event.strftime("<div class='cd-item'><span>%D</span> <p>Days</p> </div>" + "<div class='cd-item'><span>%H</span> <p>Hours</p> </div>" + "<div class='cd-item'><span>%M</span> <p>Minutes</p> </div>" + "<div class='cd-item'><span>%S</span> <p>Seconds</p> </div>"));
+        $(this).html(event.strftime("<div class='cd-item'><span>%D</span> <p>Ngày</p> </div>" + "<div class='cd-item'><span>%H</span> <p>Giờ</p> </div>" + "<div class='cd-item'><span>%M</span> <p>Phút</p> </div>" + "<div class='cd-item'><span>%S</span> <p>Giây</p> </div>"));
     });
 
     /*------------------

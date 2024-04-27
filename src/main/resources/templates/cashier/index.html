@@ -248,15 +248,21 @@
                                                     </div>
                                                 </div>
                                                 <input id="searchProduct_hd_1" type="search"
-                                                       class="form-control form-input-search"
-                                                       placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa.">
+                                                       class="js-form-search form-control form-input-search"
+                                                       placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa."
+                                                       data-hs-form-search-options='{
+                                                       "dropMenuElement": ".div-form-search",
+                                                       "dropMenuOffset": 20,
+                                                       "toggleIconOnFocus": true,
+                                                       "activeClass": "focus"
+                                                     }'>
                                             </div>
                                             <a class="btn btn-sm btn-ghost-secondary btn-scan-barcode"
                                                href="javascript:;">
                                                 <i class="tio-barcode"></i> Quét Mã
                                             </a>
                                         </div>
-                                        <div class="div-form-search d-none">
+                                        <div class="div-form-search hs-form-search-menu-content card dropdown-menu dropdown-card overflow-hidden">
                                             <ul class="list-all-product pl-3 pt-3 mt-1 mb-1">
                                                 <th:block th:each="sp:${listsanpham}">
                                                     <li class="media align-items-center li-item-ctsp-search"
@@ -659,15 +665,21 @@
                                     </div>
                                 </div>
                                 <input id="searchProduct_hd_mau" data-id-hd="searchProduct_hd_" type="search"
-                                       class="form-control form-input-search"
-                                       placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa.">
+                                       class="js-form-search form-control form-input-search"
+                                       placeholder="Tìm kiếm hàng hóa." aria-label="Tìm kiếm hàng hóa."
+                                       data-hs-form-search-options='{
+                                                       "dropMenuElement": ".div-form-search",
+                                                       "dropMenuOffset": 20,
+                                                       "toggleIconOnFocus": true,
+                                                       "activeClass": "focus"
+                                                     }'>
                             </div>
                             <a class="btn btn-sm btn-ghost-secondary btn-scan-barcode"
                                href="javascript:;">
                                 <i class="tio-barcode"></i> Quét Mã
                             </a>
                         </div>
-                        <div class="div-form-search d-none">
+                        <div class="div-form-search hs-form-search-menu-content card dropdown-menu dropdown-card overflow-hidden">
                             <ul class="list-all-product pl-3 pt-3 mt-1 mb-1">
                                 <th:block th:each="sp:${listsanpham}">
                                     <li class="media align-items-center li-item-ctsp-search"

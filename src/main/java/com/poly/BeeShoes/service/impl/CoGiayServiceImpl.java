@@ -36,6 +36,11 @@ public class CoGiayServiceImpl implements CoGiayService {
     }
 
     @Override
+    public List<CoGiay> getAllClient() {
+        return coGiayRepository.findAllByTrangThaiIsTrue();
+    }
+
+    @Override
     public boolean delete(Long id) {
         CoGiay cg = coGiayRepository.findById(id).get();
         if (cg.getId()!=null){
