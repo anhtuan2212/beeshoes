@@ -529,6 +529,48 @@ function formatDateTime(inputDateString) {
 }
 
 $(document).on('ready', function () {
+
+    $(document).on('click', '#btn-refund', function () {
+        let btn = $(this);
+        Confirm("Xác Nhận Hoàn Tiền?", "Bạn đã hoàn tiền cho đơn hàng trên?", "Chưa", "Đã Hoàn").then(check => {
+            if (check) {
+                let id = btn.data('id-hd');
+                $.ajax({
+                    url: '/api/hoa-don/refunded',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        printHistory(formatDateTime(response.time), response.user, response.message);
+                        printTimeline(response.status, 'success', response.message)
+                        btn.remove();
+                    }, error: function (e) {
+                        console.log(e.getResponseHeader('status'))
+                        switch (e.getResponseHeader('status')) {
+                            case 'NotAuth':
+                                ToastError('Vui lòng đăng nhập.');
+                                break;
+                            case 'oderIsNull':
+                                ToastError('Hóa đơn không tồn tại.');
+                                break;
+                            case 'invalidOder':
+                                ToastError('Hóa đơn không hợp lệ.');
+                                break;
+                            default:
+                                ToastError('Lỗi , Vui lòng thử lại sau.')
+                                console.log(e);
+                        }
+                    }
+                })
+                ToastSuccess('Lưu Thành Công.')
+            } else {
+                ToastError("Vui lòng hoàn tiền rồi thực hiện lại.")
+            }
+        })
+    })
+
     $('.js-select2-custom').each(function () {
         initSelect2($(this));
     });

@@ -46,7 +46,7 @@
                 <div class="col-sm mb-2 mb-sm-0">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-no-gutter">
-                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Tài Khoản</a></li>
                             <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Nhân viên</a>
                             </li>
                         </ol>
@@ -81,13 +81,13 @@
                                 <div class="col-sm-6">
                                     <!-- Form Group -->
                                     <div class="form-group">
-                                        <label class="col col-form-label input-label">Avatar</label>
+                                        <label class="col col-form-label input-label">Ảnh</label>
 
                                         <div class="col">
-                                            <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center justify-content-center">
                                                 <!-- Avatar -->
                                                 <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
-                                                       for="avatarUploader">
+                                                       for="avatarUploader" style="width: 9.5rem;height: 9.5rem;">
                                                     <img id="avatarImg" class="avatar-img w-100"
                                                          th:src="${nhanVien.getAvatar()==''?'/assets/cms/img/160x160/img1.jpg':nhanVien.getAvatar()}"
                                                          alt="Image Description">
@@ -218,6 +218,12 @@
 
                                 <!-- Form Group -->
                                 <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="email" class="col col-form-label input-label">Mã Nhân Viên</label>
+                                        <div class="col">
+                                            <label type="text" class="form-control disabled" th:text="*{maNhanVien}"></label>
+                                        </div>
+                                    </div>
                                     <!-- Form Group -->
                                     <div class="form-group">
                                         <label for="email" class="col col-form-label input-label">Email</label>
@@ -231,7 +237,6 @@
                                         <i id="email_error" style="color: red;"></i>
                                     </div>
                                     <!-- End Form Group -->
-
                                     <!-- Form Group -->
                                     <div class="form-group">
                                         <label for="ngaySinh" class="col col-form-label input-label">Ngày
