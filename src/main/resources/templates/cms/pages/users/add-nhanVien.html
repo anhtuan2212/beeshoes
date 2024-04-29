@@ -7,7 +7,7 @@
     <!-- Title -->
     <title>LightBee | Thêm nhân viên</title>
     <!-- Favicon -->
-<!--    <link rel="shortcut icon" href="favicon.ico">-->
+    <!--    <link rel="shortcut icon" href="favicon.ico">-->
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
@@ -51,8 +51,10 @@
                             <div class="col-sm mb-2 mb-sm-0">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb breadcrumb-no-gutter">
-                                        <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
-                                        <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Nhân viên</a>
+                                        <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Tài
+                                            Khoản</a></li>
+                                        <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Nhân
+                                            viên</a>
                                         </li>
                                     </ol>
                                 </nav>
@@ -85,16 +87,17 @@
                             <div class="card-body row">
                                 <div class="col-sm-6">
                                     <!-- Form Group -->
-                                    <div class="form-group">
-                                        <label class="col col-form-label input-label">Avatar</label>
+                                    <div class="form-group mb-0">
+                                        <label class="col col-form-label input-label">Ảnh</label>
 
                                         <div class="col">
-                                            <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center justify-content-center">
                                                 <!-- Avatar -->
                                                 <label class="avatar avatar-xl avatar-circle avatar-uploader mr-5"
                                                        for="avatarUploader">
                                                     <img id="avatarImg" class="avatar-img  w-100"
-                                                         th:src="${nhanVien.getAvatar()==null?'/assets/cms/img/160x160/img1.jpg':nhanVien.getAvatar()}" alt="Image Description">
+                                                         th:src="${nhanVien.getAvatar()==null?'/assets/cms/img/160x160/img1.jpg':nhanVien.getAvatar()}"
+                                                         alt="Image Description">
 
                                                     <input type="file" class="js-file-attach avatar-uploader-input"
                                                            id="avatarUploader" data-hs-file-attach-options='{
@@ -106,7 +109,8 @@
                                                                       "allowTypes": [".png", ".jpeg", ".jpg"]
                                                                    }'>
                                                     <th:block th:if="${nhanVien.getAvatar()!=null}">
-                                                        <input id="url-avatar-user" type="hidden" name="avatar" th:value="${nhanVien.getAvatar()}" hidden>
+                                                        <input id="url-avatar-user" type="hidden" name="avatar"
+                                                               th:value="${nhanVien.getAvatar()}" hidden>
                                                     </th:block>
                                                     <span class="avatar-uploader-trigger">
                                                               <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
@@ -134,7 +138,8 @@
                                             <div class="input-group input-group-sm-down-break">
                                                 <input type="text" class="form-control" name="hoTen"
                                                        id="hoTen"
-                                                       placeholder="Vui lòng nhập họ tên" aria-label="Nguyễn" th:field="*{hoTen}" th:value="${nhanVien.getHoTen()}">
+                                                       placeholder="Vui lòng nhập họ tên" aria-label="Nguyễn"
+                                                       th:field="*{hoTen}" th:value="${nhanVien.getHoTen()}">
                                             </div>
                                         </div>
                                         <i id="hoTen_emty" style="color: red;display: none">Vui lòng nhập tên</i>
@@ -149,7 +154,8 @@
                                         <div class="col">
                                             <div class="input-group input-group-sm-down-break align-items-center">
                                                 <input type="text" class="js-masked-input form-control" name="phone"
-                                                       id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx" data-hs-mask-options='{
+                                                       id="sdt" placeholder="0359xxxxxx" aria-label="0359xxxxxx"
+                                                       data-hs-mask-options='{
                                      "template": "0000000000"
                                    }' th:field="*{sdt}" th:value="${nhanVien.getSdt()}">
                                             </div>
@@ -164,7 +170,8 @@
                                         <label class="col col-form-label input-label">Chức vụ</label>
                                         <!-- Select -->
                                         <div class="col">
-                                            <select class="js-select2-custom custom-select form-control" th:field="*{idCV}">
+                                            <select class="js-select2-custom custom-select form-control"
+                                                    th:field="*{idCV}">
                                                 <option th:each="cv:${listCV}" th:value="${cv.getId()}"
                                                         th:text="${cv.getTen()}"></option>
                                             </select>
@@ -179,7 +186,8 @@
                                         <div class="col">
                                             <input type="text" class="form-control" name="cccd"
                                                    id="cccd" placeholder="Vui lòng nhập CCCD"
-                                                   aria-label="Htmlstream" th:field="*{cccd}" th:value="${nhanVien.getCccd()}">
+                                                   aria-label="Htmlstream" th:field="*{cccd}"
+                                                   th:value="${nhanVien.getCccd()}">
                                         </div>
                                         <i id="cccd_emty" style="color: red;display: none">Vui lòng nhập vào cccd</i>
                                         <i th:if="${errorCCCD!=null}" style="color: red;" th:text="${errorCCCD}"></i>
@@ -227,12 +235,14 @@
                                         <div class="col">
                                             <input type="text" class="js-email-input form-control" name="email"
                                                    id="email" placeholder="example@gmail.com"
-                                                   aria-label="Htmlstream" th:field="*{email}" th:value="${nhanVien.getEmail()}">
+                                                   aria-label="Htmlstream" th:field="*{email}"
+                                                   th:value="${nhanVien.getEmail()}">
                                         </div>
                                         <i id="email_emty" style="color: red;"></i>
                                         <i id="email_error" style="color: red;"></i>
                                         <i th:if="${errorEmail!=null}" style="color: red;" th:text="${errorEmail}"></i>
-                                        <i th:if="${errorEmail_!=null}" style="color: red;" th:text="${errorEmail_}"></i>
+                                        <i th:if="${errorEmail_!=null}" style="color: red;"
+                                           th:text="${errorEmail_}"></i>
 
                                     </div>
                                     <!-- End Form Group -->
@@ -246,7 +256,8 @@
                                                    id="ngaySinh" pattern="\d{2}-\d{2}-\d{4}\"
                                                    aria-label="Htmlstream" th:field="*{ngaySinh}">
                                         </div>
-                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày sinh</i>
+                                        <i id="ngaySinh_emty" style="color: red;display: none">Vui lòng nhập vào ngày
+                                            sinh</i>
                                     </div>
                                     <!-- End Form Group -->
 
@@ -256,13 +267,15 @@
                                         <div class="col">
                                             <input type="text" class="form-control" name="soNha"
                                                    id="soNha" placeholder="Vui lòng nhập số nhà"
-                                                   aria-label="Htmlstream" th:field="*{soNha}" th:value="${nhanVien.getSoNha()}">
+                                                   aria-label="Htmlstream" th:field="*{soNha}"
+                                                   th:value="${nhanVien.getSoNha()}">
                                         </div>
                                         <i id="soNha_emty" style="color: red;display: none">Vui lòng nhập vào số nhà</i>
                                         <i th:if="${errorSoNha!=null}" style="color: red;" th:text="${errorSoNha}"></i>
                                     </div>
                                     <div class="form-group">
-                                        <label for="tinhTP" class="col col-form-label input-label">Tỉnh/thành phố</label>
+                                        <label for="tinhTP" class="col col-form-label input-label">Tỉnh/thành
+                                            phố</label>
                                         <div class="col">
                                             <select id="tinhTP" class="js-select2-custom custom-select"
                                                     data-hs-select2-options='{
@@ -272,8 +285,10 @@
                                                 <option value="">Chọn Tỉnh Thành</option>
                                             </select>
                                         </div>
-                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh thành phố</i>
-                                        <i th:if="${errorTinhTP!=null}" style="color: red;" th:text="${errorTinhTP}"></i>
+                                        <i id="tinhTP_emty" style="color: red;display: none">Vui lòng nhập vào tỉnh
+                                            thành phố</i>
+                                        <i th:if="${errorTinhTP!=null}" style="color: red;"
+                                           th:text="${errorTinhTP}"></i>
                                     </div>
                                     <div class="form-group">
                                         <label for="quanHuyen" class="col col-form-label input-label">Quận huyện</label>
@@ -286,8 +301,10 @@
                                                 <option value="">Chọn Quận Huyện</option>
                                             </select>
                                         </div>
-                                        <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận huyện</i>
-                                        <i th:if="${errorQuanHuyen!=null}" style="color: red;" th:text="${errorQuanHuyen}"></i>
+                                        <i id="quanHuyen_emty" style="color: red;display: none">Vui lòng nhập vào quận
+                                            huyện</i>
+                                        <i th:if="${errorQuanHuyen!=null}" style="color: red;"
+                                           th:text="${errorQuanHuyen}"></i>
                                     </div>
                                     <div class="form-group">
                                         <label for="phuongXa" class="col col-form-label input-label">Phường xã</label>
@@ -300,8 +317,10 @@
                                                 <option value="">Chọn Phường Xã</option>
                                             </select>
                                         </div>
-                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường xã</i>
-                                        <i th:if="${errorPhuongXa!=null}" style="color: red;" th:text="${errorPhuongXa}"></i>
+                                        <i id="phuongXa_emty" style="color: red;display: none">Vui lòng nhập vào phường
+                                            xã</i>
+                                        <i th:if="${errorPhuongXa!=null}" style="color: red;"
+                                           th:text="${errorPhuongXa}"></i>
                                     </div>
                                 </div>
                             </div>

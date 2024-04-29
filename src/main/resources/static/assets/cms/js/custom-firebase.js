@@ -437,6 +437,7 @@ $(document).ready(function () {
                     ToastSuccess("Xóa thành công.")
                     resolve(true)
                 }, error: function (e) {
+                    console.log(e.getResponseHeader('status'))
                     switch (e.getResponseHeader('status')) {
                         case "IdNull":
                             ToastError("ID không được trống.")

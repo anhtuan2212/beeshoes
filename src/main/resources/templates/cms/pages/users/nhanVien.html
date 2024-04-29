@@ -155,6 +155,7 @@
                                     </div>
                                 </th>
                                 <th>STT</th>
+                                <th class="table-column-pl-0">Mã Nhân Viên</th>
                                 <th class="table-column-pl-0">Tên nhân viên</th>
                                 <th>Chức vụ</th>
                                 <th>Số điện thoại</th>
@@ -178,6 +179,14 @@
                                     </div>
                                 </td>
                                 <td th:text="${iter.index+1}"></td>
+                                <td class="table-column-pl-0">
+                                    <a class="media align-items-center" th:href="@{/cms/nhan-vien/view-detail/{id}(id=${nv.id})}">
+                                        <div class="media-body">
+                                            <h5 class="text-hover-primary mb-0"
+                                                th:text="${nv.getMaNhanVien()}"></h5>
+                                        </div>
+                                    </a>
+                                </td>
                                 <td class="table-column-pl-0">
                                     <a class="media align-items-center" th:href="@{/cms/nhan-vien/view-detail/{id}(id=${nv.id})}">
                                         <div class="media-body">

@@ -120,7 +120,7 @@ public class CheckOutController {
         model.addAttribute("invoiceCode", invoiceCode[0]);
         if (paymentStatus == 1) {
             User user = new User();
-            if(hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
+            if (hoaDonService.getHoaDonByMa(invoiceCode[0]) == null) {
                 HoaDon hoaDon = (HoaDon) session.getAttribute(invoiceCode[0]);
                 Voucher voucher = hoaDon.getVoucher();
                 HoaDon savedHoaDon = hoaDonService.save(hoaDon);
@@ -136,6 +136,10 @@ public class CheckOutController {
                 ht.setHoaDon(savedHoaDon);
                 ht.setMoTa("Thanh Toán online bằng VNPAY");
                 ht = hinhThucThanhToanService.save(ht);
+                if (request.getUserPrincipal() != null) {
+                    user = userService.getByUsername(request.getUserPrincipal().getName());
+                    ht.setNguoiTao(user);
+                }
                 httt.add(ht);
                 savedHoaDon.setHinhThucThanhToans(httt);
                 HoaDon savedHoaDon2 = hoaDonService.save(savedHoaDon);
@@ -188,20 +192,20 @@ public class CheckOutController {
                 session.removeAttribute("jsonArray");
                 session.removeAttribute(invoiceCode[0]);
 
-                if(request.getUserPrincipal() != null) {
+                if (request.getUserPrincipal() != null) {
                     user = userService.getByUsername(request.getUserPrincipal().getName());
                     System.out.println(request.getUserPrincipal().getName());
                     GioHang gioHang = gioHangService.findByCustomerId(user.getKhachHang().getId());
                     Long idHoaDon = hoaDonService.getHoaDonByMa(savedHoaDon2.getMaHoaDon()).getId();
                     List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(idHoaDon);
-                    if(gioHang != null) {
+                    if (gioHang != null) {
                         hoaDonChiTietList.forEach(hoaDonChiTiet -> gioHangChiTietService.deleteByGioHangIdAndChiTietSanPhamId(gioHang.getId(), hoaDonChiTiet.getChiTietSanPham().getId()));
                     }
                 }
                 Notification notification = new Notification();
                 notification.setCreatedBy("N/A");
                 notification.setCreatorAvatarUrl("/assets/cms/img/160x160/img1.jpg");
-                if(user != null && user.getNhanVien() != null) {
+                if (user != null && user.getNhanVien() != null) {
                     notification.setCreatedBy(user.getNhanVien().getHoTen());
                     notification.setCreatorAvatarUrl(user.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : user.getAvatar());
                 } else if (user != null && user.getKhachHang() != null) {

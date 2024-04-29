@@ -395,6 +395,66 @@ public class HoaDonRestController {
         return ResponseEntity.status(HttpStatus.OK).body("Xác nhận thành công đơn hàng");
     }
 
+    @PostMapping("/refunded")
+    public ResponseEntity hoanTien(@RequestParam("id") Long id, HttpServletRequest request) {
+        HoaDon hoaDon = hoaDonService.getHoaDonById(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return ResponseEntity.notFound().header("status", "NotAuth").build();
+        }
+        if (hoaDon == null) {
+            return ResponseEntity.notFound().header("status", "oderIsNull").build();
+        }
+        for (int i = 0; i < hoaDon.getHinhThucThanhToans().size(); i++) {
+            if (hoaDon.getHinhThucThanhToans().get(i).getMaGiaoDich().equals("COD")) {
+                return ResponseEntity.notFound().header("status", "invalidOder").build();
+            }
+        }
+        if (!hoaDon.getTrangThai().equals("Hủy")) {
+            return ResponseEntity.notFound().header("status", "invalidOder").build();
+        }
+        hoaDon.setTrangThai(TrangThaiHoaDon.HoanTra);
+        LichSuHoaDon lichSuHoaDon = new LichSuHoaDon();
+        lichSuHoaDon.setHoaDon(hoaDon);
+        User nt;
+        if (request.getUserPrincipal() != null) {
+            User user = userService.getByUsername(request.getUserPrincipal().getName());
+            lichSuHoaDon.setNguoiThucHien(user);
+            nt = user;
+        } else {
+            return ResponseEntity.notFound().header("status", "NotAuth").build();
+        }
+        lichSuHoaDon.setHanhDong("[" + nt.getNhanVien().getMaNhanVien() + "]Hoàn tiền cho đơn hàng.");
+        lichSuHoaDon.setTrangThaiSauUpdate(TrangThaiHoaDon.HoanTra);
+        lichSuHoaDon.setThoiGian(Timestamp.from(Instant.now()));
+        HinhThucThanhToan httt = new HinhThucThanhToan();
+        httt.setHoaDon(hoaDon);
+        httt.setMaGiaoDich("REFUNDED");
+        httt.setHinhThuc("BANKING");
+        httt.setTienThanhToan(hoaDon.getSoTienDaThanhToan());
+        httt.setTienThua(BigDecimal.ZERO);
+        httt.setMoTa("Hoàn Tiền Đơn Hủy");
+        httt.setNguoiTao(nt);
+        httt.setNgayTao(Timestamp.from(Instant.now()));
+        httt.setNgaySua(Timestamp.from(Instant.now()));
+        httt.setTrangThai(true);
+        hinhThucThanhToanService.save(httt);
+        lichSuHoaDonService.save(lichSuHoaDon);
+        HoaDon newHD = hoaDonService.save(hoaDon);
+        mailUtility.sendMail(newHD.getEmailNguoiNhan(), "[LightBee-Thông báo hoàn tiền]", "Số tiền :<h1>" +
+                newHD.getSoTienDaThanhToan().intValue() + "đ</h1> của đơn hàng " +
+                newHD.getMaHoaDon() + "đã được hoàn trả bởi nhân viên :" +
+                nt.getNhanVien().getMaNhanVien() + ". <br> Quý khách vui lòng kiểm tra lại ! <br>" +
+                "Mọi thắc mắc vui lòng liên hệ :0866755653. <br>" +
+                "Cảm ơn quý khách đã ủng hộ chúng tôi.");
+        Map<String, Object> response = new HashMap<>();
+        response.put("time", lichSuHoaDon.getThoiGian());
+        response.put("user", lichSuHoaDon.getNguoiThucHien().getNhanVien().getHoTen());
+        response.put("message", lichSuHoaDon.getHanhDong());
+        response.put("status", newHD.getTrangThai());
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping("/payment-cashier")
     public ResponseEntity banTaiQuay(@ModelAttribute PaymentCashierRequest request) {
         TypePaymentRequest typePayment = gson.fromJson(request.getTypePayment(), TypePaymentRequest.class);
@@ -404,7 +464,7 @@ public class HoaDonRestController {
         List<ProductCashierRequest> listProduct = gson.fromJson(request.getProduct(), listType);
         for (ProductCashierRequest pcr : listProduct) {
             ChiTietSanPham ctsp = chiTietSanPhamService.getById(pcr.getId());
-            if (ctsp.getSoLuongTon()<=0){
+            if (ctsp.getSoLuongTon() <= 0) {
                 return ResponseEntity.notFound().header("status", "zeroQuantityPro").build();
             }
             if (ctsp.getSoLuongTon() < pcr.getQuantity()) {
@@ -427,7 +487,7 @@ public class HoaDonRestController {
         HoaDon hd = new HoaDon();
         if (request.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(request.getVoucher());
-            if (voucher.getSoLuong() <= 0) {
+            if (voucher != null && voucher.getSoLuong() <= 0) {
                 return ResponseEntity.notFound().header("status", "ZeroVoucher").build();
             }
             if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {
@@ -548,6 +608,7 @@ public class HoaDonRestController {
             ht.setNgayTao(Timestamp.from(Instant.now()));
             ht.setTrangThai(true);
             ht.setMoTa("Chuyển Khoản");
+            ht.setNguoiTao(userTH);
             ht = hinhThucThanhToanService.save(ht);
             httt.add(ht);
         }
@@ -561,6 +622,7 @@ public class HoaDonRestController {
             ht.setNgayTao(Timestamp.from(Instant.now()));
             ht.setTrangThai(true);
             ht.setMoTa("Tiền Mặt");
+            ht.setNguoiTao(userTH);
             ht = hinhThucThanhToanService.save(ht);
             httt.add(ht);
         }
@@ -574,6 +636,7 @@ public class HoaDonRestController {
             ht.setNgayTao(Timestamp.from(Instant.now()));
             ht.setHoaDon(hd);
             ht.setMoTa("Thanh Toán Khi Nhận Hàng");
+            ht.setNguoiTao(userTH);
             ht = hinhThucThanhToanService.save(ht);
             httt.add(ht);
         }

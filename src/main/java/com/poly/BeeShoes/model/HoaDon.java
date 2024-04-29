@@ -83,4 +83,13 @@ public class HoaDon {
     @OneToOne
     @JoinColumn(name = "hinh_thuc_thanh_toan")
     HinhThucThanhToan hinhThucThanhToan;
+    public boolean hasCODTransaction() {
+        for (HinhThucThanhToan hinhThuc : hinhThucThanhToans) {
+            if ("COD".equals(hinhThuc.getMaGiaoDich())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

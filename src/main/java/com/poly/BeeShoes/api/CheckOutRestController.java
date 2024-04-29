@@ -74,14 +74,14 @@ public class CheckOutRestController {
             Long idProdDetail = jsonObject.get("productDetailId").getAsLong();
             int qty = jsonObject.get("quantity").getAsInt();
             ChiTietSanPham prodDetail = chiTietSanPhamService.getById(idProdDetail);
-            if(qty > prodDetail.getSoLuongTon()) {
+            if (qty > prodDetail.getSoLuongTon()) {
                 check.set(false);
             }
         });
-        if(check.get()) {
+        if (check.get()) {
             return new ResponseEntity<>("ok", HttpStatus.OK);
         }
-        return ResponseEntity.notFound().header("status","MaxNum").build();
+        return ResponseEntity.notFound().header("status", "MaxNum").build();
     }
 
     @PostMapping("/placeOrder-online")
@@ -95,7 +95,7 @@ public class CheckOutRestController {
         String notes = jsonObject.get("notes").getAsString();
         int total = jsonObject.get("total").getAsInt();
         int shippingFee = 0;
-        if(jsonObject.get("shippingFee") != null) {
+        if (jsonObject.get("shippingFee") != null) {
             shippingFee = jsonObject.get("shippingFee").getAsInt();
         }
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
@@ -115,7 +115,7 @@ public class CheckOutRestController {
         String customerEmail = jsonObject.get("customerEmail").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         String orderCode = Utility.randomString(8);
-        if(jsonObject.get("orderCode") != null) {
+        if (jsonObject.get("orderCode") != null) {
             orderCode = jsonObject.get("orderCode").getAsString();
         }
         HoaDon hoaDon = new HoaDon();
@@ -160,7 +160,7 @@ public class CheckOutRestController {
         String notes = jsonObject.get("notes").getAsString();
         int total = jsonObject.get("total").getAsInt();
         int shippingFee = 0;
-        if(jsonObject.get("shippingFee") != null) {
+        if (jsonObject.get("shippingFee") != null) {
             shippingFee = jsonObject.get("shippingFee").getAsInt();
         }
         int totalAmount = jsonObject.get("totalAmount").getAsInt();
@@ -178,7 +178,7 @@ public class CheckOutRestController {
         String customerEmail = jsonObject.get("customerEmail").getAsString();
         String addressReceive = jsonObject.get("addressReceive").getAsString();
         String orderCode = Utility.randomString(8);
-        if(jsonObject.get("orderCode") != null) {
+        if (jsonObject.get("orderCode") != null) {
             orderCode = jsonObject.get("orderCode").getAsString();
         }
         HoaDon hoaDon = new HoaDon();
@@ -217,6 +217,9 @@ public class CheckOutRestController {
         ht.setMaGiaoDich("COD");
         ht.setNgayTao(Timestamp.from(Instant.now()));
         ht.setHoaDon(savedHoaDon);
+        if (request.getUserPrincipal() != null) {
+            ht.setNguoiTao(user);
+        }
         ht.setMoTa("Thanh Toán Khi Nhận Hàng");
         ht = hinhThucThanhToanService.save(ht);
         httt.add(ht);
@@ -264,7 +267,7 @@ public class CheckOutRestController {
         Notification notification = new Notification();
         notification.setCreatedBy("N/A");
         notification.setCreatorAvatarUrl("/assets/cms/img/160x160/img1.jpg");
-        if(user != null && user.getNhanVien() != null) {
+        if (user != null && user.getNhanVien() != null) {
             notification.setCreatedBy(user.getNhanVien().getHoTen());
             notification.setCreatorAvatarUrl(user.getAvatar() == null ? "/assets/cms/img/160x160/img1.jpg" : user.getAvatar());
         } else if (user != null && user.getKhachHang() != null) {
