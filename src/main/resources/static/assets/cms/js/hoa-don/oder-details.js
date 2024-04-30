@@ -546,6 +546,8 @@ $(document).on('ready', function () {
                         printHistory(formatDateTime(response.time), response.user, response.message);
                         printTimeline(response.status, 'success', response.message)
                         btn.remove();
+                        $('#xacNhanFromDetail').hide();
+                        $('#getAttrToHuyFromDetail').hide();
                     }, error: function (e) {
                         console.log(e.getResponseHeader('status'))
                         switch (e.getResponseHeader('status')) {
@@ -967,6 +969,9 @@ $(document).on('ready', function () {
                             $('#xacNhanFromDetail').hide();
                             $('#getAttrToHuyFromDetail').hide();
                             $('#printOrder').removeClass('d-none');
+                            if ($('#isShowBtnRefund').text() == 'false') {
+                                $('#btn-refund').removeClass('d-none');
+                            }
                         } else if (status == 'Chờ Xác Nhận') {
                             typeOfColor = 'danger';
                             $('#btn-edit-product').removeClass('d-none');
@@ -1225,6 +1230,9 @@ $(document).on('click', '#huyFromDetail', function () {
             let hanhDong = response.hanhDong;
             $('#xacNhanFromDetail').hide();
             $('#getAttrToHuyFromDetail').hide();
+            if ($('#isShowBtnRefund').text() == 'false') {
+                $('#btn-refund').removeClass('d-none');
+            }
             printStatusHeader(type, status);
             printTimeline(status, type, hanhDong);
             printHistory(thoiGian, nguoiThucHien, hanhDong);

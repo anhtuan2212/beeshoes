@@ -56,6 +56,12 @@ public class LoginRegisterController {
         return "customer/auth/login";
     }
 
+    @GetMapping("/login-handle")
+    public String afterHandleLogin(Model model) {
+        model.addAttribute("loginDto", new LoginDto());
+        return "redirect:/login";
+    }
+
     @GetMapping("/register")
     public String formRegister(Model model) {
         model.addAttribute("registerDto", new RegisterDto());
