@@ -279,7 +279,7 @@
                                         <i class="tio-edit"></i>
                                     </a>
 
-                                    <a class="btn cancel-voucher" data-toggle="tooltip"
+                                    <a class="btn cancel-voucher" th:if="${voucher.getTrangThai()!=3}" data-toggle="tooltip"
                                        data-placement="top"
                                        title="Kết Thúc" th:attr="data-id=${voucher.id}">
                                         <i class="tio-clear"></i>
