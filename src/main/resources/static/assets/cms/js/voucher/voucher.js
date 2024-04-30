@@ -254,9 +254,9 @@ $(document).on('ready', function () {
         $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
             let quantity = parseFloat(data[4]) || 0; // Sử dụng data cho cột số lượng
             return ((isNaN(quantityFrom) && isNaN(quantityTo)) ||
-                    (isNaN(quantityFrom) && quantity <= quantityTo) ||
-                    (quantityFrom <= quantity && isNaN(quantityTo)) ||
-                    (quantityFrom <= quantity && quantity <= quantityTo));
+                (isNaN(quantityFrom) && quantity <= quantityTo) ||
+                (quantityFrom <= quantity && isNaN(quantityTo)) ||
+                (quantityFrom <= quantity && quantity <= quantityTo));
         });
         table.draw();
     }
@@ -363,6 +363,7 @@ $(document).on('ready', function () {
         } else {
             ele_percent.closest('div.col-sm-12.col-md-6').addClass('d-none');
             ele_money.closest('div.col-sm-12.col-md-6').removeClass('d-none');
+            // let moneyFormat = formatNumberMoney(money);
             $('.text-discount-value').text(formatNumberMoney(money));
         }
     })

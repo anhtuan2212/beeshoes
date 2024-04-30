@@ -1,4 +1,3 @@
-
 activeSiderbar1EXXP("phieu_giam_giam");
 
 function formatNumberMoney(input) {
@@ -215,7 +214,12 @@ $(document).on('ready', function () {
         } else {
             ele_percent.closest('div.col-sm-12.col-md-6').addClass('d-none');
             ele_money.closest('div.col-sm-12.col-md-6').removeClass('d-none');
-            $('.text-discount-value').text(formatNumberMoney(money));
+            let data = formatNumberMoney(money);
+            if (isNaN(data)) {
+                $('.text-discount-value').text(0);
+            } else {
+                $('.text-discount-value').text(data);
+            }
         }
     })
     $('#discount_percent').on('input', function () {
