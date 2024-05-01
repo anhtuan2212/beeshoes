@@ -32,15 +32,17 @@ public class HomeController {
             QuanTri quantri = list.get(0);
             int min = 0;
             int max = 0;
-            for (ChiTietSanPham item : quantri.getSan_pham_sale().getChiTietSanPham()) {
-                if (item.getGiaGoc().intValue() > max) {
-                    max = item.getGiaGoc().intValue();
-                }
-                if (min == 0) {
-                    min = item.getGiaBan().intValue();
-                } else {
-                    if (min > item.getGiaBan().intValue()) {
+            if (quantri.getSan_pham_sale() != null) {
+                for (ChiTietSanPham item : quantri.getSan_pham_sale().getChiTietSanPham()) {
+                    if (item.getGiaGoc().intValue() > max) {
+                        max = item.getGiaGoc().intValue();
+                    }
+                    if (min == 0) {
                         min = item.getGiaBan().intValue();
+                    } else {
+                        if (min > item.getGiaBan().intValue()) {
+                            min = item.getGiaBan().intValue();
+                        }
                     }
                 }
             }
@@ -75,20 +77,21 @@ public class HomeController {
             quantri.setThoi_gian(Timestamp.valueOf(quantri.getThoi_gian_sale()));
             int min = 0;
             int max = 0;
-            for (ChiTietSanPham item : quantri.getSan_pham_sale().getChiTietSanPham()) {
-                if (item.getGiaGoc().intValue() > max) {
-                    max = item.getGiaGoc().intValue();
-                }
-                if (min == 0) {
-                    min = item.getGiaBan().intValue();
-                } else {
-                    if (min > item.getGiaBan().intValue()) {
+            if (quantri.getSan_pham_sale() != null) {
+                for (ChiTietSanPham item : quantri.getSan_pham_sale().getChiTietSanPham()) {
+                    if (item.getGiaGoc().intValue() > max) {
+                        max = item.getGiaGoc().intValue();
+                    }
+                    if (min == 0) {
                         min = item.getGiaBan().intValue();
+                    } else {
+                        if (min > item.getGiaBan().intValue()) {
+                            min = item.getGiaBan().intValue();
+                        }
                     }
                 }
             }
             int phanTramGiamGia = (int) Math.floor(((double) (max - min) / max) * 100);
-            System.out.println("Phần Trăm :" + phanTramGiamGia);
             model.addAttribute("phanTramGiam", phanTramGiamGia);
             model.addAttribute("setupData", quantri);
         }
