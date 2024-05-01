@@ -587,7 +587,7 @@ $(document).on('ready', function () {
                             product_details: JSON.stringify(product_details)
                         }, success: (data, status, xhr) => {
                             ToastSuccess('Lưu Thành Công !')
-                            // redirectToProductPage()
+                            redirectToProductPage()
                         }, error: (e) => {
                             ToastError(e.getResponseHeader('error'));
                         }
