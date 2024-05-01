@@ -14,24 +14,6 @@ import java.sql.Date;
 @Entity
 @Table(name = "nhan_vien")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-/*
-     id bigint auto_increment,
-    ma_nhan_vien varchar(256),
-    id_chuc_vu bigint,
-    ten nvarchar(256),
-    ten_dem nvarchar(256),
-    ho nvarchar(256),
-    gioi_tinh bit,
-    ngay_sinh date,
-    dia_chi nvarchar(256),
-    sdt varchar(10),
-    cccd varchar(12),
-    ngay_tao timestamp,
-    ngay_sua timestamp,
-    nguoi_tao bigint,
-    nguoi_sua bigint,
-    trang_thai bit default 1,
- */
 public class NhanVien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
