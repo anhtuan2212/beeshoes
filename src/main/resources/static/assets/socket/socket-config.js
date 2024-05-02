@@ -11,13 +11,13 @@ stompClient.connect({}, function (frame) {
         updateDataTableNotification(newNoti);
     });
 });
+let isCooldown = false;
 
 function updateDataTableInvoice(hoaDon) {
-    const invoiceTable = document.getElementById('myBodyAll');
     const newInvoiceRow = document.createElement('tr');
     newInvoiceRow.innerHTML = `
            <td data-ma-hoa-don=${hoaDon.maHoaDon}>
-                    <span>0</span>
+                    <span>1</span>
                 </td>
                 <td><a href="/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet">${hoaDon.maHoaDon}</a></td>
                 <td>
@@ -78,15 +78,23 @@ function updateDataTableInvoice(hoaDon) {
                     </div>
                 </td>
         `;
-    invoiceTable.insertBefore(newInvoiceRow, invoiceTable.firstChild);
-
-    const rows = invoiceTable.querySelectorAll('tr');
-    rows.forEach((row, index) => {
-        const invoiceNumberCell = row.querySelector('td:first-child span');
-        if (invoiceNumberCell) {
-            invoiceNumberCell.textContent = index + 1;
+    if (!isCooldown) {
+        let newdata = Array.from(dataTable.data());
+        newdata.unshift(newInvoiceRow);
+        console.log(newdata)
+        dataTable.clear();
+        for (let i = 1; i < newdata.length; i++) {
+            newdata[i][0] = `<span>${i + 1}</span>`
         }
-    });
+        for (const row of newdata) {
+            dataTable.row.add(row);
+        }
+        dataTable.draw();
+        isCooldown = true;
+        setTimeout(function () {
+            isCooldown = false;
+        }, 1000);
+    }
 }
 
 function updateDataTableNotification(noti) {
