@@ -31,7 +31,7 @@ function updateDataTableInvoice(hoaDon) {
                 </td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <span class="text-dark">${hoaDon.loaiHoaDon ? 'Bán Tại Quầy' : 'Bán Giao Hàng'}</span>
+                        <span class="text-dark">${hoaDon.loaiHoaDon ? 'Bán Giao Hàng' : 'Bán Tại Quầy'}</span>
                     </div>
                 </td>
                 <td>
