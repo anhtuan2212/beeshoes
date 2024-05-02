@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -63,7 +64,9 @@ public class HoaDonController {
             tongTien = (hdct.getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
         }
         List<HinhThucThanhToan> hinhThucThanhToans = hoaDon.getHinhThucThanhToans();
+        List<String> hinhThucList = new ArrayList<>();
         hinhThucThanhToans.forEach(hinhThucThanhToan -> {
+            hinhThucList.add(hinhThucThanhToan.getHinhThuc());
             if(hinhThucThanhToan.getMaGiaoDich().equals("VNPAY")) {
                 model.addAttribute("hinhThuc", hinhThucThanhToan.getMaGiaoDich());
             }
@@ -72,6 +75,7 @@ public class HoaDonController {
         model.addAttribute("lichSuHoaDonListNotSort", lichSuHoaDonListNotSort);
         model.addAttribute("hoaDonChiTietList", hoaDonChiTietList);
         model.addAttribute("hoaDon", hoaDon);
+        model.addAttribute("hinhThucs", hinhThucList);
         return "cms/pages/orders/order-details";
     }
 
