@@ -548,6 +548,7 @@ $(document).on('ready', function () {
                         btn.remove();
                         $('#xacNhanFromDetail').hide();
                         $('#getAttrToHuyFromDetail').hide();
+                        $('#hoanTacFromDetail').hide();
                     }, error: function (e) {
                         console.log(e.getResponseHeader('status'))
                         switch (e.getResponseHeader('status')) {

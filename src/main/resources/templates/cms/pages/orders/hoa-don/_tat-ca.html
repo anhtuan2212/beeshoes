@@ -296,7 +296,7 @@
                                    data-original-title="Xem Chi Tiết" th:href="@{|/cms/hoa-don/${hoaDon.maHoaDon}/chi-tiet|}">
                                     <i class="tio-visible-outlined"></i></a>
                             </li>
-                            <li th:if="${hoaDon.trangThai != 'Hủy' && hoaDon.trangThai != 'Thành Công'}">
+                            <li th:if="${hoaDon.trangThai != 'Hủy' && hoaDon.trangThai != 'Thành Công' && hoaDon.trangThai != 'Hoàn Trả'}">
                                 <a data-toggle="tooltip"
                                    data-original-title="Xác Nhận Đơn" class="btn btn-sm btn-outline-success xacNhanFromAction">
                                     <i class="tio-checkmark-circle-outlined"></i></a>

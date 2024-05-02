@@ -233,6 +233,10 @@
                                     <dt class="col-sm-6">Thực thu:</dt>
                                     <dd class="col-sm-6" id="payment-money"
                                         th:text="${#numbers.formatInteger(hoaDon.thucThu.intValue(), 0, 'COMMA')}"></dd>
+                                    <dt class="col-sm-6">Phương thức thanh toán:</dt>
+                                    <dd class="col-sm-6" id="payment-method"
+                                        th:text="${hoaDon.hinhThucThanhToans}"></dd>
+
                                 </dl>
                                 <!-- End Row -->
                             </div>

@@ -1,6 +1,8 @@
-<div id="sidebarMain" class="d-none d-print-none">
+<div id="sidebarMain" class="d-none d-print-none"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <aside
-            class="js-navbar-vertical-aside d-print-none navbar  navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  ">
+            class="js-navbar-vertical-aside d-print-none navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  ">
         <div class="navbar-vertical-container">
             <div class="navbar-vertical-footer-offset">
                 <div class="navbar-brand-wrapper justify-content-between">
@@ -52,7 +54,7 @@
                             </a>
                         </li>
                         <!-- Sản Phẩm -->
-                        <li id="li_san_pham" class="navbar-vertical-aside-has-menu">
+                        <li sec:authorize="${hasAuthority('ADMIN')}" id="li_san_pham" class="navbar-vertical-aside-has-menu">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
                                title="Sản Phẩm">
                                 <i class="tio-format-points nav-icon"></i>
@@ -145,7 +147,7 @@
                             </a>
 
                             <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
-                                <li class="nav-item">
+                                <li sec:authorize="${hasAuthority('ADMIN')}" class="nav-item">
                                     <a class="nav-link " th:href="@{/cms/nhan-vien}" title="Referrals">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">Nhân Viên</span>
@@ -161,7 +163,7 @@
                         </li>
                         <!-- End User -->
                         <!-- Voucher -->
-                        <li id="phieu_giam_giam" class="nav-item">
+                        <li sec:authorize="${hasAuthority('ADMIN')}" id="phieu_giam_giam" class="nav-item">
                             <a class="js-nav-tooltip-link nav-link" href="/cms/voucher" title=""
                                data-placement="left" data-original-title="Phiếu Giảm Giá">
                                 <i class="tio-ticket nav-icon"></i>
@@ -169,7 +171,7 @@
                             </a>
                         </li>
                         <!-- End Voucher -->
-                        <li id="li_bao_cao" class="navbar-vertical-aside-has-menu ">
+                        <li sec:authorize="${hasAuthority('ADMIN')}" id="li_bao_cao" class="navbar-vertical-aside-has-menu ">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
                                title="Pages">
                                 <i class="tio-document-text-outlined nav-icon"></i>
