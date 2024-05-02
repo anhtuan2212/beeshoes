@@ -27,6 +27,7 @@ public class HoaDonController {
     private final HoaDonChiTietService hoaDonChiTietService;
     private final LichSuHoaDonService lichSuHoaDonService;
     private final HinhThucThanhToanService hinhThucThanhToanService;
+
     @GetMapping("/hoa-don")
     public String hoaDonPage(Model model) {
         List<HoaDon> hoaDonChoXacNhanList = hoaDonService.getAllHoaDonByTrangThai(TrangThaiHoaDon.ChoXacNhan);
@@ -52,22 +53,25 @@ public class HoaDonController {
             Model model
     ) {
         HoaDon hoaDon = hoaDonService.getHoaDonByMa(maHoaDon);
+        if (hoaDon == null) {
+            return "redirect:/cms/hoa-don";
+        }
         List<LichSuHoaDon> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDonByIdHoaDon(hoaDon.getId());
         List<LichSuHoaDon> lichSuHoaDonListNotSort = lichSuHoaDonService.getAllLichSuHoaDonNotSort(hoaDon.getId());
         List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietService.getHoaDonChiTietCuaHoaDonById(hoaDon.getId());
-        if(hoaDon.getKhachHang() != null) {
+        if (hoaDon.getKhachHang() != null) {
             Long countHoaDonCuaKhachHang = hoaDonService.countHoaDonCuaKhachHang(hoaDon.getKhachHang().getId());
             model.addAttribute("countHoaDonCuaKhachHang", countHoaDonCuaKhachHang);
         }
         double tongTien = 0;
-        for(HoaDonChiTiet hdct : hoaDonChiTietList) {
+        for (HoaDonChiTiet hdct : hoaDonChiTietList) {
             tongTien = (hdct.getGiaBan().doubleValue() * hdct.getSoLuong()) + tongTien;
         }
         List<HinhThucThanhToan> hinhThucThanhToans = hoaDon.getHinhThucThanhToans();
         List<String> hinhThucList = new ArrayList<>();
         hinhThucThanhToans.forEach(hinhThucThanhToan -> {
             hinhThucList.add(hinhThucThanhToan.getHinhThuc());
-            if(hinhThucThanhToan.getMaGiaoDich().equals("VNPAY")) {
+            if (hinhThucThanhToan.getMaGiaoDich().equals("VNPAY")) {
                 model.addAttribute("hinhThuc", hinhThucThanhToan.getMaGiaoDich());
             }
         });

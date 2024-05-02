@@ -58,6 +58,7 @@ public class SanPhamController {
             List<String> lst = sanPhamService.getListKichCo(id);
             if (sp==null){
                 model.addAttribute("errorSP", 1);
+                return "redirect:/cms/product";
             }else{
                 model.addAttribute("sanPham", sp);
                 model.addAttribute("errorSP", 0);

@@ -54,19 +54,21 @@ public class ViewProductController {
             SanPham sp = sanPhamService.getByIdcms(id);
             List<String> lst = sanPhamService.getListKichCo(id);
             if (sp == null) {
-                return "redirect:cms/product";
+                return "redirect:/cms/product";
             } else {
                 model.addAttribute("sanPham", sp);
             }
             model.addAttribute("kichCo", lst);
             return "cms/pages/products/view-products";
         }
-        return "redirect:cms/product";
+        return "redirect:/cms/product";
 
     }
+
     @PostMapping("/upload-img")
-    public ResponseEntity upload(@RequestParam("data")String data,@RequestParam("id")Long id){
-        Type listType = new TypeToken<List<UploadImgRequest>>() {}.getType();
+    public ResponseEntity upload(@RequestParam("data") String data, @RequestParam("id") Long id) {
+        Type listType = new TypeToken<List<UploadImgRequest>>() {
+        }.getType();
         SanPham sp = sanPhamService.getByIdcms(id);
         Anh anhMain = sp.getMainImage();
         List<UploadImgRequest> lst = gs.fromJson(data, listType);
@@ -108,7 +110,7 @@ public class ViewProductController {
     }
 
     @PostMapping("/update-quick-product")
-    public ResponseEntity update( @ModelAttribute CTSPRequest ctspRequest) {
+    public ResponseEntity update(@ModelAttribute CTSPRequest ctspRequest) {
         System.out.println(ctspRequest.toString());
         Type listType = new TypeToken<List<ProductDetailVersion>>() {
         }.getType();
@@ -123,7 +125,7 @@ public class ViewProductController {
             if (productdetail.get(i).getSoLuong() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "QuantityNull").body(null);
             }
-            if (ctspRequest.getMoTa().length()>8000) {
+            if (ctspRequest.getMoTa().length() > 8000) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "MaxLenghtMota").body(null);
             }
         }

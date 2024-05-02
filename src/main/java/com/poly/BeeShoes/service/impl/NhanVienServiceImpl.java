@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public NhanVien detail(Long id) {
-        NhanVien nhanVien = nhanVienRepository.findById(id).get();
+        NhanVien nhanVien = nhanVienRepository.findById(id).orElse(null);
         return nhanVien;
     }
 
