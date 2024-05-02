@@ -31,7 +31,7 @@ function updateDataTableInvoice(hoaDon) {
                 </td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <span class="text-dark">${hoaDon.loaiHoaDon ? 'Bán Tại Quầy' : 'Bán Giao Hàng'}</span>
+                        <span class="text-dark">${hoaDon.loaiHoaDon ? 'Bán Giao Hàng' : 'Bán Tại Quầy'}</span>
                     </div>
                 </td>
                 <td>
@@ -79,6 +79,14 @@ function updateDataTableInvoice(hoaDon) {
                 </td>
         `;
     invoiceTable.insertBefore(newInvoiceRow, invoiceTable.firstChild);
+
+    const rows = invoiceTable.querySelectorAll('tr');
+    rows.forEach((row, index) => {
+        const invoiceNumberCell = row.querySelector('td:first-child span');
+        if (invoiceNumberCell) {
+            invoiceNumberCell.textContent = index + 1;
+        }
+    });
 }
 
 function updateDataTableNotification(noti) {
