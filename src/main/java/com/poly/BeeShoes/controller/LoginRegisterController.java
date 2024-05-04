@@ -151,7 +151,6 @@ public class LoginRegisterController {
             }
             return "redirect:/";
         } catch (AuthenticationException ex) {
-            ex.printStackTrace();
             model.addAttribute("message", "Sai email hoặc mật khẩu !");
             return "customer/auth/login";
         }
@@ -222,6 +221,6 @@ public class LoginRegisterController {
 
     @GetMapping("/unauthorized")
     public String unauthorized() {
-        return "cms/error/401";
+        return "cms/error/403";
     }
 }

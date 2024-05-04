@@ -145,6 +145,9 @@ public class NhanVienController {
     @GetMapping("/view-detail/{id}")
     public String viewDetail(@PathVariable Long id, Model model) {
         NhanVien nhanVien = nhanVienService.detail(id);
+        if (nhanVien==null){
+            return "redirect:/cms/nhan-vien";
+        }
         User user = userService.findByNhanVien_Id(nhanVien.getId());
         NhanVienRequest nv = new NhanVienRequest();
         nv.setId(nhanVien.getId());

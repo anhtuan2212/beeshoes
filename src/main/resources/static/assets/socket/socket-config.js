@@ -14,6 +14,7 @@ stompClient.connect({}, function (frame) {
 let isCooldown = false;
 
 function updateDataTableInvoice(hoaDon) {
+
     const newInvoiceRow = document.createElement('tr');
     newInvoiceRow.innerHTML = `
            <td data-ma-hoa-don=${hoaDon.maHoaDon}>
@@ -78,10 +79,10 @@ function updateDataTableInvoice(hoaDon) {
                     </div>
                 </td>
         `;
+
     if (!isCooldown) {
         let newdata = Array.from(dataTable.data());
         newdata.unshift(newInvoiceRow);
-        console.log(newdata)
         dataTable.clear();
         for (let i = 1; i < newdata.length; i++) {
             newdata[i][0] = `<span>${i + 1}</span>`

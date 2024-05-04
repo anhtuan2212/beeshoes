@@ -23,9 +23,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> {
                     req
+                            .requestMatchers("/cms/view-product","/cms/product-detail").hasAnyAuthority("USER", "MANAGER", "ADMIN")
                             .requestMatchers("/cms/product", "/cms/shoe-material", "/cms/shoe-color", "/cms/shoe-size",
                                     "/cms/shoe-brand", "/cms/shoe-category", "/cms/shoe-sole", "/cms/shoe-toe",
-                                    "/cms/shoe-collar", "/cms/nhan-vien", "/cms/voucher", "/cms/history-payment").hasAuthority("ADMIN")
+                                    "/cms/shoe-collar", "/cms/nhan-vien", "/cms/voucher", "/cms/history-payment","/cms/quan-tri").hasAuthority("ADMIN")
                             .requestMatchers("/cms", "/cms/cashier", "/cms/hoa-don", "/cms/khach-hang").hasAnyAuthority("USER", "ADMIN")
                             .requestMatchers("/user-profile").hasAnyAuthority("CUSTOMER")
                             .requestMatchers("/change-password").authenticated()

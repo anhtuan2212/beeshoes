@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error/404")
-    public String handleError(HttpServletRequest request) {
-        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-        if (status != null) {
-            Integer statusCode = Integer.valueOf(status.toString());
-            if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                return "error/404";
-            }
-        }
+    public String handleError404() {
         return "error/404";
     }
+    @RequestMapping("/error/500")
+    public String handleError500() {
+        return "error/500";
+    }
+    @RequestMapping("/error/400")
+    public String handleError400() {
+        return "error/400";
+    }
+
 }
 

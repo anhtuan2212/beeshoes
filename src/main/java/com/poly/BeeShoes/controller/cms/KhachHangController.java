@@ -143,6 +143,9 @@ public class KhachHangController {
     @GetMapping("/detail/{id}")
     public String khachHangDetail(@PathVariable Long id, Model model) {
         KhachHang khachHang = khachHangService.detail(id);
+        if (khachHang==null){
+            return "redirect:/cms/khach-hang";
+        }
         User user = userService.findByKhachHang_Id(khachHang.getId());
         KhachHangRequest kh = new KhachHangRequest();
         kh.setId(khachHang.getId());
@@ -156,8 +159,6 @@ public class KhachHangController {
         if(khachHang.getDiaChiMacDinh() != null){
             kh.setIdDiaChi(khachHang.getDiaChiMacDinh().getId());
         }
-
-
         model.addAttribute("khachHang", kh);
         model.addAttribute("listDC", khachHang.getDiaChi());
         return "cms/pages/users/detail-khachHang";

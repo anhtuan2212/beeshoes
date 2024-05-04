@@ -1231,6 +1231,9 @@ $(document).on('click', '#huyFromDetail', function () {
             let hanhDong = response.hanhDong;
             $('#xacNhanFromDetail').hide();
             $('#getAttrToHuyFromDetail').hide();
+            $('#btn-edit-product').addClass('d-none');
+            $('#btn-add-product').addClass('d-none');
+            $('.fixInvoice').hide();
             if ($('#isShowBtnRefund').text() == 'false') {
                 $('#btn-refund').removeClass('d-none');
             }

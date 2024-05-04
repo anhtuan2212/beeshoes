@@ -103,6 +103,10 @@ public class CheckOutRestController {
         BigDecimal voucherValue = new BigDecimal(0);
         if (jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
+            Voucher voucher = voucherService.getByMa(voucherCode);
+            if(!(voucher.getSoLuong() > 0 && voucher.getTrangThai() == 2)) {
+                return ResponseEntity.badRequest().header("status", "invalid").build();
+            }
         }
         if (jsonObject.get("voucherValue") != null) {
             voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
@@ -168,6 +172,10 @@ public class CheckOutRestController {
         BigDecimal voucherValue = new BigDecimal(0);
         if (jsonObject.get("voucher") != null) {
             voucherCode = jsonObject.get("voucher").getAsString();
+            Voucher voucher = voucherService.getByMa(voucherCode);
+            if(!(voucher.getSoLuong() > 0 && voucher.getTrangThai() == 2)) {
+                return ResponseEntity.badRequest().header("status", "invalid").build();
+            }
         }
         if (jsonObject.get("voucherValue") != null || !jsonObject.get("voucherValue").isJsonNull()) {
             voucherValue = jsonObject.get("voucherValue").getAsBigDecimal();
