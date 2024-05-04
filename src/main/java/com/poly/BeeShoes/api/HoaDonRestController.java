@@ -487,7 +487,7 @@ public class HoaDonRestController {
         HoaDon hd = new HoaDon();
         if (request.getVoucher() != null) {
             Voucher voucher = voucherService.getByMa(request.getVoucher());
-            if (voucher != null && voucher.getSoLuong() <= 0) {
+            if (voucher != null && (voucher.getSoLuong() <= 0 || voucher.getTrangThai() != 2)) {
                 return ResponseEntity.notFound().header("status", "ZeroVoucher").build();
             }
             if (voucher != null && total >= voucher.getGiaTriToiThieu().intValue()) {

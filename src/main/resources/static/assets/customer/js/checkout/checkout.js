@@ -769,6 +769,11 @@ $(document).ready(function () {
                                 window.location.href = response;
                             },
                             error: function (error) {
+                                if (error.getResponseHeader('status') === 'invalid') {
+                                    ToastError('Voucher này đã kết thúc hoặc đã hết lượt sử dụng');
+                                } else {
+                                    ToastError('Lỗi.')
+                                }
                                 console.error('Xảy ra lỗi: ', error);
                             }
                         })
@@ -784,6 +789,11 @@ $(document).ready(function () {
                                 window.location.href = response;
                             },
                             error: function (error) {
+                                if (error.getResponseHeader('status') === 'invalid') {
+                                    ToastError('Voucher này đã kết thúc hoặc đã hết lượt sử dụng');
+                                } else {
+                                    ToastError('Lỗi.')
+                                }
                                 console.error('Xảy ra lỗi: ', error);
                             }
                         })
